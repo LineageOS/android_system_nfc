@@ -490,7 +490,7 @@ void GKI_run (void *p_task_id)
 {
     GKI_TRACE_1("%s enter", __func__);
     int retval = EACCES;
-    static pthread_t workerThreadId = NULL;
+    static pthread_t workerThreadId = 0;
 
     retval = pthread_create (&workerThreadId, NULL, GKI_run_worker_thread, NULL);
     if (retval != 0)
