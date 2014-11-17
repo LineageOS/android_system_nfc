@@ -26,7 +26,6 @@ LOCAL_ARM_MODE := arm
 LOCAL_MODULE := libnfc-nci
 LOCAL_MODULE_TAGS := optional
 LOCAL_SHARED_LIBRARIES := libhardware_legacy libcutils liblog libdl libhardware
-LOCAL_CXX_STL := stlport
 LOCAL_CFLAGS := $(D_CFLAGS)
 LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/src/include \
@@ -64,7 +63,6 @@ LOCAL_SRC_FILES := $(call all-c-files-under, $(HALIMPL)) \
     src/adaptation/CrcChecksum.cpp \
     src//nfca_version.c
 LOCAL_SHARED_LIBRARIES := liblog libcutils libhardware_legacy
-LOCAL_CXX_STL := stlport
 LOCAL_MODULE_TAGS := optional
 LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/$(HALIMPL)/include \
