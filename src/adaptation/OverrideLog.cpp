@@ -76,3 +76,25 @@ unsigned char initializeGlobalAppLogLevel ()
     }
     return appl_trace_level;
 }
+
+UINT32 initializeProtocolLogLevel () {
+    UINT32 num = 0;
+    char valueStr [PROPERTY_VALUE_MAX] = {0};
+
+    if ( GetNumValue ( NAME_PROTOCOL_TRACE_LEVEL, &num, sizeof ( num ) ) )
+        ScrProtocolTraceFlag = num;
+
+    int len = property_get ("nfc.enable_protocol_log", valueStr, "");
+    if (len > 0)
+    {
+        if (strncmp("0", valueStr, 1) == 0)
+        {
+            ScrProtocolTraceFlag = 0;
+        } else {
+            ScrProtocolTraceFlag = ~0;
+        }
+    }
+
+    return ScrProtocolTraceFlag;
+}
+
