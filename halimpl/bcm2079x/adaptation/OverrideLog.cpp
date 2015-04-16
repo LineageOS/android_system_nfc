@@ -24,6 +24,7 @@
  ******************************************************************************/
 #include "OverrideLog.h"
 #include <cutils/properties.h>
+#include <string.h>
 #include "config.h"
 #include "android_logmsg.h"
 #define LOG_TAG "NfcNciHal"
