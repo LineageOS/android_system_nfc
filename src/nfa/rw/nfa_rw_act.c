@@ -284,6 +284,7 @@ static void nfa_rw_handle_ndef_detect(tRW_EVENT event, tRW_DATA *p_rw_data)
                 conn_evt_data.ndef_detect.cur_size = 0;
                 conn_evt_data.ndef_detect.max_size = 0;
                 conn_evt_data.ndef_detect.flags    = RW_NDEF_FL_UNKNOWN;
+                conn_evt_data.ndef_detect.status   = NFA_STATUS_TIMEOUT;
             }
             else
             {
@@ -557,11 +558,41 @@ void nfa_rw_handle_presence_check_rsp (tNFC_STATUS status)
 static void nfa_rw_handle_t1t_evt (tRW_EVENT event, tRW_DATA *p_rw_data)
 {
     tNFA_CONN_EVT_DATA conn_evt_data;
+    tNFA_TAG_PARAMS tag_params;
+    UINT8 *p_rid_rsp;
+    tNFA_STATUS activation_status;
 
     conn_evt_data.status = p_rw_data->data.status;
     switch (event)
     {
     case RW_T1T_RID_EVT:
+        if (p_rw_data->data.p_data != NULL)
+        {
+            /* Assume the data is just the response byte sequence */
+            p_rid_rsp = (UINT8 *)(p_rw_data->data.p_data + 1) + p_rw_data->data.p_data->offset;
+            /* Fetch HR from RID response message */
+            STREAM_TO_ARRAY (tag_params.t1t.hr, p_rid_rsp, T1T_HR_LEN);
+            /* Fetch UID0-3 from RID response message */
+            STREAM_TO_ARRAY (tag_params.t1t.uid, p_rid_rsp, T1T_CMD_UID_LEN);
+            GKI_freebuf (p_rw_data->data.p_data);
+            p_rw_data->data.p_data = NULL;
+        }
+
+        /* Command complete - perform cleanup, notify the app */
+        nfa_rw_command_complete();
+
+        if (p_rw_data->status == NFC_STATUS_TIMEOUT)
+        {
+            activation_status = NFA_STATUS_TIMEOUT;
+        }
+        else
+        {
+            activation_status = NFA_STATUS_OK;
+        }
+
+        nfa_dm_notify_activation_status (activation_status, &tag_params);
+        break;
+
     case RW_T1T_RALL_CPLT_EVT:
     case RW_T1T_READ_CPLT_EVT:
     case RW_T1T_RSEG_CPLT_EVT:
@@ -2670,6 +2701,9 @@ BOOLEAN nfa_rw_activate_ntf(tNFA_RW_MSG *p_data)
         /* Retrieve HR and UID fields from activation notification */
         memcpy (tag_params.t1t.hr, p_activate_params->intf_param.intf_param.frame.param, NFA_T1T_HR_LEN);
         memcpy (tag_params.t1t.uid, p_activate_params->rf_tech_param.param.pa.nfcid1, p_activate_params->rf_tech_param.param.pa.nfcid1_len);
+        msg.op = NFA_RW_OP_T1T_RID;
+        nfa_rw_handle_op_req ((tNFA_RW_MSG *)&msg);
+        activate_notify = FALSE;                    /* Delay notifying upper layer of NFA_ACTIVATED_EVT until HR0/HR1 is received */
         break;
 
     case NFC_PROTOCOL_T2T:

@@ -1770,8 +1770,18 @@ void nfa_dm_notify_activation_status (tNFA_STATUS status, tNFA_TAG_PARAMS *p_par
         /* get length of NFCID and location */
         if (p_tech_params->mode == NFC_DISCOVERY_TYPE_POLL_A)
         {
-            nfcid_len = p_tech_params->param.pa.nfcid1_len;
-            p_nfcid   = p_tech_params->param.pa.nfcid1;
+            if ((p_tech_params->param.pa.nfcid1_len == 0) && (p_params != NULL))
+            {
+                nfcid_len = sizeof(p_params->t1t.uid);
+                p_nfcid   = p_params->t1t.uid;
+                evt_data.activated.activate_ntf.rf_tech_param.param.pa.nfcid1_len = nfcid_len;
+                memcpy (evt_data.activated.activate_ntf.rf_tech_param.param.pa.nfcid1, p_nfcid, nfcid_len);
+            }
+            else
+            {
+                nfcid_len = p_tech_params->param.pa.nfcid1_len;
+                p_nfcid   = p_tech_params->param.pa.nfcid1;
+            }
         }
         else if (p_tech_params->mode == NFC_DISCOVERY_TYPE_POLL_B)
         {
