@@ -121,3 +121,5 @@ const tNFA_HCI_CFG nfa_hci_cfg =
 };
 
 tNFA_HCI_CFG *p_nfa_hci_cfg = (tNFA_HCI_CFG *) &nfa_hci_cfg;
+
+BOOLEAN nfa_poll_bail_out_mode = FALSE;
