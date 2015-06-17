@@ -1660,7 +1660,8 @@ static void nfa_dm_poll_disc_cback (tNFA_DM_RF_DISC_EVT event, tNFC_DISCOVER *p_
                      ||(nfa_dm_cb.disc_cb.activated_protocol  == NFC_PROTOCOL_T3T)
                      ||(nfa_dm_cb.disc_cb.activated_protocol  == NFC_PROTOCOL_ISO_DEP)
                      ||(nfa_dm_cb.disc_cb.activated_protocol  == NFC_PROTOCOL_15693)
-                     ||(nfa_dm_cb.disc_cb.activated_protocol  == NFC_PROTOCOL_KOVIO)  )
+                     ||(nfa_dm_cb.disc_cb.activated_protocol  == NFC_PROTOCOL_KOVIO)
+                     ||(nfa_dm_cb.disc_cb.activated_protocol  == NFC_PROTOCOL_MIFARE)  )
             {
                 /* Notify NFA tag sub-system */
                 nfa_rw_proc_disc_evt (NFA_DM_RF_DISC_ACTIVATED_EVT, p_data, TRUE);

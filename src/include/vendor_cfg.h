@@ -30,6 +30,7 @@ typedef struct
     UINT8 pro_protocol_dual;
     UINT8 pro_protocol_15693;
     UINT8 pro_protocol_kovio;
+    UINT8 pro_protocol_mfc;
 
     UINT8 pro_discovery_kovio_poll;
     UINT8 pro_discovery_b_prime_poll;
@@ -56,6 +57,9 @@ extern tNFA_PROPRIETARY_CFG *p_nfa_proprietary_cfg;
 #endif
 #ifndef NCI_PROTOCOL_KOVIO
 #define NCI_PROTOCOL_KOVIO              (p_nfa_proprietary_cfg->pro_protocol_kovio)
+#endif
+#ifndef NCI_PROTOCOL_MIFARE
+#define NCI_PROTOCOL_MIFARE             (p_nfa_proprietary_cfg->pro_protocol_mfc)
 #endif
 
  /**********************************************
