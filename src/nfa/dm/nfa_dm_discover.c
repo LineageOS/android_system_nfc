@@ -655,9 +655,8 @@ static tNFA_DM_DISC_TECH_PROTO_MASK nfa_dm_disc_get_disc_mask (tNFC_RF_TECH_N_MO
     /* Set initial disc_mask to legacy poll or listen */
     tNFA_DM_DISC_TECH_PROTO_MASK disc_mask = ((tech_n_mode & 0x80) ? NFA_DM_DISC_MASK_L_LEGACY : NFA_DM_DISC_MASK_P_LEGACY);
 
-    switch (tech_n_mode)
+    if (NFC_DISCOVERY_TYPE_POLL_A == tech_n_mode)
     {
-    case NFC_DISCOVERY_TYPE_POLL_A:
         switch (protocol)
         {
         case NFC_PROTOCOL_T1T:
@@ -673,34 +672,41 @@ static tNFA_DM_DISC_TECH_PROTO_MASK nfa_dm_disc_get_disc_mask (tNFC_RF_TECH_N_MO
             disc_mask = NFA_DM_DISC_MASK_PA_NFC_DEP;
             break;
         }
-        break;
-    case NFC_DISCOVERY_TYPE_POLL_B:
+    }
+    else if (NFC_DISCOVERY_TYPE_POLL_B == tech_n_mode)
+    {
         if (protocol == NFC_PROTOCOL_ISO_DEP)
             disc_mask = NFA_DM_DISC_MASK_PB_ISO_DEP;
-        break;
-    case NFC_DISCOVERY_TYPE_POLL_F:
+    }
+    else if (NFC_DISCOVERY_TYPE_POLL_F == tech_n_mode)
+    {
         if (protocol == NFC_PROTOCOL_T3T)
             disc_mask = NFA_DM_DISC_MASK_PF_T3T;
         else if (protocol == NFC_PROTOCOL_NFC_DEP)
             disc_mask = NFA_DM_DISC_MASK_PF_NFC_DEP;
-        break;
-    case NFC_DISCOVERY_TYPE_POLL_ISO15693:
+    }
+    else if (NFC_DISCOVERY_TYPE_POLL_ISO15693 == tech_n_mode)
+    {
         disc_mask = NFA_DM_DISC_MASK_P_ISO15693;
-        break;
-    case NFC_DISCOVERY_TYPE_POLL_B_PRIME:
+    }
+    else if (NFC_DISCOVERY_TYPE_POLL_B_PRIME == tech_n_mode)
+    {
         disc_mask = NFA_DM_DISC_MASK_P_B_PRIME;
-        break;
-    case NFC_DISCOVERY_TYPE_POLL_KOVIO:
+    }
+    else if (NFC_DISCOVERY_TYPE_POLL_KOVIO == tech_n_mode)
+    {
         disc_mask = NFA_DM_DISC_MASK_P_KOVIO;
-        break;
-    case NFC_DISCOVERY_TYPE_POLL_A_ACTIVE:
+    }
+    else if (NFC_DISCOVERY_TYPE_POLL_A_ACTIVE == tech_n_mode)
+    {
         disc_mask = NFA_DM_DISC_MASK_PAA_NFC_DEP;
-        break;
-    case NFC_DISCOVERY_TYPE_POLL_F_ACTIVE:
+    }
+    else if (NFC_DISCOVERY_TYPE_POLL_F_ACTIVE == tech_n_mode)
+    {
         disc_mask = NFA_DM_DISC_MASK_PFA_NFC_DEP;
-        break;
-
-    case NFC_DISCOVERY_TYPE_LISTEN_A:
+    }
+    else if (NFC_DISCOVERY_TYPE_LISTEN_A == tech_n_mode)
+    {
         switch (protocol)
         {
         case NFC_PROTOCOL_T1T:
@@ -716,29 +722,34 @@ static tNFA_DM_DISC_TECH_PROTO_MASK nfa_dm_disc_get_disc_mask (tNFC_RF_TECH_N_MO
             disc_mask = NFA_DM_DISC_MASK_LA_NFC_DEP;
             break;
         }
-        break;
-    case NFC_DISCOVERY_TYPE_LISTEN_B:
+    }
+    else if (NFC_DISCOVERY_TYPE_LISTEN_B == tech_n_mode)
+    {
         if (protocol == NFC_PROTOCOL_ISO_DEP)
             disc_mask = NFA_DM_DISC_MASK_LB_ISO_DEP;
-        break;
-    case NFC_DISCOVERY_TYPE_LISTEN_F:
+    }
+    else if (NFC_DISCOVERY_TYPE_LISTEN_F == tech_n_mode)
+    {
         if (protocol == NFC_PROTOCOL_T3T)
             disc_mask = NFA_DM_DISC_MASK_LF_T3T;
         else if (protocol == NFC_PROTOCOL_NFC_DEP)
             disc_mask = NFA_DM_DISC_MASK_LF_NFC_DEP;
-        break;
-    case NFC_DISCOVERY_TYPE_LISTEN_ISO15693:
+    }
+    else if (NFC_DISCOVERY_TYPE_LISTEN_ISO15693 == tech_n_mode)
+    {
         disc_mask = NFA_DM_DISC_MASK_L_ISO15693;
-        break;
-    case NFC_DISCOVERY_TYPE_LISTEN_B_PRIME:
+    }
+    else if (NFC_DISCOVERY_TYPE_LISTEN_B_PRIME == tech_n_mode)
+    {
         disc_mask = NFA_DM_DISC_MASK_L_B_PRIME;
-        break;
-    case NFC_DISCOVERY_TYPE_LISTEN_A_ACTIVE:
+    }
+    else if (NFC_DISCOVERY_TYPE_LISTEN_A_ACTIVE == tech_n_mode)
+    {
         disc_mask = NFA_DM_DISC_MASK_LAA_NFC_DEP;
-        break;
-    case NFC_DISCOVERY_TYPE_LISTEN_F_ACTIVE:
+    }
+    else if (NFC_DISCOVERY_TYPE_LISTEN_F_ACTIVE == tech_n_mode)
+    {
         disc_mask = NFA_DM_DISC_MASK_LFA_NFC_DEP;
-        break;
     }
 
     NFA_TRACE_DEBUG3 ("nfa_dm_disc_get_disc_mask (): tech_n_mode:0x%X, protocol:0x%X, disc_mask:0x%X",

@@ -377,25 +377,6 @@ typedef UINT8 tNCI_INTF_TYPE;
 #define NCI_PROTOCOL_T3T                0x03
 #define NCI_PROTOCOL_ISO_DEP            0x04
 #define NCI_PROTOCOL_NFC_DEP            0x05
-/**********************************************
- * Proprietary Protocols
- **********************************************/
-#ifndef NCI_PROTOCOL_18092_ACTIVE
-#define NCI_PROTOCOL_18092_ACTIVE       0x80
-#endif
-#ifndef NCI_PROTOCOL_B_PRIME
-#define NCI_PROTOCOL_B_PRIME            0x81
-#endif
-#ifndef NCI_PROTOCOL_DUAL
-#define NCI_PROTOCOL_DUAL               0x82
-#endif
-#ifndef NCI_PROTOCOL_15693
-#define NCI_PROTOCOL_15693              0x83
-#endif
-#ifndef NCI_PROTOCOL_KOVIO
-#define NCI_PROTOCOL_KOVIO              0x8a
-#endif
-
 
 /* Discovery Types/Detected Technology and Mode */
 #define NCI_DISCOVERY_TYPE_POLL_A               0x00
@@ -403,14 +384,11 @@ typedef UINT8 tNCI_INTF_TYPE;
 #define NCI_DISCOVERY_TYPE_POLL_F               0x02
 #define NCI_DISCOVERY_TYPE_POLL_A_ACTIVE        0x03
 #define NCI_DISCOVERY_TYPE_POLL_F_ACTIVE        0x05
-#define NCI_DISCOVERY_TYPE_POLL_B_PRIME         0x74
-#define NCI_DISCOVERY_TYPE_POLL_KOVIO           0x77
 #define NCI_DISCOVERY_TYPE_LISTEN_A             0x80
 #define NCI_DISCOVERY_TYPE_LISTEN_B             0x81
 #define NCI_DISCOVERY_TYPE_LISTEN_F             0x82
 #define NCI_DISCOVERY_TYPE_LISTEN_A_ACTIVE      0x83
 #define NCI_DISCOVERY_TYPE_LISTEN_F_ACTIVE      0x85
-#define NCI_DISCOVERY_TYPE_LISTEN_B_PRIME       0xF4
 #define NCI_DISCOVERY_TYPE_POLL_ISO15693        0x06
 #define NCI_DISCOVERY_TYPE_LISTEN_ISO15693      0x86
 #define NCI_DISCOVERY_TYPE_MAX  NCI_DISCOVERY_TYPE_LISTEN_ISO15693
