@@ -2584,6 +2584,11 @@ BOOLEAN nfa_rw_activate_ntf(tNFA_RW_MSG *p_data)
         &&(nfa_rw_cb.pa_sel_res == NFC_SEL_RES_NFC_FORUM_T2T)  )
     {
         /* Type 2 tag is wake up from HALT State */
+        if(nfa_dm_cb.p_activate_ntf != NULL)
+        {
+            GKI_freebuf (nfa_dm_cb.p_activate_ntf);
+            nfa_dm_cb.p_activate_ntf = NULL;
+        }
         NFA_TRACE_DEBUG0("nfa_rw_activate_ntf () - Type 2 tag wake up from HALT State");
         return TRUE;
     }
