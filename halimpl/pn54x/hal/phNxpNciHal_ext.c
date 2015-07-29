@@ -398,6 +398,58 @@ NFCSTATUS phNxpNciHal_process_ext_rsp (uint8_t *p_ntf, uint16_t *p_len)
         }
     }
 #endif
+    else if (*p_len == 4 &&
+                p_ntf[0] == 0x4F &&
+                p_ntf[1] == 0x11 &&
+                p_ntf[2] == 0x01 )
+    {
+        if (p_ntf[3] == 0x00)
+        {
+            NXPLOG_NCIHAL_D (">  Workaround for ISO-DEP Presence Check, ignore response and wait for notification");
+            p_ntf[0] = 0x60;
+            p_ntf[1] = 0x06;
+            p_ntf[2] = 0x03;
+            p_ntf[3] = 0x01;
+            p_ntf[4] = 0x00;
+            p_ntf[5] = 0x01;
+            *p_len = 6;
+        }
+        else
+        {
+            NXPLOG_NCIHAL_D (">  Workaround for ISO-DEP Presence Check, presence check return failed");
+            p_ntf[0] = 0x60;
+            p_ntf[1] = 0x08;
+            p_ntf[2] = 0x02;
+            p_ntf[3] = 0xB2;
+            p_ntf[4] = 0x00;
+            *p_len = 5;
+
+        }
+    }
+    else if (*p_len == 4 &&
+                p_ntf[0] == 0x6F &&
+                p_ntf[1] == 0x11 &&
+                p_ntf[2] == 0x01 )
+    {
+        if (p_ntf[3] == 0x01)
+        {
+            NXPLOG_NCIHAL_D (">  Workaround for ISO-DEP Presence Check - Card still in field");
+            p_ntf[0] = 0x00;
+            p_ntf[1] = 0x00;
+            p_ntf[2] = 0x01;
+            p_ntf[3] = 0x7E;
+        }
+        else
+        {
+            NXPLOG_NCIHAL_D (">  Workaround for ISO-DEP Presence Check - Card not in field");
+            p_ntf[0] = 0x60;
+            p_ntf[1] = 0x08;
+            p_ntf[2] = 0x02;
+            p_ntf[3] = 0xB2;
+            p_ntf[4] = 0x00;
+            *p_len = 5;
+        }
+    }
     /*
     else if(p_ntf[0] == 0x61 && p_ntf[1] == 0x05 && p_ntf[4] == 0x01 && p_ntf[5] == 0x00 && p_ntf[6] == 0x01)
     {
@@ -742,6 +794,18 @@ NFCSTATUS phNxpNciHal_write_ext(uint16_t *cmd_len, uint8_t *p_cmd_data,
         phNxpNciHal_print_packet("RECV", p_rsp_data, 5);
 //        status = NFCSTATUS_FAILED;
         NXPLOG_NCIHAL_D ("> Going through workaround - Dirty Set Config - End ");
+    }
+    else if (*cmd_len == 3 &&
+             p_cmd_data[0] == 0x00 &&
+             p_cmd_data[1] == 0x00 &&
+             p_cmd_data[2] == 0x00 )
+    {
+        NXPLOG_NCIHAL_D ("> Going through workaround - ISO-DEP Presence Check ");
+        p_cmd_data[0] = 0x2F;
+        p_cmd_data[1] = 0x11;
+        p_cmd_data[2] = 0x00;
+        status = NFCSTATUS_SUCCESS;
+        NXPLOG_NCIHAL_D ("> Going through workaround - ISO-DEP Presence Check - End");
     }
 
 #if 0
