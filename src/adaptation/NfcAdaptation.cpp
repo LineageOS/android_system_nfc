@@ -22,6 +22,7 @@ extern "C"
     #include "gki.h"
     #include "nfa_api.h"
     #include "nfc_int.h"
+    #include "vendor_cfg.h"
 }
 #include "config.h"
 #include "android_logmsg.h"
@@ -47,7 +48,9 @@ char bcm_nfc_location[120];
 char nci_hal_module[64];
 
 static UINT8 nfa_dm_cfg[sizeof ( tNFA_DM_CFG ) ];
+static UINT8 nfa_proprietary_cfg[sizeof ( tNFA_PROPRIETARY_CFG )];
 extern tNFA_DM_CFG *p_nfa_dm_cfg;
+extern tNFA_PROPRIETARY_CFG *p_nfa_proprietary_cfg;
 extern UINT8 nfa_ee_max_ee_cfg;
 extern const UINT8  nfca_version_string [];
 extern const UINT8  nfa_version_string [];
@@ -146,6 +149,11 @@ void NfcAdaptation::Initialize ()
     {
         nfa_poll_bail_out_mode = num;
         ALOGD("%s: Overriding NFA_POLL_BAIL_OUT_MODE to use %d", func, nfa_poll_bail_out_mode);
+    }
+
+    if ( GetStrValue ( NAME_NFA_PROPRIETARY_CFG, (char*)nfa_proprietary_cfg, sizeof ( tNFA_PROPRIETARY_CFG ) ) )
+    {
+        p_nfa_proprietary_cfg = (tNFA_PROPRIETARY_CFG*) &nfa_proprietary_cfg[0];
     }
 
     //configure device host whitelist of HCI host ID's; see specification ETSI TS 102 622 V11.1.10
