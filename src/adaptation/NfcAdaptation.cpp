@@ -54,6 +54,7 @@ extern const UINT8  nfa_version_string [];
 static UINT8 deviceHostWhiteList [NFA_HCI_MAX_HOST_IN_NETWORK];
 static tNFA_HCI_CFG jni_nfa_hci_cfg;
 extern tNFA_HCI_CFG *p_nfa_hci_cfg;
+extern BOOLEAN nfa_poll_bail_out_mode;
 
 /*******************************************************************************
 **
@@ -140,6 +141,11 @@ void NfcAdaptation::Initialize ()
     {
         nfa_ee_max_ee_cfg = num;
         ALOGD("%s: Overriding NFA_EE_MAX_EE_SUPPORTED to use %d", func, nfa_ee_max_ee_cfg);
+    }
+    if ( GetNumValue ( NAME_NFA_POLL_BAIL_OUT_MODE, &num, sizeof ( num ) ) )
+    {
+        nfa_poll_bail_out_mode = num;
+        ALOGD("%s: Overriding NFA_POLL_BAIL_OUT_MODE to use %d", func, nfa_poll_bail_out_mode);
     }
 
     //configure device host whitelist of HCI host ID's; see specification ETSI TS 102 622 V11.1.10
