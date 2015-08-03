@@ -1329,6 +1329,19 @@ BOOLEAN nfa_dm_act_set_rf_disc_duration (tNFA_DM_MSG *p_data)
 
 /*******************************************************************************
 **
+** Function         nfa_dm_act_get_rf_disc_duration
+**
+** Description      Get duration for RF discovery
+**
+** Returns          UINT16
+**
+*******************************************************************************/
+UINT16 nfa_dm_act_get_rf_disc_duration ( )
+{
+    return (nfa_dm_cb.disc_cb.disc_duration);
+}
+/*******************************************************************************
+**
 ** Function         nfa_dm_act_select
 **
 ** Description      Process RF select command
