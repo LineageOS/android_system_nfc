@@ -32,6 +32,8 @@
 #include "nfc_hal_api.h"
 #include "gki.h"
 
+#include "vendor_cfg.h"
+
 /* NFC application return status codes */
 #define NFC_STATUS_OK                   NCI_STATUS_OK                   /* Command succeeded    */
 #define NFC_STATUS_REJECTED             NCI_STATUS_REJECTED             /* Command is rejected. */
