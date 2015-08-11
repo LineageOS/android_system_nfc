@@ -56,6 +56,7 @@ static uint32_t iCoreInitRspLen;
 extern uint32_t timeoutTimerId;
 
 extern NFCSTATUS read_retry();
+
 /************** HAL extension functions ***************************************/
 static void hal_extns_write_rsp_timeout_cb(uint32_t TimerId, void *pContext);
 
@@ -373,7 +374,6 @@ NFCSTATUS phNxpNciHal_process_ext_rsp (uint8_t *p_ntf, uint16_t *p_len)
             return status;
 
         }
-
     }
     else if(p_ntf[0] == 0x41 && p_ntf[1] == 0x04 && cleanup_timer!=0)
     {
