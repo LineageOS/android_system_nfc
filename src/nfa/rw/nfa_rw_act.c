@@ -1824,11 +1824,16 @@ void nfa_rw_presence_check (tNFA_RW_MSG *p_data)
     }
     else if (NFC_PROTOCOL_T2T == protocol)
     {
-        /* If T2T NFC-Forum, then let RW handle presence check; otherwise fall through */
+        /* If T2T NFC-Forum, then let RW handle presence check */
         if (sel_res == NFC_SEL_RES_NFC_FORUM_T2T)
         {
             /* Type 2 tag have not sent NACK after activation */
             status = RW_T2tPresenceCheck();
+        }
+        else
+        {
+            /* Will fall back to deactivate/reactivate */
+            unsupported = TRUE;
         }
     }
     else if (NFC_PROTOCOL_T3T == protocol)
