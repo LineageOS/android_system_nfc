@@ -303,6 +303,10 @@ NFCSTATUS phNxpNciHal_process_ext_rsp (uint8_t *p_ntf, uint16_t *p_len)
             p_ntf[2]--;
             (*p_len)--;
         }
+        else
+        {
+            p_ntf[p_ntf[2]+ 2] |= 0x01;
+        }
     }
     else if (p_ntf[2] == 0x02 &&
             p_ntf[1] == 0x00 && icode_detected == 1)
