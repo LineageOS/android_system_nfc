@@ -502,5 +502,5 @@ void phNxpNciHal_print_packet(const char *pString, const uint8_t *p_data,
 void phNxpNciHal_emergency_recovery(void)
 {
     NXPLOG_NCIHAL_E("%s: abort()", __FUNCTION__);
-    //    abort();
+    abort();
 }
