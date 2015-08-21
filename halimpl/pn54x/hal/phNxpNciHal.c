@@ -55,6 +55,7 @@ extern int send_to_upper_kovio;
 extern int kovio_detected;
 extern int disable_kovio;
 static uint8_t Rx_data[NCI_MAX_DATA_LEN];
+extern bool_t rf_deactive_cmd;
 
 uint32_t timeoutTimerId = 0;
 phNxpNciHal_Sem_t config_data;
@@ -665,11 +666,14 @@ int phNxpNciHal_write(uint16_t data_len, const uint8_t *p_data)
     /* Specific logic to block RF disable when Kovio detection logic is active */
     if (p_data[0] == 0x21&&
         p_data[1] == 0x06 &&
-        p_data[2] == 0x01 &&
-        kovio_detected == TRUE)
+        p_data[2] == 0x01)
     {
-        NXPLOG_NCIHAL_D ("Kovio detection logic is active: Set Flag to disable it.");
-        disable_kovio=0x01;
+        rf_deactive_cmd = TRUE;
+        if (kovio_detected == TRUE)
+        {
+            NXPLOG_NCIHAL_D ("Kovio detection logic is active: Set Flag to disable it.");
+            disable_kovio = 0x01;
+        }
     }
 
     /* Check for NXP ext before sending write */
