@@ -253,6 +253,7 @@
 #define NCI_PARAM_LEN_PWR_SETTING_BITMAP    3
 #define NCI_PARAM_LEN_HOST_LISTEN_MASK      2
 #define NCI_PARAM_LEN_PLL325_CFG_PARAM      14
+#define NCI_PARAM_LEN_POWER_LEVEL           6
 
 /**********************************************
  * Snooze Mode
