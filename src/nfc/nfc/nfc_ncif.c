@@ -741,8 +741,7 @@ void nfc_ncif_proc_discover_ntf (UINT8 *p, UINT16 plen)
         evt_data.result.rf_tech_param.mode  = *p++;
         p = nfc_ncif_decode_rf_params (&evt_data.result.rf_tech_param, p);
 
-        evt_data.result.more = (*p == NCI_DISCOVER_NTF_MORE) ? TRUE : FALSE;
-        p++;
+        evt_data.result.more = *p++;
         (*nfc_cb.p_discv_cback) (NFC_RESULT_DEVT, &evt_data);
     }
 }
