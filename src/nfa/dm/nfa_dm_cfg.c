@@ -30,8 +30,8 @@ const UINT8 nfa_dm_ce_cfg[] =
     13,                         /* total length */
     NFC_PMID_LF_T3T_PMM,        /* Type-3 tag default PMM */
     NCI_PARAM_LEN_LF_T3T_PMM,
-    0x20,
-    0x79,
+    0x01,                       /* This PAD0 is used to identify HCE-F on Android */
+    0xFE,                       /* This PAD0 is used to identify HCE-F on Android */
     0xFF,
     0xFF,
     0xFF,
