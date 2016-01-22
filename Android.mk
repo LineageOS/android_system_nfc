@@ -4,7 +4,9 @@ NFC := src/nfc
 HAL := src/hal
 UDRV := src/udrv
 HALIMPL := halimpl/bcm2079x
-D_CFLAGS := -DANDROID -DBUILDCFG=1
+D_CFLAGS := -DANDROID -DBUILDCFG=1 \
+    -Wno-deprecated-register \
+    -Wno-unused-parameter \
 
 
 ######################################
