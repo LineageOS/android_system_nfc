@@ -463,6 +463,8 @@ typedef struct
     UINT8 atr_req_gen_bytes_len;
     UINT8 atr_res_gen_bytes[NCI_MAX_GEN_BYTES_LEN];
     UINT8 atr_res_gen_bytes_len;
+
+    UINT8 pf_rc[NCI_PARAM_LEN_PF_RC];
 } tNFA_DM_PARAMS;
 
 /*
