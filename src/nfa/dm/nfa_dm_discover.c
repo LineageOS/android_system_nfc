@@ -970,6 +970,7 @@ void nfa_dm_start_rf_discover (void)
 {
     tNFC_DISCOVER_PARAMS    disc_params[NFA_DM_MAX_DISC_PARAMS];
     tNFA_DM_DISC_TECH_PROTO_MASK dm_disc_mask = 0, poll_mask, listen_mask;
+    UINT8                   config_params[10], *p;
     UINT8                   num_params, xx;
 
     NFA_TRACE_DEBUG0 ("nfa_dm_start_rf_discover ()");
@@ -1088,7 +1089,33 @@ void nfa_dm_start_rf_discover (void)
         /* Let P2P set GEN bytes for LLCP to NFCC */
         if (dm_disc_mask & NFA_DM_DISC_MASK_NFC_DEP)
         {
+
             nfa_p2p_set_config (dm_disc_mask);
+
+        }
+        if (dm_disc_mask & (NFA_DM_DISC_MASK_PF_NFC_DEP | NFA_DM_DISC_MASK_PF_T3T))
+        {
+            /* According to the NFC Forum Activity spec, controllers must:
+             * 1) Poll with RC=0 and SC=FFFF to find NFC-DEP targets
+             * 2) Poll with RC=1 and SC=FFFF to find T3T targets
+             * Many controllers don't do this yet, and seem to be activating
+             * NFC-DEP by default.
+             *
+             * We can at least fix the scenario where we're not interested
+             * in NFC-DEP, by setting RC=1 in that case. Otherwise, keep
+             * the default of RC=0. */
+            p = config_params;
+            UINT8_TO_STREAM (p, NFC_PMID_PF_RC);
+            UINT8_TO_STREAM (p, NCI_PARAM_LEN_PF_RC);
+            if ((dm_disc_mask & NFA_DM_DISC_MASK_PF_NFC_DEP) && !nfa_dm_is_p2p_paused())
+            {
+                UINT8_TO_STREAM (p, 0x00); // RC=0
+            }
+            else
+            {
+                UINT8_TO_STREAM (p, 0x01); // RC=1
+            }
+            nfa_dm_check_set_config(p - config_params, config_params, FALSE);
         }
     }
 

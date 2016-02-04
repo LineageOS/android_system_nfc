@@ -438,6 +438,7 @@ typedef UINT8 tNCI_DISCOVERY_TYPE;
 #define NCI_PARAM_ID_PB_BAILOUT         0x11
 #define NCI_PARAM_ID_PB_ATTRIB_PARAM1   0x12
 #define NCI_PARAM_ID_PF_BIT_RATE        0x18
+#define NCI_PARAM_ID_PF_RC              0x19
 #define NCI_PARAM_ID_PB_H_INFO          0x20
 #define NCI_PARAM_ID_PI_BIT_RATE        0x21
 
@@ -511,6 +512,8 @@ typedef UINT8 tNCI_DISCOVERY_TYPE;
 #define NCI_PARAM_LEN_TOTAL_DURATION        2
 
 #define NCI_PARAM_LEN_PA_FSDI               1
+
+#define NCI_PARAM_LEN_PF_RC                 1
 
 #define NCI_PARAM_LEN_LA_BIT_FRAME_SDD      1
 #define NCI_PARAM_LEN_LA_PLATFORM_CONFIG    1
