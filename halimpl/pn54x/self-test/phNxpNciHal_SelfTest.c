@@ -21,6 +21,7 @@
 #include <phNxpLog.h>
 #include <pthread.h>
 #include <phOsalNfc_Timer.h>
+#include <phNxpConfig.h>
 
 #define HAL_WRITE_RSP_TIMEOUT   (2000)   /* Timeout value to wait for response from PN54X */
 #define HAL_WRITE_MAX_RETRY     (10)
@@ -1384,6 +1385,8 @@ NFCSTATUS phNxpNciHal_TestMode_open (void)
 
     phOsalNfc_Config_t tOsalConfig;
     phTmlNfc_Config_t tTmlConfig;
+    char *nfc_dev_node = NULL;
+    const uint16_t max_len = 260;
     NFCSTATUS status = NFCSTATUS_SUCCESS;
     uint16_t read_len = 255;
 
@@ -1401,9 +1404,22 @@ NFCSTATUS phNxpNciHal_TestMode_open (void)
     memset(&tOsalConfig, 0x00, sizeof(tOsalConfig));
     memset(&tTmlConfig, 0x00, sizeof(tTmlConfig));
 
+    /* Read the nfc device node name */
+    nfc_dev_node = (char*) malloc (max_len * sizeof (char*));
+    if (nfc_dev_node == NULL)
+    {
+        NXPLOG_NCIHAL_E ("malloc of nfc_dev_node failed ");
+        goto clean_and_return;
+    }
+    else if (!GetNxpStrValue (NAME_NXP_NFC_DEV_NODE, nfc_dev_node, sizeof (nfc_dev_node)))
+    {
+        NXPLOG_NCIHAL_E ("Invalid nfc device node name keeping the default device node /dev/pn54x");
+        strcpy (nfc_dev_node, "/dev/pn54x");
+    }
+
     gDrvCfg.nClientId = phDal4Nfc_msgget(0, 0600);
     gDrvCfg.nLinkType = ENUM_LINK_TYPE_I2C;/* For PN54X */
-    tTmlConfig.pDevName = (int8_t *) "/dev/pn54x";
+    tTmlConfig.pDevName = (int8_t *) nfc_dev_node;
     tOsalConfig.dwCallbackThreadId = (uintptr_t) gDrvCfg.nClientId;
     tOsalConfig.pLogFile = NULL;
     tTmlConfig.dwGetMsgThreadId = (uintptr_t) gDrvCfg.nClientId;
@@ -1415,6 +1431,14 @@ NFCSTATUS phNxpNciHal_TestMode_open (void)
     {
         NXPLOG_NCIHAL_E("phTmlNfc_Init Failed");
         goto clean_and_return;
+    }
+    else
+    {
+        if (nfc_dev_node != NULL)
+        {
+            free (nfc_dev_node);
+            nfc_dev_node = NULL;
+        }
     }
 
     pthread_attr_t attr;
@@ -1443,8 +1467,13 @@ NFCSTATUS phNxpNciHal_TestMode_open (void)
     return NFCSTATUS_SUCCESS;
 
 clean_and_return:
-    CONCURRENCY_UNLOCK();
-    phNxpNciHal_cleanup_monitor();
+    CONCURRENCY_UNLOCK ();
+    if (nfc_dev_node != NULL)
+    {
+        free (nfc_dev_node);
+        nfc_dev_node = NULL;
+    }
+    phNxpNciHal_cleanup_monitor ();
     return NFCSTATUS_FAILED;
 }
 

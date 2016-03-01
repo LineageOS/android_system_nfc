@@ -432,6 +432,8 @@ int phNxpNciHal_open(nfc_stack_callback_t *p_cback, nfc_stack_data_callback_t *p
 {
     phOsalNfc_Config_t tOsalConfig;
     phTmlNfc_Config_t tTmlConfig;
+    char *nfc_dev_node = NULL;
+    const uint16_t max_len = 260;
     NFCSTATUS wConfigStatus = NFCSTATUS_SUCCESS;
     NFCSTATUS status = NFCSTATUS_SUCCESS;
     /*NCI_INIT_CMD*/
@@ -468,10 +470,23 @@ int phNxpNciHal_open(nfc_stack_callback_t *p_cback, nfc_stack_data_callback_t *p
     nxpncihal_ctrl.p_nfc_stack_cback = p_cback;
     nxpncihal_ctrl.p_nfc_stack_data_cback = p_data_cback;
 
+    /* Read the nfc device node name */
+    nfc_dev_node = (char*) malloc (max_len * sizeof (char *));
+    if (nfc_dev_node == NULL)
+    {
+        NXPLOG_NCIHAL_E ("malloc of nfc_dev_node failed ");
+        goto clean_and_return;
+    }
+    else if (!GetNxpStrValue (NAME_NXP_NFC_DEV_NODE, nfc_dev_node, sizeof (nfc_dev_node)))
+    {
+        NXPLOG_NCIHAL_E ("Invalid nfc device node name keeping the default device node /dev/pn54x");
+        strcpy (nfc_dev_node, "/dev/pn54x");
+    }
+
     /* Configure hardware link */
     nxpncihal_ctrl.gDrvCfg.nClientId = phDal4Nfc_msgget(0, 0600);
     nxpncihal_ctrl.gDrvCfg.nLinkType = ENUM_LINK_TYPE_I2C;/* For PN54X */
-    tTmlConfig.pDevName = (int8_t *) "/dev/pn54x";
+    tTmlConfig.pDevName = (int8_t *) nfc_dev_node;
     tOsalConfig.dwCallbackThreadId
     = (uintptr_t) nxpncihal_ctrl.gDrvCfg.nClientId;
     tOsalConfig.pLogFile = NULL;
@@ -486,6 +501,14 @@ int phNxpNciHal_open(nfc_stack_callback_t *p_cback, nfc_stack_data_callback_t *p
     {
         NXPLOG_NCIHAL_E("phTmlNfc_Init Failed");
         goto clean_and_return;
+    }
+    else
+    {
+        if (nfc_dev_node != NULL)
+        {
+            free (nfc_dev_node);
+            nfc_dev_node = NULL;
+        }
     }
 
     /* Create the client thread */
@@ -613,6 +636,11 @@ force_download:
 
     clean_and_return:
     CONCURRENCY_UNLOCK();
+    if (nfc_dev_node != NULL)
+    {
+        free (nfc_dev_node);
+        nfc_dev_node = NULL;
+    }
     /* Report error status */
     (*nxpncihal_ctrl.p_nfc_stack_cback)(HAL_NFC_OPEN_CPLT_EVT,
             HAL_NFC_STATUS_FAILED);
