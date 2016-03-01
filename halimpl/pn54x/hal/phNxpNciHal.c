@@ -52,6 +52,9 @@ extern void phTmlNfc_set_fragmentation_enabled(phTmlNfc_i2cfragmentation_t resul
 uint32_t wFwVerRsp;
 /* External global variable to get FW version */
 extern uint16_t wFwVer;
+
+extern uint16_t fw_maj_ver;
+extern uint16_t rom_version;
 extern int send_to_upper_kovio;
 extern int kovio_detected;
 extern int disable_kovio;
@@ -92,6 +95,7 @@ static NFCSTATUS phNxpNciHal_CheckValidFwVersion(void);
 static void phNxpNciHal_enable_i2c_fragmentation();
 static NFCSTATUS phNxpNciHal_get_mw_eeprom (void);
 static NFCSTATUS phNxpNciHal_set_mw_eeprom (void);
+static int phNxpNciHal_fw_mw_ver_check ();
 NFCSTATUS phNxpNciHal_check_clock_config(void);
 NFCSTATUS phNxpNciHal_china_tianjin_rf_setting(void);
 #if(NFC_NXP_CHIP_TYPE == PN548C2)
@@ -579,6 +583,11 @@ force_download:
             status = phNxpNciHal_fw_download();
             if (status != NFCSTATUS_SUCCESS)
             {
+                if (NFCSTATUS_SUCCESS != phNxpNciHal_fw_mw_ver_check ())
+                {
+                    NXPLOG_NCIHAL_D ("Chip Version Middleware Version mismatch!!!!");
+                    goto clean_and_return;
+                }
                 NXPLOG_NCIHAL_E ("FW Download failed - NFCC init will continue");
             }
             else
@@ -624,6 +633,29 @@ force_download:
     return NFCSTATUS_FAILED;
 }
 
+/******************************************************************************
+ * Function         phNxpNciHal_fw_mw_check
+ *
+ * Description      This function inform the status of phNxpNciHal_fw_mw_check
+ *                  function to libnfc-nci.
+ *
+ * Returns          int.
+ *
+ ******************************************************************************/
+int phNxpNciHal_fw_mw_ver_check()
+{
+    NFCSTATUS status = NFCSTATUS_FAILED;
+
+    if (!strcmp (COMPILATION_MW, "PN548C2") && (rom_version == 0x10) && (fw_maj_ver == 0x01))
+    {
+        status = NFCSTATUS_SUCCESS;
+    }
+    else if (!strcmp (COMPILATION_MW, "PN547C2") && (rom_version == 0x08) && (fw_maj_ver == 0x01))
+    {
+        status = NFCSTATUS_SUCCESS;
+    }
+    return status;
+}
 /******************************************************************************
  * Function         phNxpNciHal_open_complete
  *
