@@ -42,7 +42,7 @@ static const tNFA_SYS_REG nfa_dm_sys_reg =
 };
 
 
-tNFA_DM_CB  nfa_dm_cb = {FALSE};
+tNFA_DM_CB  nfa_dm_cb = {0, };
 
 
 #define NFA_DM_NUM_ACTIONS  (NFA_DM_MAX_EVT & 0x00ff)

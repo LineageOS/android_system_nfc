@@ -22,6 +22,7 @@
 #include <vector>
 #include <list>
 
+#undef LOG_TAG
 #define LOG_TAG "NfcAdaptation"
 
 const char transport_config_path[] = "/etc/";
