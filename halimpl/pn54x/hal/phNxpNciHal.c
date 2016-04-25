@@ -30,6 +30,7 @@
 #define PN547C2_CLOCK_SETTING
 #undef  PN547C2_FACTORY_RESET_DEBUG
 #define CORE_RES_STATUS_BYTE 3
+
 /* Processing of ISO 15693 EOF */
 extern uint8_t icode_send_eof;
 static uint8_t cmd_icode_eof[] = { 0x00, 0x00, 0x00 };
@@ -70,6 +71,8 @@ phNxpNciClock_t phNxpNciClock={0,};
 
 phNxpNciRfSetting_t phNxpNciRfSet={0,};
 
+phNxpNciMwEepromArea_t phNxpNciMwEepromArea = {0};
+
 /**************** local methods used in this file only ************************/
 static NFCSTATUS phNxpNciHal_fw_download(void);
 static void phNxpNciHal_open_complete(NFCSTATUS status);
@@ -87,6 +90,8 @@ static void phNxpNciHal_check_factory_reset(void);
 static void phNxpNciHal_print_res_status( uint8_t *p_rx_data, uint16_t *p_len);
 static NFCSTATUS phNxpNciHal_CheckValidFwVersion(void);
 static void phNxpNciHal_enable_i2c_fragmentation();
+static NFCSTATUS phNxpNciHal_get_mw_eeprom (void);
+static NFCSTATUS phNxpNciHal_set_mw_eeprom (void);
 NFCSTATUS phNxpNciHal_check_clock_config(void);
 NFCSTATUS phNxpNciHal_china_tianjin_rf_setting(void);
 #if(NFC_NXP_CHIP_TYPE == PN548C2)
@@ -94,6 +99,7 @@ static NFCSTATUS phNxpNciHalRFConfigCmdRecSequence ();
 static NFCSTATUS phNxpNciHal_CheckRFCmdRespStatus ();
 #endif
 int  check_config_parameter();
+
 /******************************************************************************
  * Function         phNxpNciHal_client_thread
  *
@@ -1059,6 +1065,15 @@ retry_core_init:
         }
     }
 
+    // Check if firmware download success
+    status = phNxpNciHal_get_mw_eeprom ();
+    if (status != NFCSTATUS_SUCCESS)
+    {
+        NXPLOG_NCIHAL_E ("NXP GET MW EEPROM AREA Proprietary Ext failed");
+        retry_core_init_cnt++;
+        goto retry_core_init;
+    }
+
     //
     status = phNxpNciHal_check_clock_config();
     if (status != NFCSTATUS_SUCCESS) {
@@ -1447,6 +1462,12 @@ retry_core_init:
             return NFCSTATUS_FAILED;
         }
 #endif
+        // Update eeprom value
+        status = phNxpNciHal_set_mw_eeprom ();
+        if (status != NFCSTATUS_SUCCESS)
+        {
+            NXPLOG_NCIHAL_E ("NXP Update MW EEPROM Proprietary Ext failed");
+        }
     }
 
     retlen = 0;
@@ -2108,6 +2129,80 @@ static void phNxpNciHal_power_cycle_complete(NFCSTATUS status)
 }
 
 /******************************************************************************
+ * Function         phNxpNciHal_get_mw_eeprom
+ *
+ * Description      This function is called to retreive data in mw eeprom area
+ *
+ * Returns          NFCSTATUS.
+ *
+ ******************************************************************************/
+static NFCSTATUS phNxpNciHal_get_mw_eeprom (void)
+{
+    NFCSTATUS status = NFCSTATUS_SUCCESS;
+    uint8_t retry_cnt = 0;
+    static uint8_t get_mw_eeprom_cmd[] = { 0x20, 0x03,0x03, 0x01, 0xA0, 0x0F };
+    uint8_t bConfig;
+
+retry_send_ext:
+    if (retry_cnt > 3)
+    {
+        return NFCSTATUS_FAILED;
+    }
+
+    phNxpNciMwEepromArea.isGetEepromArea = TRUE;
+    status = phNxpNciHal_send_ext_cmd (sizeof(get_mw_eeprom_cmd), get_mw_eeprom_cmd);
+    if (status != NFCSTATUS_SUCCESS)
+    {
+        NXPLOG_NCIHAL_E ("unable to get the mw eeprom data");
+        phNxpNciMwEepromArea.isGetEepromArea = FALSE;
+        retry_cnt++;
+        goto retry_send_ext;
+    }
+    phNxpNciMwEepromArea.isGetEepromArea = FALSE;
+
+    if (phNxpNciMwEepromArea.p_rx_data[12])
+    {
+        fw_download_success = 1;
+    }
+    return status;
+}
+
+/******************************************************************************
+ * Function         phNxpNciHal_set_mw_eeprom
+ *
+ * Description      This function is called to update data in mw eeprom area
+ *
+ * Returns          void.
+ *
+ ******************************************************************************/
+static NFCSTATUS phNxpNciHal_set_mw_eeprom (void)
+{
+    NFCSTATUS status = NFCSTATUS_SUCCESS;
+    uint8_t retry_cnt = 0;
+    uint8_t set_mw_eeprom_cmd[39] = {0};
+    uint8_t cmd_header[] = { 0x20, 0x02,0x24, 0x01, 0xA0, 0x0F, 0x20 };
+
+    memcpy (set_mw_eeprom_cmd, cmd_header, sizeof(cmd_header));
+    phNxpNciMwEepromArea.p_rx_data[12] = 0;
+    memcpy (set_mw_eeprom_cmd + sizeof(cmd_header), phNxpNciMwEepromArea.p_rx_data, sizeof(phNxpNciMwEepromArea.p_rx_data));
+
+retry_send_ext:
+    if (retry_cnt > 3)
+    {
+        return NFCSTATUS_FAILED;
+    }
+
+    status = phNxpNciHal_send_ext_cmd (sizeof(set_mw_eeprom_cmd), set_mw_eeprom_cmd);
+    if (status != NFCSTATUS_SUCCESS)
+    {
+        NXPLOG_NCIHAL_E ("unable to update the mw eeprom data");
+        retry_cnt++;
+        goto retry_send_ext;
+    }
+    return status;
+}
+
+/******************************************************************************
  * Function         phNxpNciHal_set_clock
  *
  * Description      This function is called after successfull download
@@ -2548,7 +2643,7 @@ static void phNxpNciHal_print_res_status( uint8_t *p_rx_data, uint16_t *p_len)
             }
         }
 
-        if(phNxpNciRfSet.isGetRfSetting)
+        else if(phNxpNciRfSet.isGetRfSetting)
         {
             int i;
             for(i=0; i<* p_len; i++)
@@ -2556,16 +2651,23 @@ static void phNxpNciHal_print_res_status( uint8_t *p_rx_data, uint16_t *p_len)
                 phNxpNciRfSet.p_rx_data[i] = p_rx_data[i];
                 //NXPLOG_NCIHAL_D("%s: response status =0x%x",__FUNCTION__,p_rx_data[i]);
             }
-
+        }
+        else if (phNxpNciMwEepromArea.isGetEepromArea)
+        {
+            int i;
+            for (i = 8; i < *p_len; i++)
+            {
+                phNxpNciMwEepromArea.p_rx_data[i - 8] = p_rx_data[i];
+            }
         }
     }
 
-if((p_rx_data[2])&&(config_access == TRUE))
+    if (p_rx_data[2] && (config_access == TRUE))
     {
-        if(p_rx_data[3]!=NFCSTATUS_SUCCESS)
+        if (p_rx_data[3] != NFCSTATUS_SUCCESS)
         {
-            NXPLOG_NCIHAL_W("Invalid Data from config file . Aborting..");
-            phNxpNciHal_close();
+            NXPLOG_NCIHAL_W ("Invalid Data from config file . Aborting..");
+            phNxpNciHal_close ();
         }
     }
 }
