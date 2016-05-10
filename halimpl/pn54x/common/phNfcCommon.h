@@ -53,6 +53,12 @@
 #define PKU_LIB_PATH      FW_DLL_ROOT_DIR "libpn547_fw_pku"      FW_DLL_EXTENSION
 #endif
 
+#if(NFC_NXP_CHIP_TYPE == PN548C2)
+#define COMPILATION_MW "PN548C2"
+#else
+#define COMPILATION_MW "PN547C2"
+#endif
+
 /* HAL Version number (Updated as per release) */
 #define NXP_MW_VERSION_MAJ  (1U)
 #define NXP_MW_VERSION_MIN  (0U)
