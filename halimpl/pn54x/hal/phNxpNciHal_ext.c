@@ -50,6 +50,8 @@ extern uint32_t wFwVerRsp;
 /* External global variable to get FW version from FW file*/
 extern uint16_t wFwVer;
 
+uint16_t fw_maj_ver;
+uint16_t rom_version;
 /* local buffer to store CORE_INIT response */
 static uint32_t bCoreInitRsp[40];
 static uint32_t iCoreInitRspLen;
@@ -351,6 +353,8 @@ NFCSTATUS phNxpNciHal_process_ext_rsp (uint8_t *p_ntf, uint16_t *p_len)
         iCoreInitRspLen = *p_len;
         memcpy(bCoreInitRsp, p_ntf, *p_len);
         NXPLOG_NCIHAL_D ("NxpNci> FW Version: %x.%x.%x", p_ntf[len-2], p_ntf[len-1], p_ntf[len]);
+        fw_maj_ver = p_ntf[len-1];
+        rom_version = p_ntf[len-2];
     }
     //4200 02 00 01
     else if(p_ntf[0] == 0x42 && p_ntf[1] == 0x00 && ee_disc_done == 0x01)
