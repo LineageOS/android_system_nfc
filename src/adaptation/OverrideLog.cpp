@@ -27,6 +27,8 @@
 #include <string.h>
 #include "config.h"
 #include "android_logmsg.h"
+
+#undef LOG_TAG
 #define LOG_TAG "BrcmNfcJni"
 
 
