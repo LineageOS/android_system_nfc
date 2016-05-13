@@ -27,6 +27,7 @@ extern "C"
 #include "config.h"
 #include "android_logmsg.h"
 
+#undef LOG_TAG
 #define LOG_TAG "NfcAdaptation"
 
 extern "C" void GKI_shutdown();
