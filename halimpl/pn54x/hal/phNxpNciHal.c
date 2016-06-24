@@ -73,11 +73,11 @@ extern bool_t rf_deactive_cmd;
 uint32_t timeoutTimerId = 0;
 phNxpNciHal_Sem_t config_data;
 
-phNxpNciClock_t phNxpNciClock={0,};
+phNxpNciClock_t phNxpNciClock={0, {0}, FALSE};
 
-phNxpNciRfSetting_t phNxpNciRfSet={0,};
+phNxpNciRfSetting_t phNxpNciRfSet={FALSE, {0} };
 
-phNxpNciMwEepromArea_t phNxpNciMwEepromArea = {0,};
+phNxpNciMwEepromArea_t phNxpNciMwEepromArea = {FALSE, {0} };
 
 /**************** local methods used in this file only ************************/
 static NFCSTATUS phNxpNciHal_fw_download(void);
