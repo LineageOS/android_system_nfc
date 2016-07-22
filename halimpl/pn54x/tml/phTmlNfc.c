@@ -394,6 +394,11 @@ static void phTmlNfc_TmlThread(void *pParam)
                             gpphTmlNfc_Context->bWriteCbInvoked = FALSE;
                         }
                     }
+                    if (gpphTmlNfc_Context->tWriteInfo.bThreadBusy)
+                    {
+                        NXPLOG_TML_D ("Delay Read if write thread is busy");
+                        usleep (2000); /*2ms delay to give prio to write complete */
+                    }
                     /* Update the actual number of bytes read including header */
                     gpphTmlNfc_Context->tReadInfo.wLength = (uint16_t) (dwNoBytesWrRd);
                     phNxpNciHal_print_packet("RECV", gpphTmlNfc_Context->tReadInfo.pBuffer,
