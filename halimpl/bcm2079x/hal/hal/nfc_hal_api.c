@@ -151,7 +151,7 @@ void HAL_NfcClose (void)
 ** Returns          void
 **
 *******************************************************************************/
-void HAL_NfcCoreInitialized (UINT8 *p_core_init_rsp_params)
+void HAL_NfcCoreInitialized (UINT16 data_len, UINT8 *p_core_init_rsp_params)
 {
     NFC_HDR *p_msg;
     UINT16  size;

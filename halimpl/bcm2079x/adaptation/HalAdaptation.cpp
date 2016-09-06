@@ -336,7 +336,7 @@ int HaiCoreInitialized (const bcm2079x_dev_t* device, uint8_t* coreInitResponseP
     int retval = EACCES;
 
     SyncEventGuard guard (gPostInitCompletedEvent);
-    HAL_NfcCoreInitialized (coreInitResponseParams);
+    HAL_NfcCoreInitialized (0, coreInitResponseParams);
     gPostInitCompletedEvent.wait ();
     retval = 0;
     ALOGD ("%s: exit %d", __FUNCTION__, retval);
