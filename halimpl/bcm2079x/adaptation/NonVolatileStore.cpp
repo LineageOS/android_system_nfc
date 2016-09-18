@@ -15,8 +15,10 @@
  *  limitations under the License.
  *
  ******************************************************************************/
-#include "OverrideLog.h"
+
 #define LOG_TAG "NfcNciHal"
+
+#include "OverrideLog.h"
 #include "gki.h"
 extern "C"
 {

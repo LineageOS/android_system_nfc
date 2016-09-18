@@ -7,6 +7,7 @@ HALIMPL := halimpl/bcm2079x
 D_CFLAGS := -DANDROID -DBUILDCFG=1 \
     -Wno-deprecated-register \
     -Wno-unused-parameter \
+    -Wno-missing-field-initializers \
 
 
 ######################################

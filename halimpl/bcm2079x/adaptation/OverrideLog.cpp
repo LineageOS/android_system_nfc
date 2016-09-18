@@ -16,6 +16,8 @@
  *
  ******************************************************************************/
 
+#define LOG_TAG "NfcNciHal"
+
 /******************************************************************************
  *
  *  Override the ALOGD(), ALOGE(), and other logging macros from
@@ -27,7 +29,6 @@
 #include <string.h>
 #include "config.h"
 #include "android_logmsg.h"
-#define LOG_TAG "NfcNciHal"
 
 
 unsigned char appl_trace_level = BT_TRACE_LEVEL_DEBUG;

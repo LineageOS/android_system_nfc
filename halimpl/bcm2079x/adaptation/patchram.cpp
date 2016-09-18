@@ -15,6 +15,9 @@
  *  limitations under the License.
  *
  ******************************************************************************/
+
+#define LOG_TAG "NfcNciHal"
+
 #include "OverrideLog.h"
 #include "config.h"
 #include "nfc_hal_int.h"
@@ -28,8 +31,6 @@ extern "C"
 #include <cutils/properties.h>
 #include "spdhelper.h"
 #include "StartupConfig.h"
-
-#define LOG_TAG "NfcNciHal"
 
 #define FW_PRE_PATCH                        "FW_PRE_PATCH"
 #define FW_PATCH                            "FW_PATCH"
@@ -434,7 +435,7 @@ static void StartPatchDownload(UINT32 chipid)
                         HAL_NfcPrmSetI2cPatch((UINT8*)sI2cFixPrmBuf, (UINT16)lenPrmBuffer, 0);
                     }
                     else
-                        ALOGE("%s fail reading i2c fix; actual len=%u; expected len=%lu", __FUNCTION__, actualLen, lenPrmBuffer);
+                        ALOGE("%s fail reading i2c fix; actual len=%zu; expected len=%lu", __FUNCTION__, actualLen, lenPrmBuffer);
                 }
                 else
                 {
