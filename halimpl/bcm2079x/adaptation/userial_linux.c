@@ -16,6 +16,8 @@
  *
  ******************************************************************************/
 
+#define LOG_TAG "USERIAL_LINUX"
+
 #include "OverrideLog.h"
 #include <string.h>
 #include "gki.h"
@@ -78,8 +80,6 @@ UINT8 bcmi2cnfc_read_multi_packets = 0;
 #define USERIAL_Debug_verbose     ((ScrProtocolTraceFlag & 0x80000000) == 0x80000000)
 
 #include <sys/socket.h>
-
-#define LOG_TAG "USERIAL_LINUX"
 
 static UINT8 spi_negotiation[10] = { 0xF0, /* CMD */
                                     0x00, /* SPI PARM Negotiation */

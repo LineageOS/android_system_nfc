@@ -15,14 +15,15 @@
  *  limitations under the License.
  *
  ******************************************************************************/
+
+#define LOG_TAG "NfcNciHal"
+
 #include "OverrideLog.h"
 #include "config.h"
 #include <stdio.h>
 #include <string>
 #include <vector>
 #include <list>
-
-#define LOG_TAG "NfcNciHal"
 
 const char transport_config_path[] = "/etc/";
 
