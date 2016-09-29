@@ -15,6 +15,10 @@
  *  limitations under the License.
  *
  ******************************************************************************/
+#include <android/hardware/nfc/1.0/INfc.h>
+#include <android/hardware/nfc/1.0/INfcClientCallback.h>
+#include <hwbinder/ProcessState.h>
+#include <pthread.h>
 #include "OverrideLog.h"
 #include "NfcAdaptation.h"
 extern "C"
@@ -30,6 +34,17 @@ extern "C"
 #undef LOG_TAG
 #define LOG_TAG "NfcAdaptation"
 
+using android::OK;
+using android::sp;
+using android::status_t;
+
+using android::hardware::ProcessState;
+using android::hardware::Return;
+using android::hardware::Void;
+using android::hardware::nfc::V1_0::INfc;
+using android::hardware::nfc::V1_0::INfcClientCallback;
+using android::hardware::hidl_vec;
+
 extern "C" void GKI_shutdown();
 extern void resetConfig();
 extern "C" void verify_stack_non_volatile_store ();
@@ -37,11 +52,12 @@ extern "C" void delete_stack_non_volatile_store (BOOLEAN forceDelete);
 
 NfcAdaptation* NfcAdaptation::mpInstance = NULL;
 ThreadMutex NfcAdaptation::sLock;
-nfc_nci_device_t* NfcAdaptation::mHalDeviceContext = NULL;
 tHAL_NFC_CBACK* NfcAdaptation::mHalCallback = NULL;
 tHAL_NFC_DATA_CBACK* NfcAdaptation::mHalDataCallback = NULL;
 ThreadCondVar NfcAdaptation::mHalOpenCompletedEvent;
 ThreadCondVar NfcAdaptation::mHalCloseCompletedEvent;
+sp<INfc> NfcAdaptation::mHal;
+INfcClientCallback* NfcAdaptation::mCallback;
 
 UINT32 ScrProtocolTraceFlag = SCR_PROTO_TRACE_ALL; //0x017F00;
 UINT8 appl_trace_level = 0xff;
@@ -59,6 +75,29 @@ static UINT8 deviceHostWhiteList [NFA_HCI_MAX_HOST_IN_NETWORK];
 static tNFA_HCI_CFG jni_nfa_hci_cfg;
 extern tNFA_HCI_CFG *p_nfa_hci_cfg;
 extern BOOLEAN nfa_poll_bail_out_mode;
+
+class NfcClientCallback : public INfcClientCallback {
+  public:
+    NfcClientCallback(tHAL_NFC_CBACK* eventCallback, tHAL_NFC_DATA_CBACK dataCallback) {
+      mEventCallback = eventCallback;
+      mDataCallback = dataCallback;
+    };
+    virtual ~NfcClientCallback() = default;
+    Return<void> sendEvent(
+            ::android::hardware::nfc::V1_0::nfc_event_t event,
+            ::android::hardware::nfc::V1_0::nfc_status_t event_status) override {
+      mEventCallback ((UINT8)event, (tHAL_NFC_STATUS) event_status);
+      return Void();
+    };
+    Return<void> sendData(const ::android::hardware::nfc::V1_0::nfc_data_t &data ) override {
+      ::android::hardware::nfc::V1_0::nfc_data_t copy = data;
+      mDataCallback(copy.data.size(), &copy.data[0]);
+      return Void();
+    };
+  private:
+    tHAL_NFC_CBACK* mEventCallback;
+    tHAL_NFC_DATA_CBACK* mDataCallback;
+};
 
 /*******************************************************************************
 **
@@ -188,7 +227,6 @@ void NfcAdaptation::Initialize ()
         mCondVar.wait();
     }
 
-    mHalDeviceContext = NULL;
     mHalCallback =  NULL;
     memset (&mHalEntryFuncs, 0, sizeof(mHalEntryFuncs));
     InitializeHalDeviceContext ();
@@ -214,9 +252,7 @@ void NfcAdaptation::Finalize()
 
     resetConfig();
 
-    nfc_nci_close(mHalDeviceContext); //close the HAL's device context
-    mHalDeviceContext = NULL;
-    mHalCallback = NULL;
+    mCallback = NULL;
     memset (&mHalEntryFuncs, 0, sizeof(mHalEntryFuncs));
 
     ALOGD ("%s: exit", func);
@@ -316,7 +352,6 @@ void NfcAdaptation::InitializeHalDeviceContext ()
         ALOGE("No HAL module specified in config, falling back to BCM2079x");
         strlcpy (nci_hal_module, "nfc_nci.bcm2079x", sizeof(nci_hal_module));
     }
-    const hw_module_t* hw_module = NULL;
 
     mHalEntryFuncs.initialize = HalInitialize;
     mHalEntryFuncs.terminate = HalTerminate;
@@ -328,16 +363,18 @@ void NfcAdaptation::InitializeHalDeviceContext ()
     mHalEntryFuncs.control_granted = HalControlGranted;
     mHalEntryFuncs.power_cycle = HalPowerCycle;
     mHalEntryFuncs.get_max_ee = HalGetMaxNfcee;
-
-    ret = hw_get_module (nci_hal_module, &hw_module);
-    if (ret == 0)
-    {
-        ret = nfc_nci_open (hw_module, &mHalDeviceContext);
-        if (ret != 0)
-            ALOGE ("%s: nfc_nci_open fail", func);
+    ALOGI("%s: INfc::getService(%s)", func, nci_hal_module);
+    mHal = INfc::getService(nci_hal_module);
+    LOG_FATAL_IF(mHal == nullptr, "Failed to retrieve the NFC HAL!");
+    ALOGI("%s: INfc::getService(%s) returned %p (%s)", func, nci_hal_module,
+          mHal.get(), (mHal->isRemote() ? "remote" : "local"));
+    // TODO(b/31748996) A client must be completely unaware of the
+    // implementation details of its HAL: whether the HAL is passthrough, or
+    // whether it uses HWbinder or some other transport.
+    if (mHal->isRemote()) {
+        ProcessState::self()->setThreadPoolMaxThreadCount(1);
+        ProcessState::self()->startThreadPool();
     }
-    else
-        ALOGE ("%s: fail hw_get_module %s", func, nci_hal_module);
     ALOGD ("%s: exit", func);
 }
 
@@ -386,12 +423,8 @@ void NfcAdaptation::HalOpen (tHAL_NFC_CBACK *p_hal_cback, tHAL_NFC_DATA_CBACK* p
 {
     const char* func = "NfcAdaptation::HalOpen";
     ALOGD ("%s", func);
-    if (mHalDeviceContext)
-    {
-        mHalCallback = p_hal_cback;
-        mHalDataCallback = p_data_cback;
-        mHalDeviceContext->open (mHalDeviceContext, HalDeviceContextCallback, HalDeviceContextDataCallback);
-    }
+    mCallback = new NfcClientCallback(p_hal_cback, p_data_cback);
+    mHal->open(mCallback);
 }
 
 /*******************************************************************************
@@ -407,10 +440,7 @@ void NfcAdaptation::HalClose ()
 {
     const char* func = "NfcAdaptation::HalClose";
     ALOGD ("%s", func);
-    if (mHalDeviceContext)
-    {
-        mHalDeviceContext->close (mHalDeviceContext);
-    }
+    mHal->close();
 }
 
 /*******************************************************************************
@@ -462,10 +492,9 @@ void NfcAdaptation::HalWrite (UINT16 data_len, UINT8* p_data)
 {
     const char* func = "NfcAdaptation::HalWrite";
     ALOGD ("%s", func);
-    if (mHalDeviceContext)
-    {
-        mHalDeviceContext->write (mHalDeviceContext, data_len, p_data);
-    }
+    ::android::hardware::nfc::V1_0::nfc_data_t data;
+    data.data.setToExternal(p_data, data_len);
+    mHal->write(data);
 }
 
 /*******************************************************************************
@@ -477,14 +506,14 @@ void NfcAdaptation::HalWrite (UINT16 data_len, UINT8* p_data)
 ** Returns:     None.
 **
 *******************************************************************************/
-void NfcAdaptation::HalCoreInitialized (UINT8* p_core_init_rsp_params)
+void NfcAdaptation::HalCoreInitialized (UINT16 data_len, UINT8* p_core_init_rsp_params)
 {
     const char* func = "NfcAdaptation::HalCoreInitialized";
     ALOGD ("%s", func);
-    if (mHalDeviceContext)
-    {
-        mHalDeviceContext->core_initialized (mHalDeviceContext, p_core_init_rsp_params);
-    }
+    hidl_vec<uint8_t> data;
+    data.setToExternal(p_core_init_rsp_params, data_len);
+
+    mHal->core_initialized(data);
 }
 
 /*******************************************************************************
@@ -505,11 +534,7 @@ BOOLEAN NfcAdaptation::HalPrediscover ()
     const char* func = "NfcAdaptation::HalPrediscover";
     ALOGD ("%s", func);
     BOOLEAN retval = FALSE;
-
-    if (mHalDeviceContext)
-    {
-        retval = mHalDeviceContext->pre_discover (mHalDeviceContext);
-    }
+    mHal->pre_discover();
     return retval;
 }
 
@@ -530,10 +555,7 @@ void NfcAdaptation::HalControlGranted ()
 {
     const char* func = "NfcAdaptation::HalControlGranted";
     ALOGD ("%s", func);
-    if (mHalDeviceContext)
-    {
-        mHalDeviceContext->control_granted (mHalDeviceContext);
-    }
+    mHal->control_granted();
 }
 
 /*******************************************************************************
@@ -549,10 +571,7 @@ void NfcAdaptation::HalPowerCycle ()
 {
     const char* func = "NfcAdaptation::HalPowerCycle";
     ALOGD ("%s", func);
-    if (mHalDeviceContext)
-    {
-        mHalDeviceContext->power_cycle (mHalDeviceContext);
-    }
+    mHal->power_cycle();
 }
 
 /*******************************************************************************
@@ -569,15 +588,8 @@ UINT8 NfcAdaptation::HalGetMaxNfcee()
     const char* func = "NfcAdaptation::HalPowerCycle";
     UINT8 maxNfcee = 0;
     ALOGD ("%s", func);
-    if (mHalDeviceContext)
-    {
-        // TODO maco call into HAL when we figure out binary compatibility.
-        return nfa_ee_max_ee_cfg;
 
-        //mHalDeviceContext->get_max_ee (mHalDeviceContext, &maxNfcee);
-    }
-
-    return maxNfcee;
+    return nfa_ee_max_ee_cfg;
 }
 
 
