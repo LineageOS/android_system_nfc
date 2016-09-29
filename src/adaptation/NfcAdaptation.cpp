@@ -15,11 +15,11 @@
  *  limitations under the License.
  *
  ******************************************************************************/
+#include "OverrideLog.h"
 #include <android/hardware/nfc/1.0/INfc.h>
 #include <android/hardware/nfc/1.0/INfcClientCallback.h>
 #include <hwbinder/ProcessState.h>
 #include <pthread.h>
-#include "OverrideLog.h"
 #include "NfcAdaptation.h"
 extern "C"
 {
