@@ -84,14 +84,14 @@ class NfcClientCallback : public INfcClientCallback {
     };
     virtual ~NfcClientCallback() = default;
     Return<void> sendEvent(
-            ::android::hardware::nfc::V1_0::NfcEvent event,
-            ::android::hardware::nfc::V1_0::NfcStatus event_status) override {
+            ::android::hardware::nfc::V1_0::nfc_event_t event,
+            ::android::hardware::nfc::V1_0::nfc_status_t event_status) override {
       mEventCallback ((UINT8)event, (tHAL_NFC_STATUS) event_status);
       return Void();
     };
-    Return<void> sendData(const ::android::hardware::nfc::V1_0::NfcData &data ) override {
-      ::android::hardware::nfc::V1_0::NfcData copy = data;
-      mDataCallback(copy.size(), &copy[0]);
+    Return<void> sendData(const ::android::hardware::nfc::V1_0::nfc_data_t &data ) override {
+      ::android::hardware::nfc::V1_0::nfc_data_t copy = data;
+      mDataCallback(copy.data.size(), &copy.data[0]);
       return Void();
     };
   private:
@@ -492,8 +492,8 @@ void NfcAdaptation::HalWrite (UINT16 data_len, UINT8* p_data)
 {
     const char* func = "NfcAdaptation::HalWrite";
     ALOGD ("%s", func);
-    ::android::hardware::nfc::V1_0::NfcData data;
-    data.setToExternal(p_data, data_len);
+    ::android::hardware::nfc::V1_0::nfc_data_t data;
+    data.data.setToExternal(p_data, data_len);
     mHal->write(data);
 }
 
@@ -513,7 +513,7 @@ void NfcAdaptation::HalCoreInitialized (UINT16 data_len, UINT8* p_core_init_rsp_
     hidl_vec<uint8_t> data;
     data.setToExternal(p_core_init_rsp_params, data_len);
 
-    mHal->coreInitialized(data);
+    mHal->core_initialized(data);
 }
 
 /*******************************************************************************
@@ -534,7 +534,7 @@ BOOLEAN NfcAdaptation::HalPrediscover ()
     const char* func = "NfcAdaptation::HalPrediscover";
     ALOGD ("%s", func);
     BOOLEAN retval = FALSE;
-    mHal->prediscover();
+    mHal->pre_discover();
     return retval;
 }
 
@@ -555,7 +555,7 @@ void NfcAdaptation::HalControlGranted ()
 {
     const char* func = "NfcAdaptation::HalControlGranted";
     ALOGD ("%s", func);
-    mHal->controlGranted();
+    mHal->control_granted();
 }
 
 /*******************************************************************************
@@ -571,7 +571,7 @@ void NfcAdaptation::HalPowerCycle ()
 {
     const char* func = "NfcAdaptation::HalPowerCycle";
     ALOGD ("%s", func);
-    mHal->powerCycle();
+    mHal->power_cycle();
 }
 
 /*******************************************************************************
