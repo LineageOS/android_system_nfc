@@ -39,7 +39,7 @@
 #define RW_I93_TOUT_STAY_QUIET                  200     /* stay quiet timeout   */
 #define RW_I93_READ_MULTI_BLOCK_SIZE            128     /* max reading data if read multi block is supported */
 #define RW_I93_FORMAT_DATA_LEN                  8       /* CC, zero length NDEF, Terminator TLV              */
-#define RW_I93_GET_MULTI_BLOCK_SEC_SIZE         512     /* max getting lock status if get multi block sec is supported */
+#define RW_I93_GET_MULTI_BLOCK_SEC_SIZE         253     /* max getting lock status if get multi block sec is supported */
 
 /* main state */
 enum
@@ -1629,8 +1629,11 @@ void rw_i93_sm_detect_ndef (BT_HDR *p_resp)
 
         if (status == NFC_STATUS_OK)
         {
-            /* seach NDEF TLV from offset 4 */
-            p_i93->rw_offset = 4;
+            /* seach NDEF TLV from offset 4 when CC file coded on 4 bytes NFC Forum */
+            if (cc[2] != 0)
+                p_i93->rw_offset = 4;
+            else
+                p_i93->rw_offset = 8;
 
             if (rw_i93_get_next_blocks (p_i93->rw_offset) == NFC_STATUS_OK)
             {
