@@ -31,7 +31,6 @@
 #include "gki.h"
 #include "nci_defs.h"
 #include "nfc_api.h"
-#include "btu_api.h"
 
 #ifdef __cplusplus
 extern "C" {
