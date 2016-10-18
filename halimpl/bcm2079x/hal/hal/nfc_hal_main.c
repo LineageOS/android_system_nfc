@@ -41,9 +41,7 @@ NFC_HAL_TRANS_CFG_QUALIFIER tNFC_HAL_TRANS_CFG nfc_hal_trans_cfg =
 };
 
 /* Control block for NFC HAL NCI transport */
-#if NFC_DYNAMIC_MEMORY == FALSE
 tNFC_HAL_CB nfc_hal_cb;
-#endif
 
 extern tNFC_HAL_CFG *p_nfc_hal_cfg;
 /****************************************************************************

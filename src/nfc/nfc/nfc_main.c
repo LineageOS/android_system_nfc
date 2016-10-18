@@ -58,9 +58,7 @@
 /****************************************************************************
 ** Declarations
 ****************************************************************************/
-#if NFC_DYNAMIC_MEMORY == FALSE
 tNFC_CB nfc_cb;
-#endif
 
 #if (NFC_RW_ONLY == FALSE)
 #define NFC_NUM_INTERFACE_MAP   2

@@ -248,12 +248,7 @@ typedef struct
 *****************************************************************************/
 
 /* NFA Connection Handover control block */
-#if NFA_DYNAMIC_MEMORY == FALSE
 extern tNFA_CHO_CB nfa_cho_cb;
-#else
-extern tNFA_CHO_CB *nfa_cho_cb_ptr;
-#define nfa_cho_cb (*nfa_cho_cb_ptr)
-#endif
 
 /*****************************************************************************
 **  External functions

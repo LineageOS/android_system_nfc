@@ -447,13 +447,10 @@ typedef struct
 } tNFC_HAL_CB;
 
 /* Global NCI data */
-#if NFC_DYNAMIC_MEMORY == FALSE
 extern tNFC_HAL_CB   nfc_hal_cb;
-#else
-#define nfc_hal_cb (*nfc_hal_cb_ptr)
-extern tNFC_HAL_CB *nfc_hal_cb_ptr;
-#endif
+
 extern UINT8 *p_nfc_hal_pre_discover_cfg;
+
 /****************************************************************************
 ** Internal nfc functions
 ****************************************************************************/

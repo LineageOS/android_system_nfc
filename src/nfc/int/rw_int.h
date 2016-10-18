@@ -586,12 +586,7 @@ extern "C" {
 #endif
 
 /* Global NFC data */
-#if NFC_DYNAMIC_MEMORY == FALSE
 NFC_API extern tRW_CB  rw_cb;
-#else
-NFC_API extern tRW_CB *rw_cb_ptr;
-#define rw_cb (*rw_cb_ptr)
-#endif
 
 /* from .c */
 

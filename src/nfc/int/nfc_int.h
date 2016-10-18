@@ -208,12 +208,7 @@ typedef struct
 *****************************************************************************/
 
 /* Global NFC data */
-#if NFC_DYNAMIC_MEMORY == FALSE
 NFC_API extern tNFC_CB  nfc_cb;
-#else
-NFC_API extern tNFC_CB *nfc_cb_ptr;
-#define nfc_cb (*nfc_cb_ptr)
-#endif
 
 /****************************************************************************
 ** Internal nfc functions

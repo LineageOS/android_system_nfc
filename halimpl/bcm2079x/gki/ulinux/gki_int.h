@@ -64,12 +64,7 @@ typedef struct
 extern "C" {
 #endif
 
-#if GKI_DYNAMIC_MEMORY == FALSE
 GKI_API extern tGKI_CB  gki_cb;
-#else
-GKI_API extern tGKI_CB *gki_cb_ptr;
-#define gki_cb (*gki_cb_ptr)
-#endif
 
 #ifdef __cplusplus
 }

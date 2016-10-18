@@ -19,7 +19,6 @@
 #define GKI_COMMON_H
 
 #include "gki.h"
-#include "dyn_mem.h"
 
 #ifndef GKI_DEBUG
 #define GKI_DEBUG	FALSE

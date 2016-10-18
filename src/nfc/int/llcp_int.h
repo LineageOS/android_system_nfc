@@ -286,12 +286,7 @@ extern "C" {
 ** LLCP global data
 */
 
-#if (!defined LLCP_DYNAMIC_MEMORY) || (LLCP_DYNAMIC_MEMORY == FALSE)
 LLCP_API extern tLLCP_CB  llcp_cb;
-#else
-LLCP_API extern tLLCP_CB *llcp_cb_ptr;
-#define llcp_cb (*llcp_cb_ptr)
-#endif
 
 /*
 ** Functions provided by llcp_main.c

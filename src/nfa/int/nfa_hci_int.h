@@ -425,13 +425,7 @@ typedef struct
 *****************************************************************************/
 
 /* NFA HCI control block */
-#if NFA_DYNAMIC_MEMORY == FALSE
 extern tNFA_HCI_CB nfa_hci_cb;
-#else
-extern tNFA_HCI_CB *nfa_hci_cb_ptr;
-#define nfa_hci_cb (*nfa_hci_cb_ptr)
-#endif
-
 
 /*****************************************************************************
 **  External functions
