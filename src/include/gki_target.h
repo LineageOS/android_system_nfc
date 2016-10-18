@@ -232,7 +232,7 @@ Devices with small amount of RAM should limit the number of active obex objects.
 
 /* The number of buffers in buffer pool 4. */
 #ifndef GKI_BUF4_MAX
-#define GKI_BUF4_MAX                (OBX_NUM_SERVERS + OBX_NUM_CLIENTS)
+#define GKI_BUF4_MAX                96  /* (OBX_NUM_SERVERS + OBX_NUM_CLIENTS) */
 #endif
 
 /* The ID of buffer pool 4. */

@@ -138,9 +138,6 @@
 #define BT_EVT_TO_HCISU_H5_RESET_EVT            (0x0009 | BT_EVT_HCISU)
 #define BT_EVT_HCISU_START_QUICK_TIMER          (0x000a | BT_EVT_HCISU)
 
-#define BT_EVT_DATA_TO_AMP_1        0x5100
-#define BT_EVT_DATA_TO_AMP_15       0x5f00
-
 /* HSP Events */
 
 #define BT_EVT_BTU_HSP2             0x6000
@@ -189,22 +186,6 @@ typedef struct
 } BT_HDR;
 
 #define BT_HDR_SIZE (sizeof (BT_HDR))
-
-#define BT_PSM_SDP                      0x0001
-#define BT_PSM_RFCOMM                   0x0003
-#define BT_PSM_TCS                      0x0005
-#define BT_PSM_CTP                      0x0007
-#define BT_PSM_BNEP                     0x000F
-#define BT_PSM_HIDC                     0x0011
-#define BT_PSM_HIDI                     0x0013
-#define BT_PSM_UPNP                     0x0015
-#define BT_PSM_AVCTP                    0x0017
-#define BT_PSM_AVDTP                    0x0019
-#define BT_PSM_AVCTP_13                 0x001B /* Advanced Control - Browsing */
-#define BT_PSM_UDI_CP                   0x001D /* Unrestricted Digital Information Profile C-Plane  */
-#define BT_PSM_ATT                      0x001F /* Attribute Protocol  */
-#define BT_PSM_3DS                      0x0021 /* 3D sync */
-
 
 /* These macros extract the HCI opcodes from a buffer
 */
@@ -287,19 +268,11 @@ typedef struct
 typedef UINT8 BD_ADDR[BD_ADDR_LEN];         /* Device address */
 typedef UINT8 *BD_ADDR_PTR;                 /* Pointer to Device Address */
 
-#define AMP_KEY_TYPE_GAMP       0
-#define AMP_KEY_TYPE_WIFI       1
-#define AMP_KEY_TYPE_UWB        2
-typedef UINT8 tAMP_KEY_TYPE;
-
 #define BT_OCTET8_LEN    8
 typedef UINT8 BT_OCTET8[BT_OCTET8_LEN];   /* octet array: size 16 */
 
 #define LINK_KEY_LEN    16
 typedef UINT8 LINK_KEY[LINK_KEY_LEN];       /* Link Key */
-
-#define AMP_LINK_KEY_LEN        32
-typedef UINT8 AMP_LINK_KEY[AMP_LINK_KEY_LEN];   /* Dedicated AMP and GAMP Link Keys */
 
 #define BT_OCTET16_LEN    16
 typedef UINT8 BT_OCTET16[BT_OCTET16_LEN];   /* octet array: size 16 */
@@ -449,75 +422,6 @@ typedef struct
 #define BRCM_UTILITY_SERVICE_PSM    0x5AE1
 #define BRCM_MATCHER_PSM            0x5AE3
 
-/* Connection statistics
-*/
-
-/* Structure to hold connection stats */
-#ifndef BT_CONN_STATS_DEFINED
-#define BT_CONN_STATS_DEFINED
-
-/* These bits are used in the bIsConnected field */
-#define BT_CONNECTED_USING_BREDR   1
-#define BT_CONNECTED_USING_AMP     2
-
-typedef struct
-{
-    UINT32   is_connected;
-    INT32    rssi;
-    UINT32   bytes_sent;
-    UINT32   bytes_rcvd;
-    UINT32   duration;
-} tBT_CONN_STATS;
-
-#endif
-
-/* AMP transport selection criteria definitions.
-** NOTE: if underlying L2CAP connection uses basic mode than it can use only BR/EDR.
-**       For such L2CAP connections AMP connection the criteria provided by application
-**       is reset by AMP manager to AMP_USE_AMP_NEVER.
-*/
-#define AMP_USE_AMP_NEVER                      0   /* Connection only via BR/EDR controller, no AMP allowed        */
-#define AMP_USE_AMP_IF_PEER_TRIES_IT           1   /* Allow AMP to be used if the peer tries to use it             */
-#define AMP_USE_AMP_IF_PHY_CONN_EXISTS         2   /* Use AMP if there is already a physical connection (default)  */
-#define AMP_USE_AMP_IF_LC_POWER_ON             3   /* Only try to use AMP if the Local Controller is powered on    */
-#define AMP_USE_AMP_IF_LC_AND_PEER_POWER_ON    4   /* Only try to use AMP if both LC and peer are powered on       */
-#define AMP_USE_AMP_IF_POSSIBLE                5   /* Try to use AMP if at all possible                            */
-#define AMP_USE_AMP_ONLY                       6   /* Only use AMP, never use BR/EDR                               */
-#define AMP_USE_AMP_MAX_DEF            AMP_USE_AMP_ONLY /* Maximum enum defined for AMP Criteria                        */
-
-#define	AMP_AUTOSWITCH_ALLOWED 		           0x80000000  /* flag to indicate that this connection is auto-switch ready */
-#define AMP_USE_CURRENT_CRITERIA               0xFFFFFFFF  /* Flag if previous criteria was to be still used        */
-
-typedef UINT32 tAMP_CRITERIA;
-
-
-/*****************************************************************************
-**                          Low Energy definitions
-**
-** Address types
-*/
-#define BLE_ADDR_PUBLIC         0x00
-#define BLE_ADDR_RANDOM         0x01
-#define BLE_ADDR_TYPE_MASK      (BLE_ADDR_RANDOM | BLE_ADDR_PUBLIC)
-typedef UINT8 tBLE_ADDR_TYPE;
-
-#define BLE_ADDR_IS_STATIC(x)   ((x[0] & 0xC0) == 0xC0)
-
-typedef struct
-{
-    tBLE_ADDR_TYPE      type;
-    BD_ADDR             bda;
-} tBLE_BD_ADDR;
-
-/* Device Types
-*/
-#define BT_DEVICE_TYPE_BREDR   0x01
-#define BT_DEVICE_TYPE_BLE     0x02
-#define BT_DEVICE_TYPE_DUMO    0x03
-typedef UINT8 tBT_DEVICE_TYPE;
-/*****************************************************************************/
-
-
 /* Define trace levels */
 #define BT_TRACE_LEVEL_NONE    0          /* No trace messages to be generated    */
 #define BT_TRACE_LEVEL_ERROR   1          /* Error condition trace messages       */
@@ -547,43 +451,9 @@ typedef UINT8 tBT_DEVICE_TYPE;
 #define TRACE_LAYER_USB             0x00010000
 #define TRACE_LAYER_SERIAL          0x00020000
 #define TRACE_LAYER_SOCKET          0x00030000
-#define TRACE_LAYER_RS232           0x00040000
-#define TRACE_LAYER_TRANS_MAX_NUM   5
-#define TRACE_LAYER_TRANS_ALL       0x007f0000
-#define TRACE_LAYER_LC              0x00050000
-#define TRACE_LAYER_LM              0x00060000
 #define TRACE_LAYER_HCI             0x00070000
-#define TRACE_LAYER_L2CAP           0x00080000
-#define TRACE_LAYER_RFCOMM          0x00090000
-#define TRACE_LAYER_SDP             0x000a0000
-#define TRACE_LAYER_TCS             0x000b0000
-#define TRACE_LAYER_OBEX            0x000c0000
-#define TRACE_LAYER_BTM             0x000d0000
-#define TRACE_LAYER_GAP             0x000e0000
-#define TRACE_LAYER_DUN             0x000f0000
-#define TRACE_LAYER_GOEP            0x00100000
-#define TRACE_LAYER_ICP             0x00110000
-#define TRACE_LAYER_HSP2            0x00120000
-#define TRACE_LAYER_SPP             0x00130000
-#define TRACE_LAYER_CTP             0x00140000
-#define TRACE_LAYER_BPP             0x00150000
-#define TRACE_LAYER_HCRP            0x00160000
-#define TRACE_LAYER_FTP             0x00170000
-#define TRACE_LAYER_OPP             0x00180000
 #define TRACE_LAYER_BTU             0x00190000
 #define TRACE_LAYER_GKI             0x001a0000
-#define TRACE_LAYER_BNEP            0x001b0000
-#define TRACE_LAYER_PAN             0x001c0000
-#define TRACE_LAYER_HFP             0x001d0000
-#define TRACE_LAYER_HID             0x001e0000
-#define TRACE_LAYER_BIP             0x001f0000
-#define TRACE_LAYER_AVP             0x00200000
-#define TRACE_LAYER_A2D             0x00210000
-#define TRACE_LAYER_SAP             0x00220000
-#define TRACE_LAYER_AMP             0x00230000
-#define TRACE_LAYER_MCA             0x00240000
-#define TRACE_LAYER_ATT             0x00250000
-#define TRACE_LAYER_SMP             0x00260000
 #define TRACE_LAYER_NFC             0x00270000
 #define TRACE_LAYER_NCI             0x00280000 /*it's overwritten in nfc_types.h*/
 #define TRACE_LAYER_LLCP            0x00290000
@@ -643,65 +513,17 @@ typedef UINT8 tBT_DEVICE_TYPE;
 #define TRACE_TYPE_EVT_RX           0x0000000f
 #define TRACE_TYPE_ACL_RX           0x00000010
 #define TRACE_TYPE_TARGET_TRACE     0x00000011
-#define TRACE_TYPE_SCO_TX           0x00000012
-#define TRACE_TYPE_SCO_RX           0x00000013
-
 
 #define TRACE_TYPE_MAX_NUM          20
 #define TRACE_TYPE_ALL              0xffff
 
-/* Define color for script type */
-#define SCR_COLOR_DEFAULT       0
-#define SCR_COLOR_TYPE_COMMENT  1
-#define SCR_COLOR_TYPE_COMMAND  2
-#define SCR_COLOR_TYPE_EVENT    3
-#define SCR_COLOR_TYPE_SELECT   4
-
 /* Define protocol trace flag values */
 #define SCR_PROTO_TRACE_HCI_SUMMARY 0x00000001
-#define SCR_PROTO_TRACE_HCI_DATA    0x00000002
-#define SCR_PROTO_TRACE_L2CAP       0x00000004
-#define SCR_PROTO_TRACE_RFCOMM      0x00000008
-#define SCR_PROTO_TRACE_SDP         0x00000010
-#define SCR_PROTO_TRACE_TCS         0x00000020
-#define SCR_PROTO_TRACE_OBEX        0x00000040
-#define SCR_PROTO_TRACE_OAPP        0x00000080 /* OBEX Application Profile */
-#define SCR_PROTO_TRACE_AMP         0x00000100
-#define SCR_PROTO_TRACE_BNEP        0x00000200
-#define SCR_PROTO_TRACE_AVP         0x00000400
-#define SCR_PROTO_TRACE_MCA         0x00000800
-#define SCR_PROTO_TRACE_ATT         0x00001000
-#define SCR_PROTO_TRACE_SMP         0x00002000
 #define SCR_PROTO_TRACE_NCI         0x00004000
-#define SCR_PROTO_TRACE_LLCP        0x00008000
-#define SCR_PROTO_TRACE_NDEF        0x00010000
-#define SCR_PROTO_TRACE_RW          0x00020000
-#define SCR_PROTO_TRACE_CE          0x00040000
-#define SCR_PROTO_TRACE_SNEP        0x00080000
-#define SCR_PROTO_TRACE_CHO         0x00100000
 #define SCR_PROTO_TRACE_ALL         0x001fffff
 #define SCR_PROTO_TRACE_HCI_LOGGING_VSE 0x0800 /* Brcm vs event for logmsg and protocol traces */
 
 #define MAX_SCRIPT_TYPE             5
-
-#define TCS_PSM_INTERCOM        5
-#define TCS_PSM_CORDLESS        7
-#define BT_PSM_BNEP             0x000F
-/* Define PSMs HID uses */
-#define HID_PSM_CONTROL         0x0011
-#define HID_PSM_INTERRUPT       0x0013
-
-#if defined(UCD_HID_INCLUDED) && (UCD_HID_INCLUDED == TRUE)
-#define UCD_PSM_MIN     0x8001
-#define UCD_PSM_MAX     0x8003
-#define UCD_PSM_HID_CTRL 0x8001
-#define UCD_PSM_HID_INTR 0x8003
-#endif
-
-#if defined(HIDH_UCD_INCLUDED) && (HIDH_UCD_INCLUDED == TRUE)
-#define HID_UCD_PSM_CONTROL 0x8001
-#define HID_UCD_PSM_INTERRUPT 0x8003
-#endif
 
 /* Define a function for logging */
 typedef void (BT_LOG_FUNC) (int trace_type, const char *fmt_str, ...);
