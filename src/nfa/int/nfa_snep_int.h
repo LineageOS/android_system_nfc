@@ -234,20 +234,10 @@ typedef struct
 *****************************************************************************/
 
 /* NFA SNEP control block */
-#if NFA_DYNAMIC_MEMORY == FALSE
 extern tNFA_SNEP_CB nfa_snep_cb;
-#else
-extern tNFA_SNEP_CB *nfa_snep_cb_ptr;
-#define nfa_snep_cb (*nfa_snep_cb_ptr)
-#endif
 
 /* NFA SNEP default server control block */
-#if NFA_DYNAMIC_MEMORY == FALSE
 extern tNFA_SNEP_DEFAULT_CB nfa_snep_default_cb;
-#else
-extern tNFA_SNEP_DEFAULT_CB *nfa_snep_default_cb_ptr;
-#define nfa_snep_default_cb (*nfa_snep_default_cb_ptr)
-#endif
 
 /*****************************************************************************
 **  External functions

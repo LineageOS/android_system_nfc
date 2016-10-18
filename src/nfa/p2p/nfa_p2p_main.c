@@ -37,9 +37,7 @@
 *****************************************************************************/
 
 /* system manager control block definition */
-#if NFA_DYNAMIC_MEMORY == FALSE
 tNFA_P2P_CB nfa_p2p_cb;
-#endif
 
 /*****************************************************************************
 **  Static Functions

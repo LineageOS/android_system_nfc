@@ -150,12 +150,7 @@ extern "C" {
 #endif
 
 /* Global NFC data */
-#if NFC_DYNAMIC_MEMORY == FALSE
 NFC_API extern tCE_CB  ce_cb;
-#else
-NFC_API extern tCE_CB *ce_cb_ptr;
-#define ce_cb (*ce_cb_ptr)
-#endif
 
 extern void ce_init (void);
 

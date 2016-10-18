@@ -32,9 +32,7 @@
 #include "llcp_defs.h"
 #include "nfc_int.h"
 
-#if (LLCP_DYNAMIC_MEMORY == FALSE)
 tLLCP_CB llcp_cb;
-#endif
 
 /*******************************************************************************
 **

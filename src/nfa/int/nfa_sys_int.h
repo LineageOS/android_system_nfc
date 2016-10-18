@@ -66,13 +66,7 @@ typedef struct
 *****************************************************************************/
 
 /* system manager control block */
-#if NFA_DYNAMIC_MEMORY == FALSE
 extern tNFA_SYS_CB nfa_sys_cb;
-#else
-extern tNFA_SYS_CB *nfa_sys_cb_ptr;
-#define nfa_sys_cb (*nfa_sys_cb_ptr)
-#endif
-
 
 /* system manager configuration structure */
 extern tNFA_SYS_CFG *p_nfa_sys_cfg;

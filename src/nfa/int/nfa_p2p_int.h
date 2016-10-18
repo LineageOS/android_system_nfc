@@ -275,12 +275,7 @@ typedef struct
 *****************************************************************************/
 
 /* NFA P2P control block */
-#if NFA_DYNAMIC_MEMORY == FALSE
 extern tNFA_P2P_CB nfa_p2p_cb;
-#else
-extern tNFA_P2P_CB *nfa_p2p_cb_ptr;
-#define nfa_p2p_cb (*nfa_p2p_cb_ptr)
-#endif
 
 /*****************************************************************************
 **  External functions

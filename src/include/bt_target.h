@@ -28,7 +28,6 @@
 #include "gki_target.h"
 
 #include "bt_types.h"   /* This must be defined AFTER buildcfg.h */
-#include "dyn_mem.h"    /* defines static and/or dynamic memory for components */
 
 /* #define BYPASS_AVDATATRACE */
 

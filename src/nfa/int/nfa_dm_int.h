@@ -544,12 +544,7 @@ extern UINT8 nfa_dm_num_dm_interface_mapping;
 extern BOOLEAN nfa_poll_bail_out_mode;
 
 /* NFA device manager control block */
-#if NFA_DYNAMIC_MEMORY == FALSE
 extern tNFA_DM_CB nfa_dm_cb;
-#else
-extern tNFA_DM_CB *nfa_dm_cb_ptr;
-#define nfa_dm_cb (*nfa_dm_cb_ptr)
-#endif
 
 void nfa_dm_init (void);
 void nfa_p2p_init (void);

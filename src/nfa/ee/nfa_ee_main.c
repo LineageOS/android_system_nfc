@@ -35,9 +35,7 @@ extern void nfa_ee_vs_cback (tNFC_VS_EVT event, BT_HDR *p_data);
 *****************************************************************************/
 
 /* system manager control block definition */
-#if NFA_DYNAMIC_MEMORY == FALSE
 tNFA_EE_CB nfa_ee_cb;
-#endif
 
 /*****************************************************************************
 **  Constants

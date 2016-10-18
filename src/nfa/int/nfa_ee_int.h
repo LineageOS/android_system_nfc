@@ -426,12 +426,7 @@ typedef struct
 *****************************************************************************/
 
 /* NFA EE control block */
-#if NFA_DYNAMIC_MEMORY == FALSE
 extern tNFA_EE_CB nfa_ee_cb;
-#else
-extern tNFA_EE_CB *nfa_ee_cb_ptr;
-#define nfa_ee_cb (*nfa_ee_cb_ptr)
-#endif
 
 /*****************************************************************************
 **  External functions

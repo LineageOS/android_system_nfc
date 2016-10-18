@@ -45,9 +45,7 @@
 
 /* Define the structure that holds the GKI variables
 */
-#if GKI_DYNAMIC_MEMORY == FALSE
 tGKI_CB   gki_cb;
-#endif
 
 #define NANOSEC_PER_MILLISEC (1000000)
 #define NSEC_PER_SEC (1000*NANOSEC_PER_MILLISEC)
@@ -1098,7 +1096,7 @@ void GKI_register_mempool (void *p_mem)
 ** Returns          the address of the memory allocated, or NULL if failed
 **
 ** NOTE             This function is called by the Widcomm stack when
-**                  dynamic memory allocation is used. (see dyn_mem.h)
+**                  dynamic memory allocation is used.
 **
 *******************************************************************************/
 void *GKI_os_malloc (UINT32 size)
