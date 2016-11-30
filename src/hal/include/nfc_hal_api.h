@@ -40,17 +40,6 @@ typedef struct
 #define NFC_HDR_SIZE (sizeof (NFC_HDR))
 
 /*******************************************************************************
-** tHAL_STATUS Definitions
-*******************************************************************************/
-#define HAL_NFC_STATUS_OK               0
-#define HAL_NFC_STATUS_FAILED           1
-#define HAL_NFC_STATUS_ERR_TRANSPORT    2
-#define HAL_NFC_STATUS_ERR_CMD_TIMEOUT  3
-#define HAL_NFC_STATUS_REFUSED          4
-
-typedef UINT8 tHAL_NFC_STATUS;
-
-/*******************************************************************************
 ** tHAL_HCI_NETWK_CMD Definitions
 *******************************************************************************/
 #define HAL_NFC_HCI_NO_UICC_HOST    0x00
@@ -58,20 +47,8 @@ typedef UINT8 tHAL_NFC_STATUS;
 #define HAL_NFC_HCI_UICC1_HOST      0x02
 #define HAL_NFC_HCI_UICC2_HOST      0x04
 
-/*******************************************************************************
-** tHAL_NFC_CBACK Definitions
-*******************************************************************************/
 
-/* tHAL_NFC_CBACK events */
-#define HAL_NFC_OPEN_CPLT_EVT           0x00
-#define HAL_NFC_CLOSE_CPLT_EVT          0x01
-#define HAL_NFC_POST_INIT_CPLT_EVT      0x02
-#define HAL_NFC_PRE_DISCOVER_CPLT_EVT   0x03
-#define HAL_NFC_REQUEST_CONTROL_EVT     0x04
-#define HAL_NFC_RELEASE_CONTROL_EVT     0x05
-#define HAL_NFC_ERROR_EVT               0x06
-
-
+typedef UINT8 tHAL_NFC_STATUS;
 typedef void (tHAL_NFC_STATUS_CBACK) (tHAL_NFC_STATUS status);
 typedef void (tHAL_NFC_CBACK) (UINT8 event, tHAL_NFC_STATUS status);
 typedef void (tHAL_NFC_DATA_CBACK) (UINT16 data_len, UINT8   *p_data);
