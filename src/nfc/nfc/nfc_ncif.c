@@ -839,6 +839,8 @@ void nfc_ncif_proc_activate (UINT8 *p, UINT8 len)
                 pp++;   /* TC */
             }
             p_pa_iso->his_byte_len  = (UINT8) (p_pa_iso->ats_res_len - (pp - p_pa_iso->ats_res));
+            if (p_pa_iso->his_byte_len > NFC_MAX_HIS_BYTES_LEN)
+                p_pa_iso->his_byte_len = NFC_MAX_HIS_BYTES_LEN;
             memcpy (p_pa_iso->his_byte,  pp, p_pa_iso->his_byte_len);
             break;
 
