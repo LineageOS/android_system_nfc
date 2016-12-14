@@ -19,7 +19,7 @@
 #define GKI_H
 
 #ifdef BUILDCFG
-#if (!defined(NFC_HAL_TARGET) || (NFC_HAL_TARGET == FALSE))
+#if (NFC_HAL_TARGET == FALSE)
     #include "buildcfg.h"
 #else
     /* Build config when building HAL */
@@ -27,11 +27,15 @@
 #endif
 #endif
 
+#ifndef NFC_STANDALONE
+#define NFC_STANDALONE FALSE
+#endif
+
 /* Include platform-specific over-rides */
-#if (defined(NFC_STANDALONE) && (NFC_STANDALONE == TRUE))
+#if (NFC_STANDALONE == TRUE)
     #include "gki_target.h"
     #include "bt_types.h"
-#elif (defined(NFC_HAL_TARGET) && (NFC_HAL_TARGET == TRUE))
+#elif (NFC_HAL_TARGET == TRUE)
     /* If building NFC HAL, then use hal target file */
     #include "gki_hal_target.h"
     #include "nfc_types.h"
@@ -41,8 +45,7 @@
     #include "bt_types.h"
 #endif
 
-/* Uncomment this line for verbose GKI debugging and buffer tracking */
-/*#define GKI_BUFFER_DEBUG   TRUE*/
+#define GKI_BUFFER_DEBUG   FALSE
 
 
 /* Error codes */
@@ -412,14 +415,14 @@ GKI_API extern uint8_t GKI_create_pool (uint16_t, uint16_t, uint8_t, void *);
 GKI_API extern void    GKI_delete_pool (uint8_t);
 GKI_API extern void   *GKI_find_buf_start (void *);
 GKI_API extern void    GKI_freebuf (void *);
-#if GKI_BUFFER_DEBUG
+#if (GKI_BUFFER_DEBUG == TRUE)
 #define GKI_getbuf(size)    GKI_getbuf_debug(size, __func__, __LINE__)
 GKI_API extern void   *GKI_getbuf_debug (uint16_t, const char *, int);
 #else
 GKI_API extern void   *GKI_getbuf (uint16_t);
 #endif
 GKI_API extern uint16_t  GKI_get_buf_size (void *);
-#if GKI_BUFFER_DEBUG
+#if (GKI_BUFFER_DEBUG == TRUE)
 #define GKI_getpoolbuf(id)    GKI_getpoolbuf_debug(id, __func__, __LINE__)
 GKI_API extern void   *GKI_getpoolbuf_debug (uint8_t, const char *, int);
 #else
@@ -493,7 +496,7 @@ GKI_API extern uint32_t GKI_get_os_tick_count(void);
 */
 GKI_API extern void    GKI_exception (uint16_t, char *);
 
-#if GKI_DEBUG == TRUE
+#if (GKI_DEBUG == TRUE)
 GKI_API extern void    GKI_PrintBufferUsage(uint8_t *p_num_pools, uint16_t *p_cur_used);
 GKI_API extern void    GKI_PrintBuffer(void);
 GKI_API extern void    GKI_print_task(void);

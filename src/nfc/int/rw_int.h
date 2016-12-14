@@ -126,7 +126,7 @@ typedef struct
     uint8_t             pend_retx_rsp;                  /* Number of pending rsps to retransmission on prev cmd */
 } tRW_T1T_PREV_CMD_RSP_INFO;
 
-#if (defined (RW_NDEF_INCLUDED) && (RW_NDEF_INCLUDED == TRUE))
+#if (RW_NDEF_INCLUDED == TRUE)
 #define T1T_BUFFER_SIZE             T1T_STATIC_SIZE     /* Buffer 0-E block, for easier tlv operation           */
 #else
 #define T1T_BUFFER_SIZE             T1T_UID_LEN         /* Buffer UID                                           */
@@ -147,7 +147,7 @@ typedef struct
     bool                b_update;                           /* Tag header updated                                   */
     bool                b_rseg;                             /* Segment 0 read from tag                              */
     bool                b_hard_lock;                        /* Hard lock the tag as part of config tag to Read only */
-#if (defined (RW_NDEF_INCLUDED) && (RW_NDEF_INCLUDED == TRUE))
+#if (RW_NDEF_INCLUDED == TRUE)
     uint8_t             segment;                            /* Current Tag segment                                  */
     uint8_t             substate;                           /* Current substate of RW module                        */
     uint16_t            work_offset;                        /* Working byte offset                                  */
@@ -312,7 +312,7 @@ typedef struct
     bool                b_read_data;                        /* Tag data block read from tag                                 */
     bool                b_hard_lock;                        /* Hard lock the tag as part of config tag to Read only         */
     bool                check_tag_halt;                     /* Resent command after NACK rsp to find tag is in HALT State   */
-#if (defined (RW_NDEF_INCLUDED) && (RW_NDEF_INCLUDED == TRUE))
+#if (RW_NDEF_INCLUDED == TRUE)
     bool                skip_dyn_locks;                     /* Skip reading dynamic lock bytes from the tag                 */
     uint8_t             found_tlv;                          /* The Tlv found while searching a particular TLV               */
     uint8_t             tlv_detect;                         /* TLV type under detection                                     */
@@ -470,7 +470,7 @@ typedef struct
 } tRW_T4T_CB;
 
 /* RW retransmission statistics */
-#if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
+#if (RW_STATS_INCLUDED == TRUE)
 typedef struct
 {
     uint32_t            start_tick;         /* System tick count at activation */
@@ -570,7 +570,7 @@ typedef struct
     tRW_TCB             tcb;
     tRW_CBACK           *p_cback;
     uint32_t            cur_retry;          /* Retry count for the current operation */
-#if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
+#if (RW_STATS_INCLUDED == TRUE)
     tRW_STATS           stats;
 #endif  /* RW_STATS_INCLUDED */
     uint8_t             trace_level;
@@ -590,7 +590,7 @@ NFC_API extern tRW_CB  rw_cb;
 
 /* from .c */
 
-#if (defined (RW_NDEF_INCLUDED) && (RW_NDEF_INCLUDED == TRUE))
+#if (RW_NDEF_INCLUDED == TRUE)
 extern tRW_EVENT rw_t1t_handle_rsp (const tT1T_CMD_RSP_INFO * p_info, bool    *p_notify, uint8_t *p_data, tNFC_STATUS *p_status);
 extern tRW_EVENT rw_t1t_info_to_event (const tT1T_CMD_RSP_INFO * p_info);
 #else
@@ -605,7 +605,7 @@ extern tNFC_STATUS rw_t1t_send_static_cmd (uint8_t opcode, uint8_t add, uint8_t 
 extern void rw_t1t_process_timeout (TIMER_LIST_ENT *p_tle);
 extern void rw_t1t_handle_op_complete (void);
 
-#if (defined (RW_NDEF_INCLUDED) && (RW_NDEF_INCLUDED == TRUE))
+#if (RW_NDEF_INCLUDED == TRUE)
 extern tRW_EVENT rw_t2t_info_to_event (const tT2T_CMD_RSP_INFO *p_info);
 extern void rw_t2t_handle_rsp (uint8_t *p_data);
 #else
@@ -630,7 +630,7 @@ extern void rw_t4t_process_timeout (TIMER_LIST_ENT *p_tle);
 extern tNFC_STATUS rw_i93_select (uint8_t *p_uid);
 extern void rw_i93_process_timeout (TIMER_LIST_ENT *p_tle);
 
-#if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
+#if (RW_STATS_INCLUDED == TRUE)
 /* Internal fcns for statistics (from rw_main.c) */
 void rw_main_reset_stats (void);
 void rw_main_update_tx_stats (uint32_t bytes_tx, bool    is_retry);

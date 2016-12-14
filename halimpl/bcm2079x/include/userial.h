@@ -129,7 +129,7 @@ typedef uint8_t tUSERIAL_PORT;
 #define USERIAL_OP_CTS_AS_WAKEUP  13    /* H4IBSS */
 #define USERIAL_OP_CTS_AS_FC      14    /* H4IBSS */
 
-#if (defined LINUX_OS) && (LINUX_OS == TRUE)
+#if (defined(LINUX_OS) && LINUX_OS == TRUE)
 #define USERIAL_OP_SCO_UP         20    /* LINUX SCO */
 #define USERIAL_OP_SCO_DOWN       21    /* LINUX SCO */
 #endif
@@ -220,7 +220,7 @@ typedef union
     uint8_t  baud;
     uint8_t  fc;
     uint8_t  sigs;
-#if (defined LINUX_OS) && (LINUX_OS == TRUE)
+#if (defined(LINUX_OS) && LINUX_OS == TRUE)
     uint16_t sco_handle;
 #endif
 } tUSERIAL_IOCTL_DATA;

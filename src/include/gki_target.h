@@ -381,7 +381,7 @@ over HCI data and intentionally kept out of order */
 #define GKI_BUF8_MAX                30
 #endif
 
-#if defined(GKI_DEBUG) && (GKI_DEBUG == TRUE)
+#if (GKI_DEBUG == TRUE)
 #ifdef LOG_TAG
 #undef LOG_TAG
 #endif

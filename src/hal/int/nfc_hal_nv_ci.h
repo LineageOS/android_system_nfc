@@ -25,7 +25,7 @@
 #ifndef NFC_HAL_NV_CI_H
 #define NFC_HAL_NV_CI_H
 
-#if (defined(NFC_HAL_HCI_INCLUDED) && (NFC_HAL_HCI_INCLUDED == TRUE))
+#if (NFC_HAL_HCI_INCLUDED == TRUE)
 
 #include "nfc_hal_nv_co.h"
 
