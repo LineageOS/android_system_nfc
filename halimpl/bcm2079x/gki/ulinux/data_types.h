@@ -58,14 +58,4 @@ typedef unsigned char   UBYTE;
 #define UINT16_LOW_BYTE(x)      ((x) & 0xff)
 #define UINT16_HI_BYTE(x)       ((x) >> 8)
 
-/* MACRO definitions for safe string functions */
-/* Replace standard string functions with safe functions if available */
-#define BCM_STRCAT_S(x1,x2,x3)      strcat((x1),(x3))
-#define BCM_STRNCAT_S(x1,x2,x3,x4)  strncat((x1),(x3),(x4))
-#define BCM_STRCPY_S(x1,x2,x3)      strcpy((x1),(x3))
-#define BCM_STRNCPY_S(x1,x2,x3,x4)  strncpy((x1),(x3),(x4))
-#define BCM_SPRINTF_S(x1,x2,x3,x4)  sprintf((x1),(x3),(x4))
-#define BCM_VSPRINTF_S(x1,x2,x3,x4) vsprintf((x1),(x3),(x4))
-
 #endif
-
