@@ -368,13 +368,6 @@ void NfcAdaptation::InitializeHalDeviceContext ()
     LOG_FATAL_IF(mHal == nullptr, "Failed to retrieve the NFC HAL!");
     ALOGI("%s: INfc::getService(%s) returned %p (%s)", func, nci_hal_module,
           mHal.get(), (mHal->isRemote() ? "remote" : "local"));
-    // TODO(b/31748996) A client must be completely unaware of the
-    // implementation details of its HAL: whether the HAL is passthrough, or
-    // whether it uses HWbinder or some other transport.
-    if (mHal->isRemote()) {
-        ProcessState::self()->setThreadPoolMaxThreadCount(1);
-        ProcessState::self()->startThreadPool();
-    }
     ALOGD ("%s: exit", func);
 }
 
