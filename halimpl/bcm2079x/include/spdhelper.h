@@ -26,7 +26,7 @@ using namespace std;
 class SpdHelper
 {
 public:
-    static bool isPatchBad(UINT8* prm, UINT32 len);
+    static bool isPatchBad(uint8_t* prm, uint32_t len);
     static void setPatchAsBad();
     static void incErrorCount();
     static bool isSpdDebug();
@@ -35,7 +35,7 @@ private:
     SpdHelper();
     static SpdHelper& getInstance();
 
-    bool isPatchBadImpl(UINT8* prm, UINT32 len);
+    bool isPatchBadImpl(uint8_t* prm, uint32_t len);
     void setPatchAsBadImpl();
     void incErrorCountImpl();
     bool isSpdDebugImpl() {return mSpdDebug;}

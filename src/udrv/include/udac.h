@@ -26,7 +26,7 @@
 
 
 #define UDAC_GAIN_MAX     0x00FFF
-typedef UINT16 tUDAC_GAIN;
+typedef uint16_t tUDAC_GAIN;
 
 /* API functions for DAC driver */
 

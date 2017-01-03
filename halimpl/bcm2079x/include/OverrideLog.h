@@ -41,7 +41,7 @@ extern "C" {
 
 
 extern unsigned char appl_trace_level;
-extern UINT32 ScrProtocolTraceFlag;
+extern uint32_t ScrProtocolTraceFlag;
 
 
 /*******************************************************************************
@@ -62,7 +62,7 @@ extern UINT32 ScrProtocolTraceFlag;
 **
 *******************************************************************************/
 unsigned char InitializeGlobalAppLogLevel ();
-UINT32 InitializeProtocolLogLevel ();
+uint32_t InitializeProtocolLogLevel ();
 
 
 #ifdef __cplusplus

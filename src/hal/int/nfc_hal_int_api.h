@@ -46,22 +46,22 @@ enum
     NFC_HAL_XTAL_INDEX_MAX,
     NFC_HAL_XTAL_INDEX_SPECIAL = 0xFF
 };
-typedef UINT8 tNFC_HAL_XTAL_INDEX;
+typedef uint8_t tNFC_HAL_XTAL_INDEX;
 
 /* Broadcom specific device initialization before sending NCI reset */
 
 typedef struct
 {
-    UINT32                  brcm_hw_id;
-    UINT16                  xtal_freq;
-    UINT8                   xtal_index;
+    uint32_t                brcm_hw_id;
+    uint16_t                xtal_freq;
+    uint8_t                 xtal_index;
 } tNFC_HAL_DEV_INIT_XTAL_CFG;
 
 #define NFC_HAL_DEV_INIT_MAX_XTAL_CFG       5
 
 typedef struct
 {
-    UINT8                       num_xtal_cfg;
+    uint8_t                     num_xtal_cfg;
     tNFC_HAL_DEV_INIT_XTAL_CFG  xtal_cfg[NFC_HAL_DEV_INIT_MAX_XTAL_CFG];
 } tNFC_HAL_DEV_INIT_CFG;
 
@@ -84,7 +84,7 @@ typedef struct
 #define NFC_HAL_PRM_FORMAT_BIN  0x00
 #define NFC_HAL_PRM_FORMAT_HCD  0x01
 #define NFC_HAL_PRM_FORMAT_NCD  0x02
-typedef UINT8 tNFC_HAL_PRM_FORMAT;
+typedef uint8_t tNFC_HAL_PRM_FORMAT;
 
 /*****************************************************************************
 **  Patch RAM Callback for event notificaton
@@ -102,10 +102,10 @@ enum
     NFC_HAL_PRM_ABORT_NO_NVM_EVT               /* nfc_hal_prm_nvm_required is TRUE and NVM is unavail  */
 };
 
-typedef void (tNFC_HAL_PRM_CBACK) (UINT8 event);
+typedef void (tNFC_HAL_PRM_CBACK) (uint8_t event);
 
-typedef UINT8 tNFC_HAL_NCI_EVT;     /* MT + Opcode */
-typedef void (tNFC_HAL_NCI_CBACK) (tNFC_HAL_NCI_EVT event, UINT16 data_len, UINT8 *p_data);
+typedef uint8_t tNFC_HAL_NCI_EVT;     /* MT + Opcode */
+typedef void (tNFC_HAL_NCI_CBACK) (tNFC_HAL_NCI_EVT event, uint16_t data_len, uint8_t *p_data);
 
 #ifdef __cplusplus
 extern "C" {
@@ -160,11 +160,11 @@ tHAL_NFC_STATUS HAL_NfcReInit (void);
 ** Returns          tHAL_NFC_STATUS
 **
 *******************************************************************************/
-tHAL_NFC_STATUS HAL_NfcSetSnoozeMode (UINT8 snooze_mode,
-                                      UINT8 idle_threshold_dh,
-                                      UINT8 idle_threshold_nfcc,
-                                      UINT8 nfc_wake_active_mode,
-                                      UINT8 dh_wake_active_mode,
+tHAL_NFC_STATUS HAL_NfcSetSnoozeMode (uint8_t snooze_mode,
+                                      uint8_t idle_threshold_dh,
+                                      uint8_t idle_threshold_nfcc,
+                                      uint8_t nfc_wake_active_mode,
+                                      uint8_t dh_wake_active_mode,
                                       tHAL_NFC_STATUS_CBACK *p_snooze_cback);
 
 /*******************************************************************************
@@ -198,11 +198,11 @@ tHAL_NFC_STATUS HAL_NfcSetSnoozeMode (UINT8 snooze_mode,
 **
 **
 *******************************************************************************/
-BOOLEAN HAL_NfcPrmDownloadStart (tNFC_HAL_PRM_FORMAT format_type,
-                                 UINT32              dest_address,
-                                 UINT8               *p_patchram_buf,
-                                 UINT32              patchram_len,
-                                 UINT32              patchram_delay,
+bool    HAL_NfcPrmDownloadStart (tNFC_HAL_PRM_FORMAT format_type,
+                                 uint32_t            dest_address,
+                                 uint8_t             *p_patchram_buf,
+                                 uint32_t            patchram_len,
+                                 uint32_t            patchram_delay,
                                  tNFC_HAL_PRM_CBACK  *p_cback);
 
 /*******************************************************************************
@@ -221,8 +221,8 @@ BOOLEAN HAL_NfcPrmDownloadStart (tNFC_HAL_PRM_FORMAT format_type,
 ** Returns          TRUE if successful, otherwise FALSE
 **
 *******************************************************************************/
-BOOLEAN HAL_NfcPrmDownloadContinue (UINT8 *p_patch_data,
-                                    UINT16 patch_data_len);
+bool    HAL_NfcPrmDownloadContinue (uint8_t *p_patch_data,
+                                    uint16_t patch_data_len);
 
 /*******************************************************************************
 **
@@ -241,8 +241,8 @@ BOOLEAN HAL_NfcPrmDownloadContinue (UINT8 *p_patch_data,
 **
 **
 *******************************************************************************/
-void HAL_NfcPrmSetI2cPatch (UINT8 *p_i2c_patchfile_buf,
-                      UINT16 i2c_patchfile_len, UINT32 prei2c_delay);
+void HAL_NfcPrmSetI2cPatch (uint8_t *p_i2c_patchfile_buf,
+                      uint16_t i2c_patchfile_len, uint32_t prei2c_delay);
 
 /*******************************************************************************
 **
@@ -264,7 +264,7 @@ void HAL_NfcPrmSetI2cPatch (UINT8 *p_i2c_patchfile_buf,
 **
 **
 *******************************************************************************/
-tHAL_NFC_STATUS HAL_NfcPrmSetSpdNciCmdPayloadSize (UINT8 max_payload_size);
+tHAL_NFC_STATUS HAL_NfcPrmSetSpdNciCmdPayloadSize (uint8_t max_payload_size);
 
 /*******************************************************************************
 **
@@ -276,7 +276,7 @@ tHAL_NFC_STATUS HAL_NfcPrmSetSpdNciCmdPayloadSize (UINT8 max_payload_size);
 ** Returns          none
 **
 *******************************************************************************/
-void HAL_NfcSetMaxRfDataCredits (UINT8 max_credits);
+void HAL_NfcSetMaxRfDataCredits (uint8_t max_credits);
 
 /*******************************************************************************
 **
@@ -288,7 +288,7 @@ void HAL_NfcSetMaxRfDataCredits (UINT8 max_credits);
 ** Returns          The new or current trace level
 **
 *******************************************************************************/
-UINT8 HAL_NfcSetTraceLevel (UINT8 new_level);
+uint8_t HAL_NfcSetTraceLevel (uint8_t new_level);
 
 
 #ifdef __cplusplus

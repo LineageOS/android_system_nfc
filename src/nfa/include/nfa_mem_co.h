@@ -51,7 +51,7 @@ extern "C"
 **                  NULL otherwise
 **
 *******************************************************************************/
-NFC_API extern void *nfa_mem_co_alloc (UINT32 num_bytes);
+NFC_API extern void *nfa_mem_co_alloc (uint32_t num_bytes);
 
 
 /*******************************************************************************

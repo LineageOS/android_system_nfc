@@ -49,11 +49,11 @@
 #ifndef BTE_APPL_MAX_USERIAL_DEV_NAME
 #define BTE_APPL_MAX_USERIAL_DEV_NAME           (256)
 #endif
-extern UINT8 appl_trace_level;
+extern uint8_t appl_trace_level;
 
 
 /* Mapping of USERIAL_PORT_x to linux */
-extern UINT32 ScrProtocolTraceFlag;
+extern uint32_t ScrProtocolTraceFlag;
 static tUPIO_STATE current_nfc_wake_state = UPIO_OFF;
 int uart_port  = 0;
 int isLowSpeedTransport = 0;
@@ -74,14 +74,14 @@ tSNOOZE_MODE_CONFIG gSnoozeModeCfg = {
     NFC_HAL_LP_ACTIVE_HIGH              /* Host Wake active mode (0=ActiveLow 1=ActiveHigh) */
 };
 
-UINT8 bcmi2cnfc_client_addr = 0;
-UINT8 bcmi2cnfc_read_multi_packets = 0;
+uint8_t bcmi2cnfc_client_addr = 0;
+uint8_t bcmi2cnfc_read_multi_packets = 0;
 
 #define USERIAL_Debug_verbose     ((ScrProtocolTraceFlag & 0x80000000) == 0x80000000)
 
 #include <sys/socket.h>
 
-static UINT8 spi_negotiation[10] = { 0xF0, /* CMD */
+static uint8_t spi_negotiation[10] = { 0xF0, /* CMD */
                                     0x00, /* SPI PARM Negotiation */
                                     0x01, /* SPI Version */
                                     0x00, /* SPI Mode:0, SPI_INT active low */
@@ -92,7 +92,7 @@ static UINT8 spi_negotiation[10] = { 0xF0, /* CMD */
                                     0x00, /* Reserved */
                                     0x00 /* Reserved */
 };
-static UINT8 spi_nego_res[20];
+static uint8_t spi_nego_res[20];
 
 /* Modes used when powering off (independent
    of what the stack/jni has configured */
@@ -102,7 +102,7 @@ static UINT8 spi_nego_res[20];
 
 static int gPowerOffMode = POM_NORMAL;
 
-static UINT8 ce3_so_cmd[10] = { 0x10,
+static uint8_t ce3_so_cmd[10] = { 0x10,
                                 0x2F, /* CMD */
                                 0x08,
                                 0x06, /* size of cmd */
@@ -114,7 +114,7 @@ static UINT8 ce3_so_cmd[10] = { 0x10,
                                 0x00  /* Debug */
 };
 
-static UINT8 set_nfc_off_cmd[5] = {
+static uint8_t set_nfc_off_cmd[5] = {
                                 0x10,
                                 0x2F, /* CMD */
                                 0x38,
@@ -166,7 +166,7 @@ static UINT8 set_nfc_off_cmd[5] = {
 #define MAX_SERIAL_PORT (USERIAL_PORT_15 + 1)
 
 extern void dumpbin(const char* data, int size);
-extern UINT8 *scru_dump_hex (UINT8 *p, char *p_title, UINT32 len, UINT32 trace_layer, UINT32 trace_type);
+extern uint8_t *scru_dump_hex (uint8_t *p, char *p_title, uint32_t len, uint32_t trace_layer, uint32_t trace_type);
 
 static pthread_t      worker_thread1 = 0;
 
@@ -174,11 +174,11 @@ typedef struct  {
     volatile unsigned long bt_wake_state;
     int             sock;
     tUSERIAL_CBACK      *ser_cb;
-    UINT16      baud;
-    UINT8       data_bits;
-    UINT16      parity;
-    UINT8       stop_bits;
-    UINT8       port;
+    uint16_t    baud;
+    uint8_t     data_bits;
+    uint16_t    parity;
+    uint8_t     stop_bits;
+    uint8_t     port;
     tUSERIAL_OPEN_CFG open_cfg;
     int         sock_power_control;
     int         client_device_address;
@@ -187,12 +187,12 @@ typedef struct  {
 
 static tLINUX_CB linux_cb;  /* case of multipel port support use array : [MAX_SERIAL_PORT] */
 
-void userial_close_thread(UINT32 params);
+void userial_close_thread(uint32_t params);
 
-static UINT8 device_name[BTE_APPL_MAX_USERIAL_DEV_NAME+1];
+static uint8_t device_name[BTE_APPL_MAX_USERIAL_DEV_NAME+1];
 static int   bSerialPortDevice = FALSE;
 static int _timeout = POLL_TIMEOUT;
-static BOOLEAN is_close_thread_is_waiting = FALSE;
+static bool    is_close_thread_is_waiting = FALSE;
 
 static int change_client_addr(int addr);
 
@@ -282,7 +282,7 @@ static tPERF_DATA   perf_write = {"USERIAL_Write", 0, 0, 0, 3};
 static tPERF_DATA   perf_poll_2_poll = {"USERIAL_Poll_to_Poll", 0, 0, 0, 0};
 static clock_t      _poll_t0 = 0;
 
-static UINT32 userial_baud_tbl[] =
+static uint32_t userial_baud_tbl[] =
 {
     300,        /* USERIAL_BAUD_300          0 */
     600,        /* USERIAL_BAUD_600          1 */
@@ -457,12 +457,12 @@ static inline void close_signal_fds()
 
     stat = close(signal_fds[0]);
     if (stat == -1)
-        ALOGE ("%s, fail close index 0; errno=%d", __FUNCTION__, errno);
+        ALOGE ("%s, fail close index 0; errno=%d", __func__, errno);
     signal_fds[0] = 0;
 
     stat = close(signal_fds[1]);
     if (stat == -1)
-        ALOGE ("%s, fail close index 1; errno=%d", __FUNCTION__, errno);
+        ALOGE ("%s, fail close index 1; errno=%d", __func__, errno);
     signal_fds[1] = 0;
 }
 
@@ -531,7 +531,7 @@ BUFFER_Q Userial_in_q;
  ** Returns            line speed
  **
  *******************************************************************************/
-UDRV_API extern UINT32 USERIAL_GetLineSpeed(UINT8 baud)
+UDRV_API extern uint32_t USERIAL_GetLineSpeed(uint8_t baud)
 {
     return (baud <= USERIAL_BAUD_4M) ?
             userial_baud_tbl[baud-USERIAL_BAUD_300] : 0;
@@ -548,9 +548,9 @@ UDRV_API extern UINT32 USERIAL_GetLineSpeed(UINT8 baud)
  ** Returns            line speed
  **
  *******************************************************************************/
-UDRV_API extern UINT8 USERIAL_GetBaud(UINT32 line_speed)
+UDRV_API extern uint8_t USERIAL_GetBaud(uint32_t line_speed)
 {
-    UINT8 i;
+    uint8_t i;
     for (i = USERIAL_BAUD_300; i <= USERIAL_BAUD_921600; i++)
     {
         if (userial_baud_tbl[i-USERIAL_BAUD_300] == line_speed)
@@ -574,7 +574,7 @@ UDRV_API extern UINT8 USERIAL_GetBaud(UINT32 line_speed)
 
 UDRV_API void    USERIAL_Init(void * p_cfg)
 {
-    ALOGI(__FUNCTION__);
+    ALOGI(__func__);
 
     //if userial_close_thread() is waiting to run; let it go first;
     //let it finish; then continue this function
@@ -743,7 +743,7 @@ done:
         _timeout = -1;
     return ret;
 }
-extern BOOLEAN gki_chk_buf_damage(void *p_buf);
+extern bool    gki_chk_buf_damage(void *p_buf);
 static int sRxLength = 0;
 
 /*******************************************************************************
@@ -757,7 +757,7 @@ static int sRxLength = 0;
  ** Returns            0
  **
  *******************************************************************************/
-UINT32 userial_read_thread(UINT32 arg)
+uint32_t userial_read_thread(uint32_t arg)
 {
     int rx_length;
     int error_count = 0;
@@ -773,14 +773,14 @@ UINT32 userial_read_thread(UINT32 arg)
     for (;linux_cb.sock > 0;)
     {
         BT_HDR *p_buf;
-        UINT8 *current_packet;
+        uint8_t *current_packet;
 
         if ((p_buf = (BT_HDR *) GKI_getpoolbuf( USERIAL_POOL_ID ) )!= NULL)
         {
             p_buf->offset = 0;
             p_buf->layer_specific = 0;
 
-            current_packet = (UINT8 *) (p_buf + 1);
+            current_packet = (uint8_t *) (p_buf + 1);
             rx_length = my_read(linux_cb.sock, current_packet, READ_LIMIT);
 
         }
@@ -798,7 +798,7 @@ UINT32 userial_read_thread(UINT32 arg)
             iMaxError = 3;
             if (rx_length > sRxLength)
                 sRxLength = rx_length;
-            p_buf->len = (UINT16)rx_length;
+            p_buf->len = (uint16_t)rx_length;
             GKI_enqueue(&Userial_in_q, p_buf);
             if (!isLowSpeedTransport)
                 ALOGD_IF((appl_trace_level>=BT_TRACE_LEVEL_DEBUG), "userial_read_thread(): enqueued p_buf=%p, count=%d, length=%d\n",
@@ -869,7 +869,7 @@ UINT32 userial_read_thread(UINT32 arg)
  **                    FALSE - unsupported baud rate, default of 115200 is used
  **
  *******************************************************************************/
-BOOLEAN userial_to_tcio_baud(UINT8 cfg_baud, UINT32 * baud)
+bool    userial_to_tcio_baud(uint8_t cfg_baud, uint32_t * baud)
 {
     if (cfg_baud == USERIAL_BAUD_600)
         *baud = B600;
@@ -944,10 +944,10 @@ void userial_io_init_bt_wake( int fd, unsigned long * p_wake_state )
 *******************************************************************************/
 UDRV_API void USERIAL_Open(tUSERIAL_PORT port, tUSERIAL_OPEN_CFG *p_cfg, tUSERIAL_CBACK *p_cback)
 {
-    UINT32 baud = 0;
-    UINT8 data_bits = 0;
-    UINT16 parity = 0;
-    UINT8 stop_bits = 0;
+    uint32_t baud = 0;
+    uint8_t data_bits = 0;
+    uint16_t parity = 0;
+    uint8_t stop_bits = 0;
     struct termios termios;
     const char ttyusb[] = "/dev/ttyUSB";
     const char devtty[] = "/dev/tty";
@@ -1048,14 +1048,14 @@ UDRV_API void USERIAL_Open(tUSERIAL_PORT port, tUSERIAL_OPEN_CFG *p_cfg, tUSERIA
         strcpy((char*)device_name, (char*)userial_dev);
 
     {
-        ALOGD("%s Opening %s\n",  __FUNCTION__, device_name);
+        ALOGD("%s Opening %s\n",  __func__, device_name);
         if ((linux_cb.sock = open((char*)device_name, O_RDWR | O_NOCTTY )) == -1)
         {
-            ALOGI("%s unable to open %s",  __FUNCTION__, device_name);
+            ALOGI("%s unable to open %s",  __func__, device_name);
             GKI_send_event(NFC_HAL_TASK, NFC_HAL_TASK_EVT_TERMINATE);
             goto done_open;
         }
-        ALOGD( "%s sock = %d\n", __FUNCTION__, linux_cb.sock);
+        ALOGD( "%s sock = %d\n", __func__, linux_cb.sock);
         if (GetStrValue ( NAME_POWER_CONTROL_DRIVER, power_control_dev, sizeof ( power_control_dev ) ) &&
             power_control_dev[0] != '\0')
         {
@@ -1065,7 +1065,7 @@ UDRV_API void USERIAL_Open(tUSERIAL_PORT port, tUSERIAL_OPEN_CFG *p_cfg, tUSERIA
             {
                 if ((linux_cb.sock_power_control = open((char*)power_control_dev, O_RDWR | O_NOCTTY )) == -1)
                 {
-                    ALOGI("%s unable to open %s",  __FUNCTION__, power_control_dev);
+                    ALOGI("%s unable to open %s",  __func__, power_control_dev);
                 }
             }
         }
@@ -1107,7 +1107,7 @@ UDRV_API void USERIAL_Open(tUSERIAL_PORT port, tUSERIAL_OPEN_CFG *p_cfg, tUSERIA
     linux_cb.ser_cb     = p_cback;
     linux_cb.port = port;
     memcpy(&linux_cb.open_cfg, p_cfg, sizeof(tUSERIAL_OPEN_CFG));
-    GKI_create_task ((TASKPTR)userial_read_thread, USERIAL_HAL_TASK, (INT8*)"USERIAL_HAL_TASK", 0, 0, (pthread_cond_t*)NULL, NULL);
+    GKI_create_task ((TASKPTR)userial_read_thread, USERIAL_HAL_TASK, (int8_t*)"USERIAL_HAL_TASK", 0, 0, (pthread_cond_t*)NULL, NULL);
 
 
 #if (defined USERIAL_DEBUG) && (USERIAL_DEBUG == TRUE)
@@ -1140,11 +1140,11 @@ done_open:
 
 static BT_HDR *pbuf_USERIAL_Read = NULL;
 
-UDRV_API UINT16  USERIAL_Read(tUSERIAL_PORT port, UINT8 *p_data, UINT16 len)
+UDRV_API uint16_t  USERIAL_Read(tUSERIAL_PORT port, uint8_t *p_data, uint16_t len)
 {
-    UINT16 total_len = 0;
-    UINT16 copy_len = 0;
-    UINT8 * current_packet = NULL;
+    uint16_t total_len = 0;
+    uint16_t copy_len = 0;
+    uint8_t * current_packet = NULL;
 
 #if (defined USERIAL_DEBUG) && (USERIAL_DEBUG == TRUE)
     ALOGD( "%s ++ len=%d pbuf_USERIAL_Read=%p, p_data=%p\n", __func__, len, pbuf_USERIAL_Read, p_data);
@@ -1153,7 +1153,7 @@ UDRV_API UINT16  USERIAL_Read(tUSERIAL_PORT port, UINT8 *p_data, UINT16 len)
     {
         if (pbuf_USERIAL_Read != NULL)
         {
-            current_packet = ((UINT8 *)(pbuf_USERIAL_Read + 1)) + (pbuf_USERIAL_Read->offset);
+            current_packet = ((uint8_t *)(pbuf_USERIAL_Read + 1)) + (pbuf_USERIAL_Read->offset);
 
             if ((pbuf_USERIAL_Read->len) <= (len - total_len))
                 copy_len = pbuf_USERIAL_Read->len;
@@ -1224,7 +1224,7 @@ UDRV_API void    USERIAL_ReadBuf(tUSERIAL_PORT port, BT_HDR **p_buf)
 **
 *******************************************************************************/
 
-UDRV_API BOOLEAN USERIAL_WriteBuf(tUSERIAL_PORT port, BT_HDR *p_buf)
+UDRV_API bool    USERIAL_WriteBuf(tUSERIAL_PORT port, BT_HDR *p_buf)
 {
     return FALSE;
 }
@@ -1241,7 +1241,7 @@ UDRV_API BOOLEAN USERIAL_WriteBuf(tUSERIAL_PORT port, BT_HDR *p_buf)
 **                    may be less than len.
 **
 *******************************************************************************/
-UDRV_API UINT16  USERIAL_Write(tUSERIAL_PORT port, UINT8 *p_data, UINT16 len)
+UDRV_API uint16_t  USERIAL_Write(tUSERIAL_PORT port, uint8_t *p_data, uint16_t len)
 {
     int ret = 0, total = 0;
     int i = 0;
@@ -1275,7 +1275,7 @@ UDRV_API UINT16  USERIAL_Write(tUSERIAL_PORT port, UINT8 *p_data, UINT16 len)
 
     pthread_mutex_unlock(&close_thread_mutex);
 
-    return ((UINT16)total);
+    return ((uint16_t)total);
 }
 
 /*******************************************************************************
@@ -1289,13 +1289,13 @@ UDRV_API UINT16  USERIAL_Write(tUSERIAL_PORT port, UINT8 *p_data, UINT16 len)
 ** Returns            None
 **
 *******************************************************************************/
-void userial_change_rate(UINT8 baud)
+void userial_change_rate(uint8_t baud)
 {
 #if defined (USING_BRCM_USB) && (USING_BRCM_USB == FALSE)
     struct termios termios;
 #endif
 #if (USERIAL_USE_TCIO_BAUD_CHANGE==TRUE)
-    UINT32 tcio_baud;
+    uint32_t tcio_baud;
 #endif
 
 #if defined (USING_BRCM_USB) && (USING_BRCM_USB == FALSE)
@@ -1438,10 +1438,10 @@ UDRV_API void    USERIAL_Close(tUSERIAL_PORT port)
 {
     pthread_attr_t attr;
     pthread_t      close_thread;
-    UINT8          res[10];
-    UINT32         delay = 100;
+    uint8_t        res[10];
+    uint32_t       delay = 100;
 
-    ALOGD ("%s: enter; gPowerOffMode=%d", __FUNCTION__, gPowerOffMode);
+    ALOGD ("%s: enter; gPowerOffMode=%d", __func__, gPowerOffMode);
 
     /* Do we need to put NFCC into certain mode before switching off?... */
     if (gPowerOffMode != POM_NORMAL)
@@ -1449,13 +1449,13 @@ UDRV_API void    USERIAL_Close(tUSERIAL_PORT port)
         switch (gPowerOffMode)
         {
         case POM_CE3SO:
-            ALOGD ("%s: Sending Set_PwrLevel cmd to go to CE3-SO mode", __FUNCTION__);
+            ALOGD ("%s: Sending Set_PwrLevel cmd to go to CE3-SO mode", __func__);
             USERIAL_Write(port, ce3_so_cmd, sizeof (ce3_so_cmd));
             delay = 1000;
             break;
 
         case POM_NFC_OFF:
-            ALOGD ("%s: Sending Set_NfcOff cmd", __FUNCTION__);
+            ALOGD ("%s: Sending Set_NfcOff cmd", __func__);
             USERIAL_Write(port, set_nfc_off_cmd, sizeof (set_nfc_off_cmd));
             break;
         }
@@ -1483,7 +1483,7 @@ UDRV_API void    USERIAL_Close(tUSERIAL_PORT port)
         // mutex not aquired to thread is already running
         ALOGD( "USERIAL_Close(): already closing \n");
     }
-    ALOGD ("%s: exit", __FUNCTION__);
+    ALOGD ("%s: exit", __func__);
 }
 
 
@@ -1496,18 +1496,18 @@ UDRV_API void    USERIAL_Close(tUSERIAL_PORT port)
 ** Returns          None.
 **
 *******************************************************************************/
-void userial_close_thread(UINT32 params)
+void userial_close_thread(uint32_t params)
 {
     BT_HDR                  *p_buf = NULL;
     int result;
 
-    ALOGD( "%s: closing transport (%d)\n", __FUNCTION__, linux_cb.sock);
+    ALOGD( "%s: closing transport (%d)\n", __func__, linux_cb.sock);
     pthread_mutex_lock(&close_thread_mutex);
     is_close_thread_is_waiting = FALSE;
 
     if (linux_cb.sock <= 0)
     {
-        ALOGD( "%s: already closed (%d)\n", __FUNCTION__, linux_cb.sock);
+        ALOGD( "%s: already closed (%d)\n", __func__, linux_cb.sock);
         pthread_mutex_unlock(&close_thread_mutex);
         return;
     }
@@ -1515,34 +1515,34 @@ void userial_close_thread(UINT32 params)
     send_wakeup_signal();
     result = pthread_join( worker_thread1, NULL );
     if ( result < 0 )
-        ALOGE( "%s: pthread_join() FAILED: result: %d", __FUNCTION__, result );
+        ALOGE( "%s: pthread_join() FAILED: result: %d", __func__, result );
     else
-        ALOGD( "%s: pthread_join() joined: result: %d", __FUNCTION__, result );
+        ALOGD( "%s: pthread_join() joined: result: %d", __func__, result );
 
     if (linux_cb.sock_power_control > 0)
     {
         result = ioctl(linux_cb.sock_power_control, BCMNFC_WAKE_CTL, sleep_state());
-        ALOGD("%s: Delay %dms before turning off the chip", __FUNCTION__, gPrePowerOffDelay);
+        ALOGD("%s: Delay %dms before turning off the chip", __func__, gPrePowerOffDelay);
         GKI_delay(gPrePowerOffDelay);
         result = ioctl(linux_cb.sock_power_control, BCMNFC_POWER_CTL, 0);
-        ALOGD("%s: Delay %dms after turning off the chip", __FUNCTION__, gPostPowerOffDelay);
+        ALOGD("%s: Delay %dms after turning off the chip", __func__, gPostPowerOffDelay);
         GKI_delay(gPostPowerOffDelay);
     }
     result = close(linux_cb.sock);
     if (result == -1)
-        ALOGE("%s: fail close linux_cb.sock; errno=%d", __FUNCTION__, errno);
+        ALOGE("%s: fail close linux_cb.sock; errno=%d", __func__, errno);
 
     if (linux_cb.sock_power_control > 0 && linux_cb.sock_power_control != linux_cb.sock)
     result = close(linux_cb.sock_power_control);
     if (result == -1)
-        ALOGE("%s: fail close linux_cb.sock_power_control; errno=%d", __FUNCTION__, errno);
+        ALOGE("%s: fail close linux_cb.sock_power_control; errno=%d", __func__, errno);
 
     linux_cb.sock_power_control = -1;
     linux_cb.sock = -1;
 
     close_signal_fds();
     pthread_mutex_unlock(&close_thread_mutex);
-    ALOGD("%s: exiting", __FUNCTION__);
+    ALOGD("%s: exiting", __func__);
 }
 
 /*******************************************************************************
@@ -1558,7 +1558,7 @@ void userial_close_thread(UINT32 params)
 **
 *******************************************************************************/
 
-UDRV_API BOOLEAN USERIAL_Feature(tUSERIAL_FEATURE feature)
+UDRV_API bool    USERIAL_Feature(tUSERIAL_FEATURE feature)
 {
     switch (feature)
     {
@@ -1672,7 +1672,7 @@ void setReadPacketSize(int len)
 }
 
 
-UDRV_API BOOLEAN USERIAL_IsClosed()
+UDRV_API bool    USERIAL_IsClosed()
 {
     return (linux_cb.sock == -1) ? TRUE : FALSE;
 }
@@ -1685,7 +1685,7 @@ UDRV_API void USERIAL_PowerupDevice(tUSERIAL_PORT port)
     unsigned int numTries = 0;
     unsigned char spi_negotiation[64];
     int delay = gPowerOnDelay;
-    ALOGD("%s: enter", __FUNCTION__);
+    ALOGD("%s: enter", __func__);
 
     if ( GetNumValue ( NAME_READ_MULTI_PACKETS, &num, sizeof ( num ) ) )
         bcmi2cnfc_read_multi_packets = num;
@@ -1742,7 +1742,7 @@ UDRV_API void USERIAL_PowerupDevice(tUSERIAL_PORT port)
     }
 
     GKI_delay(delay);
-    ALOGD("%s: exit", __FUNCTION__);
+    ALOGD("%s: exit", __func__);
 }
 
 #define DEFAULT_CLIENT_ADDRESS 0x77

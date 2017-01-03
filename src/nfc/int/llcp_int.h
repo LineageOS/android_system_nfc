@@ -38,7 +38,7 @@ enum
     LLCP_LINK_STATE_DEACTIVATING,               /* llcp link is deactivating    */
     LLCP_LINK_STATE_ACTIVATION_FAILED           /* llcp link activation was failed */
 };
-typedef UINT8 tLLCP_LINK_STATE;
+typedef uint8_t tLLCP_LINK_STATE;
 
 /*
 ** LLCP Symmetric state
@@ -59,45 +59,45 @@ typedef struct
 {
     tLLCP_LINK_STATE    link_state;             /* llcp link state                              */
     tLLCP_LINK_CBACK   *p_link_cback;           /* callback function to report llcp link status */
-    UINT16              wks;                    /* well-known service bit-map                   */
+    uint16_t            wks;                    /* well-known service bit-map                   */
 
-    BOOLEAN             is_initiator;           /* TRUE if initiator role                       */
-    BOOLEAN             is_sending_data;        /* TRUE if llcp_link_check_send_data() is excuting    */
-    UINT8               flags;                  /* LLCP internal flags                          */
-    BOOLEAN             received_first_packet;  /* TRUE if a packet has been received from remote */
-    UINT8               agreed_major_version;   /* llcp major version used in activated state   */
-    UINT8               agreed_minor_version;   /* llcp minor version used in activated state   */
+    bool                is_initiator;           /* TRUE if initiator role                       */
+    bool                is_sending_data;        /* TRUE if llcp_link_check_send_data() is excuting    */
+    uint8_t             flags;                  /* LLCP internal flags                          */
+    bool                received_first_packet;  /* TRUE if a packet has been received from remote */
+    uint8_t             agreed_major_version;   /* llcp major version used in activated state   */
+    uint8_t             agreed_minor_version;   /* llcp minor version used in activated state   */
 
-    UINT8               peer_version;           /* llcp version of peer device                  */
-    UINT16              peer_miu;               /* link MIU of peer device                      */
-    UINT16              peer_wks;               /* WKS of peer device                           */
-    UINT16              peer_lto;               /* link timeout of peer device in ms            */
-    UINT8               peer_opt;               /* Option field of peer device                  */
-    UINT16              effective_miu;          /* MIU to send PDU in activated state           */
+    uint8_t             peer_version;           /* llcp version of peer device                  */
+    uint16_t            peer_miu;               /* link MIU of peer device                      */
+    uint16_t            peer_wks;               /* WKS of peer device                           */
+    uint16_t            peer_lto;               /* link timeout of peer device in ms            */
+    uint8_t             peer_opt;               /* Option field of peer device                  */
+    uint16_t            effective_miu;          /* MIU to send PDU in activated state           */
 
     TIMER_LIST_ENT      timer;                  /* link timer for LTO and SYMM response         */
-    UINT8               symm_state;             /* state of symmectric procedure                */
-    BOOLEAN             ll_served;              /* TRUE if last transmisstion was for UI        */
-    UINT8               ll_idx;                 /* for scheduler of logical link connection     */
-    UINT8               dl_idx;                 /* for scheduler of data link connection        */
+    uint8_t             symm_state;             /* state of symmectric procedure                */
+    bool                ll_served;              /* TRUE if last transmisstion was for UI        */
+    uint8_t             ll_idx;                 /* for scheduler of logical link connection     */
+    uint8_t             dl_idx;                 /* for scheduler of data link connection        */
 
     TIMER_LIST_ENT      inact_timer;            /* inactivity timer                             */
-    UINT16              inact_timeout;          /* inactivity timeout in ms                     */
+    uint16_t            inact_timeout;          /* inactivity timeout in ms                     */
 
-    UINT8               link_deact_reason;      /* reason of LLCP link deactivated              */
+    uint8_t             link_deact_reason;      /* reason of LLCP link deactivated              */
 
     BUFFER_Q            sig_xmit_q;             /* tx signaling PDU queue                       */
 
     /* runtime configuration parameters */
-    UINT16              local_link_miu;         /* Maximum Information Unit                     */
-    UINT8               local_opt;              /* Option parameter                             */
-    UINT8               local_wt;               /* Response Waiting Time Index                  */
-    UINT16              local_lto;              /* Local Link Timeout                           */
-    UINT16              inact_timeout_init;     /* Inactivity Timeout as initiator role         */
-    UINT16              inact_timeout_target;   /* Inactivity Timeout as target role            */
-    UINT16              symm_delay;             /* Delay SYMM response                          */
-    UINT16              data_link_timeout;      /* data link conneciton timeout                 */
-    UINT16              delay_first_pdu_timeout;/* delay timeout to send first PDU as initiator */
+    uint16_t            local_link_miu;         /* Maximum Information Unit                     */
+    uint8_t             local_opt;              /* Option parameter                             */
+    uint8_t             local_wt;               /* Response Waiting Time Index                  */
+    uint16_t            local_lto;              /* Local Link Timeout                           */
+    uint16_t            inact_timeout_init;     /* Inactivity Timeout as initiator role         */
+    uint16_t            inact_timeout_target;   /* Inactivity Timeout as target role            */
+    uint16_t            symm_delay;             /* Delay SYMM response                          */
+    uint16_t            data_link_timeout;      /* data link conneciton timeout                 */
+    uint16_t            delay_first_pdu_timeout;/* delay timeout to send first PDU as initiator */
 
 } tLLCP_LCB;
 
@@ -107,13 +107,13 @@ typedef struct
 
 typedef struct
 {
-    UINT8               link_type;              /* logical link and/or data link                */
-    UINT8               *p_service_name;        /* GKI buffer containing service name           */
+    uint8_t             link_type;              /* logical link and/or data link                */
+    uint8_t             *p_service_name;        /* GKI buffer containing service name           */
     tLLCP_APP_CBACK     *p_app_cback;           /* application's callback pointer               */
 
     BUFFER_Q            ui_xmit_q;              /* UI PDU queue for transmitting                */
     BUFFER_Q            ui_rx_q;                /* UI PDU queue for receiving                   */
-    BOOLEAN             is_ui_tx_congested;     /* TRUE if transmitting UI PDU is congested     */
+    bool                is_ui_tx_congested;     /* TRUE if transmitting UI PDU is congested     */
 
 } tLLCP_APP_CB;
 
@@ -129,7 +129,7 @@ enum
     LLCP_DLC_STATE_W4_REMOTE_DM,    /* waiting for disconnection confirm from peer      */
     LLCP_DLC_STATE_MAX
 };
-typedef UINT8 tLLCP_DLC_STATE;
+typedef uint8_t tLLCP_DLC_STATE;
 
 /*
 ** LLCP data link connection events
@@ -154,7 +154,7 @@ enum
 
     LLCP_DLC_EVENT_TIMEOUT               /* timeout event                        */
 };
-typedef UINT8 tLLCP_DLC_EVENT;
+typedef uint8_t tLLCP_DLC_EVENT;
 
 /*
 ** LLCP data link connection control block
@@ -168,32 +168,32 @@ typedef UINT8 tLLCP_DLC_EVENT;
 typedef struct
 {
     tLLCP_DLC_STATE         state;              /* data link connection state               */
-    UINT8                   flags;              /* specific action flags                    */
+    uint8_t                 flags;              /* specific action flags                    */
     tLLCP_APP_CB            *p_app_cb;          /* pointer of application registration      */
     TIMER_LIST_ENT          timer;              /* timer for connection complete            */
 
-    UINT8                   local_sap;          /* SAP of local end point                   */
-    UINT16                  local_miu;          /* MIU of local SAP                         */
-    UINT8                   local_rw;           /* RW of local SAP                          */
-    BOOLEAN                 local_busy;         /* TRUE if local SAP is busy                */
+    uint8_t                 local_sap;          /* SAP of local end point                   */
+    uint16_t                local_miu;          /* MIU of local SAP                         */
+    uint8_t                 local_rw;           /* RW of local SAP                          */
+    bool                    local_busy;         /* TRUE if local SAP is busy                */
 
-    UINT8                   remote_sap;         /* SAP of remote end point                  */
-    UINT16                  remote_miu;         /* MIU of remote SAP                        */
-    UINT8                   remote_rw;          /* RW of remote SAP                         */
-    BOOLEAN                 remote_busy;        /* TRUE if remote SAP is busy               */
+    uint8_t                 remote_sap;         /* SAP of remote end point                  */
+    uint16_t                remote_miu;         /* MIU of remote SAP                        */
+    uint8_t                 remote_rw;          /* RW of remote SAP                         */
+    bool                    remote_busy;        /* TRUE if remote SAP is busy               */
 
-    UINT8                   next_tx_seq;        /* V(S), send state variable                */
-    UINT8                   rcvd_ack_seq;       /* V(SA), send ack state variable           */
-    UINT8                   next_rx_seq;        /* V(R), receive state variable             */
-    UINT8                   sent_ack_seq;       /* V(RA), receive ack state variable        */
+    uint8_t                 next_tx_seq;        /* V(S), send state variable                */
+    uint8_t                 rcvd_ack_seq;       /* V(SA), send ack state variable           */
+    uint8_t                 next_rx_seq;        /* V(R), receive state variable             */
+    uint8_t                 sent_ack_seq;       /* V(RA), receive ack state variable        */
 
     BUFFER_Q                i_xmit_q;           /* tx queue of I PDU                        */
-    BOOLEAN                 is_tx_congested;    /* TRUE if tx I PDU is congested            */
+    bool                    is_tx_congested;    /* TRUE if tx I PDU is congested            */
 
     BUFFER_Q                i_rx_q;             /* rx queue of I PDU                        */
-    BOOLEAN                 is_rx_congested;    /* TRUE if rx I PDU is congested            */
-    UINT8                   num_rx_i_pdu;       /* number of I PDU in rx queue              */
-    UINT8                   rx_congest_threshold; /* dynamic congest threshold for rx I PDU */
+    bool                    is_rx_congested;    /* TRUE if rx I PDU is congested            */
+    uint8_t                 num_rx_i_pdu;       /* number of I PDU in rx queue              */
+    uint8_t                 rx_congest_threshold; /* dynamic congest threshold for rx I PDU */
 
 } tLLCP_DLCB;
 
@@ -203,13 +203,13 @@ typedef struct
 
 typedef struct
 {
-    UINT8           tid;        /* transaction ID                           */
+    uint8_t         tid;        /* transaction ID                           */
     tLLCP_SDP_CBACK *p_cback;   /* callback function for service discovery  */
 } tLLCP_SDP_TRANSAC;
 
 typedef struct
 {
-    UINT8               next_tid;                       /* next TID to use         */
+    uint8_t             next_tid;                       /* next TID to use         */
     tLLCP_SDP_TRANSAC   transac[LLCP_MAX_SDP_TRANSAC];  /* active SDP transactions */
     BT_HDR              *p_snl;                         /* buffer for SNL PDU      */
 } tLLCP_SDP_CB;
@@ -221,7 +221,7 @@ typedef struct
 
 typedef struct
 {
-    UINT8           trace_level;                    /* LLCP trace level                             */
+    uint8_t         trace_level;                    /* LLCP trace level                             */
 
     tLLCP_SDP_CB    sdp_cb;                         /* SDP control block                            */
     tLLCP_LCB       lcb;                            /* LLCP link control block                      */
@@ -230,49 +230,49 @@ typedef struct
     tLLCP_APP_CB    client_cb[LLCP_MAX_CLIENT];     /* Application's registration for client        */
     tLLCP_DLCB      dlcb[LLCP_MAX_DATA_LINK];       /* Data link connection control block           */
 
-    UINT8           max_num_ll_tx_buff;             /* max number of tx UI PDU in queue             */
-    UINT8           max_num_tx_buff;                /* max number of tx UI/I PDU in queue           */
+    uint8_t         max_num_ll_tx_buff;             /* max number of tx UI PDU in queue             */
+    uint8_t         max_num_tx_buff;                /* max number of tx UI/I PDU in queue           */
 
-    UINT8           num_logical_data_link;          /* number of logical data link                  */
-    UINT8           num_data_link_connection;       /* number of established data link connection   */
+    uint8_t         num_logical_data_link;          /* number of logical data link                  */
+    uint8_t         num_data_link_connection;       /* number of established data link connection   */
 
     /* these two thresholds (number of tx UI PDU) are dynamically adjusted based on number of logical links */
-    UINT8           ll_tx_congest_start;            /* congest start threshold for each logical link*/
-    UINT8           ll_tx_congest_end;              /* congest end threshold for each logical link  */
+    uint8_t         ll_tx_congest_start;            /* congest start threshold for each logical link*/
+    uint8_t         ll_tx_congest_end;              /* congest end threshold for each logical link  */
 
-    UINT8           total_tx_ui_pdu;                /* total number of tx UI PDU in all of ui_xmit_q*/
-    UINT8           total_tx_i_pdu;                 /* total number of tx I PDU in all of i_xmit_q  */
-    BOOLEAN         overall_tx_congested;           /* TRUE if tx link is congested                 */
+    uint8_t         total_tx_ui_pdu;                /* total number of tx UI PDU in all of ui_xmit_q*/
+    uint8_t         total_tx_i_pdu;                 /* total number of tx I PDU in all of i_xmit_q  */
+    bool            overall_tx_congested;           /* TRUE if tx link is congested                 */
 
     /* start point of uncongested status notification is in round robin */
-    UINT8           ll_tx_uncongest_ntf_start_sap;  /* next start of logical data link              */
-    UINT8           dl_tx_uncongest_ntf_start_idx;  /* next start of data link connection           */
+    uint8_t         ll_tx_uncongest_ntf_start_sap;  /* next start of logical data link              */
+    uint8_t         dl_tx_uncongest_ntf_start_idx;  /* next start of data link connection           */
 
     /*
     ** when overall rx link congestion starts, RNR is sent to remote end point of data link connection
     ** while rx link is congested, UI PDU is discarded.
     */
-    UINT8           num_rx_buff;                    /* reserved number of rx UI/I PDU in queue      */
-    UINT8           overall_rx_congest_start;       /* threshold of overall rx congestion start     */
-    UINT8           overall_rx_congest_end;         /* threshold of overall rx congestion end       */
-    UINT8           max_num_ll_rx_buff;             /* max number of rx UI PDU in queue             */
+    uint8_t         num_rx_buff;                    /* reserved number of rx UI/I PDU in queue      */
+    uint8_t         overall_rx_congest_start;       /* threshold of overall rx congestion start     */
+    uint8_t         overall_rx_congest_end;         /* threshold of overall rx congestion end       */
+    uint8_t         max_num_ll_rx_buff;             /* max number of rx UI PDU in queue             */
 
     /*
     ** threshold (number of rx UI PDU) is dynamically adjusted based on number of logical links
     ** when number of rx UI PDU is more than ll_rx_congest_start, the oldest UI PDU is discarded
     */
-    UINT8           ll_rx_congest_start;            /* rx congest start threshold for each logical link */
+    uint8_t         ll_rx_congest_start;            /* rx congest start threshold for each logical link */
 
-    UINT8           total_rx_ui_pdu;                /* total number of rx UI PDU in all of ui_rx_q  */
-    UINT8           total_rx_i_pdu;                 /* total number of rx I PDU in all of i_rx_q    */
-    BOOLEAN         overall_rx_congested;           /* TRUE if overall rx link is congested         */
+    uint8_t         total_rx_ui_pdu;                /* total number of rx UI PDU in all of ui_rx_q  */
+    uint8_t         total_rx_i_pdu;                 /* total number of rx I PDU in all of i_rx_q    */
+    bool            overall_rx_congested;           /* TRUE if overall rx link is congested         */
 } tLLCP_CB;
 
 #if (LLCP_TEST_INCLUDED == TRUE) /* this is for LLCP testing */
 
 typedef struct {
-    UINT8  version;
-    UINT16 wks;
+    uint8_t  version;
+    uint16_t wks;
 } tLLCP_TEST_PARAMS;
 
 #endif
@@ -300,10 +300,10 @@ void llcp_process_timeout (TIMER_LIST_ENT *p_tle);
 */
 tLLCP_STATUS llcp_link_activate (tLLCP_ACTIVATE_CONFIG *p_config);
 void llcp_link_process_link_timeout (void);
-void llcp_link_deactivate (UINT8 reason);
+void llcp_link_deactivate (uint8_t reason);
 
 void llcp_link_check_send_data (void);
-void llcp_link_connection_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data);
+void llcp_link_connection_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data);
 
 /*
 **  Functions provided by llcp_util.c
@@ -311,40 +311,40 @@ void llcp_link_connection_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *
 void         llcp_util_adjust_ll_congestion (void);
 void         llcp_util_adjust_dl_rx_congestion (void);
 void         llcp_util_check_rx_congested_status (void);
-BOOLEAN      llcp_util_parse_link_params (UINT16 length, UINT8 *p_bytes);
-tLLCP_STATUS llcp_util_send_ui (UINT8 ssap, UINT8 dsap, tLLCP_APP_CB *p_app_cb, BT_HDR *p_msg);
-void         llcp_util_send_disc (UINT8 dsap, UINT8 ssap);
-tLLCP_DLCB  *llcp_util_allocate_data_link (UINT8 reg_sap, UINT8 remote_sap);
+bool         llcp_util_parse_link_params (uint16_t length, uint8_t *p_bytes);
+tLLCP_STATUS llcp_util_send_ui (uint8_t ssap, uint8_t dsap, tLLCP_APP_CB *p_app_cb, BT_HDR *p_msg);
+void         llcp_util_send_disc (uint8_t dsap, uint8_t ssap);
+tLLCP_DLCB  *llcp_util_allocate_data_link (uint8_t reg_sap, uint8_t remote_sap);
 void         llcp_util_deallocate_data_link (tLLCP_DLCB *p_dlcb);
 tLLCP_STATUS llcp_util_send_connect (tLLCP_DLCB *p_dlcb, tLLCP_CONNECTION_PARAMS *p_params);
-tLLCP_STATUS llcp_util_parse_connect (UINT8 *p_bytes, UINT16 length, tLLCP_CONNECTION_PARAMS *p_params);
+tLLCP_STATUS llcp_util_parse_connect (uint8_t *p_bytes, uint16_t length, tLLCP_CONNECTION_PARAMS *p_params);
 tLLCP_STATUS llcp_util_send_cc (tLLCP_DLCB *p_dlcb, tLLCP_CONNECTION_PARAMS *p_params);
-tLLCP_STATUS llcp_util_parse_cc (UINT8 *p_bytes, UINT16 length, UINT16 *p_miu, UINT8 *p_rw);
-void         llcp_util_send_dm (UINT8 dsap, UINT8 ssap, UINT8 reason);
+tLLCP_STATUS llcp_util_parse_cc (uint8_t *p_bytes, uint16_t length, uint16_t *p_miu, uint8_t *p_rw);
+void         llcp_util_send_dm (uint8_t dsap, uint8_t ssap, uint8_t reason);
 void         llcp_util_build_info_pdu (tLLCP_DLCB *p_dlcb, BT_HDR *p_msg);
-tLLCP_STATUS llcp_util_send_frmr (tLLCP_DLCB *p_dlcb, UINT8 flags, UINT8 ptype, UINT8 sequence);
+tLLCP_STATUS llcp_util_send_frmr (tLLCP_DLCB *p_dlcb, uint8_t flags, uint8_t ptype, uint8_t sequence);
 void         llcp_util_send_rr_rnr (tLLCP_DLCB *p_dlcb);
-tLLCP_APP_CB *llcp_util_get_app_cb (UINT8 sap);
+tLLCP_APP_CB *llcp_util_get_app_cb (uint8_t sap);
 /*
 ** Functions provided by llcp_dlc.c
 */
 tLLCP_STATUS llcp_dlsm_execute (tLLCP_DLCB *p_dlcb, tLLCP_DLC_EVENT event, void *p_data);
-tLLCP_DLCB  *llcp_dlc_find_dlcb_by_sap (UINT8 local_sap, UINT8 remote_sap);
+tLLCP_DLCB  *llcp_dlc_find_dlcb_by_sap (uint8_t local_sap, uint8_t remote_sap);
 void         llcp_dlc_flush_q (tLLCP_DLCB *p_dlcb);
-void         llcp_dlc_proc_i_pdu (UINT8 dsap, UINT8 ssap, UINT16 i_pdu_length, UINT8 *p_i_pdu, BT_HDR *p_msg);
-void         llcp_dlc_proc_rx_pdu (UINT8 dsap, UINT8 ptype, UINT8 ssap, UINT16 length, UINT8 *p_data);
+void         llcp_dlc_proc_i_pdu (uint8_t dsap, uint8_t ssap, uint16_t i_pdu_length, uint8_t *p_i_pdu, BT_HDR *p_msg);
+void         llcp_dlc_proc_rx_pdu (uint8_t dsap, uint8_t ptype, uint8_t ssap, uint16_t length, uint8_t *p_data);
 void         llcp_dlc_check_to_send_rr_rnr (void);
-BOOLEAN      llcp_dlc_is_rw_open (tLLCP_DLCB *p_dlcb);
+bool         llcp_dlc_is_rw_open (tLLCP_DLCB *p_dlcb);
 BT_HDR      *llcp_dlc_get_next_pdu (tLLCP_DLCB *p_dlcb);
-UINT16       llcp_dlc_get_next_pdu_length (tLLCP_DLCB *p_dlcb);
+uint16_t     llcp_dlc_get_next_pdu_length (tLLCP_DLCB *p_dlcb);
 
 /*
 ** Functions provided by llcp_sdp.c
 */
 void         llcp_sdp_proc_data (tLLCP_SAP_CBACK_DATA *p_data);
-tLLCP_STATUS llcp_sdp_send_sdreq (UINT8 tid, char *p_name);
-UINT8        llcp_sdp_get_sap_by_name (char *p_name, UINT8 length);
-tLLCP_STATUS llcp_sdp_proc_snl (UINT16 sdu_length, UINT8 *p);
+tLLCP_STATUS llcp_sdp_send_sdreq (uint8_t tid, char *p_name);
+uint8_t      llcp_sdp_get_sap_by_name (char *p_name, uint8_t length);
+tLLCP_STATUS llcp_sdp_proc_snl (uint16_t sdu_length, uint8_t *p);
 void         llcp_sdp_check_send_snl (void);
 void         llcp_sdp_proc_deactivation (void);
 #ifdef __cplusplus

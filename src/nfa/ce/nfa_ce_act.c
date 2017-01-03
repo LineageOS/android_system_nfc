@@ -87,7 +87,7 @@ void nfa_ce_handle_t3t_evt (tCE_EVENT event, tCE_DATA *p_ce_data)
         if (p_cb->idx_cur_active == NFA_CE_LISTEN_INFO_IDX_NDEF)
         {
             conn_evt.data.status = p_ce_data->raw_frame.status;
-            conn_evt.data.p_data = (UINT8 *) (p_ce_data->raw_frame.p_data + 1) + p_ce_data->raw_frame.p_data->offset;
+            conn_evt.data.p_data = (uint8_t *) (p_ce_data->raw_frame.p_data + 1) + p_ce_data->raw_frame.p_data->offset;
             conn_evt.data.len    = p_ce_data->raw_frame.p_data->len;
             (*p_cb->p_active_conn_cback) (NFA_DATA_EVT, &conn_evt);
         }
@@ -95,7 +95,7 @@ void nfa_ce_handle_t3t_evt (tCE_EVENT event, tCE_DATA *p_ce_data)
         {
             conn_evt.ce_data.status = p_ce_data->raw_frame.status;
             conn_evt.ce_data.handle = (NFA_HANDLE_GROUP_CE | ((tNFA_HANDLE)p_cb->idx_cur_active));
-            conn_evt.ce_data.p_data = (UINT8 *) (p_ce_data->raw_frame.p_data + 1) + p_ce_data->raw_frame.p_data->offset;
+            conn_evt.ce_data.p_data = (uint8_t *) (p_ce_data->raw_frame.p_data + 1) + p_ce_data->raw_frame.p_data->offset;
             conn_evt.ce_data.len    = p_ce_data->raw_frame.p_data->len;
             (*p_cb->p_active_conn_cback) (NFA_CE_DATA_EVT, &conn_evt);
         }
@@ -178,7 +178,7 @@ void nfa_ce_handle_t4t_evt (tCE_EVENT event, tCE_DATA *p_ce_data)
 void nfa_ce_handle_t4t_aid_evt (tCE_EVENT event, tCE_DATA *p_ce_data)
 {
     tNFA_CE_CB *p_cb = &nfa_ce_cb;
-    UINT8 listen_info_idx;
+    uint8_t listen_info_idx;
     tNFA_CONN_EVT_DATA conn_evt;
 
     NFA_TRACE_DEBUG1 ("nfa_ce_handle_t4t_aid_evt: event 0x%x", event);
@@ -216,7 +216,7 @@ void nfa_ce_handle_t4t_aid_evt (tCE_EVENT event, tCE_DATA *p_ce_data)
             /* Notify app of AID data */
             conn_evt.ce_data.status = p_ce_data->raw_frame.status;
             conn_evt.ce_data.handle = NFA_HANDLE_GROUP_CE | ((tNFA_HANDLE)p_cb->idx_cur_active);
-            conn_evt.ce_data.p_data = (UINT8 *) (p_ce_data->raw_frame.p_data + 1) + p_ce_data->raw_frame.p_data->offset;
+            conn_evt.ce_data.p_data = (uint8_t *) (p_ce_data->raw_frame.p_data + 1) + p_ce_data->raw_frame.p_data->offset;
             conn_evt.ce_data.len    = p_ce_data->raw_frame.p_data->len;
             (*p_cb->p_active_conn_cback) (NFA_CE_DATA_EVT, &conn_evt);
         }
@@ -286,12 +286,12 @@ void nfa_ce_discovery_cback (tNFA_DM_RF_DISC_EVT event, tNFC_DISCOVER *p_data)
 *******************************************************************************/
 void nfc_ce_t3t_set_listen_params (void)
 {
-    UINT8 i;
+    uint8_t i;
     tNFA_CE_CB *p_cb = &nfa_ce_cb;
-    UINT8 tlv[32], *p_params;
-    UINT8 tlv_size;
-    UINT16 t3t_flags2_mask = 0xFFFF;        /* Mask of which T3T_IDs are disabled */
-    UINT8 t3t_idx = 0;
+    uint8_t tlv[32], *p_params;
+    uint8_t tlv_size;
+    uint16_t t3t_flags2_mask = 0xFFFF;        /* Mask of which T3T_IDs are disabled */
+    uint8_t t3t_idx = 0;
 
     /* Point to start of tlv buffer */
     p_params = tlv;
@@ -309,7 +309,7 @@ void nfc_ce_t3t_set_listen_params (void)
             ARRAY_TO_BE_STREAM (p_params,  p_cb->listen_info[i].t3t_nfcid2, NCI_RF_F_UID_LEN);
 
             /* Set mask for this ID */
-            t3t_flags2_mask &= ~((UINT16) (1<<t3t_idx));
+            t3t_flags2_mask &= ~((uint16_t) (1<<t3t_idx));
             t3t_idx++;
         }
     }
@@ -321,8 +321,8 @@ void nfc_ce_t3t_set_listen_params (void)
     UINT8_TO_STREAM (p_params, NCI_PARAM_LEN_LF_T3T_FLAGS2); /* length */
     UINT16_TO_STREAM (p_params, t3t_flags2_mask);            /* Mask of IDs to disable listening */
 
-    tlv_size = (UINT8) (p_params-tlv);
-    nfa_dm_check_set_config (tlv_size, (UINT8 *)tlv, FALSE);
+    tlv_size = (uint8_t) (p_params-tlv);
+    nfa_dm_check_set_config (tlv_size, (uint8_t *)tlv, FALSE);
 }
 
 /*******************************************************************************
@@ -334,23 +334,23 @@ void nfc_ce_t3t_set_listen_params (void)
 ** Returns          Nothing
 **
 *******************************************************************************/
-void nfa_ce_t3t_generate_rand_nfcid (UINT8 nfcid2[NCI_RF_F_UID_LEN])
+void nfa_ce_t3t_generate_rand_nfcid (uint8_t nfcid2[NCI_RF_F_UID_LEN])
 {
-    UINT32 rand_seed = GKI_get_tick_count ();
+    uint32_t rand_seed = GKI_get_tick_count ();
 
     /* For Type-3 tag, nfcid2 starts witn 02:fe */
     nfcid2[0] = 0x02;
     nfcid2[1] = 0xFE;
 
     /* The remaining 6 bytes are random */
-    nfcid2[2] = (UINT8) (rand_seed & 0xFF);
-    nfcid2[3] = (UINT8) (rand_seed>>8 & 0xFF);
+    nfcid2[2] = (uint8_t) (rand_seed & 0xFF);
+    nfcid2[3] = (uint8_t) (rand_seed>>8 & 0xFF);
     rand_seed>>=(rand_seed&3);
-    nfcid2[4] = (UINT8) (rand_seed & 0xFF);
-    nfcid2[5] = (UINT8) (rand_seed>>8 & 0xFF);
+    nfcid2[4] = (uint8_t) (rand_seed & 0xFF);
+    nfcid2[5] = (uint8_t) (rand_seed>>8 & 0xFF);
     rand_seed>>=(rand_seed&3);
-    nfcid2[6] = (UINT8) (rand_seed & 0xFF);
-    nfcid2[7] = (UINT8) (rand_seed>>8 & 0xFF);
+    nfcid2[6] = (uint8_t) (rand_seed & 0xFF);
+    nfcid2[7] = (uint8_t) (rand_seed>>8 & 0xFF);
 }
 
 /*******************************************************************************
@@ -367,7 +367,7 @@ tNFA_STATUS nfa_ce_start_listening (void)
     tNFA_DM_DISC_TECH_PROTO_MASK listen_mask;
     tNFA_CE_CB    *p_cb = &nfa_ce_cb;
     tNFA_HANDLE   disc_handle;
-    UINT8         listen_info_idx;
+    uint8_t       listen_info_idx;
 
     /*************************************************************************/
     /* Construct protocol preference list to listen for */
@@ -494,10 +494,10 @@ tNFA_STATUS nfa_ce_start_listening (void)
 **                  FALSE if listening not restarted
 **
 *******************************************************************************/
-BOOLEAN nfa_ce_restart_listen_check (void)
+bool    nfa_ce_restart_listen_check (void)
 {
     tNFA_CE_CB *p_cb = &nfa_ce_cb;
-    UINT8 listen_info_idx;
+    uint8_t listen_info_idx;
 
     /* Check if any active entries in listen_info table */
     for (listen_info_idx=0; listen_info_idx<NFA_CE_LISTEN_INFO_MAX; listen_info_idx++)
@@ -531,7 +531,7 @@ BOOLEAN nfa_ce_restart_listen_check (void)
 ** Returns          Nothing
 **
 *******************************************************************************/
-void nfa_ce_remove_listen_info_entry (UINT8 listen_info_idx, BOOLEAN notify_app)
+void nfa_ce_remove_listen_info_entry (uint8_t listen_info_idx, bool    notify_app)
 {
     tNFA_CE_CB *p_cb = &nfa_ce_cb;
     tNFA_CONN_EVT_DATA conn_evt;
@@ -653,7 +653,7 @@ tNFA_STATUS nfa_ce_realloc_scratch_buffer (void)
             /* Free existing scratch buffer, if one was allocated */
             nfa_ce_free_scratch_buf ();
 
-            if ((nfa_ce_cb.p_scratch_buf = (UINT8 *) nfa_mem_co_alloc (nfa_ce_cb.ndef_max_size)) != NULL)
+            if ((nfa_ce_cb.p_scratch_buf = (uint8_t *) nfa_mem_co_alloc (nfa_ce_cb.ndef_max_size)) != NULL)
             {
                 nfa_ce_cb.scratch_buf_size = nfa_ce_cb.ndef_max_size;
             }
@@ -682,7 +682,7 @@ tNFC_STATUS nfa_ce_set_content (void)
     tNFC_STATUS status;
     tNFA_CE_CB *p_cb = &nfa_ce_cb;
     tNFA_PROTOCOL_MASK ndef_protocol_mask;
-    BOOLEAN readonly;
+    bool    readonly;
 
     /* Check if listening for NDEF */
     if (!(p_cb->listen_info[NFA_CE_LISTEN_INFO_IDX_NDEF].flags & NFA_CE_LISTEN_INFO_IN_USE))
@@ -746,17 +746,17 @@ tNFC_STATUS nfa_ce_set_content (void)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_ce_activate_ntf (tNFA_CE_MSG *p_ce_msg)
+bool    nfa_ce_activate_ntf (tNFA_CE_MSG *p_ce_msg)
 {
     tNFC_ACTIVATE_DEVT *p_activation_params = p_ce_msg->activate_ntf.p_activation_params;
     tNFA_CE_CB *p_cb = &nfa_ce_cb;
     tNFA_CONN_EVT_DATA conn_evt;
     tCE_CBACK *p_ce_cback = NULL;
-    UINT16 t3t_system_code = 0xFFFF;
-    UINT8 listen_info_idx = NFA_CE_LISTEN_INFO_IDX_INVALID;
-    UINT8 *p_nfcid2 = NULL;
-    UINT8 i;
-    BOOLEAN t4t_activate_pending = FALSE;
+    uint16_t t3t_system_code = 0xFFFF;
+    uint8_t listen_info_idx = NFA_CE_LISTEN_INFO_IDX_INVALID;
+    uint8_t *p_nfcid2 = NULL;
+    uint8_t i;
+    bool    t4t_activate_pending = FALSE;
 
     NFA_TRACE_DEBUG1 ("nfa_ce_activate_ntf () protocol=%d", p_ce_msg->activate_ntf.p_activation_params->protocol);
 
@@ -921,12 +921,12 @@ BOOLEAN nfa_ce_activate_ntf (tNFA_CE_MSG *p_ce_msg)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_ce_deactivate_ntf (tNFA_CE_MSG *p_ce_msg)
+bool    nfa_ce_deactivate_ntf (tNFA_CE_MSG *p_ce_msg)
 {
     tNFC_DEACT_TYPE deact_type = (tNFC_DEACT_TYPE) p_ce_msg->hdr.layer_specific;
     tNFA_CE_CB *p_cb = &nfa_ce_cb;
     tNFA_CONN_EVT_DATA conn_evt;
-    UINT8 i;
+    uint8_t i;
 
     NFA_TRACE_DEBUG1 ("nfa_ce_deactivate_ntf () deact_type=%d", deact_type);
 
@@ -1084,7 +1084,7 @@ void nfa_ce_disable_local_tag (void)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_ce_api_cfg_local_tag (tNFA_CE_MSG *p_ce_msg)
+bool    nfa_ce_api_cfg_local_tag (tNFA_CE_MSG *p_ce_msg)
 {
     tNFA_CE_CB *p_cb = &nfa_ce_cb;
     tNFA_CONN_EVT_DATA conn_evt;
@@ -1162,12 +1162,12 @@ BOOLEAN nfa_ce_api_cfg_local_tag (tNFA_CE_MSG *p_ce_msg)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_ce_api_reg_listen (tNFA_CE_MSG *p_ce_msg)
+bool    nfa_ce_api_reg_listen (tNFA_CE_MSG *p_ce_msg)
 {
     tNFA_CE_CB *p_cb = &nfa_ce_cb;
     tNFA_CONN_EVT_DATA conn_evt;
-    UINT8 i;
-    UINT8 listen_info_idx = NFA_CE_LISTEN_INFO_IDX_INVALID;
+    uint8_t i;
+    uint8_t listen_info_idx = NFA_CE_LISTEN_INFO_IDX_INVALID;
 
     NFA_TRACE_DEBUG1 ("Registering UICC/Felica/Type-4 tag listener. Type=%i", p_ce_msg->reg_listen.listen_type);
 
@@ -1306,10 +1306,10 @@ BOOLEAN nfa_ce_api_reg_listen (tNFA_CE_MSG *p_ce_msg)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_ce_api_dereg_listen (tNFA_CE_MSG *p_ce_msg)
+bool    nfa_ce_api_dereg_listen (tNFA_CE_MSG *p_ce_msg)
 {
     tNFA_CE_CB *p_cb = &nfa_ce_cb;
-    UINT8 listen_info_idx;
+    uint8_t listen_info_idx;
     tNFA_CONN_EVT_DATA conn_evt;
 
 #if (NFC_NFCEE_INCLUDED == TRUE)
@@ -1409,7 +1409,7 @@ BOOLEAN nfa_ce_api_dereg_listen (tNFA_CE_MSG *p_ce_msg)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_ce_api_cfg_isodep_tech (tNFA_CE_MSG *p_ce_msg)
+bool    nfa_ce_api_cfg_isodep_tech (tNFA_CE_MSG *p_ce_msg)
 {
     nfa_ce_cb.isodep_disc_mask  = 0;
     if (p_ce_msg->hdr.layer_specific & NFA_TECHNOLOGY_MASK_A)

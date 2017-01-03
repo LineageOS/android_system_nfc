@@ -56,7 +56,7 @@
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_start_timer (TIMER_LIST_ENT *p_tle, UINT16 type, UINT32 timeout)
+void nfc_start_timer (TIMER_LIST_ENT *p_tle, uint16_t type, uint32_t timeout)
 {
     BT_HDR *p_msg;
 
@@ -97,7 +97,7 @@ void nfc_start_timer (TIMER_LIST_ENT *p_tle, UINT16 type, UINT32 timeout)
 ** Returns          time in second
 **
 *******************************************************************************/
-UINT32 nfc_remaining_time (TIMER_LIST_ENT *p_tle)
+uint32_t nfc_remaining_time (TIMER_LIST_ENT *p_tle)
 {
     return (GKI_get_remaining_ticks (&nfc_cb.timer_queue, p_tle));
 }
@@ -178,7 +178,7 @@ void nfc_stop_timer (TIMER_LIST_ENT *p_tle)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_start_quick_timer (TIMER_LIST_ENT *p_tle, UINT16 type, UINT32 timeout)
+void nfc_start_quick_timer (TIMER_LIST_ENT *p_tle, uint16_t type, uint32_t timeout)
 {
     BT_HDR *p_msg;
 
@@ -359,11 +359,11 @@ void nfc_task_shutdown_nfcc (void)
 ** Returns          nothing
 **
 *******************************************************************************/
-UINT32 nfc_task (UINT32 param)
+uint32_t nfc_task (uint32_t param)
 {
-    UINT16  event;
+    uint16_t  event;
     BT_HDR  *p_msg;
-    BOOLEAN free_buf;
+    bool    free_buf;
 
     /* Initialize the nfc control block */
     memset (&nfc_cb, 0, sizeof (tNFC_CB));

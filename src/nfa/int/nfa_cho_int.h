@@ -45,7 +45,7 @@ enum
     NFA_CHO_ST_MAX
 };
 
-typedef UINT8 tNFA_CHO_STATE;
+typedef uint8_t tNFA_CHO_STATE;
 
 /* NFA Connection Handover substate in NFA_CHO_ST_CONNECTED */
 enum
@@ -58,7 +58,7 @@ enum
     NFA_CHO_SUBSTATE_MAX
 };
 
-typedef UINT8 tNFA_CHO_SUBSTATE;
+typedef uint8_t tNFA_CHO_SUBSTATE;
 
 /* Handover Message receiving status for SAR */
 #define NFA_CHO_RX_NDEF_COMPLETE    0   /* received complete NDEF message */
@@ -67,7 +67,7 @@ typedef UINT8 tNFA_CHO_SUBSTATE;
 #define NFA_CHO_RX_NDEF_INCOMPLTE   3   /* Need more date       */
 #define NFA_CHO_RX_NDEF_INVALID     4   /* Invalid NDEF message */
 
-typedef UINT8 tNFA_CHO_RX_NDEF_STATUS;
+typedef uint8_t tNFA_CHO_RX_NDEF_STATUS;
 
 /* Handover Message Type */
 #define NFA_CHO_MSG_UNKNOWN         0   /* Unknown Message           */
@@ -76,7 +76,7 @@ typedef UINT8 tNFA_CHO_RX_NDEF_STATUS;
 #define NFA_CHO_MSG_BT_OOB          3   /* Simplified BT OOB message */
 #define NFA_CHO_MSG_WIFI            4   /* Simplified WIFI message   */
 
-typedef UINT8 tNFA_CHO_MSG_TYPE;
+typedef uint8_t tNFA_CHO_MSG_TYPE;
 
 /* Timeout */
 #define NFA_CHO_TIMEOUT_FOR_HS          1000    /* ms, waiting for Hs record */
@@ -111,13 +111,13 @@ enum
     NFA_CHO_LAST_EVT
 };
 
-typedef UINT16 tNFA_CHO_INT_EVT;
+typedef uint16_t tNFA_CHO_INT_EVT;
 
 /* data type for NFA_CHO_API_REG_EVT */
 typedef struct
 {
     BT_HDR              hdr;
-    BOOLEAN             enable_server;
+    bool                enable_server;
     tNFA_CHO_CBACK     *p_cback;
 } tNFA_CHO_API_REG;
 
@@ -134,22 +134,22 @@ typedef BT_HDR tNFA_CHO_API_DISCONNECT;
 typedef struct
 {
     BT_HDR              hdr;
-    UINT8               num_ac_info;
+    uint8_t             num_ac_info;
     tNFA_CHO_AC_INFO   *p_ac_info;
-    UINT8              *p_ndef;
-    UINT32              max_ndef_size;
-    UINT32              cur_ndef_size;
+    uint8_t            *p_ndef;
+    uint32_t            max_ndef_size;
+    uint32_t            cur_ndef_size;
 } tNFA_CHO_API_SEND_HR;
 
 /* data type for NFA_CHO_API_SEND_HS_EVT */
 typedef struct
 {
     BT_HDR              hdr;
-    UINT8               num_ac_info;
+    uint8_t             num_ac_info;
     tNFA_CHO_AC_INFO   *p_ac_info;
-    UINT8              *p_ndef;
-    UINT32              max_ndef_size;
-    UINT32              cur_ndef_size;
+    uint8_t            *p_ndef;
+    uint32_t            max_ndef_size;
+    uint32_t            cur_ndef_size;
 } tNFA_CHO_API_SEND_HS;
 
 /* data type for NFA_CHO_API_STOP_EVT */
@@ -159,8 +159,8 @@ typedef BT_HDR tNFA_CHO_API_STOP;
 typedef struct
 {
     BT_HDR              hdr;
-    UINT8               error_reason;
-    UINT32              error_data;
+    uint8_t             error_reason;
+    uint32_t            error_data;
 } tNFA_CHO_API_SEL_ERR;
 
 /* data type for NFA_CHO_NDEF_TYPE_HANDLER_EVT */
@@ -201,45 +201,45 @@ typedef struct
     tNFA_CHO_SUBSTATE   substate;               /* substate in connected state          */
     TIMER_LIST_ENT      timer;                  /* timer for rx handover message        */
 
-    UINT8               server_sap;             /* SAP for local handover server        */
-    UINT8               client_sap;             /* SAP for connection to remote handover server */
-    UINT8               local_sap;              /* SSAP for connection, either server_sap or client_sap */
-    UINT8               remote_sap;             /* DSAP for connection                  */
+    uint8_t             server_sap;             /* SAP for local handover server        */
+    uint8_t             client_sap;             /* SAP for connection to remote handover server */
+    uint8_t             local_sap;              /* SSAP for connection, either server_sap or client_sap */
+    uint8_t             remote_sap;             /* DSAP for connection                  */
 
-    UINT8               flags;                  /* internal flags                       */
+    uint8_t             flags;                  /* internal flags                       */
     tNFA_CHO_DISC_REASON disc_reason;           /* disconnection reason                 */
 
     tNFA_HANDLE         hs_ndef_type_handle;    /* handle for HS NDEF Type handler      */
     tNFA_HANDLE         bt_ndef_type_handle;    /* handle for BT OOB NDEF Type handler  */
     tNFA_HANDLE         wifi_ndef_type_handle;  /* handle for WiFi NDEF Type handler    */
 
-    UINT16              local_link_miu;         /* MIU of local LLCP                    */
-    UINT16              remote_miu;             /* peer's MIU of data link connection   */
-    BOOLEAN             congested;              /* TRUE if data link is congested       */
+    uint16_t            local_link_miu;         /* MIU of local LLCP                    */
+    uint16_t            remote_miu;             /* peer's MIU of data link connection   */
+    bool                congested;              /* TRUE if data link is congested       */
 
-    UINT8               collision_local_sap;    /* SSAP for collision connection        */
-    UINT8               collision_remote_sap;   /* DSAP for collision connection        */
-    UINT16              collision_remote_miu;   /* peer's MIU of collision  connection  */
-    BOOLEAN             collision_congested;    /* TRUE if collision connection is congested */
+    uint8_t             collision_local_sap;    /* SSAP for collision connection        */
+    uint8_t             collision_remote_sap;   /* DSAP for collision connection        */
+    uint16_t            collision_remote_miu;   /* peer's MIU of collision  connection  */
+    bool                collision_congested;    /* TRUE if collision connection is congested */
 
-    UINT16              tx_random_number;       /* it has been sent in Hr for collision */
+    uint16_t            tx_random_number;       /* it has been sent in Hr for collision */
 
-    UINT8              *p_tx_ndef_msg;          /* allocate buffer for tx NDEF msg      */
-    UINT32              tx_ndef_cur_size;       /* current size of NDEF message         */
-    UINT32              tx_ndef_sent_size;      /* transmitted size of NDEF message     */
+    uint8_t            *p_tx_ndef_msg;          /* allocate buffer for tx NDEF msg      */
+    uint32_t            tx_ndef_cur_size;       /* current size of NDEF message         */
+    uint32_t            tx_ndef_sent_size;      /* transmitted size of NDEF message     */
 
-    UINT8              *p_rx_ndef_msg;          /* allocate buffer for rx NDEF msg      */
-    UINT32              rx_ndef_buf_size;       /* allocate buffer size for rx NDEF msg */
-    UINT32              rx_ndef_cur_size;       /* current rx size of NDEF message      */
+    uint8_t            *p_rx_ndef_msg;          /* allocate buffer for rx NDEF msg      */
+    uint32_t            rx_ndef_buf_size;       /* allocate buffer size for rx NDEF msg */
+    uint32_t            rx_ndef_cur_size;       /* current rx size of NDEF message      */
 
     tNFA_CHO_CBACK     *p_cback;                /* callback registered by application   */
 
-    UINT8               trace_level;
+    uint8_t             trace_level;
 
 #if (defined (NFA_CHO_TEST_INCLUDED) && (NFA_CHO_TEST_INCLUDED == TRUE))
-    UINT8               test_enabled;
-    UINT8               test_version;
-    UINT16              test_random_number;
+    uint8_t             test_enabled;
+    uint8_t             test_version;
+    uint16_t            test_random_number;
 #endif
 } tNFA_CHO_CB;
 
@@ -269,19 +269,19 @@ void nfa_cho_process_disconnection (tNFA_CHO_DISC_REASON disc_reason);
 void nfa_cho_notify_tx_fail_evt (tNFA_STATUS status);
 
 tNFA_STATUS nfa_cho_send_handover_msg (void);
-tNFA_CHO_RX_NDEF_STATUS nfa_cho_read_ndef_msg (UINT8 local_sap, UINT8 remote_sap);
-tNFA_CHO_RX_NDEF_STATUS nfa_cho_reassemble_ho_msg (UINT8 local_sap, UINT8 remote_sap);
+tNFA_CHO_RX_NDEF_STATUS nfa_cho_read_ndef_msg (uint8_t local_sap, uint8_t remote_sap);
+tNFA_CHO_RX_NDEF_STATUS nfa_cho_reassemble_ho_msg (uint8_t local_sap, uint8_t remote_sap);
 
 tNFA_STATUS nfa_cho_send_hr (tNFA_CHO_API_SEND_HR *p_api_send_hr);
 tNFA_STATUS nfa_cho_send_hs (tNFA_CHO_API_SEND_HS *p_api_select);
-tNFA_STATUS nfa_cho_send_hs_error (UINT8 error_reason, UINT32 error_data);
+tNFA_STATUS nfa_cho_send_hs_error (uint8_t error_reason, uint32_t error_data);
 
-void nfa_cho_proc_hr (UINT32 length, UINT8 *p_ndef_msg);
-void nfa_cho_proc_hs (UINT32 length, UINT8 *p_ndef_msg);
-void nfa_cho_proc_simplified_format (UINT32 length, UINT8 *p_ndef_msg);
+void nfa_cho_proc_hr (uint32_t length, uint8_t *p_ndef_msg);
+void nfa_cho_proc_hs (uint32_t length, uint8_t *p_ndef_msg);
+void nfa_cho_proc_simplified_format (uint32_t length, uint8_t *p_ndef_msg);
 
-tNFA_CHO_MSG_TYPE  nfa_cho_get_msg_type (UINT32 length, UINT8 *p_ndef_msg);
-tNFA_CHO_ROLE_TYPE nfa_cho_get_local_device_role (UINT32 length, UINT8 *p_ndef_msg);
-tNFA_STATUS nfa_cho_update_random_number (UINT8 *p_ndef_msg);
+tNFA_CHO_MSG_TYPE  nfa_cho_get_msg_type (uint32_t length, uint8_t *p_ndef_msg);
+tNFA_CHO_ROLE_TYPE nfa_cho_get_local_device_role (uint32_t length, uint8_t *p_ndef_msg);
+tNFA_STATUS nfa_cho_update_random_number (uint8_t *p_ndef_msg);
 #endif /* (defined (NFA_CHO_INCLUDED) && (NFA_CHO_INCLUDED==TRUE)) */
 #endif /* NFA_CHO_INT_H */

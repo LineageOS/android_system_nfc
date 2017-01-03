@@ -61,7 +61,7 @@ void llcp_sdp_proc_data (tLLCP_SAP_CBACK_DATA *p_data)
 *******************************************************************************/
 void llcp_sdp_check_send_snl (void)
 {
-    UINT8 *p;
+    uint8_t *p;
 
     if (llcp_cb.sdp_cb.p_snl)
     {
@@ -70,7 +70,7 @@ void llcp_sdp_check_send_snl (void)
         llcp_cb.sdp_cb.p_snl->len     += LLCP_PDU_HEADER_SIZE;
         llcp_cb.sdp_cb.p_snl->offset  -= LLCP_PDU_HEADER_SIZE;
 
-        p = (UINT8 *) (llcp_cb.sdp_cb.p_snl + 1) + llcp_cb.sdp_cb.p_snl->offset;
+        p = (uint8_t *) (llcp_cb.sdp_cb.p_snl + 1) + llcp_cb.sdp_cb.p_snl->offset;
         UINT16_TO_BE_STREAM (p, LLCP_GET_PDU_HEADER (LLCP_SAP_SDP, LLCP_PDU_SNL_TYPE, LLCP_SAP_SDP ));
 
         GKI_enqueue (&llcp_cb.lcb.sig_xmit_q, llcp_cb.sdp_cb.p_snl);
@@ -88,12 +88,12 @@ void llcp_sdp_check_send_snl (void)
 ** Returns          void
 **
 *******************************************************************************/
-static void llcp_sdp_add_sdreq (UINT8 tid, char *p_name)
+static void llcp_sdp_add_sdreq (uint8_t tid, char *p_name)
 {
-    UINT8  *p;
-    UINT16 name_len = (UINT16) strlen (p_name);
+    uint8_t  *p;
+    uint16_t name_len = (uint16_t) strlen (p_name);
 
-    p = (UINT8 *) (llcp_cb.sdp_cb.p_snl + 1) + llcp_cb.sdp_cb.p_snl->offset + llcp_cb.sdp_cb.p_snl->len;
+    p = (uint8_t *) (llcp_cb.sdp_cb.p_snl + 1) + llcp_cb.sdp_cb.p_snl->offset + llcp_cb.sdp_cb.p_snl->len;
 
     UINT8_TO_BE_STREAM (p, LLCP_SDREQ_TYPE);
     UINT8_TO_BE_STREAM (p, (1 + name_len));
@@ -113,11 +113,11 @@ static void llcp_sdp_add_sdreq (UINT8 tid, char *p_name)
 ** Returns          LLCP_STATUS
 **
 *******************************************************************************/
-tLLCP_STATUS llcp_sdp_send_sdreq (UINT8 tid, char *p_name)
+tLLCP_STATUS llcp_sdp_send_sdreq (uint8_t tid, char *p_name)
 {
     tLLCP_STATUS status;
-    UINT16       name_len;
-    UINT16       available_bytes;
+    uint16_t     name_len;
+    uint16_t     available_bytes;
 
     LLCP_TRACE_DEBUG2 ("llcp_sdp_send_sdreq (): tid=0x%x, ServiceName=%s", tid, p_name);
 
@@ -139,7 +139,7 @@ tLLCP_STATUS llcp_sdp_send_sdreq (UINT8 tid, char *p_name)
                           - BT_HDR_SIZE - llcp_cb.sdp_cb.p_snl->offset
                           - llcp_cb.sdp_cb.p_snl->len;
 
-        name_len = (UINT16) strlen (p_name);
+        name_len = (uint16_t) strlen (p_name);
 
         /* if SDREQ parameter can be added in SNL */
         if (  (available_bytes >= LLCP_SDREQ_MIN_LEN + name_len)
@@ -195,11 +195,11 @@ tLLCP_STATUS llcp_sdp_send_sdreq (UINT8 tid, char *p_name)
 ** Returns          void
 **
 *******************************************************************************/
-static void llcp_sdp_add_sdres (UINT8 tid, UINT8 sap)
+static void llcp_sdp_add_sdres (uint8_t tid, uint8_t sap)
 {
-    UINT8  *p;
+    uint8_t  *p;
 
-    p = (UINT8 *) (llcp_cb.sdp_cb.p_snl + 1) + llcp_cb.sdp_cb.p_snl->offset + llcp_cb.sdp_cb.p_snl->len;
+    p = (uint8_t *) (llcp_cb.sdp_cb.p_snl + 1) + llcp_cb.sdp_cb.p_snl->offset + llcp_cb.sdp_cb.p_snl->len;
 
     UINT8_TO_BE_STREAM (p, LLCP_SDRES_TYPE);
     UINT8_TO_BE_STREAM (p, LLCP_SDRES_LEN);
@@ -219,10 +219,10 @@ static void llcp_sdp_add_sdres (UINT8 tid, UINT8 sap)
 ** Returns          LLCP_STATUS
 **
 *******************************************************************************/
-static tLLCP_STATUS llcp_sdp_send_sdres (UINT8 tid, UINT8 sap)
+static tLLCP_STATUS llcp_sdp_send_sdres (uint8_t tid, uint8_t sap)
 {
     tLLCP_STATUS status;
-    UINT16       available_bytes;
+    uint16_t     available_bytes;
 
     LLCP_TRACE_DEBUG2 ("llcp_sdp_send_sdres (): tid=0x%x, SAP=0x%x", tid, sap);
 
@@ -298,9 +298,9 @@ static tLLCP_STATUS llcp_sdp_send_sdres (UINT8 tid, UINT8 sap)
 ** Returns          SAP if success
 **
 *******************************************************************************/
-UINT8 llcp_sdp_get_sap_by_name (char *p_name, UINT8 length)
+uint8_t llcp_sdp_get_sap_by_name (char *p_name, uint8_t length)
 {
-    UINT8        sap;
+    uint8_t      sap;
     tLLCP_APP_CB *p_app_cb;
 
     for (sap = LLCP_SAP_SDP; sap <= LLCP_UPPER_BOUND_SDP_SAP; sap++)
@@ -328,9 +328,9 @@ UINT8 llcp_sdp_get_sap_by_name (char *p_name, UINT8 length)
 ** Returns          void
 **
 *******************************************************************************/
-static void llcp_sdp_return_sap (UINT8 tid, UINT8 sap)
+static void llcp_sdp_return_sap (uint8_t tid, uint8_t sap)
 {
-    UINT8 i;
+    uint8_t i;
 
     LLCP_TRACE_DEBUG2 ("llcp_sdp_return_sap (): tid=0x%x, SAP=0x%x", tid, sap);
 
@@ -358,7 +358,7 @@ static void llcp_sdp_return_sap (UINT8 tid, UINT8 sap)
 *******************************************************************************/
 void llcp_sdp_proc_deactivation (void)
 {
-    UINT8 i;
+    uint8_t i;
 
     LLCP_TRACE_DEBUG0 ("llcp_sdp_proc_deactivation ()");
 
@@ -392,9 +392,9 @@ void llcp_sdp_proc_deactivation (void)
 ** Returns          LLCP_STATUS
 **
 *******************************************************************************/
-tLLCP_STATUS llcp_sdp_proc_snl (UINT16 sdu_length, UINT8 *p)
+tLLCP_STATUS llcp_sdp_proc_snl (uint16_t sdu_length, uint8_t *p)
 {
-    UINT8  type, length, tid, sap, *p_value;
+    uint8_t  type, length, tid, sap, *p_value;
 
     LLCP_TRACE_DEBUG0 ("llcp_sdp_proc_snl ()");
 
@@ -417,7 +417,7 @@ tLLCP_STATUS llcp_sdp_proc_snl (UINT16 sdu_length, UINT8 *p)
             {
                 p_value = p;
                 BE_STREAM_TO_UINT8 (tid, p_value);
-                sap = llcp_sdp_get_sap_by_name ((char*) p_value, (UINT8) (length - 1));
+                sap = llcp_sdp_get_sap_by_name ((char*) p_value, (uint8_t) (length - 1));
                 llcp_sdp_send_sdres (tid, sap);
             }
             else

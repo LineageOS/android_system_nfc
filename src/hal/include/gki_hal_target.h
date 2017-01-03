@@ -280,7 +280,7 @@ extern "C"
 {
 #endif
 
-extern void LogMsg (UINT32 trace_set_mask, const char *fmt_str, ...);
+extern void LogMsg (uint32_t trace_set_mask, const char *fmt_str, ...);
 
 #ifdef __cplusplus
 }

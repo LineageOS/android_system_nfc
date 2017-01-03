@@ -40,7 +40,7 @@
 ** Returns          none
 **
 *******************************************************************************/
-void nfc_hal_nv_ci_read (UINT16 num_bytes_read, tNFC_HAL_NV_CO_STATUS status, UINT8 block)
+void nfc_hal_nv_ci_read (uint16_t num_bytes_read, tNFC_HAL_NV_CO_STATUS status, uint8_t block)
 {
     tNFC_HAL_HCI_EVENT_DATA *p_msg;
 

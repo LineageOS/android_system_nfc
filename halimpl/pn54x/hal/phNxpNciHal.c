@@ -320,7 +320,7 @@ static NFCSTATUS phNxpNciHal_CheckValidFwVersion(void)
     /* extract the firmware's major no */
     ufw_current_major_no = ((0x00FF) & (wFwVer >> 8U));
 
-    NXPLOG_NCIHAL_D("%s current_major_no = 0x%x", __FUNCTION__,ufw_current_major_no );
+    NXPLOG_NCIHAL_D("%s current_major_no = 0x%x", __func__,ufw_current_major_no );
     if ( ufw_current_major_no == sfw_mobile_major_no)
     {
         status = NFCSTATUS_SUCCESS;
@@ -2660,7 +2660,7 @@ static void phNxpNciHal_check_factory_reset(void)
 #endif
     if (stat(config_eseinfo_path, &st) == -1)
     {
-        NXPLOG_NCIHAL_D("%s file not present = %s", __FUNCTION__, config_eseinfo_path);
+        NXPLOG_NCIHAL_D("%s file not present = %s", __func__, config_eseinfo_path);
         ret = -1;
     }
     else
@@ -2724,11 +2724,11 @@ static void phNxpNciHal_print_res_status( uint8_t *p_rx_data, uint16_t *p_len)
         if(p_rx_data[2] &&  p_rx_data[3]<=10)
         {
             status_byte = p_rx_data[CORE_RES_STATUS_BYTE];
-            NXPLOG_NCIHAL_D("%s: response status =%s",__FUNCTION__,response_buf[status_byte]);
+            NXPLOG_NCIHAL_D("%s: response status =%s",__func__,response_buf[status_byte]);
         }
         else
         {
-            NXPLOG_NCIHAL_D("%s: response status =%s",__FUNCTION__,response_buf[11]);
+            NXPLOG_NCIHAL_D("%s: response status =%s",__func__,response_buf[11]);
         }
         if(phNxpNciClock.isClockSet)
         {
@@ -2745,7 +2745,7 @@ static void phNxpNciHal_print_res_status( uint8_t *p_rx_data, uint16_t *p_len)
             for(i=0; i<* p_len; i++)
             {
                 phNxpNciRfSet.p_rx_data[i] = p_rx_data[i];
-                //NXPLOG_NCIHAL_D("%s: response status =0x%x",__FUNCTION__,p_rx_data[i]);
+                //NXPLOG_NCIHAL_D("%s: response status =0x%x",__func__,p_rx_data[i]);
             }
         }
         else if (phNxpNciMwEepromArea.isGetEepromArea)
@@ -2788,7 +2788,7 @@ NFCSTATUS phNxpNciHal_core_reset_recovery ()
     {
         goto FAILURE;
     }
-    NXPLOG_NCIHAL_D ("%s: recovery", __FUNCTION__);
+    NXPLOG_NCIHAL_D ("%s: recovery", __func__);
 
 retry_core_init:
     if (retry_core_init_cnt > 3)
