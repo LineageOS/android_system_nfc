@@ -86,7 +86,7 @@ void rw_t2t_handle_rsp (uint8_t *p_data)
 
     if (p_t2t->substate == RW_T2T_SUBSTATE_WAIT_READ_CC)
     {
-        p_t2t->b_read_hdr = TRUE;
+        p_t2t->b_read_hdr = true;
         memcpy (p_t2t->tag_hdr,  p_data, T2T_READ_DATA_LEN);
     }
 
@@ -354,7 +354,7 @@ static void rw_t2t_handle_lock_read_rsp (uint8_t *p_data)
 
     while (num_locks < p_t2t->num_lockbytes)
     {
-        if (p_t2t->lockbyte[num_locks].b_lock_read == FALSE)
+        if (p_t2t->lockbyte[num_locks].b_lock_read == false)
         {
             lock_offset = p_t2t->lock_tlv[p_t2t->lockbyte[num_locks].tlv_index].offset + p_t2t->lockbyte[num_locks].byte_index;
             if (updated_lock_byte == 0)
@@ -365,7 +365,7 @@ static void rw_t2t_handle_lock_read_rsp (uint8_t *p_data)
                 offset = (uint8_t) (lock_offset - (p_t2t->block_read * T2T_BLOCK_SIZE));
                 /* Update the lock byte value in the control block */
                 p_t2t->lockbyte[num_locks].lock_byte = p_data[offset];
-                p_t2t->lockbyte[num_locks].b_lock_read = TRUE;
+                p_t2t->lockbyte[num_locks].b_lock_read = true;
                 updated_lock_byte++;
             }
             else if (lock_offset > base_lock_offset)
@@ -375,7 +375,7 @@ static void rw_t2t_handle_lock_read_rsp (uint8_t *p_data)
                 {
                     /* And this lock byte is also present in the read data */
                     p_t2t->lockbyte[num_locks].lock_byte   = p_data[lock_offset - base_lock_offset + offset];
-                    p_t2t->lockbyte[num_locks].b_lock_read = TRUE;
+                    p_t2t->lockbyte[num_locks].b_lock_read = true;
                     updated_lock_byte++;
                 }
                 else
@@ -428,8 +428,8 @@ static void rw_t2t_handle_tlv_detect_rsp (uint8_t *p_data)
     tRW_T2T_CB              *p_t2t = &rw_cb.tcb.t2t;
     uint16_t                offset;
     uint16_t                len = 0;
-    bool                    failed = FALSE;
-    bool                    found  = FALSE;
+    bool                    failed = false;
+    bool                    found = false;
     tRW_EVENT               event;
     uint8_t                 index;
     uint8_t                 count = 0;
@@ -442,7 +442,7 @@ static void rw_t2t_handle_tlv_detect_rsp (uint8_t *p_data)
     {
         /* Skip UID,Static Lock block,CC*/
         p_t2t->work_offset = T2T_FIRST_DATA_BLOCK * T2T_BLOCK_LEN;
-        p_t2t->b_read_data = TRUE;
+        p_t2t->b_read_data = true;
         memcpy (p_t2t->tag_data,  p_data, T2T_READ_DATA_LEN);
     }
 
@@ -450,7 +450,7 @@ static void rw_t2t_handle_tlv_detect_rsp (uint8_t *p_data)
 
     for (offset = 0; offset < T2T_READ_DATA_LEN  && !failed && !found;)
     {
-        if (rw_t2t_is_lock_res_byte ((uint16_t) (p_t2t->work_offset + offset)) == TRUE)
+        if (rw_t2t_is_lock_res_byte((uint16_t)(p_t2t->work_offset + offset)) == true)
         {
             /* Skip locks, reserved bytes while searching for TLV */
             offset++;
@@ -485,13 +485,13 @@ static void rw_t2t_handle_tlv_detect_rsp (uint8_t *p_data)
                 {
                     /* Lock / Memory control tlv cannot exist after NDEF TLV
                      * So when NDEF is found, we stop searching for Lock and Memory control tlv */
-                    found = TRUE;
+                    found = true;
                 }
                 else
                 {
                     /* While searching for Lock / Memory control tlv, if NDEF TLV is found
                      * first then our search for Lock /Memory control tlv failed and we stop here */
-                    failed = TRUE;
+                    failed = true;
                 }
                 break;
 
@@ -518,16 +518,16 @@ static void rw_t2t_handle_tlv_detect_rsp (uint8_t *p_data)
                     ||((tlvtype == TAG_MEM_CTRL_TLV) && (p_t2t->num_mem_tlvs > 0))  )
                 {
                     /* No more Lock/Memory TLV control tlv in the tag, so stop searching */
-                    found = TRUE;
+                    found = true;
                 }
                 else
                 {
                     /* NDEF/Lock/Memory/Proprietary TLV cannot exist after Terminator Tlv */
-                    failed = TRUE;
+                    failed = true;
                 }
                 break;
             default:
-                failed = TRUE;
+                failed = true;
             }
             break;
 
@@ -586,11 +586,11 @@ static void rw_t2t_handle_tlv_detect_rsp (uint8_t *p_data)
                          ||((tlvtype == TAG_MEM_CTRL_TLV) && (p_t2t->num_mem_tlvs > 0))  )
                 {
                     /* Stop searching for Lock/ Memory control tlv */
-                    found = TRUE;
+                    found = true;
                 }
                 else
                 {
-                    failed = TRUE;
+                    failed = true;
                 }
                 break;
 
@@ -635,7 +635,7 @@ static void rw_t2t_handle_tlv_detect_rsp (uint8_t *p_data)
 
                 if (tlvtype == TAG_NDEF_TLV)
                 {
-                    found = TRUE;
+                    found = true;
                     p_t2t->ndef_status = T2T_NDEF_DETECTED;
                 }
                 else if (p_t2t->bytes_count == 0)
@@ -668,7 +668,7 @@ static void rw_t2t_handle_tlv_detect_rsp (uint8_t *p_data)
                         {
                             p_t2t->lockbyte[p_t2t->num_lockbytes].tlv_index     = p_t2t->num_lock_tlvs;
                             p_t2t->lockbyte[p_t2t->num_lockbytes].byte_index    = xx;
-                            p_t2t->lockbyte[p_t2t->num_lockbytes].b_lock_read   = FALSE;
+                            p_t2t->lockbyte[p_t2t->num_lockbytes].b_lock_read = false;
                             xx++;
                             p_t2t->num_lockbytes++;
                         }
@@ -699,7 +699,7 @@ static void rw_t2t_handle_tlv_detect_rsp (uint8_t *p_data)
                         if (p_t2t->num_mem_tlvs >= RW_T2T_MAX_MEM_TLVS)
                         {
                             RW_TRACE_ERROR0 ("rw_t2t_handle_tlv_detect_rsp - Maximum buffer allocated for Memory tlv has reached");
-                            failed  = TRUE;
+                            failed = true;
                         }
                         else
                         {
@@ -727,7 +727,7 @@ static void rw_t2t_handle_tlv_detect_rsp (uint8_t *p_data)
                 p_t2t->bytes_count--;
                 if (tlvtype == TAG_PROPRIETARY_TLV)
                 {
-                    found = TRUE;
+                    found = true;
                     p_t2t->prop_msg_len = len;
                 }
                 else
@@ -758,17 +758,17 @@ static void rw_t2t_handle_tlv_detect_rsp (uint8_t *p_data)
             if (  ((tlvtype == TAG_LOCK_CTRL_TLV) && (p_t2t->num_lockbytes > 0))
                 ||((tlvtype == TAG_MEM_CTRL_TLV) && (p_t2t->num_mem_tlvs > 0))  )
             {
-                found = TRUE;
+                found = true;
             }
             else
             {
-                failed = TRUE;
+                failed = true;
             }
         }
         else
         {
             if (rw_t2t_read ((uint16_t) ((p_t2t->work_offset / T2T_BLOCK_LEN) + T2T_FIRST_DATA_BLOCK)) != NFC_STATUS_OK)
-                failed = TRUE;
+                failed = true;
         }
     }
 
@@ -844,14 +844,14 @@ tNFC_STATUS rw_t2t_read_locks (void)
         while (num_locks < p_t2t->num_lockbytes)
         {
             p_t2t->lockbyte[num_locks].lock_byte   = 0x00;
-            p_t2t->lockbyte[num_locks].b_lock_read = TRUE;
+            p_t2t->lockbyte[num_locks].b_lock_read = true;
             num_locks++;
         }
     }
 
     while (num_locks < p_t2t->num_lockbytes)
     {
-        if (p_t2t->lockbyte[num_locks].b_lock_read == FALSE)
+        if (p_t2t->lockbyte[num_locks].b_lock_read == false)
         {
             /* Send Read command to read the first un read locks */
             offset = p_t2t->lock_tlv[p_t2t->lockbyte[num_locks].tlv_index].offset + p_t2t->lockbyte[num_locks].byte_index;
@@ -911,7 +911,7 @@ void rw_t2t_extract_default_locks_info (void)
     {
         /* No Lock control tlv is detected. Indicates lock bytes are present in default location */
         /* Add a virtual Lock tlv to map this default lock location */
-        if ((p_ret = t2t_tag_init_data (p_t2t->tag_hdr[0], FALSE, 0)) != NULL)
+        if ((p_ret = t2t_tag_init_data (p_t2t->tag_hdr[0], false, 0)) != NULL)
             bytes_locked_per_lock_bit = p_ret->default_lock_blpb;
 
         num_dynamic_lock_bits   = ((p_t2t->tag_hdr[T2T_CC2_TMS_BYTE] * T2T_TMS_TAG_FACTOR) - (T2T_STATIC_SIZE - T2T_HEADER_SIZE)) / bytes_locked_per_lock_bit;
@@ -927,7 +927,7 @@ void rw_t2t_extract_default_locks_info (void)
         {
             p_t2t->lockbyte[xx].tlv_index   = p_t2t->num_lock_tlvs;
             p_t2t->lockbyte[xx].byte_index  = xx;
-            p_t2t->lockbyte[xx].b_lock_read = FALSE;
+            p_t2t->lockbyte[xx].b_lock_read = false;
         }
         p_t2t->num_lockbytes = num_dynamic_lock_bytes;
         p_t2t->num_lock_tlvs = 1;
@@ -967,7 +967,7 @@ tNFC_STATUS rw_t2t_read_ndef_last_block (void)
     /* Locate NDEF final block based on the size of new NDEF Message */
     while (num_ndef_bytes < total_ndef_bytes)
     {
-        if (rw_t2t_is_lock_res_byte ((uint16_t) (last_ndef_byte_offset)) == FALSE)
+        if (rw_t2t_is_lock_res_byte((uint16_t)(last_ndef_byte_offset)) == false)
             num_ndef_bytes++;
 
         last_ndef_byte_offset++;
@@ -987,7 +987,7 @@ tNFC_STATUS rw_t2t_read_ndef_last_block (void)
 
             while (num_ndef_bytes < total_ndef_bytes)
             {
-                if (rw_t2t_is_lock_res_byte ((uint16_t) terminator_tlv_byte_index) == FALSE)
+                if (rw_t2t_is_lock_res_byte((uint16_t)terminator_tlv_byte_index) == false)
                         num_ndef_bytes++;
 
                 terminator_tlv_byte_index++;
@@ -1080,25 +1080,25 @@ static bool    rw_t2t_is_read_before_write_block (uint16_t block, uint16_t *p_bl
     uint8_t     count;
     uint8_t     index;
     uint16_t    tag_size = p_cc[2] * 2 + T2T_FIRST_DATA_BLOCK;
-    bool        read_before_write = TRUE;
+    bool        read_before_write = true;
 
 
     if (block == p_t2t->ndef_header_offset / T2T_BLOCK_SIZE)
     {
         /* First NDEF block is already read */
-        read_before_write = FALSE;
+        read_before_write = false;
         memcpy (p_t2t->ndef_read_block,p_t2t->ndef_first_block,T2T_BLOCK_SIZE);
     }
     else if (block == p_t2t->ndef_last_block_num)
     {
         /* Last NDEF block is already read */
-        read_before_write = FALSE;
+        read_before_write = false;
         memcpy (p_t2t->ndef_read_block,p_t2t->ndef_last_block,T2T_BLOCK_SIZE);
     }
     else if (block == p_t2t->terminator_byte_index / T2T_BLOCK_SIZE)
     {
         /* Terminator tlv block is already read */
-        read_before_write = FALSE;
+        read_before_write = false;
         memcpy (p_t2t->ndef_read_block,p_t2t->terminator_tlv_block,T2T_BLOCK_SIZE);
     }
     else
@@ -1111,7 +1111,7 @@ static bool    rw_t2t_is_read_before_write_block (uint16_t block, uint16_t *p_bl
             while (index < T2T_BLOCK_SIZE)
             {
                 /* check if it is a reserved or locked byte */
-                if (rw_t2t_is_lock_res_byte ((uint16_t) ((block * T2T_BLOCK_SIZE) + index)) == FALSE)
+                if (rw_t2t_is_lock_res_byte((uint16_t)((block * T2T_BLOCK_SIZE) + index)) == false)
                 {
                     count++;
                 }
@@ -1120,7 +1120,7 @@ static bool    rw_t2t_is_read_before_write_block (uint16_t block, uint16_t *p_bl
             if (count == T2T_BLOCK_SIZE)
             {
                 /* All the bytes in the block are free to NDEF write  */
-                read_before_write = FALSE;
+                read_before_write = false;
                 break;
             }
             else if (count == 0)
@@ -1132,7 +1132,7 @@ static bool    rw_t2t_is_read_before_write_block (uint16_t block, uint16_t *p_bl
             else
             {
                 /* The block has reseved byte (s) or locked byte (s) or both */
-                read_before_write = TRUE;
+                read_before_write = true;
                 break;
             }
         }
@@ -1203,7 +1203,7 @@ tNFC_STATUS rw_t2t_write_ndef_first_block (uint16_t msg_len, bool    b_update_le
         /* update length field */
         while (index < T2T_BLOCK_SIZE && p_t2t->work_offset < p_t2t->new_ndef_msg_len)
         {
-            if (rw_t2t_is_lock_res_byte ((uint16_t) ((block * T2T_BLOCK_SIZE) + index)) == FALSE)
+            if (rw_t2t_is_lock_res_byte((uint16_t)((block * T2T_BLOCK_SIZE) + index)) == false)
             {
                 write_block[index] = length_field[p_t2t->work_offset];
                 p_t2t->work_offset++;
@@ -1217,7 +1217,7 @@ tNFC_STATUS rw_t2t_write_ndef_first_block (uint16_t msg_len, bool    b_update_le
         /* If more space in this block then add ndef message */
         while (index < T2T_BLOCK_SIZE && p_t2t->work_offset < (p_t2t->new_ndef_msg_len + new_lengthfield_len))
         {
-            if (rw_t2t_is_lock_res_byte ((uint16_t) ((block * T2T_BLOCK_SIZE) + index)) == FALSE)
+            if (rw_t2t_is_lock_res_byte((uint16_t)((block * T2T_BLOCK_SIZE) + index)) == false)
             {
                 write_block[index] = p_t2t->p_new_ndef_buffer[p_t2t->work_offset - new_lengthfield_len];
                 p_t2t->work_offset++;
@@ -1245,7 +1245,7 @@ tNFC_STATUS rw_t2t_write_ndef_first_block (uint16_t msg_len, bool    b_update_le
         /* Update the identified block with newly prepared data */
         if ((status = rw_t2t_write (block, write_block)) == NFC_STATUS_OK)
         {
-            p_t2t->b_read_data = FALSE;
+            p_t2t->b_read_data = false;
         }
     }
     return status;
@@ -1287,7 +1287,7 @@ tNFC_STATUS rw_t2t_write_ndef_next_block (uint16_t block, uint16_t msg_len, bool
         {
             while (index < T2T_BLOCK_SIZE && p_t2t->work_offset < (p_t2t->new_ndef_msg_len + new_lengthfield_len))
             {
-                if (rw_t2t_is_lock_res_byte ((uint16_t) ((block * T2T_BLOCK_SIZE) + index)) == FALSE)
+                if (rw_t2t_is_lock_res_byte((uint16_t)((block * T2T_BLOCK_SIZE) + index)) == false)
                 {
                     write_block[index] = p_t2t->p_new_ndef_buffer[p_t2t->work_offset - new_lengthfield_len];
                     p_t2t->work_offset++;
@@ -1332,7 +1332,7 @@ tNFC_STATUS rw_t2t_write_ndef_next_block (uint16_t block, uint16_t msg_len, bool
             /* Update length field */
             while (index < T2T_BLOCK_SIZE && p_t2t->work_offset < p_t2t->new_ndef_msg_len)
             {
-                if (rw_t2t_is_lock_res_byte ((uint16_t) ((block * T2T_BLOCK_SIZE) + index)) == FALSE)
+                if (rw_t2t_is_lock_res_byte((uint16_t)((block * T2T_BLOCK_SIZE) + index)) == false)
                 {
                     write_block[index] = length_field[p_t2t->work_offset];
                     p_t2t->work_offset++;
@@ -1346,7 +1346,7 @@ tNFC_STATUS rw_t2t_write_ndef_next_block (uint16_t block, uint16_t msg_len, bool
             /* Update ndef message field */
             while (index < T2T_BLOCK_SIZE && p_t2t->work_offset < (p_t2t->new_ndef_msg_len + new_lengthfield_len))
             {
-                if (rw_t2t_is_lock_res_byte ((uint16_t) ((block * T2T_BLOCK_SIZE) + index)) == FALSE)
+                if (rw_t2t_is_lock_res_byte((uint16_t)((block * T2T_BLOCK_SIZE) + index)) == false)
                 {
                     write_block[index] = p_t2t->p_new_ndef_buffer[p_t2t->work_offset - new_lengthfield_len];
                     p_t2t->work_offset++;
@@ -1401,7 +1401,7 @@ static void rw_t2t_update_cb (uint16_t block, uint8_t *p_write_block, bool    b_
         /* Update terminator block if the 'block' points to terminator tlv block */
         memcpy (p_t2t->terminator_tlv_block, p_write_block, T2T_BLOCK_LEN);
     }
-    if (b_update_len == FALSE)
+    if (b_update_len == false)
     {
         if (block == p_t2t->ndef_last_block_num)
         {
@@ -1467,7 +1467,7 @@ static uint8_t rw_t2t_get_ndef_flags (void)
     if ((p_t2t->tag_hdr[T2T_CC3_RWA_BYTE] & T2T_CC3_RWA_RO) == T2T_CC3_RWA_RO)
         flags |=RW_NDEF_FL_READ_ONLY;
 
-    if (  ((p_ret = t2t_tag_init_data (p_t2t->tag_hdr[0], FALSE, 0)) != NULL)
+    if (  ((p_ret = t2t_tag_init_data (p_t2t->tag_hdr[0], false, 0)) != NULL)
         &&(p_ret->b_otp)  )
     {
         /* Set otp flag */
@@ -1515,9 +1515,9 @@ static uint16_t rw_t2t_get_ndef_max_size (void)
     /* Starting from NDEF Message offset find the first locked data byte */
     while (offset < tag_size)
     {
-        if (rw_t2t_is_lock_res_byte ((uint16_t) offset) == FALSE)
+        if (rw_t2t_is_lock_res_byte((uint16_t)offset) == false)
         {
-            if (rw_t2t_is_read_only_byte ((uint16_t) offset) == TRUE)
+            if (rw_t2t_is_read_only_byte((uint16_t)offset) == true)
                 break;
             p_t2t->max_ndef_msg_len++;
         }
@@ -1572,8 +1572,8 @@ static void rw_t2t_handle_ndef_read_rsp (uint8_t *p_data)
     tRW_READ_DATA    evt_data;
     uint16_t        len;
     uint16_t        offset;
-    bool            failed = FALSE;
-    bool            done   = FALSE;
+    bool            failed = false;
+    bool            done = false;
 
     /* On the first read, adjust for any partial block offset */
     offset = 0;
@@ -1590,7 +1590,7 @@ static void rw_t2t_handle_ndef_read_rsp (uint8_t *p_data)
            &&(p_t2t->work_offset<p_t2t->ndef_msg_len)  )
 
     {
-        if (rw_t2t_is_lock_res_byte ((uint16_t) (offset + p_t2t->block_read * T2T_BLOCK_LEN)) == FALSE)
+        if (rw_t2t_is_lock_res_byte((uint16_t)(offset + p_t2t->block_read * T2T_BLOCK_LEN)) == false)
         {
             /* Collect the NDEF Message */
             p_t2t->p_ndef_buffer[p_t2t->work_offset] = p_data[offset];
@@ -1601,14 +1601,14 @@ static void rw_t2t_handle_ndef_read_rsp (uint8_t *p_data)
 
     if (p_t2t->work_offset >= p_t2t->ndef_msg_len)
     {
-        done = TRUE;
+        done = true;
         p_t2t->ndef_status = T2T_NDEF_READ;
     }
     else
     {
         /* Read next 4 blocks */
         if (rw_t2t_read ((uint16_t) (p_t2t->block_read + T2T_READ_BLOCKS)) != NFC_STATUS_OK)
-            failed = TRUE;
+            failed = true;
     }
 
     if (failed || done)
@@ -1633,8 +1633,8 @@ static void rw_t2t_handle_ndef_write_rsp (uint8_t *p_data)
 {
     tRW_T2T_CB      *p_t2t = &rw_cb.tcb.t2t;
     tRW_READ_DATA   evt_data;
-    bool            failed = FALSE;
-    bool            done   = FALSE;
+    bool            failed = false;
+    bool            done = false;
     uint16_t        block;
     uint8_t         offset;
 
@@ -1646,7 +1646,7 @@ static void rw_t2t_handle_ndef_write_rsp (uint8_t *p_data)
            memcpy (p_t2t->ndef_first_block, p_data, T2T_BLOCK_LEN);
         /* Read ndef final block */
         if (rw_t2t_read_ndef_last_block () !=  NFC_STATUS_OK)
-            failed = TRUE;
+            failed = true;
         break;
 
     case RW_T2T_SUBSTATE_WAIT_READ_NDEF_LAST_BLOCK:
@@ -1658,19 +1658,19 @@ static void rw_t2t_handle_ndef_write_rsp (uint8_t *p_data)
         {
             /* If Terminator TLV will reside on the NDEF Final block */
             memcpy (p_t2t->terminator_tlv_block, p_t2t->ndef_last_block, T2T_BLOCK_LEN);
-            if (rw_t2t_write_ndef_first_block (0x0000, FALSE)!=  NFC_STATUS_OK)
-                failed = TRUE;
+            if (rw_t2t_write_ndef_first_block (0x0000, false)!=  NFC_STATUS_OK)
+                failed = true;
         }
         else if (p_t2t->terminator_byte_index != 0)
         {
             /* If there is space for Terminator TLV and if it will reside outside NDEF Final block */
             if (rw_t2t_read_terminator_tlv_block ()!=  NFC_STATUS_OK)
-                failed = TRUE;
+                failed = true;
         }
         else
         {
-            if (rw_t2t_write_ndef_first_block (0x0000, FALSE)!=  NFC_STATUS_OK)
-                failed = TRUE;
+            if (rw_t2t_write_ndef_first_block (0x0000, false)!=  NFC_STATUS_OK)
+                failed = true;
         }
         break;
 
@@ -1681,8 +1681,8 @@ static void rw_t2t_handle_ndef_write_rsp (uint8_t *p_data)
         memcpy (p_t2t->terminator_tlv_block, &p_data[offset], T2T_BLOCK_LEN);
 
         /* Write the first block for new NDEF Message */
-        if (rw_t2t_write_ndef_first_block (0x0000, FALSE)!=  NFC_STATUS_OK)
-           failed = TRUE;
+        if (rw_t2t_write_ndef_first_block (0x0000, false)!=  NFC_STATUS_OK)
+           failed = true;
         break;
 
     case RW_T2T_SUBSTATE_WAIT_READ_NDEF_NEXT_BLOCK:
@@ -1692,33 +1692,33 @@ static void rw_t2t_handle_ndef_write_rsp (uint8_t *p_data)
         memcpy (p_t2t->ndef_read_block, &p_data[offset], T2T_BLOCK_LEN);
 
         /* Update the block with new NDEF Message */
-        if (rw_t2t_write_ndef_next_block (p_t2t->ndef_read_block_num, 0x0000, FALSE) !=  NFC_STATUS_OK)
-            failed = TRUE;
+        if (rw_t2t_write_ndef_next_block (p_t2t->ndef_read_block_num, 0x0000, false) !=  NFC_STATUS_OK)
+            failed = true;
         break;
 
     case RW_T2T_SUBSTATE_WAIT_WRITE_NDEF_NEXT_BLOCK:
     case RW_T2T_SUBSTATE_WAIT_WRITE_NDEF_LEN_NEXT_BLOCK:
-        if (rw_t2t_is_read_before_write_block ((uint16_t) (p_t2t->block_written + 1), &block) == TRUE)
+        if (rw_t2t_is_read_before_write_block((uint16_t)(p_t2t->block_written + 1), &block) == true)
         {
             p_t2t->ndef_read_block_num = block;
             /* If only part of the block is going to be updated read the block to retain previous data for
                unchanged part of the block */
             if (rw_t2t_read_ndef_next_block (block) !=  NFC_STATUS_OK)
-                failed = TRUE;
+                failed = true;
         }
         else
         {
             if (p_t2t->substate == RW_T2T_SUBSTATE_WAIT_WRITE_NDEF_LEN_NEXT_BLOCK)
             {
                 /* Directly write the block with new NDEF contents as whole block is going to be updated */
-                if (rw_t2t_write_ndef_next_block (block, p_t2t->new_ndef_msg_len, TRUE)!=  NFC_STATUS_OK)
-                   failed = TRUE;
+                if (rw_t2t_write_ndef_next_block (block, p_t2t->new_ndef_msg_len, true)!=  NFC_STATUS_OK)
+                   failed = true;
             }
             else
             {
                 /* Directly write the block with new NDEF contents as whole block is going to be updated */
-                if (rw_t2t_write_ndef_next_block (block, 0x0000, FALSE)!=  NFC_STATUS_OK)
-                   failed = TRUE;
+                if (rw_t2t_write_ndef_next_block (block, 0x0000, false)!=  NFC_STATUS_OK)
+                   failed = true;
             }
         }
         break;
@@ -1726,20 +1726,20 @@ static void rw_t2t_handle_ndef_write_rsp (uint8_t *p_data)
     case RW_T2T_SUBSTATE_WAIT_WRITE_NDEF_LAST_BLOCK:
         /* Write the next block for new NDEF Message */
         p_t2t->ndef_write_block = p_t2t->ndef_header_offset / T2T_BLOCK_SIZE;
-        if (rw_t2t_is_read_before_write_block ((uint16_t) (p_t2t->ndef_write_block), &block) == TRUE)
+        if (rw_t2t_is_read_before_write_block((uint16_t)(p_t2t->ndef_write_block), &block) == true)
         {
             /* If only part of the block is going to be updated read the block to retain previous data for
                part of the block thats not going to be changed */
             p_t2t->substate = RW_T2T_SUBSTATE_WAIT_READ_NDEF_LEN_BLOCK;
             if (rw_t2t_read (block) !=  NFC_STATUS_OK)
-                failed = TRUE;
+                failed = true;
 
         }
         else
         {
             /* Update NDEF Message Length in the Tag */
-            if (rw_t2t_write_ndef_first_block (p_t2t->new_ndef_msg_len, TRUE)!=  NFC_STATUS_OK)
-               failed = TRUE;
+            if (rw_t2t_write_ndef_first_block (p_t2t->new_ndef_msg_len, true)!=  NFC_STATUS_OK)
+               failed = true;
         }
         break;
 
@@ -1748,20 +1748,20 @@ static void rw_t2t_handle_ndef_write_rsp (uint8_t *p_data)
         memcpy (p_t2t->ndef_read_block, p_data, T2T_BLOCK_LEN);
 
         /* Update the block with new NDEF Message */
-        if (rw_t2t_write_ndef_next_block (p_t2t->block_read, p_t2t->new_ndef_msg_len, TRUE) ==  NFC_STATUS_OK)
+        if (rw_t2t_write_ndef_next_block (p_t2t->block_read, p_t2t->new_ndef_msg_len, true) ==  NFC_STATUS_OK)
             p_t2t->ndef_write_block = p_t2t->block_read + 1;
         else
-            failed = TRUE;
+            failed = true;
 
         break;
 
     case RW_T2T_SUBSTATE_WAIT_WRITE_NDEF_LEN_BLOCK:
         if (rw_t2t_add_terminator_tlv ()!=  NFC_STATUS_OK)
-           failed = TRUE;
+           failed = true;
         break;
 
     case RW_T2T_SUBSTATE_WAIT_WRITE_TERM_TLV_CMPLT:
-        done = TRUE;
+        done = true;
         break;
 
     default:
@@ -1833,10 +1833,10 @@ static void rw_t2t_handle_config_tag_readonly (uint8_t *p_data)
 {
     tRW_T2T_CB  *p_t2t = &rw_cb.tcb.t2t;
     tNFC_STATUS status  = NFC_STATUS_FAILED;
-    bool        b_notify = FALSE;
+    bool        b_notify = false;
     uint8_t     write_block[T2T_BLOCK_SIZE];
     tRW_DATA    evt;
-    bool        b_pending = FALSE;
+    bool        b_pending = false;
     uint8_t     read_lock = 0;
     uint8_t     num_locks = 0;
     uint16_t    offset;
@@ -1858,7 +1858,7 @@ static void rw_t2t_handle_config_tag_readonly (uint8_t *p_data)
         {
             /* Tag configuration complete */
             status   = NFC_STATUS_OK;
-            b_notify = TRUE;
+            b_notify = true;
             break;
         }
 
@@ -1879,7 +1879,7 @@ static void rw_t2t_handle_config_tag_readonly (uint8_t *p_data)
             if (!b_pending && p_t2t->lockbyte[num_locks].lock_status == RW_T2T_LOCK_NOT_UPDATED)
             {
                 /* One or more dynamic lock bits are not set */
-                b_pending = TRUE;
+                b_pending = true;
                 read_lock = num_locks;
             }
             num_locks++;
@@ -1914,7 +1914,7 @@ static void rw_t2t_handle_config_tag_readonly (uint8_t *p_data)
     case RW_T2T_SUBSTATE_WAIT_SET_ST_LOCK_BITS:
         /* Tag configuration complete */
         status   = NFC_STATUS_OK;
-        b_notify = TRUE;
+        b_notify = true;
         break;
 
     }
@@ -1948,7 +1948,7 @@ static void rw_t2t_handle_format_tag_rsp (uint8_t *p_data)
     uint8_t     tms;
     uint8_t     next_block = T2T_FIRST_DATA_BLOCK + 1;
     uint16_t    addr, locked_area;
-    bool        b_notify = FALSE;
+    bool        b_notify = false;
 
 
     p = p_t2t->ndef_final_block;
@@ -1964,9 +1964,9 @@ static void rw_t2t_handle_format_tag_rsp (uint8_t *p_data)
     case RW_T2T_SUBSTATE_WAIT_READ_VERSION_INFO:
 
         memcpy (p_t2t->tag_data, p_data, T2T_READ_DATA_LEN);
-        p_t2t->b_read_data = TRUE;
+        p_t2t->b_read_data = true;
         version_no = (uint16_t) p_data[0] << 8 | p_data[1];
-        if ((p_ret = t2t_tag_init_data (p_t2t->tag_hdr[0], TRUE, version_no)) != NULL)
+        if ((p_ret = t2t_tag_init_data (p_t2t->tag_hdr[0], true, version_no)) != NULL)
         {
             /* Valid Version Number */
             if (p_ret->b_calc_cc)
@@ -1986,7 +1986,7 @@ static void rw_t2t_handle_format_tag_rsp (uint8_t *p_data)
 
         version_no = (uint16_t) p_t2t->tag_data[0] << 8 | p_t2t->tag_data[1];
         if (  (version_no == 0)
-            ||((p_ret = t2t_tag_init_data (p_t2t->tag_hdr[0], TRUE, version_no)) == NULL)
+            ||((p_ret = t2t_tag_init_data (p_t2t->tag_hdr[0], true, version_no)) == NULL)
             ||(!p_ret->b_multi_version)
             ||(!p_ret->b_calc_cc)  )
         {
@@ -2017,7 +2017,7 @@ static void rw_t2t_handle_format_tag_rsp (uint8_t *p_data)
         UINT8_TO_BE_STREAM (p, TAG_NDEF_TLV);
         UINT8_TO_BE_STREAM (p, 0);
 
-        if (  ((p_ret = t2t_tag_init_data (p_t2t->tag_hdr[0], FALSE, 0)) != NULL)
+        if (  ((p_ret = t2t_tag_init_data (p_t2t->tag_hdr[0], false, 0)) != NULL)
             &&(!p_ret->b_otp)  )
         {
             UINT8_TO_BE_STREAM (p, TAG_TERMINATOR_TLV);
@@ -2028,13 +2028,13 @@ static void rw_t2t_handle_format_tag_rsp (uint8_t *p_data)
         p_t2t->substate = RW_T2T_SUBSTATE_WAIT_SET_NULL_NDEF;
         /* send WRITE-E8 command */
         if ((status = rw_t2t_write (next_block, p_t2t->ndef_final_block)) == NFC_STATUS_OK)
-            p_t2t->b_read_data = FALSE;
+            p_t2t->b_read_data = false;
         break;
 
     case RW_T2T_SUBSTATE_WAIT_SET_NULL_NDEF:
         /* Tag Formated successfully */
         status   = NFC_STATUS_OK;
-        b_notify = TRUE;
+        b_notify = true;
         break;
 
     default:
@@ -2152,7 +2152,7 @@ static uint8_t rw_t2t_get_lock_bits_for_segment (uint8_t segment, uint8_t *p_sta
     uint8_t     bytes_locked_per_bit;
     uint8_t     num_bits;
     tRW_T2T_CB  *p_t2t = &rw_cb.tcb.t2t;
-    bool        b_all_bits_are_locks = TRUE;
+    bool        b_all_bits_are_locks = true;
     uint16_t    tag_size;
     uint8_t     xx;
 
@@ -2277,7 +2277,7 @@ static void rw_t2t_update_lock_attributes (void)
     uint8_t     bits_covered                = 0;
     uint8_t     bytes_covered               = 0;
     uint8_t     block_count                 = 0;
-    bool        b_all_bits_are_locks        = TRUE;
+    bool        b_all_bits_are_locks = true;
     uint8_t     bytes_locked_per_lock_bit;
     uint8_t     start_lock_byte;
     uint8_t     start_lock_bit;
@@ -2408,7 +2408,7 @@ static bool    rw_t2t_is_lock_res_byte (uint16_t index)
      * Find the block and offset for the index (passed as argument) and Check if the offset bit in the
      * p_t2t->attr[block/2] is set or not. If the bit is set then it is a lock/reserved byte, otherwise not */
 
-    return ((p_t2t->attr[index /8] & rw_t2t_mask_bits[index % 8]) == 0) ? FALSE:TRUE;
+    return ((p_t2t->attr[index / 8] & rw_t2t_mask_bits[index % 8]) == 0) ? false : true;
 }
 
 /*******************************************************************************
@@ -2446,7 +2446,7 @@ static bool    rw_t2t_is_read_only_byte (uint16_t index)
      * Find the block and offset for the index (passed as argument) and Check if the offset bit in
      * p_t2t->lock_attr[block/2] is set or not. If the bit is set then it is a read only byte, otherwise read write byte */
 
-    return ((p_t2t->lock_attr[index /8] & rw_t2t_mask_bits[index % 8]) == 0) ? FALSE:TRUE;
+    return ((p_t2t->lock_attr[index / 8] & rw_t2t_mask_bits[index % 8]) == 0) ? false : true;
 }
 
 /*******************************************************************************
@@ -2472,7 +2472,7 @@ tNFC_STATUS rw_t2t_set_dynamic_lock_bits (uint8_t *p_data)
     tNFC_STATUS status      = NFC_STATUS_FAILED;
     uint8_t     num_locks;
     uint8_t     lock_count;
-    bool        b_all_bits_are_locks = TRUE;
+    bool        b_all_bits_are_locks = true;
 
     num_locks = 0;
 
@@ -2590,7 +2590,7 @@ tNFC_STATUS rw_t2t_set_lock_tlv (uint16_t addr, uint8_t num_dyn_lock_bits, uint1
         /* send WRITE-E8 command */
         if ((status = rw_t2t_write (T2T_FIRST_DATA_BLOCK, data_block)) == NFC_STATUS_OK)
         {
-            p_t2t->b_read_data = FALSE;
+            p_t2t->b_read_data = false;
         }
         else
             p_t2t->substate = RW_T2T_SUBSTATE_NONE;
@@ -2639,7 +2639,7 @@ tNFC_STATUS rw_t2t_set_cc (uint8_t tms)
     if ((status = rw_t2t_write (T2T_CC_BLOCK, cc_block)) == NFC_STATUS_OK)
     {
         p_t2t->state    = RW_T2T_STATE_FORMAT_TAG;
-        p_t2t->b_read_hdr = FALSE;
+        p_t2t->b_read_hdr = false;
     }
     else
         p_t2t->substate = RW_T2T_SUBSTATE_NONE;
@@ -2664,9 +2664,9 @@ tNFC_STATUS rw_t2t_format_tag (void)
     const tT2T_INIT_TAG *p_ret;
     uint8_t             tms;
     tNFC_STATUS         status  = NFC_STATUS_FAILED;
-    bool                b_blank_tag = TRUE;
+    bool                b_blank_tag = true;
 
-    if ((p_ret = t2t_tag_init_data (p_t2t->tag_hdr[0], FALSE, 0)) == NULL)
+    if ((p_ret = t2t_tag_init_data (p_t2t->tag_hdr[0], false, 0)) == NULL)
     {
         RW_TRACE_WARNING1 ("rw_t2t_format_tag - Unknown Manufacturer ID: %u, Cannot Format the tag!", p_t2t->tag_hdr[0]);
         return (NFC_STATUS_FAILED);
@@ -2691,7 +2691,7 @@ tNFC_STATUS rw_t2t_format_tag (void)
         else
         {
             tms = p_t2t->tag_hdr[T2T_CC2_TMS_BYTE];
-            b_blank_tag = FALSE;
+            b_blank_tag = false;
         }
     }
     else
@@ -2778,7 +2778,7 @@ tNFC_STATUS rw_t2t_soft_lock_tag (void)
     if ((status = rw_t2t_write (T2T_CC_BLOCK, write_block)) == NFC_STATUS_OK)
     {
         p_t2t->state        = RW_T2T_STATE_SET_TAG_RO;
-        p_t2t->b_read_hdr   = FALSE;
+        p_t2t->b_read_hdr = false;
     }
     else
     {
@@ -2823,7 +2823,7 @@ tNFC_STATUS RW_T2tFormatNDef (void)
     else
     {
         if ((status = rw_t2t_format_tag ()) != NFC_STATUS_OK)
-            p_t2t->b_read_hdr = FALSE;
+            p_t2t->b_read_hdr = false;
     }
     return status;
 }
@@ -2866,7 +2866,7 @@ tNFC_STATUS RW_T2tLocateTlv (uint8_t tlv_type)
         &&(p_t2t->b_read_hdr)
         &&(p_t2t->tag_hdr[T2T_CC2_TMS_BYTE] == T2T_CC2_TMS_STATIC)  )
     {
-        p_t2t->b_read_hdr = FALSE;
+        p_t2t->b_read_hdr = false;
         RW_TRACE_API1 ("RW_T2tLocateTlv - No Lock tlv in static structure tag, CC[0]: 0x%02x", p_t2t->tag_hdr[T2T_CC2_TMS_BYTE]);
         return (NFC_STATUS_FAILED);
     }
@@ -2875,7 +2875,7 @@ tNFC_STATUS RW_T2tLocateTlv (uint8_t tlv_type)
         &&(p_t2t->b_read_hdr)
         &&(p_t2t->tag_hdr[T2T_CC0_NMN_BYTE] != T2T_CC0_NMN)  )
     {
-        p_t2t->b_read_hdr = FALSE;
+        p_t2t->b_read_hdr = false;
         RW_TRACE_WARNING3 ("RW_T2tLocateTlv - Invalid NDEF Magic Number!, CC[0]: 0x%02x, CC[1]: 0x%02x, CC[3]: 0x%02x", p_t2t->tag_hdr[T2T_CC0_NMN_BYTE], p_t2t->tag_hdr[T2T_CC1_VNO_BYTE], p_t2t->tag_hdr[T2T_CC3_RWA_BYTE]);
         return (NFC_STATUS_FAILED);
     }
@@ -3093,7 +3093,7 @@ tNFC_STATUS RW_T2tWriteNDef (uint16_t msg_len, uint8_t *p_msg)
 
     /* If OTP tag and tag has valid NDEF Message, stop writting new NDEF Message as it may corrupt the tag */
     if (  (p_t2t->ndef_msg_len > 0)
-        &&((p_ret = t2t_tag_init_data (p_t2t->tag_hdr[0], FALSE, 0)) != NULL)
+        &&((p_ret = t2t_tag_init_data (p_t2t->tag_hdr[0], false, 0)) != NULL)
         &&(p_ret->b_otp)  )
     {
         RW_TRACE_WARNING0 ("RW_T2tWriteNDef - Cannot Overwrite NDEF Message on a OTP tag!");
@@ -3165,7 +3165,7 @@ tNFC_STATUS RW_T2tSetTagReadOnly (bool    b_hard_lock)
     else
     {
         if ((status = rw_t2t_soft_lock_tag ()) != NFC_STATUS_OK)
-            p_t2t->b_read_hdr = FALSE;
+            p_t2t->b_read_hdr = false;
     }
 
     return status;

@@ -565,7 +565,7 @@ bool    nfc_hal_dm_check_pre_set_mem (void)
     HAL_TRACE_DEBUG2 ("nfc_hal_dm_check_pre_set_mem: %d/0x%x", nfc_hal_cb.pre_set_mem_idx, addr);
     if (addr == 0)
     {
-        return TRUE;
+        return true;
     }
     p = cmd;
 
@@ -582,7 +582,7 @@ bool    nfc_hal_dm_check_pre_set_mem (void)
     nfc_hal_dm_send_bt_cmd (cmd,
                             NFC_HAL_BT_HCI_CMD_HDR_SIZE + HCI_BRCM_PRE_SET_MEM_LENGTH,
                             nfc_hal_dm_pre_set_mem_cback);
-    return FALSE;
+    return false;
 }
 
 /*******************************************************************************
@@ -1079,7 +1079,7 @@ void nfc_hal_dm_set_nfc_wake (uint8_t cmd)
 *******************************************************************************/
 bool    nfc_hal_dm_power_mode_execute (tNFC_HAL_LP_EVT event)
 {
-    bool    send_to_nfcc = FALSE;
+    bool    send_to_nfcc = false;
 
     HAL_TRACE_DEBUG1 ("nfc_hal_dm_power_mode_execute () event = %d", event);
 
@@ -1092,7 +1092,7 @@ bool    nfc_hal_dm_power_mode_execute (tNFC_HAL_LP_EVT event)
                 ||(event == NFC_HAL_LP_RX_DATA_EVT)  )
             {
                 /* if idle timer is not running */
-                if (nfc_hal_cb.dev_cb.lp_timer.in_use == FALSE)
+                if (nfc_hal_cb.dev_cb.lp_timer.in_use == false)
                 {
                     nfc_hal_dm_set_nfc_wake (NFC_HAL_ASSERT_NFC_WAKE);
                 }
@@ -1108,7 +1108,7 @@ bool    nfc_hal_dm_power_mode_execute (tNFC_HAL_LP_EVT event)
             }
         }
 
-        send_to_nfcc = TRUE;
+        send_to_nfcc = true;
     }
 
     return (send_to_nfcc);
@@ -1222,10 +1222,10 @@ void nfc_hal_dm_init (void)
     nfc_hal_cb.hci_cb.hci_timer.p_cback = nfc_hal_hci_timeout_cback;
 #endif
 
-    nfc_hal_cb.pre_discover_done        = FALSE;
+    nfc_hal_cb.pre_discover_done = false;
 
     nfc_post_reset_cb.spd_nvm_detection_cur_count = 0;
-    nfc_post_reset_cb.spd_skip_on_power_cycle     = FALSE;
+    nfc_post_reset_cb.spd_skip_on_power_cycle = false;
 
 }
 

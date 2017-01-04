@@ -401,7 +401,7 @@ void gki_system_tick_start_stop_cback(bool    start)
     tGKI_OS         *p_os = &gki_cb.os;
     volatile int    *p_run_cond = &p_os->no_timer_suspend;
     volatile static int wake_lock_count;
-    if ( FALSE == start )
+    if (start == false)
     {
         /* this can lead to a race condition. however as we only read this variable in the timer loop
          * we should be fine with this approach. otherwise uncomment below mutexes.

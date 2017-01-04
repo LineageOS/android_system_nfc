@@ -403,7 +403,8 @@ void nfc_hal_main_start_quick_timer (TIMER_LIST_ENT *p_tle, uint16_t type, uint3
         }
         else
         {
-            GKI_start_timer (NFC_HAL_QUICK_TIMER_ID, ((GKI_SECS_TO_TICKS (1) / QUICK_TIMER_TICKS_PER_SEC)), TRUE);
+            GKI_start_timer (NFC_HAL_QUICK_TIMER_ID, ((GKI_SECS_TO_TICKS (1) / QUICK_TIMER_TICKS_PER_SEC)),
+                             true);
         }
     }
 
@@ -528,7 +529,7 @@ static void nfc_hal_send_credit_ntf_for_cid (uint8_t cid)
         /* Number of credits */
         *p = 0x01;
 #ifdef DISP_NCI
-        DISP_NCI (ps, (uint16_t) p_msg->len, TRUE);
+        DISP_NCI (ps, (uint16_t) p_msg->len, true);
 #endif
         nfc_hal_send_nci_msg_to_nfc_task (p_msg);
     }
@@ -578,7 +579,7 @@ static void nfc_hal_main_send_message (NFC_HDR *p_msg)
         pp = ps + 1;
 #ifdef DISP_NCI
         delta = p_msg->len - len;
-        DISP_NCI (ps + delta, (uint16_t) (p_msg->len - delta), FALSE);
+        DISP_NCI (ps + delta, (uint16_t) (p_msg->len - delta), false);
 #endif
 
 #if (defined(NFC_HAL_HCI_INCLUDED) && (NFC_HAL_HCI_INCLUDED == TRUE))
@@ -633,7 +634,7 @@ uint32_t nfc_hal_main_task (uint32_t param)
     HAL_TRACE_DEBUG0 ("NFC_HAL_TASK started");
 
     /* Main loop */
-    while (TRUE)
+    while (true)
     {
         event = GKI_wait (0xFFFF, 0);
 
@@ -675,13 +676,13 @@ uint32_t nfc_hal_main_task (uint32_t param)
         {
             while ((p_msg = (NFC_HDR *) GKI_read_mbox (NFC_HAL_TASK_MBOX)) != NULL)
             {
-                free_msg = TRUE;
+                free_msg = true;
                 switch (p_msg->event & NFC_EVT_MASK)
                 {
                 case NFC_HAL_EVT_TO_NFC_NCI:
                     nfc_hal_main_send_message (p_msg);
                     /* do not free buffer. NCI VS code may keep it for processing later */
-                    free_msg = FALSE;
+                    free_msg = false;
                     break;
 
                 case NFC_HAL_EVT_POST_CORE_RESET:
@@ -702,7 +703,8 @@ uint32_t nfc_hal_main_task (uint32_t param)
                     break;
 
                 case NFC_HAL_EVT_TO_START_QUICK_TIMER:
-                    GKI_start_timer (NFC_HAL_QUICK_TIMER_ID, ((GKI_SECS_TO_TICKS (1) / QUICK_TIMER_TICKS_PER_SEC)), TRUE);
+                    GKI_start_timer (NFC_HAL_QUICK_TIMER_ID, ((GKI_SECS_TO_TICKS (1) / QUICK_TIMER_TICKS_PER_SEC)),
+                                     true);
                     break;
 
                 case NFC_HAL_EVT_HCI:
@@ -730,7 +732,7 @@ uint32_t nfc_hal_main_task (uint32_t param)
         /* Data waiting to be read from serial port */
         if (event & NFC_HAL_TASK_EVT_DATA_RDY)
         {
-            while (TRUE)
+            while (true)
             {
                 /* Read one byte to see if there is anything waiting to be read */
                 if (USERIAL_Read (USERIAL_NFC_PORT, &byte, 1) == 0)

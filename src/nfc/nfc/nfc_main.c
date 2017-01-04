@@ -748,7 +748,7 @@ void NFC_Init (tHAL_NFC_ENTRY *p_hal_entry_tbl)
     nfc_cb.num_disc_maps    = NFC_NUM_INTERFACE_MAP;
     nfc_cb.trace_level      = NFC_INITIAL_TRACE_LEVEL;
     nfc_cb.nci_ctrl_size    = NCI_CTRL_INIT_SIZE;
-    nfc_cb.reassembly       = TRUE;
+    nfc_cb.reassembly = true;
 
     rw_init ();
     ce_init ();
@@ -850,13 +850,13 @@ tNFC_STATUS NFC_DiscoveryMap (uint8_t num, tNFC_DISCOVER_MAPS *p_maps,
 
     for (xx = 0; xx < num_disc_maps; xx++)
     {
-        is_supported = FALSE;
+        is_supported = false;
         if (p_maps[xx].intf_type > NCI_INTERFACE_MAX)
         {
             for (yy = 0; yy < NFC_NFCC_MAX_NUM_VS_INTERFACE; yy++)
             {
                 if (nfc_cb.vs_interface[yy] == p_maps[xx].intf_type)
-                    is_supported    = TRUE;
+                    is_supported = true;
             }
             NFC_TRACE_DEBUG3 ("[%d]: vs intf_type:0x%x is_supported:%d", xx, p_maps[xx].intf_type, is_supported);
         }
@@ -865,7 +865,7 @@ tNFC_STATUS NFC_DiscoveryMap (uint8_t num, tNFC_DISCOVER_MAPS *p_maps,
             intf_mask = (1 << (p_maps[xx].intf_type));
             if (intf_mask & nfc_cb.nci_interfaces)
             {
-                is_supported    = TRUE;
+                is_supported = true;
             }
             NFC_TRACE_DEBUG4 ("[%d]: intf_type:%d intf_mask: 0x%x is_supported:%d", xx, p_maps[xx].intf_type, intf_mask, is_supported);
         }
@@ -1277,7 +1277,7 @@ tNFC_STATUS NFC_SetPowerOffSleep (bool    enable)
 {
     NFC_TRACE_API1 ("NFC_SetPowerOffSleep () enable = %d", enable);
 
-    if (  (enable == FALSE)
+    if (  (enable == false)
         &&(nfc_cb.nfc_state == NFC_STATE_NFCC_POWER_OFF_SLEEP)  )
     {
         nfc_cb.flags |= NFC_FL_RESTARTING;
@@ -1288,7 +1288,7 @@ tNFC_STATUS NFC_SetPowerOffSleep (bool    enable)
 
         return NFC_STATUS_OK;
     }
-    else if (  (enable == TRUE)
+    else if (  (enable == true)
              &&(nfc_cb.nfc_state == NFC_STATE_IDLE)  )
     {
         /* close transport to turn off NFCC and clean up */

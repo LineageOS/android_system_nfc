@@ -142,7 +142,7 @@ void nfa_ce_handle_t4t_evt (tCE_EVENT event, tCE_DATA *p_ce_data)
         conn_evt.ndef_write_cplt.len    = p_ce_data->update_info.length;
         conn_evt.ndef_write_cplt.p_data = p_ce_data->update_info.p_data;
 
-        if (NDEF_MsgValidate (p_ce_data->update_info.p_data, p_ce_data->update_info.length, TRUE) != NDEF_OK)
+        if (NDEF_MsgValidate (p_ce_data->update_info.p_data, p_ce_data->update_info.length, true) != NDEF_OK)
             conn_evt.ndef_write_cplt.status = NFA_STATUS_FAILED;
         else
             conn_evt.ndef_write_cplt.status = NFA_STATUS_OK;
@@ -322,7 +322,7 @@ void nfc_ce_t3t_set_listen_params (void)
     UINT16_TO_STREAM (p_params, t3t_flags2_mask);            /* Mask of IDs to disable listening */
 
     tlv_size = (uint8_t) (p_params-tlv);
-    nfa_dm_check_set_config (tlv_size, (uint8_t *)tlv, FALSE);
+    nfa_dm_check_set_config (tlv_size, (uint8_t *)tlv, false);
 }
 
 /*******************************************************************************
@@ -515,10 +515,10 @@ bool    nfa_ce_restart_listen_check (void)
     else
     {
         /* No active listen_info entries */
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -566,8 +566,8 @@ void nfa_ce_remove_listen_info_entry (uint8_t listen_info_idx, bool    notify_ap
     if (listen_info_idx == NFA_CE_LISTEN_INFO_IDX_NDEF)
     {
         /* clear NDEF contents */
-        CE_T3tSetLocalNDEFMsg (TRUE, 0, 0, NULL, NULL);
-        CE_T4tSetLocalNDEFMsg (TRUE, 0, 0, NULL, NULL);
+        CE_T3tSetLocalNDEFMsg (true, 0, 0, NULL, NULL);
+        CE_T4tSetLocalNDEFMsg (true, 0, 0, NULL, NULL);
 
         if (p_cb->listen_info[listen_info_idx].protocol_mask & NFA_PROTOCOL_MASK_T3T)
         {
@@ -693,7 +693,7 @@ tNFC_STATUS nfa_ce_set_content (void)
 
     NFA_TRACE_DEBUG0 ("Setting NDEF contents");
 
-    readonly = (p_cb->listen_info[NFA_CE_LISTEN_INFO_IDX_NDEF].flags & NFC_CE_LISTEN_INFO_READONLY_NDEF) ? TRUE : FALSE;
+    readonly = (p_cb->listen_info[NFA_CE_LISTEN_INFO_IDX_NDEF].flags & NFC_CE_LISTEN_INFO_READONLY_NDEF) ? true : false;
     ndef_protocol_mask = p_cb->listen_info[NFA_CE_LISTEN_INFO_IDX_NDEF].protocol_mask;
 
     /* Allocate a scratch buffer if needed (for handling write-requests) */
@@ -723,8 +723,8 @@ tNFC_STATUS nfa_ce_set_content (void)
     if (status != NFA_STATUS_OK)
     {
         /* clear NDEF contents */
-        CE_T3tSetLocalNDEFMsg (TRUE, 0, 0, NULL, NULL);
-        CE_T4tSetLocalNDEFMsg (TRUE, 0, 0, NULL, NULL);
+        CE_T3tSetLocalNDEFMsg (true, 0, 0, NULL, NULL);
+        CE_T4tSetLocalNDEFMsg (true, 0, 0, NULL, NULL);
 
         NFA_TRACE_ERROR1 ("Unable to set contents (error %02x)", status);
     }
@@ -756,7 +756,7 @@ bool    nfa_ce_activate_ntf (tNFA_CE_MSG *p_ce_msg)
     uint8_t listen_info_idx = NFA_CE_LISTEN_INFO_IDX_INVALID;
     uint8_t *p_nfcid2 = NULL;
     uint8_t i;
-    bool    t4t_activate_pending = FALSE;
+    bool    t4t_activate_pending = false;
 
     NFA_TRACE_DEBUG1 ("nfa_ce_activate_ntf () protocol=%d", p_ce_msg->activate_ntf.p_activation_params->protocol);
 
@@ -824,7 +824,7 @@ bool    nfa_ce_activate_ntf (tNFA_CE_MSG *p_ce_msg)
                         listen_info_idx = NFA_CE_LISTEN_INFO_IDX_NDEF;
                     }
 
-                    t4t_activate_pending = TRUE;
+                    t4t_activate_pending = true;
                 }
 
 #if (NFC_NFCEE_INCLUDED == TRUE)
@@ -848,7 +848,7 @@ bool    nfa_ce_activate_ntf (tNFA_CE_MSG *p_ce_msg)
         if (t4t_activate_pending && (listen_info_idx == NFA_CE_LISTEN_INFO_IDX_INVALID))
         {
             CE_SetActivatedTagType (&p_cb->activation_params, 0, p_ce_cback);
-            return TRUE;
+            return true;
         }
     }
     else if (p_cb->activation_params.intf_param.type == NFC_INTERFACE_EE_DIRECT_RF)
@@ -870,7 +870,7 @@ bool    nfa_ce_activate_ntf (tNFA_CE_MSG *p_ce_msg)
         ||((listen_info_idx == NFA_CE_LISTEN_INFO_IDX_NDEF) && !(p_cb->listen_info[NFA_CE_LISTEN_INFO_IDX_NDEF].flags & NFA_CE_LISTEN_INFO_IN_USE)))
     {
         NFA_TRACE_DEBUG1 ("No listen_info found for this activation. listen_info_idx=%d", listen_info_idx);
-        return (TRUE);
+        return true;
     }
 
     p_cb->listen_info[listen_info_idx].flags &= ~NFA_CE_LISTEN_INFO_T4T_ACTIVATE_PND;
@@ -901,7 +901,7 @@ bool    nfa_ce_activate_ntf (tNFA_CE_MSG *p_ce_msg)
         /* Notify CE subsystem */
         CE_SetActivatedTagType (&p_cb->activation_params, t3t_system_code, p_ce_cback);
     }
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -951,7 +951,7 @@ bool    nfa_ce_deactivate_ntf (tNFA_CE_MSG *p_ce_msg)
                 (*p_cb->p_active_conn_cback) (NFA_CE_DEACTIVATED_EVT, &conn_evt);
         }
 
-        return TRUE;
+        return true;
     }
     else
     {
@@ -1013,7 +1013,7 @@ bool    nfa_ce_deactivate_ntf (tNFA_CE_MSG *p_ce_msg)
     if (p_cb->flags & NFA_CE_FLAGS_APP_INIT_DEACTIVATION)
     {
         p_cb->flags &= ~NFA_CE_FLAGS_APP_INIT_DEACTIVATION;
-        nfa_ce_remove_listen_info_entry (p_cb->idx_cur_active, TRUE);
+        nfa_ce_remove_listen_info_entry (p_cb->idx_cur_active, true);
     }
 
     p_cb->p_active_conn_cback = NULL;
@@ -1022,7 +1022,7 @@ bool    nfa_ce_deactivate_ntf (tNFA_CE_MSG *p_ce_msg)
     /* Restart listening (if any listen_info entries are still active) */
     nfa_ce_restart_listen_check ();
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -1062,7 +1062,8 @@ void nfa_ce_disable_local_tag (void)
                 nfa_dm_delete_rf_discover (p_cb->listen_info[NFA_CE_LISTEN_INFO_IDX_NDEF].rf_disc_handle);
                 p_cb->listen_info[NFA_CE_LISTEN_INFO_IDX_NDEF].rf_disc_handle = NFA_HANDLE_INVALID;
             }
-            nfa_ce_remove_listen_info_entry (NFA_CE_LISTEN_INFO_IDX_NDEF, TRUE);
+            nfa_ce_remove_listen_info_entry (NFA_CE_LISTEN_INFO_IDX_NDEF,
+                                             true);
         }
     }
     else
@@ -1093,7 +1094,7 @@ bool    nfa_ce_api_cfg_local_tag (tNFA_CE_MSG *p_ce_msg)
     if (p_ce_msg->local_tag.protocol_mask == 0)
     {
         nfa_ce_disable_local_tag ();
-        return TRUE;
+        return true;
     }
 
     NFA_TRACE_DEBUG5 ("Configuring local NDEF tag: protocol_mask=%01x cur_size=%i, max_size=%i, readonly=%i",
@@ -1114,8 +1115,8 @@ bool    nfa_ce_api_cfg_local_tag (tNFA_CE_MSG *p_ce_msg)
         p_cb->listen_info[NFA_CE_LISTEN_INFO_IDX_NDEF].rf_disc_handle = NFA_HANDLE_INVALID;
 
         /* clear NDEF contents */
-        CE_T3tSetLocalNDEFMsg (TRUE, 0, 0, NULL, NULL);
-        CE_T4tSetLocalNDEFMsg (TRUE, 0, 0, NULL, NULL);
+        CE_T3tSetLocalNDEFMsg (true, 0, 0, NULL, NULL);
+        CE_T4tSetLocalNDEFMsg (true, 0, 0, NULL, NULL);
     }
 
     /* Store NDEF info to control block */
@@ -1141,7 +1142,7 @@ bool    nfa_ce_api_cfg_local_tag (tNFA_CE_MSG *p_ce_msg)
         {
             NFA_TRACE_ERROR0 ("nfa_ce_api_cfg_local_tag: could not set contents");
             nfa_dm_conn_cback_event_notify (NFA_CE_LOCAL_TAG_CONFIGURED_EVT, &conn_evt);
-            return TRUE;
+            return true;
         }
 
         /* Start listening and notify app of status */
@@ -1149,7 +1150,7 @@ bool    nfa_ce_api_cfg_local_tag (tNFA_CE_MSG *p_ce_msg)
         nfa_dm_conn_cback_event_notify (NFA_CE_LOCAL_TAG_CONFIGURED_EVT, &conn_evt);
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -1185,7 +1186,7 @@ bool    nfa_ce_api_reg_listen (tNFA_CE_MSG *p_ce_msg)
             NFA_TRACE_ERROR1 ("UICC (0x%x) listening already specified", p_ce_msg->reg_listen.ee_handle);
             conn_evt.status = NFA_STATUS_FAILED;
             nfa_dm_conn_cback_event_notify (NFA_CE_UICC_LISTEN_CONFIGURED_EVT, &conn_evt);
-            return TRUE;
+            return true;
         }
         /* If this is a free entry, and we haven't found one yet, remember it */
         else if (  (!(p_cb->listen_info[i].flags & NFA_CE_LISTEN_INFO_IN_USE))
@@ -1212,7 +1213,7 @@ bool    nfa_ce_api_reg_listen (tNFA_CE_MSG *p_ce_msg)
             conn_evt.ce_registered.status = NFA_STATUS_FAILED;
             (*p_ce_msg->reg_listen.p_conn_cback) (NFA_CE_REGISTERED_EVT, &conn_evt);
         }
-        return TRUE;
+        return true;
     }
     else
     {
@@ -1246,7 +1247,7 @@ bool    nfa_ce_api_reg_listen (tNFA_CE_MSG *p_ce_msg)
                 conn_evt.ce_registered.status = NFA_STATUS_FAILED;
                 (*p_ce_msg->reg_listen.p_conn_cback) (NFA_CE_REGISTERED_EVT, &conn_evt);
 
-                return TRUE;
+                return true;
             }
             if (p_cb->listen_info[listen_info_idx].t4t_aid_handle == CE_T4T_WILDCARD_AID_HANDLE)
                 nfa_ce_cb.idx_wild_card     = listen_info_idx;
@@ -1294,7 +1295,7 @@ bool    nfa_ce_api_reg_listen (tNFA_CE_MSG *p_ce_msg)
         (*p_cb->listen_info[listen_info_idx].p_conn_cback) (NFA_CE_REGISTERED_EVT, &conn_evt);
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -1341,7 +1342,7 @@ bool    nfa_ce_api_dereg_listen (tNFA_CE_MSG *p_ce_msg)
                     }
 
                     /* Remove entry and notify application */
-                    nfa_ce_remove_listen_info_entry (listen_info_idx, TRUE);
+                    nfa_ce_remove_listen_info_entry (listen_info_idx, true);
                 }
                 break;
             }
@@ -1385,7 +1386,7 @@ bool    nfa_ce_api_dereg_listen (tNFA_CE_MSG *p_ce_msg)
                 }
 
                 /* Remove entry and notify application */
-                nfa_ce_remove_listen_info_entry (listen_info_idx, TRUE);
+                nfa_ce_remove_listen_info_entry (listen_info_idx, true);
             }
         }
         else
@@ -1396,7 +1397,7 @@ bool    nfa_ce_api_dereg_listen (tNFA_CE_MSG *p_ce_msg)
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -1417,5 +1418,5 @@ bool    nfa_ce_api_cfg_isodep_tech (tNFA_CE_MSG *p_ce_msg)
 
     if (p_ce_msg->hdr.layer_specific & NFA_TECHNOLOGY_MASK_B)
         nfa_ce_cb.isodep_disc_mask |= NFA_DM_DISC_MASK_LB_ISO_DEP;
-    return TRUE;
+    return true;
 }

@@ -121,14 +121,14 @@ static bool    gki_alloc_free_queue(uint8_t id)
             #if GKI_BUFFER_DEBUG
                 ALOGD("\ngki_alloc_free_queue ret OK, id:%d  size:%d, totol:%d\n", id, Q->size, Q->total);
             #endif
-            return TRUE;
+            return true;
         }
         GKI_exception (GKI_ERROR_BUF_SIZE_TOOBIG, "gki_alloc_free_queue: Not enough memory");
     }
     #if GKI_BUFFER_DEBUG
         ALOGD("\ngki_alloc_free_queue out failed, id:%d\n", id);
     #endif
-    return FALSE;
+    return false;
 }
 #endif
 
@@ -404,7 +404,7 @@ void *GKI_getbuf (uint16_t size)
         if(Q->cur_cnt < Q->total)
         {
         #ifdef GKI_USE_DEFERED_ALLOC_BUF_POOLS
-            if(Q->p_first == 0 && gki_alloc_free_queue(i) != TRUE)
+            if(Q->p_first == 0 && gki_alloc_free_queue(i) != true)
             {
                 GKI_TRACE_ERROR_0("GKI_getbuf() out of buffer");
                 GKI_enable();
@@ -521,7 +521,7 @@ void *GKI_getpoolbuf (uint8_t pool_id)
     if(Q->cur_cnt < Q->total)
     {
 #ifdef GKI_USE_DEFERED_ALLOC_BUF_POOLS
-        if(Q->p_first == 0 && gki_alloc_free_queue(pool_id) != TRUE)
+        if(Q->p_first == 0 && gki_alloc_free_queue(pool_id) != true)
             return NULL;
 #endif
 
@@ -683,16 +683,16 @@ bool    gki_chk_buf_damage(void *p_buf)
     magic  = (uint32_t *)((uint8_t *) p_buf + GKI_get_buf_size(p_buf));
 
     if ((uint32_t)magic & 1)
-        return (TRUE);
+        return true;
 
     if (*magic == MAGIC_NO)
-        return (FALSE);
+        return false;
 
-    return (TRUE);
+    return true;
 
 #else
 
-    return (FALSE);
+    return false;
 
 #endif
 }

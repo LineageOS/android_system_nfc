@@ -181,7 +181,7 @@ void nfc_hal_prm_spd_handle_next_patch_start (void)
 {
     uint32_t  cur_patch_mask;
     uint32_t  cur_patch_len;
-    bool    found_patch_to_download = FALSE;
+    bool    found_patch_to_download = false;
 
     while (!found_patch_to_download)
     {
@@ -192,7 +192,7 @@ void nfc_hal_prm_spd_handle_next_patch_start (void)
         cur_patch_mask = ((uint32_t) 1 << nfc_hal_cb.prm.spd_patch_desc[nfc_hal_cb.prm.spd_cur_patch_idx].power_mode);
         if (nfc_hal_cb.prm.spd_patch_needed_mask & cur_patch_mask)
         {
-            found_patch_to_download = TRUE;
+            found_patch_to_download = true;
         }
         else
         {
@@ -523,12 +523,12 @@ void nfc_hal_prm_spd_check_version (void)
     }
     else
     {
-        static bool    firstTime = TRUE;
+        static bool    firstTime = true;
         if (firstTime)
         {
             HAL_TRACE_ERROR2 ("NVM patch version is %d.%d",
                               nfc_hal_cb.nvm_cb.ver_major, nfc_hal_cb.nvm_cb.ver_minor);
-            firstTime = FALSE;
+            firstTime = false;
         }
         /* Download complete */
         nfc_hal_prm_spd_handle_download_complete (return_code);
@@ -621,7 +621,7 @@ static bool    nfc_hal_prm_nvm_rw_cmd(void)
     HAL_TRACE_DEBUG2 ("nfc_hal_prm_nvm_rw_cmd: %d/%d", nfc_hal_cb.prm.param_idx, len);
     if (len == 0)
     {
-        return TRUE;
+        return true;
     }
     cmd_len = len + 7;
 
@@ -629,7 +629,7 @@ static bool    nfc_hal_prm_nvm_rw_cmd(void)
     {
         HAL_TRACE_ERROR0 ("NVM No buffer");
         nfc_hal_prm_spd_handle_download_complete (NFC_HAL_PRM_ABORT_EVT);
-        return TRUE;
+        return true;
     }
 
     p = p_buff;
@@ -645,7 +645,7 @@ static bool    nfc_hal_prm_nvm_rw_cmd(void)
     nfc_hal_cb.prm.param_idx++;
     nfc_hal_dm_send_nci_cmd(p_buff, cmd_len, nfc_hal_prm_nci_command_complete_cback);
     GKI_freebuf (p_buff);
-    return FALSE;
+    return false;
 }
 
 /*******************************************************************************
@@ -1025,7 +1025,7 @@ bool    HAL_NfcPrmDownloadStart (tNFC_HAL_PRM_FORMAT format_type,
         nfc_hal_cb.prm.flags |= NFC_HAL_PRM_FLAGS_USE_PATCHRAM_BUF;
 
         if (patchram_len == 0)
-            return FALSE;
+            return false;
     }
 
     nfc_hal_cb.prm.p_cback          = p_cback;
@@ -1047,7 +1047,7 @@ bool    HAL_NfcPrmDownloadStart (tNFC_HAL_PRM_FORMAT format_type,
         {
             HAL_TRACE_ERROR0 ("This platform requires NVM and the NVM is not available - Abort");
             nfc_hal_prm_spd_handle_download_complete (NFC_HAL_PRM_ABORT_NO_NVM_EVT);
-            return FALSE;
+            return false;
         }
 
         /* Compare patch version in NVM with version in patchfile */
@@ -1066,10 +1066,10 @@ bool    HAL_NfcPrmDownloadStart (tNFC_HAL_PRM_FORMAT format_type,
     else
     {
         HAL_TRACE_ERROR0 ("Unexpected patch format.");
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -1098,10 +1098,10 @@ bool    HAL_NfcPrmDownloadContinue (uint8_t *p_patch_data,
     if (  (nfc_hal_cb.prm.state != NFC_HAL_PRM_ST_SPD_COMPARE_VERSION)
         &&(nfc_hal_cb.prm.state != NFC_HAL_PRM_ST_SPD_GET_PATCH_HEADER)
         &&(nfc_hal_cb.prm.state != NFC_HAL_PRM_ST_SPD_DOWNLOADING)  )
-        return FALSE;
+        return false;
 
     if (patch_data_len == 0)
-        return FALSE;
+        return false;
 
     nfc_hal_cb.prm.cur_patch_offset = 0;
     nfc_hal_cb.prm.p_cur_patch_data = p_patch_data;
@@ -1125,7 +1125,7 @@ bool    HAL_NfcPrmDownloadContinue (uint8_t *p_patch_data,
         HAL_TRACE_ERROR1 ("Unexpected patch state:%d.", nfc_hal_cb.prm.state);
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************

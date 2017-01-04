@@ -57,13 +57,14 @@ void nfc_hal_nci_assemble_nci_msg (void)
     uint8_t hdr[2];
     uint8_t *ps, *pd;
     uint16_t  size, needed;
-    bool    disp_again = FALSE;
+    bool    disp_again = false;
 
     if ((p_msg == NULL) || (p_msg->len < NCI_MSG_HDR_SIZE))
         return;
 
 #ifdef DISP_NCI
-    DISP_NCI ((uint8_t *) (p_msg + 1) + p_msg->offset, (uint16_t) (p_msg->len), TRUE);
+    DISP_NCI ((uint8_t *) (p_msg + 1) + p_msg->offset, (uint16_t) (p_msg->len),
+	      true);
 #endif
 
     p       = (uint8_t *) (p_msg + 1) + p_msg->offset;
@@ -97,7 +98,7 @@ void nfc_hal_nci_assemble_nci_msg (void)
         }
         else if (nfc_hal_cb.ncit_cb.nci_ras == 0)
         {
-            disp_again = TRUE;
+            disp_again = true;
             /* if not previous reassembly error, append the new fragment */
             p_msg->offset   += NCI_MSG_HDR_SIZE;
             p_msg->len      -= NCI_MSG_HDR_SIZE;
@@ -149,7 +150,8 @@ void nfc_hal_nci_assemble_nci_msg (void)
 #ifdef DISP_NCI
         if ((nfc_hal_cb.ncit_cb.nci_ras == 0) && (disp_again))
         {
-            DISP_NCI ((uint8_t *) (p_msg + 1) + p_msg->offset, (uint16_t) (p_msg->len), TRUE);
+            DISP_NCI ((uint8_t *) (p_msg + 1) + p_msg->offset, (uint16_t) (p_msg->len),
+		      true);
         }
 #endif
         /* clear the error flags, so the next NCI packet is clean */
@@ -179,7 +181,7 @@ void nfc_hal_nci_assemble_nci_msg (void)
 static bool    nfc_hal_nci_receive_nci_msg (tNFC_HAL_NCIT_CB *p_cb, uint8_t byte)
 {
     uint16_t    len;
-    bool        msg_received = FALSE;
+    bool        msg_received = false;
 
     switch (p_cb->rcv_state)
     {
@@ -227,7 +229,7 @@ static bool    nfc_hal_nci_receive_nci_msg (tNFC_HAL_NCIT_CB *p_cb, uint8_t byte
             }
             else
             {
-                msg_received    = TRUE;
+                msg_received = true;
                 p_cb->rcv_state = NFC_HAL_RCV_IDLE_ST;
             }
         }
@@ -252,7 +254,7 @@ static bool    nfc_hal_nci_receive_nci_msg (tNFC_HAL_NCIT_CB *p_cb, uint8_t byte
         /* Check if we read in entire message yet */
         if (p_cb->rcv_len == 0)
         {
-            msg_received    = TRUE;
+            msg_received = true;
             p_cb->rcv_state = NFC_HAL_RCV_IDLE_ST;
         }
         break;
@@ -276,7 +278,7 @@ static bool    nfc_hal_nci_receive_nci_msg (tNFC_HAL_NCIT_CB *p_cb, uint8_t byte
 static bool    nfc_hal_nci_receive_bt_msg (tNFC_HAL_NCIT_CB *p_cb, uint8_t byte)
 {
     uint16_t  len;
-    bool    msg_received = FALSE;
+    bool    msg_received = false;
 
     switch (p_cb->rcv_state)
     {
@@ -335,7 +337,7 @@ static bool    nfc_hal_nci_receive_bt_msg (tNFC_HAL_NCIT_CB *p_cb, uint8_t byte)
             else
             {
                 /* Message has no additional parameters. (Entire message has been received) */
-                msg_received    = TRUE;
+                msg_received = true;
                 p_cb->rcv_state = NFC_HAL_RCV_IDLE_ST;  /* Next, wait for packet type of next message */
             }
         }
@@ -359,7 +361,7 @@ static bool    nfc_hal_nci_receive_bt_msg (tNFC_HAL_NCIT_CB *p_cb, uint8_t byte)
         /* Check if we read in entire message yet */
         if (p_cb->rcv_len == 0)
         {
-            msg_received        = TRUE;
+            msg_received = true;
             p_cb->rcv_state     = NFC_HAL_RCV_IDLE_ST;      /* Next, wait for packet type of next message */
         }
         break;
@@ -478,7 +480,7 @@ static void nfc_hal_nci_proc_rx_bt_msg (void)
 bool    nfc_hal_nci_receive_msg (uint8_t byte)
 {
     tNFC_HAL_NCIT_CB *p_cb = &(nfc_hal_cb.ncit_cb);
-    bool    msg_received = FALSE;
+    bool    msg_received = false;
 
     if (p_cb->rcv_state == NFC_HAL_RCV_IDLE_ST)
     {
@@ -540,7 +542,7 @@ bool    nfc_hal_nci_preproc_rx_nci_msg (NFC_HDR *p_msg)
         /* if turning off BRCM NFCC */
         nfc_hal_dm_proc_msg_during_exit (p_msg);
         /* do not send message to NFC task while shutting down */
-        return (FALSE);
+        return false;
     }
 
     /* if initializing BRCM NFCC */
@@ -548,7 +550,7 @@ bool    nfc_hal_nci_preproc_rx_nci_msg (NFC_HDR *p_msg)
     {
         nfc_hal_dm_proc_msg_during_init (p_msg);
         /* do not send message to NFC task while initializing NFCC */
-        return (FALSE);
+        return false;
     }
     else
     {
@@ -613,7 +615,7 @@ bool    nfc_hal_nci_preproc_rx_nci_msg (NFC_HDR *p_msg)
                     if (nfc_hal_cb.hci_cb.b_wait_hcp_conn_create_rsp)
                     {
                         p++; /* skip status byte */
-                        nfc_hal_cb.hci_cb.b_wait_hcp_conn_create_rsp = FALSE;
+                        nfc_hal_cb.hci_cb.b_wait_hcp_conn_create_rsp = false;
                         p++; /* skip buff size */
                         p++; /* num of buffers */
                         nfc_hal_cb.hci_cb.hcp_conn_id = *p;
@@ -633,7 +635,7 @@ bool    nfc_hal_nci_preproc_rx_nci_msg (NFC_HDR *p_msg)
         }
     }
 
-    return (TRUE);
+    return true;
 }
 
 /*******************************************************************************
@@ -682,7 +684,7 @@ static void nci_brcm_check_cmd_create_hcp_connection (NFC_HDR *p_msg)
     uint8_t *p;
     uint8_t mt, pbf, gid, op_code;
 
-    nfc_hal_cb.hci_cb.b_wait_hcp_conn_create_rsp = FALSE;
+    nfc_hal_cb.hci_cb.b_wait_hcp_conn_create_rsp = false;
 
     p = (uint8_t *) (p_msg + 1) + p_msg->offset;
 
@@ -706,7 +708,7 @@ static void nci_brcm_check_cmd_create_hcp_connection (NFC_HDR *p_msg)
                         p++;
                         if (NCI_NFCEE_INTERFACE_HCI_ACCESS == *p)
                         {
-                            nfc_hal_cb.hci_cb.b_wait_hcp_conn_create_rsp = TRUE;
+                            nfc_hal_cb.hci_cb.b_wait_hcp_conn_create_rsp = true;
                             return;
                         }
                     }
@@ -730,7 +732,7 @@ static void nci_brcm_check_cmd_create_hcp_connection (NFC_HDR *p_msg)
 *******************************************************************************/
 void nfc_hal_nci_send_cmd (NFC_HDR *p_buf)
 {
-    bool    continue_to_process = TRUE;
+    bool    continue_to_process = true;
     uint8_t *ps, *pd;
     uint16_t  max_len;
     uint16_t  buf_len, offset;
@@ -762,7 +764,7 @@ void nfc_hal_nci_send_cmd (NFC_HDR *p_buf)
     if (buf_len > max_len)
     {
         /* this command needs to be fragmented. display the complete packet first */
-        DISP_NCI ((uint8_t *) (p_buf + 1) + p_buf->offset, p_buf->len, FALSE);
+        DISP_NCI ((uint8_t *) (p_buf + 1) + p_buf->offset, p_buf->len, false);
     }
 #endif
     ps      = (uint8_t *) (p_buf + 1) + p_buf->offset;
@@ -789,7 +791,7 @@ void nfc_hal_nci_send_cmd (NFC_HDR *p_buf)
 
 #ifdef DISP_NCI
         delta = p_buf->len - max_len;
-        DISP_NCI (p + delta, (uint16_t) (p_buf->len - delta), FALSE);
+        DISP_NCI (p + delta, (uint16_t) (p_buf->len - delta), false);
 #endif
         USERIAL_Write (USERIAL_NFC_PORT, p, p_buf->len);
 
@@ -816,7 +818,7 @@ void nfc_hal_nci_send_cmd (NFC_HDR *p_buf)
 
 #ifdef DISP_NCI
     delta = p_buf->len - buf_len;
-    DISP_NCI (p + delta, (uint16_t) (p_buf->len - delta), FALSE);
+    DISP_NCI (p + delta, (uint16_t) (p_buf->len - delta), false);
 #endif
     USERIAL_Write (USERIAL_NFC_PORT, p, p_buf->len);
 

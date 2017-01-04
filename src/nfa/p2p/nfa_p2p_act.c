@@ -236,16 +236,16 @@ bool    nfa_p2p_start_sdp (char *p_service_name, uint8_t local_sap)
                                       &(nfa_p2p_cb.sdp_cb[xx].tid)) == LLCP_STATUS_SUCCESS)
             {
                 nfa_p2p_cb.sdp_cb[xx].local_sap    = local_sap;
-                return TRUE;
+                return true;
             }
             else
             {
                 /* failure of SDP */
-                return FALSE;
+                return false;
             }
         }
     }
-    return FALSE;
+    return false;
 }
 
 /*******************************************************************************
@@ -548,13 +548,13 @@ void nfa_p2p_proc_llcp_congestion (tLLCP_SAP_CBACK_DATA  *p_data)
         {
             evt_data.congest.handle = (NFA_HANDLE_GROUP_P2P | local_sap);
 
-            if (  (evt_data.congest.is_congested == FALSE)
+            if (  (evt_data.congest.is_congested == false)
                 &&(nfa_p2p_cb.sap_cb[local_sap].flags & NFA_P2P_SAP_FLAG_LLINK_CONGESTED)  )
             {
                 nfa_p2p_cb.sap_cb[local_sap].flags &= ~NFA_P2P_SAP_FLAG_LLINK_CONGESTED;
                 nfa_p2p_cb.sap_cb[local_sap].p_cback (NFA_P2P_CONGEST_EVT, &evt_data);
             }
-            else if (  (evt_data.congest.is_congested == TRUE)
+            else if (  (evt_data.congest.is_congested == true)
                      &&(!(nfa_p2p_cb.sap_cb[local_sap].flags & NFA_P2P_SAP_FLAG_LLINK_CONGESTED))  )
             {
                 /* this is overall congestion due to high usage of buffer pool */
@@ -570,13 +570,13 @@ void nfa_p2p_proc_llcp_congestion (tLLCP_SAP_CBACK_DATA  *p_data)
             {
                 evt_data.congest.handle = (NFA_HANDLE_GROUP_P2P | NFA_P2P_HANDLE_FLAG_CONN | xx);
 
-                if (  (evt_data.congest.is_congested == FALSE)
+                if (  (evt_data.congest.is_congested == false)
                     &&(nfa_p2p_cb.conn_cb[xx].flags & NFA_P2P_CONN_FLAG_CONGESTED)  )
                 {
                     nfa_p2p_cb.conn_cb[xx].flags &= ~NFA_P2P_CONN_FLAG_CONGESTED;
                     nfa_p2p_cb.sap_cb[local_sap].p_cback (NFA_P2P_CONGEST_EVT, &evt_data);
                 }
-                else if (  (evt_data.congest.is_congested == TRUE)
+                else if (  (evt_data.congest.is_congested == true)
                          &&(!(nfa_p2p_cb.conn_cb[xx].flags & NFA_P2P_CONN_FLAG_CONGESTED))  )
                 {
                     /* this is overall congestion due to high usage of buffer pool */
@@ -693,17 +693,17 @@ bool    nfa_p2p_reg_server (tNFA_P2P_MSG *p_msg)
 
         p_msg->api_reg_server.p_cback (NFA_P2P_REG_SERVER_EVT, &evt_data);
 
-        return TRUE;
+        return true;
     }
 
     /* if need to update WKS in LLCP Gen bytes */
     if (server_sap <= LLCP_UPPER_BOUND_WK_SAP)
     {
-        nfa_p2p_enable_listening (NFA_ID_P2P, TRUE);
+        nfa_p2p_enable_listening (NFA_ID_P2P, true);
     }
     else if (!nfa_p2p_cb.is_p2p_listening)
     {
-        nfa_p2p_enable_listening (NFA_ID_P2P, FALSE);
+        nfa_p2p_enable_listening (NFA_ID_P2P, false);
     }
 
     nfa_p2p_cb.sap_cb[server_sap].p_cback    = p_msg->api_reg_server.p_cback;
@@ -729,7 +729,7 @@ bool    nfa_p2p_reg_server (tNFA_P2P_MSG *p_msg)
         nfa_p2p_cb.sap_cb[server_sap].p_cback (NFA_P2P_ACTIVATED_EVT, &evt_data);
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -756,7 +756,7 @@ bool    nfa_p2p_reg_client (tNFA_P2P_MSG *p_msg)
     {
         evt_data.reg_client.client_handle = NFA_HANDLE_INVALID;
         p_msg->api_reg_client.p_cback (NFA_P2P_REG_CLIENT_EVT, &evt_data);
-        return TRUE;
+        return true;
     }
 
     nfa_p2p_cb.sap_cb[local_sap].p_cback = p_msg->api_reg_client.p_cback;
@@ -776,7 +776,7 @@ bool    nfa_p2p_reg_client (tNFA_P2P_MSG *p_msg)
         nfa_p2p_cb.sap_cb[local_sap].p_cback (NFA_P2P_ACTIVATED_EVT, &evt_data);
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -828,18 +828,18 @@ bool    nfa_p2p_dereg (tNFA_P2P_MSG *p_msg)
         {
             /* if need to update WKS in LLCP Gen bytes */
             if (local_sap <= LLCP_UPPER_BOUND_WK_SAP)
-                nfa_p2p_disable_listening (NFA_ID_P2P, TRUE);
+                nfa_p2p_disable_listening (NFA_ID_P2P, true);
             else
-                nfa_p2p_disable_listening (NFA_ID_P2P, FALSE);
+                nfa_p2p_disable_listening (NFA_ID_P2P, false);
         }
         /* if need to update WKS in LLCP Gen bytes */
         else if (local_sap <= LLCP_UPPER_BOUND_WK_SAP)
         {
-            nfa_p2p_enable_listening (NFA_ID_P2P, TRUE);
+            nfa_p2p_enable_listening (NFA_ID_P2P, true);
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -868,7 +868,7 @@ bool    nfa_p2p_accept_connection (tNFA_P2P_MSG *p_msg)
 
     LLCP_ConnectCfm (nfa_p2p_cb.conn_cb[xx].local_sap, nfa_p2p_cb.conn_cb[xx].remote_sap, &params);
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -896,7 +896,7 @@ bool    nfa_p2p_reject_connection (tNFA_P2P_MSG *p_msg)
     /* no need to deregister service on LLCP */
     nfa_p2p_deallocate_conn_cb (xx);
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -930,7 +930,7 @@ bool    nfa_p2p_disconnect (tNFA_P2P_MSG *p_msg)
         if (status == LLCP_STATUS_SUCCESS)
         {
             /* wait for disconnect response if successful */
-            return TRUE;
+            return true;
         }
         else
         {
@@ -955,7 +955,7 @@ bool    nfa_p2p_disconnect (tNFA_P2P_MSG *p_msg)
         P2P_TRACE_ERROR0 ("Handle is not for Data link connection");
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -1005,7 +1005,7 @@ bool    nfa_p2p_create_data_link_connection (tNFA_P2P_MSG *p_msg)
         nfa_p2p_cb.sap_cb[local_sap].p_cback (NFA_P2P_DISC_EVT, &evt_data);
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -1048,13 +1048,13 @@ bool    nfa_p2p_send_ui (tNFA_P2P_MSG *p_msg)
             /* notify that this logical link is congested */
             evt_data.congest.link_type    = NFA_P2P_LLINK_TYPE;
             evt_data.congest.handle       = (NFA_HANDLE_GROUP_P2P | local_sap);
-            evt_data.congest.is_congested = TRUE;
+            evt_data.congest.is_congested = true;
 
             nfa_p2p_cb.sap_cb[local_sap].p_cback (NFA_P2P_CONGEST_EVT, &evt_data);
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -1098,13 +1098,13 @@ bool    nfa_p2p_send_data (tNFA_P2P_MSG *p_msg)
             /* notify that this data link is congested */
             evt_data.congest.link_type    = NFA_P2P_DLINK_TYPE;
             evt_data.congest.handle       = (NFA_HANDLE_GROUP_P2P | NFA_P2P_HANDLE_FLAG_CONN | xx);
-            evt_data.congest.is_congested = TRUE;
+            evt_data.congest.is_congested = true;
 
             nfa_p2p_cb.sap_cb[nfa_p2p_cb.conn_cb[xx].local_sap].p_cback (NFA_P2P_CONGEST_EVT, &evt_data);
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -1130,7 +1130,7 @@ bool    nfa_p2p_set_local_busy (tNFA_P2P_MSG *p_msg)
                              nfa_p2p_cb.conn_cb[xx].remote_sap,
                              p_msg->api_local_busy.is_busy);
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -1158,7 +1158,7 @@ bool    nfa_p2p_get_link_info (tNFA_P2P_MSG *p_msg)
     local_sap =  (uint8_t) (p_msg->api_link_info.handle & NFA_HANDLE_MASK);
     nfa_p2p_cb.sap_cb[local_sap].p_cback (NFA_P2P_LINK_INFO_EVT, &evt_data);
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -1188,7 +1188,7 @@ bool    nfa_p2p_get_remote_sap (tNFA_P2P_MSG *p_msg)
         nfa_p2p_cb.sap_cb[local_sap].p_cback (NFA_P2P_SDP_EVT, &evt_data);
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -1213,7 +1213,7 @@ bool    nfa_p2p_set_llcp_cfg (tNFA_P2P_MSG *p_msg)
                     p_msg->api_set_llcp_cfg.data_link_timeout,
                     p_msg->api_set_llcp_cfg.delay_first_pdu_timeout);
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -1232,5 +1232,5 @@ bool    nfa_p2p_restart_rf_discovery (tNFA_P2P_MSG *p_msg)
 
     nfa_dm_rf_deactivate (NFA_DEACTIVATE_TYPE_IDLE);
 
-    return TRUE;
+    return true;
 }

@@ -59,7 +59,7 @@ static void rw_t1t_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *
 {
     tRW_T1T_CB              *p_t1t      = &rw_cb.tcb.t1t;
     tRW_EVENT               rw_event    = RW_RAW_FRAME_EVT;
-    bool                    b_notify    = TRUE;
+    bool                    b_notify = true;
     tRW_DATA                evt_data;
     BT_HDR                  *p_pkt;
     uint8_t                 *p;
@@ -353,7 +353,7 @@ tNFC_STATUS rw_t1t_send_static_cmd (uint8_t opcode, uint8_t add, uint8_t dat)
 
 #if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
             /* Update stats */
-            rw_main_update_tx_stats (p_data->len, FALSE);
+            rw_main_update_tx_stats (p_data->len, false);
 #endif  /* RW_STATS_INCLUDED */
 
             RW_TRACE_EVENT2 ("RW SENT [%s]:0x%x CMD", t1t_info_to_str (p_cmd_rsp_info), p_cmd_rsp_info->opcode);
@@ -421,7 +421,7 @@ tNFC_STATUS rw_t1t_send_dyn_cmd (uint8_t opcode, uint8_t add, uint8_t *p_dat)
 
 #if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
             /* Update stats */
-            rw_main_update_tx_stats (p_data->len, FALSE);
+            rw_main_update_tx_stats (p_data->len, false);
 #endif  /* RW_STATS_INCLUDED */
 
             RW_TRACE_EVENT2 ("RW SENT [%s]:0x%x CMD", t1t_info_to_str (p_cmd_rsp_info), p_cmd_rsp_info->opcode);
@@ -609,7 +609,7 @@ static void rw_t1t_process_error (void)
 
 #if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
             /* Update stats */
-            rw_main_update_tx_stats (p_cmd_buf->len, TRUE);
+            rw_main_update_tx_stats (p_cmd_buf->len, true);
 #endif  /* RW_STATS_INCLUDED */
 
             if (NFC_SendData (NFC_RF_CONN_ID, p_cmd_buf) == NFC_STATUS_OK)
@@ -696,8 +696,8 @@ void rw_t1t_handle_op_complete (void)
 #if (defined (RW_NDEF_INCLUDED) && (RW_NDEF_INCLUDED == TRUE))
     if (p_t1t->state != RW_T1T_STATE_READ_NDEF)
     {
-        p_t1t->b_update = FALSE;
-        p_t1t->b_rseg   = FALSE;
+        p_t1t->b_update = false;
+        p_t1t->b_rseg = false;
     }
     p_t1t->substate = RW_T1T_SUBSTATE_NONE;
 #endif
@@ -899,8 +899,8 @@ tNFC_STATUS RW_T1tWriteErase (uint8_t block, uint8_t byte, uint8_t new_byte)
         p_t1t->state = RW_T1T_STATE_WRITE;
         if (block < T1T_BLOCKS_PER_SEGMENT)
         {
-            p_t1t->b_update = FALSE;
-            p_t1t->b_rseg   = FALSE;
+            p_t1t->b_update = false;
+            p_t1t->b_rseg = false;
         }
     }
     return status;
@@ -952,8 +952,8 @@ tNFC_STATUS RW_T1tWriteNoErase (uint8_t block, uint8_t byte, uint8_t new_byte)
         p_t1t->state = RW_T1T_STATE_WRITE;
         if (block < T1T_BLOCKS_PER_SEGMENT)
         {
-            p_t1t->b_update = FALSE;
-            p_t1t->b_rseg   = FALSE;
+            p_t1t->b_update = false;
+            p_t1t->b_rseg = false;
         }
     }
     return status;
@@ -1069,8 +1069,8 @@ tNFC_STATUS RW_T1tWriteErase8 (uint8_t block, uint8_t *p_new_dat)
             p_t1t->state = RW_T1T_STATE_WRITE;
             if (block < T1T_BLOCKS_PER_SEGMENT)
             {
-                p_t1t->b_update = FALSE;
-                p_t1t->b_rseg   = FALSE;
+                p_t1t->b_update = false;
+                p_t1t->b_rseg = false;
             }
         }
     }
@@ -1119,8 +1119,8 @@ tNFC_STATUS RW_T1tWriteNoErase8 (uint8_t block, uint8_t *p_new_dat)
             p_t1t->state    = RW_T1T_STATE_WRITE;
             if (block < T1T_BLOCKS_PER_SEGMENT)
             {
-                p_t1t->b_update = FALSE;
-                p_t1t->b_rseg   = FALSE;
+                p_t1t->b_update = false;
+                p_t1t->b_rseg = false;
             }
         }
     }

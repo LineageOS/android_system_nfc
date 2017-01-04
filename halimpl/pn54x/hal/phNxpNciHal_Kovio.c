@@ -30,7 +30,7 @@ extern NFCSTATUS phNxpNciHal_send_ext_cmd(uint16_t cmd_len, uint8_t *p_cmd);
 int kovio_detected = 0x00;
 int send_to_upper_kovio = 0x01;
 int disable_kovio=0x00;
-bool_t rf_deactive_cmd = FALSE;
+bool_t rf_deactive_cmd = false;
 static uint8_t rf_deactivate_cmd[]   = { 0x21, 0x06, 0x01, 0x03 }; /* discovery */
 static uint8_t rf_deactivated_ntf[]  = { 0x61, 0x06, 0x02, 0x03, 0x01 };
 static uint8_t reset_ntf[] = {0x60, 0x00, 0x06, 0xA0, 0x00, 0xC7, 0xD4, 0x00, 0x00};
@@ -116,7 +116,7 @@ static NFCSTATUS phNxpNciHal_rf_deactivate()
     {
         //phNxpNciHal_emergency_recovery();
         if (nxpncihal_ctrl.p_nfc_stack_data_cback!= NULL &&
-            nxpncihal_ctrl.hal_open_status == TRUE)
+            nxpncihal_ctrl.hal_open_status == true)
         {
             NXPLOG_NCIHAL_D("Send the Core Reset NTF to upper layer, which will trigger the recovery\n");
             //Send the Core Reset NTF to upper layer, which will trigger the recovery.
@@ -190,7 +190,7 @@ NFCSTATUS phNxpNciHal_kovio_rsp_ext(uint8_t *p_ntf, uint16_t *p_len)
             else
             {
                 NXPLOG_NCIHAL_D ("RF deactivate command is already sent to NFCC");
-                disable_kovio = TRUE;
+                disable_kovio = true;
                 send_to_upper_kovio = 0;
             }
             status = phOsalNfc_Timer_Start(kovio_timer,
@@ -218,7 +218,7 @@ NFCSTATUS phNxpNciHal_kovio_rsp_ext(uint8_t *p_ntf, uint16_t *p_len)
     }
     else if((p_ntf[0]==0x41)&&(p_ntf[1]==0x06)&&(p_ntf[2]==0x01))
     {
-        rf_deactive_cmd = FALSE;
+        rf_deactive_cmd = false;
         if(kovio_detected == 1)
             send_to_upper_kovio = 0;
         if((kovio_detected == 1)&&(disable_kovio==0x01))
