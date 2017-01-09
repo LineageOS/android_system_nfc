@@ -26,17 +26,8 @@
 #define NFC_STANDALONE FALSE
 #endif
 
-/* Include platform-specific over-rides */
-#if (NFC_STANDALONE == TRUE)
-    #include "gki_target.h"
-#else
-    /* For non-nfc_standalone, include Bluetooth definitions */
-    #include "bt_target.h"
-#endif
-
-
-
 #include "bt_types.h"
+#include "gki_target.h"
 
 /* Uncomment this line for verbose GKI debugging and buffer tracking */
 #define GKI_BUFFER_DEBUG   FALSE
