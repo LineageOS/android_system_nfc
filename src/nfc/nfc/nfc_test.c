@@ -51,7 +51,7 @@
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_TestLoopback (BT_HDR *p_data)
+tNFC_STATUS NFC_TestLoopback (NFC_HDR *p_data)
 {
     tNFC_STATUS     status  = NFC_STATUS_FAILED;
     tNFC_CONN_CB    *p_cb   = nfc_find_conn_cb_by_handle (NCI_TEST_ID);

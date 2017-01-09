@@ -128,14 +128,14 @@ typedef struct
 /* This data type is for NFC task to send a NCI VS command to NCIT task */
 typedef struct
 {
-    BT_HDR          bt_hdr;     /* the NCI command          */
+    NFC_HDR          bt_hdr;     /* the NCI command          */
     tNFC_VS_CBACK   *p_cback;   /* the callback function to receive RSP   */
 } tNFC_NCI_VS_MSG;
 
 /* This data type is for HAL event */
 typedef struct
 {
-    BT_HDR          hdr;
+    NFC_HDR          hdr;
     uint8_t         hal_evt;    /* HAL event code  */
     uint8_t         status;     /* tHAL_NFC_STATUS */
 } tNFC_HAL_EVT_MSG;
@@ -145,11 +145,11 @@ typedef struct
 /* NFCC power state change pending callback */
 typedef void (tNFC_PWR_ST_CBACK) (void);
 #define NFC_SAVED_HDR_SIZE          (2)
-/* data Reassembly error (in BT_HDR.layer_specific) */
+/* data Reassembly error (in NFC_HDR.layer_specific) */
 #define NFC_RAS_TOO_BIG             0x08
 #define NFC_RAS_FRAGMENTED          0x01
 
-/* NCI command buffer contains a VSC (in BT_HDR.layer_specific) */
+/* NCI command buffer contains a VSC (in NFC_HDR.layer_specific) */
 #define NFC_WAIT_RSP_VSC            0x01
 
 /* NFC control blocks */
@@ -196,7 +196,7 @@ typedef struct
 
     uint8_t             nci_cmd_window;     /* Number of commands the controller can accecpt without waiting for response */
 
-    BT_HDR              *p_nci_init_rsp;    /* holding INIT_RSP until receiving HAL_NFC_POST_INIT_CPLT_EVT */
+    NFC_HDR              *p_nci_init_rsp;    /* holding INIT_RSP until receiving HAL_NFC_POST_INIT_CPLT_EVT */
     tHAL_NFC_ENTRY      *p_hal;
 
 } tNFC_CB;
@@ -224,14 +224,14 @@ NFC_API extern void nfc_free_conn_cb (tNFC_CONN_CB *p_cb);
 NFC_API extern void nfc_reset_all_conn_cbs (void);
 NFC_API extern void nfc_data_event (tNFC_CONN_CB * p_cb);
 
-void nfc_ncif_send (BT_HDR *p_buf, bool    is_cmd);
-extern uint8_t nfc_ncif_send_data (tNFC_CONN_CB *p_cb, BT_HDR *p_data);
+void nfc_ncif_send (NFC_HDR *p_buf, bool    is_cmd);
+extern uint8_t nfc_ncif_send_data (tNFC_CONN_CB *p_cb, NFC_HDR *p_data);
 NFC_API extern void nfc_ncif_cmd_timeout (void);
 NFC_API extern void nfc_wait_2_deactivate_timeout (void);
 
-NFC_API extern bool    nfc_ncif_process_event (BT_HDR *p_msg);
-NFC_API extern void nfc_ncif_check_cmd_queue (BT_HDR *p_buf);
-NFC_API extern void nfc_ncif_send_cmd (BT_HDR *p_buf);
+NFC_API extern bool    nfc_ncif_process_event (NFC_HDR *p_msg);
+NFC_API extern void nfc_ncif_check_cmd_queue (NFC_HDR *p_buf);
+NFC_API extern void nfc_ncif_send_cmd (NFC_HDR *p_buf);
 NFC_API extern void nfc_ncif_proc_discover_ntf (uint8_t *p, uint16_t plen);
 NFC_API extern void nfc_ncif_rf_management_status (tNFC_DISCOVER_EVT event, uint8_t status);
 NFC_API extern void nfc_ncif_set_config_status (uint8_t *p, uint8_t len);
@@ -249,9 +249,9 @@ NFC_API extern void nfc_ncif_proc_conn_create_rsp (uint8_t *p, uint16_t plen, ui
 NFC_API extern void nfc_ncif_report_conn_close_evt (uint8_t conn_id, tNFC_STATUS status);
 NFC_API extern void nfc_ncif_proc_t3t_polling_ntf (uint8_t *p, uint16_t plen);
 NFC_API extern void nfc_ncif_proc_reset_rsp (uint8_t *p, bool    is_ntf);
-NFC_API extern void nfc_ncif_proc_init_rsp (BT_HDR *p_msg);
-NFC_API extern void nfc_ncif_proc_get_config_rsp (BT_HDR *p_msg);
-NFC_API extern void nfc_ncif_proc_data (BT_HDR *p_msg);
+NFC_API extern void nfc_ncif_proc_init_rsp (NFC_HDR *p_msg);
+NFC_API extern void nfc_ncif_proc_get_config_rsp (NFC_HDR *p_msg);
+NFC_API extern void nfc_ncif_proc_data (NFC_HDR *p_msg);
 NFC_API extern bool    nfa_dm_p2p_prio_logic(uint8_t event, uint8_t *p, uint8_t ntf_rsp);
 NFC_API extern void nfa_dm_p2p_timer_event ();
 NFC_API extern void nfa_dm_p2p_prio_logic_cleanup ();
@@ -267,7 +267,7 @@ NFC_API extern uint32_t nfc_task (uint32_t param);
 void nfc_task_shutdown_nfcc (void);
 
 /* From nfc_main.c */
-void nfc_enabled (tNFC_STATUS nfc_status, BT_HDR *p_init_rsp_msg);
+void nfc_enabled (tNFC_STATUS nfc_status, NFC_HDR *p_init_rsp_msg);
 void nfc_set_state (tNFC_STATE nfc_state);
 void nfc_main_flush_cmd_queue (void);
 void nfc_gen_cleanup (void);

@@ -44,7 +44,7 @@ tNFA_P2P_CB nfa_p2p_cb;
 *****************************************************************************/
 
 /* event handler function type */
-static bool    nfa_p2p_evt_hdlr (BT_HDR *p_msg);
+static bool    nfa_p2p_evt_hdlr (NFC_HDR *p_msg);
 
 /* disable function type */
 static void nfa_p2p_sys_disable (void);
@@ -201,7 +201,7 @@ static void nfa_p2p_update_active_listen_timeout_cback (TIMER_LIST_ENT *p_tle)
 static void nfa_p2p_update_active_listen (void)
 {
     tNFA_DM_DISC_TECH_PROTO_MASK p2p_listen_mask = 0;
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
 
     P2P_TRACE_DEBUG1 ("nfa_p2p_update_active_listen (): listen_tech_mask_to_restore:0x%x",
                        nfa_p2p_cb.listen_tech_mask_to_restore);
@@ -252,7 +252,7 @@ static void nfa_p2p_update_active_listen (void)
                                                         nfa_p2p_discovery_cback);
 
     /* restart RF discovery to update RF technologies */
-    if ((p_msg = (BT_HDR *) GKI_getbuf (sizeof(BT_HDR))) != NULL)
+    if ((p_msg = (NFC_HDR *) GKI_getbuf (sizeof(NFC_HDR))) != NULL)
     {
         p_msg->event = NFA_P2P_INT_RESTART_RF_DISC_EVT;
         nfa_sys_sendmsg (p_msg);
@@ -706,7 +706,7 @@ void nfa_p2p_update_listen_tech (tNFA_TECHNOLOGY_MASK tech_mask)
 ** Returns          TRUE if p_msg needs to be deallocated
 **
 *******************************************************************************/
-static bool    nfa_p2p_evt_hdlr (BT_HDR *p_hdr)
+static bool    nfa_p2p_evt_hdlr (NFC_HDR *p_hdr)
 {
     bool    delete_msg = true;
     uint16_t  event;

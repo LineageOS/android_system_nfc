@@ -137,10 +137,10 @@ typedef struct
 */
 
 /* Max data size using a single ReadBinary. 2 bytes are for status bytes */
-#define CE_T4T_MAX_LE           (NFC_CE_POOL_BUF_SIZE - BT_HDR_SIZE - NCI_MSG_OFFSET_SIZE - NCI_DATA_HDR_SIZE - T4T_RSP_STATUS_WORDS_SIZE)
+#define CE_T4T_MAX_LE           (NFC_CE_POOL_BUF_SIZE - NFC_HDR_SIZE - NCI_MSG_OFFSET_SIZE - NCI_DATA_HDR_SIZE - T4T_RSP_STATUS_WORDS_SIZE)
 
 /* Max data size using a single UpdateBinary. 6 bytes are for CLA, INS, P1, P2, Lc */
-#define CE_T4T_MAX_LC           (NFC_CE_POOL_BUF_SIZE - BT_HDR_SIZE - NCI_DATA_HDR_SIZE - T4T_CMD_MAX_HDR_SIZE)
+#define CE_T4T_MAX_LC           (NFC_CE_POOL_BUF_SIZE - NFC_HDR_SIZE - NCI_DATA_HDR_SIZE - T4T_CMD_MAX_HDR_SIZE)
 
 /*****************************************************************************
 **  EXTERNAL FUNCTION DECLARATIONS

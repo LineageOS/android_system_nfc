@@ -20,6 +20,7 @@
 #define BT_TYPES_H
 
 #include "data_types.h"
+#include "nfc_types.h"
 
 #ifdef _WIN32
 #ifdef BLUESTACK_TESTER

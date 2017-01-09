@@ -129,7 +129,7 @@ typedef struct
 /* NFA_RW_OP_SEND_RAW_FRAME params */
 typedef struct
 {
-    BT_HDR          *p_data;
+    NFC_HDR          *p_data;
 } tNFA_RW_OP_PARAMS_SEND_RAW_FRAME;
 
 /* NFA_RW_OP_SET_TAG_RO params */
@@ -239,7 +239,7 @@ typedef union
 /* data type for NFA_RW_op_req_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_RW_OP          op;     /* NFA RW operation */
     tNFA_RW_OP_PARAMS   params;
 } tNFA_RW_OPERATION;
@@ -247,7 +247,7 @@ typedef struct
 /* data type for NFA_RW_ACTIVATE_NTF */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFC_ACTIVATE_DEVT  *p_activate_params; /* Data from NFC_ACTIVATE_DEVT      */
     bool                excl_rf_not_active; /* TRUE if not in exclusive RF mode */
 } tNFA_RW_ACTIVATE_NTF;
@@ -256,7 +256,7 @@ typedef struct
 typedef union
 {
     /* GKI event buffer header */
-    BT_HDR                  hdr;
+    NFC_HDR                  hdr;
     tNFA_RW_OPERATION       op_req;
     tNFA_RW_ACTIVATE_NTF    activate_ntf;
 } tNFA_RW_MSG;
@@ -345,7 +345,7 @@ extern bool    nfa_rw_presence_check_timeout (tNFA_RW_MSG *p_data);
 extern void    nfa_rw_handle_sleep_wakeup_rsp (tNFC_STATUS status);
 extern void    nfa_rw_handle_presence_check_rsp (tNFC_STATUS status);
 extern void    nfa_rw_command_complete (void);
-extern bool    nfa_rw_handle_event (BT_HDR *p_msg);
+extern bool    nfa_rw_handle_event (NFC_HDR *p_msg);
 
 extern void    nfa_rw_free_ndef_rx_buf (void);
 extern void    nfa_rw_sys_disable (void);

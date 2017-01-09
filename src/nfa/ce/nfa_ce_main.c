@@ -173,7 +173,7 @@ static void nfa_ce_proc_nfcc_power_mode (uint8_t nfcc_power_mode)
 ** Returns          bool   
 **
 *******************************************************************************/
-bool    nfa_ce_hdl_event (BT_HDR *p_msg)
+bool    nfa_ce_hdl_event (NFC_HDR *p_msg)
 {
     uint16_t act_idx;
     bool    freebuf = true;

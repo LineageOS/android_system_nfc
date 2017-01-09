@@ -196,11 +196,11 @@ inline void byte2hex (const char* data, char** str)
 
 
     //Decode a few Bluetooth HCI packets into hex numbers.
-    void DispHciCmd (BT_HDR *p_buf)
+    void DispHciCmd (NFC_HDR *p_buf)
     {
-        uint32_t nBytes = ((BT_HDR_SIZE + p_buf->offset + p_buf->len)*2)+1;
+        uint32_t nBytes = ((NFC_HDR_SIZE + p_buf->offset + p_buf->len)*2)+1;
         uint8_t* data = (uint8_t*) p_buf;
-        int data_len = BT_HDR_SIZE + p_buf->offset + p_buf->len;
+        int data_len = NFC_HDR_SIZE + p_buf->offset + p_buf->len;
 
         if (appl_trace_level < BT_TRACE_LEVEL_DEBUG)
             return;
@@ -214,11 +214,11 @@ inline void byte2hex (const char* data, char** str)
 
 
     //Decode a few Bluetooth HCI packets into hex numbers.
-    void DispHciEvt (BT_HDR *p_buf)
+    void DispHciEvt (NFC_HDR *p_buf)
     {
-        uint32_t nBytes = ((BT_HDR_SIZE + p_buf->offset + p_buf->len)*2)+1;
+        uint32_t nBytes = ((NFC_HDR_SIZE + p_buf->offset + p_buf->len)*2)+1;
         uint8_t* data = (uint8_t*) p_buf;
-        int data_len = BT_HDR_SIZE + p_buf->offset + p_buf->len;
+        int data_len = NFC_HDR_SIZE + p_buf->offset + p_buf->len;
 
         if (appl_trace_level < BT_TRACE_LEVEL_DEBUG)
             return;
@@ -240,11 +240,11 @@ inline void byte2hex (const char* data, char** str)
     ** Returns          None.
     **
     *******************************************************************************/
-    void DispLLCP (BT_HDR *p_buf, bool    is_recv)
+    void DispLLCP (NFC_HDR *p_buf, bool    is_recv)
     {
-        uint32_t nBytes = ((BT_HDR_SIZE + p_buf->offset + p_buf->len)*2)+1;
+        uint32_t nBytes = ((NFC_HDR_SIZE + p_buf->offset + p_buf->len)*2)+1;
         uint8_t * data = (uint8_t*) p_buf;
-        int data_len = BT_HDR_SIZE + p_buf->offset + p_buf->len;
+        int data_len = NFC_HDR_SIZE + p_buf->offset + p_buf->len;
 
         if (appl_trace_level < BT_TRACE_LEVEL_DEBUG)
             return;
@@ -285,12 +285,12 @@ inline void byte2hex (const char* data, char** str)
     }
 
 
-    void DispSNEP (uint8_t local_sap, uint8_t remote_sap, BT_HDR *p_buf, bool    is_first, bool    is_rx) {}
+    void DispSNEP (uint8_t local_sap, uint8_t remote_sap, NFC_HDR *p_buf, bool    is_first, bool    is_rx) {}
     void DispCHO (uint8_t *pMsg, uint32_t MsgLen, bool    is_rx) {}
-    void DispT3TagMessage(BT_HDR *p_msg, bool    is_rx) {}
-    void DispRWT4Tags (BT_HDR *p_buf, bool    is_rx) {}
-    void DispCET4Tags (BT_HDR *p_buf, bool    is_rx) {}
-    void DispRWI93Tag (BT_HDR *p_buf, bool    is_rx, uint8_t command_to_respond) {}
+    void DispT3TagMessage(NFC_HDR *p_msg, bool    is_rx) {}
+    void DispRWT4Tags (NFC_HDR *p_buf, bool    is_rx) {}
+    void DispCET4Tags (NFC_HDR *p_buf, bool    is_rx) {}
+    void DispRWI93Tag (NFC_HDR *p_buf, bool    is_rx, uint8_t command_to_respond) {}
     void DispNDEFMsg (uint8_t *pMsg, uint32_t MsgLen, bool    is_recv) {}
 
 

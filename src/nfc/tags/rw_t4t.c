@@ -73,7 +73,7 @@ static char *rw_t4t_get_state_name (uint8_t state);
 static char *rw_t4t_get_sub_state_name (uint8_t sub_state);
 #endif
 
-static bool    rw_t4t_send_to_lower (BT_HDR *p_c_apdu);
+static bool    rw_t4t_send_to_lower (NFC_HDR *p_c_apdu);
 static bool    rw_t4t_select_file (uint16_t file_id);
 static bool    rw_t4t_read_file (uint16_t offset, uint16_t length, bool    is_continue);
 static bool    rw_t4t_update_nlen (uint16_t ndef_len);
@@ -91,12 +91,12 @@ static bool    rw_t4t_create_ndef (void);
 static bool    rw_t4t_write_cc (void);
 static bool    rw_t4t_write_ndef (void);
 static void rw_t4t_handle_error (tNFC_STATUS status, uint8_t sw1, uint8_t sw2);
-static void rw_t4t_sm_detect_ndef (BT_HDR *p_r_apdu);
-static void rw_t4t_sm_read_ndef (BT_HDR *p_r_apdu);
-static void rw_t4t_sm_update_ndef (BT_HDR  *p_r_apdu);
-static void rw_t4t_sm_set_readonly (BT_HDR  *p_r_apdu);
+static void rw_t4t_sm_detect_ndef (NFC_HDR *p_r_apdu);
+static void rw_t4t_sm_read_ndef (NFC_HDR *p_r_apdu);
+static void rw_t4t_sm_update_ndef (NFC_HDR  *p_r_apdu);
+static void rw_t4t_sm_set_readonly (NFC_HDR  *p_r_apdu);
 static void rw_t4t_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data);
-static void rw_t4t_sm_ndef_format (BT_HDR  *p_r_apdu);
+static void rw_t4t_sm_ndef_format (NFC_HDR  *p_r_apdu);
 
 /*******************************************************************************
 **
@@ -107,7 +107,7 @@ static void rw_t4t_sm_ndef_format (BT_HDR  *p_r_apdu);
 ** Returns          TRUE if success
 **
 *******************************************************************************/
-static bool    rw_t4t_send_to_lower (BT_HDR *p_c_apdu)
+static bool    rw_t4t_send_to_lower (NFC_HDR *p_c_apdu)
 {
 #if (BT_TRACE_PROTOCOL == TRUE)
     DispRWT4Tags (p_c_apdu, false);
@@ -136,10 +136,10 @@ static bool    rw_t4t_send_to_lower (BT_HDR *p_c_apdu)
 *******************************************************************************/
 static bool    rw_t4t_get_hw_version (void)
 {
-    BT_HDR      *p_c_apdu;
+    NFC_HDR      *p_c_apdu;
     uint8_t     *p;
 
-    p_c_apdu = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_c_apdu = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_c_apdu)
     {
@@ -176,10 +176,10 @@ static bool    rw_t4t_get_hw_version (void)
 *******************************************************************************/
 static bool    rw_t4t_get_sw_version (void)
 {
-    BT_HDR      *p_c_apdu;
+    NFC_HDR      *p_c_apdu;
     uint8_t     *p;
 
-    p_c_apdu = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_c_apdu = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_c_apdu)
     {
@@ -214,7 +214,7 @@ static bool    rw_t4t_get_sw_version (void)
 ** Returns          TRUE if success
 **
 *******************************************************************************/
-static bool    rw_t4t_update_version_details (BT_HDR *p_r_apdu)
+static bool    rw_t4t_update_version_details (NFC_HDR *p_r_apdu)
 {
     tRW_T4T_CB      *p_t4t = &rw_cb.tcb.t4t;
     uint8_t         *p;
@@ -266,10 +266,10 @@ static bool    rw_t4t_update_version_details (BT_HDR *p_r_apdu)
 *******************************************************************************/
 static bool    rw_t4t_get_uid_details (void)
 {
-    BT_HDR      *p_c_apdu;
+    NFC_HDR      *p_c_apdu;
     uint8_t     *p;
 
-    p_c_apdu = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_c_apdu = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_c_apdu)
     {
@@ -307,11 +307,11 @@ static bool    rw_t4t_get_uid_details (void)
 static bool    rw_t4t_create_app (void)
 {
     tRW_T4T_CB  *p_t4t = &rw_cb.tcb.t4t;
-    BT_HDR      *p_c_apdu;
+    NFC_HDR      *p_c_apdu;
     uint8_t     *p;
     uint8_t     df_name[] = {0xD2, 0x76, 0x00, 0x00, 0x85, 0x01, 0x01};
 
-    p_c_apdu = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_c_apdu = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_c_apdu)
     {
@@ -364,10 +364,10 @@ static bool    rw_t4t_create_app (void)
 static bool    rw_t4t_select_app (void)
 {
     tRW_T4T_CB  *p_t4t = &rw_cb.tcb.t4t;
-    BT_HDR      *p_c_apdu;
+    NFC_HDR      *p_c_apdu;
     uint8_t     *p;
 
-    p_c_apdu = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_c_apdu = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_c_apdu)
     {
@@ -415,10 +415,10 @@ static bool    rw_t4t_select_app (void)
 static bool    rw_t4t_create_ccfile (void)
 {
     tRW_T4T_CB  *p_t4t = &rw_cb.tcb.t4t;
-    BT_HDR      *p_c_apdu;
+    NFC_HDR      *p_c_apdu;
     uint8_t     *p;
 
-    p_c_apdu = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_c_apdu = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_c_apdu)
     {
@@ -471,10 +471,10 @@ static bool    rw_t4t_create_ccfile (void)
 static bool    rw_t4t_create_ndef (void)
 {
     tRW_T4T_CB  *p_t4t = &rw_cb.tcb.t4t;
-    BT_HDR      *p_c_apdu;
+    NFC_HDR      *p_c_apdu;
     uint8_t     *p;
 
-    p_c_apdu = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_c_apdu = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_c_apdu)
     {
@@ -528,11 +528,11 @@ static bool    rw_t4t_create_ndef (void)
 static bool    rw_t4t_write_cc (void)
 {
     tRW_T4T_CB  *p_t4t = &rw_cb.tcb.t4t;
-    BT_HDR      *p_c_apdu;
+    NFC_HDR      *p_c_apdu;
     uint8_t     *p;
     uint8_t     CCFileBytes[] = {0x00, 0x0F, 0x10, 0x00, 0x3B, 0x00, 0x34, 0x04, 0x06, 0xE1, 0x04, 0x04, 0x00, 0x00, 0x00};
 
-    p_c_apdu = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_c_apdu = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_c_apdu)
     {
@@ -586,10 +586,10 @@ static bool    rw_t4t_write_cc (void)
 static bool    rw_t4t_write_ndef (void)
 {
     tRW_T4T_CB  *p_t4t = &rw_cb.tcb.t4t;
-    BT_HDR      *p_c_apdu;
+    NFC_HDR      *p_c_apdu;
     uint8_t     *p;
 
-    p_c_apdu = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_c_apdu = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_c_apdu)
     {
@@ -639,12 +639,12 @@ static bool    rw_t4t_write_ndef (void)
 *******************************************************************************/
 static bool    rw_t4t_select_file (uint16_t file_id)
 {
-    BT_HDR      *p_c_apdu;
+    NFC_HDR      *p_c_apdu;
     uint8_t     *p;
 
     RW_TRACE_DEBUG1 ("rw_t4t_select_file (): File ID:0x%04X", file_id);
 
-    p_c_apdu = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_c_apdu = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_c_apdu)
     {
@@ -694,13 +694,13 @@ static bool    rw_t4t_select_file (uint16_t file_id)
 static bool    rw_t4t_read_file (uint16_t offset, uint16_t length, bool    is_continue)
 {
     tRW_T4T_CB      *p_t4t = &rw_cb.tcb.t4t;
-    BT_HDR          *p_c_apdu;
+    NFC_HDR          *p_c_apdu;
     uint8_t         *p;
 
     RW_TRACE_DEBUG3 ("rw_t4t_read_file () offset:%d, length:%d, is_continue:%d, ",
                       offset, length, is_continue);
 
-    p_c_apdu = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_c_apdu = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_c_apdu)
     {
@@ -752,12 +752,12 @@ static bool    rw_t4t_read_file (uint16_t offset, uint16_t length, bool    is_co
 *******************************************************************************/
 static bool    rw_t4t_update_nlen (uint16_t ndef_len)
 {
-    BT_HDR          *p_c_apdu;
+    NFC_HDR          *p_c_apdu;
     uint8_t         *p;
 
     RW_TRACE_DEBUG1 ("rw_t4t_update_nlen () NLEN:%d", ndef_len);
 
-    p_c_apdu = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_c_apdu = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_c_apdu)
     {
@@ -796,14 +796,14 @@ static bool    rw_t4t_update_nlen (uint16_t ndef_len)
 static bool    rw_t4t_update_file (void)
 {
     tRW_T4T_CB      *p_t4t = &rw_cb.tcb.t4t;
-    BT_HDR          *p_c_apdu;
+    NFC_HDR          *p_c_apdu;
     uint8_t         *p;
     uint16_t        length;
 
     RW_TRACE_DEBUG2 ("rw_t4t_update_file () rw_offset:%d, rw_length:%d",
                       p_t4t->rw_offset, p_t4t->rw_length);
 
-    p_c_apdu = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_c_apdu = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_c_apdu)
     {
@@ -856,12 +856,12 @@ static bool    rw_t4t_update_file (void)
 *******************************************************************************/
 static bool    rw_t4t_update_cc_to_readonly (void)
 {
-    BT_HDR          *p_c_apdu;
+    NFC_HDR          *p_c_apdu;
     uint8_t         *p;
 
     RW_TRACE_DEBUG0 ("rw_t4t_update_cc_to_readonly (): Remove Write access from CC");
 
-    p_c_apdu = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_c_apdu = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_c_apdu)
     {
@@ -909,12 +909,12 @@ static bool    rw_t4t_update_cc_to_readonly (void)
 *******************************************************************************/
 static bool    rw_t4t_select_application (uint8_t version)
 {
-    BT_HDR      *p_c_apdu;
+    NFC_HDR      *p_c_apdu;
     uint8_t     *p;
 
     RW_TRACE_DEBUG1 ("rw_t4t_select_application () version:0x%X", version);
 
-    p_c_apdu = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_c_apdu = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_c_apdu)
     {
@@ -1127,7 +1127,7 @@ static void rw_t4t_handle_error (tNFC_STATUS status, uint8_t sw1, uint8_t sw2)
 ** Returns          none
 **
 *******************************************************************************/
-static void rw_t4t_sm_ndef_format (BT_HDR *p_r_apdu)
+static void rw_t4t_sm_ndef_format (NFC_HDR *p_r_apdu)
 {
     tRW_T4T_CB  *p_t4t = &rw_cb.tcb.t4t;
     uint8_t     *p, type, length;
@@ -1364,7 +1364,7 @@ static void rw_t4t_sm_ndef_format (BT_HDR *p_r_apdu)
 ** Returns          none
 **
 *******************************************************************************/
-static void rw_t4t_sm_detect_ndef (BT_HDR *p_r_apdu)
+static void rw_t4t_sm_detect_ndef (NFC_HDR *p_r_apdu)
 {
     tRW_T4T_CB  *p_t4t = &rw_cb.tcb.t4t;
     uint8_t     *p, type, length;
@@ -1610,7 +1610,7 @@ static void rw_t4t_sm_detect_ndef (BT_HDR *p_r_apdu)
 ** Returns          none
 **
 *******************************************************************************/
-static void rw_t4t_sm_read_ndef (BT_HDR *p_r_apdu)
+static void rw_t4t_sm_read_ndef (NFC_HDR *p_r_apdu)
 {
     tRW_T4T_CB  *p_t4t = &rw_cb.tcb.t4t;
     uint8_t     *p;
@@ -1708,7 +1708,7 @@ static void rw_t4t_sm_read_ndef (BT_HDR *p_r_apdu)
 ** Returns          none
 **
 *******************************************************************************/
-static void rw_t4t_sm_update_ndef (BT_HDR  *p_r_apdu)
+static void rw_t4t_sm_update_ndef (NFC_HDR  *p_r_apdu)
 {
     tRW_T4T_CB  *p_t4t = &rw_cb.tcb.t4t;
     uint8_t     *p;
@@ -1807,7 +1807,7 @@ static void rw_t4t_sm_update_ndef (BT_HDR  *p_r_apdu)
 ** Returns          none
 **
 *******************************************************************************/
-static void rw_t4t_sm_set_readonly (BT_HDR  *p_r_apdu)
+static void rw_t4t_sm_set_readonly (NFC_HDR  *p_r_apdu)
 {
     tRW_T4T_CB  *p_t4t = &rw_cb.tcb.t4t;
     uint8_t     *p;
@@ -1916,7 +1916,7 @@ void rw_t4t_process_timeout (TIMER_LIST_ENT *p_tle)
 static void rw_t4t_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
 {
     tRW_T4T_CB *p_t4t    = &rw_cb.tcb.t4t;
-    BT_HDR     *p_r_apdu;
+    NFC_HDR     *p_r_apdu;
     tRW_DATA    rw_data;
 
 #if (BT_TRACE_VERBOSE == TRUE)
@@ -1959,7 +1959,7 @@ static void rw_t4t_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *
         return;
 
     case NFC_DATA_CEVT:
-        p_r_apdu = (BT_HDR *) p_data->data.p_data;
+        p_r_apdu = (NFC_HDR *) p_data->data.p_data;
         break;
 
     default:
@@ -2292,7 +2292,7 @@ tNFC_STATUS RW_T4tPresenceCheck (uint8_t option)
     tNFC_STATUS retval = NFC_STATUS_OK;
     tRW_DATA    evt_data;
     bool        status;
-    BT_HDR      *p_data;
+    NFC_HDR      *p_data;
 
     RW_TRACE_API1 ("RW_T4tPresenceCheck () %d", option);
 
@@ -2319,11 +2319,11 @@ tNFC_STATUS RW_T4tPresenceCheck (uint8_t option)
         if (option == RW_T4T_CHK_EMPTY_I_BLOCK)
         {
             /* use empty I block for presence check */
-            if ((p_data = (BT_HDR *) GKI_getbuf (NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE)) != NULL)
+            if ((p_data = (NFC_HDR *) GKI_getbuf (NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE)) != NULL)
             {
                 p_data->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
                 p_data->len    = 0;
-                if (NFC_SendData (NFC_RF_CONN_ID, (BT_HDR*) p_data) == NFC_STATUS_OK)
+                if (NFC_SendData (NFC_RF_CONN_ID, (NFC_HDR*) p_data) == NFC_STATUS_OK)
                     status = true;
             }
         }

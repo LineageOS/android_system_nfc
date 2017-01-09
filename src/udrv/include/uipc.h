@@ -63,7 +63,7 @@
 typedef uint8_t tUIPC_CH_ID;
 
 
-typedef void (tUIPC_RCV_CBACK)(BT_HDR *p_msg); /* points to BT_HDR which describes event type and length of data; len contains the number of bytes of entire message (sizeof(BT_HDR) + offset + size of data) */
+typedef void (tUIPC_RCV_CBACK)(NFC_HDR *p_msg); /* points to NFC_HDR which describes event type and length of data; len contains the number of bytes of entire message (sizeof(NFC_HDR) + offset + size of data) */
 
 #ifdef __cplusplus
 extern "C"
@@ -113,7 +113,7 @@ UDRV_API extern void UIPC_Close(tUIPC_CH_ID ch_id);
 ** Returns          void
 **
 *******************************************************************************/
-UDRV_API extern bool    UIPC_SendBuf(tUIPC_CH_ID ch_id, BT_HDR *p_msg);
+UDRV_API extern bool    UIPC_SendBuf(tUIPC_CH_ID ch_id, NFC_HDR *p_msg);
 
 /*******************************************************************************
 **

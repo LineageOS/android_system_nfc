@@ -68,7 +68,7 @@ void nfa_sys_init (void)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_event (BT_HDR *p_msg)
+void nfa_sys_event (NFC_HDR *p_msg)
 {
     uint8_t     id;
     bool        freebuf = true;

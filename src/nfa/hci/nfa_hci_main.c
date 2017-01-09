@@ -56,7 +56,7 @@ tNFA_HCI_CB nfa_hci_cb;
 *****************************************************************************/
 
 /* event handler function type */
-static bool    nfa_hci_evt_hdlr (BT_HDR *p_msg);
+static bool    nfa_hci_evt_hdlr (NFC_HDR *p_msg);
 
 static void nfa_hci_sys_enable (void);
 static void nfa_hci_sys_disable (void);
@@ -659,7 +659,7 @@ static void nfa_hci_sys_disable (void)
 static void nfa_hci_conn_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
 {
     uint8_t *p;
-    BT_HDR  *p_pkt = (BT_HDR *) p_data->data.p_data;
+    NFC_HDR  *p_pkt = (NFC_HDR *) p_data->data.p_data;
     uint8_t chaining_bit;
     uint8_t pipe;
     uint16_t  pkt_len;
@@ -1110,7 +1110,7 @@ static void nfa_hci_assemble_msg (uint8_t *p_data, uint16_t data_len)
 ** Returns          TRUE if p_msg needs to be deallocated
 **
 *******************************************************************************/
-static bool    nfa_hci_evt_hdlr (BT_HDR *p_msg)
+static bool    nfa_hci_evt_hdlr (NFC_HDR *p_msg)
 {
     tNFA_HCI_EVENT_DATA *p_evt_data = (tNFA_HCI_EVENT_DATA *)p_msg;
 

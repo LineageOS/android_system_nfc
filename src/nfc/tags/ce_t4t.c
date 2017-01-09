@@ -50,7 +50,7 @@ uint8_t ce_test_tag_app_id[T4T_V20_NDEF_TAG_AID_LEN] = {0xD2, 0x76, 0x00, 0x00, 
 ** Returns          TRUE if success
 **
 *******************************************************************************/
-static bool    ce_t4t_send_to_lower (BT_HDR *p_r_apdu)
+static bool    ce_t4t_send_to_lower (NFC_HDR *p_r_apdu)
 {
 #if (BT_TRACE_PROTOCOL == TRUE)
     DispCET4Tags (p_r_apdu, false);
@@ -75,12 +75,12 @@ static bool    ce_t4t_send_to_lower (BT_HDR *p_r_apdu)
 *******************************************************************************/
 static bool    ce_t4t_send_status (uint16_t status)
 {
-    BT_HDR      *p_r_apdu;
+    NFC_HDR      *p_r_apdu;
     uint8_t     *p;
 
     CE_TRACE_DEBUG1 ("ce_t4t_send_status (): Status:0x%04X", status);
 
-    p_r_apdu = (BT_HDR *) GKI_getpoolbuf (NFC_CE_POOL_ID);
+    p_r_apdu = (NFC_HDR *) GKI_getpoolbuf (NFC_CE_POOL_ID);
 
     if (!p_r_apdu)
     {
@@ -163,7 +163,7 @@ static bool    ce_t4t_read_binary (uint16_t offset, uint8_t length)
 {
     tCE_T4T_MEM *p_t4t = &ce_cb.mem.t4t;
     uint8_t     *p_src = NULL, *p_dst;
-    BT_HDR      *p_r_apdu;
+    NFC_HDR      *p_r_apdu;
 
     CE_TRACE_DEBUG3 ("ce_t4t_read_binary (): Offset:0x%04X, Length:0x%04X, selected status = 0x%02X",
                       offset, length, p_t4t->status);
@@ -182,7 +182,7 @@ static bool    ce_t4t_read_binary (uint16_t offset, uint8_t length)
 
     if (p_src)
     {
-        p_r_apdu = (BT_HDR *) GKI_getpoolbuf (NFC_CE_POOL_ID);
+        p_r_apdu = (NFC_HDR *) GKI_getpoolbuf (NFC_CE_POOL_ID);
 
         if (!p_r_apdu)
         {
@@ -417,7 +417,7 @@ static bool    ce_t4t_process_select_file_cmd (uint8_t *p_cmd)
 ** Returns          none
 **
 *******************************************************************************/
-static void ce_t4t_process_select_app_cmd (uint8_t *p_cmd, BT_HDR *p_c_apdu)
+static void ce_t4t_process_select_app_cmd (uint8_t *p_cmd, NFC_HDR *p_c_apdu)
 {
     uint8_t  data_len;
     uint16_t status_words = 0x0000; /* invalid status words */
@@ -597,7 +597,7 @@ void ce_t4t_process_timeout (TIMER_LIST_ENT *p_tle)
 *******************************************************************************/
 static void ce_t4t_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
 {
-    BT_HDR  *p_c_apdu;
+    NFC_HDR  *p_c_apdu;
     uint8_t *p_cmd;
     uint8_t  cla, instruct, select_type = 0, length;
     uint16_t offset, max_file_size;
@@ -613,7 +613,7 @@ static void ce_t4t_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *
         return;
     }
 
-    p_c_apdu = (BT_HDR *) p_data->data.p_data;
+    p_c_apdu = (NFC_HDR *) p_data->data.p_data;
 
 #if (BT_TRACE_PROTOCOL == TRUE)
     DispCET4Tags (p_c_apdu, true);

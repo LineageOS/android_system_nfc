@@ -46,16 +46,16 @@ void BTDISP_LOCK_LOG();
 void BTDISP_UNLOCK_LOG();
 void BTDISP_INIT_LOCK();
 void BTDISP_UNINIT_LOCK();
-void DispHciCmd (BT_HDR* p_buf);
-void DispHciEvt (BT_HDR* p_buf);
-void DispLLCP (BT_HDR *p_buf, bool    is_recv);
+void DispHciCmd (NFC_HDR* p_buf);
+void DispHciEvt (NFC_HDR* p_buf);
+void DispLLCP (NFC_HDR *p_buf, bool    is_recv);
 void DispHcp (uint8_t *data, uint16_t len, bool    is_recv);
-void DispSNEP (uint8_t local_sap, uint8_t remote_sap, BT_HDR *p_buf, bool    is_first, bool    is_rx);
+void DispSNEP (uint8_t local_sap, uint8_t remote_sap, NFC_HDR *p_buf, bool    is_first, bool    is_rx);
 void DispCHO (uint8_t *pMsg, uint32_t MsgLen, bool    is_rx);
-void DispT3TagMessage(BT_HDR *p_msg, bool    is_rx);
-void DispRWT4Tags (BT_HDR *p_buf, bool    is_rx);
-void DispCET4Tags (BT_HDR *p_buf, bool    is_rx);
-void DispRWI93Tag (BT_HDR *p_buf, bool    is_rx, uint8_t command_to_respond);
+void DispT3TagMessage(NFC_HDR *p_msg, bool    is_rx);
+void DispRWT4Tags (NFC_HDR *p_buf, bool    is_rx);
+void DispCET4Tags (NFC_HDR *p_buf, bool    is_rx);
+void DispRWI93Tag (NFC_HDR *p_buf, bool    is_rx, uint8_t command_to_respond);
 void DispNDEFMsg (uint8_t *pMsg, uint32_t MsgLen, bool    is_recv);
 
 

@@ -140,7 +140,7 @@ typedef struct
     tT1T_CMD_RSP_INFO   *p_cmd_rsp_info;                    /* Pointer to Command rsp info of last sent command     */
     uint8_t             state;                              /* Current state of RW module                           */
     uint8_t             tag_attribute;                      /* Present state of the Tag as interpreted by RW        */
-    BT_HDR              *p_cur_cmd_buf;                     /* Buffer to hold cur sent command for retransmission   */
+    NFC_HDR              *p_cur_cmd_buf;                     /* Buffer to hold cur sent command for retransmission   */
     uint8_t             addr;                               /* ADD/ADD8/ADDS value                                  */
     tRW_T1T_PREV_CMD_RSP_INFO prev_cmd_rsp_info;            /* Information about previous sent command if retx      */
     TIMER_LIST_ENT      timer;                              /* timer to set timelimit for the response to command   */
@@ -305,8 +305,8 @@ typedef struct
     uint16_t            block_read;                         /* Read block                                                   */
     uint16_t            block_written;                      /* Written block                                                */
     tT2T_CMD_RSP_INFO   *p_cmd_rsp_info;                    /* Pointer to Command rsp info of last sent command             */
-    BT_HDR              *p_cur_cmd_buf;                     /* Copy of current command, for retx/send after sector change   */
-    BT_HDR              *p_sec_cmd_buf;                     /* Copy of command, to send after sector change                 */
+    NFC_HDR              *p_cur_cmd_buf;                     /* Copy of current command, for retx/send after sector change   */
+    NFC_HDR              *p_sec_cmd_buf;                     /* Copy of command, to send after sector change                 */
     TIMER_LIST_ENT      t2_timer;                           /* timeout for each API call                                    */
     bool                b_read_hdr;                         /* Tag header read from tag                                     */
     bool                b_read_data;                        /* Tag data block read from tag                                 */
@@ -385,7 +385,7 @@ typedef struct
     tRW_T3T_RW_STATE    rw_state;               /* Reader/writer state */
     uint8_t             rw_substate;
     uint8_t             cur_cmd;                /* Current command being executed */
-    BT_HDR              *p_cur_cmd_buf;         /* Copy of current command, for retransmission */
+    NFC_HDR              *p_cur_cmd_buf;         /* Copy of current command, for retransmission */
     TIMER_LIST_ENT      timer;                  /* timeout for waiting for response */
     TIMER_LIST_ENT      poll_timer;             /* timeout for waiting for response */
 
@@ -412,10 +412,10 @@ typedef struct
 */
 
 /* Max data size using a single ReadBinary. 2 bytes are for status bytes */
-#define RW_T4T_MAX_DATA_PER_READ           (NFC_RW_POOL_BUF_SIZE - BT_HDR_SIZE - NCI_DATA_HDR_SIZE - T4T_RSP_STATUS_WORDS_SIZE)
+#define RW_T4T_MAX_DATA_PER_READ           (NFC_RW_POOL_BUF_SIZE - NFC_HDR_SIZE - NCI_DATA_HDR_SIZE - T4T_RSP_STATUS_WORDS_SIZE)
 
 /* Max data size using a single UpdateBinary. 6 bytes are for CLA, INS, P1, P2, Lc */
-#define RW_T4T_MAX_DATA_PER_WRITE          (NFC_RW_POOL_BUF_SIZE - BT_HDR_SIZE - NCI_MSG_OFFSET_SIZE - NCI_DATA_HDR_SIZE - T4T_CMD_MAX_HDR_SIZE)
+#define RW_T4T_MAX_DATA_PER_WRITE          (NFC_RW_POOL_BUF_SIZE - NFC_HDR_SIZE - NCI_MSG_OFFSET_SIZE - NCI_DATA_HDR_SIZE - T4T_CMD_MAX_HDR_SIZE)
 
 
 
@@ -453,7 +453,7 @@ typedef struct
     uint8_t            *p_update_data;      /* pointer of data to update        */
     uint16_t            rw_length;          /* remaining bytes to read/write    */
     uint16_t            rw_offset;          /* remaining offset to read/write   */
-    BT_HDR             *p_data_to_free;     /* GKI buffet to delete after done  */
+    NFC_HDR             *p_data_to_free;     /* GKI buffet to delete after done  */
 
     tRW_T4T_CC          cc_file;            /* Capability Container File        */
 
@@ -527,7 +527,7 @@ typedef struct
     TIMER_LIST_ENT      timer;                  /* timeout for each sent command    */
     uint8_t             sent_cmd;               /* last sent command                */
     uint8_t             retry_count;            /* number of retry                  */
-    BT_HDR             *p_retry_cmd;            /* buffer to store cmd sent last    */
+    NFC_HDR             *p_retry_cmd;            /* buffer to store cmd sent last    */
 
     uint8_t             info_flags;             /* information flags                */
     uint8_t             uid[I93_UID_BYTE_LEN];  /* UID of currently activated       */

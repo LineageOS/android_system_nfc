@@ -119,7 +119,7 @@ void nfa_dm_init (void)
 ** Returns          void
 **
 *******************************************************************************/
-bool    nfa_dm_evt_hdlr (BT_HDR *p_msg)
+bool    nfa_dm_evt_hdlr (NFC_HDR *p_msg)
 {
     bool    freebuf = true;
     uint16_t  event = p_msg->event & 0x00ff;

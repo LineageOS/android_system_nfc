@@ -34,7 +34,7 @@
 #include "nfa_mem_co.h"
 #include "nfa_hci_defs.h"
 
-static void handle_debug_loopback (BT_HDR *p_buf, uint8_t pipe, uint8_t type, uint8_t instruction);
+static void handle_debug_loopback (NFC_HDR *p_buf, uint8_t pipe, uint8_t type, uint8_t instruction);
 bool    HCI_LOOPBACK_DEBUG = false;
 
 /*******************************************************************************
@@ -315,7 +315,7 @@ tNFA_HCI_DYN_GATE *nfa_hciu_alloc_gate (uint8_t gate_id, tNFA_HANDLE app_handle)
 *******************************************************************************/
 tNFA_STATUS nfa_hciu_send_msg (uint8_t pipe_id, uint8_t type, uint8_t instruction, uint16_t msg_len, uint8_t *p_msg)
 {
-    BT_HDR          *p_buf;
+    NFC_HDR          *p_buf;
     uint8_t         *p_data;
     bool             first_pkt = true;
     uint16_t        data_len;
@@ -337,7 +337,7 @@ tNFA_STATUS nfa_hciu_send_msg (uint8_t pipe_id, uint8_t type, uint8_t instructio
 
     while ((first_pkt == true) || (msg_len != 0))
     {
-        if ((p_buf = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) != NULL)
+        if ((p_buf = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) != NULL)
         {
             p_buf->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
 
@@ -1415,7 +1415,7 @@ char *nfa_hciu_evt_2_str (uint8_t pipe_id, uint8_t evt)
 #endif
 
 
-static void handle_debug_loopback (BT_HDR *p_buf, uint8_t pipe, uint8_t type, uint8_t instruction)
+static void handle_debug_loopback (NFC_HDR *p_buf, uint8_t pipe, uint8_t type, uint8_t instruction)
 {
     uint8_t *p = (uint8_t *) (p_buf + 1) + p_buf->offset;
     static uint8_t  next_pipe = 0x10;
