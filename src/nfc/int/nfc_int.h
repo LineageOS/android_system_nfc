@@ -207,63 +207,63 @@ typedef struct
 *****************************************************************************/
 
 /* Global NFC data */
-NFC_API extern tNFC_CB  nfc_cb;
+extern tNFC_CB  nfc_cb;
 
 /****************************************************************************
 ** Internal nfc functions
 ****************************************************************************/
 
-NFC_API extern void nfc_init(void);
+extern void nfc_init(void);
 
 /* from nfc_utils.c */
-NFC_API extern tNFC_CONN_CB * nfc_alloc_conn_cb ( tNFC_CONN_CBACK *p_cback);
-NFC_API extern tNFC_CONN_CB * nfc_find_conn_cb_by_conn_id (uint8_t conn_id);
-NFC_API extern tNFC_CONN_CB * nfc_find_conn_cb_by_handle (uint8_t target_handle);
-NFC_API extern void nfc_set_conn_id (tNFC_CONN_CB * p_cb, uint8_t conn_id);
-NFC_API extern void nfc_free_conn_cb (tNFC_CONN_CB *p_cb);
-NFC_API extern void nfc_reset_all_conn_cbs (void);
-NFC_API extern void nfc_data_event (tNFC_CONN_CB * p_cb);
+extern tNFC_CONN_CB * nfc_alloc_conn_cb ( tNFC_CONN_CBACK *p_cback);
+extern tNFC_CONN_CB * nfc_find_conn_cb_by_conn_id (uint8_t conn_id);
+extern tNFC_CONN_CB * nfc_find_conn_cb_by_handle (uint8_t target_handle);
+extern void nfc_set_conn_id (tNFC_CONN_CB * p_cb, uint8_t conn_id);
+extern void nfc_free_conn_cb (tNFC_CONN_CB *p_cb);
+extern void nfc_reset_all_conn_cbs (void);
+extern void nfc_data_event (tNFC_CONN_CB * p_cb);
 
 void nfc_ncif_send (NFC_HDR *p_buf, bool    is_cmd);
 extern uint8_t nfc_ncif_send_data (tNFC_CONN_CB *p_cb, NFC_HDR *p_data);
-NFC_API extern void nfc_ncif_cmd_timeout (void);
-NFC_API extern void nfc_wait_2_deactivate_timeout (void);
+extern void nfc_ncif_cmd_timeout (void);
+extern void nfc_wait_2_deactivate_timeout (void);
 
-NFC_API extern bool    nfc_ncif_process_event (NFC_HDR *p_msg);
-NFC_API extern void nfc_ncif_check_cmd_queue (NFC_HDR *p_buf);
-NFC_API extern void nfc_ncif_send_cmd (NFC_HDR *p_buf);
-NFC_API extern void nfc_ncif_proc_discover_ntf (uint8_t *p, uint16_t plen);
-NFC_API extern void nfc_ncif_rf_management_status (tNFC_DISCOVER_EVT event, uint8_t status);
-NFC_API extern void nfc_ncif_set_config_status (uint8_t *p, uint8_t len);
-NFC_API extern void nfc_ncif_event_status (tNFC_RESPONSE_EVT event, uint8_t status);
-NFC_API extern void nfc_ncif_error_status (uint8_t conn_id, uint8_t status);
-NFC_API extern void nfc_ncif_proc_credits(uint8_t *p, uint16_t plen);
-NFC_API extern void nfc_ncif_proc_activate (uint8_t *p, uint8_t len);
-NFC_API extern void nfc_ncif_proc_deactivate (uint8_t status, uint8_t deact_type, bool    is_ntf);
+extern bool    nfc_ncif_process_event (NFC_HDR *p_msg);
+extern void nfc_ncif_check_cmd_queue (NFC_HDR *p_buf);
+extern void nfc_ncif_send_cmd (NFC_HDR *p_buf);
+extern void nfc_ncif_proc_discover_ntf (uint8_t *p, uint16_t plen);
+extern void nfc_ncif_rf_management_status (tNFC_DISCOVER_EVT event, uint8_t status);
+extern void nfc_ncif_set_config_status (uint8_t *p, uint8_t len);
+extern void nfc_ncif_event_status (tNFC_RESPONSE_EVT event, uint8_t status);
+extern void nfc_ncif_error_status (uint8_t conn_id, uint8_t status);
+extern void nfc_ncif_proc_credits(uint8_t *p, uint16_t plen);
+extern void nfc_ncif_proc_activate (uint8_t *p, uint8_t len);
+extern void nfc_ncif_proc_deactivate (uint8_t status, uint8_t deact_type, bool    is_ntf);
 #if (NFC_NFCEE_INCLUDED == TRUE && NFC_RW_ONLY == FALSE)
-NFC_API extern void nfc_ncif_proc_ee_action (uint8_t *p, uint16_t plen);
-NFC_API extern void nfc_ncif_proc_ee_discover_req (uint8_t *p, uint16_t plen);
-NFC_API extern void nfc_ncif_proc_get_routing (uint8_t *p, uint8_t len);
+extern void nfc_ncif_proc_ee_action (uint8_t *p, uint16_t plen);
+extern void nfc_ncif_proc_ee_discover_req (uint8_t *p, uint16_t plen);
+extern void nfc_ncif_proc_get_routing (uint8_t *p, uint8_t len);
 #endif
-NFC_API extern void nfc_ncif_proc_conn_create_rsp (uint8_t *p, uint16_t plen, uint8_t dest_type);
-NFC_API extern void nfc_ncif_report_conn_close_evt (uint8_t conn_id, tNFC_STATUS status);
-NFC_API extern void nfc_ncif_proc_t3t_polling_ntf (uint8_t *p, uint16_t plen);
-NFC_API extern void nfc_ncif_proc_reset_rsp (uint8_t *p, bool    is_ntf);
-NFC_API extern void nfc_ncif_proc_init_rsp (NFC_HDR *p_msg);
-NFC_API extern void nfc_ncif_proc_get_config_rsp (NFC_HDR *p_msg);
-NFC_API extern void nfc_ncif_proc_data (NFC_HDR *p_msg);
-NFC_API extern bool    nfa_dm_p2p_prio_logic(uint8_t event, uint8_t *p, uint8_t ntf_rsp);
-NFC_API extern void nfa_dm_p2p_timer_event ();
-NFC_API extern void nfa_dm_p2p_prio_logic_cleanup ();
+extern void nfc_ncif_proc_conn_create_rsp (uint8_t *p, uint16_t plen, uint8_t dest_type);
+extern void nfc_ncif_report_conn_close_evt (uint8_t conn_id, tNFC_STATUS status);
+extern void nfc_ncif_proc_t3t_polling_ntf (uint8_t *p, uint16_t plen);
+extern void nfc_ncif_proc_reset_rsp (uint8_t *p, bool    is_ntf);
+extern void nfc_ncif_proc_init_rsp (NFC_HDR *p_msg);
+extern void nfc_ncif_proc_get_config_rsp (NFC_HDR *p_msg);
+extern void nfc_ncif_proc_data (NFC_HDR *p_msg);
+extern bool    nfa_dm_p2p_prio_logic(uint8_t event, uint8_t *p, uint8_t ntf_rsp);
+extern void nfa_dm_p2p_timer_event ();
+extern void nfa_dm_p2p_prio_logic_cleanup ();
 
 #if (NFC_RW_ONLY == FALSE)
-NFC_API extern void nfc_ncif_proc_rf_field_ntf (uint8_t rf_status);
+extern void nfc_ncif_proc_rf_field_ntf (uint8_t rf_status);
 #else
 #define nfc_ncif_proc_rf_field_ntf(rf_status)
 #endif
 
 /* From nfc_task.c */
-NFC_API extern uint32_t nfc_task (uint32_t param);
+extern uint32_t nfc_task (uint32_t param);
 void nfc_task_shutdown_nfcc (void);
 
 /* From nfc_main.c */

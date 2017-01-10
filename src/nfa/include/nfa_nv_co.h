@@ -88,7 +88,7 @@ typedef uint8_t tNFA_NV_CO_STATUS;
 **                        or an error has occurred.
 **
 *******************************************************************************/
-NFC_API extern void nfa_nv_co_read (uint8_t *p_buf, uint16_t nbytes, uint8_t block);
+extern void nfa_nv_co_read (uint8_t *p_buf, uint16_t nbytes, uint8_t block);
 
 /*******************************************************************************
 **
@@ -108,7 +108,7 @@ NFC_API extern void nfa_nv_co_read (uint8_t *p_buf, uint16_t nbytes, uint8_t blo
 **                        bytes have been written, or an error has been detected,
 **
 *******************************************************************************/
-NFC_API extern void nfa_nv_co_write (const uint8_t *p_buf, uint16_t nbytes, uint8_t block);
+extern void nfa_nv_co_write (const uint8_t *p_buf, uint16_t nbytes, uint8_t block);
 
 
 #endif /* NFA_NV_CO_H */

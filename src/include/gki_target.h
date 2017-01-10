@@ -32,20 +32,6 @@
 #define _BT_WIN32
 #endif
 
-/* define prefix for exporting APIs from libraries */
-#define EXPORT_API
-
-#ifndef BTE_BSE_WRAPPER
-#ifdef  BTE_SIM_APP
-#undef  EXPORT_API
-#define EXPORT_API  __declspec(dllexport)
-#endif
-#endif
-
-#define GKI_API EXPORT_API
-#define UDRV_API EXPORT_API
-
-
 /******************************************************************************
 **
 ** Task configuration
@@ -418,7 +404,7 @@ extern "C"
 {
 #endif
 
-EXPORT_API extern void LogMsg (uint32_t trace_set_mask, const char *fmt_str, ...);
+extern void LogMsg (uint32_t trace_set_mask, const char *fmt_str, ...);
 
 #ifdef __cplusplus
 }

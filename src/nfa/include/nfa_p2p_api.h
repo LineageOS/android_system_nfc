@@ -208,10 +208,10 @@ extern "C"
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_P2pRegisterServer (uint8_t            server_sap,
-                                                  tNFA_P2P_LINK_TYPE link_type,
-                                                  char              *p_service_name,
-                                                  tNFA_P2P_CBACK    *p_cback);
+extern tNFA_STATUS NFA_P2pRegisterServer (uint8_t            server_sap,
+                                          tNFA_P2P_LINK_TYPE link_type,
+                                          char              *p_service_name,
+                                          tNFA_P2P_CBACK    *p_cback);
 
 /*******************************************************************************
 **
@@ -227,8 +227,8 @@ NFC_API extern tNFA_STATUS NFA_P2pRegisterServer (uint8_t            server_sap,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_P2pRegisterClient (tNFA_P2P_LINK_TYPE link_type,
-                                                  tNFA_P2P_CBACK *p_cback);
+extern tNFA_STATUS NFA_P2pRegisterClient (tNFA_P2P_LINK_TYPE link_type,
+                                          tNFA_P2P_CBACK *p_cback);
 
 /*******************************************************************************
 **
@@ -246,7 +246,7 @@ NFC_API extern tNFA_STATUS NFA_P2pRegisterClient (tNFA_P2P_LINK_TYPE link_type,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_P2pDeregister (tNFA_HANDLE handle);
+extern tNFA_STATUS NFA_P2pDeregister (tNFA_HANDLE handle);
 
 /*******************************************************************************
 **
@@ -261,9 +261,9 @@ NFC_API extern tNFA_STATUS NFA_P2pDeregister (tNFA_HANDLE handle);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_P2pAcceptConn (tNFA_HANDLE conn_handle,
-                                              uint16_t    miu,
-                                              uint8_t     rw);
+extern tNFA_STATUS NFA_P2pAcceptConn (tNFA_HANDLE conn_handle,
+                                      uint16_t    miu,
+                                      uint8_t     rw);
 
 /*******************************************************************************
 **
@@ -278,7 +278,7 @@ NFC_API extern tNFA_STATUS NFA_P2pAcceptConn (tNFA_HANDLE conn_handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_P2pRejectConn (tNFA_HANDLE conn_handle);
+extern tNFA_STATUS NFA_P2pRejectConn (tNFA_HANDLE conn_handle);
 
 /*******************************************************************************
 **
@@ -296,8 +296,8 @@ NFC_API extern tNFA_STATUS NFA_P2pRejectConn (tNFA_HANDLE conn_handle);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_P2pDisconnect (tNFA_HANDLE conn_handle,
-                                              bool        flush);
+extern tNFA_STATUS NFA_P2pDisconnect (tNFA_HANDLE conn_handle,
+                                      bool        flush);
 
 /*******************************************************************************
 **
@@ -313,10 +313,10 @@ NFC_API extern tNFA_STATUS NFA_P2pDisconnect (tNFA_HANDLE conn_handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_P2pConnectByName (tNFA_HANDLE client_handle,
-                                                 char       *p_service_name,
-                                                 uint16_t    miu,
-                                                 uint8_t     rw);
+extern tNFA_STATUS NFA_P2pConnectByName (tNFA_HANDLE client_handle,
+                                         char       *p_service_name,
+                                         uint16_t    miu,
+                                         uint8_t     rw);
 
 /*******************************************************************************
 **
@@ -332,10 +332,10 @@ NFC_API extern tNFA_STATUS NFA_P2pConnectByName (tNFA_HANDLE client_handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_P2pConnectBySap (tNFA_HANDLE client_handle,
-                                                uint8_t     dsap,
-                                                uint16_t    miu,
-                                                uint8_t     rw);
+extern tNFA_STATUS NFA_P2pConnectBySap (tNFA_HANDLE client_handle,
+                                        uint8_t     dsap,
+                                        uint16_t    miu,
+                                        uint8_t     rw);
 
 /*******************************************************************************
 **
@@ -351,10 +351,10 @@ NFC_API extern tNFA_STATUS NFA_P2pConnectBySap (tNFA_HANDLE client_handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_P2pSendUI (tNFA_HANDLE handle,
-                                          uint8_t     dsap,
-                                          uint16_t    length,
-                                          uint8_t    *p_data);
+extern tNFA_STATUS NFA_P2pSendUI (tNFA_HANDLE handle,
+                                  uint8_t     dsap,
+                                  uint16_t    length,
+                                  uint8_t    *p_data);
 
 /*******************************************************************************
 **
@@ -373,12 +373,12 @@ NFC_API extern tNFA_STATUS NFA_P2pSendUI (tNFA_HANDLE handle,
 **                  NFA_STATUS_BAD_HANDLE if handle is not valid
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_P2pReadUI (tNFA_HANDLE handle,
-                                          uint32_t    max_data_len,
-                                          uint8_t     *p_remote_sap,
-                                          uint32_t    *p_data_len,
-                                          uint8_t     *p_data,
-                                          bool        *p_more);
+extern tNFA_STATUS NFA_P2pReadUI (tNFA_HANDLE handle,
+                                  uint32_t    max_data_len,
+                                  uint8_t     *p_remote_sap,
+                                  uint32_t    *p_data_len,
+                                  uint8_t     *p_data,
+                                  bool        *p_more);
 
 /*******************************************************************************
 **
@@ -391,8 +391,8 @@ NFC_API extern tNFA_STATUS NFA_P2pReadUI (tNFA_HANDLE handle,
 **                  NFA_STATUS_BAD_HANDLE if handle is not valid
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_P2pFlushUI (tNFA_HANDLE handle,
-                                           uint32_t    *p_length);
+extern tNFA_STATUS NFA_P2pFlushUI (tNFA_HANDLE handle,
+                                   uint32_t    *p_length);
 
 /*******************************************************************************
 **
@@ -408,9 +408,9 @@ NFC_API extern tNFA_STATUS NFA_P2pFlushUI (tNFA_HANDLE handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_P2pSendData (tNFA_HANDLE conn_handle,
-                                            uint16_t    length,
-                                            uint8_t    *p_data);
+extern tNFA_STATUS NFA_P2pSendData (tNFA_HANDLE conn_handle,
+                                    uint16_t    length,
+                                    uint8_t    *p_data);
 
 /*******************************************************************************
 **
@@ -428,11 +428,11 @@ NFC_API extern tNFA_STATUS NFA_P2pSendData (tNFA_HANDLE conn_handle,
 **                  NFA_STATUS_BAD_HANDLE if handle is not valid
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_P2pReadData (tNFA_HANDLE handle,
-                                            uint32_t    max_data_len,
-                                            uint32_t    *p_data_len,
-                                            uint8_t     *p_data,
-                                            bool        *p_more);
+extern tNFA_STATUS NFA_P2pReadData (tNFA_HANDLE handle,
+                                    uint32_t    max_data_len,
+                                    uint32_t    *p_data_len,
+                                    uint8_t     *p_data,
+                                    bool        *p_more);
 
 /*******************************************************************************
 **
@@ -445,8 +445,8 @@ NFC_API extern tNFA_STATUS NFA_P2pReadData (tNFA_HANDLE handle,
 **                  NFA_STATUS_BAD_HANDLE if handle is not valid
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_P2pFlushData (tNFA_HANDLE handle,
-                                             uint32_t    *p_length);
+extern tNFA_STATUS NFA_P2pFlushData (tNFA_HANDLE handle,
+                                     uint32_t    *p_length);
 
 /*******************************************************************************
 **
@@ -460,8 +460,8 @@ NFC_API extern tNFA_STATUS NFA_P2pFlushData (tNFA_HANDLE handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_P2pSetLocalBusy (tNFA_HANDLE conn_handle,
-                                                bool        is_busy);
+extern tNFA_STATUS NFA_P2pSetLocalBusy (tNFA_HANDLE conn_handle,
+                                        bool        is_busy);
 
 /*******************************************************************************
 **
@@ -476,7 +476,7 @@ NFC_API extern tNFA_STATUS NFA_P2pSetLocalBusy (tNFA_HANDLE conn_handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_P2pGetLinkInfo (tNFA_HANDLE handle);
+extern tNFA_STATUS NFA_P2pGetLinkInfo (tNFA_HANDLE handle);
 
 /*******************************************************************************
 **
@@ -491,8 +491,8 @@ NFC_API extern tNFA_STATUS NFA_P2pGetLinkInfo (tNFA_HANDLE handle);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_P2pGetRemoteSap (tNFA_HANDLE handle,
-                                                char       *p_service_name);
+extern tNFA_STATUS NFA_P2pGetRemoteSap (tNFA_HANDLE handle,
+                                        char       *p_service_name);
 
 /*******************************************************************************
 **
@@ -516,15 +516,15 @@ NFC_API extern tNFA_STATUS NFA_P2pGetRemoteSap (tNFA_HANDLE handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_P2pSetLLCPConfig (uint16_t link_miu,
-                                                 uint8_t  opt,
-                                                 uint8_t  wt,
-                                                 uint16_t link_timeout,
-                                                 uint16_t inact_timeout_init,
-                                                 uint16_t inact_timeout_target,
-                                                 uint16_t symm_delay,
-                                                 uint16_t data_link_timeout,
-                                                 uint16_t delay_first_pdu_timeout);
+extern tNFA_STATUS NFA_P2pSetLLCPConfig (uint16_t link_miu,
+                                         uint8_t  opt,
+                                         uint8_t  wt,
+                                         uint16_t link_timeout,
+                                         uint16_t inact_timeout_init,
+                                         uint16_t inact_timeout_target,
+                                         uint16_t symm_delay,
+                                         uint16_t data_link_timeout,
+                                         uint16_t delay_first_pdu_timeout);
 
 /*******************************************************************************
 **
@@ -546,15 +546,15 @@ NFC_API extern tNFA_STATUS NFA_P2pSetLLCPConfig (uint16_t link_miu,
 ** Returns          None
 **
 *******************************************************************************/
-NFC_API extern void NFA_P2pGetLLCPConfig (uint16_t *p_link_miu,
-                                          uint8_t  *p_opt,
-                                          uint8_t  *p_wt,
-                                          uint16_t *p_link_timeout,
-                                          uint16_t *p_inact_timeout_init,
-                                          uint16_t *p_inact_timeout_target,
-                                          uint16_t *p_symm_delay,
-                                          uint16_t *p_data_link_timeout,
-                                          uint16_t *p_delay_first_pdu_timeout);
+extern void NFA_P2pGetLLCPConfig (uint16_t *p_link_miu,
+                                  uint8_t  *p_opt,
+                                  uint8_t  *p_wt,
+                                  uint16_t *p_link_timeout,
+                                  uint16_t *p_inact_timeout_init,
+                                  uint16_t *p_inact_timeout_target,
+                                  uint16_t *p_symm_delay,
+                                  uint16_t *p_data_link_timeout,
+                                  uint16_t *p_delay_first_pdu_timeout);
 
 /*******************************************************************************
 **
@@ -566,7 +566,7 @@ NFC_API extern void NFA_P2pGetLLCPConfig (uint16_t *p_link_miu,
 ** Returns          The new or current trace level
 **
 *******************************************************************************/
-NFC_API extern uint8_t NFA_P2pSetTraceLevel (uint8_t new_level);
+extern uint8_t NFA_P2pSetTraceLevel (uint8_t new_level);
 
 #ifdef __cplusplus
 }
