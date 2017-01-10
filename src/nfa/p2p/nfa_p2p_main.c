@@ -571,8 +571,6 @@ void nfa_p2p_enable_listening (tNFA_SYS_ID sys_id, bool    update_wks)
 
     if (sys_id == NFA_ID_P2P)
         nfa_p2p_cb.is_p2p_listening = true;
-    else if (sys_id == NFA_ID_CHO)
-        nfa_p2p_cb.is_cho_listening = true;
     else if (sys_id == NFA_ID_SNEP)
         nfa_p2p_cb.is_snep_listening = true;
 
@@ -629,15 +627,12 @@ void nfa_p2p_disable_listening (tNFA_SYS_ID sys_id, bool    update_wks)
 
     if (sys_id == NFA_ID_P2P)
         nfa_p2p_cb.is_p2p_listening = false;
-    else if (sys_id == NFA_ID_CHO)
-        nfa_p2p_cb.is_cho_listening = false;
     else if (sys_id == NFA_ID_SNEP)
         nfa_p2p_cb.is_snep_listening = false;
 
     if (nfa_p2p_cb.dm_disc_handle != NFA_HANDLE_INVALID)
     {
         if (  (nfa_p2p_cb.is_p2p_listening == false)
-            &&(nfa_p2p_cb.is_cho_listening == false)
             &&(nfa_p2p_cb.is_snep_listening == false)  )
         {
             nfa_p2p_cb.llcp_state    = NFA_P2P_LLCP_STATE_IDLE;
@@ -689,8 +684,6 @@ void nfa_p2p_update_listen_tech (tNFA_TECHNOLOGY_MASK tech_mask)
         /* restart discovery without updating sub-module status */
         if (nfa_p2p_cb.is_p2p_listening)
             nfa_p2p_enable_listening (NFA_ID_P2P, false);
-        else if (nfa_p2p_cb.is_cho_listening)
-            nfa_p2p_enable_listening (NFA_ID_CHO, false);
         else if (nfa_p2p_cb.is_snep_listening)
             nfa_p2p_enable_listening (NFA_ID_SNEP, false);
     }
