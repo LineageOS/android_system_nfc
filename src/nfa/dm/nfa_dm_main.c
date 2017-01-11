@@ -121,7 +121,7 @@ void nfa_dm_init (void)
 *******************************************************************************/
 bool    nfa_dm_evt_hdlr (BT_HDR *p_msg)
 {
-    bool    freebuf = TRUE;
+    bool    freebuf = true;
     uint16_t  event = p_msg->event & 0x00ff;
 
 #if (BT_TRACE_VERBOSE == TRUE)
@@ -208,10 +208,10 @@ bool    nfa_dm_is_active (void)
     if (  (nfa_dm_cb.flags  & NFA_DM_FLAGS_DM_IS_ACTIVE)
         &&((nfa_dm_cb.flags & (NFA_DM_FLAGS_ENABLE_EVT_PEND | NFA_DM_FLAGS_NFCC_IS_RESTORING | NFA_DM_FLAGS_POWER_OFF_SLEEP)) == 0)  )
     {
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 /*******************************************************************************
 **
@@ -242,7 +242,7 @@ tNFA_STATUS nfa_dm_check_set_config (uint8_t tlv_list_len, uint8_t *p_tlv_list, 
 
     while (tlv_list_len - xx >= 2) /* at least type and len */
     {
-        update  = FALSE;
+        update = false;
         type    = *(p_tlv_list + xx);
         len     = *(p_tlv_list + xx + 1);
         p_value = p_tlv_list + xx + 2;
@@ -371,7 +371,7 @@ tNFA_STATUS nfa_dm_check_set_config (uint8_t tlv_list_len, uint8_t *p_tlv_list, 
             else
             {
                 /* we don't stored this config items */
-                update   = TRUE;
+                update = true;
                 p_stored = NULL;
             }
             break;
@@ -384,18 +384,18 @@ tNFA_STATUS nfa_dm_check_set_config (uint8_t tlv_list_len, uint8_t *p_tlv_list, 
                 if (*p_cur_len != len)
                 {
                     *p_cur_len = len;
-                    update = TRUE;
+                    update = true;
                 }
                 else if (memcmp (p_value, p_stored, len))
                 {
-                    update = TRUE;
+                    update = true;
                 }
             }
             else if (len == max_len)  /* fixed length */
             {
                 if (memcmp (p_value, p_stored, len))
                 {
-                    update = TRUE;
+                    update = true;
                 }
             }
         }

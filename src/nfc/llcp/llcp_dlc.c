@@ -439,7 +439,7 @@ static tLLCP_STATUS llcp_dlsm_connected (tLLCP_DLCB *p_dlcb, tLLCP_DLC_EVENT eve
                                     p_dlcb->local_sap, p_dlcb->remote_sap, p_dlcb->i_xmit_q.count);
 
                 /* set congested here so overall congestion check routine will not report event again */
-                p_dlcb->is_tx_congested = TRUE;
+                p_dlcb->is_tx_congested = true;
                 status = LLCP_STATUS_CONGESTED;
             }
         }
@@ -947,7 +947,7 @@ void llcp_dlc_proc_i_pdu (uint8_t dsap, uint8_t ssap, uint16_t i_pdu_length, uin
             p_dlcb->next_rx_seq  = (p_dlcb->next_rx_seq + 1) % LLCP_SEQ_MODULO;
             p_dlcb->rcvd_ack_seq = rcv_seq;
 
-            appended = FALSE;
+            appended = false;
 
             /* get last buffer in rx queue */
             p_last_buf = (BT_HDR *) GKI_getlast (&p_dlcb->i_rx_q);
@@ -978,7 +978,7 @@ void llcp_dlc_proc_i_pdu (uint8_t dsap, uint8_t ssap, uint16_t i_pdu_length, uin
                         p_msg = NULL;
                     }
 
-                    appended = TRUE;
+                    appended = true;
                 }
             }
 
@@ -1047,7 +1047,7 @@ void llcp_dlc_proc_i_pdu (uint8_t dsap, uint8_t ssap, uint16_t i_pdu_length, uin
                                     p_dlcb->num_rx_i_pdu, p_dlcb->rx_congest_threshold);
 
                 /* send RNR */
-                p_dlcb->is_rx_congested = TRUE;
+                p_dlcb->is_rx_congested = true;
                 p_dlcb->flags |= LLCP_DATA_LINK_FLAG_PENDING_RR_RNR;
             }
         }
@@ -1077,7 +1077,7 @@ static void llcp_dlc_proc_rr_rnr_pdu (uint8_t dsap, uint8_t ptype, uint8_t ssap,
 {
     uint8_t    rcv_seq, error_flags;
     tLLCP_DLCB *p_dlcb;
-    bool        flush = TRUE;
+    bool        flush = true;
     tLLCP_SAP_CBACK_DATA cback_data;
     bool                 old_remote_busy;
 
@@ -1122,7 +1122,7 @@ static void llcp_dlc_proc_rr_rnr_pdu (uint8_t dsap, uint8_t ptype, uint8_t ssap,
             old_remote_busy = p_dlcb->remote_busy;
             if (ptype == LLCP_PDU_RNR_TYPE)
             {
-                p_dlcb->remote_busy = TRUE;
+                p_dlcb->remote_busy = true;
                 /* if upper layer hasn't get congestion started notification */
                 if (  (!old_remote_busy)
                     &&(!p_dlcb->is_tx_congested)  )
@@ -1134,7 +1134,7 @@ static void llcp_dlc_proc_rr_rnr_pdu (uint8_t dsap, uint8_t ptype, uint8_t ssap,
                     cback_data.congest.event        = LLCP_SAP_EVT_CONGEST;
                     cback_data.congest.local_sap    = p_dlcb->local_sap;
                     cback_data.congest.remote_sap   = p_dlcb->remote_sap;
-                    cback_data.congest.is_congested = TRUE;
+                    cback_data.congest.is_congested = true;
                     cback_data.congest.link_type    = LLCP_LINK_TYPE_DATA_LINK_CONNECTION;
 
                     (*p_dlcb->p_app_cb->p_app_cback) (&cback_data);
@@ -1142,7 +1142,7 @@ static void llcp_dlc_proc_rr_rnr_pdu (uint8_t dsap, uint8_t ptype, uint8_t ssap,
             }
             else
             {
-                p_dlcb->remote_busy = FALSE;
+                p_dlcb->remote_busy = false;
                 /* if upper layer hasn't get congestion ended notification and data link is not congested */
                 if (  (old_remote_busy)
                     &&(!p_dlcb->is_tx_congested)  )
@@ -1154,7 +1154,7 @@ static void llcp_dlc_proc_rr_rnr_pdu (uint8_t dsap, uint8_t ptype, uint8_t ssap,
                     cback_data.congest.event        = LLCP_SAP_EVT_CONGEST;
                     cback_data.congest.local_sap    = p_dlcb->local_sap;
                     cback_data.congest.remote_sap   = p_dlcb->remote_sap;
-                    cback_data.congest.is_congested = FALSE;
+                    cback_data.congest.is_congested = false;
                     cback_data.congest.link_type    = LLCP_LINK_TYPE_DATA_LINK_CONNECTION;
 
                     (*p_dlcb->p_app_cb->p_app_cback) (&cback_data);
@@ -1259,7 +1259,7 @@ void llcp_dlc_proc_rx_pdu (uint8_t dsap, uint8_t ptype, uint8_t ssap, uint16_t l
 void llcp_dlc_check_to_send_rr_rnr (void)
 {
     uint8_t idx;
-    bool    flush = TRUE;
+    bool    flush = true;
 
     LLCP_TRACE_DEBUG0 ("llcp_dlc_check_to_send_rr_rnr ()");
 
@@ -1306,13 +1306,13 @@ bool    llcp_dlc_is_rw_open (tLLCP_DLCB *p_dlcb)
 {
     if ((uint8_t) (p_dlcb->next_tx_seq - p_dlcb->rcvd_ack_seq) % LLCP_SEQ_MODULO < p_dlcb->remote_rw)
     {
-        return TRUE;
+        return true;
     }
     else
     {
         LLCP_TRACE_DEBUG3 ("llcp_dlc_is_rw_open ():Flow Off, V(S):%d, V(SA):%d, RW(R):%d",
                            p_dlcb->next_tx_seq, p_dlcb->rcvd_ack_seq, p_dlcb->remote_rw);
-        return FALSE;
+        return false;
     }
 }
 
@@ -1328,7 +1328,7 @@ bool    llcp_dlc_is_rw_open (tLLCP_DLCB *p_dlcb)
 BT_HDR* llcp_dlc_get_next_pdu (tLLCP_DLCB *p_dlcb)
 {
     BT_HDR *p_msg = NULL;
-    bool    flush = TRUE;
+    bool    flush = true;
     tLLCP_SAP_CBACK_DATA data;
 
 #if (BT_TRACE_VERBOSE == TRUE)

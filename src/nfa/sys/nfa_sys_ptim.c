@@ -137,7 +137,7 @@ void nfa_sys_ptim_start_timer (tPTIM_CB *p_cb, TIMER_LIST_ENT *p_tle, uint16_t t
     {
         NFA_TRACE_DEBUG0 ("ptim timer start");
         p_cb->last_gki_ticks = GKI_get_tick_count ();
-        GKI_start_timer (p_cb->timer_id, GKI_MS_TO_TICKS (p_cb->period), TRUE);
+        GKI_start_timer (p_cb->timer_id, GKI_MS_TO_TICKS (p_cb->period), true);
     }
 
     GKI_remove_from_timer_list (&p_cb->timer_queue, p_tle);

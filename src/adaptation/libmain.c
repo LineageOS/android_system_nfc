@@ -199,12 +199,12 @@ extern void nfa_nv_co_write(const uint8_t *pBuffer, uint16_t nbytes, uint8_t blo
 *******************************************************************************/
 void delete_stack_non_volatile_store (bool    forceDelete)
 {
-    static bool    firstTime = TRUE;
+    static bool    firstTime = true;
     char filename[256], filename2[256];
 
-    if ((firstTime == FALSE) && (forceDelete == FALSE))
+    if ((firstTime == false) && (forceDelete == false))
         return;
-    firstTime = FALSE;
+    firstTime = false;
 
     ALOGD ("%s", __func__);
 
@@ -244,7 +244,7 @@ void verify_stack_non_volatile_store ()
 {
     ALOGD ("%s", __func__);
     char filename[256], filename2[256];
-    bool    isValid = FALSE;
+    bool    isValid = false;
 
     memset (filename, 0, sizeof(filename));
     memset (filename2, 0, sizeof(filename2));
@@ -270,13 +270,13 @@ void verify_stack_non_volatile_store ()
                 {
                     sprintf (filename, "%s%u", filename2, HC_F5_NV_BLOCK);
                     if (crcChecksumVerifyIntegrity (filename))
-                        isValid = TRUE;
+                        isValid = true;
                 }
             }
         }
     }
 
-    if (isValid == FALSE)
-        delete_stack_non_volatile_store (TRUE);
+    if (isValid == false)
+        delete_stack_non_volatile_store (true);
 }
 

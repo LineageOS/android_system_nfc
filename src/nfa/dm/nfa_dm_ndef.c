@@ -182,7 +182,7 @@ bool    nfa_dm_ndef_reg_hdlr (tNFA_DM_MSG *p_data)
         NFA_TRACE_DEBUG1 ("NDEF handler successfully registered. Handle=0x%08x", p_reg_info->ndef_type_handle);
         (*(p_reg_info->p_ndef_cback)) (NFA_NDEF_REGISTER_EVT, (tNFA_NDEF_EVT_DATA *) &ndef_register);
 
-        return FALSE;       /* indicate that we will free message buffer when type_handler is deregistered */
+        return false;       /* indicate that we will free message buffer when type_handler is deregistered */
     }
     else
     {
@@ -192,7 +192,7 @@ bool    nfa_dm_ndef_reg_hdlr (tNFA_DM_MSG *p_data)
         ndef_register.status = NFA_STATUS_FAILED;
         (*(p_reg_info->p_ndef_cback)) (NFA_NDEF_REGISTER_EVT, (tNFA_NDEF_EVT_DATA *) &ndef_register);
 
-        return TRUE;
+        return true;
     }
 }
 
@@ -221,7 +221,7 @@ bool    nfa_dm_ndef_dereg_hdlr (tNFA_DM_MSG *p_data)
     }
 
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -407,7 +407,7 @@ void nfa_dm_ndef_handle_message (tNFA_STATUS status, uint8_t *p_msg_buf, uint32_
     }
 
     /* Validate the NDEF message */
-    if ((ndef_status = NDEF_MsgValidate (p_msg_buf, len, TRUE)) != NDEF_OK)
+    if ((ndef_status = NDEF_MsgValidate (p_msg_buf, len, true)) != NDEF_OK)
     {
         NFA_TRACE_ERROR1 ("Received invalid NDEF message. NDEF status=0x%x", ndef_status);
         return;
@@ -419,7 +419,7 @@ void nfa_dm_ndef_handle_message (tNFA_STATUS status, uint8_t *p_msg_buf, uint32_
     nfa_dm_ndef_clear_notified_flag ();
 
     /* Indicate that no handler has handled this entire NDEF message (e.g. connection-handover handler *) */
-    entire_message_handled = FALSE;
+    entire_message_handled = false;
 
     /* Get first record in message */
     p_rec = p_ndef_start = p_msg_buf;
@@ -431,7 +431,7 @@ void nfa_dm_ndef_handle_message (tNFA_STATUS status, uint8_t *p_msg_buf, uint32_
         p_type = NDEF_RecGetType (p_rec, &tnf, &type_len);
 
         /* Indicate record not handled yet */
-        record_handled = FALSE;
+        record_handled = false;
 
         /* Get pointer to record payload */
         p_payload = NDEF_RecGetPayload (p_rec, &payload_len);
@@ -506,14 +506,14 @@ void nfa_dm_ndef_handle_message (tNFA_STATUS status, uint8_t *p_msg_buf, uint32_
                 p_handler->flags |= NFA_NDEF_FLAGS_WHOLE_MESSAGE_NOTIFIED;
 
                 /* Indicate that at least one handler has received entire NDEF message */
-                entire_message_handled = TRUE;
+                entire_message_handled = true;
             }
 
             /* Notify NDEF type handler */
             (*p_handler->p_ndef_cback) (NFA_NDEF_DATA_EVT, (tNFA_NDEF_EVT_DATA *) &ndef_data);
 
             /* Indicate that at lease one handler has received this record */
-            record_handled = TRUE;
+            record_handled = true;
 
             /* Look for next handler */
             p_handler = nfa_dm_ndef_find_next_handler (p_handler, tnf, p_type, type_len, p_payload, payload_len);

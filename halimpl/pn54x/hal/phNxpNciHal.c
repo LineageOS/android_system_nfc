@@ -39,7 +39,7 @@ static uint8_t cmd_icode_eof[] = { 0x00, 0x00, 0x00 };
 /* FW download success flag */
 static uint8_t fw_download_success = 0;
 
-static uint8_t config_access = FALSE;
+static uint8_t config_access = false;
 /* NCI HAL Control structure */
 phNxpNciHal_Control_t nxpncihal_ctrl;
 
@@ -73,11 +73,11 @@ extern bool_t rf_deactive_cmd;
 uint32_t timeoutTimerId = 0;
 phNxpNciHal_Sem_t config_data;
 
-phNxpNciClock_t phNxpNciClock={0, {0}, FALSE};
+phNxpNciClock_t phNxpNciClock={0, {0}, false};
 
-phNxpNciRfSetting_t phNxpNciRfSet={FALSE, {0} };
+phNxpNciRfSetting_t phNxpNciRfSet={false, {0} };
 
-phNxpNciMwEepromArea_t phNxpNciMwEepromArea = {FALSE, {0} };
+phNxpNciMwEepromArea_t phNxpNciMwEepromArea = {false, {0} };
 
 /**************** local methods used in this file only ************************/
 static NFCSTATUS phNxpNciHal_fw_download(void);
@@ -352,7 +352,7 @@ static NFCSTATUS phNxpNciHal_CheckValidFwVersion(void)
         }
     }
 #if(NFC_NXP_CHIP_TYPE != PN547C2)
-    else if (gRecFWDwnld == TRUE)
+    else if (gRecFWDwnld == true)
     {
         status = NFCSTATUS_SUCCESS;
     }
@@ -721,7 +721,7 @@ static void phNxpNciHal_open_complete(NFCSTATUS status)
     if (status == NFCSTATUS_SUCCESS)
     {
         msg.eMsgType = NCI_HAL_OPEN_CPLT_MSG;
-        nxpncihal_ctrl.hal_open_status = TRUE;
+        nxpncihal_ctrl.hal_open_status = true;
     }
     else
     {
@@ -767,7 +767,7 @@ int phNxpNciHal_write(uint16_t data_len, const uint8_t *p_data)
     if (p_data[0] == 0x21&&
         p_data[1] == 0x06 &&
         p_data[2] == 0x01 &&
-        EnableP2P_PrioLogic == TRUE)
+        EnableP2P_PrioLogic == true)
     {
         NXPLOG_NCIHAL_D ("P2P priority logic busy: Disable it.");
         phNxpNciHal_clean_P2P_Prio();
@@ -778,8 +778,8 @@ int phNxpNciHal_write(uint16_t data_len, const uint8_t *p_data)
         p_data[1] == 0x06 &&
         p_data[2] == 0x01)
     {
-        rf_deactive_cmd = TRUE;
-        if (kovio_detected == TRUE)
+        rf_deactive_cmd = true;
+        if (kovio_detected == true)
         {
             NXPLOG_NCIHAL_D ("Kovio detection logic is active: Set Flag to disable it.");
             disable_kovio = 0x01;
@@ -899,7 +899,7 @@ int phNxpNciHal_write_unlocked(uint16_t data_len, const uint8_t *p_data)
             }
             if (nxpncihal_ctrl.p_nfc_stack_data_cback!= NULL &&
                 nxpncihal_ctrl.p_rx_data!= NULL &&
-                nxpncihal_ctrl.hal_open_status == TRUE)
+                nxpncihal_ctrl.hal_open_status == true)
             {
                 NXPLOG_NCIHAL_D("Send the Core Reset NTF to upper layer, which will trigger the recovery\n");
                 //Send the Core Reset NTF to upper layer, which will trigger the recovery.
@@ -987,7 +987,7 @@ static void phNxpNciHal_read_complete(void *pContext, phTmlNfc_TransactInfo_t *p
             }
             /* Unlock semaphore only for responses*/
             if ((nxpncihal_ctrl.p_rx_data[0x00] & 0xF0) == 0x40 ||
-               ((icode_detected == TRUE) &&(icode_send_eof == 3)))
+               ((icode_detected == true) &&(icode_send_eof == 3)))
             {
                 /* Unlock semaphore */
                 SEM_POST (&(nxpncihal_ctrl.ext_cb_data));
@@ -1085,7 +1085,7 @@ int phNxpNciHal_core_initialized(uint8_t* p_core_init_rsp_params)
     if((*p_core_init_rsp_params > 0) && (*p_core_init_rsp_params < 4)) //initializing for recovery.
     {
 retry_core_init:
-        config_access = FALSE;
+        config_access = false;
         if(buffer != NULL)
         {
             free(buffer);
@@ -1141,7 +1141,7 @@ retry_core_init:
     {
         return NFCSTATUS_FAILED;
     }
-    config_access = TRUE;
+    config_access = true;
     retlen = 0;
     isfound = GetNxpByteArrayValue(NAME_NXP_ACT_PROP_EXTN, (char *) buffer,
             bufflen, &retlen);
@@ -1181,7 +1181,7 @@ retry_core_init:
     {
         //phNxpNciHal_get_clk_freq();
         phNxpNciHal_set_clock();
-        phNxpNciClock.issetConfig = FALSE;
+        phNxpNciClock.issetConfig = false;
 #if(NFC_NXP_HFO_SETTINGS == TRUE)
         if (temp_fix == 1 )
         {
@@ -1215,7 +1215,7 @@ retry_core_init:
 
     phNxpNciHal_check_factory_reset();
     retlen = 0;
-    config_access = TRUE;
+    config_access = true;
     isfound = GetNxpByteArrayValue(NAME_NXP_NFC_PROFILE_EXTN, (char *) buffer,
             bufflen, &retlen);
     if (retlen > 0) {
@@ -1282,7 +1282,7 @@ retry_core_init:
 #endif
         retlen = 0;
 #if(NFC_NXP_CHIP_TYPE != PN547C2)
-        config_access = FALSE;
+        config_access = false;
 #endif
         NXPLOG_NCIHAL_D ("Performing RF Settings BLK 1");
         isfound = GetNxpByteArrayValue(NAME_NXP_RF_CONF_BLK_1, (char *) buffer,
@@ -1446,7 +1446,7 @@ retry_core_init:
         }
         retlen = 0;
 #if(NFC_NXP_CHIP_TYPE != PN547C2)
-        config_access = TRUE;
+        config_access = true;
 #endif
         NXPLOG_NCIHAL_D ("Performing NAME_NXP_CORE_CONF_EXTN Settings");
         isfound = GetNxpByteArrayValue(NAME_NXP_CORE_CONF_EXTN,
@@ -1477,7 +1477,7 @@ retry_core_init:
 
         retlen = 0;
 #if(NFC_NXP_CHIP_TYPE != PN547C2)
-        config_access = FALSE;
+        config_access = false;
 #endif
         isfound = GetNxpByteArrayValue(NAME_NXP_CORE_RF_FIELD,
                 (char *) buffer, bufflen, &retlen);
@@ -1505,7 +1505,7 @@ retry_core_init:
             }
         }
 #if(NFC_NXP_CHIP_TYPE != PN547C2)
-        config_access = TRUE;
+        config_access = true;
 #endif
 
         retlen = 0;
@@ -1587,7 +1587,7 @@ retry_core_init:
         }
     }
 
-    config_access = FALSE;
+    config_access = false;
     //if length of last command is 0 then only reset the P2P listen mode routing.
     if(p_core_init_rsp_params[35] == 0)
     {
@@ -1799,7 +1799,7 @@ retry_core_init:
     else
     {
 invoke_callback:
-        config_access = FALSE;
+        config_access = false;
         if (nxpncihal_ctrl.p_nfc_stack_data_cback != NULL)
         {
             *p_core_init_rsp_params = 0;
@@ -1864,12 +1864,12 @@ NFCSTATUS phNxpNciHalRFConfigCmdRecSequence ()
 {
     NFCSTATUS status = NFCSTATUS_SUCCESS;
     uint16_t recFWState = 1;
-    gRecFWDwnld = TRUE;
+    gRecFWDwnld = true;
     gRecFwRetryCount++;
     if (gRecFwRetryCount > 0x03)
     {
         NXPLOG_NCIHAL_D ("Max retry count for RF config FW recovery exceeded ");
-        gRecFWDwnld = FALSE;
+        gRecFWDwnld = false;
         return NFCSTATUS_FAILED;
     }
     do {
@@ -1901,9 +1901,9 @@ NFCSTATUS phNxpNciHalRFConfigCmdRecSequence ()
                 break;
             }
         }
-        gRecFWDwnld = FALSE;
+        gRecFWDwnld = false;
     }while (recFWState--);
-    gRecFWDwnld = FALSE;
+    gRecFWDwnld = false;
     return status;
 }
 #endif
@@ -2245,16 +2245,16 @@ retry_send_ext:
         return NFCSTATUS_FAILED;
     }
 
-    phNxpNciMwEepromArea.isGetEepromArea = TRUE;
+    phNxpNciMwEepromArea.isGetEepromArea = true;
     status = phNxpNciHal_send_ext_cmd (sizeof(get_mw_eeprom_cmd), get_mw_eeprom_cmd);
     if (status != NFCSTATUS_SUCCESS)
     {
         NXPLOG_NCIHAL_E ("unable to get the mw eeprom data");
-        phNxpNciMwEepromArea.isGetEepromArea = FALSE;
+        phNxpNciMwEepromArea.isGetEepromArea = false;
         retry_cnt++;
         goto retry_send_ext;
     }
-    phNxpNciMwEepromArea.isGetEepromArea = FALSE;
+    phNxpNciMwEepromArea.isGetEepromArea = false;
 
     if (phNxpNciMwEepromArea.p_rx_data[12])
     {
@@ -2313,7 +2313,7 @@ static void phNxpNciHal_set_clock(void)
     int retryCount = 0;
 
 retrySetclock:
-    phNxpNciClock.isClockSet = TRUE;
+    phNxpNciClock.isClockSet = true;
     if (nxpprofile_ctrl.bClkSrcVal == CLK_SRC_PLL)
     {
         static uint8_t set_clock_cmd[] = {0x20, 0x02,0x09, 0x02, 0xA0, 0x03, 0x01, 0x11,
@@ -2374,7 +2374,7 @@ retrySetclock:
     }
 
    // Checking for SET CONFG SUCCESS, re-send the command  if not.
-    phNxpNciClock.isClockSet = FALSE;
+    phNxpNciClock.isClockSet = false;
     if(phNxpNciClock.p_rx_data[3]   != NFCSTATUS_SUCCESS )
     {
         if(retryCount++  < 3)
@@ -2407,7 +2407,7 @@ NFCSTATUS phNxpNciHal_check_clock_config(void)
     uint8_t param_clock_src;
     static uint8_t get_clock_cmd[] = {0x20, 0x03,0x07, 0x03, 0xA0, 0x02,
             0xA0, 0x03, 0xA0, 0x04};
-    phNxpNciClock.isClockSet = TRUE;
+    phNxpNciClock.isClockSet = true;
     phNxpNciHal_get_clk_freq();
     status = phNxpNciHal_send_ext_cmd(sizeof(get_clock_cmd),get_clock_cmd);
 
@@ -2419,11 +2419,11 @@ NFCSTATUS phNxpNciHal_check_clock_config(void)
     param_clock_src = check_config_parameter();
     if( phNxpNciClock.p_rx_data[12] == param_clock_src &&  phNxpNciClock.p_rx_data[16] == nxpprofile_ctrl.bTimeout)
     {
-        phNxpNciClock.issetConfig = FALSE;
+        phNxpNciClock.issetConfig = false;
     }else {
-        phNxpNciClock.issetConfig = TRUE;
+        phNxpNciClock.issetConfig = true;
     }
-    phNxpNciClock.isClockSet = FALSE;
+    phNxpNciClock.isClockSet = false;
 
     return status;
 }
@@ -2440,7 +2440,7 @@ NFCSTATUS phNxpNciHal_china_tianjin_rf_setting(void)
 {
     NFCSTATUS status = NFCSTATUS_SUCCESS;
     int isfound = 0;
-    int rf_enable = FALSE;
+    int rf_enable = false;
     int rf_val = 0;
     int send_flag;
     uint8_t retry_cnt =0;
@@ -2452,17 +2452,17 @@ retry_send_ext:
     {
         return NFCSTATUS_FAILED;
     }
-    send_flag = TRUE;
-    phNxpNciRfSet.isGetRfSetting = TRUE;
+    send_flag = true;
+    phNxpNciRfSet.isGetRfSetting = true;
     status = phNxpNciHal_send_ext_cmd(sizeof(get_rf_cmd),get_rf_cmd);
     if(status != NFCSTATUS_SUCCESS)
     {
         NXPLOG_NCIHAL_E("unable to get the RF setting");
-        phNxpNciRfSet.isGetRfSetting = FALSE;
+        phNxpNciRfSet.isGetRfSetting = false;
         retry_cnt++;
         goto retry_send_ext;
     }
-    phNxpNciRfSet.isGetRfSetting = FALSE;
+    phNxpNciRfSet.isGetRfSetting = false;
     if(phNxpNciRfSet.p_rx_data[3] != 0x00)
     {
         NXPLOG_NCIHAL_E("GET_CONFIG_RSP is FAILED for CHINA TIANJIN");
@@ -2483,10 +2483,10 @@ retry_send_ext:
         }
         else
         {
-            send_flag = FALSE;  // No need to change in RF setting
+            send_flag = false;  // No need to change in RF setting
         }
 
-        if(send_flag == TRUE)
+        if(send_flag == true)
         {
             static uint8_t set_rf_cmd[] = {0x20, 0x02, 0x08, 0x01, 0xA0, 0x85, 0x04, 0x50, 0x08, 0x68, 0x00};
             memcpy(&set_rf_cmd[4],&phNxpNciRfSet.p_rx_data[5],7);
@@ -2758,7 +2758,7 @@ static void phNxpNciHal_print_res_status( uint8_t *p_rx_data, uint16_t *p_len)
         }
     }
 
-    if (p_rx_data[2] && (config_access == TRUE))
+    if (p_rx_data[2] && (config_access == true))
     {
         if (p_rx_data[3] != NFCSTATUS_SUCCESS)
         {

@@ -846,12 +846,12 @@ tNFA_STATUS NFA_RwI93Inventory (bool    afi_present, uint8_t afi, uint8_t *p_uid
 
         if (p_uid)
         {
-            p_msg->params.i93_cmd.uid_present = TRUE;
+            p_msg->params.i93_cmd.uid_present = true;
             memcpy (p_msg->params.i93_cmd.uid, p_uid, I93_UID_BYTE_LEN);
         }
         else
         {
-            p_msg->params.i93_cmd.uid_present = FALSE;
+            p_msg->params.i93_cmd.uid_present = false;
         }
 
         nfa_sys_sendmsg (p_msg);
@@ -1442,12 +1442,12 @@ tNFA_STATUS NFA_RwI93GetSysInfo (uint8_t *p_uid)
 
         if (p_uid)
         {
-            p_msg->params.i93_cmd.uid_present = TRUE;
+            p_msg->params.i93_cmd.uid_present = true;
             memcpy (p_msg->params.i93_cmd.uid, p_uid, I93_UID_BYTE_LEN);
         }
         else
         {
-            p_msg->params.i93_cmd.uid_present = FALSE;
+            p_msg->params.i93_cmd.uid_present = false;
         }
 
         nfa_sys_sendmsg (p_msg);

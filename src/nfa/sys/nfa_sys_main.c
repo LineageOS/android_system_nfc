@@ -71,7 +71,7 @@ void nfa_sys_init (void)
 void nfa_sys_event (BT_HDR *p_msg)
 {
     uint8_t     id;
-    bool        freebuf = TRUE;
+    bool        freebuf = true;
 
     NFA_TRACE_EVENT1 ("NFA got event 0x%04X", p_msg->event);
 
@@ -125,7 +125,7 @@ void nfa_sys_timer_update (void)
 void nfa_sys_register (uint8_t id, const tNFA_SYS_REG *p_reg)
 {
     nfa_sys_cb.reg[id] = (tNFA_SYS_REG *) p_reg;
-    nfa_sys_cb.is_reg[id] = TRUE;
+    nfa_sys_cb.is_reg[id] = true;
 
     if ((id != NFA_ID_DM) && (id != NFA_ID_SYS))
         nfa_sys_cb.enable_cplt_mask |= (0x0001 << id);
@@ -154,7 +154,7 @@ void nfa_sys_register (uint8_t id, const tNFA_SYS_REG *p_reg)
 void nfa_sys_check_disabled (void)
 {
     uint8_t id;
-    uint8_t done = TRUE;
+    uint8_t done = true;
 
     /* Check if all subsystems above DM have been disabled. */
     for (id = (NFA_ID_DM+1); id < NFA_ID_MAX; id++)
@@ -162,7 +162,7 @@ void nfa_sys_check_disabled (void)
         if (nfa_sys_cb.is_reg[id])
         {
             /* as long as one subsystem is not done */
-            done = FALSE;
+            done = false;
             break;
         }
     }
@@ -190,7 +190,7 @@ void nfa_sys_deregister (uint8_t id)
 {
     NFA_TRACE_DEBUG1 ("nfa_sys: deregistering subsystem %i", id);
 
-    nfa_sys_cb.is_reg[id] = FALSE;
+    nfa_sys_cb.is_reg[id] = false;
 
     /* If not deregistering DM, then check if any other subsystems above DM are still  */
     /* registered.                                                                  */
@@ -284,7 +284,7 @@ void nfa_sys_enable_subsystems (void)
 void nfa_sys_disable_subsystems (bool    graceful)
 {
     uint8_t id;
-    bool    done = TRUE;
+    bool    done = true;
 
     NFA_TRACE_DEBUG1 ("nfa_sys: disabling subsystems:%d", graceful);
     nfa_sys_cb.graceful_disable = graceful;
@@ -294,7 +294,7 @@ void nfa_sys_disable_subsystems (bool    graceful)
     {
         if (nfa_sys_cb.is_reg[id])
         {
-            done = FALSE;
+            done = false;
             if (nfa_sys_cb.reg[id]->disable != NULL)
             {
                 /* Subsytem has a Disable funciton. Call it now */
@@ -399,7 +399,7 @@ void nfa_sys_stop_timer (TIMER_LIST_ENT *p_tle)
 *******************************************************************************/
 void nfa_sys_disable_timers (void)
 {
-    nfa_sys_cb.timers_disabled = TRUE;
+    nfa_sys_cb.timers_disabled = true;
 }
 
 /*******************************************************************************

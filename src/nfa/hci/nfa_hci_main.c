@@ -100,7 +100,7 @@ void nfa_hci_ee_info_cback (tNFA_EE_DISC_STS status)
             &&((nfa_hci_cb.hci_state == NFA_HCI_STATE_STARTUP) || (nfa_hci_cb.hci_state == NFA_HCI_STATE_RESTORE))  )
         {
         /* NFCEE Discovery is in progress */
-        nfa_hci_cb.ee_disc_cmplt      = TRUE;
+        nfa_hci_cb.ee_disc_cmplt = true;
         nfa_hci_cb.num_ee_dis_req_ntf = 0;
         nfa_hci_cb.num_hot_plug_evts  = 0;
         nfa_hci_cb.conn_id            = 0;
@@ -111,7 +111,7 @@ void nfa_hci_ee_info_cback (tNFA_EE_DISC_STS status)
     case NFA_EE_DISC_STS_OFF:
         if (nfa_hci_cb.ee_disable_disc)
             break;
-        nfa_hci_cb.ee_disable_disc  = TRUE;
+        nfa_hci_cb.ee_disable_disc = true;
         /* Discovery operation is complete, retrieve discovery result */
         NFA_EeGetInfo (&num_nfcee, ee_info);
         nfa_hci_cb.num_nfcee        = num_nfcee;
@@ -135,7 +135,7 @@ void nfa_hci_ee_info_cback (tNFA_EE_DISC_STS status)
                 }
                 else
                 {
-                    nfa_hci_cb.w4_hci_netwk_init = FALSE;
+                    nfa_hci_cb.w4_hci_netwk_init = false;
                     nfa_hciu_send_get_param_cmd (NFA_HCI_ADMIN_PIPE, NFA_HCI_HOST_LIST_INDEX);
                 }
             }
@@ -143,7 +143,7 @@ void nfa_hci_ee_info_cback (tNFA_EE_DISC_STS status)
         else if (nfa_hci_cb.num_nfcee <= 1)
         {
             /* No UICC Host is detected, HCI NETWORK is enabled */
-            nfa_hci_cb.w4_hci_netwk_init = FALSE;
+            nfa_hci_cb.w4_hci_netwk_init = false;
         }
         break;
 
@@ -161,7 +161,7 @@ void nfa_hci_ee_info_cback (tNFA_EE_DISC_STS status)
                 {
                     /* Received expected number of EE DISC REQ Ntf(s) */
                     nfa_sys_stop_timer (&nfa_hci_cb.timer);
-                    nfa_hci_cb.w4_hci_netwk_init = FALSE;
+                    nfa_hci_cb.w4_hci_netwk_init = false;
                     nfa_hciu_send_get_param_cmd (NFA_HCI_ADMIN_PIPE, NFA_HCI_HOST_LIST_INDEX);
                 }
             }
@@ -172,7 +172,7 @@ void nfa_hci_ee_info_cback (tNFA_EE_DISC_STS status)
                 if (nfa_hci_cb.num_ee_dis_req_ntf == (nfa_hci_cb.num_nfcee - 1))
                 {
                     /* Received expected number of EE DISC REQ Ntf(s) */
-                    nfa_hci_cb.w4_hci_netwk_init = FALSE;
+                    nfa_hci_cb.w4_hci_netwk_init = false;
                 }
             }
         }
@@ -225,12 +225,12 @@ bool    nfa_hci_is_valid_cfg (void)
     {
         /* Check if app name is valid with null terminated string */
         if (strlen (&nfa_hci_cb.cfg.reg_app_names[xx][0]) > NFA_MAX_HCI_APP_NAME_LEN)
-            return FALSE;
+            return false;
 
         /* Send Connectivity event flag can be either TRUE or FALSE */
-        if (  (nfa_hci_cb.cfg.b_send_conn_evts[xx] != TRUE)
-            &&(nfa_hci_cb.cfg.b_send_conn_evts[xx] != FALSE))
-            return FALSE;
+        if (  (nfa_hci_cb.cfg.b_send_conn_evts[xx] != true)
+            &&(nfa_hci_cb.cfg.b_send_conn_evts[xx] != false))
+            return false;
 
         if (nfa_hci_cb.cfg.reg_app_names[xx][0] != 0)
         {
@@ -242,7 +242,7 @@ bool    nfa_hci_is_valid_cfg (void)
                 {
                     /* Two app cannot have the same name , NVRAM is corrupted */
                     NFA_TRACE_EVENT2 ("nfa_hci_is_valid_cfg (%s)  Reusing: %u", &nfa_hci_cb.cfg.reg_app_names[xx][0], xx);
-                    return FALSE;
+                    return false;
                 }
             }
             /* Collect list of hci handle */
@@ -259,7 +259,7 @@ bool    nfa_hci_is_valid_cfg (void)
                    &&(nfa_hci_cb.cfg.dyn_gates[xx].gate_id != NFA_HCI_IDENTITY_MANAGEMENT_GATE)
                    &&(nfa_hci_cb.cfg.dyn_gates[xx].gate_id < NFA_HCI_FIRST_HOST_SPECIFIC_GENERIC_GATE))
                 ||(nfa_hci_cb.cfg.dyn_gates[xx].gate_id > NFA_HCI_LAST_PROP_GATE))
-                return FALSE;
+                return false;
 
             /* Check if the same gate id is present more than once in the control block */
             for (yy = xx + 1; yy < NFA_HCI_MAX_GATE_CB; yy++)
@@ -268,13 +268,13 @@ bool    nfa_hci_is_valid_cfg (void)
                     &&(nfa_hci_cb.cfg.dyn_gates[xx].gate_id == nfa_hci_cb.cfg.dyn_gates[yy].gate_id) )
                 {
                     NFA_TRACE_EVENT1 ("nfa_hci_is_valid_cfg  Reusing: %u", nfa_hci_cb.cfg.dyn_gates[xx].gate_id);
-                    return FALSE;
+                    return false;
                 }
             }
             if ((nfa_hci_cb.cfg.dyn_gates[xx].gate_owner & (~NFA_HANDLE_GROUP_HCI)) >= NFA_HCI_MAX_APP_CB)
             {
                 NFA_TRACE_EVENT1 ("nfa_hci_is_valid_cfg  Invalid Gate owner: %u", nfa_hci_cb.cfg.dyn_gates[xx].gate_owner);
-                return FALSE;
+                return false;
             }
             if (nfa_hci_cb.cfg.dyn_gates[xx].gate_id != NFA_HCI_CONNECTIVITY_GATE)
             {
@@ -287,7 +287,7 @@ bool    nfa_hci_is_valid_cfg (void)
                 if (zz == app_count)
                 {
                     NFA_TRACE_EVENT1 ("nfa_hci_is_valid_cfg  Invalid Gate owner: %u", nfa_hci_cb.cfg.dyn_gates[xx].gate_owner);
-                    return FALSE;
+                    return false;
                 }
             }
             /* Collect list of allocated gates */
@@ -295,7 +295,7 @@ bool    nfa_hci_is_valid_cfg (void)
 
             /* No two gates can own a same pipe */
             if ((pipe_inx_mask & nfa_hci_cb.cfg.dyn_gates[xx].pipe_inx_mask) != 0)
-                return FALSE;
+                return false;
             /* Collect the list of pipes on this gate */
             pipe_inx_mask |= nfa_hci_cb.cfg.dyn_gates[xx].pipe_inx_mask;
         }
@@ -308,12 +308,12 @@ bool    nfa_hci_is_valid_cfg (void)
         {
             /* Check if the pipe is valid one */
             if (nfa_hci_cb.cfg.dyn_pipes[xx].pipe_id < NFA_HCI_FIRST_DYNAMIC_PIPE)
-                return FALSE;
+                return false;
         }
     }
 
     if (xx == NFA_HCI_MAX_PIPE_CB)
-        return FALSE;
+        return false;
 
     /* Validate Gate Control block */
     for (xx = 0; xx < NFA_HCI_MAX_PIPE_CB; xx++)
@@ -322,22 +322,22 @@ bool    nfa_hci_is_valid_cfg (void)
         {
             /* Check if pipe id is valid */
             if (nfa_hci_cb.cfg.dyn_pipes[xx].pipe_id < NFA_HCI_FIRST_DYNAMIC_PIPE)
-                return FALSE;
+                return false;
 
             /* Check if pipe state is valid */
             if (  (nfa_hci_cb.cfg.dyn_pipes[xx].pipe_state != NFA_HCI_PIPE_OPENED)
                 &&(nfa_hci_cb.cfg.dyn_pipes[xx].pipe_state != NFA_HCI_PIPE_CLOSED))
-                return FALSE;
+                return false;
 
             /* Check if local gate on which the pipe is created is valid */
             if (  (((nfa_hci_cb.cfg.dyn_pipes[xx].local_gate != NFA_HCI_LOOP_BACK_GATE) && (nfa_hci_cb.cfg.dyn_pipes[xx].local_gate != NFA_HCI_IDENTITY_MANAGEMENT_GATE)) && (nfa_hci_cb.cfg.dyn_pipes[xx].local_gate < NFA_HCI_FIRST_HOST_SPECIFIC_GENERIC_GATE))
                 ||(nfa_hci_cb.cfg.dyn_pipes[xx].local_gate > NFA_HCI_LAST_PROP_GATE))
-                return FALSE;
+                return false;
 
             /* Check if the peer gate on which the pipe is created is valid */
             if (  (((nfa_hci_cb.cfg.dyn_pipes[xx].dest_gate != NFA_HCI_LOOP_BACK_GATE) && (nfa_hci_cb.cfg.dyn_pipes[xx].dest_gate != NFA_HCI_IDENTITY_MANAGEMENT_GATE)) && (nfa_hci_cb.cfg.dyn_pipes[xx].dest_gate < NFA_HCI_FIRST_HOST_SPECIFIC_GENERIC_GATE))
                 ||(nfa_hci_cb.cfg.dyn_pipes[xx].dest_gate > NFA_HCI_LAST_PROP_GATE))
-                return FALSE;
+                return false;
 
             /* Check if the same pipe is present more than once in the control block */
             for (yy = xx + 1; yy < NFA_HCI_MAX_PIPE_CB; yy++)
@@ -346,7 +346,7 @@ bool    nfa_hci_is_valid_cfg (void)
                     &&(nfa_hci_cb.cfg.dyn_pipes[xx].pipe_id == nfa_hci_cb.cfg.dyn_pipes[yy].pipe_id) )
                 {
                     NFA_TRACE_EVENT1 ("nfa_hci_is_valid_cfg  Reusing: %u", nfa_hci_cb.cfg.dyn_pipes[xx].pipe_id);
-                    return FALSE;
+                    return false;
                 }
             }
             /* The local gate should be one of the element in gate control block */
@@ -358,7 +358,7 @@ bool    nfa_hci_is_valid_cfg (void)
             if (zz == gate_count)
             {
                 NFA_TRACE_EVENT1 ("nfa_hci_is_valid_cfg  Invalid Gate: %u", nfa_hci_cb.cfg.dyn_pipes[xx].local_gate);
-                return FALSE;
+                return false;
             }
         }
     }
@@ -366,12 +366,12 @@ bool    nfa_hci_is_valid_cfg (void)
     /* Check if admin pipe state is valid */
     if (  (nfa_hci_cb.cfg.admin_gate.pipe01_state != NFA_HCI_PIPE_OPENED)
         &&(nfa_hci_cb.cfg.admin_gate.pipe01_state != NFA_HCI_PIPE_CLOSED))
-        return FALSE;
+        return false;
 
     /* Check if link management pipe state is valid */
     if (  (nfa_hci_cb.cfg.link_mgmt_gate.pipe00_state != NFA_HCI_PIPE_OPENED)
         &&(nfa_hci_cb.cfg.link_mgmt_gate.pipe00_state != NFA_HCI_PIPE_CLOSED))
-        return FALSE;
+        return false;
 
     pipe_inx_mask = nfa_hci_cb.cfg.id_mgmt_gate.pipe_inx_mask;
     for (xx = 0; (pipe_inx_mask && (xx < NFA_HCI_MAX_PIPE_CB)); xx++,pipe_inx_mask >>= 1)
@@ -381,16 +381,16 @@ bool    nfa_hci_is_valid_cfg (void)
         {
             /* Check if the pipe is valid one */
             if (nfa_hci_cb.cfg.dyn_pipes[xx].pipe_id < NFA_HCI_FIRST_DYNAMIC_PIPE)
-                return FALSE;
+                return false;
             /* Check if the pipe is connected to Identity management gate */
             if (nfa_hci_cb.cfg.dyn_pipes[xx].local_gate != NFA_HCI_IDENTITY_MANAGEMENT_GATE)
-                return FALSE;
+                return false;
         }
     }
     if (xx == NFA_HCI_MAX_PIPE_CB)
-        return FALSE;
+        return false;
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -406,7 +406,7 @@ void nfa_hci_restore_default_config (uint8_t *p_session_id)
 {
     memset (&nfa_hci_cb.cfg, 0, sizeof (nfa_hci_cb.cfg));
     memcpy (nfa_hci_cb.cfg.admin_gate.session_id, p_session_id, NFA_HCI_SESSION_ID_LEN);
-    nfa_hci_cb.nv_write_needed = TRUE;
+    nfa_hci_cb.nv_write_needed = true;
 }
 
 /*******************************************************************************
@@ -425,16 +425,16 @@ void nfa_hci_proc_nfcc_power_mode (uint8_t nfcc_power_mode)
     /* if NFCC power mode is change to full power */
     if (nfcc_power_mode == NFA_DM_PWR_MODE_FULL)
     {
-        nfa_hci_cb.b_low_power_mode = FALSE;
+        nfa_hci_cb.b_low_power_mode = false;
         if (nfa_hci_cb.hci_state == NFA_HCI_STATE_IDLE)
         {
             nfa_hci_cb.hci_state          = NFA_HCI_STATE_RESTORE;
-            nfa_hci_cb.ee_disc_cmplt      = FALSE;
-            nfa_hci_cb.ee_disable_disc    = TRUE;
+            nfa_hci_cb.ee_disc_cmplt = false;
+            nfa_hci_cb.ee_disable_disc = true;
             if (nfa_hci_cb.num_nfcee > 1)
-                nfa_hci_cb.w4_hci_netwk_init  = TRUE;
+                nfa_hci_cb.w4_hci_netwk_init = true;
             else
-                nfa_hci_cb.w4_hci_netwk_init  = FALSE;
+                nfa_hci_cb.w4_hci_netwk_init = false;
             nfa_hci_cb.conn_id            = 0;
             nfa_hci_cb.num_ee_dis_req_ntf = 0;
             nfa_hci_cb.num_hot_plug_evts  = 0;
@@ -448,10 +448,10 @@ void nfa_hci_proc_nfcc_power_mode (uint8_t nfcc_power_mode)
     else
     {
         nfa_hci_cb.hci_state     = NFA_HCI_STATE_IDLE;
-        nfa_hci_cb.w4_rsp_evt    = FALSE;
+        nfa_hci_cb.w4_rsp_evt = false;
         nfa_hci_cb.conn_id       = 0;
         nfa_sys_stop_timer (&nfa_hci_cb.timer);
-        nfa_hci_cb.b_low_power_mode = TRUE;
+        nfa_hci_cb.b_low_power_mode = true;
         nfa_sys_cback_notify_nfcc_power_mode_proc_complete (NFA_ID_HCI);
     }
 }
@@ -487,7 +487,7 @@ void nfa_hci_dh_startup_complete (void)
              &&(nfa_hci_cb.num_ee_dis_req_ntf != (nfa_hci_cb.num_nfcee - 1))  )
     {
         if (nfa_hci_cb.hci_state == NFA_HCI_STATE_RESTORE)
-            nfa_hci_cb.ee_disable_disc  = TRUE;
+            nfa_hci_cb.ee_disable_disc = true;
         /* Received HOT PLUG EVT, we will also wait for EE DISC REQ Ntf(s) */
         nfa_sys_start_timer (&nfa_hci_cb.timer, NFA_HCI_RSP_TIMEOUT_EVT, p_nfa_hci_cfg->hci_netwk_enable_timeout);
     }
@@ -552,7 +552,7 @@ void nfa_hci_startup (void)
     uint8_t         num_nfcee = 2;
     uint8_t         target_handle;
     uint8_t         count = 0;
-    bool            found = FALSE;
+    bool            found = false;
 
     if (HCI_LOOPBACK_DEBUG)
     {
@@ -572,7 +572,7 @@ void nfa_hci_startup (void)
 
             if(ee_info[count].ee_interface[0] == NFA_EE_INTERFACE_HCI_ACCESS)
             {
-                found = TRUE;
+                found = true;
 
                 if (ee_info[count].ee_status == NFA_EE_STATUS_INACTIVE)
                 {
@@ -674,7 +674,7 @@ static void nfa_hci_conn_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN 
 
         if (nfa_hci_cb.hci_state == NFA_HCI_STATE_STARTUP)
         {
-            nfa_hci_cb.w4_hci_netwk_init = TRUE;
+            nfa_hci_cb.w4_hci_netwk_init = true;
             nfa_hciu_alloc_gate (NFA_HCI_CONNECTIVITY_GATE,0);
         }
 
@@ -713,7 +713,7 @@ static void nfa_hci_conn_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN 
     pkt_len = p_pkt->len;
 
 #if (BT_TRACE_PROTOCOL == TRUE)
-    DispHcp (p, pkt_len, TRUE, (bool   ) !nfa_hci_cb.assembling);
+    DispHcp (p, pkt_len, true, (bool   ) !nfa_hci_cb.assembling);
 #endif
 
     chaining_bit = ((*p) >> 0x07) & 0x01;
@@ -721,19 +721,19 @@ static void nfa_hci_conn_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN 
     if (pkt_len != 0)
         pkt_len--;
 
-    if (nfa_hci_cb.assembling == FALSE)
+    if (nfa_hci_cb.assembling == false)
     {
         /* First Segment of a packet */
         nfa_hci_cb.type            = ((*p) >> 0x06) & 0x03;
         nfa_hci_cb.inst            = (*p++ & 0x3F);
         if (pkt_len != 0)
             pkt_len--;
-        nfa_hci_cb.assembly_failed = FALSE;
+        nfa_hci_cb.assembly_failed = false;
         nfa_hci_cb.msg_len         = 0;
 
         if (chaining_bit == NFA_HCI_MESSAGE_FRAGMENTATION)
         {
-            nfa_hci_cb.assembling = TRUE;
+            nfa_hci_cb.assembling = true;
             nfa_hci_set_receive_buf (pipe);
             nfa_hci_assemble_msg (p, pkt_len);
         }
@@ -763,7 +763,7 @@ static void nfa_hci_conn_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN 
         if (chaining_bit == NFA_HCI_NO_MESSAGE_FRAGMENTATION)
         {
             /* Just added the last segment in the chain. Reset pointers */
-            nfa_hci_cb.assembling = FALSE;
+            nfa_hci_cb.assembling = false;
             p                     = nfa_hci_cb.p_msg_data;
             pkt_len               = nfa_hci_cb.msg_len;
         }
@@ -828,7 +828,7 @@ static void nfa_hci_conn_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN 
 
     if ((nfa_hci_cb.type == NFA_HCI_RESPONSE_TYPE) || (nfa_hci_cb.w4_rsp_evt && (nfa_hci_cb.type == NFA_HCI_EVENT_TYPE)))
     {
-        nfa_hci_cb.w4_rsp_evt = FALSE;
+        nfa_hci_cb.w4_rsp_evt = false;
     }
 
     /* Send a message to ouselves to check for anything to do */
@@ -857,13 +857,13 @@ void nfa_hci_handle_nv_read (uint8_t block, tNFA_STATUS status)
     {
         /* Stop timer as NVDATA Read Completed */
         nfa_sys_stop_timer (&nfa_hci_cb.timer);
-        nfa_hci_cb.nv_read_cmplt = TRUE;
+        nfa_hci_cb.nv_read_cmplt = true;
         if (  (status != NFA_STATUS_OK)
             ||(!nfa_hci_is_valid_cfg ())
             ||(!(memcmp (nfa_hci_cb.cfg.admin_gate.session_id, default_session, NFA_HCI_SESSION_ID_LEN)))
             ||(!(memcmp (nfa_hci_cb.cfg.admin_gate.session_id, reset_session, NFA_HCI_SESSION_ID_LEN)))  )
         {
-            nfa_hci_cb.b_hci_netwk_reset = TRUE;
+            nfa_hci_cb.b_hci_netwk_reset = true;
             /* Set a new session id so that we clear all pipes later after seeing a difference with the HC Session ID */
             memcpy (&session_id[(NFA_HCI_SESSION_ID_LEN / 2)], nfa_hci_cb.cfg.admin_gate.session_id, (NFA_HCI_SESSION_ID_LEN / 2));
             os_tick = GKI_get_os_tick_count ();
@@ -907,7 +907,7 @@ void nfa_hci_rsp_timeout (tNFA_HCI_EVENT_DATA *p_evt_data)
         if (nfa_hci_cb.w4_hci_netwk_init)
         {
             /* HCI Network is enabled */
-            nfa_hci_cb.w4_hci_netwk_init = FALSE;
+            nfa_hci_cb.w4_hci_netwk_init = false;
             nfa_hciu_send_get_param_cmd (NFA_HCI_ADMIN_PIPE, NFA_HCI_HOST_LIST_INDEX);
         }
         else
@@ -947,7 +947,7 @@ void nfa_hci_rsp_timeout (tNFA_HCI_EVENT_DATA *p_evt_data)
 
         if (nfa_hci_cb.w4_rsp_evt)
         {
-            nfa_hci_cb.w4_rsp_evt       = FALSE;
+            nfa_hci_cb.w4_rsp_evt = false;
             evt                         = NFA_HCI_EVENT_RCVD_EVT;
             evt_data.rcvd_evt.pipe      = nfa_hci_cb.pipe_in_use;
             evt_data.rcvd_evt.evt_code  = 0;
@@ -1091,7 +1091,7 @@ static void nfa_hci_assemble_msg (uint8_t *p_data, uint16_t data_len)
         memcpy (&nfa_hci_cb.p_msg_data[nfa_hci_cb.msg_len], p_data, (nfa_hci_cb.max_msg_len - nfa_hci_cb.msg_len));
         nfa_hci_cb.msg_len         = nfa_hci_cb.max_msg_len;
         /* Set Reassembly failed */
-        nfa_hci_cb.assembly_failed = TRUE;
+        nfa_hci_cb.assembly_failed = true;
         NFA_TRACE_ERROR1 ("nfa_hci_assemble_msg (): Insufficient buffer to Reassemble HCP packet! Dropping :%u bytes", ((nfa_hci_cb.msg_len + data_len) - nfa_hci_cb.max_msg_len));
     }
     else
@@ -1151,7 +1151,7 @@ static bool    nfa_hci_evt_hdlr (BT_HDR *p_msg)
                     tNFC_DATA_CEVT   xx;
                     xx.p_data = p_msg;
                     nfa_hci_conn_cback (0, NFC_DATA_CEVT, (tNFC_CONN *)&xx);
-                    return FALSE;
+                    return false;
                 }
             }
             break;
@@ -1168,10 +1168,10 @@ static bool    nfa_hci_evt_hdlr (BT_HDR *p_msg)
 
     if ((nfa_hci_cb.hci_state == NFA_HCI_STATE_IDLE) && (nfa_hci_cb.nv_write_needed))
     {
-        nfa_hci_cb.nv_write_needed = FALSE;
+        nfa_hci_cb.nv_write_needed = false;
         nfa_nv_co_write ((uint8_t *)&nfa_hci_cb.cfg, sizeof (nfa_hci_cb.cfg),DH_NV_BLOCK);
     }
 
-    return FALSE;
+    return false;
 }
 
