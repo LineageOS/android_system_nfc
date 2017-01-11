@@ -271,7 +271,7 @@ void rw_t3t_process_error (tNFC_STATUS status)
             RW_TRACE_DEBUG1 ("T3T maximum retransmission attempts reached (%i)", RW_MAX_RETRIES);
         }
 
-#if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
+#if (RW_STATS_INCLUDED == TRUE)
         /* update failure count */
         rw_main_update_fail_stats ();
 #endif  /* RW_STATS_INCLUDED */
@@ -561,7 +561,7 @@ void rw_t3t_process_frame_error (void)
     RW_TRACE_ERROR2 ("T3T frame error. state=0x%02X cur_cmd=0x%02X", rw_cb.tcb.t3t.rw_state, rw_cb.tcb.t3t.cur_cmd);
 #endif
 
-#if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
+#if (RW_STATS_INCLUDED == TRUE)
     /* Update stats */
     rw_main_update_crc_error_stats ();
 #endif  /* RW_STATS_INCLUDED */
@@ -583,7 +583,7 @@ tNFC_STATUS rw_t3t_send_to_lower (BT_HDR *p_msg)
 {
     uint8_t *p;
 
-#if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
+#if (RW_STATS_INCLUDED == TRUE)
     bool    is_retry;
     /* Update stats */
     rw_main_update_tx_stats (p_msg->len,
@@ -2240,7 +2240,7 @@ void rw_t3t_data_cback (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
     /* Stop rsponse timer */
     nfc_stop_quick_timer (&p_cb->timer);
 
-#if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
+#if (RW_STATS_INCLUDED == TRUE)
     /* Update rx stats */
     rw_main_update_rx_stats (p_msg->len);
 #endif  /* RW_STATS_INCLUDED */
@@ -2383,7 +2383,7 @@ void rw_t3t_conn_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
     case NFC_ERROR_CEVT:
         nfc_stop_quick_timer (&p_cb->timer);
 
-#if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
+#if (RW_STATS_INCLUDED == TRUE)
         rw_main_update_trans_error_stats ();
 #endif  /* RW_STATS_INCLUDED */
 
@@ -2478,7 +2478,7 @@ static tNFC_STATUS rw_t3t_unselect (uint8_t peer_nfcid2[])
 {
     tRW_T3T_CB *p_cb = &rw_cb.tcb.t3t;
 
-#if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
+#if (RW_STATS_INCLUDED == TRUE)
     /* Display stats */
     rw_main_log_stats ();
 #endif  /* RW_STATS_INCLUDED */

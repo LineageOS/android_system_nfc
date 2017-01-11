@@ -580,7 +580,7 @@ typedef struct
 
 
 #ifndef NCI_GET_CMD_BUF
-#if (!defined (HCI_USE_VARIABLE_SIZE_CMD_BUF) || (HCI_USE_VARIABLE_SIZE_CMD_BUF == FALSE))
+#if (HCI_USE_VARIABLE_SIZE_CMD_BUF == FALSE)
 /* Allocate fixed-size buffer from HCI_CMD_POOL (default case) */
 #define NCI_GET_CMD_BUF(paramlen)    ((BT_HDR *) GKI_getpoolbuf (NFC_NCI_POOL_ID))
 #else

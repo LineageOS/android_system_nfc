@@ -33,6 +33,9 @@
 #include "bt_trace.h"
 #endif
 
+#ifndef USERIAL_DEBUG
+#define USERIAL_DEBUG                       FALSE
+#endif
 
 /* API macros for DLL (needed to export API functions from DLLs) */
 #define NFC_API         EXPORT_API

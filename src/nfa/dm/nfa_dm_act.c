@@ -35,7 +35,7 @@
 #include "nfa_p2p_int.h"
 #include "nci_hmsgs.h"
 
-#if (defined (NFA_CHO_INCLUDED) && (NFA_CHO_INCLUDED==TRUE))
+#if (NFA_CHO_INCLUDED == TRUE)
 #include "nfa_cho_int.h"
 #endif
 
@@ -44,7 +44,7 @@
 #include "nfa_hci_int.h"
 #endif
 
-#if (defined (NFA_SNEP_INCLUDED) && (NFA_SNEP_INCLUDED==TRUE))
+#if (NFA_SNEP_INCLUDED == TRUE)
 #include "nfa_snep_int.h"
 #endif
 
