@@ -23,21 +23,21 @@ extern "C" {
 #endif
 
 /* External declaration for appl_trace_level here to avoid to add the declaration in all the files using APPL_TRACExxx macros */
-extern UINT8 appl_trace_level ;
+extern uint8_t appl_trace_level ;
 
 /* Prototype for message logging function. */
-EXPORT_API extern void LogMsg (UINT32 trace_set_mask, const char *fmt_str, ...);
-extern void LogMsg_0 (UINT32 trace_set_mask, const char *p_str);
-extern void LogMsg_1 (UINT32 trace_set_mask, const char *fmt_str, UINT32 p1);
-extern void LogMsg_2 (UINT32 trace_set_mask, const char *fmt_str, UINT32 p1, UINT32 p2);
-extern void LogMsg_3 (UINT32 trace_set_mask, const char *fmt_str, UINT32 p1, UINT32 p2,
-                      UINT32 p3);
-extern void LogMsg_4 (UINT32 trace_set_mask, const char *fmt_str, UINT32 p1, UINT32 p2,
-                      UINT32 p3, UINT32 p4);
-extern void LogMsg_5 (UINT32 trace_set_mask, const char *fmt_str, UINT32 p1, UINT32 p2,
-                      UINT32 p3, UINT32 p4, UINT32 p5);
-extern void LogMsg_6 (UINT32 trace_set_mask, const char *fmt_str, UINT32 p1, UINT32 p2,
-                      UINT32 p3, UINT32 p4, UINT32 p5, UINT32 p6);
+EXPORT_API extern void LogMsg (uint32_t trace_set_mask, const char *fmt_str, ...);
+extern void LogMsg_0 (uint32_t trace_set_mask, const char *p_str);
+extern void LogMsg_1 (uint32_t trace_set_mask, const char *fmt_str, uint32_t p1);
+extern void LogMsg_2 (uint32_t trace_set_mask, const char *fmt_str, uint32_t p1, uint32_t p2);
+extern void LogMsg_3 (uint32_t trace_set_mask, const char *fmt_str, uint32_t p1, uint32_t p2,
+                      uint32_t p3);
+extern void LogMsg_4 (uint32_t trace_set_mask, const char *fmt_str, uint32_t p1, uint32_t p2,
+                      uint32_t p3, uint32_t p4);
+extern void LogMsg_5 (uint32_t trace_set_mask, const char *fmt_str, uint32_t p1, uint32_t p2,
+                      uint32_t p3, uint32_t p4, uint32_t p5);
+extern void LogMsg_6 (uint32_t trace_set_mask, const char *fmt_str, uint32_t p1, uint32_t p2,
+                      uint32_t p3, uint32_t p4, uint32_t p5, uint32_t p6);
 
 #ifdef __cplusplus
 }
@@ -94,24 +94,24 @@ extern void LogMsg_6 (UINT32 trace_set_mask, const char *fmt_str, UINT32 p1, UIN
 #endif
 
 #define BT_TRACE_0(l,t,m)                           LogMsg_0((TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t)),(m))
-#define BT_TRACE_1(l,t,m,p1)                        LogMsg_1(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(UINT32)(p1))
-#define BT_TRACE_2(l,t,m,p1,p2)                     LogMsg_2(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(UINT32)(p1),   \
-                                                        (UINT32)(p2))
-#define BT_TRACE_3(l,t,m,p1,p2,p3)                  LogMsg_3(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(UINT32)(p1),   \
-                                                        (UINT32)(p2),(UINT32)(p3))
-#define BT_TRACE_4(l,t,m,p1,p2,p3,p4)               LogMsg_4(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(UINT32)(p1),   \
-                                                        (UINT32)(p2),(UINT32)(p3),(UINT32)(p4))
-#define BT_TRACE_5(l,t,m,p1,p2,p3,p4,p5)            LogMsg_5(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(UINT32)(p1),   \
-                                                        (UINT32)(p2),(UINT32)(p3),(UINT32)(p4), \
-                                                        (UINT32)(p5))
-#define BT_TRACE_6(l,t,m,p1,p2,p3,p4,p5,p6)         LogMsg_6(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(UINT32)(p1),   \
-                                                        (UINT32)(p2),(UINT32)(p3),(UINT32)(p4), \
-                                                        (UINT32)(p5),(UINT32)(p6))
+#define BT_TRACE_1(l,t,m,p1)                        LogMsg_1(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(uint32_t)(p1))
+#define BT_TRACE_2(l,t,m,p1,p2)                     LogMsg_2(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(uint32_t)(p1),   \
+                                                        (uint32_t)(p2))
+#define BT_TRACE_3(l,t,m,p1,p2,p3)                  LogMsg_3(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(uint32_t)(p1),   \
+                                                        (uint32_t)(p2),(uint32_t)(p3))
+#define BT_TRACE_4(l,t,m,p1,p2,p3,p4)               LogMsg_4(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(uint32_t)(p1),   \
+                                                        (uint32_t)(p2),(uint32_t)(p3),(uint32_t)(p4))
+#define BT_TRACE_5(l,t,m,p1,p2,p3,p4,p5)            LogMsg_5(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(uint32_t)(p1),   \
+                                                        (uint32_t)(p2),(uint32_t)(p3),(uint32_t)(p4), \
+                                                        (uint32_t)(p5))
+#define BT_TRACE_6(l,t,m,p1,p2,p3,p4,p5,p6)         LogMsg_6(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(uint32_t)(p1),   \
+                                                        (uint32_t)(p2),(uint32_t)(p3),(uint32_t)(p4), \
+                                                        (uint32_t)(p5),(uint32_t)(p6))
 
 #define BT_ERROR_TRACE_0(l,m)                     LogMsg_0(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | TRACE_TYPE_ERROR,(m))
-#define BT_ERROR_TRACE_1(l,m,p1)                  LogMsg_1(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | TRACE_TYPE_ERROR,(m),(UINT32)(p1))
-#define BT_ERROR_TRACE_2(l,m,p1,p2)               LogMsg_2(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | TRACE_TYPE_ERROR,(m),(UINT32)(p1),(UINT32)(p2))
-#define BT_ERROR_TRACE_3(l,m,p1,p2,p3)            LogMsg_3(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | TRACE_TYPE_ERROR,(m),(UINT32)(p1),(UINT32)(p2),(UINT32)(p3))
+#define BT_ERROR_TRACE_1(l,m,p1)                  LogMsg_1(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | TRACE_TYPE_ERROR,(m),(uint32_t)(p1))
+#define BT_ERROR_TRACE_2(l,m,p1,p2)               LogMsg_2(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | TRACE_TYPE_ERROR,(m),(uint32_t)(p1),(uint32_t)(p2))
+#define BT_ERROR_TRACE_3(l,m,p1,p2,p3)            LogMsg_3(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | TRACE_TYPE_ERROR,(m),(uint32_t)(p1),(uint32_t)(p2),(uint32_t)(p3))
 
 /* Define tracing for the LLCP unit
 */
@@ -487,73 +487,73 @@ extern void LogMsg_6 (UINT32 trace_set_mask, const char *fmt_str, UINT32 p1, UIN
 /* define traces for application */
 #define APPL_TRACE_ERROR0(m)                    {if (appl_trace_level >= BT_TRACE_LEVEL_ERROR) LogMsg_0(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_ERROR, (m));}
 #define APPL_TRACE_ERROR1(m,p1)                 {if (appl_trace_level >= BT_TRACE_LEVEL_ERROR) LogMsg_1(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_ERROR, \
-                                                        (m), (UINT32)(p1));}
+                                                        (m), (uint32_t)(p1));}
 #define APPL_TRACE_ERROR2(m,p1,p2)              {if (appl_trace_level >= BT_TRACE_LEVEL_ERROR) LogMsg_2(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_ERROR, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2));}
 #define APPL_TRACE_ERROR3(m,p1,p2,p3)           {if (appl_trace_level >= BT_TRACE_LEVEL_ERROR) LogMsg_3(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_ERROR, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2), (UINT32)(p3));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2), (uint32_t)(p3));}
 #define APPL_TRACE_ERROR4(m,p1,p2,p3,p4)        {if (appl_trace_level >= BT_TRACE_LEVEL_ERROR) LogMsg_4(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_ERROR, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2), (UINT32)(p3), (UINT32)(p4));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2), (uint32_t)(p3), (uint32_t)(p4));}
 #define APPL_TRACE_ERROR5(m,p1,p2,p3,p4,p5)     {if (appl_trace_level >= BT_TRACE_LEVEL_ERROR) LogMsg_5(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_ERROR, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2), (UINT32)(p3), (UINT32)(p4), (UINT32)(p5));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2), (uint32_t)(p3), (uint32_t)(p4), (uint32_t)(p5));}
 #define APPL_TRACE_ERROR6(m,p1,p2,p3,p4,p5,p6)  {if (appl_trace_level >= BT_TRACE_LEVEL_ERROR) LogMsg_6(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_ERROR, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2), (UINT32)(p3), (UINT32)(p4), (UINT32)(p5), (UINT32)(p6));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2), (uint32_t)(p3), (uint32_t)(p4), (uint32_t)(p5), (uint32_t)(p6));}
 
 #define APPL_TRACE_WARNING0(m)                  {if (appl_trace_level >= BT_TRACE_LEVEL_WARNING) LogMsg_0(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_WARNING, (m));}
 #define APPL_TRACE_WARNING1(m,p1)               {if (appl_trace_level >= BT_TRACE_LEVEL_WARNING) LogMsg_1(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_WARNING, \
-                                                        (m), (UINT32)(p1));}
+                                                        (m), (uint32_t)(p1));}
 #define APPL_TRACE_WARNING2(m,p1,p2)            {if (appl_trace_level >= BT_TRACE_LEVEL_WARNING) LogMsg_2(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_WARNING, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2));}
 #define APPL_TRACE_WARNING3(m,p1,p2,p3)         {if (appl_trace_level >= BT_TRACE_LEVEL_WARNING) LogMsg_3(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_WARNING, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2), (UINT32)(p3));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2), (uint32_t)(p3));}
 #define APPL_TRACE_WARNING4(m,p1,p2,p3,p4)      {if (appl_trace_level >= BT_TRACE_LEVEL_WARNING) LogMsg_4(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_WARNING, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2), (UINT32)(p3), (UINT32)(p4));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2), (uint32_t)(p3), (uint32_t)(p4));}
 #define APPL_TRACE_WARNING5(m,p1,p2,p3,p4,p5)   {if (appl_trace_level >= BT_TRACE_LEVEL_WARNING) LogMsg_5(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_WARNING, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2), (UINT32)(p3), (UINT32)(p4), (UINT32)(p5));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2), (uint32_t)(p3), (uint32_t)(p4), (uint32_t)(p5));}
 #define APPL_TRACE_WARNING6(m,p1,p2,p3,p4,p5,p6) {if (appl_trace_level >= BT_TRACE_LEVEL_WARNING) LogMsg_6(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_WARNING, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2), (UINT32)(p3), (UINT32)(p4), (UINT32)(p5), (UINT32)(p6));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2), (uint32_t)(p3), (uint32_t)(p4), (uint32_t)(p5), (uint32_t)(p6));}
 
 #define APPL_TRACE_API0(m)                      {if (appl_trace_level >= BT_TRACE_LEVEL_API) LogMsg_0(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_API, (m));}
 #define APPL_TRACE_API1(m,p1)                   {if (appl_trace_level >= BT_TRACE_LEVEL_API) LogMsg_1(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_API, \
-                                                        (m), (UINT32)(p1));}
+                                                        (m), (uint32_t)(p1));}
 #define APPL_TRACE_API2(m,p1,p2)                {if (appl_trace_level >= BT_TRACE_LEVEL_API) LogMsg_2(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_API, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2));}
 #define APPL_TRACE_API3(m,p1,p2,p3)             {if (appl_trace_level >= BT_TRACE_LEVEL_API) LogMsg_3(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_API, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2), (UINT32)(p3));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2), (uint32_t)(p3));}
 #define APPL_TRACE_API4(m,p1,p2,p3,p4)          {if (appl_trace_level >= BT_TRACE_LEVEL_API) LogMsg_4(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_API, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2), (UINT32)(p3), (UINT32)(p4));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2), (uint32_t)(p3), (uint32_t)(p4));}
 #define APPL_TRACE_API5(m,p1,p2,p3,p4,p5)       {if (appl_trace_level >= BT_TRACE_LEVEL_API) LogMsg_5(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_API, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2), (UINT32)(p3), (UINT32)(p4), (UINT32)(p5));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2), (uint32_t)(p3), (uint32_t)(p4), (uint32_t)(p5));}
 #define APPL_TRACE_API6(m,p1,p2,p3,p4,p5,p6)    {if (appl_trace_level >= BT_TRACE_LEVEL_API) LogMsg_6(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_API, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2), (UINT32)(p3), (UINT32)(p4), (UINT32)(p5), (UINT32)(p6));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2), (uint32_t)(p3), (uint32_t)(p4), (uint32_t)(p5), (uint32_t)(p6));}
 
 #define APPL_TRACE_EVENT0(m)                    {if (appl_trace_level >= BT_TRACE_LEVEL_EVENT) LogMsg_0(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_EVENT, (m));}
 #define APPL_TRACE_EVENT1(m,p1)                 {if (appl_trace_level >= BT_TRACE_LEVEL_EVENT) LogMsg_1(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_EVENT, \
-                                                        (m), (UINT32)(p1));}
+                                                        (m), (uint32_t)(p1));}
 #define APPL_TRACE_EVENT2(m,p1,p2)              {if (appl_trace_level >= BT_TRACE_LEVEL_EVENT) LogMsg_2(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_EVENT, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2));}
 #define APPL_TRACE_EVENT3(m,p1,p2,p3)           {if (appl_trace_level >= BT_TRACE_LEVEL_EVENT) LogMsg_3(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_EVENT, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2), (UINT32)(p3));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2), (uint32_t)(p3));}
 #define APPL_TRACE_EVENT4(m,p1,p2,p3,p4)        {if (appl_trace_level >= BT_TRACE_LEVEL_EVENT) LogMsg_4(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_EVENT, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2), (UINT32)(p3), (UINT32)(p4));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2), (uint32_t)(p3), (uint32_t)(p4));}
 #define APPL_TRACE_EVENT5(m,p1,p2,p3,p4,p5)     {if (appl_trace_level >= BT_TRACE_LEVEL_EVENT) LogMsg_5(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_EVENT, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2), (UINT32)(p3), (UINT32)(p4), (UINT32)(p5));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2), (uint32_t)(p3), (uint32_t)(p4), (uint32_t)(p5));}
 #define APPL_TRACE_EVENT6(m,p1,p2,p3,p4,p5,p6)  {if (appl_trace_level >= BT_TRACE_LEVEL_EVENT) LogMsg_6(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_EVENT, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2), (UINT32)(p3), (UINT32)(p4), (UINT32)(p5), (UINT32)(p6));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2), (uint32_t)(p3), (uint32_t)(p4), (uint32_t)(p5), (uint32_t)(p6));}
 
 #define APPL_TRACE_DEBUG0(m)                    {if (appl_trace_level >= BT_TRACE_LEVEL_DEBUG) LogMsg_0(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_DEBUG, (m));}
 #define APPL_TRACE_DEBUG1(m,p1)                 {if (appl_trace_level >= BT_TRACE_LEVEL_DEBUG) LogMsg_1(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_DEBUG, \
-                                                        (m), (UINT32)(p1));}
+                                                        (m), (uint32_t)(p1));}
 #define APPL_TRACE_DEBUG2(m,p1,p2)              {if (appl_trace_level >= BT_TRACE_LEVEL_DEBUG) LogMsg_2(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_DEBUG, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2));}
 #define APPL_TRACE_DEBUG3(m,p1,p2,p3)           {if (appl_trace_level >= BT_TRACE_LEVEL_DEBUG) LogMsg_3(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_DEBUG, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2), (UINT32)(p3));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2), (uint32_t)(p3));}
 #define APPL_TRACE_DEBUG4(m,p1,p2,p3,p4)        {if (appl_trace_level >= BT_TRACE_LEVEL_DEBUG) LogMsg_4(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_DEBUG, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2), (UINT32)(p3), (UINT32)(p4));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2), (uint32_t)(p3), (uint32_t)(p4));}
 #define APPL_TRACE_DEBUG5(m,p1,p2,p3,p4,p5)     {if (appl_trace_level >= BT_TRACE_LEVEL_DEBUG) LogMsg_5(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_DEBUG, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2), (UINT32)(p3), (UINT32)(p4), (UINT32)(p5));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2), (uint32_t)(p3), (uint32_t)(p4), (uint32_t)(p5));}
 #define APPL_TRACE_DEBUG6(m,p1,p2,p3,p4,p5,p6)  {if (appl_trace_level >= BT_TRACE_LEVEL_DEBUG) LogMsg_6(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_DEBUG, \
-                                                        (m), (UINT32)(p1), (UINT32)(p2), (UINT32)(p3), (UINT32)(p4), (UINT32)(p5), (UINT32)(p6));}
+                                                        (m), (uint32_t)(p1), (uint32_t)(p2), (uint32_t)(p3), (uint32_t)(p4), (uint32_t)(p5), (uint32_t)(p6));}
 
 #endif /* BT_TRACE_H */
 

@@ -35,11 +35,11 @@
 #define LLCP_GET_PTYPE(u16) (((u16) & 0x03C0) >> 6)
 #define LLCP_GET_SSAP(u16)  (((u16) & 0x003F))
 
-#define LLCP_GET_PDU_HEADER(dsap, ptype, ssap) (((UINT16) (dsap) << 10) | ((UINT16) (ptype) << 6) | (UINT16) (ssap))
+#define LLCP_GET_PDU_HEADER(dsap, ptype, ssap) (((uint16_t) (dsap) << 10) | ((uint16_t) (ptype) << 6) | (uint16_t) (ssap))
 
-#define LLCP_GET_NS(u8) ((UINT8)(u8) >> 4)
-#define LLCP_GET_NR(u8) ((UINT8)(u8) & 0x0F)
-#define LLCP_GET_SEQUENCE(NS, NR) (((UINT8) (NS) << 4) | (UINT8) (NR))
+#define LLCP_GET_NS(u8) ((uint8_t)(u8) >> 4)
+#define LLCP_GET_NR(u8) ((uint8_t)(u8) & 0x0F)
+#define LLCP_GET_SEQUENCE(NS, NR) (((uint8_t) (NS) << 4) | (uint8_t) (NR))
 #define LLCP_SEQUENCE_SIZE      1
 
 #define LLCP_PDU_SYMM_TYPE      0
@@ -81,15 +81,15 @@
 #define LLCP_FRMR_R_ERROR_FLAG  0x02    /* Receive Sequence Error */
 #define LLCP_FRMR_S_ERROR_FLAG  0x01    /* Send Sequence Error */
 
-#define LLCP_GET_FRMR_W_ERROR_FLAG(u8) (((UINT8) (u8) >> 7) & 0x01)
-#define LLCP_GET_FRMR_I_ERROR_FLAG(u8) (((UINT8) (u8) >> 6) & 0x01)
-#define LLCP_GET_FRMR_R_ERROR_FLAG(u8) (((UINT8) (u8) >> 5) & 0x01)
-#define LLCP_GET_FRMR_S_ERROR_FLAG(u8) (((UINT8) (u8) >> 4) & 0x01)
-#define LLCP_GET_FRMR_PTYPE(u8)        ((UINT8) (u8) & 0x0F)
-#define LLCP_GET_FRMR_VS(u16)          (((UINT16) (u16) >> 12) & 0x000F)
-#define LLCP_GET_FRMR_VR(u16)          (((UINT16) (u16) >>  8) & 0x000F)
-#define LLCP_GET_FRMR_VSA(u16)         (((UINT16) (u16) >>  4) & 0x000F)
-#define LLCP_GET_FRMR_VRA(u16)         (((UINT16) (u16) >>  0) & 0x000F)
+#define LLCP_GET_FRMR_W_ERROR_FLAG(u8) (((uint8_t) (u8) >> 7) & 0x01)
+#define LLCP_GET_FRMR_I_ERROR_FLAG(u8) (((uint8_t) (u8) >> 6) & 0x01)
+#define LLCP_GET_FRMR_R_ERROR_FLAG(u8) (((uint8_t) (u8) >> 5) & 0x01)
+#define LLCP_GET_FRMR_S_ERROR_FLAG(u8) (((uint8_t) (u8) >> 4) & 0x01)
+#define LLCP_GET_FRMR_PTYPE(u8)        ((uint8_t) (u8) & 0x0F)
+#define LLCP_GET_FRMR_VS(u16)          (((uint16_t) (u16) >> 12) & 0x000F)
+#define LLCP_GET_FRMR_VR(u16)          (((uint16_t) (u16) >>  8) & 0x000F)
+#define LLCP_GET_FRMR_VSA(u16)         (((uint16_t) (u16) >>  4) & 0x000F)
+#define LLCP_GET_FRMR_VRA(u16)         (((uint16_t) (u16) >>  0) & 0x000F)
 
 /*
 ** LLCP Parameter Descriptions
@@ -98,8 +98,8 @@
 /* Version */
 #define LLCP_VERSION_TYPE   0x01
 #define LLCP_VERSION_LEN    0x01
-#define LLCP_GET_MAJOR_VERSION(u8)     (((UINT8) (u8) >> 4) & 0x0F)
-#define LLCP_GET_MINOR_VERSION(u8)     ((UINT8) (u8) & 0x0F)
+#define LLCP_GET_MAJOR_VERSION(u8)     (((uint8_t) (u8) >> 4) & 0x0F)
+#define LLCP_GET_MINOR_VERSION(u8)     ((uint8_t) (u8) & 0x0F)
 #define LLCP_MIN_MAJOR_VERSION      0x01
 #define LLCP_MIN_SNL_MAJOR_VERSION  0x01
 #define LLCP_MIN_SNL_MINOR_VERSION  0x01
@@ -152,7 +152,7 @@
 /* Option, OPT */
 #define LLCP_OPT_TYPE       0x07
 #define LLCP_OPT_LEN        0x01
-#define LLCP_GET_OPT_LSC(u8) ((UINT8) (u8) & 0x03)
+#define LLCP_GET_OPT_LSC(u8) ((uint8_t) (u8) & 0x03)
 
 /* Service Discovery Request, SDREQ */
 #define LLCP_SDREQ_TYPE     0x08

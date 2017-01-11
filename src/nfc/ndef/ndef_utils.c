@@ -40,11 +40,11 @@
 ** Description      shift memory down (to make space to insert a record)
 **
 *******************************************************************************/
-static void shiftdown (UINT8 *p_mem, UINT32 len, UINT32 shift_amount)
+static void shiftdown (uint8_t *p_mem, uint32_t len, uint32_t shift_amount)
 {
-    register UINT8 *ps = p_mem + len - 1;
-    register UINT8 *pd = ps + shift_amount;
-    register UINT32 xx;
+    register uint8_t *ps = p_mem + len - 1;
+    register uint8_t *pd = ps + shift_amount;
+    register uint32_t xx;
 
     for (xx = 0; xx < len; xx++)
         *pd-- = *ps--;
@@ -57,11 +57,11 @@ static void shiftdown (UINT8 *p_mem, UINT32 len, UINT32 shift_amount)
 ** Description      shift memory up (to delete a record)
 **
 *******************************************************************************/
-static void shiftup (UINT8 *p_dest, UINT8 *p_src, UINT32 len)
+static void shiftup (uint8_t *p_dest, uint8_t *p_src, uint32_t len)
 {
-    register UINT8 *ps = p_src;
-    register UINT8 *pd = p_dest;
-    register UINT32 xx;
+    register uint8_t *ps = p_src;
+    register uint8_t *pd = p_dest;
+    register uint32_t xx;
 
     for (xx = 0; xx < len; xx++)
         *pd++ = *ps++;
@@ -76,14 +76,14 @@ static void shiftup (UINT8 *p_dest, UINT8 *p_src, UINT32 len)
 ** Returns          TRUE if all OK, or FALSE if the message is invalid.
 **
 *******************************************************************************/
-tNDEF_STATUS NDEF_MsgValidate (UINT8 *p_msg, UINT32 msg_len, BOOLEAN b_allow_chunks)
+tNDEF_STATUS NDEF_MsgValidate (uint8_t *p_msg, uint32_t msg_len, bool    b_allow_chunks)
 {
-    UINT8   *p_rec = p_msg;
-    UINT8   *p_end = p_msg + msg_len;
-    UINT8   rec_hdr=0, type_len, id_len;
+    uint8_t *p_rec = p_msg;
+    uint8_t *p_end = p_msg + msg_len;
+    uint8_t rec_hdr=0, type_len, id_len;
     int     count;
-    UINT32  payload_len;
-    BOOLEAN bInChunk = FALSE;
+    uint32_t  payload_len;
+    bool    bInChunk = FALSE;
 
     if ( (p_msg == NULL) || (msg_len < 3) )
         return (NDEF_MSG_TOO_SHORT);
@@ -217,12 +217,12 @@ tNDEF_STATUS NDEF_MsgValidate (UINT8 *p_msg, UINT32 msg_len, BOOLEAN b_allow_chu
 ** Returns          The record count, or 0 if the message is invalid.
 **
 *******************************************************************************/
-INT32 NDEF_MsgGetNumRecs (UINT8 *p_msg)
+int32_t NDEF_MsgGetNumRecs (uint8_t *p_msg)
 {
-    UINT8   *p_rec = p_msg;
-    UINT8   rec_hdr, type_len, id_len;
+    uint8_t *p_rec = p_msg;
+    uint8_t rec_hdr, type_len, id_len;
     int     count;
-    UINT32  payload_len;
+    uint32_t  payload_len;
 
     for (count = 0; ; )
     {
@@ -266,11 +266,11 @@ INT32 NDEF_MsgGetNumRecs (UINT8 *p_msg)
 ** Returns          Length of record
 **
 *******************************************************************************/
-UINT32 NDEF_MsgGetRecLength (UINT8 *p_cur_rec)
+uint32_t NDEF_MsgGetRecLength (uint8_t *p_cur_rec)
 {
-    UINT8   rec_hdr, type_len, id_len;
-    UINT32  rec_len = 0;
-    UINT32  payload_len;
+    uint8_t rec_hdr, type_len, id_len;
+    uint32_t  rec_len = 0;
+    uint32_t  payload_len;
 
     /* Get the current record's header */
     rec_hdr = *p_cur_rec++;
@@ -318,10 +318,10 @@ UINT32 NDEF_MsgGetRecLength (UINT8 *p_cur_rec)
 ** Returns          Pointer to the start of the record, or NULL if no more
 **
 *******************************************************************************/
-UINT8 *NDEF_MsgGetNextRec (UINT8 *p_cur_rec)
+uint8_t *NDEF_MsgGetNextRec (uint8_t *p_cur_rec)
 {
-    UINT8   rec_hdr, type_len, id_len;
-    UINT32  payload_len;
+    uint8_t rec_hdr, type_len, id_len;
+    uint32_t  payload_len;
 
     /* Get the current record's header */
     rec_hdr = *p_cur_rec++;
@@ -361,12 +361,12 @@ UINT8 *NDEF_MsgGetNextRec (UINT8 *p_cur_rec)
 ** Returns          Pointer to the start of the record, or NULL
 **
 *******************************************************************************/
-UINT8 *NDEF_MsgGetRecByIndex (UINT8 *p_msg, INT32 index)
+uint8_t *NDEF_MsgGetRecByIndex (uint8_t *p_msg, int32_t index)
 {
-    UINT8   *p_rec = p_msg;
-    UINT8   rec_hdr, type_len, id_len;
-    INT32   count;
-    UINT32  payload_len;
+    uint8_t *p_rec = p_msg;
+    uint8_t rec_hdr, type_len, id_len;
+    int32_t count;
+    uint32_t  payload_len;
 
     for (count = 0; ; count++)
     {
@@ -412,12 +412,12 @@ UINT8 *NDEF_MsgGetRecByIndex (UINT8 *p_msg, INT32 index)
 ** Returns          Pointer to the start of the last record, or NULL if some problem
 **
 *******************************************************************************/
-UINT8 *NDEF_MsgGetLastRecInMsg (UINT8 *p_msg)
+uint8_t *NDEF_MsgGetLastRecInMsg (uint8_t *p_msg)
 {
-    UINT8   *p_rec = p_msg;
-    UINT8   *pRecStart;
-    UINT8   rec_hdr, type_len, id_len;
-    UINT32  payload_len;
+    uint8_t *p_rec = p_msg;
+    uint8_t *pRecStart;
+    uint8_t rec_hdr, type_len, id_len;
+    uint32_t  payload_len;
 
     for ( ; ; )
     {
@@ -460,12 +460,12 @@ UINT8 *NDEF_MsgGetLastRecInMsg (UINT8 *p_msg)
 ** Returns          Pointer to the start of the record, or NULL
 **
 *******************************************************************************/
-UINT8 *NDEF_MsgGetFirstRecByType (UINT8 *p_msg, UINT8 tnf, UINT8 *p_type, UINT8 tlen)
+uint8_t *NDEF_MsgGetFirstRecByType (uint8_t *p_msg, uint8_t tnf, uint8_t *p_type, uint8_t tlen)
 {
-    UINT8   *p_rec = p_msg;
-    UINT8   *pRecStart;
-    UINT8   rec_hdr, type_len, id_len;
-    UINT32  payload_len;
+    uint8_t *p_rec = p_msg;
+    uint8_t *pRecStart;
+    uint8_t rec_hdr, type_len, id_len;
+    uint32_t  payload_len;
 
     for ( ; ; )
     {
@@ -517,12 +517,12 @@ UINT8 *NDEF_MsgGetFirstRecByType (UINT8 *p_msg, UINT8 tnf, UINT8 *p_type, UINT8 
 ** Returns          Pointer to the start of the record, or NULL
 **
 *******************************************************************************/
-UINT8 *NDEF_MsgGetNextRecByType (UINT8 *p_cur_rec, UINT8 tnf, UINT8 *p_type, UINT8 tlen)
+uint8_t *NDEF_MsgGetNextRecByType (uint8_t *p_cur_rec, uint8_t tnf, uint8_t *p_type, uint8_t tlen)
 {
-    UINT8   *p_rec;
-    UINT8   *pRecStart;
-    UINT8   rec_hdr, type_len, id_len;
-    UINT32  payload_len;
+    uint8_t *p_rec;
+    uint8_t *pRecStart;
+    uint8_t rec_hdr, type_len, id_len;
+    uint32_t  payload_len;
 
     /* If this is the last record in the message, return NULL */
     if ((p_rec = NDEF_MsgGetNextRec (p_cur_rec)) == NULL)
@@ -579,12 +579,12 @@ UINT8 *NDEF_MsgGetNextRecByType (UINT8 *p_cur_rec, UINT8 tnf, UINT8 *p_type, UIN
 ** Returns          Pointer to the start of the record, or NULL
 **
 *******************************************************************************/
-UINT8 *NDEF_MsgGetFirstRecById (UINT8 *p_msg, UINT8 *p_id, UINT8 ilen)
+uint8_t *NDEF_MsgGetFirstRecById (uint8_t *p_msg, uint8_t *p_id, uint8_t ilen)
 {
-    UINT8   *p_rec = p_msg;
-    UINT8   *pRecStart;
-    UINT8   rec_hdr, type_len, id_len;
-    UINT32  payload_len;
+    uint8_t *p_rec = p_msg;
+    uint8_t *pRecStart;
+    uint8_t rec_hdr, type_len, id_len;
+    uint32_t  payload_len;
 
     for ( ; ; )
     {
@@ -636,12 +636,12 @@ UINT8 *NDEF_MsgGetFirstRecById (UINT8 *p_msg, UINT8 *p_id, UINT8 ilen)
 ** Returns          Pointer to the start of the record, or NULL
 **
 *******************************************************************************/
-UINT8 *NDEF_MsgGetNextRecById (UINT8 *p_cur_rec, UINT8 *p_id, UINT8 ilen)
+uint8_t *NDEF_MsgGetNextRecById (uint8_t *p_cur_rec, uint8_t *p_id, uint8_t ilen)
 {
-    UINT8   *p_rec;
-    UINT8   *pRecStart;
-    UINT8   rec_hdr, type_len, id_len;
-    UINT32  payload_len;
+    uint8_t *p_rec;
+    uint8_t *pRecStart;
+    uint8_t rec_hdr, type_len, id_len;
+    uint32_t  payload_len;
 
     /* If this is the last record in the message, return NULL */
     if ((p_rec = NDEF_MsgGetNextRec (p_cur_rec)) == NULL)
@@ -696,9 +696,9 @@ UINT8 *NDEF_MsgGetNextRecById (UINT8 *p_cur_rec, UINT8 *p_id, UINT8 ilen)
 ** Returns          Pointer to Type (NULL if none). TNF and len are filled in.
 **
 *******************************************************************************/
-UINT8 *NDEF_RecGetType (UINT8 *p_rec, UINT8 *p_tnf, UINT8 *p_type_len)
+uint8_t *NDEF_RecGetType (uint8_t *p_rec, uint8_t *p_tnf, uint8_t *p_type_len)
 {
-    UINT8   rec_hdr, type_len;
+    uint8_t rec_hdr, type_len;
 
     /* First byte is the record header */
     rec_hdr = *p_rec++;
@@ -735,9 +735,9 @@ UINT8 *NDEF_RecGetType (UINT8 *p_rec, UINT8 *p_tnf, UINT8 *p_type_len)
 ** Returns          Pointer to Id (NULL if none). ID Len is filled in.
 **
 *******************************************************************************/
-UINT8 *NDEF_RecGetId (UINT8 *p_rec, UINT8 *p_id_len)
+uint8_t *NDEF_RecGetId (uint8_t *p_rec, uint8_t *p_id_len)
 {
-    UINT8   rec_hdr, type_len;
+    uint8_t rec_hdr, type_len;
 
     /* First byte is the record header */
     rec_hdr = *p_rec++;
@@ -774,10 +774,10 @@ UINT8 *NDEF_RecGetId (UINT8 *p_rec, UINT8 *p_id_len)
 ** Returns          a pointer to the payload (or NULL none). Payload len filled in.
 **
 *******************************************************************************/
-UINT8 *NDEF_RecGetPayload (UINT8 *p_rec, UINT32 *p_payload_len)
+uint8_t *NDEF_RecGetPayload (uint8_t *p_rec, uint32_t *p_payload_len)
 {
-    UINT8   rec_hdr, type_len, id_len;
-    UINT32  payload_len;
+    uint8_t rec_hdr, type_len, id_len;
+    uint32_t  payload_len;
 
     /* First byte is the record header */
     rec_hdr = *p_rec++;
@@ -817,7 +817,7 @@ UINT8 *NDEF_RecGetPayload (UINT8 *p_rec, UINT32 *p_payload_len)
 **                  *p_cur_size is initialized to 0
 **
 *******************************************************************************/
-void NDEF_MsgInit (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size)
+void NDEF_MsgInit (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size)
 {
     *p_cur_size = 0;
     memset (p_msg, 0, max_size);
@@ -833,13 +833,13 @@ void NDEF_MsgInit (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size)
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-extern tNDEF_STATUS  NDEF_MsgAddRec (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                     UINT8 tnf, UINT8 *p_type, UINT8 type_len,
-                                     UINT8 *p_id, UINT8  id_len,
-                                     UINT8 *p_payload, UINT32 payload_len)
+extern tNDEF_STATUS  NDEF_MsgAddRec (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                     uint8_t tnf, uint8_t *p_type, uint8_t type_len,
+                                     uint8_t *p_id, uint8_t  id_len,
+                                     uint8_t *p_payload, uint32_t payload_len)
 {
-    UINT8   *p_rec = p_msg + *p_cur_size;
-    UINT32  recSize;
+    uint8_t *p_rec = p_msg + *p_cur_size;
+    uint32_t  recSize;
     int     plen = (payload_len < 256) ? 1 : 4;
     int     ilen = (id_len == 0) ? 0 : 1;
 
@@ -861,7 +861,7 @@ extern tNDEF_STATUS  NDEF_MsgAddRec (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cu
     else
     {
         /* Find the previous last and clear his 'Message End' bit */
-        UINT8  *pLast = NDEF_MsgGetLastRecInMsg (p_msg);
+        uint8_t  *pLast = NDEF_MsgGetLastRecInMsg (p_msg);
 
         if (!pLast)
             return (NDEF_MSG_NO_MSG_END);
@@ -883,7 +883,7 @@ extern tNDEF_STATUS  NDEF_MsgAddRec (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cu
 
     /* Payload length - can be 1 or 4 bytes */
     if (plen == 1)
-        *p_rec++ = (UINT8)payload_len;
+        *p_rec++ = (uint8_t)payload_len;
     else
          UINT32_TO_BE_STREAM (p_rec, payload_len);
 
@@ -929,15 +929,15 @@ extern tNDEF_STATUS  NDEF_MsgAddRec (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cu
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-extern tNDEF_STATUS NDEF_MsgInsertRec (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size, INT32 index,
-                                       UINT8 tnf, UINT8 *p_type, UINT8 type_len,
-                                       UINT8 *p_id, UINT8  id_len,
-                                       UINT8 *p_payload, UINT32 payload_len)
+extern tNDEF_STATUS NDEF_MsgInsertRec (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size, int32_t index,
+                                       uint8_t tnf, uint8_t *p_type, uint8_t type_len,
+                                       uint8_t *p_id, uint8_t  id_len,
+                                       uint8_t *p_payload, uint32_t payload_len)
 {
-    UINT8   *p_rec;
-    UINT32  recSize;
-    INT32   plen = (payload_len < 256) ? 1 : 4;
-    INT32   ilen = (id_len == 0) ? 0 : 1;
+    uint8_t *p_rec;
+    uint32_t  recSize;
+    int32_t plen = (payload_len < 256) ? 1 : 4;
+    int32_t ilen = (id_len == 0) ? 0 : 1;
 
     /* First, make sure the record will fit. we need at least 2 bytes for header and type length */
     recSize = payload_len + 2 + type_len + plen + ilen + id_len;
@@ -958,7 +958,7 @@ extern tNDEF_STATUS NDEF_MsgInsertRec (UINT8 *p_msg, UINT32 max_size, UINT32 *p_
         *p_msg &= ~NDEF_MB_MASK;
 
     /* Make space for the new record */
-    shiftdown (p_rec, (UINT32)(*p_cur_size - (p_rec - p_msg)), recSize);
+    shiftdown (p_rec, (uint32_t)(*p_cur_size - (p_rec - p_msg)), recSize);
 
     /* If adding at the beginning, set begin bit */
     if (index == 0)
@@ -979,7 +979,7 @@ extern tNDEF_STATUS NDEF_MsgInsertRec (UINT8 *p_msg, UINT32 max_size, UINT32 *p_
 
     /* Payload length - can be 1 or 4 bytes */
     if (plen == 1)
-        *p_rec++ = (UINT8)payload_len;
+        *p_rec++ = (uint8_t)payload_len;
     else
          UINT32_TO_BE_STREAM (p_rec, payload_len);
 
@@ -1024,10 +1024,10 @@ extern tNDEF_STATUS NDEF_MsgInsertRec (UINT8 *p_msg, UINT32 max_size, UINT32 *p_
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-extern tNDEF_STATUS  NDEF_MsgAppendRec (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                        UINT8 *p_new_rec, UINT32 new_rec_len)
+extern tNDEF_STATUS  NDEF_MsgAppendRec (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                        uint8_t *p_new_rec, uint32_t new_rec_len)
 {
-    UINT8   *p_rec;
+    uint8_t *p_rec;
     tNDEF_STATUS    status;
 
     /* First, validate new records */
@@ -1044,7 +1044,7 @@ extern tNDEF_STATUS  NDEF_MsgAppendRec (UINT8 *p_msg, UINT32 max_size, UINT32 *p
     else
     {
         /* Find the previous last and clear his 'Message End' bit */
-        UINT8  *pLast = NDEF_MsgGetLastRecInMsg (p_msg);
+        uint8_t  *pLast = NDEF_MsgGetLastRecInMsg (p_msg);
 
         if (!pLast)
             return (NDEF_MSG_NO_MSG_END);
@@ -1075,13 +1075,13 @@ extern tNDEF_STATUS  NDEF_MsgAppendRec (UINT8 *p_msg, UINT32 max_size, UINT32 *p
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-tNDEF_STATUS NDEF_MsgAppendPayload (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                    UINT8 *p_rec, UINT8 *p_add_pl, UINT32 add_pl_len)
+tNDEF_STATUS NDEF_MsgAppendPayload (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                    uint8_t *p_rec, uint8_t *p_add_pl, uint32_t add_pl_len)
 {
-    UINT32      prev_paylen, new_paylen;
-    UINT8       *p_prev_pl, *pp;
-    UINT8       incr_lenfld = 0;
-    UINT8       type_len, id_len;
+    uint32_t    prev_paylen, new_paylen;
+    uint8_t     *p_prev_pl, *pp;
+    uint8_t     incr_lenfld = 0;
+    uint8_t     type_len, id_len;
 
     /* Skip header */
     pp = p_rec + 1;
@@ -1120,7 +1120,7 @@ tNDEF_STATUS NDEF_MsgAppendPayload (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur
     /* If we need to increase the length field from 1 to 4 bytes, do it first */
     if (incr_lenfld)
     {
-        shiftdown (pp + 1, (UINT32)(*p_cur_size - (pp - p_msg) - 1), 3);
+        shiftdown (pp + 1, (uint32_t)(*p_cur_size - (pp - p_msg) - 1), 3);
         p_prev_pl += 3;
     }
 
@@ -1131,14 +1131,14 @@ tNDEF_STATUS NDEF_MsgAppendPayload (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur
         UINT32_TO_BE_STREAM (pp, new_paylen);
     }
     else
-        *pp = (UINT8)new_paylen;
+        *pp = (uint8_t)new_paylen;
 
     /* Point to the end of the previous payload */
     pp = p_prev_pl + prev_paylen;
 
     /* If we are not the last record, make space for the extra payload */
     if ((*p_rec & NDEF_ME_MASK) == 0)
-        shiftdown (pp, (UINT32)(*p_cur_size - (pp - p_msg)), add_pl_len);
+        shiftdown (pp, (uint32_t)(*p_cur_size - (pp - p_msg)), add_pl_len);
 
     /* Now copy in the additional payload data */
     memcpy (pp, p_add_pl, add_pl_len);
@@ -1159,13 +1159,13 @@ tNDEF_STATUS NDEF_MsgAppendPayload (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-tNDEF_STATUS NDEF_MsgReplacePayload (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                     UINT8 *p_rec, UINT8 *p_new_pl, UINT32 new_pl_len)
+tNDEF_STATUS NDEF_MsgReplacePayload (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                     uint8_t *p_rec, uint8_t *p_new_pl, uint32_t new_pl_len)
 {
-    UINT32      prev_paylen;
-    UINT8       *p_prev_pl, *pp;
-    UINT32      paylen_delta;
-    UINT8       type_len, id_len;
+    uint32_t    prev_paylen;
+    uint8_t     *p_prev_pl, *pp;
+    uint32_t    paylen_delta;
+    uint8_t     type_len, id_len;
 
     /* Skip header */
     pp = p_rec + 1;
@@ -1202,7 +1202,7 @@ tNDEF_STATUS NDEF_MsgReplacePayload (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cu
             if ((*p_cur_size + paylen_delta + 3) > max_size)
                 return (NDEF_MSG_INSUFFICIENT_MEM);
 
-            shiftdown (pp + 1, (UINT32)(*p_cur_size - (pp - p_msg) - 1), 3);
+            shiftdown (pp + 1, (uint32_t)(*p_cur_size - (pp - p_msg) - 1), 3);
             p_prev_pl   += 3;
             *p_cur_size += 3;
             *p_rec      &= ~NDEF_SR_MASK;
@@ -1216,14 +1216,14 @@ tNDEF_STATUS NDEF_MsgReplacePayload (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cu
             UINT32_TO_BE_STREAM (pp, new_pl_len);
         }
         else
-            *pp = (UINT8)new_pl_len;
+            *pp = (uint8_t)new_pl_len;
 
         /* Point to the end of the previous payload */
         pp = p_prev_pl + prev_paylen;
 
         /* If we are not the last record, make space for the extra payload */
         if ((*p_rec & NDEF_ME_MASK) == 0)
-            shiftdown (pp, (UINT32)(*p_cur_size - (pp - p_msg)), paylen_delta);
+            shiftdown (pp, (uint32_t)(*p_cur_size - (pp - p_msg)), paylen_delta);
 
         *p_cur_size += paylen_delta;
     }
@@ -1236,7 +1236,7 @@ tNDEF_STATUS NDEF_MsgReplacePayload (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cu
         /* the payload length field goes from 4 bytes to 1 byte        */
         if ( (prev_paylen > 255) && (new_pl_len < 256) )
         {
-            shiftup (pp + 1, pp + 4, (UINT32)(*p_cur_size - (pp - p_msg) - 3));
+            shiftup (pp + 1, pp + 4, (uint32_t)(*p_cur_size - (pp - p_msg) - 3));
             p_prev_pl   -= 3;
             *p_cur_size -= 3;
             *p_rec      |= NDEF_SR_MASK;
@@ -1248,14 +1248,14 @@ tNDEF_STATUS NDEF_MsgReplacePayload (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cu
             UINT32_TO_BE_STREAM (pp, new_pl_len);
         }
         else
-            *pp = (UINT8)new_pl_len;
+            *pp = (uint8_t)new_pl_len;
 
         /* Point to the end of the previous payload */
         pp = p_prev_pl + prev_paylen;
 
         /* If we are not the last record, remove the extra space from the previous payload */
         if ((*p_rec & NDEF_ME_MASK) == 0)
-            shiftup (pp - paylen_delta, pp, (UINT32)(*p_cur_size - (pp - p_msg)));
+            shiftup (pp - paylen_delta, pp, (uint32_t)(*p_cur_size - (pp - p_msg)));
 
         *p_cur_size -= paylen_delta;
     }
@@ -1278,12 +1278,12 @@ tNDEF_STATUS NDEF_MsgReplacePayload (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cu
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-tNDEF_STATUS NDEF_MsgReplaceType (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                  UINT8 *p_rec, UINT8 *p_new_type, UINT8 new_type_len)
+tNDEF_STATUS NDEF_MsgReplaceType (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                  uint8_t *p_rec, uint8_t *p_new_type, uint8_t new_type_len)
 {
-    UINT8       typelen_delta;
-    UINT8       *p_prev_type, prev_type_len;
-    UINT8       *pp;
+    uint8_t     typelen_delta;
+    uint8_t     *p_prev_type, prev_type_len;
+    uint8_t     *pp;
 
     /* Skip header */
     pp = p_rec + 1;
@@ -1313,7 +1313,7 @@ tNDEF_STATUS NDEF_MsgReplaceType (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_s
 
         /* Point to the end of the previous type, and make space for the extra data */
         pp = p_prev_type + prev_type_len;
-        shiftdown (pp, (UINT32)(*p_cur_size - (pp - p_msg)), typelen_delta);
+        shiftdown (pp, (uint32_t)(*p_cur_size - (pp - p_msg)), typelen_delta);
 
         *p_cur_size += typelen_delta;
     }
@@ -1324,7 +1324,7 @@ tNDEF_STATUS NDEF_MsgReplaceType (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_s
 
         /* Point to the end of the previous type, and shift up to fill the the unused space */
         pp = p_prev_type + prev_type_len;
-        shiftup (pp - typelen_delta, pp, (UINT32)(*p_cur_size - (pp - p_msg)));
+        shiftup (pp - typelen_delta, pp, (uint32_t)(*p_cur_size - (pp - p_msg)));
 
         *p_cur_size -= typelen_delta;
     }
@@ -1350,13 +1350,13 @@ tNDEF_STATUS NDEF_MsgReplaceType (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_s
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-tNDEF_STATUS NDEF_MsgReplaceId (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                UINT8 *p_rec, UINT8 *p_new_id, UINT8 new_id_len)
+tNDEF_STATUS NDEF_MsgReplaceId (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                uint8_t *p_rec, uint8_t *p_new_id, uint8_t new_id_len)
 {
-    UINT8       idlen_delta;
-    UINT8       *p_prev_id, *p_idlen_field;
-    UINT8       prev_id_len, type_len;
-    UINT8       *pp;
+    uint8_t     idlen_delta;
+    uint8_t     *p_prev_id, *p_idlen_field;
+    uint8_t     prev_id_len, type_len;
+    uint8_t     *pp;
 
     /* Skip header */
     pp = p_rec + 1;
@@ -1391,7 +1391,7 @@ tNDEF_STATUS NDEF_MsgReplaceId (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_siz
             if ((*p_cur_size + idlen_delta + 1) > max_size)
                 return (NDEF_MSG_INSUFFICIENT_MEM);
 
-            shiftdown (p_idlen_field, (UINT32)(*p_cur_size - (p_idlen_field - p_msg)), 1);
+            shiftdown (p_idlen_field, (uint32_t)(*p_cur_size - (p_idlen_field - p_msg)), 1);
             p_prev_id   += 1;
             *p_cur_size += 1;
             *p_rec      |= NDEF_IL_MASK;
@@ -1401,7 +1401,7 @@ tNDEF_STATUS NDEF_MsgReplaceId (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_siz
 
         /* Point to the end of the previous ID field, and make space for the extra data */
         pp = p_prev_id + prev_id_len;
-        shiftdown (pp, (UINT32)(*p_cur_size - (pp - p_msg)), idlen_delta);
+        shiftdown (pp, (uint32_t)(*p_cur_size - (pp - p_msg)), idlen_delta);
 
         *p_cur_size += idlen_delta;
     }
@@ -1412,14 +1412,14 @@ tNDEF_STATUS NDEF_MsgReplaceId (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_siz
 
         /* Point to the end of the previous ID, and shift up to fill the the unused space */
         pp = p_prev_id + prev_id_len;
-        shiftup (pp - idlen_delta, pp, (UINT32)(*p_cur_size - (pp - p_msg)));
+        shiftup (pp - idlen_delta, pp, (uint32_t)(*p_cur_size - (pp - p_msg)));
 
         *p_cur_size -= idlen_delta;
 
         /* If removing the ID, make sure that length field is also removed */
         if (new_id_len == 0)
         {
-            shiftup (p_idlen_field, p_idlen_field + 1, (UINT32)(*p_cur_size - (p_idlen_field - p_msg - (UINT32)1)));
+            shiftup (p_idlen_field, p_idlen_field + 1, (uint32_t)(*p_cur_size - (p_idlen_field - p_msg - (uint32_t)1)));
             *p_rec      &= ~NDEF_IL_MASK;
             *p_cur_size -= 1;
         }
@@ -1448,10 +1448,10 @@ tNDEF_STATUS NDEF_MsgReplaceId (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_siz
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-tNDEF_STATUS NDEF_MsgRemoveRec (UINT8 *p_msg, UINT32 *p_cur_size, INT32 index)
+tNDEF_STATUS NDEF_MsgRemoveRec (uint8_t *p_msg, uint32_t *p_cur_size, int32_t index)
 {
-    UINT8   *p_rec = NDEF_MsgGetRecByIndex (p_msg, index);
-    UINT8   *pNext, *pPrev;
+    uint8_t *p_rec = NDEF_MsgGetRecByIndex (p_msg, index);
+    uint8_t *pNext, *pPrev;
 
     if (!p_rec)
         return (NDEF_REC_NOT_FOUND);
@@ -1464,7 +1464,7 @@ tNDEF_STATUS NDEF_MsgRemoveRec (UINT8 *p_msg, UINT32 *p_cur_size, INT32 index)
         {
             *pNext |= NDEF_MB_MASK;
 
-            *p_cur_size -= (UINT32)(pNext - p_msg);
+            *p_cur_size -= (uint32_t)(pNext - p_msg);
 
             shiftup (p_msg, pNext, *p_cur_size);
         }
@@ -1485,7 +1485,7 @@ tNDEF_STATUS NDEF_MsgRemoveRec (UINT8 *p_msg, UINT32 *p_cur_size, INT32 index)
 
             *pPrev |= NDEF_ME_MASK;
         }
-        *p_cur_size = (UINT32)(p_rec - p_msg);
+        *p_cur_size = (uint32_t)(p_rec - p_msg);
 
         return (NDEF_OK);
     }
@@ -1495,9 +1495,9 @@ tNDEF_STATUS NDEF_MsgRemoveRec (UINT8 *p_msg, UINT32 *p_cur_size, INT32 index)
         return (FALSE);
 
     /* We are removing p_rec, so shift from pNext to the end */
-    shiftup (p_rec, pNext, (UINT32)(*p_cur_size - (pNext - p_msg)));
+    shiftup (p_rec, pNext, (uint32_t)(*p_cur_size - (pNext - p_msg)));
 
-    *p_cur_size -= (UINT32)(pNext - p_rec);
+    *p_cur_size -= (uint32_t)(pNext - p_rec);
 
     return (NDEF_OK);
 }
@@ -1515,14 +1515,14 @@ tNDEF_STATUS NDEF_MsgRemoveRec (UINT8 *p_msg, UINT32 *p_cur_size, INT32 index)
 ** Returns          The output byte count
 **
 *******************************************************************************/
-tNDEF_STATUS NDEF_MsgCopyAndDechunk (UINT8 *p_src, UINT32 src_len, UINT8 *p_dest, UINT32 *p_out_len)
+tNDEF_STATUS NDEF_MsgCopyAndDechunk (uint8_t *p_src, uint32_t src_len, uint8_t *p_dest, uint32_t *p_out_len)
 {
-    UINT32          out_len, max_out_len;
-    UINT8           *p_rec;
-    UINT8           *p_prev_rec = p_dest;
-    UINT8           *p_type, *p_id, *p_pay;
-    UINT8           type_len, id_len, tnf;
-    UINT32          pay_len;
+    uint32_t        out_len, max_out_len;
+    uint8_t         *p_rec;
+    uint8_t         *p_prev_rec = p_dest;
+    uint8_t         *p_type, *p_id, *p_pay;
+    uint8_t         type_len, id_len, tnf;
+    uint32_t        pay_len;
     tNDEF_STATUS    status;
 
     /* First, validate the source */

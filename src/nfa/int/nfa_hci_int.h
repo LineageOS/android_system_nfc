@@ -27,7 +27,7 @@
 
 #include "nfa_hci_api.h"
 
-extern BOOLEAN HCI_LOOPBACK_DEBUG;
+extern bool    HCI_LOOPBACK_DEBUG;
 
 /*****************************************************************************
 **  Constants and data types
@@ -57,7 +57,7 @@ extern BOOLEAN HCI_LOOPBACK_DEBUG;
 #define NFA_HCI_STATE_RESTORE               0x07     /* HCI restore */
 #define NFA_HCI_STATE_RESTORE_NETWK_ENABLE  0x08     /* HCI is waiting for initialization of other host in the network after restore */
 
-typedef UINT8 tNFA_HCI_STATE;
+typedef uint8_t tNFA_HCI_STATE;
 
 /* NFA HCI PIPE states */
 #define NFA_HCI_PIPE_CLOSED             0x00     /* Pipe is closed */
@@ -66,8 +66,8 @@ typedef UINT8 tNFA_HCI_STATE;
 #define NFA_HCI_INVALID_INX             0xFF
 
 
-typedef UINT8 tNFA_HCI_COMMAND;
-typedef UINT8 tNFA_HCI_RESPONSE;
+typedef uint8_t tNFA_HCI_COMMAND;
+typedef uint8_t tNFA_HCI_RESPONSE;
 
 
 /* NFA HCI Internal events */
@@ -99,7 +99,7 @@ enum
 #define NFA_HCI_FIRST_API_EVENT     NFA_HCI_API_REGISTER_APP_EVT
 #define NFA_HCI_LAST_API_EVENT      NFA_HCI_API_SEND_EVENT_EVT
 
-typedef UINT16 tNFA_HCI_INT_EVT;
+typedef uint16_t tNFA_HCI_INT_EVT;
 
 /* Internal event structures.
 **
@@ -113,7 +113,7 @@ typedef struct
     tNFA_HANDLE         hci_handle;
     char                app_name[NFA_MAX_HCI_APP_NAME_LEN + 1];
     tNFA_HCI_CBACK      *p_cback;
-    BOOLEAN             b_send_conn_evts;
+    bool                b_send_conn_evts;
 } tNFA_HCI_API_REGISTER_APP;
 
 /* data type for NFA_HCI_API_DEREGISTER_APP_EVT */
@@ -136,7 +136,7 @@ typedef struct
 {
     BT_HDR              hdr;
     tNFA_HANDLE         hci_handle;
-    UINT8               gate;
+    uint8_t             gate;
 } tNFA_HCI_API_ALLOC_GATE;
 
 /* data type for NFA_HCI_API_DEALLOC_GATE_EVT */
@@ -144,7 +144,7 @@ typedef struct
 {
     BT_HDR              hdr;
     tNFA_HANDLE         hci_handle;
-    UINT8               gate;
+    uint8_t             gate;
 } tNFA_HCI_API_DEALLOC_GATE;
 
 /* data type for NFA_HCI_API_GET_HOST_LIST_EVT */
@@ -160,8 +160,8 @@ typedef struct
 {
     BT_HDR              hdr;
     tNFA_HANDLE         hci_handle;
-    UINT8               pipe;
-    UINT8               reg_inx;
+    uint8_t             pipe;
+    uint8_t             reg_inx;
 } tNFA_HCI_API_GET_REGISTRY;
 
 /* data type for NFA_HCI_API_SET_REGISTRY_EVT */
@@ -169,10 +169,10 @@ typedef struct
 {
     BT_HDR              hdr;
     tNFA_HANDLE         hci_handle;
-    UINT8               pipe;
-    UINT8               reg_inx;
-    UINT8               size;
-    UINT8               data[NFA_MAX_HCI_CMD_LEN];
+    uint8_t             pipe;
+    uint8_t             reg_inx;
+    uint8_t             size;
+    uint8_t             data[NFA_MAX_HCI_CMD_LEN];
 } tNFA_HCI_API_SET_REGISTRY;
 
 /* data type for NFA_HCI_API_CREATE_PIPE_EVT */
@@ -181,9 +181,9 @@ typedef struct
     BT_HDR              hdr;
     tNFA_HANDLE         hci_handle;
     tNFA_STATUS         status;
-    UINT8               source_gate;
-    UINT8               dest_host;
-    UINT8               dest_gate;
+    uint8_t             source_gate;
+    uint8_t             dest_host;
+    uint8_t             dest_gate;
 } tNFA_HCI_API_CREATE_PIPE_EVT;
 
 /* data type for NFA_HCI_API_OPEN_PIPE_EVT */
@@ -192,7 +192,7 @@ typedef struct
     BT_HDR              hdr;
     tNFA_HANDLE         hci_handle;
     tNFA_STATUS         status;
-    UINT8               pipe;
+    uint8_t             pipe;
 } tNFA_HCI_API_OPEN_PIPE_EVT;
 
 /* data type for NFA_HCI_API_CLOSE_PIPE_EVT */
@@ -201,7 +201,7 @@ typedef struct
     BT_HDR              hdr;
     tNFA_HANDLE         hci_handle;
     tNFA_STATUS         status;
-    UINT8               pipe;
+    uint8_t             pipe;
 } tNFA_HCI_API_CLOSE_PIPE_EVT;
 
 /* data type for NFA_HCI_API_DELETE_PIPE_EVT */
@@ -210,7 +210,7 @@ typedef struct
     BT_HDR              hdr;
     tNFA_HANDLE         hci_handle;
     tNFA_STATUS         status;
-    UINT8               pipe;
+    uint8_t             pipe;
 } tNFA_HCI_API_DELETE_PIPE_EVT;
 
 /* data type for NFA_HCI_API_ADD_STATIC_PIPE_EVT */
@@ -219,9 +219,9 @@ typedef struct
     BT_HDR              hdr;
     tNFA_HANDLE         hci_handle;
     tNFA_STATUS         status;
-    UINT8               host;
-    UINT8               gate;
-    UINT8               pipe;
+    uint8_t             host;
+    uint8_t             gate;
+    uint8_t             pipe;
 } tNFA_HCI_API_ADD_STATIC_PIPE_EVT;
 
 /* data type for NFA_HCI_API_SEND_EVENT_EVT */
@@ -229,13 +229,13 @@ typedef struct
 {
     BT_HDR              hdr;
     tNFA_HANDLE         hci_handle;
-    UINT8               pipe;
-    UINT8               evt_code;
-    UINT16              evt_len;
-    UINT8               *p_evt_buf;
-    UINT16              rsp_len;
-    UINT8               *p_rsp_buf;
-    UINT16              rsp_timeout;
+    uint8_t             pipe;
+    uint8_t             evt_code;
+    uint16_t            evt_len;
+    uint8_t             *p_evt_buf;
+    uint16_t            rsp_len;
+    uint8_t             *p_rsp_buf;
+    uint16_t            rsp_timeout;
 } tNFA_HCI_API_SEND_EVENT_EVT;
 
 /* data type for NFA_HCI_API_SEND_CMD_EVT */
@@ -243,18 +243,18 @@ typedef struct
 {
     BT_HDR              hdr;
     tNFA_HANDLE         hci_handle;
-    UINT8               pipe;
-    UINT8               cmd_code;
-    UINT16              cmd_len;
-    UINT8               data[NFA_MAX_HCI_CMD_LEN];
+    uint8_t             pipe;
+    uint8_t             cmd_code;
+    uint16_t            cmd_len;
+    uint8_t             data[NFA_MAX_HCI_CMD_LEN];
 } tNFA_HCI_API_SEND_CMD_EVT;
 
 /* data type for NFA_HCI_RSP_NV_READ_EVT */
 typedef struct
 {
     BT_HDR              hdr;
-    UINT8               block;
-    UINT16              size;
+    uint8_t             block;
+    uint16_t            size;
     tNFA_STATUS         status;
 } tNFA_HCI_RSP_NV_READ_EVT;
 
@@ -270,10 +270,10 @@ typedef struct
 {
     BT_HDR              hdr;
     tNFA_HANDLE         hci_handle;
-    UINT8               pipe;
-    UINT8               response;
-    UINT8               size;
-    UINT8               data[NFA_MAX_HCI_RSP_LEN];
+    uint8_t             pipe;
+    uint8_t             response;
+    uint8_t             size;
+    uint8_t             data[NFA_MAX_HCI_RSP_LEN];
 } tNFA_HCI_API_SEND_RSP_EVT;
 
 /* common data type for internal events */
@@ -318,44 +318,44 @@ typedef union
 /* Dynamic pipe control block */
 typedef struct
 {
-    UINT8                   pipe_id;                /* Pipe ID */
+    uint8_t                 pipe_id;                /* Pipe ID */
     tNFA_HCI_PIPE_STATE     pipe_state;             /* State of the Pipe */
-    UINT8                   local_gate;             /* local gate id */
-    UINT8                   dest_host;              /* Peer host to which this pipe is connected */
-    UINT8                   dest_gate;              /* Peer gate to which this pipe is connected */
+    uint8_t                 local_gate;             /* local gate id */
+    uint8_t                 dest_host;              /* Peer host to which this pipe is connected */
+    uint8_t                 dest_gate;              /* Peer gate to which this pipe is connected */
 } tNFA_HCI_DYN_PIPE;
 
 /* Dynamic gate control block */
 typedef struct
 {
-    UINT8                   gate_id;                /* local gate id */
+    uint8_t                 gate_id;                /* local gate id */
     tNFA_HANDLE             gate_owner;             /* NFA-HCI handle assigned to the application which owns the gate */
-    UINT32                  pipe_inx_mask;          /* Bit 0 == pipe inx 0, etc */
+    uint32_t                pipe_inx_mask;          /* Bit 0 == pipe inx 0, etc */
 } tNFA_HCI_DYN_GATE;
 
 /* Admin gate control block */
 typedef struct
 {
     tNFA_HCI_PIPE_STATE pipe01_state;                       /* State of Pipe '01' */
-    UINT8               session_id[NFA_HCI_SESSION_ID_LEN]; /* Session ID of the host network */
+    uint8_t             session_id[NFA_HCI_SESSION_ID_LEN]; /* Session ID of the host network */
 } tNFA_ADMIN_GATE_INFO;
 
 /* Link management gate control block */
 typedef struct
 {
     tNFA_HCI_PIPE_STATE pipe00_state;               /* State of Pipe '00' */
-    UINT16              rec_errors;                 /* Receive errors */
+    uint16_t            rec_errors;                 /* Receive errors */
 } tNFA_LINK_MGMT_GATE_INFO;
 
 /* Identity management gate control block */
 typedef struct
 {
-    UINT32              pipe_inx_mask;                  /* Bit 0 == pipe inx 0, etc */
-    UINT16              version_sw;                     /* Software version number */
-    UINT16              version_hw;                     /* Hardware version number */
-    UINT8               vendor_name[20];                /* Vendor name */
-    UINT8               model_id;                       /* Model ID */
-    UINT8               hci_version;                    /* HCI Version */
+    uint32_t            pipe_inx_mask;                  /* Bit 0 == pipe inx 0, etc */
+    uint16_t            version_sw;                     /* Software version number */
+    uint16_t            version_hw;                     /* Hardware version number */
+    uint8_t             vendor_name[20];                /* Vendor name */
+    uint8_t             model_id;                       /* Model ID */
+    uint8_t             hci_version;                    /* HCI Version */
 } tNFA_ID_MGMT_GATE_INFO;
 
 /* Internal flags */
@@ -367,43 +367,43 @@ typedef struct
 typedef struct
 {
     tNFA_HCI_STATE                  hci_state;                          /* state of the HCI */
-    UINT8                           num_nfcee;                          /* Number of NFCEE ID Discovered */
-    UINT8                           num_ee_dis_req_ntf;                 /* Number of ee discovery request ntf received */
-    UINT8                           num_hot_plug_evts;                  /* Number of Hot plug events received after ee discovery disable ntf */
-    UINT8                           inactive_host[NFA_HCI_MAX_HOST_IN_NETWORK]; /* Inactive host in the host network */
-    UINT8                           reset_host[NFA_HCI_MAX_HOST_IN_NETWORK]; /* List of host reseting */
-    BOOLEAN                         b_low_power_mode;                   /* Host controller in low power mode */
-    BOOLEAN                         b_hci_netwk_reset;                  /* Command sent to reset HCI Network */
-    BOOLEAN                         w4_hci_netwk_init;                  /* Wait for other host in network to initialize */
+    uint8_t                         num_nfcee;                          /* Number of NFCEE ID Discovered */
+    uint8_t                         num_ee_dis_req_ntf;                 /* Number of ee discovery request ntf received */
+    uint8_t                         num_hot_plug_evts;                  /* Number of Hot plug events received after ee discovery disable ntf */
+    uint8_t                         inactive_host[NFA_HCI_MAX_HOST_IN_NETWORK]; /* Inactive host in the host network */
+    uint8_t                         reset_host[NFA_HCI_MAX_HOST_IN_NETWORK]; /* List of host reseting */
+    bool                            b_low_power_mode;                   /* Host controller in low power mode */
+    bool                            b_hci_netwk_reset;                  /* Command sent to reset HCI Network */
+    bool                            w4_hci_netwk_init;                  /* Wait for other host in network to initialize */
     TIMER_LIST_ENT                  timer;                              /* Timer to avoid indefinitely waiting for response */
-    UINT8                           conn_id;                            /* Connection ID */
-    UINT8                           buff_size;                          /* Connection buffer size */
-    BOOLEAN                         nv_read_cmplt;                      /* NV Read completed */
-    BOOLEAN                         nv_write_needed;                    /* Something changed - NV write is needed */
-    BOOLEAN                         assembling;                         /* Set true if in process of assembling a message  */
-    BOOLEAN                         assembly_failed;                    /* Set true if Insufficient buffer to Reassemble incoming message */
-    BOOLEAN                         w4_rsp_evt;                         /* Application command sent on HCP Event */
+    uint8_t                         conn_id;                            /* Connection ID */
+    uint8_t                         buff_size;                          /* Connection buffer size */
+    bool                            nv_read_cmplt;                      /* NV Read completed */
+    bool                            nv_write_needed;                    /* Something changed - NV write is needed */
+    bool                            assembling;                         /* Set true if in process of assembling a message  */
+    bool                            assembly_failed;                    /* Set true if Insufficient buffer to Reassemble incoming message */
+    bool                            w4_rsp_evt;                         /* Application command sent on HCP Event */
     tNFA_HANDLE                     app_in_use;                         /* Index of the application that is waiting for response */
-    UINT8                           local_gate_in_use;                  /* Local gate currently working with */
-    UINT8                           remote_gate_in_use;                 /* Remote gate currently working with */
-    UINT8                           remote_host_in_use;                 /* The remote host to which a command is sent */
-    UINT8                           pipe_in_use;                        /* The pipe currently working with */
-    UINT8                           param_in_use;                       /* The registry parameter currently working with */
+    uint8_t                         local_gate_in_use;                  /* Local gate currently working with */
+    uint8_t                         remote_gate_in_use;                 /* Remote gate currently working with */
+    uint8_t                         remote_host_in_use;                 /* The remote host to which a command is sent */
+    uint8_t                         pipe_in_use;                        /* The pipe currently working with */
+    uint8_t                         param_in_use;                       /* The registry parameter currently working with */
     tNFA_HCI_COMMAND                cmd_sent;                           /* The last command sent */
-    BOOLEAN                         ee_disc_cmplt;                      /* EE Discovery operation completed */
-    BOOLEAN                         ee_disable_disc;                    /* EE Discovery operation is disabled */
-    UINT16                          msg_len;                            /* For segmentation - length of the combined message */
-    UINT16                          max_msg_len;                        /* Maximum reassembled message size */
-    UINT8                           msg_data[NFA_MAX_HCI_EVENT_LEN];    /* For segmentation - the combined message data */
-    UINT8                           *p_msg_data;                        /* For segmentation - reassembled message */
-    UINT8                           type;                               /* Instruction type of incoming message */
-    UINT8                           inst;                               /* Instruction of incoming message */
+    bool                            ee_disc_cmplt;                      /* EE Discovery operation completed */
+    bool                            ee_disable_disc;                    /* EE Discovery operation is disabled */
+    uint16_t                        msg_len;                            /* For segmentation - length of the combined message */
+    uint16_t                        max_msg_len;                        /* Maximum reassembled message size */
+    uint8_t                         msg_data[NFA_MAX_HCI_EVENT_LEN];    /* For segmentation - the combined message data */
+    uint8_t                         *p_msg_data;                        /* For segmentation - reassembled message */
+    uint8_t                         type;                               /* Instruction type of incoming message */
+    uint8_t                         inst;                               /* Instruction of incoming message */
 
     BUFFER_Q                        hci_api_q;                          /* Buffer Q to hold incoming API commands */
     BUFFER_Q                        hci_host_reset_api_q;               /* Buffer Q to hold incoming API commands to a host that is reactivating */
     tNFA_HCI_CBACK                  *p_app_cback[NFA_HCI_MAX_APP_CB];   /* Callback functions registered by the applications */
-    UINT16                          rsp_buf_size;                       /* Maximum size of APDU buffer */
-    UINT8                           *p_rsp_buf;                         /* Buffer to hold response to sent event */
+    uint16_t                        rsp_buf_size;                       /* Maximum size of APDU buffer */
+    uint8_t                         *p_rsp_buf;                         /* Buffer to hold response to sent event */
     struct                                                              /* Persistent information for Device Host */
     {
         char                        reg_app_names[NFA_HCI_MAX_APP_CB][NFA_MAX_HCI_APP_NAME_LEN + 1];
@@ -411,7 +411,7 @@ typedef struct
         tNFA_HCI_DYN_GATE           dyn_gates[NFA_HCI_MAX_GATE_CB];
         tNFA_HCI_DYN_PIPE           dyn_pipes[NFA_HCI_MAX_PIPE_CB];
 
-        BOOLEAN                     b_send_conn_evts[NFA_HCI_MAX_APP_CB];
+        bool                        b_send_conn_evts[NFA_HCI_MAX_APP_CB];
         tNFA_ADMIN_GATE_INFO        admin_gate;
         tNFA_LINK_MGMT_GATE_INFO    link_mgmt_gate;
         tNFA_ID_MGMT_GATE_INFO      id_mgmt_gate;
@@ -434,77 +434,77 @@ extern tNFA_HCI_CB nfa_hci_cb;
 /* Functions in nfa_hci_main.c
 */
 extern void nfa_hci_init (void);
-extern void nfa_hci_proc_nfcc_power_mode (UINT8 nfcc_power_mode);
+extern void nfa_hci_proc_nfcc_power_mode (uint8_t nfcc_power_mode);
 extern void nfa_hci_dh_startup_complete (void);
 extern void nfa_hci_startup_complete (tNFA_STATUS status);
 extern void nfa_hci_startup (void);
-extern void nfa_hci_restore_default_config (UINT8 *p_session_id);
+extern void nfa_hci_restore_default_config (uint8_t *p_session_id);
 
 /* Action functions in nfa_hci_act.c
 */
 extern void nfa_hci_check_pending_api_requests (void);
 extern void nfa_hci_check_api_requests (void);
-extern void nfa_hci_handle_admin_gate_cmd (UINT8 *p_data);
-extern void nfa_hci_handle_admin_gate_rsp (UINT8 *p_data, UINT8 data_len);
-extern void nfa_hci_handle_admin_gate_evt (UINT8 *p_data);
-extern void nfa_hci_handle_link_mgm_gate_cmd (UINT8 *p_data);
-extern void nfa_hci_handle_dyn_pipe_pkt (UINT8 pipe, UINT8  *p_data, UINT16 data_len);
+extern void nfa_hci_handle_admin_gate_cmd (uint8_t *p_data);
+extern void nfa_hci_handle_admin_gate_rsp (uint8_t *p_data, uint8_t data_len);
+extern void nfa_hci_handle_admin_gate_evt (uint8_t *p_data);
+extern void nfa_hci_handle_link_mgm_gate_cmd (uint8_t *p_data);
+extern void nfa_hci_handle_dyn_pipe_pkt (uint8_t pipe, uint8_t  *p_data, uint16_t data_len);
 extern void nfa_hci_handle_pipe_open_close_cmd (tNFA_HCI_DYN_PIPE *p_pipe);
 extern void nfa_hci_api_dealloc_gate (tNFA_HCI_EVENT_DATA *p_evt_data);
 extern void nfa_hci_api_deregister (tNFA_HCI_EVENT_DATA *p_evt_data);
 
 /* Utility functions in nfa_hci_utils.c
 */
-extern tNFA_HCI_DYN_GATE  *nfa_hciu_alloc_gate (UINT8 gate_id, tNFA_HANDLE app_handle);
-extern tNFA_HCI_DYN_GATE  *nfa_hciu_find_gate_by_gid (UINT8 gate_id);
+extern tNFA_HCI_DYN_GATE  *nfa_hciu_alloc_gate (uint8_t gate_id, tNFA_HANDLE app_handle);
+extern tNFA_HCI_DYN_GATE  *nfa_hciu_find_gate_by_gid (uint8_t gate_id);
 extern tNFA_HCI_DYN_GATE  *nfa_hciu_find_gate_by_owner (tNFA_HANDLE app_handle);
 extern tNFA_HCI_DYN_GATE  *nfa_hciu_find_gate_with_nopipes_by_owner (tNFA_HANDLE app_handle);
-extern tNFA_HCI_DYN_PIPE  *nfa_hciu_find_pipe_by_pid (UINT8 pipe_id);
+extern tNFA_HCI_DYN_PIPE  *nfa_hciu_find_pipe_by_pid (uint8_t pipe_id);
 extern tNFA_HCI_DYN_PIPE  *nfa_hciu_find_pipe_by_owner (tNFA_HANDLE app_handle);
 extern tNFA_HCI_DYN_PIPE  *nfa_hciu_find_active_pipe_by_owner (tNFA_HANDLE app_handle);
-extern tNFA_HCI_DYN_PIPE  *nfa_hciu_find_pipe_on_gate (UINT8 gate_id);
-extern tNFA_HANDLE         nfa_hciu_get_gate_owner (UINT8 gate_id);
-extern BOOLEAN             nfa_hciu_check_pipe_between_gates (UINT8 local_gate, UINT8 dest_host, UINT8 dest_gate);
-extern BOOLEAN             nfa_hciu_is_active_host (UINT8 host_id);
-extern BOOLEAN             nfa_hciu_is_host_reseting (UINT8 host_id);
-extern BOOLEAN             nfa_hciu_is_no_host_resetting (void);
-extern tNFA_HCI_DYN_PIPE  *nfa_hciu_find_active_pipe_on_gate (UINT8 gate_id);
-extern tNFA_HANDLE         nfa_hciu_get_pipe_owner (UINT8 pipe_id);
-extern UINT8               nfa_hciu_count_open_pipes_on_gate (tNFA_HCI_DYN_GATE *p_gate);
-extern UINT8               nfa_hciu_count_pipes_on_gate (tNFA_HCI_DYN_GATE *p_gate);
-extern tNFA_STATUS         nfa_hciu_asmbl_dyn_pipe_pkt (UINT8 *p_data, UINT8 data_len);
+extern tNFA_HCI_DYN_PIPE  *nfa_hciu_find_pipe_on_gate (uint8_t gate_id);
+extern tNFA_HANDLE         nfa_hciu_get_gate_owner (uint8_t gate_id);
+extern bool                nfa_hciu_check_pipe_between_gates (uint8_t local_gate, uint8_t dest_host, uint8_t dest_gate);
+extern bool                nfa_hciu_is_active_host (uint8_t host_id);
+extern bool                nfa_hciu_is_host_reseting (uint8_t host_id);
+extern bool                nfa_hciu_is_no_host_resetting (void);
+extern tNFA_HCI_DYN_PIPE  *nfa_hciu_find_active_pipe_on_gate (uint8_t gate_id);
+extern tNFA_HANDLE         nfa_hciu_get_pipe_owner (uint8_t pipe_id);
+extern uint8_t             nfa_hciu_count_open_pipes_on_gate (tNFA_HCI_DYN_GATE *p_gate);
+extern uint8_t             nfa_hciu_count_pipes_on_gate (tNFA_HCI_DYN_GATE *p_gate);
+extern tNFA_STATUS         nfa_hciu_asmbl_dyn_pipe_pkt (uint8_t *p_data, uint8_t data_len);
 
-extern tNFA_HCI_RESPONSE   nfa_hciu_add_pipe_to_gate (UINT8 pipe, UINT8 local_gate, UINT8 dest_host, UINT8 dest_gate);
-extern tNFA_HCI_RESPONSE   nfa_hciu_add_pipe_to_static_gate (UINT8 local_gate, UINT8 pipe_id, UINT8 dest_host, UINT8 dest_gate);
+extern tNFA_HCI_RESPONSE   nfa_hciu_add_pipe_to_gate (uint8_t pipe, uint8_t local_gate, uint8_t dest_host, uint8_t dest_gate);
+extern tNFA_HCI_RESPONSE   nfa_hciu_add_pipe_to_static_gate (uint8_t local_gate, uint8_t pipe_id, uint8_t dest_host, uint8_t dest_gate);
 
-extern tNFA_HCI_RESPONSE   nfa_hciu_release_pipe (UINT8 pipe_id);
-extern void                nfa_hciu_release_gate (UINT8 gate);
-extern void                nfa_hciu_remove_all_pipes_from_host (UINT8 host);
-extern UINT8               nfa_hciu_get_allocated_gate_list (UINT8 *p_gate_list);
+extern tNFA_HCI_RESPONSE   nfa_hciu_release_pipe (uint8_t pipe_id);
+extern void                nfa_hciu_release_gate (uint8_t gate);
+extern void                nfa_hciu_remove_all_pipes_from_host (uint8_t host);
+extern uint8_t             nfa_hciu_get_allocated_gate_list (uint8_t *p_gate_list);
 
 extern void                nfa_hciu_send_to_app (tNFA_HCI_EVT event, tNFA_HCI_EVT_DATA *p_evt, tNFA_HANDLE app_handle);
 extern void                nfa_hciu_send_to_all_apps (tNFA_HCI_EVT event, tNFA_HCI_EVT_DATA *p_evt);
 extern void                nfa_hciu_send_to_apps_handling_connectivity_evts (tNFA_HCI_EVT event, tNFA_HCI_EVT_DATA *p_evt);
 
-extern tNFA_STATUS nfa_hciu_send_close_pipe_cmd (UINT8 pipe);
-extern tNFA_STATUS nfa_hciu_send_delete_pipe_cmd (UINT8 pipe);
+extern tNFA_STATUS nfa_hciu_send_close_pipe_cmd (uint8_t pipe);
+extern tNFA_STATUS nfa_hciu_send_delete_pipe_cmd (uint8_t pipe);
 extern tNFA_STATUS nfa_hciu_send_clear_all_pipe_cmd (void);
-extern tNFA_STATUS nfa_hciu_send_open_pipe_cmd (UINT8 pipe);
-extern tNFA_STATUS nfa_hciu_send_get_param_cmd (UINT8 pipe, UINT8 index);
-extern tNFA_STATUS nfa_hciu_send_create_pipe_cmd (UINT8 source_gate, UINT8 dest_host, UINT8 dest_gate);
-extern tNFA_STATUS nfa_hciu_send_set_param_cmd (UINT8 pipe, UINT8 index, UINT8 length, UINT8 *p_data);
-extern tNFA_STATUS nfa_hciu_send_msg (UINT8 pipe_id, UINT8 type, UINT8 instruction, UINT16 pkt_len, UINT8 *p_pkt);
+extern tNFA_STATUS nfa_hciu_send_open_pipe_cmd (uint8_t pipe);
+extern tNFA_STATUS nfa_hciu_send_get_param_cmd (uint8_t pipe, uint8_t index);
+extern tNFA_STATUS nfa_hciu_send_create_pipe_cmd (uint8_t source_gate, uint8_t dest_host, uint8_t dest_gate);
+extern tNFA_STATUS nfa_hciu_send_set_param_cmd (uint8_t pipe, uint8_t index, uint8_t length, uint8_t *p_data);
+extern tNFA_STATUS nfa_hciu_send_msg (uint8_t pipe_id, uint8_t type, uint8_t instruction, uint16_t pkt_len, uint8_t *p_pkt);
 
 
 
 #if (BT_TRACE_VERBOSE == TRUE)
-extern char *nfa_hciu_type_2_str (UINT8 type);
-extern char *nfa_hciu_instr_2_str (UINT8 type);
-extern char *nfa_hciu_get_event_name (UINT16 event);
-extern char *nfa_hciu_get_response_name (UINT8 rsp_code);
-extern char *nfa_hciu_get_state_name (UINT8 state);
-extern char *nfa_hciu_get_type_inst_names (UINT8 pipe, UINT8 type, UINT8 inst, char *p_buff);
-extern char *nfa_hciu_evt_2_str (UINT8 pipe_id, UINT8 evt);
+extern char *nfa_hciu_type_2_str (uint8_t type);
+extern char *nfa_hciu_instr_2_str (uint8_t type);
+extern char *nfa_hciu_get_event_name (uint16_t event);
+extern char *nfa_hciu_get_response_name (uint8_t rsp_code);
+extern char *nfa_hciu_get_state_name (uint8_t state);
+extern char *nfa_hciu_get_type_inst_names (uint8_t pipe, uint8_t type, uint8_t inst, char *p_buff);
+extern char *nfa_hciu_evt_2_str (uint8_t pipe_id, uint8_t evt);
 #endif
 
 

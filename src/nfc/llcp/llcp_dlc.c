@@ -127,7 +127,7 @@ static tLLCP_STATUS llcp_dlsm_idle (tLLCP_DLCB *p_dlcb, tLLCP_DLC_EVENT event, v
             p_dlcb->state     = LLCP_DLC_STATE_W4_REMOTE_RESP;
 
             nfc_start_quick_timer (&p_dlcb->timer, NFC_TTYPE_LLCP_DATA_LINK,
-                                   (UINT32) (llcp_cb.lcb.data_link_timeout * QUICK_TIMER_TICKS_PER_SEC) / 1000);
+                                   (uint32_t) (llcp_cb.lcb.data_link_timeout * QUICK_TIMER_TICKS_PER_SEC) / 1000);
         }
         break;
 
@@ -159,7 +159,7 @@ static tLLCP_STATUS llcp_dlsm_idle (tLLCP_DLCB *p_dlcb, tLLCP_DLC_EVENT event, v
         p_dlcb->state = LLCP_DLC_STATE_W4_LOCAL_RESP;
 
         nfc_start_quick_timer (&p_dlcb->timer, NFC_TTYPE_LLCP_DATA_LINK,
-                               (UINT32) (llcp_cb.lcb.data_link_timeout * QUICK_TIMER_TICKS_PER_SEC) / 1000);
+                               (uint32_t) (llcp_cb.lcb.data_link_timeout * QUICK_TIMER_TICKS_PER_SEC) / 1000);
 
         (*p_dlcb->p_app_cb->p_app_cback) (&data);
 
@@ -234,7 +234,7 @@ static tLLCP_STATUS llcp_dlsm_w4_remote_resp (tLLCP_DLCB *p_dlcb, tLLCP_DLC_EVEN
         data.disconnect_resp.event       = LLCP_SAP_EVT_DISCONNECT_RESP;
         data.disconnect_resp.local_sap   = p_dlcb->local_sap;
         data.disconnect_resp.remote_sap  = p_dlcb->remote_sap;
-        data.disconnect_resp.reason      = *((UINT8*) p_data);
+        data.disconnect_resp.reason      = *((uint8_t*) p_data);
         (*p_dlcb->p_app_cb->p_app_cback) (&data);
 
         /* stop timer, flush any pending data in queue and deallocate control block */
@@ -279,7 +279,7 @@ static tLLCP_STATUS llcp_dlsm_w4_local_resp (tLLCP_DLCB *p_dlcb, tLLCP_DLC_EVENT
     tLLCP_STATUS             status = LLCP_STATUS_SUCCESS;
     tLLCP_CONNECTION_PARAMS *p_params;
     tLLCP_SAP_CBACK_DATA     data;
-    UINT8                    reason;
+    uint8_t                  reason;
 
     switch (event)
     {
@@ -323,7 +323,7 @@ static tLLCP_STATUS llcp_dlsm_w4_local_resp (tLLCP_DLCB *p_dlcb, tLLCP_DLC_EVENT
         if (event == LLCP_DLC_EVENT_TIMEOUT)
             reason = LLCP_SAP_DM_REASON_TEMP_REJECT_THIS;
         else
-            reason = *((UINT8*) p_data);
+            reason = *((uint8_t*) p_data);
 
         /* upper layer rejected connection or didn't respond */
         llcp_util_send_dm (p_dlcb->remote_sap, p_dlcb->local_sap, reason);
@@ -366,7 +366,7 @@ static tLLCP_STATUS llcp_dlsm_w4_local_resp (tLLCP_DLCB *p_dlcb, tLLCP_DLC_EVENT
 *******************************************************************************/
 static tLLCP_STATUS llcp_dlsm_connected (tLLCP_DLCB *p_dlcb, tLLCP_DLC_EVENT event, void *p_data)
 {
-    BOOLEAN              flush;
+    bool                 flush;
     tLLCP_STATUS         status = LLCP_STATUS_SUCCESS;
     tLLCP_SAP_CBACK_DATA data;
 
@@ -375,7 +375,7 @@ static tLLCP_STATUS llcp_dlsm_connected (tLLCP_DLCB *p_dlcb, tLLCP_DLC_EVENT eve
     case LLCP_DLC_EVENT_API_DISCONNECT_REQ:
 
         /* upper layer requests to disconnect */
-        flush = *(BOOLEAN*) (p_data);
+        flush = *(bool   *) (p_data);
 
         /*
         ** if upper layer asks to discard any pending data
@@ -392,7 +392,7 @@ static tLLCP_STATUS llcp_dlsm_connected (tLLCP_DLCB *p_dlcb, tLLCP_DLC_EVENT eve
             llcp_util_send_disc (p_dlcb->remote_sap, p_dlcb->local_sap );
 
             nfc_start_quick_timer (&p_dlcb->timer, NFC_TTYPE_LLCP_DATA_LINK,
-                                   (UINT32) (llcp_cb.lcb.data_link_timeout * QUICK_TIMER_TICKS_PER_SEC) / 1000);
+                                   (uint32_t) (llcp_cb.lcb.data_link_timeout * QUICK_TIMER_TICKS_PER_SEC) / 1000);
         }
         else
         {
@@ -555,7 +555,7 @@ static tLLCP_STATUS llcp_dlsm_w4_remote_dm (tLLCP_DLCB *p_dlcb, tLLCP_DLC_EVENT 
 ** Returns          tLLCP_DLCB *
 **
 *******************************************************************************/
-tLLCP_DLCB *llcp_dlc_find_dlcb_by_sap (UINT8 local_sap, UINT8 remote_sap)
+tLLCP_DLCB *llcp_dlc_find_dlcb_by_sap (uint8_t local_sap, uint8_t remote_sap)
 {
     int i;
 
@@ -618,7 +618,7 @@ void llcp_dlc_flush_q (tLLCP_DLCB *p_dlcb)
 ** Returns          void
 **
 *******************************************************************************/
-static void llcp_dlc_proc_connect_pdu (UINT8 dsap, UINT8 ssap, UINT16 length, UINT8 *p_data)
+static void llcp_dlc_proc_connect_pdu (uint8_t dsap, uint8_t ssap, uint16_t length, uint8_t *p_data)
 {
     tLLCP_DLCB   *p_dlcb;
     tLLCP_STATUS  status;
@@ -652,7 +652,7 @@ static void llcp_dlc_proc_connect_pdu (UINT8 dsap, UINT8 ssap, UINT16 length, UI
     {
         /* find registered SAP with service name */
         if (strlen (params.sn))
-            dsap = llcp_sdp_get_sap_by_name (params.sn, (UINT8) strlen (params.sn));
+            dsap = llcp_sdp_get_sap_by_name (params.sn, (uint8_t) strlen (params.sn));
         else
         {
             /* if SN type is included without SN */
@@ -736,7 +736,7 @@ static void llcp_dlc_proc_connect_pdu (UINT8 dsap, UINT8 ssap, UINT16 length, UI
 ** Returns          void
 **
 *******************************************************************************/
-static void llcp_dlc_proc_disc_pdu (UINT8 dsap, UINT8 ssap, UINT16 length, UINT8 *p_data)
+static void llcp_dlc_proc_disc_pdu (uint8_t dsap, uint8_t ssap, uint16_t length, uint8_t *p_data)
 {
     tLLCP_DLCB *p_dlcb;
 
@@ -772,7 +772,7 @@ static void llcp_dlc_proc_disc_pdu (UINT8 dsap, UINT8 ssap, UINT16 length, UINT8
 ** Returns          void
 **
 *******************************************************************************/
-static void llcp_dlc_proc_cc_pdu (UINT8 dsap, UINT8 ssap, UINT16 length, UINT8 *p_data)
+static void llcp_dlc_proc_cc_pdu (uint8_t dsap, uint8_t ssap, uint16_t length, uint8_t *p_data)
 {
     tLLCP_DLCB              *p_dlcb;
     tLLCP_CONNECTION_PARAMS  params;
@@ -817,7 +817,7 @@ static void llcp_dlc_proc_cc_pdu (UINT8 dsap, UINT8 ssap, UINT16 length, UINT8 *
 ** Returns          void
 **
 *******************************************************************************/
-static void llcp_dlc_proc_dm_pdu (UINT8 dsap, UINT8 ssap, UINT16 length, UINT8 *p_data)
+static void llcp_dlc_proc_dm_pdu (uint8_t dsap, uint8_t ssap, uint16_t length, uint8_t *p_data)
 {
     tLLCP_DLCB *p_dlcb;
 
@@ -861,12 +861,12 @@ static void llcp_dlc_proc_dm_pdu (UINT8 dsap, UINT8 ssap, UINT16 length, UINT8 *
 ** Returns          void
 **
 *******************************************************************************/
-void llcp_dlc_proc_i_pdu (UINT8 dsap, UINT8 ssap, UINT16 i_pdu_length, UINT8 *p_i_pdu, BT_HDR *p_msg)
+void llcp_dlc_proc_i_pdu (uint8_t dsap, uint8_t ssap, uint16_t i_pdu_length, uint8_t *p_i_pdu, BT_HDR *p_msg)
 {
-    UINT8      *p, *p_dst, send_seq, rcv_seq, error_flags;
-    UINT16      info_len, available_bytes;
+    uint8_t    *p, *p_dst, send_seq, rcv_seq, error_flags;
+    uint16_t    info_len, available_bytes;
     tLLCP_DLCB *p_dlcb;
-    BOOLEAN     appended;
+    bool        appended;
     BT_HDR     *p_last_buf;
 
     LLCP_TRACE_DEBUG0 ("llcp_dlc_proc_i_pdu ()");
@@ -880,7 +880,7 @@ void llcp_dlc_proc_i_pdu (UINT8 dsap, UINT8 ssap, UINT16 i_pdu_length, UINT8 *p_
         if (p_msg)
         {
             i_pdu_length = p_msg->len;
-            p_i_pdu = (UINT8 *) (p_msg + 1) + p_msg->offset;
+            p_i_pdu = (uint8_t *) (p_msg + 1) + p_msg->offset;
         }
 
         info_len = i_pdu_length - LLCP_PDU_HEADER_SIZE - LLCP_SEQUENCE_SIZE;
@@ -917,7 +917,7 @@ void llcp_dlc_proc_i_pdu (UINT8 dsap, UINT8 ssap, UINT16 i_pdu_length, UINT8 *p_
         else
         {
             /* if peer device sends more than our receiving window size */
-            if ((UINT8) (send_seq - p_dlcb->sent_ack_seq) % LLCP_SEQ_MODULO >= p_dlcb->local_rw)
+            if ((uint8_t) (send_seq - p_dlcb->sent_ack_seq) % LLCP_SEQ_MODULO >= p_dlcb->local_rw)
             {
                 LLCP_TRACE_ERROR3 ("llcp_dlc_proc_i_pdu (): Bad N(S):%d >= V(RA):%d + RW(L):%d",
                                     send_seq, p_dlcb->sent_ack_seq, p_dlcb->local_rw);
@@ -927,8 +927,8 @@ void llcp_dlc_proc_i_pdu (UINT8 dsap, UINT8 ssap, UINT16 i_pdu_length, UINT8 *p_
         }
 
         /* check N(R) is in valid range; V(SA) <= N(R) <= V(S) */
-        if ((UINT8) (rcv_seq - p_dlcb->rcvd_ack_seq) % LLCP_SEQ_MODULO + (UINT8) (p_dlcb->next_tx_seq - rcv_seq) % LLCP_SEQ_MODULO
-            != (UINT8) (p_dlcb->next_tx_seq - p_dlcb->rcvd_ack_seq) % LLCP_SEQ_MODULO)
+        if ((uint8_t) (rcv_seq - p_dlcb->rcvd_ack_seq) % LLCP_SEQ_MODULO + (uint8_t) (p_dlcb->next_tx_seq - rcv_seq) % LLCP_SEQ_MODULO
+            != (uint8_t) (p_dlcb->next_tx_seq - p_dlcb->rcvd_ack_seq) % LLCP_SEQ_MODULO)
         {
             error_flags |= LLCP_FRMR_R_ERROR_FLAG;
             LLCP_TRACE_ERROR3 ("llcp_dlc_proc_i_pdu (): Bad N(R):%d valid range [V(SA):%d, V(S):%d]",
@@ -960,7 +960,7 @@ void llcp_dlc_proc_i_pdu (UINT8 dsap, UINT8 ssap, UINT16 i_pdu_length, UINT8 *p_
                 /* if new UI PDU with length can be attached at the end of buffer */
                 if (available_bytes >= LLCP_PDU_AGF_LEN_SIZE + info_len)
                 {
-                    p_dst = (UINT8*) (p_last_buf + 1) + p_last_buf->offset + p_last_buf->len;
+                    p_dst = (uint8_t*) (p_last_buf + 1) + p_last_buf->offset + p_last_buf->len;
 
                     /* add length of information in I PDU */
                     UINT16_TO_BE_STREAM (p_dst, info_len);
@@ -1002,7 +1002,7 @@ void llcp_dlc_proc_i_pdu (UINT8 dsap, UINT8 ssap, UINT16 i_pdu_length, UINT8 *p_
 
                     if (p_msg)
                     {
-                        p_dst = (UINT8*) (p_msg + 1);
+                        p_dst = (uint8_t*) (p_msg + 1);
 
                         /* add length of information in front of information */
                         UINT16_TO_BE_STREAM (p_dst, info_len);
@@ -1073,13 +1073,13 @@ void llcp_dlc_proc_i_pdu (UINT8 dsap, UINT8 ssap, UINT16 i_pdu_length, UINT8 *p_
 ** Returns          void
 **
 *******************************************************************************/
-static void llcp_dlc_proc_rr_rnr_pdu (UINT8 dsap, UINT8 ptype, UINT8 ssap, UINT16 length, UINT8 *p_data)
+static void llcp_dlc_proc_rr_rnr_pdu (uint8_t dsap, uint8_t ptype, uint8_t ssap, uint16_t length, uint8_t *p_data)
 {
-    UINT8      rcv_seq, error_flags;
+    uint8_t    rcv_seq, error_flags;
     tLLCP_DLCB *p_dlcb;
-    BOOLEAN     flush = TRUE;
+    bool        flush = TRUE;
     tLLCP_SAP_CBACK_DATA cback_data;
-    BOOLEAN              old_remote_busy;
+    bool                 old_remote_busy;
 
     LLCP_TRACE_DEBUG0 ("llcp_dlc_proc_rr_rnr_pdu ()");
 
@@ -1096,8 +1096,8 @@ static void llcp_dlc_proc_rr_rnr_pdu (UINT8 dsap, UINT8 ptype, UINT8 ssap, UINT1
         }
 
         /* check N(R) is in valid range; V(SA) <= N(R) <= V(S) */
-        if ((UINT8) (rcv_seq - p_dlcb->rcvd_ack_seq) % LLCP_SEQ_MODULO + (UINT8) (p_dlcb->next_tx_seq - rcv_seq) % LLCP_SEQ_MODULO
-            != (UINT8) (p_dlcb->next_tx_seq - p_dlcb->rcvd_ack_seq) % LLCP_SEQ_MODULO )
+        if ((uint8_t) (rcv_seq - p_dlcb->rcvd_ack_seq) % LLCP_SEQ_MODULO + (uint8_t) (p_dlcb->next_tx_seq - rcv_seq) % LLCP_SEQ_MODULO
+            != (uint8_t) (p_dlcb->next_tx_seq - p_dlcb->rcvd_ack_seq) % LLCP_SEQ_MODULO )
         {
             error_flags |= LLCP_FRMR_R_ERROR_FLAG;
             LLCP_TRACE_ERROR3 ("llcp_dlc_proc_rr_rnr_pdu (): Bad N(R):%d valid range [V(SA):%d, V(S):%d]",
@@ -1190,7 +1190,7 @@ static void llcp_dlc_proc_rr_rnr_pdu (UINT8 dsap, UINT8 ptype, UINT8 ssap, UINT1
 ** Returns          void
 **
 *******************************************************************************/
-void llcp_dlc_proc_rx_pdu (UINT8 dsap, UINT8 ptype, UINT8 ssap, UINT16 length, UINT8 *p_data)
+void llcp_dlc_proc_rx_pdu (uint8_t dsap, uint8_t ptype, uint8_t ssap, uint16_t length, uint8_t *p_data)
 {
     tLLCP_DLCB *p_dlcb;
 
@@ -1258,8 +1258,8 @@ void llcp_dlc_proc_rx_pdu (UINT8 dsap, UINT8 ptype, UINT8 ssap, UINT16 length, U
 *******************************************************************************/
 void llcp_dlc_check_to_send_rr_rnr (void)
 {
-    UINT8   idx;
-    BOOLEAN flush = TRUE;
+    uint8_t idx;
+    bool    flush = TRUE;
 
     LLCP_TRACE_DEBUG0 ("llcp_dlc_check_to_send_rr_rnr ()");
 
@@ -1302,9 +1302,9 @@ void llcp_dlc_check_to_send_rr_rnr (void)
 ** Returns          TRUE if remote can receive more data
 **
 *******************************************************************************/
-BOOLEAN llcp_dlc_is_rw_open (tLLCP_DLCB *p_dlcb)
+bool    llcp_dlc_is_rw_open (tLLCP_DLCB *p_dlcb)
 {
-    if ((UINT8) (p_dlcb->next_tx_seq - p_dlcb->rcvd_ack_seq) % LLCP_SEQ_MODULO < p_dlcb->remote_rw)
+    if ((uint8_t) (p_dlcb->next_tx_seq - p_dlcb->rcvd_ack_seq) % LLCP_SEQ_MODULO < p_dlcb->remote_rw)
     {
         return TRUE;
     }
@@ -1328,11 +1328,11 @@ BOOLEAN llcp_dlc_is_rw_open (tLLCP_DLCB *p_dlcb)
 BT_HDR* llcp_dlc_get_next_pdu (tLLCP_DLCB *p_dlcb)
 {
     BT_HDR *p_msg = NULL;
-    BOOLEAN flush = TRUE;
+    bool    flush = TRUE;
     tLLCP_SAP_CBACK_DATA data;
 
 #if (BT_TRACE_VERBOSE == TRUE)
-    UINT8   send_seq = p_dlcb->next_tx_seq;
+    uint8_t send_seq = p_dlcb->next_tx_seq;
 #endif
 
     /* if there is data to send and remote device can receive it */
@@ -1403,7 +1403,7 @@ BT_HDR* llcp_dlc_get_next_pdu (tLLCP_DLCB *p_dlcb)
 ** Returns          length of PDU
 **
 *******************************************************************************/
-UINT16 llcp_dlc_get_next_pdu_length (tLLCP_DLCB *p_dlcb)
+uint16_t llcp_dlc_get_next_pdu_length (tLLCP_DLCB *p_dlcb)
 {
     BT_HDR *p_msg;
 

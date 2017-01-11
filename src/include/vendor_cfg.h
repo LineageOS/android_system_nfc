@@ -25,16 +25,16 @@
 /* compile-time configuration structure for proprietary protocol and discovery value */
 typedef struct
 {
-    UINT8 pro_protocol_18092_active;
-    UINT8 pro_protocol_b_prime;
-    UINT8 pro_protocol_dual;
-    UINT8 pro_protocol_15693;
-    UINT8 pro_protocol_kovio;
-    UINT8 pro_protocol_mfc;
+    uint8_t pro_protocol_18092_active;
+    uint8_t pro_protocol_b_prime;
+    uint8_t pro_protocol_dual;
+    uint8_t pro_protocol_15693;
+    uint8_t pro_protocol_kovio;
+    uint8_t pro_protocol_mfc;
 
-    UINT8 pro_discovery_kovio_poll;
-    UINT8 pro_discovery_b_prime_poll;
-    UINT8 pro_discovery_b_prime_listen;
+    uint8_t pro_discovery_kovio_poll;
+    uint8_t pro_discovery_b_prime_poll;
+    uint8_t pro_discovery_b_prime_listen;
 } tNFA_PROPRIETARY_CFG;
 
 

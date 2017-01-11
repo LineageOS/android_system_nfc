@@ -35,8 +35,8 @@
 
 /* Handover version */
 #define NFA_CHO_VERSION             0x12    /* version 1.2 */
-#define NFA_CHO_GET_MAJOR_VERSION(x) ((UINT8)(x) >> 4)
-#define NFA_CHO_GET_MINOR_VERSION(x) ((UINT8)(x) & 0x0F)
+#define NFA_CHO_GET_MAJOR_VERSION(x) ((uint8_t)(x) >> 4)
+#define NFA_CHO_GET_MINOR_VERSION(x) ((uint8_t)(x) & 0x0F)
 
 /*
 ** NFA Connection Handover callback events
@@ -51,14 +51,14 @@
 #define NFA_CHO_SEL_ERR_EVT         0x07    /* Received select with error       */
 #define NFA_CHO_TX_FAIL_EVT         0x08    /* Cannot send message to peer      */
 
-typedef UINT8 tNFA_CHO_EVT;
+typedef uint8_t tNFA_CHO_EVT;
 
 /*
 ** Data for NFA_CHO_ACTIVATED_EVT
 */
 typedef struct
 {
-    BOOLEAN         is_initiator;   /* TRUE if local LLCP is initiator */
+    bool            is_initiator;   /* TRUE if local LLCP is initiator */
 } tNFA_CHO_ACTIVATED;
 
 /* NFA Connection Handover Carrier Power State */
@@ -67,13 +67,13 @@ typedef struct
 #define NFA_CHO_CPS_ACTIVATING      0x02    /* Activating carrier               */
 #define NFA_CHO_CPS_UNKNOWN         0x03    /* Unknown                          */
 
-typedef UINT8 tNFA_CHO_CPS;
+typedef uint8_t tNFA_CHO_CPS;
 
 /* Data for Alternative Carrier Information */
 typedef struct
 {
     tNFA_CHO_CPS        cps;            /* carrier power state                      */
-    UINT8               num_aux_data;   /* number of Auxiliary NDEF records         */
+    uint8_t             num_aux_data;   /* number of Auxiliary NDEF records         */
 } tNFA_CHO_AC_INFO;
 
 /* Device Role of Handover */
@@ -81,7 +81,7 @@ typedef struct
 #define NFA_CHO_ROLE_SELECTOR   1
 #define NFA_CHO_ROLE_UNDECIDED  2
 
-typedef UINT8 tNFA_CHO_ROLE_TYPE;
+typedef uint8_t tNFA_CHO_ROLE_TYPE;
 
 /*
 ** Data for NFA_CHO_CONNECTED_EVT
@@ -104,7 +104,7 @@ typedef struct
 #define NFA_CHO_DISC_REASON_SEMANTIC_ERROR      8
 #define NFA_CHO_DISC_REASON_INTERNAL_ERROR      9
 
-typedef UINT8 tNFA_CHO_DISC_REASON;
+typedef uint8_t tNFA_CHO_DISC_REASON;
 
 /*
 ** Data for NFA_CHO_DISCONNECTED_EVT
@@ -117,8 +117,8 @@ typedef struct
 /* Reference ID */
 typedef struct
 {
-    UINT8               ref_len;
-    UINT8               ref_name[NFA_CHO_MAX_REF_NAME_LEN];
+    uint8_t             ref_len;
+    uint8_t             ref_name[NFA_CHO_MAX_REF_NAME_LEN];
 } tNFA_CHO_REF_ID;
 
 /* Alternative Carrier records including carrier power state, carrier data reference and aux data reference */
@@ -126,7 +126,7 @@ typedef struct
 {
     tNFA_CHO_CPS        cps;                                      /* carrier power state    */
     tNFA_CHO_REF_ID     carrier_data_ref;                         /* carrier data reference */
-    UINT8               aux_data_ref_count;                       /* number of aux data     */
+    uint8_t             aux_data_ref_count;                       /* number of aux data     */
     tNFA_CHO_REF_ID     aux_data_ref[NFA_CHO_MAX_AUX_DATA_COUNT]; /* aux data reference     */
 } tNFA_CHO_AC_REC;
 
@@ -137,10 +137,10 @@ typedef struct
 typedef struct
 {
     tNFA_STATUS         status;
-    UINT8               num_ac_rec;                     /* number of Alternative Carrier records*/
+    uint8_t             num_ac_rec;                     /* number of Alternative Carrier records*/
     tNFA_CHO_AC_REC     ac_rec[NFA_CHO_MAX_AC_INFO];    /* Alternative Carrier records          */
-    UINT8               *p_ref_ndef;                    /* pointer of NDEF including AC records */
-    UINT32              ref_ndef_len;                   /* length of NDEF                       */
+    uint8_t             *p_ref_ndef;                    /* pointer of NDEF including AC records */
+    uint32_t            ref_ndef_len;                   /* length of NDEF                       */
 } tNFA_CHO_REQUEST;
 
 /*
@@ -149,10 +149,10 @@ typedef struct
 typedef struct
 {
     tNFA_STATUS         status;
-    UINT8               num_ac_rec;                     /* number of Alternative Carrier records*/
+    uint8_t             num_ac_rec;                     /* number of Alternative Carrier records*/
     tNFA_CHO_AC_REC     ac_rec[NFA_CHO_MAX_AC_INFO];    /* Alternative Carrier records          */
-    UINT8               *p_ref_ndef;                    /* pointer of NDEF including AC records */
-    UINT32              ref_ndef_len;                   /* length of NDEF                       */
+    uint8_t             *p_ref_ndef;                    /* pointer of NDEF including AC records */
+    uint32_t            ref_ndef_len;                   /* length of NDEF                       */
 } tNFA_CHO_SELECT;
 
 /* Error reason */
@@ -165,8 +165,8 @@ typedef struct
 */
 typedef struct
 {
-    UINT8               error_reason;   /* Error reason          */
-    UINT32              error_data;     /* Error Data per reason */
+    uint8_t             error_reason;   /* Error reason          */
+    uint32_t            error_data;     /* Error Data per reason */
 } tNFA_CHO_SEL_ERR;
 
 /* Union of all Connection Handover callback structures */
@@ -213,7 +213,7 @@ extern "C"
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_ChoRegister (BOOLEAN        enable_server,
+NFC_API extern tNFA_STATUS NFA_ChoRegister (bool           enable_server,
                                             tNFA_CHO_CBACK *p_cback);
 
 /*******************************************************************************
@@ -291,10 +291,10 @@ NFC_API extern tNFA_STATUS NFA_ChoDisconnect (void);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_ChoSendHr (UINT8             num_ac_info,
+NFC_API extern tNFA_STATUS NFA_ChoSendHr (uint8_t           num_ac_info,
                                           tNFA_CHO_AC_INFO *p_ac_info,
-                                          UINT8            *p_ndef,
-                                          UINT32            ndef_len);
+                                          uint8_t          *p_ndef,
+                                          uint32_t          ndef_len);
 
 /*******************************************************************************
 **
@@ -314,10 +314,10 @@ NFC_API extern tNFA_STATUS NFA_ChoSendHr (UINT8             num_ac_info,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_ChoSendHs (UINT8             num_ac_info,
+NFC_API extern tNFA_STATUS NFA_ChoSendHs (uint8_t           num_ac_info,
                                           tNFA_CHO_AC_INFO *p_ac_info,
-                                          UINT8            *p_ndef,
-                                          UINT32            ndef_len);
+                                          uint8_t          *p_ndef,
+                                          uint32_t          ndef_len);
 
 /*******************************************************************************
 **
@@ -334,8 +334,8 @@ NFC_API extern tNFA_STATUS NFA_ChoSendHs (UINT8             num_ac_info,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_ChoSendSelectError (UINT8  error_reason,
-                                                   UINT32 error_data);
+NFC_API extern tNFA_STATUS NFA_ChoSendSelectError (uint8_t  error_reason,
+                                                   uint32_t error_data);
 
 /*******************************************************************************
 **
@@ -347,7 +347,7 @@ NFC_API extern tNFA_STATUS NFA_ChoSendSelectError (UINT8  error_reason,
 ** Returns          The new or current trace level
 **
 *******************************************************************************/
-NFC_API extern UINT8 NFA_ChoSetTraceLevel (UINT8 new_level);
+NFC_API extern uint8_t NFA_ChoSetTraceLevel (uint8_t new_level);
 
 #if (defined (NFA_CHO_TEST_INCLUDED) && (NFA_CHO_TEST_INCLUDED == TRUE))
 
@@ -360,9 +360,9 @@ NFC_API extern UINT8 NFA_ChoSetTraceLevel (UINT8 new_level);
 ** Description      This function is called to set test parameters.
 **
 *******************************************************************************/
-NFC_API extern void NFA_ChoSetTestParam (UINT8  test_enable,
-                                         UINT8  test_version,
-                                         UINT16 test_random_number);
+NFC_API extern void NFA_ChoSetTestParam (uint8_t  test_enable,
+                                         uint8_t  test_version,
+                                         uint16_t test_random_number);
 #endif
 
 #ifdef __cplusplus

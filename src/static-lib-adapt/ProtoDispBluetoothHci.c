@@ -21,11 +21,11 @@
 #include <cutils/log.h>
 
 
-extern UINT8 *HCIDisp1 (char *p_descr, UINT8 *p_data);
-extern UINT32 ScrProtocolTraceFlag;
+extern uint8_t *HCIDisp1 (char *p_descr, uint8_t *p_data);
+extern uint32_t ScrProtocolTraceFlag;
 #define HCI_GEN_TRACE   (TRACE_CTRL_GENERAL | TRACE_LAYER_HCI | \
                          TRACE_ORG_PROTO_DISP | hci_trace_type)
-static UINT8 hci_trace_type = 0;
+static uint8_t hci_trace_type = 0;
 static char* modes_str [] =
 {
     "No sleep mode",
@@ -42,17 +42,17 @@ static char* modes_str [] =
     "",
     "UART with BREAK"
 };
-static UINT8* p_end_hci = NULL;
-static UINT8* HCIDisp1Ext (char *p_descr, UINT8 *p_data, char * p_ext);
-static void disp_sleepmode (UINT8* p);
-static void disp_sleepmode_evt (UINT8* p);
+static uint8_t* p_end_hci = NULL;
+static uint8_t* HCIDisp1Ext (char *p_descr, uint8_t *p_data, char * p_ext);
+static void disp_sleepmode (uint8_t* p);
+static void disp_sleepmode_evt (uint8_t* p);
 
 
 ///////////////////////////////////////////
 ///////////////////////////////////////////
 
 
-UINT8 *HCIDisp1Ext (char *p_descr, UINT8 *p_data, char * p_ext)
+uint8_t *HCIDisp1Ext (char *p_descr, uint8_t *p_data, char * p_ext)
 {
     if (p_data == p_end_hci)
         return p_data;
@@ -75,7 +75,7 @@ UINT8 *HCIDisp1Ext (char *p_descr, UINT8 *p_data, char * p_ext)
 ** Returns          none.
 **
 *******************************************************************************/
-void disp_sleepmode(UINT8 * p)
+void disp_sleepmode(uint8_t * p)
 {
     hci_trace_type = TRACE_TYPE_CMD_TX;
     ScrLog (HCI_GEN_TRACE, "--");
@@ -109,9 +109,9 @@ void disp_sleepmode(UINT8 * p)
 ** Returns          none.
 **
 *******************************************************************************/
-void disp_sleepmode_evt(UINT8* p)
+void disp_sleepmode_evt(uint8_t* p)
 {
-    UINT8   len=p[1], status=p[5];
+    uint8_t len=p[1], status=p[5];
 
     hci_trace_type = TRACE_TYPE_EVT_RX;
     ScrLog (HCI_GEN_TRACE, "--");
@@ -137,7 +137,7 @@ void ProtoDispBluetoothHciCmd (BT_HDR *p_buf)
 {
     if (!(ScrProtocolTraceFlag & SCR_PROTO_TRACE_HCI_SUMMARY))
         return;
-    UINT8 * p = (UINT8 *)(p_buf + 1) + p_buf->offset;
+    uint8_t * p = (uint8_t *)(p_buf + 1) + p_buf->offset;
     if (*(p) == 0x27 && *(p+1) == 0xfc) // opcode sleep mode
     {
         disp_sleepmode(p);
@@ -160,7 +160,7 @@ void ProtoDispBluetoothHciEvt (BT_HDR *pBuffer)
     if (!(ScrProtocolTraceFlag & SCR_PROTO_TRACE_HCI_SUMMARY))
         return;
 
-    UINT8   *p = (UINT8 *)(pBuffer + 1) + pBuffer->offset;
+    uint8_t *p = (uint8_t *)(pBuffer + 1) + pBuffer->offset;
     if (*p == 0x0e) // command complete
     {
         if (*(p+1) == 4)    // length

@@ -19,17 +19,17 @@
 
 #if (GKI_DEBUG == TRUE)
 
-const INT8 * const OSTaskStates[] =
+const int8_t * const OSTaskStates[] =
 {
-    (INT8 *)"DEAD",  /* 0 */
-    (INT8 *)"REDY",  /* 1 */
-    (INT8 *)"WAIT",  /* 2 */
-    (INT8 *)"",
-    (INT8 *)"DELY",  /* 4 */
-    (INT8 *)"",
-    (INT8 *)"",
-    (INT8 *)"",
-    (INT8 *)"SUSP",  /* 8 */
+    (int8_t *)"DEAD",  /* 0 */
+    (int8_t *)"REDY",  /* 1 */
+    (int8_t *)"WAIT",  /* 2 */
+    (int8_t *)"",
+    (int8_t *)"DELY",  /* 4 */
+    (int8_t *)"",
+    (int8_t *)"",
+    (int8_t *)"",
+    (int8_t *)"SUSP",  /* 8 */
 };
 
 
@@ -42,12 +42,12 @@ const INT8 * const OSTaskStates[] =
 ** Returns          void
 **
 *******************************************************************************/
-void GKI_PrintBufferUsage(UINT8 *p_num_pools, UINT16 *p_cur_used)
+void GKI_PrintBufferUsage(uint8_t *p_num_pools, uint16_t *p_cur_used)
 {
     int i;
     FREE_QUEUE_T    *p;
-    UINT8   num = gki_cb.com.curr_total_no_of_pools;
-    UINT16   cur[GKI_NUM_TOTAL_BUF_POOLS];
+    uint8_t num = gki_cb.com.curr_total_no_of_pools;
+    uint16_t cur[GKI_NUM_TOTAL_BUF_POOLS];
 
     GKI_TRACE_0("");
     GKI_TRACE_0("--- GKI Buffer Pool Summary (R - restricted, P - public) ---");
@@ -86,7 +86,7 @@ void GKI_PrintBufferUsage(UINT8 *p_num_pools, UINT16 *p_cur_used)
 *******************************************************************************/
 void GKI_PrintBuffer(void)
 {
-    UINT16 i;
+    uint16_t i;
     for(i=0; i<GKI_NUM_TOTAL_BUF_POOLS; i++)
     {
         GKI_TRACE_5("pool:%4u free %4u cur %3u max %3u  total%3u", i, gki_cb.com.freeq[i].size,
@@ -105,14 +105,14 @@ void GKI_PrintBuffer(void)
 ** Returns          the number of unused byte on the stack. 4 in case of stack overrun
 **
 *******************************************************************************/
-UINT16 gki_calc_stack (UINT8 task)
+uint16_t gki_calc_stack (uint8_t task)
 {
     int    j, stacksize;
-    UINT32 MagicNum;
-    UINT32 *p;
+    uint32_t MagicNum;
+    uint32_t *p;
 
     stacksize = (int) gki_cb.com.OSStackSize[task];
-    p = (UINT32 *)gki_cb.com.OSStack[task]; /* assume stack is aligned, */
+    p = (uint32_t *)gki_cb.com.OSStack[task]; /* assume stack is aligned, */
     MagicNum = *p;
 
     for(j = 0; j < stacksize; j++)
@@ -120,7 +120,7 @@ UINT16 gki_calc_stack (UINT8 task)
         if(*p++ != MagicNum) break;
     }
 
-    return (j * sizeof(UINT32));
+    return (j * sizeof(uint32_t));
 }
 
 /*******************************************************************************
@@ -137,7 +137,7 @@ void GKI_print_task(void)
 #ifdef _BT_WIN32
 	GKI_TRACE_0("Service not available under insight");
 #else
-    UINT8 TaskId;
+    uint8_t TaskId;
 
     GKI_TRACE_0("TID TASKNAME STATE FREE_STACK  STACK");
     for(TaskId=0; TaskId < GKI_MAX_TASKS; TaskId++)
@@ -145,7 +145,7 @@ void GKI_print_task(void)
         if (gki_cb.com.OSRdyTbl[TaskId] != TASK_DEAD)
         {
             GKI_TRACE_5("%2u   %-8s %-5s  0x%04X     0x%04X Bytes",
-                (UINT16)TaskId,  gki_cb.com.OSTName[TaskId],
+                (uint16_t)TaskId,  gki_cb.com.OSTName[TaskId],
                 OSTaskStates[gki_cb.com.OSRdyTbl[TaskId]],
                 gki_calc_stack(TaskId), gki_cb.com.OSStackSize[TaskId]);
 
@@ -164,12 +164,12 @@ void GKI_print_task(void)
 ** Returns          void
 **
 *******************************************************************************/
-void gki_print_buffer_statistics(FP_PRINT print, INT16 pool)
+void gki_print_buffer_statistics(FP_PRINT print, int16_t pool)
 {
-    UINT16           i;
+    uint16_t         i;
     BUFFER_HDR_T    *hdr;
-    UINT16           size,act_size,maxbuffs;
-    UINT32           *magic;
+    uint16_t         size,act_size,maxbuffs;
+    uint32_t         *magic;
 
     if (pool > GKI_NUM_TOTAL_BUF_POOLS || pool < 0)
     {
@@ -189,9 +189,9 @@ void gki_print_buffer_statistics(FP_PRINT print, INT16 pool)
     hdr = (BUFFER_HDR_T *)(gki_cb.com.pool_start[pool]);
     for(i=0; i<maxbuffs; i++)
     {
-        magic = (UINT32 *)((UINT8 *)hdr + BUFFER_HDR_SIZE + size);
+        magic = (uint32_t *)((uint8_t *)hdr + BUFFER_HDR_SIZE + size);
         print("%3d: 0x%02x %4d %10s\n", i, hdr->task_id, hdr->status, (*magic == MAGIC_NO)?"OK":"CORRUPTED");
-        hdr          = (BUFFER_HDR_T *)((UINT8 *)hdr + act_size);
+        hdr          = (BUFFER_HDR_T *)((uint8_t *)hdr + act_size);
     }
     return;
 }
@@ -204,15 +204,15 @@ void gki_print_buffer_statistics(FP_PRINT print, INT16 pool)
 ** Description      Dumps used buffers in the particular pool
 **
 *******************************************************************************/
-GKI_API void gki_print_used_bufs (FP_PRINT print, UINT8 pool_id)
+GKI_API void gki_print_used_bufs (FP_PRINT print, uint8_t pool_id)
 {
-    UINT8        *p_start;
-    UINT16       buf_size;
-    UINT16       num_bufs;
+    uint8_t      *p_start;
+    uint16_t     buf_size;
+    uint16_t     num_bufs;
     BUFFER_HDR_T *p_hdr;
-    UINT16       i;
-    UINT32         *magic;
-    UINT16       *p;
+    uint16_t     i;
+    uint32_t       *magic;
+    uint16_t     *p;
 
 
     if (pool_id >= GKI_NUM_TOTAL_BUF_POOLS && gki_cb.com.pool_start[pool_id] != 0)
@@ -228,8 +228,8 @@ GKI_API void gki_print_used_bufs (FP_PRINT print, UINT8 pool_id)
     for (i = 0; i < num_bufs; i++, p_start += buf_size)
     {
         p_hdr = (BUFFER_HDR_T *)p_start;
-        magic = (UINT32 *)((UINT8 *)p_hdr + buf_size - sizeof(UINT32));
-        p     = (UINT16 *) p_hdr;
+        magic = (uint32_t *)((uint8_t *)p_hdr + buf_size - sizeof(uint32_t));
+        p     = (uint16_t *) p_hdr;
 
         if (p_hdr->status != BUF_STATUS_FREE)
         {
@@ -256,7 +256,7 @@ GKI_API void gki_print_used_bufs (FP_PRINT print, UINT8 pool_id)
 *******************************************************************************/
 void gki_print_task (FP_PRINT print)
 {
-    UINT8 i;
+    uint8_t i;
 
     print("TID VID TASKNAME STATE WAIT WAITFOR TIMEOUT STACK\n");
     print("-------------------------------------------------\n");
@@ -265,7 +265,7 @@ void gki_print_task (FP_PRINT print)
         if (gki_cb.com.OSRdyTbl[i] != TASK_DEAD)
         {
             print("%2u  %-8s %-5s %04X    %04X %7u %u/%u Bytes\n",
-                (UINT16)i,  gki_cb.com.OSTName[i],
+                (uint16_t)i,  gki_cb.com.OSTName[i],
                 OSTaskStates[gki_cb.com.OSRdyTbl[i]],
                 gki_cb.com.OSWaitEvt[i], gki_cb.com.OSWaitForEvt[i],
                 gki_cb.com.OSWaitTmr[i], gki_calc_stack(i), gki_cb.com.OSStackSize[i]);
@@ -285,7 +285,7 @@ void gki_print_task (FP_PRINT print)
 *******************************************************************************/
 void gki_print_exception(FP_PRINT print)
 {
-    UINT16 i;
+    uint16_t i;
     EXCEPTION_T *pExp;
 
     print ("GKI Exceptions:\n");
@@ -293,15 +293,15 @@ void gki_print_exception(FP_PRINT print)
     {
         pExp =     &gki_cb.com.Exception[i];
         print("%d: Type=%d, Task=%d: %s\n", i,
-            (INT32)pExp->type, (INT32)pExp->taskid, (INT8 *)pExp->msg);
+            (int32_t)pExp->type, (int32_t)pExp->taskid, (int8_t *)pExp->msg);
     }
 }
 
 
 /*****************************************************************************/
-void gki_dump (UINT8 *s, UINT16 len, FP_PRINT print)
+void gki_dump (uint8_t *s, uint16_t len, FP_PRINT print)
 {
-    UINT16 i, j;
+    uint16_t i, j;
 
     for(i=0, j=0; i<len; i++)
     {
@@ -317,9 +317,9 @@ void gki_dump (UINT8 *s, UINT16 len, FP_PRINT print)
     print("\n");
 }
 
-void gki_dump2 (UINT16 *s, UINT16 len, FP_PRINT print)
+void gki_dump2 (uint16_t *s, uint16_t len, FP_PRINT print)
 {
-    UINT16 i, j;
+    uint16_t i, j;
 
     for(i=0, j=0; i<len; i++)
     {
@@ -333,9 +333,9 @@ void gki_dump2 (UINT16 *s, UINT16 len, FP_PRINT print)
     print("\n");
 }
 
-void gki_dump4 (UINT32 *s, UINT16 len, FP_PRINT print)
+void gki_dump4 (uint32_t *s, uint16_t len, FP_PRINT print)
 {
-    UINT16 i, j;
+    uint16_t i, j;
 
     for(i=0, j=0; i<len; i++)
     {

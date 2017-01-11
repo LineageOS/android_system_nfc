@@ -55,7 +55,7 @@
 
 static void nfa_dm_set_init_nci_params (void);
 static tNFA_STATUS nfa_dm_start_polling (void);
-static BOOLEAN nfa_dm_deactivate_polling (void);
+static bool    nfa_dm_deactivate_polling (void);
 static void nfa_dm_excl_disc_cback (tNFA_DM_RF_DISC_EVT event, tNFC_DISCOVER *p_data);
 static void nfa_dm_poll_disc_cback (tNFA_DM_RF_DISC_EVT event, tNFC_DISCOVER *p_data);
 
@@ -137,7 +137,7 @@ void nfa_dm_sys_enable (void)
 *******************************************************************************/
 static void nfa_dm_set_init_nci_params (void)
 {
-    UINT8   xx;
+    uint8_t xx;
 
     /* set NCI default value if other than zero */
 
@@ -194,7 +194,7 @@ static void nfa_dm_set_init_nci_params (void)
 ** Returns          None
 **
 *******************************************************************************/
-void nfa_dm_proc_nfcc_power_mode (UINT8 nfcc_power_mode)
+void nfa_dm_proc_nfcc_power_mode (uint8_t nfcc_power_mode)
 {
     NFA_TRACE_DEBUG1 ("nfa_dm_proc_nfcc_power_mode (): nfcc_power_mode=%d",
                        nfcc_power_mode);
@@ -254,8 +254,8 @@ static void nfa_dm_nfc_response_cback (tNFC_RESPONSE_EVT event, tNFC_RESPONSE *p
     tNFA_DM_CBACK_DATA dm_cback_data;
     tNFA_GET_CONFIG   *p_nfa_get_confg;
     tNFA_CONN_EVT_DATA conn_evt;
-    UINT8 dm_cback_evt;
-    UINT8 max_ee = 0;
+    uint8_t dm_cback_evt;
+    uint8_t max_ee = 0;
 
 #if (BT_TRACE_VERBOSE == TRUE)
     NFA_TRACE_DEBUG2 ("nfa_dm_nfc_response_cback () %s(0x%x)", nfa_dm_nfc_revt_2_str (event), event);
@@ -323,7 +323,7 @@ static void nfa_dm_nfc_response_cback (tNFC_RESPONSE_EVT event, tNFC_RESPONSE *p
     case NFC_GET_CONFIG_REVT:                    /* 3  Get Config Response */
         if (p_data->get_config.status == NFC_STATUS_OK)
         {
-            if ((p_nfa_get_confg = (tNFA_GET_CONFIG *) GKI_getbuf ((UINT16) (sizeof (tNFA_GET_CONFIG) + p_data->get_config.tlv_size))) != NULL)
+            if ((p_nfa_get_confg = (tNFA_GET_CONFIG *) GKI_getbuf ((uint16_t) (sizeof (tNFA_GET_CONFIG) + p_data->get_config.tlv_size))) != NULL)
             {
                 p_nfa_get_confg->status = NFA_STATUS_OK;
                 p_nfa_get_confg->tlv_size = p_data->get_config.tlv_size;
@@ -434,7 +434,7 @@ static void nfa_dm_nfc_response_cback (tNFC_RESPONSE_EVT event, tNFC_RESPONSE *p
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_enable (tNFA_DM_MSG *p_data)
+bool    nfa_dm_enable (tNFA_DM_MSG *p_data)
 {
     tNFA_DM_CBACK_DATA dm_cback_data;
     NFA_TRACE_DEBUG0 ("nfa_dm_enable ()");
@@ -473,7 +473,7 @@ BOOLEAN nfa_dm_enable (tNFA_DM_MSG *p_data)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_disable (tNFA_DM_MSG *p_data)
+bool    nfa_dm_disable (tNFA_DM_MSG *p_data)
 {
     tNFC_DEACT_TYPE deactivate_type = NFA_DEACTIVATE_TYPE_IDLE;
 
@@ -556,11 +556,11 @@ void nfa_dm_disable_complete (void)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_set_config (tNFA_DM_MSG *p_data)
+bool    nfa_dm_set_config (tNFA_DM_MSG *p_data)
 {
     tNFC_STATUS status;
-    UINT8       buff[255];
-    UINT8      *p = buff;
+    uint8_t     buff[255];
+    uint8_t    *p = buff;
 
     tNFA_DM_CBACK_DATA dm_cback_data;
 
@@ -574,7 +574,7 @@ BOOLEAN nfa_dm_set_config (tNFA_DM_MSG *p_data)
         UINT8_TO_STREAM (p, p_data->setconfig.param_id);
         UINT8_TO_STREAM (p, p_data->setconfig.length);
         ARRAY_TO_STREAM (p, p_data->setconfig.p_data, p_data->setconfig.length)
-        status = nfa_dm_check_set_config ((UINT8) (p_data->setconfig.length + 2), buff, TRUE);
+        status = nfa_dm_check_set_config ((uint8_t) (p_data->setconfig.length + 2), buff, TRUE);
     }
 
     if (status != NFC_STATUS_OK)
@@ -595,7 +595,7 @@ BOOLEAN nfa_dm_set_config (tNFA_DM_MSG *p_data)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_get_config (tNFA_DM_MSG *p_data)
+bool    nfa_dm_get_config (tNFA_DM_MSG *p_data)
 {
     NFC_GetConfig (p_data->getconfig.num_ids, p_data->getconfig.p_pmids);
 
@@ -612,7 +612,7 @@ BOOLEAN nfa_dm_get_config (tNFA_DM_MSG *p_data)
 ** Returns          nothing
 **
 *******************************************************************************/
-void nfa_dm_conn_cback_event_notify (UINT8 event, tNFA_CONN_EVT_DATA *p_data)
+void nfa_dm_conn_cback_event_notify (uint8_t event, tNFA_CONN_EVT_DATA *p_data)
 {
     if (nfa_dm_cb.flags & NFA_DM_FLAGS_EXCL_RF_ACTIVE)
     {
@@ -664,7 +664,7 @@ void nfa_dm_rel_excl_rf_control_and_notify (void)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_act_request_excl_rf_ctrl (tNFA_DM_MSG *p_data)
+bool    nfa_dm_act_request_excl_rf_ctrl (tNFA_DM_MSG *p_data)
 {
     tNFA_CONN_EVT_DATA conn_evt;
 
@@ -711,7 +711,7 @@ BOOLEAN nfa_dm_act_request_excl_rf_ctrl (tNFA_DM_MSG *p_data)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_act_release_excl_rf_ctrl (tNFA_DM_MSG *p_data)
+bool    nfa_dm_act_release_excl_rf_ctrl (tNFA_DM_MSG *p_data)
 {
     NFA_TRACE_DEBUG0 ("nfa_dm_act_release_excl_rf_ctrl ()");
 
@@ -742,7 +742,7 @@ BOOLEAN nfa_dm_act_release_excl_rf_ctrl (tNFA_DM_MSG *p_data)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_act_deactivate (tNFA_DM_MSG *p_data)
+bool    nfa_dm_act_deactivate (tNFA_DM_MSG *p_data)
 {
     tNFA_CONN_EVT_DATA conn_evt;
     tNFA_DEACTIVATE_TYPE deact_type;
@@ -820,11 +820,11 @@ BOOLEAN nfa_dm_act_deactivate (tNFA_DM_MSG *p_data)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_act_power_off_sleep (tNFA_DM_MSG *p_data)
+bool    nfa_dm_act_power_off_sleep (tNFA_DM_MSG *p_data)
 {
     NFA_TRACE_DEBUG0 ("nfa_dm_act_power_off_sleep ()");
 
-    NFC_SetPowerOffSleep ((BOOLEAN) (p_data->hdr.layer_specific));
+    NFC_SetPowerOffSleep ((bool   ) (p_data->hdr.layer_specific));
 
     return (TRUE);
 }
@@ -838,7 +838,7 @@ BOOLEAN nfa_dm_act_power_off_sleep (tNFA_DM_MSG *p_data)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_act_reg_vsc(tNFA_DM_MSG *p_data)
+bool    nfa_dm_act_reg_vsc(tNFA_DM_MSG *p_data)
 {
     if (NFC_RegVSCback(p_data->reg_vsc.is_register, p_data->reg_vsc.p_cback) != NFC_STATUS_OK)
     {
@@ -856,7 +856,7 @@ BOOLEAN nfa_dm_act_reg_vsc(tNFA_DM_MSG *p_data)
 ** Returns          FALSE (message buffer is NOT freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_act_send_vsc(tNFA_DM_MSG *p_data)
+bool    nfa_dm_act_send_vsc(tNFA_DM_MSG *p_data)
 {
     BT_HDR  *p_cmd = (BT_HDR *)p_data;
 
@@ -955,7 +955,7 @@ tNFA_STATUS nfa_dm_start_polling (void)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_act_enable_polling (tNFA_DM_MSG *p_data)
+bool    nfa_dm_act_enable_polling (tNFA_DM_MSG *p_data)
 {
     tNFA_CONN_EVT_DATA evt_data;
 
@@ -996,7 +996,7 @@ BOOLEAN nfa_dm_act_enable_polling (tNFA_DM_MSG *p_data)
 ** Returns          TRUE if need to wait for deactivation
 **
 *******************************************************************************/
-static BOOLEAN nfa_dm_deactivate_polling (void)
+static bool    nfa_dm_deactivate_polling (void)
 {
     NFA_TRACE_DEBUG0 ("nfa_dm_deactivate_polling ()");
 
@@ -1034,7 +1034,7 @@ static BOOLEAN nfa_dm_deactivate_polling (void)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_act_disable_polling (tNFA_DM_MSG *p_data)
+bool    nfa_dm_act_disable_polling (tNFA_DM_MSG *p_data)
 {
     tNFA_CONN_EVT_DATA evt_data;
 
@@ -1075,7 +1075,7 @@ BOOLEAN nfa_dm_act_disable_polling (tNFA_DM_MSG *p_data)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_act_enable_listening (tNFA_DM_MSG *p_data)
+bool    nfa_dm_act_enable_listening (tNFA_DM_MSG *p_data)
 {
     tNFA_CONN_EVT_DATA evt_data;
 
@@ -1097,7 +1097,7 @@ BOOLEAN nfa_dm_act_enable_listening (tNFA_DM_MSG *p_data)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_act_disable_listening (tNFA_DM_MSG *p_data)
+bool    nfa_dm_act_disable_listening (tNFA_DM_MSG *p_data)
 {
     tNFA_CONN_EVT_DATA evt_data;
 
@@ -1119,7 +1119,7 @@ BOOLEAN nfa_dm_act_disable_listening (tNFA_DM_MSG *p_data)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_act_pause_p2p (tNFA_DM_MSG *p_data)
+bool    nfa_dm_act_pause_p2p (tNFA_DM_MSG *p_data)
 {
     tNFA_CONN_EVT_DATA evt_data;
 
@@ -1141,7 +1141,7 @@ BOOLEAN nfa_dm_act_pause_p2p (tNFA_DM_MSG *p_data)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_act_resume_p2p (tNFA_DM_MSG *p_data)
+bool    nfa_dm_act_resume_p2p (tNFA_DM_MSG *p_data)
 {
     tNFA_CONN_EVT_DATA evt_data;
 
@@ -1163,7 +1163,7 @@ BOOLEAN nfa_dm_act_resume_p2p (tNFA_DM_MSG *p_data)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_act_send_raw_frame (tNFA_DM_MSG *p_data)
+bool    nfa_dm_act_send_raw_frame (tNFA_DM_MSG *p_data)
 {
     tNFC_STATUS status = NFC_STATUS_FAILED;
 
@@ -1221,7 +1221,7 @@ BOOLEAN nfa_dm_act_send_raw_frame (tNFA_DM_MSG *p_data)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_set_p2p_listen_tech (tNFA_DM_MSG *p_data)
+bool    nfa_dm_set_p2p_listen_tech (tNFA_DM_MSG *p_data)
 {
     NFA_TRACE_DEBUG1 ("nfa_dm_set_p2p_listen_tech ()  tech_mask = %d",
                       p_data->set_p2p_listen_tech.tech_mask);
@@ -1241,7 +1241,7 @@ BOOLEAN nfa_dm_set_p2p_listen_tech (tNFA_DM_MSG *p_data)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_act_start_rf_discovery (tNFA_DM_MSG *p_data)
+bool    nfa_dm_act_start_rf_discovery (tNFA_DM_MSG *p_data)
 {
     tNFA_CONN_EVT_DATA evt_data;
 
@@ -1275,7 +1275,7 @@ BOOLEAN nfa_dm_act_start_rf_discovery (tNFA_DM_MSG *p_data)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_act_stop_rf_discovery (tNFA_DM_MSG *p_data)
+bool    nfa_dm_act_stop_rf_discovery (tNFA_DM_MSG *p_data)
 {
     tNFA_CONN_EVT_DATA evt_data;
 
@@ -1321,7 +1321,7 @@ BOOLEAN nfa_dm_act_stop_rf_discovery (tNFA_DM_MSG *p_data)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_act_set_rf_disc_duration (tNFA_DM_MSG *p_data)
+bool    nfa_dm_act_set_rf_disc_duration (tNFA_DM_MSG *p_data)
 {
     nfa_dm_cb.disc_cb.disc_duration = p_data->disc_duration.rf_disc_dur_ms;
     return (TRUE);
@@ -1333,10 +1333,10 @@ BOOLEAN nfa_dm_act_set_rf_disc_duration (tNFA_DM_MSG *p_data)
 **
 ** Description      Get duration for RF discovery
 **
-** Returns          UINT16
+** Returns          uint16_t
 **
 *******************************************************************************/
-UINT16 nfa_dm_act_get_rf_disc_duration ( )
+uint16_t nfa_dm_act_get_rf_disc_duration ( )
 {
     return (nfa_dm_cb.disc_cb.disc_duration);
 }
@@ -1349,7 +1349,7 @@ UINT16 nfa_dm_act_get_rf_disc_duration ( )
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_act_select (tNFA_DM_MSG *p_data)
+bool    nfa_dm_act_select (tNFA_DM_MSG *p_data)
 {
     NFA_TRACE_DEBUG0 ("nfa_dm_act_select ()");
 
@@ -1368,7 +1368,7 @@ BOOLEAN nfa_dm_act_select (tNFA_DM_MSG *p_data)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_act_update_rf_params (tNFA_DM_MSG *p_data)
+bool    nfa_dm_act_update_rf_params (tNFA_DM_MSG *p_data)
 {
     tNFA_CONN_EVT_DATA conn_evt;
 
@@ -1392,7 +1392,7 @@ BOOLEAN nfa_dm_act_update_rf_params (tNFA_DM_MSG *p_data)
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_act_disable_timeout (tNFA_DM_MSG *p_data)
+bool    nfa_dm_act_disable_timeout (tNFA_DM_MSG *p_data)
 {
     tNFA_DM_API_DISABLE disable;
 
@@ -1410,7 +1410,7 @@ BOOLEAN nfa_dm_act_disable_timeout (tNFA_DM_MSG *p_data)
 ** Returns          nothing
 **
 *******************************************************************************/
-void nfa_dm_act_conn_cback_notify (UINT8 event, tNFA_CONN_EVT_DATA *p_data)
+void nfa_dm_act_conn_cback_notify (uint8_t event, tNFA_CONN_EVT_DATA *p_data)
 {
     NFA_TRACE_DEBUG1 ("nfa_dm_act_conn_cback_notify (): event:0x%X", event);
 
@@ -1452,7 +1452,7 @@ void nfa_dm_act_conn_cback_notify (UINT8 event, tNFA_CONN_EVT_DATA *p_data)
 ** Returns          None
 **
 *******************************************************************************/
-static void nfa_dm_act_data_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
+static void nfa_dm_act_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
 {
     BT_HDR             *p_msg;
     tNFA_CONN_EVT_DATA evt_data;
@@ -1466,7 +1466,7 @@ static void nfa_dm_act_data_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN
         if (p_msg)
         {
             evt_data.data.status = p_data->data.status;
-            evt_data.data.p_data = (UINT8 *) (p_msg + 1) + p_msg->offset;
+            evt_data.data.p_data = (uint8_t *) (p_msg + 1) + p_msg->offset;
             evt_data.data.len    = p_msg->len;
 
             nfa_dm_conn_cback_event_notify (NFA_DATA_EVT, &evt_data);
@@ -1526,7 +1526,7 @@ static void nfa_dm_excl_disc_cback (tNFA_DM_RF_DISC_EVT event, tNFC_DISCOVER *p_
         else
         {
             /* holding activation notification until sub-module is ready */
-            nfa_dm_cb.p_activate_ntf = (UINT8*) GKI_getbuf (sizeof (tNFC_ACTIVATE_DEVT));
+            nfa_dm_cb.p_activate_ntf = (uint8_t*) GKI_getbuf (sizeof (tNFC_ACTIVATE_DEVT));
 
             if (nfa_dm_cb.p_activate_ntf)
             {
@@ -1628,7 +1628,7 @@ static void nfa_dm_poll_disc_cback (tNFA_DM_RF_DISC_EVT event, tNFC_DISCOVER *p_
         }
 
         /* holding activation notification until sub-module is ready */
-        nfa_dm_cb.p_activate_ntf = (UINT8*) GKI_getbuf (sizeof (tNFC_ACTIVATE_DEVT));
+        nfa_dm_cb.p_activate_ntf = (uint8_t*) GKI_getbuf (sizeof (tNFC_ACTIVATE_DEVT));
 
         if (nfa_dm_cb.p_activate_ntf)
         {
@@ -1759,7 +1759,7 @@ void nfa_dm_notify_activation_status (tNFA_STATUS status, tNFA_TAG_PARAMS *p_par
 {
     tNFA_CONN_EVT_DATA  evt_data;
     tNFC_RF_TECH_PARAMS *p_tech_params;
-    UINT8               *p_nfcid = NULL, nfcid_len;
+    uint8_t             *p_nfcid = NULL, nfcid_len;
 
     NFA_TRACE_DEBUG1 ("nfa_dm_notify_activation_status (): status:0x%X", status);
 

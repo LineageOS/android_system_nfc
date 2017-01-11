@@ -111,7 +111,7 @@ enum
     UPIO_FEAT_IN_FALL           /* Support for input with interrupt on falling. */
 
 };
-typedef UINT8 tUPIO_FEATURE;
+typedef uint8_t tUPIO_FEATURE;
 
 
 /* Enumeration of UPIO configurations */
@@ -123,7 +123,7 @@ enum
     UPIO_IN_LEVEL,
     UPIO_NONE
 };
-typedef UINT8 tUPIO_CONFIG;
+typedef uint8_t tUPIO_CONFIG;
 
 
 /* Enumeration of UPIO types */
@@ -137,7 +137,7 @@ enum
 
     UPIO_NUMBER_OF_TYPES
 };
-typedef UINT8 tUPIO_TYPE;
+typedef uint8_t tUPIO_TYPE;
 
 
 /* Enumeration of UPIO states */
@@ -147,7 +147,7 @@ enum
     UPIO_ON,
     UPIO_TOGGLE
 };
-typedef UINT8 tUPIO_STATE;
+typedef uint8_t tUPIO_STATE;
 
 
 enum
@@ -155,7 +155,7 @@ enum
     UPIO_SW_BANK2,
     UPIO_SW_BANK3
 };
-typedef UINT8 tUPIO_SW_BANK;
+typedef uint8_t tUPIO_SW_BANK;
 
 /* Jumper masks */
 #define UPIO_JUMPER1    0x00000001
@@ -201,7 +201,7 @@ typedef UINT8 tUPIO_SW_BANK;
 #define UPIO_GENERAL31  0x40000000
 #define UPIO_GENERAL32  0x80000000
 
-typedef UINT32 tUPIO;
+typedef uint32_t tUPIO;
 
 /* LED masks */
 #define UPIO_LED1       0x00000001
@@ -357,7 +357,7 @@ UDRV_API void UPIO_Config(tUPIO_TYPE type, tUPIO pio, tUPIO_CONFIG config, tUPIO
 **      TRUE if feature is supported, FALSE if it is not.
 **
 *****************************************************************************/
-UDRV_API BOOLEAN UPIO_Feature(tUPIO_FEATURE feature);
+UDRV_API bool    UPIO_Feature(tUPIO_FEATURE feature);
 
 #ifdef __cplusplus
 }

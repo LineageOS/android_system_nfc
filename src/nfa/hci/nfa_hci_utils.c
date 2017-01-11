@@ -34,8 +34,8 @@
 #include "nfa_mem_co.h"
 #include "nfa_hci_defs.h"
 
-static void handle_debug_loopback (BT_HDR *p_buf, UINT8 pipe, UINT8 type, UINT8 instruction);
-BOOLEAN HCI_LOOPBACK_DEBUG = FALSE;
+static void handle_debug_loopback (BT_HDR *p_buf, uint8_t pipe, uint8_t type, uint8_t instruction);
+bool    HCI_LOOPBACK_DEBUG = FALSE;
 
 /*******************************************************************************
 **
@@ -46,7 +46,7 @@ BOOLEAN HCI_LOOPBACK_DEBUG = FALSE;
 ** Returns          pointer to the pipe control block, or NULL if not found
 **
 *******************************************************************************/
-tNFA_HCI_DYN_PIPE *nfa_hciu_find_pipe_by_pid (UINT8 pipe_id)
+tNFA_HCI_DYN_PIPE *nfa_hciu_find_pipe_by_pid (uint8_t pipe_id)
 {
     tNFA_HCI_DYN_PIPE   *pp = nfa_hci_cb.cfg.dyn_pipes;
     int                 xx  = 0;
@@ -71,7 +71,7 @@ tNFA_HCI_DYN_PIPE *nfa_hciu_find_pipe_by_pid (UINT8 pipe_id)
 ** Returns          pointer to the gate control block, or NULL if not found
 **
 *******************************************************************************/
-tNFA_HCI_DYN_GATE *nfa_hciu_find_gate_by_gid (UINT8 gate_id)
+tNFA_HCI_DYN_GATE *nfa_hciu_find_gate_by_gid (uint8_t gate_id)
 {
     tNFA_HCI_DYN_GATE *pg = nfa_hci_cb.cfg.dyn_gates;
     int               xx  = 0;
@@ -142,11 +142,11 @@ tNFA_HCI_DYN_GATE *nfa_hciu_find_gate_with_nopipes_by_owner (tNFA_HANDLE app_han
 ** Returns          the number of pipes on the gate
 **
 *******************************************************************************/
-UINT8 nfa_hciu_count_pipes_on_gate (tNFA_HCI_DYN_GATE *p_gate)
+uint8_t nfa_hciu_count_pipes_on_gate (tNFA_HCI_DYN_GATE *p_gate)
 {
     int               xx    = 0;
-    UINT32            mask  = 1;
-    UINT8             count = 0;
+    uint32_t          mask  = 1;
+    uint8_t           count = 0;
 
     for ( ; xx < NFA_HCI_MAX_PIPE_CB; xx++)
     {
@@ -168,12 +168,12 @@ UINT8 nfa_hciu_count_pipes_on_gate (tNFA_HCI_DYN_GATE *p_gate)
 ** Returns          the number of pipes in OPENED state on the gate
 **
 *******************************************************************************/
-UINT8 nfa_hciu_count_open_pipes_on_gate (tNFA_HCI_DYN_GATE *p_gate)
+uint8_t nfa_hciu_count_open_pipes_on_gate (tNFA_HCI_DYN_GATE *p_gate)
 {
     tNFA_HCI_DYN_PIPE *pp   = nfa_hci_cb.cfg.dyn_pipes;
     int               xx    = 0;
-    UINT32            mask  = 1;
-    UINT8             count = 0;
+    uint32_t          mask  = 1;
+    uint8_t           count = 0;
 
     for ( ; xx < NFA_HCI_MAX_PIPE_CB; xx++, pp++)
     {
@@ -196,7 +196,7 @@ UINT8 nfa_hciu_count_open_pipes_on_gate (tNFA_HCI_DYN_GATE *p_gate)
 ** Returns          application handle
 **
 *******************************************************************************/
-tNFA_HANDLE nfa_hciu_get_gate_owner (UINT8 gate_id)
+tNFA_HANDLE nfa_hciu_get_gate_owner (uint8_t gate_id)
 {
     tNFA_HCI_DYN_GATE   *pg;
 
@@ -215,7 +215,7 @@ tNFA_HANDLE nfa_hciu_get_gate_owner (UINT8 gate_id)
 ** Returns          application handle
 **
 *******************************************************************************/
-tNFA_HANDLE nfa_hciu_get_pipe_owner (UINT8 pipe_id)
+tNFA_HANDLE nfa_hciu_get_pipe_owner (uint8_t pipe_id)
 {
     tNFA_HCI_DYN_PIPE   *pp;
     tNFA_HCI_DYN_GATE   *pg;
@@ -239,11 +239,11 @@ tNFA_HANDLE nfa_hciu_get_pipe_owner (UINT8 pipe_id)
 ** Returns          pointer to the allocated gate, or NULL if cannot allocate
 **
 *******************************************************************************/
-tNFA_HCI_DYN_GATE *nfa_hciu_alloc_gate (UINT8 gate_id, tNFA_HANDLE app_handle)
+tNFA_HCI_DYN_GATE *nfa_hciu_alloc_gate (uint8_t gate_id, tNFA_HANDLE app_handle)
 {
     tNFA_HCI_DYN_GATE   *pg;
     int                 xx;
-    UINT8               app_inx = app_handle & NFA_HANDLE_MASK;
+    uint8_t             app_inx = app_handle & NFA_HANDLE_MASK;
 
 
     /* First, check if the application handle is valid */
@@ -313,14 +313,14 @@ tNFA_HCI_DYN_GATE *nfa_hciu_alloc_gate (UINT8 gate_id, tNFA_HANDLE app_handle)
 ** Returns          status
 **
 *******************************************************************************/
-tNFA_STATUS nfa_hciu_send_msg (UINT8 pipe_id, UINT8 type, UINT8 instruction, UINT16 msg_len, UINT8 *p_msg)
+tNFA_STATUS nfa_hciu_send_msg (uint8_t pipe_id, uint8_t type, uint8_t instruction, uint16_t msg_len, uint8_t *p_msg)
 {
     BT_HDR          *p_buf;
-    UINT8           *p_data;
-    BOOLEAN          first_pkt = TRUE;
-    UINT16          data_len;
+    uint8_t         *p_data;
+    bool             first_pkt = TRUE;
+    uint16_t        data_len;
     tNFA_STATUS     status = NFA_STATUS_OK;
-    UINT16          max_seg_hcp_pkt_size = nfa_hci_cb.buff_size - NCI_DATA_HDR_SIZE;
+    uint16_t        max_seg_hcp_pkt_size = nfa_hci_cb.buff_size - NCI_DATA_HDR_SIZE;
 
 #if (BT_TRACE_VERBOSE == TRUE)
     char    buff[100];
@@ -344,7 +344,7 @@ tNFA_STATUS nfa_hciu_send_msg (UINT8 pipe_id, UINT8 type, UINT8 instruction, UIN
             /* First packet has a 2-byte header, subsequent fragments have a 1-byte header */
             data_len = first_pkt ? (max_seg_hcp_pkt_size - 2) : (max_seg_hcp_pkt_size - 1);
 
-            p_data = (UINT8 *) (p_buf + 1) + p_buf->offset;
+            p_data = (uint8_t *) (p_buf + 1) + p_buf->offset;
 
             /* Last or only segment has "no fragmentation" bit set */
             if (msg_len > data_len)
@@ -378,7 +378,7 @@ tNFA_STATUS nfa_hciu_send_msg (UINT8 pipe_id, UINT8 type, UINT8 instruction, UIN
             }
 
 #if (BT_TRACE_PROTOCOL == TRUE)
-            DispHcp (((UINT8 *) (p_buf + 1) + p_buf->offset), p_buf->len, FALSE, (BOOLEAN) ((p_buf->len - data_len) == 2));
+            DispHcp (((uint8_t *) (p_buf + 1) + p_buf->offset), p_buf->len, FALSE, (bool   ) ((p_buf->len - data_len) == 2));
 #endif
 
             if (HCI_LOOPBACK_DEBUG)
@@ -417,11 +417,11 @@ tNFA_STATUS nfa_hciu_send_msg (UINT8 pipe_id, UINT8 type, UINT8 instruction, UIN
 ** Returns          the number of gates
 **
 *******************************************************************************/
-UINT8 nfa_hciu_get_allocated_gate_list (UINT8 *p_gate_list)
+uint8_t nfa_hciu_get_allocated_gate_list (uint8_t *p_gate_list)
 {
     tNFA_HCI_DYN_GATE   *p_cb;
     int                 xx;
-    UINT8               count = 0;
+    uint8_t             count = 0;
 
     for (xx = 0, p_cb = nfa_hci_cb.cfg.dyn_gates; xx < NFA_HCI_MAX_GATE_CB; xx++, p_cb++)
     {
@@ -447,9 +447,9 @@ UINT8 nfa_hciu_get_allocated_gate_list (UINT8 *p_gate_list)
 **                  cannot allocate
 **
 *******************************************************************************/
-tNFA_HCI_DYN_PIPE *nfa_hciu_alloc_pipe (UINT8 pipe_id)
+tNFA_HCI_DYN_PIPE *nfa_hciu_alloc_pipe (uint8_t pipe_id)
 {
-    UINT8               xx;
+    uint8_t             xx;
     tNFA_HCI_DYN_PIPE   *pp;
 
     /* If we already have a pipe of the same ID, release it first it */
@@ -486,7 +486,7 @@ tNFA_HCI_DYN_PIPE *nfa_hciu_alloc_pipe (UINT8 pipe_id)
 ** Returns          none
 **
 *******************************************************************************/
-void nfa_hciu_release_gate (UINT8 gate_id)
+void nfa_hciu_release_gate (uint8_t gate_id)
 {
     tNFA_HCI_DYN_GATE   *p_gate = nfa_hciu_find_gate_by_gid (gate_id);
 
@@ -517,12 +517,12 @@ void nfa_hciu_release_gate (UINT8 gate_id)
 **                  NFA_HCI_ADM_E_NO_PIPES_AVAILABLE, otherwise
 **
 *******************************************************************************/
-tNFA_HCI_RESPONSE nfa_hciu_add_pipe_to_gate (UINT8 pipe_id,   UINT8 local_gate,
-                                             UINT8 dest_host, UINT8 dest_gate)
+tNFA_HCI_RESPONSE nfa_hciu_add_pipe_to_gate (uint8_t pipe_id,   uint8_t local_gate,
+                                             uint8_t dest_host, uint8_t dest_gate)
 {
     tNFA_HCI_DYN_GATE   *p_gate;
     tNFA_HCI_DYN_PIPE   *p_pipe;
-    UINT8               pipe_index;
+    uint8_t             pipe_index;
 
     p_gate = nfa_hciu_find_gate_by_gid (local_gate);
 
@@ -538,8 +538,8 @@ tNFA_HCI_RESPONSE nfa_hciu_add_pipe_to_gate (UINT8 pipe_id,   UINT8 local_gate,
             p_pipe->local_gate  = local_gate;
 
             /* Save the pipe in the gate that it belongs to */
-            pipe_index = (UINT8) (p_pipe - nfa_hci_cb.cfg.dyn_pipes);
-            p_gate->pipe_inx_mask |= (UINT32) (1 << pipe_index);
+            pipe_index = (uint8_t) (p_pipe - nfa_hci_cb.cfg.dyn_pipes);
+            p_gate->pipe_inx_mask |= (uint32_t) (1 << pipe_index);
 
             NFA_TRACE_DEBUG4 ("nfa_hciu_add_pipe_to_gate  Gate ID: 0x%02x  Pipe ID: 0x%02x  pipe_index: %u  App Handle: 0x%08x",
                               local_gate, pipe_id, pipe_index, p_gate->gate_owner);
@@ -562,10 +562,10 @@ tNFA_HCI_RESPONSE nfa_hciu_add_pipe_to_gate (UINT8 pipe_id,   UINT8 local_gate,
 **                  NFA_HCI_ADM_E_NO_PIPES_AVAILABLE, otherwise
 **
 *******************************************************************************/
-tNFA_HCI_RESPONSE nfa_hciu_add_pipe_to_static_gate (UINT8 local_gate, UINT8 pipe_id, UINT8 dest_host, UINT8 dest_gate)
+tNFA_HCI_RESPONSE nfa_hciu_add_pipe_to_static_gate (uint8_t local_gate, uint8_t pipe_id, uint8_t dest_host, uint8_t dest_gate)
 {
     tNFA_HCI_DYN_PIPE   *p_pipe;
-    UINT8               pipe_index;
+    uint8_t             pipe_index;
 
     NFA_TRACE_EVENT4 ("nfa_hciu_add_pipe_to_static_gate (%u)  Pipe: 0x%02x  Dest Host: 0x%02x  Dest Gate: 0x%02x)",
                       local_gate, pipe_id, dest_host, dest_gate);
@@ -583,8 +583,8 @@ tNFA_HCI_RESPONSE nfa_hciu_add_pipe_to_static_gate (UINT8 local_gate, UINT8 pipe
         /* block. Note that for loopback, it is enough to just create the pipe */
         if (local_gate == NFA_HCI_IDENTITY_MANAGEMENT_GATE)
         {
-            pipe_index = (UINT8) (p_pipe - nfa_hci_cb.cfg.dyn_pipes);
-            nfa_hci_cb.cfg.id_mgmt_gate.pipe_inx_mask  |= (UINT32) (1 << pipe_index);
+            pipe_index = (uint8_t) (p_pipe - nfa_hci_cb.cfg.dyn_pipes);
+            nfa_hci_cb.cfg.id_mgmt_gate.pipe_inx_mask  |= (uint32_t) (1 << pipe_index);
         }
         return NFA_HCI_ANY_OK;
     }
@@ -638,7 +638,7 @@ tNFA_HCI_DYN_PIPE *nfa_hciu_find_active_pipe_by_owner (tNFA_HANDLE app_handle)
 **                  FALSE, otherwise
 **
 *******************************************************************************/
-BOOLEAN nfa_hciu_check_pipe_between_gates (UINT8 local_gate, UINT8 dest_host, UINT8 dest_gate)
+bool    nfa_hciu_check_pipe_between_gates (uint8_t local_gate, uint8_t dest_host, uint8_t dest_gate)
 {
     tNFA_HCI_DYN_PIPE   *pp;
     int                 xx;
@@ -704,7 +704,7 @@ tNFA_HCI_DYN_PIPE *nfa_hciu_find_pipe_by_owner (tNFA_HANDLE app_handle)
 ** Returns          pointer to pipe, or NULL if none found
 **
 *******************************************************************************/
-tNFA_HCI_DYN_PIPE *nfa_hciu_find_pipe_on_gate (UINT8 gate_id)
+tNFA_HCI_DYN_PIPE *nfa_hciu_find_pipe_on_gate (uint8_t gate_id)
 {
     tNFA_HCI_DYN_GATE   *pg;
     tNFA_HCI_DYN_PIPE   *pp;
@@ -737,9 +737,9 @@ tNFA_HCI_DYN_PIPE *nfa_hciu_find_pipe_on_gate (UINT8 gate_id)
 **                  FALSE, if the host is not active in the host network
 **
 *******************************************************************************/
-BOOLEAN nfa_hciu_is_active_host (UINT8 host_id)
+bool    nfa_hciu_is_active_host (uint8_t host_id)
 {
-    UINT8   xx;
+    uint8_t xx;
 
     for (xx = 0; xx < NFA_HCI_MAX_HOST_IN_NETWORK; xx++)
     {
@@ -760,9 +760,9 @@ BOOLEAN nfa_hciu_is_active_host (UINT8 host_id)
 **                  FALSE, if the host is not reseting
 **
 *******************************************************************************/
-BOOLEAN nfa_hciu_is_host_reseting (UINT8 host_id)
+bool    nfa_hciu_is_host_reseting (uint8_t host_id)
 {
-    UINT8   xx;
+    uint8_t xx;
 
     for (xx = 0; xx < NFA_HCI_MAX_HOST_IN_NETWORK; xx++)
     {
@@ -783,9 +783,9 @@ BOOLEAN nfa_hciu_is_host_reseting (UINT8 host_id)
 **                  FALSE, if one or more host is resetting
 **
 *******************************************************************************/
-BOOLEAN nfa_hciu_is_no_host_resetting (void)
+bool    nfa_hciu_is_no_host_resetting (void)
 {
-    UINT8   xx;
+    uint8_t xx;
 
     for (xx = 0; xx < NFA_HCI_MAX_HOST_IN_NETWORK; xx++)
     {
@@ -805,7 +805,7 @@ BOOLEAN nfa_hciu_is_no_host_resetting (void)
 ** Returns          pointer to pipe, or NULL if none found
 **
 *******************************************************************************/
-tNFA_HCI_DYN_PIPE *nfa_hciu_find_active_pipe_on_gate (UINT8 gate_id)
+tNFA_HCI_DYN_PIPE *nfa_hciu_find_active_pipe_on_gate (uint8_t gate_id)
 {
     tNFA_HCI_DYN_GATE   *pg;
     tNFA_HCI_DYN_PIPE   *pp;
@@ -841,11 +841,11 @@ tNFA_HCI_DYN_PIPE *nfa_hciu_find_active_pipe_on_gate (UINT8 gate_id)
 **                  NFA_HCI_ANY_E_NOK, if otherwise
 **
 *******************************************************************************/
-tNFA_HCI_RESPONSE nfa_hciu_release_pipe (UINT8 pipe_id)
+tNFA_HCI_RESPONSE nfa_hciu_release_pipe (uint8_t pipe_id)
 {
     tNFA_HCI_DYN_GATE   *p_gate;
     tNFA_HCI_DYN_PIPE   *p_pipe;
-    UINT8               pipe_index;
+    uint8_t             pipe_index;
 
     NFA_TRACE_EVENT1 ("nfa_hciu_release_pipe: %u", pipe_id);
 
@@ -858,12 +858,12 @@ tNFA_HCI_RESPONSE nfa_hciu_release_pipe (UINT8 pipe_id)
         return (NFA_HCI_ANY_E_NOK);
     }
 
-    pipe_index = (UINT8) (p_pipe - nfa_hci_cb.cfg.dyn_pipes);
+    pipe_index = (uint8_t) (p_pipe - nfa_hci_cb.cfg.dyn_pipes);
 
     if (p_pipe->local_gate == NFA_HCI_IDENTITY_MANAGEMENT_GATE)
     {
         /* Remove pipe from ID management gate */
-        nfa_hci_cb.cfg.id_mgmt_gate.pipe_inx_mask &= ~ (UINT32) (1 << pipe_index);
+        nfa_hci_cb.cfg.id_mgmt_gate.pipe_inx_mask &= ~ (uint32_t) (1 << pipe_index);
     }
     else
     {
@@ -875,7 +875,7 @@ tNFA_HCI_RESPONSE nfa_hciu_release_pipe (UINT8 pipe_id)
         }
 
         /* Remove pipe from gate */
-        p_gate->pipe_inx_mask &= ~ (UINT32) (1 << pipe_index);
+        p_gate->pipe_inx_mask &= ~ (uint32_t) (1 << pipe_index);
     }
 
     /* Reset pipe control block */
@@ -893,7 +893,7 @@ tNFA_HCI_RESPONSE nfa_hciu_release_pipe (UINT8 pipe_id)
 ** Returns          None
 **
 *******************************************************************************/
-void nfa_hciu_remove_all_pipes_from_host (UINT8 host)
+void nfa_hciu_remove_all_pipes_from_host (uint8_t host)
 {
     tNFA_HCI_DYN_GATE   *pg;
     tNFA_HCI_DYN_PIPE   *pp;
@@ -931,10 +931,10 @@ void nfa_hciu_remove_all_pipes_from_host (UINT8 host)
 ** Returns          status
 **
 *******************************************************************************/
-tNFA_STATUS nfa_hciu_send_create_pipe_cmd (UINT8 source_gate, UINT8 dest_host, UINT8 dest_gate)
+tNFA_STATUS nfa_hciu_send_create_pipe_cmd (uint8_t source_gate, uint8_t dest_host, uint8_t dest_gate)
 {
     tNFA_STATUS         status;
-    UINT8               data[3];
+    uint8_t             data[3];
 
     data[0] = source_gate;
     data[1] = dest_host;
@@ -956,7 +956,7 @@ tNFA_STATUS nfa_hciu_send_create_pipe_cmd (UINT8 source_gate, UINT8 dest_host, U
 ** Returns          None
 **
 *******************************************************************************/
-tNFA_STATUS nfa_hciu_send_delete_pipe_cmd (UINT8 pipe)
+tNFA_STATUS nfa_hciu_send_delete_pipe_cmd (uint8_t pipe)
 {
     tNFA_STATUS status;
 
@@ -990,11 +990,11 @@ tNFA_STATUS nfa_hciu_send_delete_pipe_cmd (UINT8 pipe)
 tNFA_STATUS nfa_hciu_send_clear_all_pipe_cmd (void)
 {
     tNFA_STATUS status;
-    UINT16      id_ref_data = 0x0102;
+    uint16_t    id_ref_data = 0x0102;
 
     NFA_TRACE_DEBUG0 ("nfa_hciu_send_clear_all_pipe_cmd");
 
-    status = nfa_hciu_send_msg (NFA_HCI_ADMIN_PIPE, NFA_HCI_COMMAND_TYPE, NFA_HCI_ADM_CLEAR_ALL_PIPE, 2, (UINT8 *) &id_ref_data);
+    status = nfa_hciu_send_msg (NFA_HCI_ADMIN_PIPE, NFA_HCI_COMMAND_TYPE, NFA_HCI_ADM_CLEAR_ALL_PIPE, 2, (uint8_t *) &id_ref_data);
 
     return status;
 }
@@ -1008,7 +1008,7 @@ tNFA_STATUS nfa_hciu_send_clear_all_pipe_cmd (void)
 ** Returns          status
 **
 *******************************************************************************/
-tNFA_STATUS nfa_hciu_send_open_pipe_cmd (UINT8 pipe)
+tNFA_STATUS nfa_hciu_send_open_pipe_cmd (uint8_t pipe)
 {
     tNFA_STATUS status;
 
@@ -1028,7 +1028,7 @@ tNFA_STATUS nfa_hciu_send_open_pipe_cmd (UINT8 pipe)
 ** Returns          status
 **
 *******************************************************************************/
-tNFA_STATUS nfa_hciu_send_close_pipe_cmd (UINT8 pipe)
+tNFA_STATUS nfa_hciu_send_close_pipe_cmd (uint8_t pipe)
 {
     tNFA_STATUS status;
 
@@ -1048,7 +1048,7 @@ tNFA_STATUS nfa_hciu_send_close_pipe_cmd (UINT8 pipe)
 ** Returns          None
 **
 *******************************************************************************/
-tNFA_STATUS nfa_hciu_send_get_param_cmd (UINT8 pipe, UINT8 index)
+tNFA_STATUS nfa_hciu_send_get_param_cmd (uint8_t pipe, uint8_t index)
 {
     tNFA_STATUS status;
 
@@ -1067,16 +1067,16 @@ tNFA_STATUS nfa_hciu_send_get_param_cmd (UINT8 pipe, UINT8 index)
 ** Returns          None
 **
 *******************************************************************************/
-tNFA_STATUS nfa_hciu_send_set_param_cmd (UINT8 pipe, UINT8 index, UINT8 length, UINT8 *p_data)
+tNFA_STATUS nfa_hciu_send_set_param_cmd (uint8_t pipe, uint8_t index, uint8_t length, uint8_t *p_data)
 {
     tNFA_STATUS status;
-    UINT8       data[255];
+    uint8_t     data[255];
 
     data[0] = index;
 
     memcpy (&data[1], p_data, length);
 
-    if ((status = nfa_hciu_send_msg (pipe, NFA_HCI_COMMAND_TYPE, NFA_HCI_ANY_SET_PARAMETER, (UINT16) (length + 1), data)) == NFC_STATUS_OK)
+    if ((status = nfa_hciu_send_msg (pipe, NFA_HCI_COMMAND_TYPE, NFA_HCI_ANY_SET_PARAMETER, (uint16_t) (length + 1), data)) == NFC_STATUS_OK)
         nfa_hci_cb.param_in_use = index;
 
     return status;
@@ -1094,7 +1094,7 @@ tNFA_STATUS nfa_hciu_send_set_param_cmd (UINT8 pipe, UINT8 index, UINT8 length, 
 *******************************************************************************/
 void nfa_hciu_send_to_app (tNFA_HCI_EVT event, tNFA_HCI_EVT_DATA *p_evt, tNFA_HANDLE app_handle)
 {
-    UINT8   app_inx = app_handle & NFA_HANDLE_MASK;
+    uint8_t app_inx = app_handle & NFA_HANDLE_MASK;
 
     /* First, check if the application handle is valid */
     if (  ((app_handle & NFA_HANDLE_GROUP_MASK) == NFA_HANDLE_GROUP_HCI)
@@ -1125,7 +1125,7 @@ void nfa_hciu_send_to_app (tNFA_HCI_EVT event, tNFA_HCI_EVT_DATA *p_evt, tNFA_HA
 *******************************************************************************/
 void nfa_hciu_send_to_all_apps (tNFA_HCI_EVT event, tNFA_HCI_EVT_DATA *p_evt)
 {
-    UINT8   app_inx;
+    uint8_t app_inx;
 
     for (app_inx = 0; app_inx < NFA_HCI_MAX_APP_CB; app_inx++)
     {
@@ -1147,7 +1147,7 @@ void nfa_hciu_send_to_all_apps (tNFA_HCI_EVT event, tNFA_HCI_EVT_DATA *p_evt)
 *******************************************************************************/
 void nfa_hciu_send_to_apps_handling_connectivity_evts (tNFA_HCI_EVT event, tNFA_HCI_EVT_DATA *p_evt)
 {
-    UINT8   app_inx;
+    uint8_t app_inx;
 
     for (app_inx = 0; app_inx < NFA_HCI_MAX_APP_CB; app_inx++)
     {
@@ -1171,7 +1171,7 @@ void nfa_hciu_send_to_apps_handling_connectivity_evts (tNFA_HCI_EVT event, tNFA_
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-char *nfa_hciu_get_response_name (UINT8 rsp_code)
+char *nfa_hciu_get_response_name (uint8_t rsp_code)
 {
     switch (rsp_code)
     {
@@ -1213,7 +1213,7 @@ char *nfa_hciu_get_response_name (UINT8 rsp_code)
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-char *nfa_hciu_type_2_str(UINT8 type)
+char *nfa_hciu_type_2_str(uint8_t type)
 {
     switch (type)
     {
@@ -1237,7 +1237,7 @@ char *nfa_hciu_type_2_str(UINT8 type)
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-char *nfa_hciu_instr_2_str (UINT8 instruction)
+char *nfa_hciu_instr_2_str (uint8_t instruction)
 {
     switch (instruction)
     {
@@ -1276,7 +1276,7 @@ char *nfa_hciu_instr_2_str (UINT8 instruction)
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-char *nfa_hciu_get_event_name (UINT16 event)
+char *nfa_hciu_get_event_name (uint16_t event)
 {
     switch (event)
     {
@@ -1314,7 +1314,7 @@ char *nfa_hciu_get_event_name (UINT16 event)
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-char *nfa_hciu_get_state_name (UINT8 state)
+char *nfa_hciu_get_state_name (uint8_t state)
 {
     switch (state)
     {
@@ -1342,7 +1342,7 @@ char *nfa_hciu_get_state_name (UINT8 state)
 ** Returns          none
 **
 *******************************************************************************/
-char *nfa_hciu_get_type_inst_names (UINT8 pipe, UINT8 type, UINT8 inst, char *p_buff)
+char *nfa_hciu_get_type_inst_names (uint8_t pipe, uint8_t type, uint8_t inst, char *p_buff)
 {
     int   xx;
 
@@ -1375,7 +1375,7 @@ char *nfa_hciu_get_type_inst_names (UINT8 pipe, UINT8 type, UINT8 inst, char *p_
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-char *nfa_hciu_evt_2_str (UINT8 pipe_id, UINT8 evt)
+char *nfa_hciu_evt_2_str (uint8_t pipe_id, uint8_t evt)
 {
     tNFA_HCI_DYN_PIPE   *p_pipe;
 
@@ -1414,10 +1414,10 @@ char *nfa_hciu_evt_2_str (UINT8 pipe_id, UINT8 evt)
 #endif
 
 
-static void handle_debug_loopback (BT_HDR *p_buf, UINT8 pipe, UINT8 type, UINT8 instruction)
+static void handle_debug_loopback (BT_HDR *p_buf, uint8_t pipe, uint8_t type, uint8_t instruction)
 {
-    UINT8 *p = (UINT8 *) (p_buf + 1) + p_buf->offset;
-    static UINT8  next_pipe = 0x10;
+    uint8_t *p = (uint8_t *) (p_buf + 1) + p_buf->offset;
+    static uint8_t  next_pipe = 0x10;
 
     if (type == NFA_HCI_COMMAND_TYPE)
     {
@@ -1435,7 +1435,7 @@ static void handle_debug_loopback (BT_HDR *p_buf, UINT8 pipe, UINT8 type, UINT8 
 
         case NFA_HCI_ANY_GET_PARAMETER:
             p[1] = (NFA_HCI_RESPONSE_TYPE << 6) | NFA_HCI_ANY_OK;
-            memcpy (&p[2], (UINT8 *) nfa_hci_cb.cfg.admin_gate.session_id, NFA_HCI_SESSION_ID_LEN);
+            memcpy (&p[2], (uint8_t *) nfa_hci_cb.cfg.admin_gate.session_id, NFA_HCI_SESSION_ID_LEN);
             p_buf->len = p_buf->offset + 2 + NFA_HCI_SESSION_ID_LEN;
             break;
 

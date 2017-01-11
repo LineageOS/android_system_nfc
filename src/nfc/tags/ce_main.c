@@ -57,11 +57,11 @@ void ce_init (void)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS CE_SendRawFrame (UINT8 *p_raw_data, UINT16 data_len)
+tNFC_STATUS CE_SendRawFrame (uint8_t *p_raw_data, uint16_t data_len)
 {
     tNFC_STATUS status = NFC_STATUS_FAILED;
     BT_HDR  *p_data;
-    UINT8   *p;
+    uint8_t *p;
 
     if (ce_cb.p_cback)
     {
@@ -70,7 +70,7 @@ tNFC_STATUS CE_SendRawFrame (UINT8 *p_raw_data, UINT16 data_len)
         if (p_data)
         {
             p_data->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
-            p = (UINT8 *) (p_data + 1) + p_data->offset;
+            p = (uint8_t *) (p_data + 1) + p_data->offset;
             memcpy (p, p_raw_data, data_len);
             p_data->len = data_len;
             CE_TRACE_EVENT1 ("CE SENT raw frame (0x%x)", data_len);
@@ -90,7 +90,7 @@ tNFC_STATUS CE_SendRawFrame (UINT8 *p_raw_data, UINT16 data_len)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS CE_SetActivatedTagType (tNFC_ACTIVATE_DEVT *p_activate_params, UINT16 t3t_system_code, tCE_CBACK *p_cback)
+tNFC_STATUS CE_SetActivatedTagType (tNFC_ACTIVATE_DEVT *p_activate_params, uint16_t t3t_system_code, tCE_CBACK *p_cback)
 {
     tNFC_STATUS status = NFC_STATUS_FAILED;
     tNFC_PROTOCOL protocol = p_activate_params->protocol;
@@ -139,7 +139,7 @@ tNFC_STATUS CE_SetActivatedTagType (tNFC_ACTIVATE_DEVT *p_activate_params, UINT1
 ** Returns          The new or current trace level
 **
 *******************************************************************************/
-UINT8 CE_SetTraceLevel (UINT8 new_level)
+uint8_t CE_SetTraceLevel (uint8_t new_level)
 {
     if (new_level != 0xFF)
         ce_cb.trace_level = new_level;

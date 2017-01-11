@@ -70,7 +70,7 @@ unsigned char initializeGlobalAppLogLevel ()
     //trace level; it does not change any trace level
     if (appl_trace_level == 0xFF)
         appl_trace_level = BT_TRACE_LEVEL_DEBUG;
-    ALOGD ("%s: level=%u", __FUNCTION__, appl_trace_level);
+    ALOGD ("%s: level=%u", __func__, appl_trace_level);
 
     if (appl_trace_level < BT_TRACE_LEVEL_DEBUG)
     {
@@ -80,8 +80,8 @@ unsigned char initializeGlobalAppLogLevel ()
     return appl_trace_level;
 }
 
-UINT32 initializeProtocolLogLevel () {
-    UINT32 num = 0;
+uint32_t initializeProtocolLogLevel () {
+    uint32_t num = 0;
     char valueStr [PROPERTY_VALUE_MAX] = {0};
 
     if ( GetNumValue ( NAME_PROTOCOL_TRACE_LEVEL, &num, sizeof ( num ) ) )

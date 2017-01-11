@@ -74,7 +74,7 @@ void rw_main_reset_stats (void)
 ** Returns          void
 **
 *******************************************************************************/
-void rw_main_update_tx_stats (UINT32 num_bytes, BOOLEAN is_retry)
+void rw_main_update_tx_stats (uint32_t num_bytes, bool    is_retry)
 {
     rw_cb.stats.bytes_sent+=num_bytes;
     rw_cb.stats.num_ops++;
@@ -134,7 +134,7 @@ void rw_main_update_trans_error_stats (void)
 ** Returns          void
 **
 *******************************************************************************/
-void rw_main_update_rx_stats (UINT32 num_bytes)
+void rw_main_update_rx_stats (uint32_t num_bytes)
 {
     rw_cb.stats.bytes_received+=num_bytes;
 }
@@ -150,7 +150,7 @@ void rw_main_update_rx_stats (UINT32 num_bytes)
 *******************************************************************************/
 void rw_main_log_stats (void)
 {
-    UINT32 ticks, elapsed_ms;
+    uint32_t ticks, elapsed_ms;
 
     ticks = GKI_get_tick_count () - rw_cb.stats.start_tick;
     elapsed_ms = GKI_TICKS_TO_MS (ticks);
@@ -171,11 +171,11 @@ void rw_main_log_stats (void)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS RW_SendRawFrame (UINT8 *p_raw_data, UINT16 data_len)
+tNFC_STATUS RW_SendRawFrame (uint8_t *p_raw_data, uint16_t data_len)
 {
     tNFC_STATUS status = NFC_STATUS_FAILED;
     BT_HDR  *p_data;
-    UINT8   *p;
+    uint8_t *p;
 
     if (rw_cb.p_cback)
     {
@@ -184,7 +184,7 @@ tNFC_STATUS RW_SendRawFrame (UINT8 *p_raw_data, UINT16 data_len)
         if (p_data)
         {
             p_data->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
-            p = (UINT8 *) (p_data + 1) + p_data->offset;
+            p = (uint8_t *) (p_data + 1) + p_data->offset;
             memcpy (p, p_raw_data, data_len);
             p_data->len = data_len;
 
@@ -295,7 +295,7 @@ tNFC_STATUS RW_SetActivatedTagType (tNFC_ACTIVATE_DEVT *p_activate_params, tRW_C
 ** Returns          The new or current trace level
 **
 *******************************************************************************/
-UINT8 RW_SetTraceLevel (UINT8 new_level)
+uint8_t RW_SetTraceLevel (uint8_t new_level)
 {
     if (new_level != 0xFF)
         rw_cb.trace_level = new_level;

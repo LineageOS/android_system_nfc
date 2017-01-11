@@ -62,7 +62,7 @@ void verify_hal_non_volatile_store ();
 **                        or an error has occurred.
 **
 *******************************************************************************/
-void nfc_hal_nv_co_read (UINT8 *p_buf, UINT16 nbytes, UINT8 block)
+void nfc_hal_nv_co_read (uint8_t *p_buf, uint16_t nbytes, uint8_t block)
 {
     std::string fn = get_storage_location();
     char filename[256];
@@ -70,12 +70,12 @@ void nfc_hal_nv_co_read (UINT8 *p_buf, UINT16 nbytes, UINT8 block)
     fn.append (filename_prefix);
     if (fn.length() > 200)
     {
-        ALOGE ("%s: filename too long", __FUNCTION__);
+        ALOGE ("%s: filename too long", __func__);
         return;
     }
     snprintf (filename, sizeof(filename), "%s%u", fn.c_str(), block);
 
-    ALOGD ("%s: buffer len=%u; file=%s", __FUNCTION__, nbytes, filename);
+    ALOGD ("%s: buffer len=%u; file=%s", __func__, nbytes, filename);
     int fileStream = open (filename, O_RDONLY);
     if (fileStream >= 0)
     {
@@ -85,18 +85,18 @@ void nfc_hal_nv_co_read (UINT8 *p_buf, UINT16 nbytes, UINT8 block)
         close (fileStream);
         if (actualReadData > 0)
         {
-            ALOGD ("%s: data size=%u", __FUNCTION__, actualReadData);
+            ALOGD ("%s: data size=%u", __func__, actualReadData);
             nfc_hal_nv_ci_read (actualReadData, NFC_HAL_NV_CO_OK, block);
         }
         else
         {
-            ALOGE ("%s: fail to read", __FUNCTION__);
+            ALOGE ("%s: fail to read", __func__);
             nfc_hal_nv_ci_read (0, NFC_HAL_NV_CO_FAIL, block);
         }
     }
     else
     {
-        ALOGD ("%s: fail to open", __FUNCTION__);
+        ALOGD ("%s: fail to open", __func__);
         nfc_hal_nv_ci_read (0, NFC_HAL_NV_CO_FAIL, block);
     }
 }
@@ -120,7 +120,7 @@ void nfc_hal_nv_co_read (UINT8 *p_buf, UINT16 nbytes, UINT8 block)
 **                        bytes have been written, or an error has been detected,
 **
 *******************************************************************************/
-void nfc_hal_nv_co_write (const UINT8 *p_buf, UINT16 nbytes, UINT8 block)
+void nfc_hal_nv_co_write (const uint8_t *p_buf, uint16_t nbytes, uint8_t block)
 {
     std::string fn = get_storage_location();
     char filename[256];
@@ -129,11 +129,11 @@ void nfc_hal_nv_co_write (const UINT8 *p_buf, UINT16 nbytes, UINT8 block)
     fn.append (filename_prefix);
     if (fn.length() > 200)
     {
-        ALOGE ("%s: filename too long", __FUNCTION__);
+        ALOGE ("%s: filename too long", __func__);
         return;
     }
     snprintf (filename, sizeof(filename), "%s%u", fn.c_str(), block);
-    ALOGD ("%s: bytes=%u; file=%s", __FUNCTION__, nbytes, filename);
+    ALOGD ("%s: bytes=%u; file=%s", __func__, nbytes, filename);
 
     fileStream = open (filename, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
     if (fileStream >= 0)
@@ -141,21 +141,21 @@ void nfc_hal_nv_co_write (const UINT8 *p_buf, UINT16 nbytes, UINT8 block)
         unsigned short checksum = crcChecksumCompute (p_buf, nbytes);
         size_t actualWrittenCrc = write (fileStream, &checksum, sizeof(checksum));
         size_t actualWrittenData = write (fileStream, p_buf, nbytes);
-        ALOGD ("%s: %d bytes written", __FUNCTION__, actualWrittenData);
+        ALOGD ("%s: %d bytes written", __func__, actualWrittenData);
         if ((actualWrittenData == nbytes) && (actualWrittenCrc == sizeof(checksum)))
         {
             nfc_hal_nv_ci_write (NFC_HAL_NV_CO_OK);
         }
         else
         {
-            ALOGE ("%s: fail to write", __FUNCTION__);
+            ALOGE ("%s: fail to write", __func__);
             nfc_hal_nv_ci_write (NFC_HAL_NV_CO_FAIL);
         }
         close (fileStream);
     }
     else
     {
-        ALOGE ("%s: fail to open, error = %d", __FUNCTION__, errno);
+        ALOGE ("%s: fail to open, error = %d", __func__, errno);
         nfc_hal_nv_ci_write (NFC_HAL_NV_CO_FAIL);
     }
 }
@@ -205,12 +205,12 @@ void delete_hal_non_volatile_store (bool forceDelete)
         return;
     firstTime = false;
 
-    ALOGD ("%s", __FUNCTION__);
+    ALOGD ("%s", __func__);
 
     fn.append (filename_prefix);
     if (fn.length() > 200)
     {
-        ALOGE ("%s: filename too long", __FUNCTION__);
+        ALOGE ("%s: filename too long", __func__);
         return;
     }
 
@@ -240,7 +240,7 @@ void delete_hal_non_volatile_store (bool forceDelete)
 *******************************************************************************/
 void verify_hal_non_volatile_store ()
 {
-    ALOGD ("%s", __FUNCTION__);
+    ALOGD ("%s", __func__);
     std::string fn = get_storage_location();
     char filename[256];
     bool isValid = false;
@@ -248,7 +248,7 @@ void verify_hal_non_volatile_store ()
     fn.append (filename_prefix);
     if (fn.length() > 200)
     {
-        ALOGE ("%s: filename too long", __FUNCTION__);
+        ALOGE ("%s: filename too long", __func__);
         return;
     }
 

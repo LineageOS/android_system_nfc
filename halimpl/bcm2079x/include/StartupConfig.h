@@ -29,7 +29,7 @@
 class StartupConfig
 {
 public:
-    typedef std::basic_string<UINT8> uint8_string;
+    typedef std::basic_string<uint8_t> uint8_string;
     StartupConfig ();
 
 
@@ -55,7 +55,7 @@ public:
     ** Returns:         Pointer to buffer.
     **
     *******************************************************************************/
-    const UINT8* getInternalBuffer ();
+    const uint8_t* getInternalBuffer ();
 
 
     /*******************************************************************************
@@ -70,7 +70,7 @@ public:
     ** Returns:         True if ok.
     **
     *******************************************************************************/
-    bool append (const UINT8* newContent, UINT8 newContentLen);
+    bool append (const uint8_t* newContent, uint8_t newContentLen);
 
 
     /*******************************************************************************
@@ -85,9 +85,9 @@ public:
     ** Returns:         True if ok.
     **
     *******************************************************************************/
-    bool disableSecureElement (UINT8 bitmask);
+    bool disableSecureElement (uint8_t bitmask);
 
 private:
-    static const UINT8 mMaxLength;
+    static const uint8_t mMaxLength;
     uint8_string mBuffer;
 };
