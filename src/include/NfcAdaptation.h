@@ -17,9 +17,7 @@
  ******************************************************************************/
 #pragma once
 #include <pthread.h>
-#ifndef uint32_t
-typedef unsigned long   uint32_t;
-#endif
+
 #include "nfc_target.h"
 #include "nfc_hal_api.h"
 

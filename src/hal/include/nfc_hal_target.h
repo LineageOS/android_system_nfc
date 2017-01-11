@@ -172,19 +172,19 @@
 /* HAL trace macros */
 #if (NFC_HAL_USE_TRACES == TRUE)
 #define NCI_TRACE_0(l,t,m)                           LogMsg((TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t)),(m))
-#define NCI_TRACE_1(l,t,m,p1)                        LogMsg(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(UINTPTR)(p1))
-#define NCI_TRACE_2(l,t,m,p1,p2)                     LogMsg(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(UINTPTR)(p1),   \
-                                                        (UINTPTR)(p2))
-#define NCI_TRACE_3(l,t,m,p1,p2,p3)                  LogMsg(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(UINTPTR)(p1),   \
-                                                        (UINTPTR)(p2),(UINTPTR)(p3))
-#define NCI_TRACE_4(l,t,m,p1,p2,p3,p4)               LogMsg(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(UINTPTR)(p1),   \
-                                                        (UINTPTR)(p2),(UINTPTR)(p3),(UINTPTR)(p4))
-#define NCI_TRACE_5(l,t,m,p1,p2,p3,p4,p5)            LogMsg(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(UINTPTR)(p1),   \
-                                                        (UINTPTR)(p2),(UINTPTR)(p3),(UINTPTR)(p4), \
-                                                        (UINTPTR)(p5))
-#define NCI_TRACE_6(l,t,m,p1,p2,p3,p4,p5,p6)         LogMsg(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(UINTPTR)(p1),   \
-                                                        (UINTPTR)(p2),(UINTPTR)(p3),(UINTPTR)(p4), \
-                                                        (UINTPTR)(p5),(UINTPTR)(p6))
+#define NCI_TRACE_1(l,t,m,p1)                        LogMsg(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(uintptr_t)(p1))
+#define NCI_TRACE_2(l,t,m,p1,p2)                     LogMsg(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(uintptr_t)(p1),   \
+                                                        (uintptr_t)(p2))
+#define NCI_TRACE_3(l,t,m,p1,p2,p3)                  LogMsg(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(uintptr_t)(p1),   \
+                                                        (uintptr_t)(p2),(uintptr_t)(p3))
+#define NCI_TRACE_4(l,t,m,p1,p2,p3,p4)               LogMsg(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(uintptr_t)(p1),   \
+                                                        (uintptr_t)(p2),(uintptr_t)(p3),(uintptr_t)(p4))
+#define NCI_TRACE_5(l,t,m,p1,p2,p3,p4,p5)            LogMsg(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(uintptr_t)(p1),   \
+                                                        (uintptr_t)(p2),(uintptr_t)(p3),(uintptr_t)(p4), \
+                                                        (uintptr_t)(p5))
+#define NCI_TRACE_6(l,t,m,p1,p2,p3,p4,p5,p6)         LogMsg(TRACE_CTRL_GENERAL | (l) | TRACE_ORG_STACK | (t),(m),(uintptr_t)(p1),   \
+                                                        (uintptr_t)(p2),(uintptr_t)(p3),(uintptr_t)(p4), \
+                                                        (uintptr_t)(p5),(uintptr_t)(p6))
 
 #define HAL_TRACE_ERROR0(m)                     {if (nfc_hal_cb.trace_level >= BT_TRACE_LEVEL_ERROR) NCI_TRACE_0(TRACE_LAYER_HAL, TRACE_TYPE_ERROR, m);}
 #define HAL_TRACE_ERROR1(m,p1)                  {if (nfc_hal_cb.trace_level >= BT_TRACE_LEVEL_ERROR) NCI_TRACE_1(TRACE_LAYER_HAL, TRACE_TYPE_ERROR, m,p1);}
