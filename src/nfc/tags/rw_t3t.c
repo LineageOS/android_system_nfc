@@ -586,7 +586,8 @@ tNFC_STATUS rw_t3t_send_to_lower (BT_HDR *p_msg)
 #if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
     bool    is_retry;
     /* Update stats */
-    rw_main_update_tx_stats (p_msg->len, ((rw_cb.cur_retry==0) ? FALSE : TRUE));
+    rw_main_update_tx_stats (p_msg->len,
+			     ((rw_cb.cur_retry == 0) ? false : true));
 #endif  /* RW_STATS_INCLUDED */
 
     /* Set NFC-F SoD field (payload len + 1) */
@@ -596,7 +597,7 @@ tNFC_STATUS rw_t3t_send_to_lower (BT_HDR *p_msg)
     p_msg->len += 1;            /* Increment len to include SoD */
 
 #if (BT_TRACE_PROTOCOL == TRUE)
-    DispT3TagMessage (p_msg, FALSE);
+    DispT3TagMessage (p_msg, false);
 #endif
 
     return (NFC_SendData (NFC_RF_CONN_ID, p_msg));
@@ -1493,7 +1494,7 @@ void rw_t3t_act_handle_raw_senddata_rsp (tRW_T3T_CB *p_cb, tNFC_DATA_CEVT *p_dat
 *****************************************************************************/
 void rw_t3t_act_handle_check_ndef_rsp (tRW_T3T_CB *p_cb, BT_HDR *p_msg_rsp)
 {
-    bool    check_complete = TRUE;
+    bool    check_complete = true;
     tNFC_STATUS nfc_status = NFC_STATUS_OK;
     tRW_READ_DATA read_data;
     tRW_DATA evt_data;
@@ -1549,7 +1550,7 @@ void rw_t3t_act_handle_check_ndef_rsp (tRW_T3T_CB *p_cb, BT_HDR *p_msg_rsp)
                 if ((nfc_status = rw_t3t_send_next_ndef_check_cmd (p_cb)) == NFC_STATUS_OK)
                 {
                     /* Still getting more segments. Don't send RW_T3T_CHECK_CPLT_EVT yet */
-                    check_complete = FALSE;
+                    check_complete = false;
                 }
             }
         }
@@ -1576,7 +1577,7 @@ void rw_t3t_act_handle_check_ndef_rsp (tRW_T3T_CB *p_cb, BT_HDR *p_msg_rsp)
 *****************************************************************************/
 void rw_t3t_act_handle_update_ndef_rsp (tRW_T3T_CB *p_cb, BT_HDR *p_msg_rsp)
 {
-    bool    update_complete = TRUE;
+    bool    update_complete = true;
     tNFC_STATUS nfc_status = NFC_STATUS_OK;
     tRW_DATA evt_data;
     uint8_t *p_t3t_rsp = (uint8_t *) (p_msg_rsp+1) + p_msg_rsp->offset;
@@ -1606,17 +1607,17 @@ void rw_t3t_act_handle_update_ndef_rsp (tRW_T3T_CB *p_cb, BT_HDR *p_msg_rsp)
         if ((nfc_status = rw_t3t_send_next_ndef_update_cmd (p_cb)) == NFC_STATUS_OK)
         {
             /* Wait for update response */
-            update_complete = FALSE;
+            update_complete = false;
         }
     }
     /*  Otherwise, no more NDEF bytes. Send final UPDATE for Attribute Information block */
     else
     {
         p_cb->flags |= RW_T3T_FL_IS_FINAL_NDEF_SEGMENT;
-        if ((nfc_status = rw_t3t_send_update_ndef_attribute_cmd (p_cb, FALSE)) == NFC_STATUS_OK)
+        if ((nfc_status = rw_t3t_send_update_ndef_attribute_cmd (p_cb, false)) == NFC_STATUS_OK)
         {
             /* Wait for update response */
-            update_complete = FALSE;
+            update_complete = false;
         }
     }
 
@@ -2233,7 +2234,7 @@ void rw_t3t_data_cback (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
 {
     tRW_T3T_CB *p_cb  = &rw_cb.tcb.t3t;
     BT_HDR     *p_msg = p_data->p_data;
-    bool    free_msg = FALSE;           /* if TRUE, free msg buffer before returning */
+    bool    free_msg = false;           /* if TRUE, free msg buffer before returning */
     uint8_t *p, sod;
 
     /* Stop rsponse timer */
@@ -2257,7 +2258,7 @@ void rw_t3t_data_cback (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
     else if (p_msg->len < T3T_MSG_RSP_COMMON_HDR_LEN)
     {
         RW_TRACE_ERROR1 ("T3T: invalid Type3 Tag Message (invalid len: %i)", p_msg->len);
-        free_msg = TRUE;
+        free_msg = true;
 
         rw_t3t_process_frame_error ();
     }
@@ -2276,7 +2277,7 @@ void rw_t3t_data_cback (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
         }
 
 #if (BT_TRACE_PROTOCOL == TRUE)
-        DispT3TagMessage (p_msg, TRUE);
+        DispT3TagMessage (p_msg, true);
 #endif
 
         /* Skip over SoD */
@@ -2762,7 +2763,7 @@ tNFC_STATUS RW_T3tUpdateNDef (uint32_t len, uint8_t *p_data)
     p_cb->ndef_msg = p_data;
 
     /* Send initial UPDATE command for NDEF Attribute Info */
-    retval = rw_t3t_send_update_ndef_attribute_cmd (p_cb, TRUE);
+    retval = rw_t3t_send_update_ndef_attribute_cmd (p_cb, true);
 
     return (retval);
 }

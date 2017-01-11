@@ -76,7 +76,7 @@ void nfc_start_timer (TIMER_LIST_ENT *p_tle, uint16_t type, uint32_t timeout)
         else
         {
             /* Start nfc_task 1-sec resolution timer */
-            GKI_start_timer (NFC_TIMER_ID, GKI_SECS_TO_TICKS (1), TRUE);
+            GKI_start_timer (NFC_TIMER_ID, GKI_SECS_TO_TICKS (1), true);
         }
     }
 
@@ -198,7 +198,8 @@ void nfc_start_quick_timer (TIMER_LIST_ENT *p_tle, uint16_t type, uint32_t timeo
         else
         {
             /* Quick-timer is required for LLCP */
-            GKI_start_timer (NFC_QUICK_TIMER_ID, ((GKI_SECS_TO_TICKS (1) / QUICK_TIMER_TICKS_PER_SEC)), TRUE);
+            GKI_start_timer (NFC_QUICK_TIMER_ID, ((GKI_SECS_TO_TICKS (1) / QUICK_TIMER_TICKS_PER_SEC)),
+                             true);
         }
     }
 
@@ -372,7 +373,7 @@ uint32_t nfc_task (uint32_t param)
     NFC_TRACE_DEBUG0 ("NFC_TASK started.");
 
     /* main loop */
-    while (TRUE)
+    while (true)
     {
         event = GKI_wait (0xFFFF, 0);
 
@@ -391,7 +392,7 @@ uint32_t nfc_task (uint32_t param)
             /* Process all incoming NCI messages */
             while ((p_msg = (BT_HDR *) GKI_read_mbox (NFC_MBOX_ID)) != NULL)
             {
-                free_buf = TRUE;
+                free_buf = true;
 
                 /* Determine the input message type. */
                 switch (p_msg->event & BT_EVT_MASK)
@@ -402,12 +403,14 @@ uint32_t nfc_task (uint32_t param)
 
                     case BT_EVT_TO_START_TIMER :
                         /* Start nfc_task 1-sec resolution timer */
-                        GKI_start_timer (NFC_TIMER_ID, GKI_SECS_TO_TICKS (1), TRUE);
+                        GKI_start_timer (NFC_TIMER_ID, GKI_SECS_TO_TICKS (1),
+					 true);
                         break;
 
                     case BT_EVT_TO_START_QUICK_TIMER :
                         /* Quick-timer is required for LLCP */
-                        GKI_start_timer (NFC_QUICK_TIMER_ID, ((GKI_SECS_TO_TICKS (1) / QUICK_TIMER_TICKS_PER_SEC)), TRUE);
+                        GKI_start_timer (NFC_QUICK_TIMER_ID, ((GKI_SECS_TO_TICKS (1) / QUICK_TIMER_TICKS_PER_SEC)),
+					 true);
                         break;
 
                     case BT_EVT_TO_NFC_MSGS:

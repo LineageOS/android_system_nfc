@@ -41,7 +41,7 @@
 #define FW_DNLD_LEN_OFFSET          1
 #define NORMAL_MODE_LEN_OFFSET      2
 #define FRAGMENTSIZE_MAX            PHNFC_I2C_FRAGMENT_SIZE
-static bool_t bFwDnldFlag = FALSE;
+static bool_t bFwDnldFlag = false;
 extern phTmlNfc_i2cfragmentation_t fragmentation_enabled;
 
 /*******************************************************************************
@@ -134,7 +134,7 @@ int phTmlNfc_i2c_read(void *pDevHandle, uint8_t * pBuffer, int nNbBytesToRead)
         return -1;
     }
 
-    if (FALSE == bFwDnldFlag)
+    if (bFwDnldFlag == false)
     {
         totalBtyesToRead = NORMAL_MODE_HEADER_LEN;
     }
@@ -180,7 +180,7 @@ int phTmlNfc_i2c_read(void *pDevHandle, uint8_t * pBuffer, int nNbBytesToRead)
             return -1;
         }
 
-        if (FALSE == bFwDnldFlag)
+        if (bFwDnldFlag == false)
         {
             totalBtyesToRead = NORMAL_MODE_HEADER_LEN;
         }
@@ -202,7 +202,7 @@ int phTmlNfc_i2c_read(void *pDevHandle, uint8_t * pBuffer, int nNbBytesToRead)
                 numRead += ret_Read;
             }
         }
-        if(TRUE == bFwDnldFlag)
+        if(bFwDnldFlag == true)
         {
             totalBtyesToRead = pBuffer[FW_DNLD_LEN_OFFSET] + FW_DNLD_HEADER_LEN + CRC_LEN;
         }
@@ -224,7 +224,7 @@ int phTmlNfc_i2c_read(void *pDevHandle, uint8_t * pBuffer, int nNbBytesToRead)
            }
            else
            {
-               if (FALSE == bFwDnldFlag)
+               if (bFwDnldFlag == false)
                {
                    NXPLOG_TML_E ("_i2c_read() [hdr] received");
                    phNxpNciHal_print_packet ("RECV", pBuffer, NORMAL_MODE_HEADER_LEN);
@@ -338,9 +338,9 @@ int phTmlNfc_i2c_reset(void *pDevHandle, long level)
     ret = ioctl((intptr_t)pDevHandle, PN544_SET_PWR, level);
     if(level == 2 && ret == 0)
     {
-        bFwDnldFlag = TRUE;
+        bFwDnldFlag = true;
     }else{
-        bFwDnldFlag = FALSE;
+        bFwDnldFlag = false;
     }
     return ret;
 }

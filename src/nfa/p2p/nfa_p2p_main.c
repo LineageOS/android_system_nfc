@@ -393,11 +393,11 @@ void nfa_p2p_activate_llcp (tNFC_DISCOVER *p_data)
         ||(p_data->activate.rf_tech_param.mode == NFC_DISCOVERY_TYPE_POLL_A_ACTIVE)
         ||(p_data->activate.rf_tech_param.mode == NFC_DISCOVERY_TYPE_POLL_F_ACTIVE)  )
     {
-        config.is_initiator = TRUE;
+        config.is_initiator = true;
     }
     else
     {
-        config.is_initiator = FALSE;
+        config.is_initiator = false;
     }
 
     if (  (p_data->activate.rf_tech_param.mode == NFC_DISCOVERY_TYPE_POLL_A_ACTIVE)
@@ -405,11 +405,11 @@ void nfa_p2p_activate_llcp (tNFC_DISCOVER *p_data)
         ||(p_data->activate.rf_tech_param.mode == NFC_DISCOVERY_TYPE_LISTEN_A_ACTIVE)
         ||(p_data->activate.rf_tech_param.mode == NFC_DISCOVERY_TYPE_LISTEN_F_ACTIVE)  )
     {
-        nfa_p2p_cb.is_active_mode = TRUE;
+        nfa_p2p_cb.is_active_mode = true;
     }
     else
     {
-        nfa_p2p_cb.is_active_mode = FALSE;
+        nfa_p2p_cb.is_active_mode = false;
     }
 
     nfa_p2p_cb.is_initiator = config.is_initiator;
@@ -526,7 +526,7 @@ void nfa_p2p_set_config (tNFA_DM_DISC_TECH_PROTO_MASK disc_mask)
         p += gen_bytes_len;
         length = gen_bytes_len + 2;
 
-        nfa_dm_check_set_config (length, params, FALSE);
+        nfa_dm_check_set_config (length, params, false);
     }
 
     if (disc_mask & ( NFA_DM_DISC_MASK_LA_NFC_DEP
@@ -548,7 +548,7 @@ void nfa_p2p_set_config (tNFA_DM_DISC_TECH_PROTO_MASK disc_mask)
 
         length += 3;
 
-        nfa_dm_check_set_config (length, params, FALSE);
+        nfa_dm_check_set_config (length, params, false);
     }
 }
 
@@ -570,11 +570,11 @@ void nfa_p2p_enable_listening (tNFA_SYS_ID sys_id, bool    update_wks)
                        sys_id, update_wks);
 
     if (sys_id == NFA_ID_P2P)
-        nfa_p2p_cb.is_p2p_listening = TRUE;
+        nfa_p2p_cb.is_p2p_listening = true;
     else if (sys_id == NFA_ID_CHO)
-        nfa_p2p_cb.is_cho_listening = TRUE;
+        nfa_p2p_cb.is_cho_listening = true;
     else if (sys_id == NFA_ID_SNEP)
-        nfa_p2p_cb.is_snep_listening = TRUE;
+        nfa_p2p_cb.is_snep_listening = true;
 
     if (nfa_p2p_cb.dm_disc_handle != NFA_HANDLE_INVALID)
     {
@@ -628,17 +628,17 @@ void nfa_p2p_disable_listening (tNFA_SYS_ID sys_id, bool    update_wks)
                        sys_id, update_wks);
 
     if (sys_id == NFA_ID_P2P)
-        nfa_p2p_cb.is_p2p_listening = FALSE;
+        nfa_p2p_cb.is_p2p_listening = false;
     else if (sys_id == NFA_ID_CHO)
-        nfa_p2p_cb.is_cho_listening = FALSE;
+        nfa_p2p_cb.is_cho_listening = false;
     else if (sys_id == NFA_ID_SNEP)
-        nfa_p2p_cb.is_snep_listening = FALSE;
+        nfa_p2p_cb.is_snep_listening = false;
 
     if (nfa_p2p_cb.dm_disc_handle != NFA_HANDLE_INVALID)
     {
-        if (  (nfa_p2p_cb.is_p2p_listening == FALSE)
-            &&(nfa_p2p_cb.is_cho_listening == FALSE)
-            &&(nfa_p2p_cb.is_snep_listening == FALSE)  )
+        if (  (nfa_p2p_cb.is_p2p_listening == false)
+            &&(nfa_p2p_cb.is_cho_listening == false)
+            &&(nfa_p2p_cb.is_snep_listening == false)  )
         {
             nfa_p2p_cb.llcp_state    = NFA_P2P_LLCP_STATE_IDLE;
             nfa_p2p_cb.rf_disc_state = NFA_DM_RFST_IDLE;
@@ -688,11 +688,11 @@ void nfa_p2p_update_listen_tech (tNFA_TECHNOLOGY_MASK tech_mask)
 
         /* restart discovery without updating sub-module status */
         if (nfa_p2p_cb.is_p2p_listening)
-            nfa_p2p_enable_listening (NFA_ID_P2P, FALSE);
+            nfa_p2p_enable_listening (NFA_ID_P2P, false);
         else if (nfa_p2p_cb.is_cho_listening)
-            nfa_p2p_enable_listening (NFA_ID_CHO, FALSE);
+            nfa_p2p_enable_listening (NFA_ID_CHO, false);
         else if (nfa_p2p_cb.is_snep_listening)
-            nfa_p2p_enable_listening (NFA_ID_SNEP, FALSE);
+            nfa_p2p_enable_listening (NFA_ID_SNEP, false);
     }
 }
 
@@ -708,7 +708,7 @@ void nfa_p2p_update_listen_tech (tNFA_TECHNOLOGY_MASK tech_mask)
 *******************************************************************************/
 static bool    nfa_p2p_evt_hdlr (BT_HDR *p_hdr)
 {
-    bool    delete_msg = TRUE;
+    bool    delete_msg = true;
     uint16_t  event;
 
     tNFA_P2P_MSG *p_msg = (tNFA_P2P_MSG *)p_hdr;

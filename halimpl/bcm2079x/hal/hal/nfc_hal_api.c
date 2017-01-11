@@ -231,17 +231,17 @@ void HAL_NfcWrite (uint16_t data_len, uint8_t *p_data)
 *******************************************************************************/
 bool    HAL_NfcPreDiscover (void)
 {
-    bool    status = FALSE;
+    bool    status = false;
 
     NFC_HDR *p_msg;
 
     HAL_TRACE_API0 ("HAL_NfcPreDiscover ()");
-    if (nfc_hal_cb.pre_discover_done == FALSE)
+    if (nfc_hal_cb.pre_discover_done == false)
     {
-        nfc_hal_cb.pre_discover_done    = TRUE;
+        nfc_hal_cb.pre_discover_done = true;
         if (p_nfc_hal_pre_discover_cfg && *p_nfc_hal_pre_discover_cfg)
         {
-            status                          = TRUE;
+            status = true;
             /* Send message to NFC_HAL_TASK */
             if ((p_msg = (NFC_HDR *)GKI_getpoolbuf (NFC_HAL_NCI_POOL_ID)) != NULL)
             {

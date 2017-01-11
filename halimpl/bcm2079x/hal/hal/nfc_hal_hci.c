@@ -199,21 +199,21 @@ void nfc_hal_hci_handle_build_info (uint8_t chipverlen, uint8_t *p_chipverstr)
     if ((chipverlen == NFC_HAL_DM_BCM20791B3_STR_LEN) && (memcmp (NFC_HAL_DM_BCM20791B3_STR, p_chipverstr, NFC_HAL_DM_BCM20791B3_STR_LEN) == 0))
     {
         /* BCM2079B3 FW - eSE restarted for patch download */
-        nfc_hal_cb.hci_cb.hci_fw_workaround         = TRUE;
-        nfc_hal_cb.hci_cb.hci_fw_validate_netwk_cmd = TRUE;
+        nfc_hal_cb.hci_cb.hci_fw_workaround = true;
+        nfc_hal_cb.hci_cb.hci_fw_validate_netwk_cmd = true;
     }
     else if (  ((chipverlen == NFC_HAL_DM_BCM20791B4_STR_LEN) && (memcmp (NFC_HAL_DM_BCM20791B4_STR, p_chipverstr, NFC_HAL_DM_BCM20791B4_STR_LEN) == 0))
              ||((chipverlen == NFC_HAL_DM_BCM43341B0_STR_LEN) && (memcmp (NFC_HAL_DM_BCM43341B0_STR, p_chipverstr, NFC_HAL_DM_BCM43341B0_STR_LEN) == 0))  )
     {
         /* BCM43341B0/BCM2079B4 FW - eSE restarted for patch download */
-        nfc_hal_cb.hci_cb.hci_fw_workaround         = TRUE;
-        nfc_hal_cb.hci_cb.hci_fw_validate_netwk_cmd = FALSE;
+        nfc_hal_cb.hci_cb.hci_fw_workaround = true;
+        nfc_hal_cb.hci_cb.hci_fw_validate_netwk_cmd = false;
     }
     else
     {
         /* BCM2079B5 FW - eSE not be restarted for patch download from UICC */
-        nfc_hal_cb.hci_cb.hci_fw_workaround         = FALSE;
-        nfc_hal_cb.hci_cb.hci_fw_validate_netwk_cmd = FALSE;
+        nfc_hal_cb.hci_cb.hci_fw_workaround = false;
+        nfc_hal_cb.hci_cb.hci_fw_validate_netwk_cmd = false;
     }
 }
 
@@ -322,7 +322,7 @@ void nfc_hal_hci_fake_adm_notify_all_pipe_cleared_to_dh (void)
         *p = NFC_HAL_HCI_HOST_ID_UICC1;
 
 #ifdef DISP_NCI
-        DISP_NCI (ps, (uint16_t) p_msg->len, TRUE);
+        DISP_NCI (ps, (uint16_t) p_msg->len, true);
 #endif
         nfc_hal_send_nci_msg_to_nfc_task (p_msg);
 
@@ -372,7 +372,7 @@ bool    nfc_hal_hci_handle_hcp_pkt_to_hc (uint8_t *p_data)
                     /* Set flag to modify session id[0] on response
                      * from host controller to set session id cmd
                      */
-                    nfc_hal_cb.hci_cb.update_session_id = TRUE;
+                    nfc_hal_cb.hci_cb.update_session_id = true;
                 }
             }
             else if (inst == NFC_HAL_HCI_ANY_SET_PARAMETER)
@@ -386,7 +386,7 @@ bool    nfc_hal_hci_handle_hcp_pkt_to_hc (uint8_t *p_data)
                         /* Set flag to fake ADM_NOTIFY_ALL_PIPE_CLEARED cmd to nfc task after
                          * response from host controller to set whitelist cmd
                          */
-                        nfc_hal_cb.hci_cb.clear_all_pipes_to_uicc1 = TRUE;
+                        nfc_hal_cb.hci_cb.clear_all_pipes_to_uicc1 = true;
                     }
                 }
                 else if (index == NFC_HAL_HCI_SESSION_IDENTITY_INDEX)
@@ -406,14 +406,14 @@ bool    nfc_hal_hci_handle_hcp_pkt_to_hc (uint8_t *p_data)
                 &&(nfc_hal_cb.hci_cb.clear_all_pipes_to_uicc1)  )
             {
                 /* Got response to the fake ADM_NOTIFY_ALL_PIPE_CLEARED cmd sent by HAL to nfc task */
-                nfc_hal_cb.hci_cb.clear_all_pipes_to_uicc1 =  FALSE;
+                nfc_hal_cb.hci_cb.clear_all_pipes_to_uicc1 = false;
                 /* return TRUE to drop this hcp without forwarding to host controller */
-                return TRUE;
+                return true;
             }
         }
     }
 
-    return FALSE;
+    return false;
 }
 
 /*******************************************************************************
@@ -486,7 +486,7 @@ void nfc_hal_hci_handle_hcp_pkt_from_hc (uint8_t *p_data)
         {
             if (nfc_hal_cb.hci_cb.update_session_id)
             {
-                nfc_hal_cb.hci_cb.update_session_id = FALSE;
+                nfc_hal_cb.hci_cb.update_session_id = false;
                 inst  = (*p_data++ & 0x3F);
                 if (inst == NFC_HAL_HCI_ANY_OK)
                 {

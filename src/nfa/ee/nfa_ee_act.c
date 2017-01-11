@@ -399,9 +399,9 @@ void nfa_ee_api_discover(tNFA_EE_MSG *p_data)
     if (nfa_ee_cb.discv_timer.in_use)
     {
         nfa_sys_stop_timer(&nfa_ee_cb.discv_timer);
-        NFC_NfceeDiscover(FALSE);
+        NFC_NfceeDiscover(false);
     }
-    if (nfa_ee_cb.p_ee_disc_cback == NULL && NFC_NfceeDiscover(TRUE) == NFC_STATUS_OK)
+    if (nfa_ee_cb.p_ee_disc_cback == NULL && NFC_NfceeDiscover(true) == NFC_STATUS_OK)
     {
         nfa_ee_cb.p_ee_disc_cback   = p_cback;
     }
@@ -426,7 +426,7 @@ void nfa_ee_api_register(tNFA_EE_MSG *p_data)
     int xx;
     tNFA_EE_CBACK *p_cback = p_data->ee_register.p_cback;
     tNFA_EE_CBACK_DATA  evt_data = {0};
-    bool    found = FALSE;
+    bool    found = false;
 
     evt_data.ee_register = NFA_STATUS_FAILED;
     /* loop through all entries to see if there's a matching callback */
@@ -435,7 +435,7 @@ void nfa_ee_api_register(tNFA_EE_MSG *p_data)
         if (nfa_ee_cb.p_ee_cback[xx] == p_cback)
         {
             evt_data.ee_register        = NFA_STATUS_OK;
-            found                       = TRUE;
+            found = true;
             break;
         }
     }
@@ -1003,7 +1003,7 @@ void nfa_ee_report_disc_done(bool    notify_enable_done)
 bool    nfa_ee_restore_ntf_done(void)
 {
     tNFA_EE_ECB     *p_cb;
-    bool            is_done = TRUE;
+    bool            is_done = true;
     int             xx;
 
     p_cb = nfa_ee_cb.ecb;
@@ -1011,7 +1011,7 @@ bool    nfa_ee_restore_ntf_done(void)
     {
         if ((p_cb->nfcee_id != NFA_EE_INVALID) && (p_cb->ee_old_status & NFA_EE_STATUS_RESTORING))
         {
-            is_done = FALSE;
+            is_done = false;
             break;
         }
     }
@@ -1087,7 +1087,7 @@ void nfa_ee_nci_disc_rsp(tNFA_EE_MSG *p_data)
     tNFA_EE_ECB              *p_cb;
     uint8_t xx;
     uint8_t num_nfcee = p_evt->num_nfcee;
-    bool    notify_enable_done = FALSE;
+    bool    notify_enable_done = false;
 
     NFA_TRACE_DEBUG3("nfa_ee_nci_disc_rsp() em_state:%d cur_ee:%d, num_nfcee:%d", nfa_ee_cb.em_state, nfa_ee_cb.cur_ee, num_nfcee);
     switch (nfa_ee_cb.em_state)
@@ -1098,7 +1098,7 @@ void nfa_ee_nci_disc_rsp(tNFA_EE_MSG *p_data)
         if (num_nfcee == 0)
         {
             nfa_ee_cb.em_state = NFA_EE_EM_STATE_INIT_DONE;
-            notify_enable_done = TRUE;
+            notify_enable_done = true;
             if (p_evt->status != NFC_STATUS_OK)
             {
                 nfa_sys_stop_timer(&nfa_ee_cb.discv_timer);
@@ -1165,8 +1165,8 @@ void nfa_ee_nci_disc_ntf(tNFA_EE_MSG *p_data)
 {
     tNFC_NFCEE_INFO_REVT    *p_ee = p_data->disc_ntf.p_data;
     tNFA_EE_ECB             *p_cb = NULL;
-    bool                    notify_enable_done = FALSE;
-    bool                    notify_new_ee = FALSE;
+    bool                    notify_enable_done = false;
+    bool                    notify_new_ee = false;
     tNFA_EE_CBACK_DATA      evt_data = {0};
     tNFA_EE_INFO            *p_info;
     tNFA_EE_EM_STATE        new_em_state = NFA_EE_EM_STATE_MAX;
@@ -1178,7 +1178,7 @@ void nfa_ee_nci_disc_ntf(tNFA_EE_MSG *p_data)
         if ((nfa_ee_cb.num_ee_expecting == 0) && (nfa_ee_cb.p_ee_disc_cback != NULL))
         {
             /* Discovery triggered by API function */
-            NFC_NfceeDiscover(FALSE);
+            NFC_NfceeDiscover(false);
         }
     }
     switch (nfa_ee_cb.em_state)
@@ -1194,7 +1194,7 @@ void nfa_ee_nci_disc_ntf(tNFA_EE_MSG *p_data)
         {
             /* notify init_done callback */
             nfa_ee_cb.em_state = NFA_EE_EM_STATE_INIT_DONE;
-            notify_enable_done = TRUE;
+            notify_enable_done = true;
         }
         break;
 
@@ -1208,13 +1208,13 @@ void nfa_ee_nci_disc_ntf(tNFA_EE_MSG *p_data)
             if (p_cb)
             {
                 nfa_ee_cb.cur_ee++;
-                notify_new_ee = TRUE;
+                notify_new_ee = true;
             }
         }
         else if (p_cb->ecb_flags & NFA_EE_ECB_FLAGS_ORDER)
         {
             nfa_ee_cb.cur_ee++;
-            notify_new_ee = TRUE;
+            notify_new_ee = true;
         }
         else
         {
@@ -1232,13 +1232,13 @@ void nfa_ee_nci_disc_ntf(tNFA_EE_MSG *p_data)
             if (p_cb)
             {
                 nfa_ee_cb.cur_ee++;
-                notify_new_ee = TRUE;
+                notify_new_ee = true;
             }
         }
         if (nfa_ee_cb.num_ee_expecting == 0)
         {
             /* notify init_done callback */
-            notify_enable_done = TRUE;
+            notify_enable_done = true;
             if (nfa_ee_restore_ntf_done())
             {
                 new_em_state       = NFA_EE_EM_STATE_INIT_DONE;
@@ -1273,7 +1273,7 @@ void nfa_ee_nci_disc_ntf(tNFA_EE_MSG *p_data)
             }
         }
 
-        if ((nfa_ee_cb.p_ee_disc_cback == NULL) && (notify_new_ee == TRUE))
+        if ((nfa_ee_cb.p_ee_disc_cback == NULL) && (notify_new_ee == true))
         {
             if (nfa_dm_is_active() && (p_cb->ee_status != NFA_EE_STATUS_REMOVED))
             {
@@ -1332,7 +1332,7 @@ void nfa_ee_check_restore_complete(void)
 {
     uint32_t  xx;
     tNFA_EE_ECB     *p_cb;
-    bool            proc_complete = TRUE;
+    bool            proc_complete = true;
 
     p_cb = nfa_ee_cb.ecb;
     for (xx = 0; xx < nfa_ee_cb.cur_ee; xx++, p_cb++)
@@ -1343,7 +1343,7 @@ void nfa_ee_check_restore_complete(void)
              * ignore the restoring status for HCI Access */
             if (p_cb->ee_interface[0] != NFC_NFCEE_INTERFACE_HCI_ACCESS)
             {
-                proc_complete = FALSE;
+                proc_complete = false;
                 break;
             }
         }
@@ -1801,7 +1801,7 @@ void nfa_ee_nci_disc_req_ntf(tNFA_EE_MSG *p_data)
 *******************************************************************************/
 bool    nfa_ee_is_active (tNFA_HANDLE nfcee_id)
 {
-    bool    is_active = FALSE;
+    bool    is_active = false;
     int     xx;
     tNFA_EE_ECB  *p_cb = nfa_ee_cb.ecb;
 
@@ -1815,7 +1815,7 @@ bool    nfa_ee_is_active (tNFA_HANDLE nfcee_id)
         {
             if (p_cb->ee_status == NFA_EE_STATUS_ACTIVE)
             {
-                is_active = TRUE;
+                is_active = true;
             }
             break;
         }
@@ -1894,7 +1894,7 @@ void nfa_ee_check_set_routing(uint16_t new_size, int *p_max_len, uint8_t *p, int
 
     if (new_size + *p_cur_offset > max_tlv)
     {
-        if (NFC_SetRouting(TRUE, *p, *p_cur_offset, p + 1) == NFA_STATUS_OK)
+        if (NFC_SetRouting(true, *p, *p_cur_offset, p + 1) == NFA_STATUS_OK)
         {
             nfa_ee_cb.wait_rsp++;
         }
@@ -2061,7 +2061,7 @@ tNFA_STATUS nfa_ee_route_add_one_ecb(tNFA_EE_ECB *p_cb, int *p_max_len, bool    
     }
     NFA_TRACE_DEBUG2 ("ee_cfg_sts:0x%02x lmrt_size:%d", nfa_ee_cb.ee_cfg_sts, tlv_size);
 
-    if (more == FALSE)
+    if (more == false)
     {
         /* last entry. update routing table now */
         if (nfa_ee_cb.ee_cfg_sts & NFA_EE_STS_CHANGED_ROUTING)
@@ -2129,7 +2129,7 @@ tNFA_STATUS nfa_ee_route_add_one_ecb(tNFA_EE_ECB *p_cb, int *p_max_len, bool    
 *******************************************************************************/
 static bool    nfa_ee_need_recfg(void)
 {
-    bool    needed = FALSE;
+    bool    needed = false;
     uint32_t  xx;
     tNFA_EE_ECB  *p_cb;
     uint8_t mask;
@@ -2140,7 +2140,7 @@ static bool    nfa_ee_need_recfg(void)
     {
         if (nfa_ee_cb.ee_cfg_sts & NFA_EE_STS_CHANGED)
         {
-            needed = TRUE;
+            needed = true;
         }
         else
         {
@@ -2151,7 +2151,7 @@ static bool    nfa_ee_need_recfg(void)
                 NFA_TRACE_DEBUG3("%d: ecb_flags  : 0x%02x, mask: 0x%02x", xx, p_cb->ecb_flags  , mask);
                 if ((p_cb->ecb_flags  ) && (nfa_ee_cb.ee_cfged & mask))
                 {
-                    needed = TRUE;
+                    needed = true;
                     break;
                 }
                 p_cb = &nfa_ee_cb.ecb[xx];
@@ -2211,7 +2211,7 @@ void nfa_ee_rout_timeout(tNFA_EE_MSG *p_data)
 *******************************************************************************/
 void nfa_ee_discv_timeout(tNFA_EE_MSG *p_data)
 {
-    NFC_NfceeDiscover(FALSE);
+    NFC_NfceeDiscover(false);
     if (nfa_ee_cb.p_enable_cback)
         (*nfa_ee_cb.p_enable_cback)(NFA_EE_DISC_STS_OFF);
 }
@@ -2231,7 +2231,7 @@ void nfa_ee_lmrt_to_nfcc(tNFA_EE_MSG *p_data)
     int xx;
     tNFA_EE_ECB          *p_cb;
     uint8_t *p = NULL;
-    bool    more = TRUE;
+    bool    more = true;
     uint8_t last_active = NFA_EE_INVALID;
     int     max_len, len;
     tNFA_STATUS status = NFA_STATUS_FAILED;
@@ -2262,7 +2262,7 @@ void nfa_ee_lmrt_to_nfcc(tNFA_EE_MSG *p_data)
     }
     if (last_active == NFA_EE_INVALID)
     {
-        more = FALSE;
+        more = false;
     }
 
     /* add the routing for DH first */
@@ -2286,11 +2286,11 @@ void nfa_ee_lmrt_to_nfcc(tNFA_EE_MSG *p_data)
             {
                 NFA_TRACE_DEBUG2 ("nfcee_id:0x%x, last_active: 0x%x", p_cb->nfcee_id, last_active);
                 if (last_active == p_cb->nfcee_id)
-                    more = FALSE;
+                    more = false;
                 status = nfa_ee_route_add_one_ecb(p_cb, &max_len, more, p, &cur_offset);
                 if (status != NFA_STATUS_OK)
                 {
-                    more    = FALSE;
+                    more = false;
                 }
             }
         }
