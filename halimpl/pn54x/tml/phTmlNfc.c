@@ -118,8 +118,8 @@ NFCSTATUS phTmlNfc_Init(pphTmlNfc_Config_t pConfig)
             {
                 gpphTmlNfc_Context->tReadInfo.bEnable = 0;
                 gpphTmlNfc_Context->tWriteInfo.bEnable = 0;
-                gpphTmlNfc_Context->tReadInfo.bThreadBusy = FALSE;
-                gpphTmlNfc_Context->tWriteInfo.bThreadBusy = FALSE;
+                gpphTmlNfc_Context->tReadInfo.bThreadBusy = false;
+                gpphTmlNfc_Context->tWriteInfo.bThreadBusy = false;
 
                 if(0 != sem_init(&gpphTmlNfc_Context->rxSemaphore, 0, 0))
                 {
@@ -153,7 +153,7 @@ NFCSTATUS phTmlNfc_Init(pphTmlNfc_Config_t pConfig)
                             gpphTmlNfc_Context->eConfig = phTmlNfc_e_DisableRetrans;
                             /** Retry Count = Standby Recovery time of NFCC / Retransmission time + 1 */
                             gpphTmlNfc_Context->bRetryCount = (2000 / PHTMLNFC_MAXTIME_RETRANSMIT) + 1;
-                            gpphTmlNfc_Context->bWriteCbInvoked = FALSE;
+                            gpphTmlNfc_Context->bWriteCbInvoked = false;
                         }
                         else
                         {
@@ -279,7 +279,7 @@ static void phTmlNfc_ReTxTimerCb(uint32_t dwTimerId, void *pContext)
         else
         {
             bCurrentRetryCount--;
-            gpphTmlNfc_Context->tWriteInfo.bThreadBusy = TRUE;
+            gpphTmlNfc_Context->tWriteInfo.bThreadBusy = true;
             gpphTmlNfc_Context->tWriteInfo.bEnable = 1;
         }
         sem_post(&gpphTmlNfc_Context->txSemaphore);
@@ -391,7 +391,7 @@ static void phTmlNfc_TmlThread(void *pParam)
                         }
                         else
                         {
-                            gpphTmlNfc_Context->bWriteCbInvoked = FALSE;
+                            gpphTmlNfc_Context->bWriteCbInvoked = false;
                         }
                     }
                     if (gpphTmlNfc_Context->tWriteInfo.bThreadBusy)
@@ -493,7 +493,7 @@ static void phTmlNfc_TmlWriterThread(void *pParam)
                 /* Try I2C Write Five Times, if it fails : Raju */
                 if (-1 == dwNoBytesWrRd)
                 {
-                    if (getDownloadFlag() == TRUE)
+                    if (getDownloadFlag() == true)
                     {
                         if (retry_cnt++ < MAX_WRITE_RETRY_COUNT)
                         {
@@ -539,7 +539,7 @@ static void phTmlNfc_TmlWriterThread(void *pParam)
                 if ((phTmlNfc_e_EnableRetrans == gpphTmlNfc_Context->eConfig) &&
                         (0x00 != (gpphTmlNfc_Context->tWriteInfo.pBuffer[0] & 0xE0)))
                 {
-                    if (FALSE == gpphTmlNfc_Context->bWriteCbInvoked)
+                    if (gpphTmlNfc_Context->bWriteCbInvoked == false)
                     {
                         if ((NFCSTATUS_SUCCESS == wStatus) ||
                                 (bCurrentRetryCount == 0))
@@ -547,7 +547,7 @@ static void phTmlNfc_TmlWriterThread(void *pParam)
                                 NXPLOG_TML_D("PN54X - Posting Write message.....\n");
                                 phTmlNfc_DeferredCall(gpphTmlNfc_Context->dwCallbackThreadId,
                                         &tMsg);
-                                gpphTmlNfc_Context->bWriteCbInvoked = TRUE;
+                                gpphTmlNfc_Context->bWriteCbInvoked = true;
                         }
                     }
                 }
@@ -713,7 +713,7 @@ NFCSTATUS phTmlNfc_Write(uint8_t *pBuffer, uint16_t wLength, pphTmlNfc_TransactC
             if (!gpphTmlNfc_Context->tWriteInfo.bThreadBusy)
             {
                 /* Setting the flag marks beginning of a Write Operation */
-                gpphTmlNfc_Context->tWriteInfo.bThreadBusy = TRUE;
+                gpphTmlNfc_Context->tWriteInfo.bThreadBusy = true;
                 /* Copy the buffer, length and Callback function,
                    This shall be utilized while invoking the Callback function in thread */
                 gpphTmlNfc_Context->tWriteInfo.pBuffer = pBuffer;
@@ -730,7 +730,7 @@ NFCSTATUS phTmlNfc_Write(uint8_t *pBuffer, uint16_t wLength, pphTmlNfc_TransactC
                     // a new request. The expired timer will think that retry is still
                     // ongoing.
                     bCurrentRetryCount = gpphTmlNfc_Context->bRetryCount;
-                    gpphTmlNfc_Context->bWriteCbInvoked = FALSE;
+                    gpphTmlNfc_Context->bWriteCbInvoked = false;
                 }
                 /* Set event to invoke Writer Thread */
                 gpphTmlNfc_Context->tWriteInfo.bEnable = 1;
@@ -788,7 +788,7 @@ NFCSTATUS phTmlNfc_Read(uint8_t *pBuffer, uint16_t wLength, pphTmlNfc_TransactCo
             if (!gpphTmlNfc_Context->tReadInfo.bThreadBusy)
             {
                 /* Setting the flag marks beginning of a Read Operation */
-                gpphTmlNfc_Context->tReadInfo.bThreadBusy = TRUE;
+                gpphTmlNfc_Context->tReadInfo.bThreadBusy = true;
                 /* Copy the buffer, length and Callback function,
                    This shall be utilized while invoking the Callback function in thread */
                 gpphTmlNfc_Context->tReadInfo.pBuffer = pBuffer;
@@ -840,7 +840,7 @@ NFCSTATUS phTmlNfc_ReadAbort(void)
     gpphTmlNfc_Context->tReadInfo.bEnable = 0;
 
     /*Reset the flag to accept another Read Request */
-    gpphTmlNfc_Context->tReadInfo.bThreadBusy=FALSE;
+    gpphTmlNfc_Context->tReadInfo.bThreadBusy = false;
     wStatus = NFCSTATUS_SUCCESS;
 
     return wStatus;
@@ -870,7 +870,7 @@ NFCSTATUS phTmlNfc_WriteAbort(void)
     bCurrentRetryCount = 0;
 
     /* Reset the flag to accept another Write Request */
-    gpphTmlNfc_Context->tWriteInfo.bThreadBusy=FALSE;
+    gpphTmlNfc_Context->tWriteInfo.bThreadBusy = false;
     wStatus = NFCSTATUS_SUCCESS;
 
     return wStatus;
@@ -985,7 +985,7 @@ static void phTmlNfc_ReadDeferredCb(void *pParams)
     phTmlNfc_TransactInfo_t *pTransactionInfo = (phTmlNfc_TransactInfo_t *) pParams;
 
     /* Reset the flag to accept another Read Request */
-    gpphTmlNfc_Context->tReadInfo.bThreadBusy = FALSE;
+    gpphTmlNfc_Context->tReadInfo.bThreadBusy = false;
     gpphTmlNfc_Context->tReadInfo.pThread_Callback(gpphTmlNfc_Context->tReadInfo.pContext,
             pTransactionInfo);
 
@@ -1009,7 +1009,7 @@ static void phTmlNfc_WriteDeferredCb(void *pParams)
     phTmlNfc_TransactInfo_t *pTransactionInfo = (phTmlNfc_TransactInfo_t *) pParams;
 
     /* Reset the flag to accept another Write Request */
-    gpphTmlNfc_Context->tWriteInfo.bThreadBusy = FALSE;
+    gpphTmlNfc_Context->tWriteInfo.bThreadBusy = false;
     gpphTmlNfc_Context->tWriteInfo.pThread_Callback(gpphTmlNfc_Context->tWriteInfo.pContext,
             pTransactionInfo);
 

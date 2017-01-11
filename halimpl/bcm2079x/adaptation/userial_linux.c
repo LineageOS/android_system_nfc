@@ -190,9 +190,9 @@ static tLINUX_CB linux_cb;  /* case of multipel port support use array : [MAX_SE
 void userial_close_thread(uint32_t params);
 
 static uint8_t device_name[BTE_APPL_MAX_USERIAL_DEV_NAME+1];
-static int   bSerialPortDevice = FALSE;
+static int   bSerialPortDevice = false;
 static int _timeout = POLL_TIMEOUT;
-static bool    is_close_thread_is_waiting = FALSE;
+static bool    is_close_thread_is_waiting = false;
 
 static int change_client_addr(int addr);
 
@@ -578,7 +578,7 @@ UDRV_API void    USERIAL_Init(void * p_cfg)
 
     //if userial_close_thread() is waiting to run; let it go first;
     //let it finish; then continue this function
-    while (TRUE)
+    while (true)
     {
         pthread_mutex_lock(&close_thread_mutex);
         if (is_close_thread_is_waiting)
@@ -901,9 +901,9 @@ bool    userial_to_tcio_baud(uint8_t cfg_baud, uint32_t * baud)
     {
         ALOGE( "userial_to_tcio_baud: unsupported baud idx %i", cfg_baud );
         *baud = B115200;
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 #if (USERIAL_USE_IO_BT_WAKE==TRUE)
@@ -958,7 +958,7 @@ UDRV_API void USERIAL_Open(tUSERIAL_PORT port, tUSERIAL_OPEN_CFG *p_cfg, tUSERIA
 
     //if userial_close_thread() is waiting to run; let it go first;
     //let it finish; then continue this function
-    while (TRUE)
+    while (true)
     {
         pthread_mutex_lock(&close_thread_mutex);
         if (is_close_thread_is_waiting)
@@ -1011,7 +1011,7 @@ UDRV_API void USERIAL_Open(tUSERIAL_PORT port, tUSERIAL_OPEN_CFG *p_cfg, tUSERIA
             ALOGD( "Port > MAX_SERIAL_PORT\n");
             goto done_open;
         }
-        bSerialPortDevice = TRUE;
+        bSerialPortDevice = true;
         sprintf((char*)device_name, "%s%d", (char*)userial_dev, uart_port);
         ALOGI("USERIAL_Open() using device_name: %s ", (char*)device_name);
         if (!userial_to_tcio_baud(p_cfg->baud, &baud))
@@ -1226,7 +1226,7 @@ UDRV_API void    USERIAL_ReadBuf(tUSERIAL_PORT port, BT_HDR **p_buf)
 
 UDRV_API bool    USERIAL_WriteBuf(tUSERIAL_PORT port, BT_HDR *p_buf)
 {
-    return FALSE;
+    return false;
 }
 
 /*******************************************************************************
@@ -1503,7 +1503,7 @@ void userial_close_thread(uint32_t params)
 
     ALOGD( "%s: closing transport (%d)\n", __func__, linux_cb.sock);
     pthread_mutex_lock(&close_thread_mutex);
-    is_close_thread_is_waiting = FALSE;
+    is_close_thread_is_waiting = false;
 
     if (linux_cb.sock <= 0)
     {
@@ -1591,12 +1591,12 @@ UDRV_API bool    USERIAL_Feature(tUSERIAL_FEATURE feature)
 
     case USERIAL_FEAT_OP_FLUSH_RX:
     case USERIAL_FEAT_OP_FLUSH_TX:
-        return TRUE;
+        return true;
     default:
-        return FALSE;
+        return false;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*****************************************************************************
@@ -1674,7 +1674,7 @@ void setReadPacketSize(int len)
 
 UDRV_API bool    USERIAL_IsClosed()
 {
-    return (linux_cb.sock == -1) ? TRUE : FALSE;
+    return (linux_cb.sock == -1) ? true : false;
 }
 
 UDRV_API void USERIAL_PowerupDevice(tUSERIAL_PORT port)

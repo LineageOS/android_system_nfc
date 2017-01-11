@@ -408,13 +408,13 @@ static void phDnldNfc_ProcessRWSeqState(void *pContext, phTmlNfc_TransactInfo_t 
             }
             case phDnldNfc_StateSend:
             {
-                if(FALSE == pDlCtxt->bResendLastFrame)
+                if(pDlCtxt->bResendLastFrame == false)
                 {
                     wStatus = phDnldNfc_BuildFramePkt(pDlCtxt);
                 }
                 else
                 {
-                    pDlCtxt->bResendLastFrame = FALSE;
+                    pDlCtxt->bResendLastFrame = false;
                 }
 
                 if(NFCSTATUS_SUCCESS == wStatus)
@@ -539,7 +539,7 @@ static void phDnldNfc_ProcessRWSeqState(void *pContext, phTmlNfc_TransactInfo_t 
                 }
                 else
                 {
-                    (pDlCtxt->tRWInfo.bFramesSegmented) = FALSE;
+                    (pDlCtxt->tRWInfo.bFramesSegmented) = false;
                     /* Abort TML read operation which is always kept open */
                     wIntStatus  = phTmlNfc_ReadAbort();
 
@@ -551,7 +551,7 @@ static void phDnldNfc_ProcessRWSeqState(void *pContext, phTmlNfc_TransactInfo_t 
                     pDlCtxt->tCurrEvent = phDnldNfc_EventInvalid;
                     pDlCtxt->tDnldInProgress = phDnldNfc_TransitionIdle;
                     pDlCtxt->tCurrState = phDnldNfc_StateInit;
-                    pDlCtxt->bResendLastFrame = FALSE;
+                    pDlCtxt->bResendLastFrame = false;
 
                     /* Delete the timer & reset timer primitives in context */
                     (void)phOsalNfc_Timer_Delete(pDlCtxt->TimerInfo.dwRspTimerId);
@@ -612,7 +612,7 @@ static NFCSTATUS phDnldNfc_BuildFramePkt(pphDnldNfc_DlContext_t pDlContext)
             }
             else
             {
-                if(TRUE == (pDlContext->tRWInfo.bFirstWrReq))
+                if((pDlContext->tRWInfo.bFirstWrReq) == true)
                 {
                     (pDlContext->tRWInfo.wRemBytes) = (pDlContext->tUserData.wLen);
                     (pDlContext->tRWInfo.wOffset) = 0;
@@ -628,7 +628,7 @@ static NFCSTATUS phDnldNfc_BuildFramePkt(pphDnldNfc_DlContext_t pDlContext)
             }
             else
             {
-                if(FALSE == (pDlContext->tRWInfo.bFramesSegmented))
+                if((pDlContext->tRWInfo.bFramesSegmented) == false)
                 {
                     NXPLOG_FWDNLD_D("Verifying RspBuffInfo for Read Request..");
                     wFrameLen = (pDlContext->tRspBuffInfo.wLen) + PHDNLDNFC_MIN_PLD_LEN;
@@ -641,7 +641,7 @@ static NFCSTATUS phDnldNfc_BuildFramePkt(pphDnldNfc_DlContext_t pDlContext)
 
                     if(PHDNLDNFC_CMDRESP_MAX_PLD_SIZE < wFrameLen)
                     {
-                        (pDlContext->tRWInfo.bFramesSegmented) = TRUE;
+                        (pDlContext->tRWInfo.bFramesSegmented) = true;
                     }
                 }
             }
@@ -687,7 +687,7 @@ static NFCSTATUS phDnldNfc_BuildFramePkt(pphDnldNfc_DlContext_t pDlContext)
                 {
                     if(0 != (pDlContext->tRWInfo.wRWPldSize))
                     {
-                        if(TRUE == (pDlContext->tRWInfo.bFramesSegmented))
+                        if((pDlContext->tRWInfo.bFramesSegmented) == true)
                         {
                             /* Turning ON the Fragmentation bit in FrameLen */
                             wFrameLen = PHDNLDNFC_SET_HDR_FRAGBIT(wFrameLen);
@@ -785,7 +785,7 @@ static NFCSTATUS phDnldNfc_CreateFramePld(pphDnldNfc_DlContext_t pDlContext)
         {
             wBuffIdx = (pDlContext->tRWInfo.wOffset);
 
-            if(FALSE == (pDlContext->tRWInfo.bFramesSegmented))
+            if((pDlContext->tRWInfo.bFramesSegmented) == false)
             {
                 wFrameLen = (pDlContext->tUserData.pBuff[wBuffIdx]);
                 wFrameLen <<= 8;
@@ -796,7 +796,7 @@ static NFCSTATUS phDnldNfc_CreateFramePld(pphDnldNfc_DlContext_t pDlContext)
 
             if((pDlContext->tRWInfo.wRWPldSize) > PHDNLDNFC_CMDRESP_MAX_PLD_SIZE)
             {
-                if(FALSE == (pDlContext->tRWInfo.bFirstChunkResp))
+                if((pDlContext->tRWInfo.bFirstChunkResp) == false)
                 {
                     (pDlContext->tRWInfo.wRemChunkBytes) = wFrameLen;
                     (pDlContext->tRWInfo.wOffset) += PHDNLDNFC_FRAME_HDR_LEN;
@@ -806,12 +806,12 @@ static NFCSTATUS phDnldNfc_CreateFramePld(pphDnldNfc_DlContext_t pDlContext)
                 if(PHDNLDNFC_CMDRESP_MAX_PLD_SIZE < (pDlContext->tRWInfo.wRemChunkBytes))
                 {
                     (pDlContext->tRWInfo.wBytesToSendRecv) = PHDNLDNFC_CMDRESP_MAX_PLD_SIZE;
-                    (pDlContext->tRWInfo.bFramesSegmented) = TRUE;
+                    (pDlContext->tRWInfo.bFramesSegmented) = true;
                 }
                 else
                 {
                     (pDlContext->tRWInfo.wBytesToSendRecv) = (pDlContext->tRWInfo.wRemChunkBytes);
-                    (pDlContext->tRWInfo.bFramesSegmented) = FALSE;
+                    (pDlContext->tRWInfo.bFramesSegmented) = false;
                 }
 
                 memcpy(&(pDlContext->tCmdRspFrameInfo.aFrameBuff[PHDNLDNFC_FRAMEID_OFFSET]),
@@ -1151,7 +1151,7 @@ static void phDnldNfc_ResendTimeOutCb(uint32_t TimerId, void *pContext)
              pDlCtxt->tCurrState = phDnldNfc_StateSend;
 
              /* set the flag to trigger last frame re-transmission */
-             pDlCtxt->bResendLastFrame = TRUE;
+             pDlCtxt->bResendLastFrame = true;
 
              phDnldNfc_ProcessRWSeqState(pDlCtxt,NULL);
         }
@@ -1191,19 +1191,19 @@ static NFCSTATUS phDnldNfc_UpdateRsp(pphDnldNfc_DlContext_t   pDlContext, phTmlN
             if(PH_DL_STATUS_OK == (pInfo->pBuff[PHDNLDNFC_FRAMESTATUS_OFFSET]))
             {
                 /* first write frame response received case */
-                if(TRUE == (pDlContext->tRWInfo.bFirstWrReq))
+                if((pDlContext->tRWInfo.bFirstWrReq) == true)
                 {
                     NXPLOG_FWDNLD_D("First Write Frame Success Status received!!");
-                    (pDlContext->tRWInfo.bFirstWrReq) = FALSE;
+                    (pDlContext->tRWInfo.bFirstWrReq) = false;
                 }
 
-                if(TRUE == (pDlContext->tRWInfo.bFirstChunkResp))
+                if((pDlContext->tRWInfo.bFirstChunkResp) == true)
                 {
-                    if(FALSE == (pDlContext->tRWInfo.bFramesSegmented))
+                    if((pDlContext->tRWInfo.bFramesSegmented) == false)
                     {
                         NXPLOG_FWDNLD_D("Chunked Write Frame Success Status received!!");
                         (pDlContext->tRWInfo.wRemChunkBytes) -= (pDlContext->tRWInfo.wBytesToSendRecv);
-                        (pDlContext->tRWInfo.bFirstChunkResp) = FALSE;
+                        (pDlContext->tRWInfo.bFirstChunkResp) = false;
                     }
                     else
                     {
@@ -1218,24 +1218,24 @@ static NFCSTATUS phDnldNfc_UpdateRsp(pphDnldNfc_DlContext_t   pDlContext, phTmlN
                     (pDlContext->tRWInfo.wOffset) += (pDlContext->tRWInfo.wBytesToSendRecv);
                 }
             }
-            else if((FALSE == (pDlContext->tRWInfo.bFirstChunkResp)) &&
-                (TRUE == (pDlContext->tRWInfo.bFramesSegmented)) &&
+            else if(((pDlContext->tRWInfo.bFirstChunkResp) == false) &&
+                ((pDlContext->tRWInfo.bFramesSegmented) == true) &&
                 (PHDNLDNFC_FIRST_FRAGFRAME_RESP == (pInfo->pBuff[PHDNLDNFC_FRAMESTATUS_OFFSET])))
             {
-                (pDlContext->tRWInfo.bFirstChunkResp) = TRUE;
+                (pDlContext->tRWInfo.bFirstChunkResp) = true;
                 (pDlContext->tRWInfo.wRemChunkBytes) -= (pDlContext->tRWInfo.wBytesToSendRecv);
                 (pDlContext->tRWInfo.wRemBytes) -= ((pDlContext->tRWInfo.wBytesToSendRecv) + PHDNLDNFC_FRAME_HDR_LEN);
                 (pDlContext->tRWInfo.wOffset) += (pDlContext->tRWInfo.wBytesToSendRecv);
 
                 /* first write frame response received case */
-                if(TRUE == (pDlContext->tRWInfo.bFirstWrReq))
+                if((pDlContext->tRWInfo.bFirstWrReq) == true)
                 {
                     NXPLOG_FWDNLD_D("First Write Frame Success Status received!!");
-                    (pDlContext->tRWInfo.bFirstWrReq) = FALSE;
+                    (pDlContext->tRWInfo.bFirstWrReq) = false;
                 }
             }
-            else if((TRUE == (pDlContext->tRWInfo.bFirstChunkResp)) &&
-                (TRUE == (pDlContext->tRWInfo.bFramesSegmented)) &&
+            else if(((pDlContext->tRWInfo.bFirstChunkResp) == true) &&
+                ((pDlContext->tRWInfo.bFramesSegmented) == true) &&
                 (PHDNLDNFC_NEXT_FRAGFRAME_RESP == (pInfo->pBuff[PHDNLDNFC_FRAMESTATUS_OFFSET])))
             {
                 (pDlContext->tRWInfo.wRemChunkBytes) -= (pDlContext->tRWInfo.wBytesToSendRecv);
@@ -1245,7 +1245,7 @@ static NFCSTATUS phDnldNfc_UpdateRsp(pphDnldNfc_DlContext_t   pDlContext, phTmlN
             else if(PH_DL_STATUS_FIRMWARE_VERSION_ERROR == (pInfo->pBuff[PHDNLDNFC_FRAMESTATUS_OFFSET]))
             {
                 NXPLOG_FWDNLD_E("FW version Error !!!could be either due to FW major version mismatch or Firmware Already Up To Date !!");
-                (pDlContext->tRWInfo.bFirstWrReq) = FALSE;
+                (pDlContext->tRWInfo.bFirstWrReq) = false;
                 /* resetting wRemBytes to 0 to avoid any further write frames send */
                 (pDlContext->tRWInfo.wRemBytes) = 0;
                 (pDlContext->tRWInfo.wOffset) = 0;

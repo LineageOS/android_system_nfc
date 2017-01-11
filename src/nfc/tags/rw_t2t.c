@@ -62,8 +62,8 @@ static void rw_t2t_proc_data (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
     tRW_EVENT               rw_event    = RW_RAW_FRAME_EVT;
     tRW_T2T_CB              *p_t2t      = &rw_cb.tcb.t2t;
     BT_HDR                  *p_pkt      = p_data->p_data;
-    bool                    b_notify    = TRUE;
-    bool                    b_release   = TRUE;
+    bool                    b_notify = true;
+    bool                    b_release = true;
     uint8_t                 *p;
     tRW_READ_DATA           evt_data = {0, };
     tT2T_CMD_RSP_INFO       *p_cmd_rsp_info = (tT2T_CMD_RSP_INFO *) rw_cb.tcb.t2t.p_cmd_rsp_info;
@@ -109,7 +109,7 @@ static void rw_t2t_proc_data (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
         {
             /* Retrasmit the last sent command if retry-count < max retry */
             rw_t2t_process_frame_error ();
-            p_t2t->check_tag_halt = FALSE;
+            p_t2t->check_tag_halt = false;
         }
         GKI_freebuf (p_pkt);
         return;
@@ -131,7 +131,7 @@ static void rw_t2t_proc_data (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
         if ((*p & 0x0f) == T2T_RSP_ACK)
         {
             if (rw_t2t_sector_change (p_t2t->select_sector) == NFC_STATUS_OK)
-                b_notify = FALSE;
+                b_notify = false;
             else
                 evt_data.status = NFC_STATUS_FAILED;
         }
@@ -151,21 +151,21 @@ static void rw_t2t_proc_data (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
         /* Received NACK response */
         evt_data.p_data = p_pkt;
         if (p_t2t->state == RW_T2T_STATE_READ)
-            b_release = FALSE;
+            b_release = false;
 
         RW_TRACE_EVENT1 ("rw_t2t_proc_data - Received NACK response(0x%x)", (*p & 0x0f));
 
         if (!p_t2t->check_tag_halt)
         {
             /* Just received first NACK. Retry just one time to find if tag went in to HALT State */
-            b_notify =  FALSE;
+            b_notify = false;
             rw_t2t_process_error ();
             /* Assume Tag is in HALT State, untill we get response to retry command */
-            p_t2t->check_tag_halt = TRUE;
+            p_t2t->check_tag_halt = true;
         }
         else
         {
-            p_t2t->check_tag_halt = FALSE;
+            p_t2t->check_tag_halt = false;
             /* Got consecutive NACK so tag not really halt after first NACK, but current operation failed */
             evt_data.status = NFC_STATUS_FAILED;
         }
@@ -174,22 +174,22 @@ static void rw_t2t_proc_data (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
     {
         /* If the response length indicates positive response or cannot be known from length then assume success */
         evt_data.status  = NFC_STATUS_OK;
-        p_t2t->check_tag_halt = FALSE;
+        p_t2t->check_tag_halt = false;
 
         /* The response data depends on what the current operation was */
         switch (p_t2t->state)
         {
         case RW_T2T_STATE_CHECK_PRESENCE:
-            b_notify = FALSE;
+            b_notify = false;
             rw_t2t_handle_presence_check_rsp (NFC_STATUS_OK);
             break;
 
         case RW_T2T_STATE_READ:
             evt_data.p_data = p_pkt;
-            b_release = FALSE;
+            b_release = false;
             if (p_t2t->block_read == 0)
             {
-                p_t2t->b_read_hdr = TRUE;
+                p_t2t->b_read_hdr = true;
                 memcpy (p_t2t->tag_hdr,  p, T2T_READ_DATA_LEN);
             }
             break;
@@ -200,7 +200,7 @@ static void rw_t2t_proc_data (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
 
         default:
             /* NDEF/other Tlv Operation/Format-Tag/Config Tag as Read only */
-            b_notify = FALSE;
+            b_notify = false;
             rw_t2t_handle_rsp (p);
             break;
         }
@@ -406,7 +406,7 @@ tNFC_STATUS rw_t2t_send_cmd (uint8_t opcode, uint8_t *p_dat)
 
 #if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
             /* Update stats */
-            rw_main_update_tx_stats (p_data->len, FALSE);
+            rw_main_update_tx_stats (p_data->len, false);
 #endif
             RW_TRACE_EVENT2 ("RW SENT [%s]:0x%x CMD", t2t_info_to_str (p_cmd_rsp_info), p_cmd_rsp_info->opcode);
 
@@ -547,7 +547,7 @@ static void rw_t2t_process_error (void)
             memcpy (p_cmd_buf, p_t2t->p_cur_cmd_buf, sizeof (BT_HDR) + p_t2t->p_cur_cmd_buf->offset + p_t2t->p_cur_cmd_buf->len);
 #if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
             /* Update stats */
-            rw_main_update_tx_stats (p_cmd_buf->len, TRUE);
+            rw_main_update_tx_stats (p_cmd_buf->len, true);
 #endif
             if (NFC_SendData (NFC_RF_CONN_ID, p_cmd_buf) == NFC_STATUS_OK)
             {
@@ -665,7 +665,7 @@ static void rw_t2t_resume_op (void)
 
 #if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
         /* Update stats */
-         rw_main_update_tx_stats (p_cmd_buf->len, TRUE);
+         rw_main_update_tx_stats (p_cmd_buf->len, true);
 #endif
         if (NFC_SendData (NFC_RF_CONN_ID, p_cmd_buf) == NFC_STATUS_OK)
         {
@@ -888,7 +888,7 @@ tNFC_STATUS rw_t2t_select (void)
 
     NFC_SetStaticRfCback (rw_t2t_conn_cback);
     rw_t2t_handle_op_complete ();
-    p_t2t->check_tag_halt = FALSE;
+    p_t2t->check_tag_halt = false;
 
     return NFC_STATUS_OK;
 }
@@ -909,7 +909,7 @@ void rw_t2t_handle_op_complete (void)
     if (  (p_t2t->state == RW_T2T_STATE_READ_NDEF)
         ||(p_t2t->state == RW_T2T_STATE_WRITE_NDEF)  )
     {
-        p_t2t->b_read_data = FALSE;
+        p_t2t->b_read_data = false;
     }
 
     if (p_t2t->state != RW_T2T_STATE_HALT)
@@ -1032,9 +1032,9 @@ tNFC_STATUS RW_T2tWrite (uint16_t block, uint8_t *p_write_data)
     {
         p_t2t->state    = RW_T2T_STATE_WRITE;
         if (block < T2T_FIRST_DATA_BLOCK)
-            p_t2t->b_read_hdr = FALSE;
+            p_t2t->b_read_hdr = false;
         else if (block < (T2T_FIRST_DATA_BLOCK + T2T_READ_BLOCKS))
-            p_t2t->b_read_data = FALSE;
+            p_t2t->b_read_data = false;
         RW_TRACE_EVENT0 ("RW_T2tWrite Sent Write command");
     }
 

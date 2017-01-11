@@ -147,7 +147,7 @@ tNFC_HAL_DM_PRE_SET_MEM *p_nfc_hal_dm_pre_set_mem = NULL;
 
 tNFC_HAL_CFG nfc_hal_cfg =
 {
-    FALSE,                                  /* set nfc_hal_prm_nvm_required to TRUE, if the platform wants to abort PRM process without NVM */
+    false,                                  /* set nfc_hal_prm_nvm_required to TRUE, if the platform wants to abort PRM process without NVM */
     (uint16_t) NFC_HAL_NFCC_ENABLE_TIMEOUT,   /* max time to wait for RESET NTF after setting REG_PU to high
                                             ** If NFCC doesn't have NVM or cannot load patch from NVM without Xtal setting
                                             ** then set it to short to optimize bootup time because NFCC cannot send RESET NTF.
@@ -158,7 +158,7 @@ tNFC_HAL_CFG nfc_hal_cfg =
                                             */
 #if (defined(NFC_HAL_HCI_INCLUDED) && (NFC_HAL_HCI_INCLUDED == TRUE))
     ,
-    TRUE,                                   /* set nfc_hal_first_boot to TRUE, if platform enables NFC for the first time after bootup */
+    true,                                   /* set nfc_hal_first_boot to TRUE, if platform enables NFC for the first time after bootup */
     (HAL_NFC_HCI_UICC0_HOST | HAL_NFC_HCI_UICC1_HOST | HAL_NFC_HCI_UICC2_HOST)  /* Set bit(s) for supported UICC(s) */
 #endif
 };

@@ -72,7 +72,7 @@ static void cleanup_timer_handler(uint32_t timerId, void *pContext)
     phOsalNfc_Timer_Delete(cleanup_timer);
     cleanup_timer=0;
     iso_dep_detected = 0x00;
-    EnableP2P_PrioLogic = FALSE;
+    EnableP2P_PrioLogic = false;
     return;
 }
 
@@ -283,7 +283,7 @@ NFCSTATUS phNxpNciHal_NfcDep_rsp_ext(uint8_t *p_ntf, uint16_t *p_len)
                 phOsalNfc_Timer_Stop(cleanup_timer);
                 phOsalNfc_Timer_Delete(cleanup_timer);
                 cleanup_timer=0;
-                EnableP2P_PrioLogic = FALSE;
+                EnableP2P_PrioLogic = false;
                 iso_dep_detected = 0;
                 status = NFCSTATUS_SUCCESS;
             }
@@ -294,7 +294,7 @@ NFCSTATUS phNxpNciHal_NfcDep_rsp_ext(uint8_t *p_ntf, uint16_t *p_len)
 
             phOsalNfc_Timer_Stop(custom_poll_timer);
             phOsalNfc_Timer_Delete(custom_poll_timer);
-            EnableP2P_PrioLogic = FALSE;
+            EnableP2P_PrioLogic = false;
             iso_dep_detected = 0;
             status = NFCSTATUS_SUCCESS;
         }
@@ -303,7 +303,7 @@ NFCSTATUS phNxpNciHal_NfcDep_rsp_ext(uint8_t *p_ntf, uint16_t *p_len)
             NXPLOG_NCIHAL_D(">>  detected other technology- stopping the custom poll timer");
             phOsalNfc_Timer_Stop(custom_poll_timer);
             phOsalNfc_Timer_Delete(custom_poll_timer);
-            EnableP2P_PrioLogic = FALSE;
+            EnableP2P_PrioLogic = false;
             iso_dep_detected = 0;
             status = NFCSTATUS_INVALID_PARAMETER;
         }
@@ -322,7 +322,7 @@ NFCSTATUS phNxpNciHal_NfcDep_rsp_ext(uint8_t *p_ntf, uint16_t *p_len)
 
             /* start polling loop */
             phNxpNciHal_start_polling_loop();
-            EnableP2P_PrioLogic = FALSE;
+            EnableP2P_PrioLogic = false;
             NXPLOG_NCIHAL_D (">> NFC DEP NOT  detected - custom poll timer expired - RF disabled");
 
             cleanup_timer = phOsalNfc_Timer_Create();
@@ -433,7 +433,7 @@ extern NFCSTATUS phNxpNciHal_clean_P2P_Prio()
     NFCSTATUS status = NFCSTATUS_SUCCESS;
 
     iso_dep_detected = 0x00;
-    EnableP2P_PrioLogic = FALSE;
+    EnableP2P_PrioLogic = false;
     poll_timer_fired = 0x00;
     bIgnorep2plogic = 0x00;
     bIgnoreIsoDep = 0x00;

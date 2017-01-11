@@ -35,7 +35,7 @@
 #include "nfa_hci_defs.h"
 
 static void handle_debug_loopback (BT_HDR *p_buf, uint8_t pipe, uint8_t type, uint8_t instruction);
-bool    HCI_LOOPBACK_DEBUG = FALSE;
+bool    HCI_LOOPBACK_DEBUG = false;
 
 /*******************************************************************************
 **
@@ -293,7 +293,7 @@ tNFA_HCI_DYN_GATE *nfa_hciu_alloc_gate (uint8_t gate_id, tNFA_HANDLE app_handle)
 
             NFA_TRACE_DEBUG2 ("nfa_hciu_alloc_gate id:%d  app_handle: 0x%04x", gate_id, app_handle);
 
-            nfa_hci_cb.nv_write_needed = TRUE;
+            nfa_hci_cb.nv_write_needed = true;
             return (pg);
         }
     }
@@ -317,7 +317,7 @@ tNFA_STATUS nfa_hciu_send_msg (uint8_t pipe_id, uint8_t type, uint8_t instructio
 {
     BT_HDR          *p_buf;
     uint8_t         *p_data;
-    bool             first_pkt = TRUE;
+    bool             first_pkt = true;
     uint16_t        data_len;
     tNFA_STATUS     status = NFA_STATUS_OK;
     uint16_t        max_seg_hcp_pkt_size = nfa_hci_cb.buff_size - NCI_DATA_HDR_SIZE;
@@ -335,7 +335,7 @@ tNFA_STATUS nfa_hciu_send_msg (uint8_t pipe_id, uint8_t type, uint8_t instructio
     if (instruction == NFA_HCI_ANY_GET_PARAMETER)
         nfa_hci_cb.param_in_use = *p_msg;
 
-    while ((first_pkt == TRUE) || (msg_len != 0))
+    while ((first_pkt == true) || (msg_len != 0))
     {
         if ((p_buf = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) != NULL)
         {
@@ -362,7 +362,7 @@ tNFA_STATUS nfa_hciu_send_msg (uint8_t pipe_id, uint8_t type, uint8_t instructio
             /* Message header only goes in the first segment */
             if (first_pkt)
             {
-                first_pkt = FALSE;
+                first_pkt = false;
                 *p_data++ = (type << 6) | instruction;
                 p_buf->len++;
             }
@@ -378,7 +378,8 @@ tNFA_STATUS nfa_hciu_send_msg (uint8_t pipe_id, uint8_t type, uint8_t instructio
             }
 
 #if (BT_TRACE_PROTOCOL == TRUE)
-            DispHcp (((uint8_t *) (p_buf + 1) + p_buf->offset), p_buf->len, FALSE, (bool   ) ((p_buf->len - data_len) == 2));
+            DispHcp (((uint8_t *) (p_buf + 1) + p_buf->offset), p_buf->len,
+                     false, (bool   ) ((p_buf->len - data_len) == 2));
 #endif
 
             if (HCI_LOOPBACK_DEBUG)
@@ -468,7 +469,7 @@ tNFA_HCI_DYN_PIPE *nfa_hciu_alloc_pipe (uint8_t pipe_id)
             NFA_TRACE_DEBUG2 ("nfa_hciu_alloc_pipe:%d, index:%d", pipe_id, xx);
             pp->pipe_id = pipe_id;
 
-            nfa_hci_cb.nv_write_needed = TRUE;
+            nfa_hci_cb.nv_write_needed = true;
             return (pp);
         }
     }
@@ -499,7 +500,7 @@ void nfa_hciu_release_gate (uint8_t gate_id)
         p_gate->gate_owner    = 0;
         p_gate->pipe_inx_mask = 0;
 
-        nfa_hci_cb.nv_write_needed = TRUE;
+        nfa_hci_cb.nv_write_needed = true;
     }
     else
     {
@@ -655,12 +656,12 @@ bool    nfa_hciu_check_pipe_between_gates (uint8_t local_gate, uint8_t dest_host
             &&(pp->dest_host  == dest_host)
             &&(pp->dest_gate  == dest_gate)  )
         {
-            return (TRUE);
+            return true;
         }
     }
 
     /* If here, not found */
-    return (FALSE);
+    return false;
 }
 
 /*******************************************************************************
@@ -744,10 +745,10 @@ bool    nfa_hciu_is_active_host (uint8_t host_id)
     for (xx = 0; xx < NFA_HCI_MAX_HOST_IN_NETWORK; xx++)
     {
         if (nfa_hci_cb.inactive_host[xx] == host_id)
-            return FALSE;
+            return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -767,10 +768,10 @@ bool    nfa_hciu_is_host_reseting (uint8_t host_id)
     for (xx = 0; xx < NFA_HCI_MAX_HOST_IN_NETWORK; xx++)
     {
         if (nfa_hci_cb.reset_host[xx] == host_id)
-            return TRUE;
+            return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 /*******************************************************************************
@@ -790,10 +791,10 @@ bool    nfa_hciu_is_no_host_resetting (void)
     for (xx = 0; xx < NFA_HCI_MAX_HOST_IN_NETWORK; xx++)
     {
         if (nfa_hci_cb.reset_host[xx] != 0)
-            return FALSE;
+            return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -880,7 +881,7 @@ tNFA_HCI_RESPONSE nfa_hciu_release_pipe (uint8_t pipe_id)
 
     /* Reset pipe control block */
     memset (p_pipe,0,sizeof (tNFA_HCI_DYN_PIPE));
-    nfa_hci_cb.nv_write_needed = TRUE;
+    nfa_hci_cb.nv_write_needed = true;
     return NFA_HCI_ANY_OK;
 }
 

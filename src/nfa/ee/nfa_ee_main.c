@@ -127,7 +127,7 @@ void nfa_ee_sys_enable (void)
     if (nfa_ee_max_ee_cfg)
     {
         /* collect NFCEE information */
-        NFC_NfceeDiscover (TRUE);
+        NFC_NfceeDiscover (true);
         nfa_sys_start_timer (&nfa_ee_cb.discv_timer, NFA_EE_DISCV_TIMEOUT_EVT, NFA_EE_DISCV_TIMEOUT_VAL);
     }
     else
@@ -212,7 +212,7 @@ void nfa_ee_proc_nfcc_power_mode (uint8_t nfcc_power_mode)
 {
     uint32_t        xx;
     tNFA_EE_ECB     *p_cb;
-    bool            proc_complete = TRUE;
+    bool            proc_complete = true;
 
     NFA_TRACE_DEBUG1 ("nfa_ee_proc_nfcc_power_mode (): nfcc_power_mode=%d", nfcc_power_mode);
     /* if NFCC power state is change to full power */
@@ -229,7 +229,7 @@ void nfa_ee_proc_nfcc_power_mode (uint8_t nfcc_power_mode)
 
                 if ((p_cb->nfcee_id != NFA_EE_INVALID) && (p_cb->ee_interface[0] != NFC_NFCEE_INTERFACE_HCI_ACCESS) && (p_cb->ee_status  != NFA_EE_STATUS_REMOVED))
                 {
-                    proc_complete       = FALSE;
+                    proc_complete = false;
                     /* NFA_EE_STATUS_RESTORING bit makes sure the ee_status restore to ee_old_status
                      * NFA_EE_STATUS_RESTORING bit is cleared in ee_status at NFCEE_DISCOVER NTF.
                      * NFA_EE_STATUS_RESTORING bit is cleared in ee_old_status at restoring the activate/inactive status after NFCEE_DISCOVER NTF */
@@ -246,7 +246,7 @@ void nfa_ee_proc_nfcc_power_mode (uint8_t nfcc_power_mode)
                 nfa_ee_cb.ee_flags   |= NFA_EE_FLAG_WAIT_HCI;
                 nfa_ee_cb.ee_flags   |= NFA_EE_FLAG_NOTIFY_HCI;
             }
-            NFC_NfceeDiscover (TRUE);
+            NFC_NfceeDiscover (true);
             nfa_sys_start_timer (&nfa_ee_cb.discv_timer, NFA_EE_DISCV_TIMEOUT_EVT, NFA_EE_DISCV_TIMEOUT_VAL);
         }
     }
@@ -510,7 +510,7 @@ void nfa_ee_sys_disable (void)
     nfa_sys_stop_timer (&nfa_ee_cb.discv_timer);
 
     /* If Application initiated NFCEE discovery, fake/report the event */
-    nfa_ee_report_disc_done (FALSE);
+    nfa_ee_report_disc_done (false);
 
     /* deregister message handler on NFA SYS */
     if (nfa_ee_cb.em_state == NFA_EE_EM_STATE_DISABLED)
@@ -661,7 +661,7 @@ bool    nfa_ee_evt_hdlr (BT_HDR *p_msg)
 {
     tNFA_EE_MSG *p_evt_data = (tNFA_EE_MSG *) p_msg;
     uint16_t  event = p_msg->event & 0x00ff;
-    bool    act = FALSE;
+    bool    act = false;
 
 #if (BT_TRACE_VERBOSE == TRUE)
     NFA_TRACE_DEBUG4 ("nfa_ee_evt_hdlr (): Event %s(0x%02x), State: %s(%d)",
@@ -675,15 +675,15 @@ bool    nfa_ee_evt_hdlr (BT_HDR *p_msg)
     {
     case NFA_EE_EM_STATE_INIT_DONE:
     case NFA_EE_EM_STATE_RESTORING:
-        act = TRUE;
+        act = true;
         break;
     case NFA_EE_EM_STATE_INIT:
         if ((p_msg->event == NFA_EE_NCI_DISC_NTF_EVT) || (p_msg->event == NFA_EE_NCI_DISC_RSP_EVT))
-            act = TRUE;
+            act = true;
         break;
     case NFA_EE_EM_STATE_DISABLING:
         if (p_msg->event == NFA_EE_NCI_CONN_EVT)
-            act = TRUE;
+            act = true;
         break;
     }
     if (act)
@@ -700,7 +700,7 @@ bool    nfa_ee_evt_hdlr (BT_HDR *p_msg)
             GKI_freebuf (p_evt_data->conn.p_data);
     }
 
-    return TRUE;
+    return true;
 }
 
 

@@ -287,10 +287,10 @@ bool    rw_i93_process_sys_info (uint8_t* p_data)
                             /* STM supports more than 2040 bytes */
                             p_i93->intl_flags |= RW_I93_FLAG_16BIT_NUM_BLOCK;
 
-                            return FALSE;
+                            return false;
                         }
                     }
-                    return TRUE;
+                    return true;
                 }
                 else if (  (p_i93->product_version == RW_I93_STM_LRI2K)
                          &&(p_i93->ic_reference    == 0x21)  )
@@ -303,7 +303,7 @@ bool    rw_i93_process_sys_info (uint8_t* p_data)
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -326,11 +326,11 @@ bool    rw_i93_check_sys_info_prot_ext (uint8_t error_code)
         &&(error_code == I93_ERROR_CODE_OPTION_NOT_SUPPORTED)
         &&(rw_i93_send_cmd_get_sys_info (NULL, I93_FLAG_PROT_EXT_YES) == NFC_STATUS_OK)  )
     {
-        return TRUE;
+        return true;
     }
     else
     {
-        return FALSE;
+        return false;
     }
 }
 
@@ -496,7 +496,7 @@ void rw_i93_send_to_upper (BT_HDR *p_resp)
 bool    rw_i93_send_to_lower (BT_HDR *p_msg)
 {
 #if (BT_TRACE_PROTOCOL == TRUE)
-    DispRWI93Tag (p_msg, FALSE, 0x00);
+    DispRWI93Tag (p_msg, false, 0x00);
 #endif
 
     /* store command for retransmitting */
@@ -516,13 +516,13 @@ bool    rw_i93_send_to_lower (BT_HDR *p_msg)
     if (NFC_SendData (NFC_RF_CONN_ID, p_msg) != NFC_STATUS_OK)
     {
         RW_TRACE_ERROR0 ("rw_i93_send_to_lower (): NFC_SendData () failed");
-        return FALSE;
+        return false;
     }
 
     nfc_start_quick_timer (&rw_cb.tcb.i93.timer, NFC_TTYPE_RW_I93_RESPONSE,
                            (RW_I93_TOUT_RESP*QUICK_TIMER_TICKS_PER_SEC)/1000);
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -1439,7 +1439,7 @@ tNFC_STATUS rw_i93_get_next_blocks (uint16_t offset)
     }
     else
     {
-        return rw_i93_send_cmd_read_single_block (first_block, FALSE);
+        return rw_i93_send_cmd_read_single_block (first_block, false);
     }
 }
 
@@ -1572,7 +1572,7 @@ void rw_i93_sm_detect_ndef (BT_HDR *p_resp)
         else
         {
             /* read CC in the first block */
-            if (rw_i93_send_cmd_read_single_block (0x0000, FALSE) == NFC_STATUS_OK)
+            if (rw_i93_send_cmd_read_single_block (0x0000, false) == NFC_STATUS_OK)
             {
                 p_i93->sub_state = RW_I93_SUBSTATE_WAIT_CC;
             }
@@ -1758,7 +1758,7 @@ void rw_i93_sm_detect_ndef (BT_HDR *p_resp)
                 first_block = p_i93->ndef_tlv_start_offset / p_i93->block_size;
 
                 /* read block to get lock status */
-                rw_i93_send_cmd_read_single_block (first_block, TRUE);
+                rw_i93_send_cmd_read_single_block (first_block, true);
                 p_i93->sub_state = RW_I93_SUBSTATE_CHECK_LOCK_STATUS;
             }
             else
@@ -1822,7 +1822,8 @@ void rw_i93_sm_detect_ndef (BT_HDR *p_resp)
                     p_i93->rw_offset += p_i93->block_size;
 
                     /* read block to get lock status */
-                    rw_i93_send_cmd_read_single_block ((uint16_t)(p_i93->rw_offset / p_i93->block_size), TRUE);
+                    rw_i93_send_cmd_read_single_block ((uint16_t)(p_i93->rw_offset / p_i93->block_size),
+						       true);
                     break;
                 }
             }
@@ -2206,7 +2207,7 @@ void rw_i93_sm_update_ndef (BT_HDR *p_resp)
                     /* read length field to update length       */
                     block_number = (p_i93->ndef_tlv_start_offset + 1) / p_i93->block_size;
 
-                    if (rw_i93_send_cmd_read_single_block (block_number, FALSE) == NFC_STATUS_OK)
+                    if (rw_i93_send_cmd_read_single_block (block_number, false) == NFC_STATUS_OK)
                     {
                         /* set offset to length field */
                         p_i93->rw_offset = p_i93->ndef_tlv_start_offset + 1;
@@ -2243,7 +2244,7 @@ void rw_i93_sm_update_ndef (BT_HDR *p_resp)
                 /* read length field to update length       */
                 block_number = (p_i93->ndef_tlv_start_offset + 1) / p_i93->block_size;
 
-                if (rw_i93_send_cmd_read_single_block (block_number, FALSE) == NFC_STATUS_OK)
+                if (rw_i93_send_cmd_read_single_block (block_number, false) == NFC_STATUS_OK)
                 {
                     /* set offset to length field */
                     p_i93->rw_offset = p_i93->ndef_tlv_start_offset + 1;
@@ -2280,7 +2281,7 @@ void rw_i93_sm_update_ndef (BT_HDR *p_resp)
             {
                 block_number = p_i93->rw_offset / p_i93->block_size;
 
-                if (rw_i93_send_cmd_read_single_block (block_number, FALSE) != NFC_STATUS_OK)
+                if (rw_i93_send_cmd_read_single_block (block_number, false) != NFC_STATUS_OK)
                 {
                     rw_i93_handle_error (NFC_STATUS_FAILED);
                 }
@@ -2481,7 +2482,7 @@ void rw_i93_sm_format (BT_HDR *p_resp)
                 rw_cb.tcb.i93.rw_offset = 0;
 
                 /* read blocks with option flag to get block security status */
-                if (rw_i93_send_cmd_read_single_block (0x0000, TRUE) == NFC_STATUS_OK)
+                if (rw_i93_send_cmd_read_single_block (0x0000, true) == NFC_STATUS_OK)
                 {
                     p_i93->sub_state = RW_I93_SUBSTATE_CHECK_READ_ONLY;
                 }
@@ -2551,7 +2552,7 @@ void rw_i93_sm_format (BT_HDR *p_resp)
                 rw_cb.tcb.i93.rw_offset = 0;
 
                 /* read blocks with option flag to get block security status */
-                if (rw_i93_send_cmd_read_single_block (0x0000, TRUE) == NFC_STATUS_OK)
+                if (rw_i93_send_cmd_read_single_block (0x0000, true) == NFC_STATUS_OK)
                 {
                     p_i93->sub_state = RW_I93_SUBSTATE_CHECK_READ_ONLY;
                 }
@@ -2597,7 +2598,8 @@ void rw_i93_sm_format (BT_HDR *p_resp)
                 {
                     /* read the block which has AFI */
                     p_i93->rw_offset = I93_TAG_IT_HF_I_STD_PRO_CHIP_INLAY_AFI_LOCATION;
-                    rw_i93_send_cmd_read_single_block ((uint16_t)(p_i93->rw_offset/p_i93->block_size), TRUE);
+                    rw_i93_send_cmd_read_single_block ((uint16_t)(p_i93->rw_offset/p_i93->block_size),
+						       true);
                     break;
                 }
             }
@@ -2608,7 +2610,8 @@ void rw_i93_sm_format (BT_HDR *p_resp)
             else
             {
                 p_i93->rw_offset += p_i93->block_size;
-                rw_i93_send_cmd_read_single_block ((uint16_t)(p_i93->rw_offset/p_i93->block_size), TRUE);
+                rw_i93_send_cmd_read_single_block ((uint16_t)(p_i93->rw_offset/p_i93->block_size),
+						   true);
                 break;
             }
         }
@@ -3122,7 +3125,7 @@ static void rw_i93_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *
     }
 
 #if (BT_TRACE_PROTOCOL == TRUE)
-    DispRWI93Tag (p_resp, TRUE, p_i93->sent_cmd);
+    DispRWI93Tag (p_resp, true, p_i93->sent_cmd);
 #endif
 
 #if (BT_TRACE_VERBOSE == TRUE)
@@ -3337,7 +3340,7 @@ tNFC_STATUS RW_I93ReadSingleBlock (uint16_t block_number)
         return NFC_STATUS_BUSY;
     }
 
-    status = rw_i93_send_cmd_read_single_block (block_number, FALSE);
+    status = rw_i93_send_cmd_read_single_block (block_number, false);
     if (status == NFC_STATUS_OK)
     {
         rw_cb.tcb.i93.state = RW_I93_STATE_BUSY;
@@ -3845,7 +3848,7 @@ tNFC_STATUS RW_I93DetectNDef (void)
 
     if (rw_cb.tcb.i93.uid[0] != I93_UID_FIRST_BYTE)
     {
-        status = rw_i93_send_cmd_inventory (NULL, FALSE, 0x00);
+        status = rw_i93_send_cmd_inventory (NULL, false, 0x00);
         sub_state = RW_I93_SUBSTATE_WAIT_UID;
     }
     else if (  (rw_cb.tcb.i93.num_block == 0)
@@ -3860,7 +3863,7 @@ tNFC_STATUS RW_I93DetectNDef (void)
     else
     {
         /* read CC in the first block */
-        status = rw_i93_send_cmd_read_single_block (0x0000, FALSE);
+        status = rw_i93_send_cmd_read_single_block (0x0000, false);
         sub_state = RW_I93_SUBSTATE_WAIT_CC;
     }
 
@@ -3979,7 +3982,7 @@ tNFC_STATUS RW_I93UpdateNDef (uint16_t length, uint8_t *p_data)
 
         block_number = rw_cb.tcb.i93.rw_offset / rw_cb.tcb.i93.block_size;
 
-        if (rw_i93_send_cmd_read_single_block (block_number, FALSE) == NFC_STATUS_OK)
+        if (rw_i93_send_cmd_read_single_block (block_number, false) == NFC_STATUS_OK)
         {
             rw_cb.tcb.i93.state     = RW_I93_STATE_UPDATE_NDEF;
             rw_cb.tcb.i93.sub_state = RW_I93_SUBSTATE_RESET_LEN;
@@ -4031,12 +4034,12 @@ tNFC_STATUS RW_I93FormatNDef (void)
         rw_cb.tcb.i93.rw_offset = 0;
 
         /* read blocks with option flag to get block security status */
-        status = rw_i93_send_cmd_read_single_block (0x0000, TRUE);
+        status = rw_i93_send_cmd_read_single_block (0x0000, true);
         sub_state = RW_I93_SUBSTATE_CHECK_READ_ONLY;
     }
     else
     {
-        status = rw_i93_send_cmd_inventory (rw_cb.tcb.i93.uid, FALSE, 0x00);
+        status = rw_i93_send_cmd_inventory (rw_cb.tcb.i93.uid, false, 0x00);
         sub_state = RW_I93_SUBSTATE_WAIT_UID;
     }
 
@@ -4084,7 +4087,7 @@ tNFC_STATUS RW_I93SetTagReadOnly (void)
         }
 
         /* get CC in the first block */
-        if (rw_i93_send_cmd_read_single_block (0, FALSE) == NFC_STATUS_OK)
+        if (rw_i93_send_cmd_read_single_block (0, false) == NFC_STATUS_OK)
         {
             rw_cb.tcb.i93.state     = RW_I93_STATE_SET_READ_ONLY;
             rw_cb.tcb.i93.sub_state = RW_I93_SUBSTATE_WAIT_CC;
@@ -4143,7 +4146,7 @@ tNFC_STATUS RW_I93PresenceCheck (void)
     else
     {
         /* The support of AFI by the VICC is optional, so do not include AFI */
-        status = rw_i93_send_cmd_inventory (rw_cb.tcb.i93.uid, FALSE, 0x00);
+        status = rw_i93_send_cmd_inventory (rw_cb.tcb.i93.uid, false, 0x00);
 
         if (status == NFC_STATUS_OK)
         {

@@ -110,19 +110,19 @@ static void rw_t4t_sm_ndef_format (BT_HDR  *p_r_apdu);
 static bool    rw_t4t_send_to_lower (BT_HDR *p_c_apdu)
 {
 #if (BT_TRACE_PROTOCOL == TRUE)
-    DispRWT4Tags (p_c_apdu, FALSE);
+    DispRWT4Tags (p_c_apdu, false);
 #endif
 
     if (NFC_SendData (NFC_RF_CONN_ID, p_c_apdu) != NFC_STATUS_OK)
     {
         RW_TRACE_ERROR0 ("rw_t4t_send_to_lower (): NFC_SendData () failed");
-        return FALSE;
+        return false;
     }
 
     nfc_start_quick_timer (&rw_cb.tcb.t4t.timer, NFC_TTYPE_RW_T4T_RESPONSE,
             (RW_T4T_TOUT_RESP * QUICK_TIMER_TICKS_PER_SEC) / 1000);
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -144,7 +144,7 @@ static bool    rw_t4t_get_hw_version (void)
     if (!p_c_apdu)
     {
         RW_TRACE_ERROR0 ("rw_t4t_get_hw_version (): Cannot allocate buffer");
-        return FALSE;
+        return false;
     }
 
     p_c_apdu->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
@@ -159,10 +159,10 @@ static bool    rw_t4t_get_hw_version (void)
 
     if (!rw_t4t_send_to_lower (p_c_apdu))
     {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -184,7 +184,7 @@ static bool    rw_t4t_get_sw_version (void)
     if (!p_c_apdu)
     {
         RW_TRACE_ERROR0 ("rw_t4t_get_sw_version (): Cannot allocate buffer");
-        return FALSE;
+        return false;
     }
 
     p_c_apdu->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
@@ -199,10 +199,10 @@ static bool    rw_t4t_get_sw_version (void)
 
     if (!rw_t4t_send_to_lower (p_c_apdu))
     {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -244,15 +244,15 @@ static bool    rw_t4t_update_version_details (BT_HDR *p_r_apdu)
             p_t4t->card_size = 7680;
             break;
         default:
-            return FALSE;
+            return false;
         }
     }
     else
     {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -274,7 +274,7 @@ static bool    rw_t4t_get_uid_details (void)
     if (!p_c_apdu)
     {
         RW_TRACE_ERROR0 ("rw_t4t_get_uid_details (): Cannot allocate buffer");
-        return FALSE;
+        return false;
     }
 
     p_c_apdu->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
@@ -289,10 +289,10 @@ static bool    rw_t4t_get_uid_details (void)
 
     if (!rw_t4t_send_to_lower (p_c_apdu))
     {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -316,7 +316,7 @@ static bool    rw_t4t_create_app (void)
     if (!p_c_apdu)
     {
         RW_TRACE_ERROR0 ("rw_t4t_create_app (): Cannot allocate buffer");
-        return FALSE;
+        return false;
     }
 
     p_c_apdu->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
@@ -346,10 +346,10 @@ static bool    rw_t4t_create_app (void)
 
     if (!rw_t4t_send_to_lower (p_c_apdu))
     {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -372,7 +372,7 @@ static bool    rw_t4t_select_app (void)
     if (!p_c_apdu)
     {
         RW_TRACE_ERROR0 ("rw_t4t_select_app (): Cannot allocate buffer");
-        return FALSE;
+        return false;
     }
 
     p_c_apdu->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
@@ -397,10 +397,10 @@ static bool    rw_t4t_select_app (void)
 
     if (!rw_t4t_send_to_lower (p_c_apdu))
     {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -423,7 +423,7 @@ static bool    rw_t4t_create_ccfile (void)
     if (!p_c_apdu)
     {
         RW_TRACE_ERROR0 ("rw_t4t_create_ccfile (): Cannot allocate buffer");
-        return FALSE;
+        return false;
     }
 
     p_c_apdu->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
@@ -453,10 +453,10 @@ static bool    rw_t4t_create_ccfile (void)
 
     if (!rw_t4t_send_to_lower (p_c_apdu))
     {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -479,7 +479,7 @@ static bool    rw_t4t_create_ndef (void)
     if (!p_c_apdu)
     {
         RW_TRACE_ERROR0 ("rw_t4t_create_ndef (): Cannot allocate buffer");
-        return FALSE;
+        return false;
     }
 
     p_c_apdu->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
@@ -510,10 +510,10 @@ static bool    rw_t4t_create_ndef (void)
 
     if (!rw_t4t_send_to_lower (p_c_apdu))
     {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -537,7 +537,7 @@ static bool    rw_t4t_write_cc (void)
     if (!p_c_apdu)
     {
         RW_TRACE_ERROR0 ("rw_t4t_write_cc (): Cannot allocate buffer");
-        return FALSE;
+        return false;
     }
 
     p_c_apdu->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
@@ -568,10 +568,10 @@ static bool    rw_t4t_write_cc (void)
 
     if (!rw_t4t_send_to_lower (p_c_apdu))
     {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -594,7 +594,7 @@ static bool    rw_t4t_write_ndef (void)
     if (!p_c_apdu)
     {
         RW_TRACE_ERROR0 ("rw_t4t_write_ndef (): Cannot allocate buffer");
-        return FALSE;
+        return false;
     }
 
     p_c_apdu->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
@@ -622,10 +622,10 @@ static bool    rw_t4t_write_ndef (void)
 
     if (!rw_t4t_send_to_lower (p_c_apdu))
     {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -649,7 +649,7 @@ static bool    rw_t4t_select_file (uint16_t file_id)
     if (!p_c_apdu)
     {
         RW_TRACE_ERROR0 ("rw_t4t_select_file (): Cannot allocate buffer");
-        return FALSE;
+        return false;
     }
 
     p_c_apdu->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
@@ -676,10 +676,10 @@ static bool    rw_t4t_select_file (uint16_t file_id)
 
     if (!rw_t4t_send_to_lower (p_c_apdu))
     {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -705,11 +705,11 @@ static bool    rw_t4t_read_file (uint16_t offset, uint16_t length, bool    is_co
     if (!p_c_apdu)
     {
         RW_TRACE_ERROR0 ("rw_t4t_read_file (): Cannot allocate buffer");
-        return FALSE;
+        return false;
     }
 
     /* if this is the first reading */
-    if (is_continue == FALSE)
+    if (is_continue == false)
     {
         /* initialise starting offset and total length */
         /* these will be updated when receiving response */
@@ -735,10 +735,10 @@ static bool    rw_t4t_read_file (uint16_t offset, uint16_t length, bool    is_co
 
     if (!rw_t4t_send_to_lower (p_c_apdu))
     {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -762,7 +762,7 @@ static bool    rw_t4t_update_nlen (uint16_t ndef_len)
     if (!p_c_apdu)
     {
         RW_TRACE_ERROR0 ("rw_t4t_update_nlen (): Cannot allocate buffer");
-        return FALSE;
+        return false;
     }
 
     p_c_apdu->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
@@ -778,10 +778,10 @@ static bool    rw_t4t_update_nlen (uint16_t ndef_len)
 
     if (!rw_t4t_send_to_lower (p_c_apdu))
     {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -808,7 +808,7 @@ static bool    rw_t4t_update_file (void)
     if (!p_c_apdu)
     {
         RW_TRACE_ERROR0 ("rw_t4t_write_file (): Cannot allocate buffer");
-        return FALSE;
+        return false;
     }
 
     /* try to send all of remaining data */
@@ -834,7 +834,7 @@ static bool    rw_t4t_update_file (void)
 
     if (!rw_t4t_send_to_lower (p_c_apdu))
     {
-        return FALSE;
+        return false;
     }
 
     /* adjust offset, length and pointer for remaining data */
@@ -842,7 +842,7 @@ static bool    rw_t4t_update_file (void)
     p_t4t->rw_length     -= length;
     p_t4t->p_update_data += length;
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -866,7 +866,7 @@ static bool    rw_t4t_update_cc_to_readonly (void)
     if (!p_c_apdu)
     {
         RW_TRACE_ERROR0 ("rw_t4t_update_cc_to_readonly (): Cannot allocate buffer");
-        return FALSE;
+        return false;
     }
 
     p_c_apdu->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
@@ -886,10 +886,10 @@ static bool    rw_t4t_update_cc_to_readonly (void)
 
     if (!rw_t4t_send_to_lower (p_c_apdu))
     {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -919,7 +919,7 @@ static bool    rw_t4t_select_application (uint8_t version)
     if (!p_c_apdu)
     {
         RW_TRACE_ERROR0 ("rw_t4t_select_application (): Cannot allocate buffer");
-        return FALSE;
+        return false;
     }
 
     p_c_apdu->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
@@ -951,15 +951,15 @@ static bool    rw_t4t_select_application (uint8_t version)
     }
     else
     {
-        return FALSE;
+        return false;
     }
 
     if (!rw_t4t_send_to_lower (p_c_apdu))
     {
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -981,28 +981,28 @@ static bool    rw_t4t_validate_cc_file (void)
     {
         RW_TRACE_ERROR1 ("rw_t4t_validate_cc_file (): CCLEN (%d) is too short",
                          p_t4t->cc_file.cclen);
-        return FALSE;
+        return false;
     }
 
     if (T4T_GET_MAJOR_VERSION (p_t4t->cc_file.version) != T4T_GET_MAJOR_VERSION (p_t4t->version))
     {
         RW_TRACE_ERROR2 ("rw_t4t_validate_cc_file (): Peer version (0x%02X) is matched to ours (0x%02X)",
                          p_t4t->cc_file.version, p_t4t->version);
-        return FALSE;
+        return false;
     }
 
     if (p_t4t->cc_file.max_le < 0x000F)
     {
         RW_TRACE_ERROR1 ("rw_t4t_validate_cc_file (): MaxLe (%d) is too small",
                          p_t4t->cc_file.max_le);
-        return FALSE;
+        return false;
     }
 
     if (p_t4t->cc_file.max_lc < 0x0001)
     {
         RW_TRACE_ERROR1 ("rw_t4t_validate_cc_file (): MaxLc (%d) is too small",
                          p_t4t->cc_file.max_lc);
-        return FALSE;
+        return false;
     }
 
     if (  (p_t4t->cc_file.ndef_fc.file_id == T4T_CC_FILE_ID)
@@ -1015,7 +1015,7 @@ static bool    rw_t4t_validate_cc_file (void)
     {
         RW_TRACE_ERROR1 ("rw_t4t_validate_cc_file (): File ID (0x%04X) is invalid",
                           p_t4t->cc_file.ndef_fc.file_id);
-        return FALSE;
+        return false;
     }
 
     if (  (p_t4t->cc_file.ndef_fc.max_file_size < 0x0005)
@@ -1023,14 +1023,14 @@ static bool    rw_t4t_validate_cc_file (void)
     {
         RW_TRACE_ERROR1 ("rw_t4t_validate_cc_file (): max_file_size (%d) is reserved",
                          p_t4t->cc_file.ndef_fc.max_file_size);
-        return FALSE;
+        return false;
     }
 
     if (p_t4t->cc_file.ndef_fc.read_access != T4T_FC_READ_ACCESS)
     {
         RW_TRACE_ERROR1 ("rw_t4t_validate_cc_file (): Read Access (0x%02X) is invalid",
                           p_t4t->cc_file.ndef_fc.read_access);
-        return FALSE;
+        return false;
     }
 
     if (  (p_t4t->cc_file.ndef_fc.write_access != T4T_FC_WRITE_ACCESS)
@@ -1038,10 +1038,10 @@ static bool    rw_t4t_validate_cc_file (void)
     {
         RW_TRACE_ERROR1 ("rw_t4t_validate_cc_file (): Write Access (0x%02X) is invalid",
                           p_t4t->cc_file.ndef_fc.write_access);
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -1424,7 +1424,7 @@ static void rw_t4t_sm_detect_ndef (BT_HDR *p_r_apdu)
     case RW_T4T_SUBSTATE_WAIT_SELECT_CC:
 
         /* CC file has been selected then read mandatory part of CC file */
-        if (!rw_t4t_read_file (0x00, T4T_CC_FILE_MIN_LEN, FALSE))
+        if (!rw_t4t_read_file (0x00, T4T_CC_FILE_MIN_LEN, false))
         {
             rw_t4t_handle_error (NFC_STATUS_FAILED, 0, 0);
         }
@@ -1493,7 +1493,7 @@ static void rw_t4t_sm_detect_ndef (BT_HDR *p_r_apdu)
     case RW_T4T_SUBSTATE_WAIT_SELECT_NDEF_FILE:
 
         /* NDEF file has been selected then read the first 2 bytes (NLEN) */
-        if (!rw_t4t_read_file (0, T4T_FILE_LENGTH_SIZE, FALSE))
+        if (!rw_t4t_read_file (0, T4T_FILE_LENGTH_SIZE, false))
         {
             rw_t4t_handle_error (NFC_STATUS_FAILED, 0, 0);
         }
@@ -1658,7 +1658,7 @@ static void rw_t4t_sm_read_ndef (BT_HDR *p_r_apdu)
                 {
                     (*(rw_cb.p_cback)) (RW_T4T_NDEF_READ_EVT, &rw_data);
 
-                    if (!rw_t4t_read_file (p_t4t->rw_offset, p_t4t->rw_length, TRUE))
+                    if (!rw_t4t_read_file (p_t4t->rw_offset, p_t4t->rw_length, true))
                     {
                         rw_t4t_handle_error (NFC_STATUS_FAILED, 0, 0);
                     }
@@ -1968,7 +1968,7 @@ static void rw_t4t_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *
 
 #if (BT_TRACE_PROTOCOL == TRUE)
     if (p_t4t->state != RW_T4T_STATE_IDLE)
-        DispRWT4Tags (p_r_apdu, TRUE);
+        DispRWT4Tags (p_r_apdu, true);
 #endif
 
 #if (BT_TRACE_VERBOSE == TRUE)
@@ -2184,7 +2184,7 @@ tNFC_STATUS RW_T4tReadNDef (void)
     if (rw_cb.tcb.t4t.ndef_status & RW_T4T_NDEF_STATUS_NDEF_DETECTED)
     {
         /* start reading NDEF */
-        if (!rw_t4t_read_file (T4T_FILE_LENGTH_SIZE, rw_cb.tcb.t4t.ndef_length, FALSE))
+        if (!rw_t4t_read_file (T4T_FILE_LENGTH_SIZE, rw_cb.tcb.t4t.ndef_length, false))
         {
             return NFC_STATUS_FAILED;
         }
@@ -2315,7 +2315,7 @@ tNFC_STATUS RW_T4tPresenceCheck (uint8_t option)
     }
     else
     {
-        status = FALSE;
+        status = false;
         if (option == RW_T4T_CHK_EMPTY_I_BLOCK)
         {
             /* use empty I block for presence check */
@@ -2324,7 +2324,7 @@ tNFC_STATUS RW_T4tPresenceCheck (uint8_t option)
                 p_data->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
                 p_data->len    = 0;
                 if (NFC_SendData (NFC_RF_CONN_ID, (BT_HDR*) p_data) == NFC_STATUS_OK)
-                    status = TRUE;
+                    status = true;
             }
         }
         else
@@ -2333,11 +2333,11 @@ tNFC_STATUS RW_T4tPresenceCheck (uint8_t option)
             rw_cb.tcb.t4t.channel = 0;
             if (option <= RW_T4T_CHK_READ_BINARY_CH3)
                 rw_cb.tcb.t4t.channel = option;
-            status = rw_t4t_read_file (0, 1, FALSE);
+            status = rw_t4t_read_file (0, 1, false);
             rw_cb.tcb.t4t.channel = 0;
         }
 
-        if (status == TRUE)
+        if (status == true)
         {
             rw_cb.tcb.t4t.state = RW_T4T_STATE_PRESENCE_CHECK;
         }

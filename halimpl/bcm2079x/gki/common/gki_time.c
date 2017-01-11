@@ -82,7 +82,7 @@ void gki_timers_init(void)
     }
 
     gki_cb.com.p_tick_cb = NULL;
-    gki_cb.com.system_tick_running = FALSE;
+    gki_cb.com.system_tick_running = false;
 
     return;
 }
@@ -106,33 +106,33 @@ bool    gki_timers_is_timer_running(void)
 #if (GKI_NUM_TIMERS > 0)
         if(gki_cb.com.OSTaskTmr0  [tt])
         {
-            return TRUE;
+            return true;
         }
 #endif
 
 #if (GKI_NUM_TIMERS > 1)
         if(gki_cb.com.OSTaskTmr1  [tt] )
         {
-            return TRUE;
+            return true;
         }
 #endif
 
 #if (GKI_NUM_TIMERS > 2)
         if(gki_cb.com.OSTaskTmr2  [tt] )
         {
-            return TRUE;
+            return true;
         }
 #endif
 
 #if (GKI_NUM_TIMERS > 3)
         if(gki_cb.com.OSTaskTmr3  [tt] )
         {
-            return TRUE;
+            return true;
         }
 #endif
     }
 
-    return FALSE;
+    return false;
 
 }
 
@@ -198,7 +198,7 @@ void GKI_start_timer (uint8_t tnum, int32_t ticks, bool    is_continuous)
     int32_t reload;
     int32_t orig_ticks;
     uint8_t task_id = GKI_get_taskid();
-    bool    bad_timer = FALSE;
+    bool    bad_timer = false;
 
     if (ticks <= 0)
         ticks = 1;
@@ -214,7 +214,7 @@ void GKI_start_timer (uint8_t tnum, int32_t ticks, bool    is_continuous)
 
     GKI_disable();
 
-    if(gki_timers_is_timer_running() == FALSE)
+    if(gki_timers_is_timer_running() == false)
     {
 #if (defined(GKI_DELAY_STOP_SYS_TICK) && (GKI_DELAY_STOP_SYS_TICK > 0))
         /* if inactivity delay timer is not running, start system tick */
@@ -224,8 +224,8 @@ void GKI_start_timer (uint8_t tnum, int32_t ticks, bool    is_continuous)
             if(gki_cb.com.p_tick_cb)
             {
                 /* start system tick */
-                gki_cb.com.system_tick_running = TRUE;
-                (gki_cb.com.p_tick_cb) (TRUE);
+                gki_cb.com.system_tick_running = true;
+                (gki_cb.com.p_tick_cb)(true);
             }
 #if (defined(GKI_DELAY_STOP_SYS_TICK) && (GKI_DELAY_STOP_SYS_TICK > 0))
         }
@@ -277,7 +277,7 @@ void GKI_start_timer (uint8_t tnum, int32_t ticks, bool    is_continuous)
             break;
 #endif
         default:
-            bad_timer = TRUE;       /* Timer number is bad, so do not use */
+            bad_timer = true;       /* Timer number is bad, so do not use */
     }
 
     /* Update the expiration timeout if a legitimate timer */
@@ -341,7 +341,7 @@ void GKI_stop_timer (uint8_t tnum)
 #endif
     }
 
-    if (gki_timers_is_timer_running() == FALSE)
+    if (gki_timers_is_timer_running() == false)
     {
         if (gki_cb.com.p_tick_cb)
         {
@@ -354,8 +354,8 @@ void GKI_stop_timer (uint8_t tnum)
                 gki_cb.com.OSTicksTilStop = GKI_DELAY_STOP_SYS_TICK;
             }
 #else
-            gki_cb.com.system_tick_running = FALSE;
-            gki_cb.com.p_tick_cb(FALSE); /* stop system tick */
+            gki_cb.com.system_tick_running = false;
+            (gki_cb.com.p_tick_cb)(false); /* stop system tick */
 #endif
         }
     }
@@ -411,8 +411,8 @@ void GKI_timer_update (int32_t ticks_since_last_update)
         {
             if(gki_cb.com.p_tick_cb)
             {
-                gki_cb.com.system_tick_running = FALSE;
-                (gki_cb.com.p_tick_cb) (FALSE); /* stop system tick */
+                gki_cb.com.system_tick_running = false;
+                (gki_cb.com.p_tick_cb)(false); /* stop system tick */
             }
             gki_cb.com.OSTicksTilStop = 0;      /* clear inactivity delay timer */
             gki_cb.com.timer_nesting = 0;
@@ -591,10 +591,10 @@ bool    GKI_timer_queue_empty (void)
     for (tt = 0; tt < GKI_MAX_TIMER_QUEUES; tt++)
     {
         if (gki_cb.com.timer_queues[tt])
-            return FALSE;
+            return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -656,7 +656,7 @@ void GKI_init_timer_list_entry (TIMER_LIST_ENT  *p_tle)
     p_tle->p_next  = NULL;
     p_tle->p_prev  = NULL;
     p_tle->ticks   = GKI_UNUSED_LIST_ENTRY;
-    p_tle->in_use  = FALSE;
+    p_tle->in_use = false;
 }
 
 
@@ -863,7 +863,7 @@ void GKI_add_to_timer_list (TIMER_LIST_Q *p_timer_listq, TIMER_LIST_ENT  *p_tle)
             p_temp->ticks -= p_tle->ticks;
         }
 
-        p_tle->in_use = TRUE;
+        p_tle->in_use = true;
 
         /* if we already add this timer queue to the array */
         for (tt = 0; tt < GKI_MAX_TIMER_QUEUES; tt++)
@@ -905,7 +905,7 @@ void GKI_remove_from_timer_list (TIMER_LIST_Q *p_timer_listq, TIMER_LIST_ENT  *p
     uint8_t tt;
 
     /* Verify that the entry is valid */
-    if (p_tle == NULL || p_tle->in_use == FALSE || p_timer_listq->p_first == NULL)
+    if (p_tle == NULL || p_tle->in_use == false || p_timer_listq->p_first == NULL)
     {
         return;
     }
@@ -965,7 +965,7 @@ void GKI_remove_from_timer_list (TIMER_LIST_Q *p_timer_listq, TIMER_LIST_ENT  *p
 
     p_tle->p_next = p_tle->p_prev = NULL;
     p_tle->ticks = GKI_UNUSED_LIST_ENTRY;
-    p_tle->in_use = FALSE;
+    p_tle->in_use = false;
 
     /* if timer queue is empty */
     if (p_timer_listq->p_first == NULL && p_timer_listq->p_last == NULL)

@@ -40,7 +40,7 @@ uint8_t icode_send_eof = 0x00;
 uint8_t nfcdep_detected = 0x00;
 #endif
 static uint8_t ee_disc_done = 0x00;
-uint8_t EnableP2P_PrioLogic = FALSE;
+uint8_t EnableP2P_PrioLogic = false;
 static uint32_t RfDiscID = 1;
 static uint32_t RfProtocolType = 4;
 /* NFCEE Set mode */
@@ -91,7 +91,7 @@ void phNxpNciHal_ext_init (void)
     kovio_detected = 0x00;
     disable_kovio = 0x00;
     send_to_upper_kovio = 0x01;
-    EnableP2P_PrioLogic = FALSE;
+    EnableP2P_PrioLogic = false;
 }
 
 /*******************************************************************************
@@ -141,13 +141,13 @@ NFCSTATUS phNxpNciHal_process_ext_rsp (uint8_t *p_ntf, uint16_t *p_len)
        p_ntf[5] == 0x04 &&
        nxpprofile_ctrl.profile_type == NFC_FORUM_PROFILE)
     {
-        EnableP2P_PrioLogic = TRUE;
+        EnableP2P_PrioLogic = true;
     }
 
     NXPLOG_NCIHAL_D("Is EnableP2P_PrioLogic: 0x0%X",  EnableP2P_PrioLogic);
-    if(phNxpDta_IsEnable() == FALSE)
+    if(phNxpDta_IsEnable() == false)
     {
-        if ((icode_detected != 1)&&(kovio_detected != 1) && (EnableP2P_PrioLogic == TRUE))
+        if ((icode_detected != 1)&&(kovio_detected != 1) && (EnableP2P_PrioLogic == true))
         {
             if (phNxpNciHal_NfcDep_comapre_ntf(p_ntf, *p_len) == NFCSTATUS_FAILED)
             {
@@ -603,7 +603,7 @@ NFCSTATUS phNxpNciHal_write_ext(uint16_t *cmd_len, uint8_t *p_cmd_data,
 
     phNxpNciHal_NfcDep_cmd_ext(p_cmd_data, cmd_len);
 
-    if(phNxpDta_IsEnable() == TRUE)
+    if(phNxpDta_IsEnable() == true)
     {
         status = phNxpNHal_DtaUpdate(cmd_len, p_cmd_data,rsp_len, p_rsp_data);
     }

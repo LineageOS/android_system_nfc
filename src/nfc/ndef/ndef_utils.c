@@ -83,7 +83,7 @@ tNDEF_STATUS NDEF_MsgValidate (uint8_t *p_msg, uint32_t msg_len, bool    b_allow
     uint8_t rec_hdr=0, type_len, id_len;
     int     count;
     uint32_t  payload_len;
-    bool    bInChunk = FALSE;
+    bool    bInChunk = false;
 
     if ( (p_msg == NULL) || (msg_len < 3) )
         return (NDEF_MSG_TOO_SHORT);
@@ -153,7 +153,7 @@ tNDEF_STATUS NDEF_MsgValidate (uint8_t *p_msg, uint32_t msg_len, bool    b_allow
                 if ((rec_hdr & NDEF_TNF_MASK) == NDEF_TNF_UNCHANGED)
                     return (NDEF_MSG_INVALID_CHUNK);
 
-                bInChunk = TRUE;
+                bInChunk = true;
             }
         }
         else
@@ -164,7 +164,7 @@ tNDEF_STATUS NDEF_MsgValidate (uint8_t *p_msg, uint32_t msg_len, bool    b_allow
                 if ( (type_len != 0) || (id_len != 0) || ((rec_hdr & NDEF_TNF_MASK) != NDEF_TNF_UNCHANGED) )
                     return (NDEF_MSG_INVALID_CHUNK);
 
-                bInChunk = FALSE;
+                bInChunk = false;
             }
             else
             {
@@ -1031,7 +1031,7 @@ extern tNDEF_STATUS  NDEF_MsgAppendRec (uint8_t *p_msg, uint32_t max_size, uint3
     tNDEF_STATUS    status;
 
     /* First, validate new records */
-    if ((status = NDEF_MsgValidate(p_new_rec, new_rec_len, FALSE)) != NDEF_OK)
+    if ((status = NDEF_MsgValidate(p_new_rec, new_rec_len, false)) != NDEF_OK)
         return (status);
 
     /* First, make sure the record will fit */
@@ -1481,7 +1481,7 @@ tNDEF_STATUS NDEF_MsgRemoveRec (uint8_t *p_msg, uint32_t *p_cur_size, int32_t in
         {
             /* Find the previous record and set his 'Message End' bit */
             if ((pPrev = NDEF_MsgGetRecByIndex(p_msg, index - 1)) == NULL)
-                return (FALSE);
+                return false;
 
             *pPrev |= NDEF_ME_MASK;
         }
@@ -1492,7 +1492,7 @@ tNDEF_STATUS NDEF_MsgRemoveRec (uint8_t *p_msg, uint32_t *p_cur_size, int32_t in
 
     /* Not the first or the last... get the address of the next record */
     if ((pNext = NDEF_MsgGetNextRec (p_rec)) == NULL)
-        return (FALSE);
+        return false;
 
     /* We are removing p_rec, so shift from pNext to the end */
     shiftup (p_rec, pNext, (uint32_t)(*p_cur_size - (pNext - p_msg)));
@@ -1526,7 +1526,7 @@ tNDEF_STATUS NDEF_MsgCopyAndDechunk (uint8_t *p_src, uint32_t src_len, uint8_t *
     tNDEF_STATUS    status;
 
     /* First, validate the source */
-    if ((status = NDEF_MsgValidate(p_src, src_len, TRUE)) != NDEF_OK)
+    if ((status = NDEF_MsgValidate(p_src, src_len, true)) != NDEF_OK)
         return (status);
 
     /* The output buffer must be at least as large as the input buffer */

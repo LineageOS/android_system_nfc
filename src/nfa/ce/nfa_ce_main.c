@@ -176,7 +176,7 @@ static void nfa_ce_proc_nfcc_power_mode (uint8_t nfcc_power_mode)
 bool    nfa_ce_hdl_event (BT_HDR *p_msg)
 {
     uint16_t act_idx;
-    bool    freebuf = TRUE;
+    bool    freebuf = true;
 
 #if (BT_TRACE_VERBOSE == TRUE)
     NFA_TRACE_EVENT3 ("nfa_ce_handle_event event: %s (0x%02x), flags: %08x", nfa_ce_evt_2_str (p_msg->event), p_msg->event, nfa_ce_cb.flags);

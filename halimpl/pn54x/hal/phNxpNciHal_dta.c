@@ -30,11 +30,11 @@ static phNxpDta_Control_t nxpdta_ctrl = {0,0,0};
 *******************************************************************************/
 void phNxpEnable_DtaMode (uint16_t pattern_no)
 {
-    nxpdta_ctrl.dta_ctrl_flag = FALSE;
-    nxpdta_ctrl.dta_t1t_flag = FALSE;
+    nxpdta_ctrl.dta_ctrl_flag = false;
+    nxpdta_ctrl.dta_t1t_flag = false;
     nxpdta_ctrl.dta_pattern_no = pattern_no;
     ALOGD(">>>>DTA - Mode is enabled");
-    nxpdta_ctrl.dta_ctrl_flag = TRUE;
+    nxpdta_ctrl.dta_ctrl_flag = true;
 }
 
 /*******************************************************************************
@@ -46,8 +46,8 @@ void phNxpEnable_DtaMode (uint16_t pattern_no)
 *******************************************************************************/
 void phNxpDisable_DtaMode (void)
 {
-    nxpdta_ctrl.dta_ctrl_flag = FALSE;
-    nxpdta_ctrl.dta_t1t_flag = FALSE;
+    nxpdta_ctrl.dta_ctrl_flag = false;
+    nxpdta_ctrl.dta_t1t_flag = false;
     NXPLOG_NCIHAL_D(">>>>DTA - Mode is Disabled");
 }
 
@@ -73,7 +73,7 @@ NFCSTATUS phNxpDta_IsEnable(void)
  ******************************************************************************/
 void phNxpDta_T1TEnable(void)
 {
-    nxpdta_ctrl.dta_t1t_flag = TRUE;
+    nxpdta_ctrl.dta_t1t_flag = true;
 }
 /******************************************************************************
  * Function         phNxpNHal_DtaUpdate
@@ -92,7 +92,7 @@ NFCSTATUS phNxpNHal_DtaUpdate(uint16_t *cmd_len, uint8_t *p_cmd_data,
 {
     NFCSTATUS status = NFCSTATUS_SUCCESS;
 
-    if (nxpdta_ctrl.dta_ctrl_flag == TRUE)
+    if (nxpdta_ctrl.dta_ctrl_flag == true)
     {
         // Workaround for DTA, block the set config command with general bytes */
         if (p_cmd_data[0] == 0x20 && p_cmd_data[1] == 0x02 &&
@@ -217,7 +217,7 @@ NFCSTATUS phNxpNHal_DtaUpdate(uint16_t *cmd_len, uint8_t *p_cmd_data,
         {
 
         }
-        if (nxpdta_ctrl.dta_t1t_flag == TRUE)
+        if (nxpdta_ctrl.dta_t1t_flag == true)
         {
 
            if (p_cmd_data[2] == 0x07 && p_cmd_data[3] == 0x78 && p_cmd_data[4] ==0x00 &&  p_cmd_data[5] == 0x00)
@@ -246,7 +246,7 @@ NFCSTATUS phNxpNHal_DtaUpdate(uint16_t *cmd_len, uint8_t *p_cmd_data,
              {*/
                NXPLOG_NCIHAL_D("Change RID command's UID echo bytes to 0");
 
-               nxpdta_ctrl.dta_t1t_flag = FALSE;
+               nxpdta_ctrl.dta_t1t_flag = false;
                p_cmd_data[6] = 0x00;
                p_cmd_data[7] = 0x00;
                p_cmd_data[8] = 0x00;

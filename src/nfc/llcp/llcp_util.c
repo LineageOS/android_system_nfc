@@ -97,10 +97,10 @@ bool    llcp_util_parse_link_params (uint16_t length, uint8_t *p_bytes)
         else
         {
             LLCP_TRACE_ERROR0 ("llcp_util_parse_link_params (): Bad LTV's");
-            return (FALSE);
+            return false;
         }
     }
-    return (TRUE);
+    return true;
 }
 
 /*******************************************************************************
@@ -221,13 +221,13 @@ void llcp_util_check_rx_congested_status (void)
                                 llcp_cb.total_rx_ui_pdu, llcp_cb.total_rx_i_pdu,
                                 llcp_cb.overall_rx_congest_end);
 
-            llcp_cb.overall_rx_congested = FALSE;
+            llcp_cb.overall_rx_congested = false;
 
             for (idx = 0; idx < LLCP_MAX_DATA_LINK; idx++)
             {
                 /* set flag to clear local busy status on data link connections */
                 if (  (llcp_cb.dlcb[idx].state == LLCP_DLC_STATE_CONNECTED)
-                    &&(llcp_cb.dlcb[idx].is_rx_congested == FALSE)  )
+                    &&(llcp_cb.dlcb[idx].is_rx_congested == false)  )
                 {
                     llcp_cb.dlcb[idx].flags |= LLCP_DATA_LINK_FLAG_PENDING_RR_RNR;
                 }
@@ -243,13 +243,13 @@ void llcp_util_check_rx_congested_status (void)
                                   llcp_cb.total_rx_ui_pdu, llcp_cb.total_rx_i_pdu,
                                   llcp_cb.overall_rx_congest_start);
 
-            llcp_cb.overall_rx_congested = TRUE;
+            llcp_cb.overall_rx_congested = true;
 
             /* rx link congestion is started, send RNR to remote end point */
             for (idx = 0; idx < LLCP_MAX_DATA_LINK; idx++)
             {
                 if (  (llcp_cb.dlcb[idx].state == LLCP_DLC_STATE_CONNECTED)
-                    &&(llcp_cb.dlcb[idx].is_rx_congested == FALSE)  )
+                    &&(llcp_cb.dlcb[idx].is_rx_congested == false)  )
                 {
                     llcp_cb.dlcb[idx].flags |= LLCP_DATA_LINK_FLAG_PENDING_RR_RNR;
                 }
@@ -290,7 +290,7 @@ tLLCP_STATUS llcp_util_send_ui (uint8_t ssap, uint8_t dsap, tLLCP_APP_CB *p_app_
     {
         /* set congested here so overall congestion check routine will not report event again, */
         /* or notify uncongestion later                                                        */
-        p_app_cb->is_ui_tx_congested = TRUE;
+        p_app_cb->is_ui_tx_congested = true;
 
         LLCP_TRACE_WARNING2 ("Logical link (SAP=0x%X) congested: ui_xmit_q.count=%d",
                               ssap, p_app_cb->ui_xmit_q.count);
