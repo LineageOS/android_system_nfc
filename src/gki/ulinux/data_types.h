@@ -18,6 +18,9 @@
 #ifndef DATA_TYPES_H
 #define DATA_TYPES_H
 
+#include <stdint.h>
+#include <stdbool.h>
+
 #ifndef NULL
 #define NULL     0
 #endif
@@ -26,15 +29,6 @@
 #define FALSE  0
 #endif
 
-typedef unsigned char   uint8_t;
-typedef unsigned short  uint16_t;
-typedef unsigned long   uint32_t;
-typedef unsigned long long int uint64_t;
-typedef signed   long   int32_t;
-typedef signed   char   int8_t;
-typedef signed   short  int16_t;
-typedef unsigned char   bool   ;
-typedef uint32_t        UINTPTR;
 typedef uint32_t        TIME_STAMP;
 
 #ifndef TRUE
