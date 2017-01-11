@@ -171,7 +171,7 @@ void nfc_hal_main_close (void)
 ** Returns          nothing
 **
 *******************************************************************************/
-void nfa_hal_pre_discover_done_cback (tNFC_HAL_NCI_EVT event, UINT16 data_len, UINT8 *p_data)
+void nfa_hal_pre_discover_done_cback (tNFC_HAL_NCI_EVT event, uint16_t data_len, uint8_t *p_data)
 {
     NFC_HAL_SET_INIT_STATE(NFC_HAL_INIT_STATE_IDLE);
     nfc_hal_main_stop_quick_timer (&nfc_hal_cb.ncit_cb.nci_wait_rsp_timer);
@@ -265,7 +265,7 @@ static void nfc_hal_main_userial_cback (tUSERIAL_PORT port, tUSERIAL_EVT evt, tU
 ** Returns          nothing
 **
 *******************************************************************************/
-void nfc_hal_main_exit_op_done (tNFC_HAL_NCI_EVT event, UINT16 data_len, UINT8 *p_data)
+void nfc_hal_main_exit_op_done (tNFC_HAL_NCI_EVT event, uint16_t data_len, uint8_t *p_data)
 {
     nfc_hal_main_close ();
 }
@@ -384,7 +384,7 @@ static void nfc_hal_main_handle_terminate (void)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_hal_main_start_quick_timer (TIMER_LIST_ENT *p_tle, UINT16 type, UINT32 timeout)
+void nfc_hal_main_start_quick_timer (TIMER_LIST_ENT *p_tle, uint16_t type, uint32_t timeout)
 {
     NFC_HDR *p_msg;
 
@@ -485,7 +485,7 @@ void nfc_hal_send_nci_msg_to_nfc_task (NFC_HDR * p_msg)
     GKI_send_msg (NFC_TASK, NFC_MBOX_ID, p_msg);
 #else
     /* Send NCI message to the stack */
-    nfc_hal_cb.p_data_cback (p_msg->len, (UINT8 *) ((p_msg + 1)
+    nfc_hal_cb.p_data_cback (p_msg->len, (uint8_t *) ((p_msg + 1)
                                  + p_msg->offset));
     GKI_freebuf(p_msg);
 #endif
@@ -501,10 +501,10 @@ void nfc_hal_send_nci_msg_to_nfc_task (NFC_HDR * p_msg)
 ** Returns          void
 **
 *******************************************************************************/
-static void nfc_hal_send_credit_ntf_for_cid (UINT8 cid)
+static void nfc_hal_send_credit_ntf_for_cid (uint8_t cid)
 {
     NFC_HDR  *p_msg;
-    UINT8    *p, *ps;
+    uint8_t  *p, *ps;
 
     /* Start of new message. Allocate a buffer for message */
     if ((p_msg = (NFC_HDR *) GKI_getpoolbuf (NFC_HAL_NCI_POOL_ID)) != NULL)
@@ -515,7 +515,7 @@ static void nfc_hal_send_credit_ntf_for_cid (UINT8 cid)
         p_msg->offset = 0;
         p_msg->layer_specific = 0;
 
-        p = (UINT8 *) (p_msg + 1) + p_msg->offset;
+        p = (uint8_t *) (p_msg + 1) + p_msg->offset;
         ps = p;
         NCI_MSG_BLD_HDR0(p, NCI_MT_NTF, NCI_GID_CORE);
         NCI_MSG_BLD_HDR1(p, NCI_MSG_CORE_CONN_CREDITS);
@@ -528,7 +528,7 @@ static void nfc_hal_send_credit_ntf_for_cid (UINT8 cid)
         /* Number of credits */
         *p = 0x01;
 #ifdef DISP_NCI
-        DISP_NCI (ps, (UINT16) p_msg->len, TRUE);
+        DISP_NCI (ps, (uint16_t) p_msg->len, TRUE);
 #endif
         nfc_hal_send_nci_msg_to_nfc_task (p_msg);
     }
@@ -550,13 +550,13 @@ static void nfc_hal_send_credit_ntf_for_cid (UINT8 cid)
 static void nfc_hal_main_send_message (NFC_HDR *p_msg)
 {
 #if (defined(NFC_HAL_HCI_INCLUDED) && (NFC_HAL_HCI_INCLUDED == TRUE))
-    UINT8   cid, pbf;
-    UINT16  data_len;
+    uint8_t cid, pbf;
+    uint16_t  data_len;
 #endif
-    UINT8   *ps, *pp;
-    UINT16  len = p_msg->len;
+    uint8_t *ps, *pp;
+    uint16_t  len = p_msg->len;
 #ifdef DISP_NCI
-    UINT8   delta;
+    uint8_t delta;
 #endif
 
     HAL_TRACE_DEBUG1 ("nfc_hal_main_send_message() ls:0x%x", p_msg->layer_specific);
@@ -574,11 +574,11 @@ static void nfc_hal_main_send_message (NFC_HDR *p_msg)
         nfc_hal_nci_add_nfc_pkt_type (p_msg);
 
         /* send this packet to transport */
-        ps = (UINT8 *) (p_msg + 1) + p_msg->offset;
+        ps = (uint8_t *) (p_msg + 1) + p_msg->offset;
         pp = ps + 1;
 #ifdef DISP_NCI
         delta = p_msg->len - len;
-        DISP_NCI (ps + delta, (UINT16) (p_msg->len - delta), FALSE);
+        DISP_NCI (ps + delta, (uint16_t) (p_msg->len - delta), FALSE);
 #endif
 
 #if (defined(NFC_HAL_HCI_INCLUDED) && (NFC_HAL_HCI_INCLUDED == TRUE))
@@ -621,14 +621,14 @@ static void nfc_hal_main_send_message (NFC_HDR *p_msg)
 ** Returns          0
 **
 *******************************************************************************/
-UINT32 nfc_hal_main_task (UINT32 param)
+uint32_t nfc_hal_main_task (uint32_t param)
 {
-    UINT16   event;
-    UINT8    byte;
-    UINT8    num_interfaces;
-    UINT8    *p;
+    uint16_t event;
+    uint8_t  byte;
+    uint8_t  num_interfaces;
+    uint8_t  *p;
     NFC_HDR  *p_msg;
-    BOOLEAN  free_msg;
+    bool     free_msg;
 
     HAL_TRACE_DEBUG0 ("NFC_HAL_TASK started");
 
@@ -688,7 +688,7 @@ UINT32 nfc_hal_main_task (UINT32 param)
                     NFC_HAL_SET_INIT_STATE (NFC_HAL_INIT_STATE_W4_POST_INIT_DONE);
 
                     /* set NCI Control packet size from CORE_INIT_RSP */
-                    p = (UINT8 *) (p_msg + 1) + p_msg->offset + NCI_MSG_HDR_SIZE;
+                    p = (uint8_t *) (p_msg + 1) + p_msg->offset + NCI_MSG_HDR_SIZE;
                     p += 5;
                     STREAM_TO_UINT8 (num_interfaces, p);
                     p += (num_interfaces + 3);
@@ -783,7 +783,7 @@ UINT32 nfc_hal_main_task (UINT32 param)
 ** Returns          The new or current trace level
 **
 *******************************************************************************/
-UINT8 HAL_NfcSetTraceLevel (UINT8 new_level)
+uint8_t HAL_NfcSetTraceLevel (uint8_t new_level)
 {
     if (new_level != 0xFF)
         nfc_hal_cb.trace_level = new_level;

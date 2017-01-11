@@ -34,9 +34,9 @@
 typedef struct
 {
     TIMER_LIST_Q        timer_queue;        /* GKI timer queue */
-    INT32               period;             /* Timer period in milliseconds */
-    UINT32              last_gki_ticks;     /* GKI ticks since last time update called */
-    UINT8               timer_id;           /* GKI timer id */
+    int32_t             period;             /* Timer period in milliseconds */
+    uint32_t            last_gki_ticks;     /* GKI ticks since last time update called */
+    uint8_t             timer_id;           /* GKI timer id */
 } tPTIM_CB;
 
 #ifdef __cplusplus
@@ -57,7 +57,7 @@ extern "C"
 ** Returns          void
 **
 *******************************************************************************/
-extern void nfa_sys_ptim_init (tPTIM_CB *p_cb, UINT16 period, UINT8 timer_id);
+extern void nfa_sys_ptim_init (tPTIM_CB *p_cb, uint16_t period, uint8_t timer_id);
 
 /*******************************************************************************
 **
@@ -80,7 +80,7 @@ extern void nfa_sys_ptim_timer_update (tPTIM_CB *p_cb);
 ** Returns          void
 **
 *******************************************************************************/
-extern void nfa_sys_ptim_start_timer (tPTIM_CB *p_cb, TIMER_LIST_ENT *p_tle, UINT16 type, INT32 timeout);
+extern void nfa_sys_ptim_start_timer (tPTIM_CB *p_cb, TIMER_LIST_ENT *p_tle, uint16_t type, int32_t timeout);
 
 /*******************************************************************************
 **

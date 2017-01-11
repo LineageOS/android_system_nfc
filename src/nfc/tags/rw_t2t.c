@@ -36,16 +36,16 @@
 #include "gki.h"
 
 /* Static local functions */
-static void rw_t2t_proc_data (UINT8 conn_id, tNFC_DATA_CEVT *p_data);
-static tNFC_STATUS rw_t2t_send_cmd (UINT8 opcode, UINT8 *p_dat);
+static void rw_t2t_proc_data (uint8_t conn_id, tNFC_DATA_CEVT *p_data);
+static tNFC_STATUS rw_t2t_send_cmd (uint8_t opcode, uint8_t *p_dat);
 static void rw_t2t_process_error (void);
 static void rw_t2t_process_frame_error (void);
 static void rw_t2t_handle_presence_check_rsp (tNFC_STATUS status);
 static void rw_t2t_resume_op (void);
 
 #if (BT_TRACE_VERBOSE == TRUE)
-static char *rw_t2t_get_state_name (UINT8 state);
-static char *rw_t2t_get_substate_name (UINT8 substate);
+static char *rw_t2t_get_state_name (uint8_t state);
+static char *rw_t2t_get_substate_name (uint8_t substate);
 #endif
 
 /*******************************************************************************
@@ -57,19 +57,19 @@ static char *rw_t2t_get_substate_name (UINT8 substate);
 ** Returns          none
 **
 *******************************************************************************/
-static void rw_t2t_proc_data (UINT8 conn_id, tNFC_DATA_CEVT *p_data)
+static void rw_t2t_proc_data (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
 {
     tRW_EVENT               rw_event    = RW_RAW_FRAME_EVT;
     tRW_T2T_CB              *p_t2t      = &rw_cb.tcb.t2t;
     BT_HDR                  *p_pkt      = p_data->p_data;
-    BOOLEAN                 b_notify    = TRUE;
-    BOOLEAN                 b_release   = TRUE;
-    UINT8                   *p;
+    bool                    b_notify    = TRUE;
+    bool                    b_release   = TRUE;
+    uint8_t                 *p;
     tRW_READ_DATA           evt_data = {0, };
     tT2T_CMD_RSP_INFO       *p_cmd_rsp_info = (tT2T_CMD_RSP_INFO *) rw_cb.tcb.t2t.p_cmd_rsp_info;
     tRW_DETECT_NDEF_DATA    ndef_data;
 #if (BT_TRACE_VERBOSE == TRUE)
-    UINT8                   begin_state     = p_t2t->state;
+    uint8_t                 begin_state     = p_t2t->state;
 #endif
 
     if (  (p_t2t->state == RW_T2T_STATE_IDLE)
@@ -117,7 +117,7 @@ static void rw_t2t_proc_data (UINT8 conn_id, tNFC_DATA_CEVT *p_data)
     rw_cb.cur_retry = 0;
 
     /* Assume the data is just the response byte sequence */
-    p = (UINT8 *) (p_pkt + 1) + p_pkt->offset;
+    p = (uint8_t *) (p_pkt + 1) + p_pkt->offset;
 
 
     RW_TRACE_EVENT4 ("rw_t2t_proc_data State: %u  conn_id: %u  len: %u  data[0]: 0x%02x",
@@ -253,7 +253,7 @@ static void rw_t2t_proc_data (UINT8 conn_id, tNFC_DATA_CEVT *p_data)
 ** Returns          none
 **
 *******************************************************************************/
-void rw_t2t_conn_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
+void rw_t2t_conn_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
 {
     tRW_T2T_CB  *p_t2t  = &rw_cb.tcb.t2t;
     tRW_READ_DATA       evt_data;
@@ -323,7 +323,7 @@ void rw_t2t_conn_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
             rw_main_update_trans_error_stats ();
 #endif  /* RW_STATS_INCLUDED */
             if (event == NFC_ERROR_CEVT)
-                evt_data.status = (tNFC_STATUS) (*(UINT8*) p_data);
+                evt_data.status = (tNFC_STATUS) (*(uint8_t*) p_data);
             else if (p_data)
                 evt_data.status = p_data->status;
             else
@@ -373,13 +373,13 @@ void rw_t2t_conn_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
 **                  otherwise, error status
 **
 *******************************************************************************/
-tNFC_STATUS rw_t2t_send_cmd (UINT8 opcode, UINT8 *p_dat)
+tNFC_STATUS rw_t2t_send_cmd (uint8_t opcode, uint8_t *p_dat)
 {
     tNFC_STATUS             status  = NFC_STATUS_FAILED;
     tRW_T2T_CB              *p_t2t  = &rw_cb.tcb.t2t;
     const tT2T_CMD_RSP_INFO *p_cmd_rsp_info = t2t_cmd_to_rsp_info (opcode);
     BT_HDR                  *p_data;
-    UINT8                   *p;
+    uint8_t                 *p;
 
     if (p_cmd_rsp_info)
     {
@@ -389,7 +389,7 @@ tNFC_STATUS rw_t2t_send_cmd (UINT8 opcode, UINT8 *p_dat)
         {
             p_t2t->p_cmd_rsp_info   = (tT2T_CMD_RSP_INFO *) p_cmd_rsp_info;
             p_data->offset  = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
-            p               = (UINT8 *) (p_data + 1) + p_data->offset;
+            p               = (uint8_t *) (p_data + 1) + p_data->offset;
 
             UINT8_TO_STREAM (p, opcode);
 
@@ -648,13 +648,13 @@ static void rw_t2t_resume_op (void)
     BT_HDR              *p_cmd_buf;
     tRW_EVENT           event;
     const tT2T_CMD_RSP_INFO   *p_cmd_rsp_info = (tT2T_CMD_RSP_INFO *) rw_cb.tcb.t2t.p_cmd_rsp_info;
-    UINT8               *p;
+    uint8_t             *p;
 
     /* Move back to the substate where we were before changing sector */
     p_t2t->substate = p_t2t->prev_substate;
 
-    p              = (UINT8 *) (p_t2t->p_sec_cmd_buf + 1) + p_t2t->p_sec_cmd_buf->offset;
-    p_cmd_rsp_info = t2t_cmd_to_rsp_info ((UINT8) *p);
+    p              = (uint8_t *) (p_t2t->p_sec_cmd_buf + 1) + p_t2t->p_sec_cmd_buf->offset;
+    p_cmd_rsp_info = t2t_cmd_to_rsp_info ((uint8_t) *p);
     p_t2t->p_cmd_rsp_info   = (tT2T_CMD_RSP_INFO *) p_cmd_rsp_info;
 
     /* allocate a new buffer for message */
@@ -695,11 +695,11 @@ static void rw_t2t_resume_op (void)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS rw_t2t_sector_change (UINT8 sector)
+tNFC_STATUS rw_t2t_sector_change (uint8_t sector)
 {
     tNFC_STATUS status;
     BT_HDR      *p_data;
-    UINT8       *p;
+    uint8_t     *p;
     tRW_T2T_CB  *p_t2t = &rw_cb.tcb.t2t;
 
     if ((p_data = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) == NULL)
@@ -709,7 +709,7 @@ tNFC_STATUS rw_t2t_sector_change (UINT8 sector)
     }
 
     p_data->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
-    p = (UINT8 *) (p_data + 1) + p_data->offset;
+    p = (uint8_t *) (p_data + 1) + p_data->offset;
 
     UINT8_TO_BE_STREAM (p, sector);
     UINT8_TO_BE_STREAM (p, 0x00);
@@ -749,13 +749,13 @@ tNFC_STATUS rw_t2t_sector_change (UINT8 sector)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS rw_t2t_read (UINT16 block)
+tNFC_STATUS rw_t2t_read (uint16_t block)
 {
     tNFC_STATUS status;
-    UINT8       *p;
+    uint8_t     *p;
     tRW_T2T_CB  *p_t2t = &rw_cb.tcb.t2t;
-    UINT8       sector_byte2[1];
-    UINT8       read_cmd[1];
+    uint8_t     sector_byte2[1];
+    uint8_t     read_cmd[1];
 
 
     read_cmd[0] = block % T2T_BLOCKS_PER_SECTOR;
@@ -766,10 +766,10 @@ tNFC_STATUS rw_t2t_read (UINT16 block)
         if ((status = rw_t2t_send_cmd (T2T_CMD_SEC_SEL,sector_byte2)) == NFC_STATUS_OK)
         {
             /* Prepare command that needs to be sent after sector change op is completed */
-            p_t2t->select_sector         = (UINT8) (block/T2T_BLOCKS_PER_SECTOR);
+            p_t2t->select_sector         = (uint8_t) (block/T2T_BLOCKS_PER_SECTOR);
             p_t2t->p_sec_cmd_buf->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
 
-            p = (UINT8 *) (p_t2t->p_sec_cmd_buf + 1) + p_t2t->p_sec_cmd_buf->offset;
+            p = (uint8_t *) (p_t2t->p_sec_cmd_buf + 1) + p_t2t->p_sec_cmd_buf->offset;
             UINT8_TO_BE_STREAM (p, T2T_CMD_READ);
             UINT8_TO_BE_STREAM (p, read_cmd[0]);
             p_t2t->p_sec_cmd_buf->len = 2;
@@ -784,7 +784,7 @@ tNFC_STATUS rw_t2t_read (UINT16 block)
     }
 
     /* Send Read command as sector change is not needed */
-    if ((status = rw_t2t_send_cmd (T2T_CMD_READ, (UINT8 *) read_cmd)) == NFC_STATUS_OK)
+    if ((status = rw_t2t_send_cmd (T2T_CMD_READ, (uint8_t *) read_cmd)) == NFC_STATUS_OK)
     {
         p_t2t->block_read = block;
         RW_TRACE_EVENT1 ("rw_t2t_read Sent Command for Block: %u", block);
@@ -806,16 +806,16 @@ tNFC_STATUS rw_t2t_read (UINT16 block)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS rw_t2t_write (UINT16 block, UINT8 *p_write_data)
+tNFC_STATUS rw_t2t_write (uint16_t block, uint8_t *p_write_data)
 {
     tNFC_STATUS status;
-    UINT8       *p;
+    uint8_t     *p;
     tRW_T2T_CB  *p_t2t = &rw_cb.tcb.t2t;
-    UINT8       write_cmd[T2T_WRITE_DATA_LEN + 1];
-    UINT8       sector_byte2[1];
+    uint8_t     write_cmd[T2T_WRITE_DATA_LEN + 1];
+    uint8_t     sector_byte2[1];
 
     p_t2t->block_written = block;
-    write_cmd[0] = (UINT8) (block%T2T_BLOCKS_PER_SECTOR);
+    write_cmd[0] = (uint8_t) (block%T2T_BLOCKS_PER_SECTOR);
     memcpy (&write_cmd[1], p_write_data, T2T_WRITE_DATA_LEN);
 
     if (p_t2t->sector != block/T2T_BLOCKS_PER_SECTOR)
@@ -825,9 +825,9 @@ tNFC_STATUS rw_t2t_write (UINT16 block, UINT8 *p_write_data)
         if ((status = rw_t2t_send_cmd (T2T_CMD_SEC_SEL, sector_byte2)) == NFC_STATUS_OK)
         {
             /* Prepare command that needs to be sent after sector change op is completed */
-            p_t2t->select_sector         = (UINT8) (block/T2T_BLOCKS_PER_SECTOR);
+            p_t2t->select_sector         = (uint8_t) (block/T2T_BLOCKS_PER_SECTOR);
             p_t2t->p_sec_cmd_buf->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
-            p = (UINT8 *) (p_t2t->p_sec_cmd_buf + 1) + p_t2t->p_sec_cmd_buf->offset;
+            p = (uint8_t *) (p_t2t->p_sec_cmd_buf + 1) + p_t2t->p_sec_cmd_buf->offset;
             UINT8_TO_BE_STREAM (p, T2T_CMD_WRITE);
             memcpy (p, write_cmd, T2T_WRITE_DATA_LEN + 1);
             p_t2t->p_sec_cmd_buf->len   = 2 + T2T_WRITE_DATA_LEN;
@@ -939,7 +939,7 @@ tNFC_STATUS RW_T2tPresenceCheck (void)
     tNFC_STATUS retval = NFC_STATUS_OK;
     tRW_DATA evt_data;
     tRW_CB *p_rw_cb = &rw_cb;
-    UINT8 sector_blk = 0;           /* block 0 of current sector */
+    uint8_t sector_blk = 0;           /* block 0 of current sector */
 
     RW_TRACE_API0 ("RW_T2tPresenceCheck");
 
@@ -983,7 +983,7 @@ tNFC_STATUS RW_T2tPresenceCheck (void)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS RW_T2tRead (UINT16 block)
+tNFC_STATUS RW_T2tRead (uint16_t block)
 {
     tRW_T2T_CB  *p_t2t = &rw_cb.tcb.t2t;
     tNFC_STATUS status;
@@ -1017,7 +1017,7 @@ tNFC_STATUS RW_T2tRead (UINT16 block)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS RW_T2tWrite (UINT16 block, UINT8 *p_write_data)
+tNFC_STATUS RW_T2tWrite (uint16_t block, uint8_t *p_write_data)
 {
     tRW_T2T_CB  *p_t2t = &rw_cb.tcb.t2t;
     tNFC_STATUS status;
@@ -1058,11 +1058,11 @@ tNFC_STATUS RW_T2tWrite (UINT16 block, UINT8 *p_write_data)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS RW_T2tSectorSelect (UINT8 sector)
+tNFC_STATUS RW_T2tSectorSelect (uint8_t sector)
 {
     tNFC_STATUS status;
     tRW_T2T_CB  *p_t2t       = &rw_cb.tcb.t2t;
-    UINT8       sector_byte2[1];
+    uint8_t     sector_byte2[1];
 
     if (p_t2t->state != RW_T2T_STATE_IDLE)
     {
@@ -1102,7 +1102,7 @@ tNFC_STATUS RW_T2tSectorSelect (UINT8 sector)
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-static char *rw_t2t_get_state_name (UINT8 state)
+static char *rw_t2t_get_state_name (uint8_t state)
 {
     switch (state)
     {
@@ -1142,7 +1142,7 @@ static char *rw_t2t_get_state_name (UINT8 state)
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-static char *rw_t2t_get_substate_name (UINT8 substate)
+static char *rw_t2t_get_substate_name (uint8_t substate)
 {
     switch (substate)
     {

@@ -48,7 +48,7 @@ tNFA_DM_CB  nfa_dm_cb = {0, };
 #define NFA_DM_NUM_ACTIONS  (NFA_DM_MAX_EVT & 0x00ff)
 
 /* type for action functions */
-typedef BOOLEAN (*tNFA_DM_ACTION) (tNFA_DM_MSG *p_data);
+typedef bool    (*tNFA_DM_ACTION) (tNFA_DM_MSG *p_data);
 
 /* action function list */
 const tNFA_DM_ACTION nfa_dm_action[] =
@@ -86,7 +86,7 @@ const tNFA_DM_ACTION nfa_dm_action[] =
 ** Local function prototypes
 *****************************************************************************/
 #if (BT_TRACE_VERBOSE == TRUE)
-static char *nfa_dm_evt_2_str (UINT16 event);
+static char *nfa_dm_evt_2_str (uint16_t event);
 #endif
 /*******************************************************************************
 **
@@ -119,10 +119,10 @@ void nfa_dm_init (void)
 ** Returns          void
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_evt_hdlr (BT_HDR *p_msg)
+bool    nfa_dm_evt_hdlr (BT_HDR *p_msg)
 {
-    BOOLEAN freebuf = TRUE;
-    UINT16  event = p_msg->event & 0x00ff;
+    bool    freebuf = TRUE;
+    uint16_t  event = p_msg->event & 0x00ff;
 
 #if (BT_TRACE_VERBOSE == TRUE)
     NFA_TRACE_EVENT2 ("nfa_dm_evt_hdlr event: %s (0x%02x)", nfa_dm_evt_2_str (event), event);
@@ -183,7 +183,7 @@ void nfa_dm_sys_disable (void)
 ** Returns          TRUE if protocol is supported by NFA
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_is_protocol_supported (tNFC_PROTOCOL protocol, UINT8 sel_res)
+bool    nfa_dm_is_protocol_supported (tNFC_PROTOCOL protocol, uint8_t sel_res)
 {
     return (  (protocol == NFC_PROTOCOL_T1T)
             ||((protocol == NFC_PROTOCOL_T2T) && (sel_res == NFC_SEL_RES_NFC_FORUM_T2T))
@@ -202,7 +202,7 @@ BOOLEAN nfa_dm_is_protocol_supported (tNFC_PROTOCOL protocol, UINT8 sel_res)
 ** Returns          TRUE, if NFA_DM_ENABLE_EVT is reported and it is not restoring NFCC
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_is_active (void)
+bool    nfa_dm_is_active (void)
 {
     NFA_TRACE_DEBUG1 ("nfa_dm_is_active () flags:0x%x", nfa_dm_cb.flags);
     if (  (nfa_dm_cb.flags  & NFA_DM_FLAGS_DM_IS_ACTIVE)
@@ -223,13 +223,13 @@ BOOLEAN nfa_dm_is_active (void)
 ** Returns          tNFA_STATUS
 **
 *******************************************************************************/
-tNFA_STATUS nfa_dm_check_set_config (UINT8 tlv_list_len, UINT8 *p_tlv_list, BOOLEAN app_init)
+tNFA_STATUS nfa_dm_check_set_config (uint8_t tlv_list_len, uint8_t *p_tlv_list, bool    app_init)
 {
-    UINT8 type, len, *p_value, *p_stored, max_len;
-    UINT8 xx = 0, updated_len = 0, *p_cur_len;
-    BOOLEAN update;
+    uint8_t type, len, *p_value, *p_stored, max_len;
+    uint8_t xx = 0, updated_len = 0, *p_cur_len;
+    bool    update;
     tNFC_STATUS nfc_status;
-    UINT32 cur_bit;
+    uint32_t cur_bit;
 
     NFA_TRACE_DEBUG0 ("nfa_dm_check_set_config ()");
 
@@ -426,7 +426,7 @@ tNFA_STATUS nfa_dm_check_set_config (UINT8 tlv_list_len, UINT8 *p_tlv_list, BOOL
             /* Keep track of whether we will need to notify NFA_DM_SET_CONFIG_EVT on NFC_SET_CONFIG_REVT */
 
             /* Get the next available bit offset for this setconfig (based on how many SetConfigs are outstanding) */
-            cur_bit = (UINT32) (1 << nfa_dm_cb.setcfg_pending_num);
+            cur_bit = (uint32_t) (1 << nfa_dm_cb.setcfg_pending_num);
 
             /* If setconfig is due to NFA_SetConfig: then set the bit (NFA_DM_SET_CONFIG_EVT needed on NFC_SET_CONFIG_REVT) */
             if (app_init)
@@ -459,7 +459,7 @@ tNFA_STATUS nfa_dm_check_set_config (UINT8 tlv_list_len, UINT8 *p_tlv_list, BOOL
 ** Description      convert nfc revt to string
 **
 *******************************************************************************/
-static char *nfa_dm_evt_2_str (UINT16 event)
+static char *nfa_dm_evt_2_str (uint16_t event)
 {
     switch (NFA_SYS_EVT_START (NFA_ID_DM) | event)
     {

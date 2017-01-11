@@ -48,7 +48,7 @@ using android::hardware::hidl_vec;
 extern "C" void GKI_shutdown();
 extern void resetConfig();
 extern "C" void verify_stack_non_volatile_store ();
-extern "C" void delete_stack_non_volatile_store (BOOLEAN forceDelete);
+extern "C" void delete_stack_non_volatile_store (bool    forceDelete);
 
 NfcAdaptation* NfcAdaptation::mpInstance = NULL;
 ThreadMutex NfcAdaptation::sLock;
@@ -59,22 +59,22 @@ ThreadCondVar NfcAdaptation::mHalCloseCompletedEvent;
 sp<INfc> NfcAdaptation::mHal;
 INfcClientCallback* NfcAdaptation::mCallback;
 
-UINT32 ScrProtocolTraceFlag = SCR_PROTO_TRACE_ALL; //0x017F00;
-UINT8 appl_trace_level = 0xff;
+uint32_t ScrProtocolTraceFlag = SCR_PROTO_TRACE_ALL; //0x017F00;
+uint8_t appl_trace_level = 0xff;
 char bcm_nfc_location[120];
 char nci_hal_module[64];
 
-static UINT8 nfa_dm_cfg[sizeof ( tNFA_DM_CFG ) ];
-static UINT8 nfa_proprietary_cfg[sizeof ( tNFA_PROPRIETARY_CFG )];
+static uint8_t nfa_dm_cfg[sizeof ( tNFA_DM_CFG ) ];
+static uint8_t nfa_proprietary_cfg[sizeof ( tNFA_PROPRIETARY_CFG )];
 extern tNFA_DM_CFG *p_nfa_dm_cfg;
 extern tNFA_PROPRIETARY_CFG *p_nfa_proprietary_cfg;
-extern UINT8 nfa_ee_max_ee_cfg;
-extern const UINT8  nfca_version_string [];
-extern const UINT8  nfa_version_string [];
-static UINT8 deviceHostWhiteList [NFA_HCI_MAX_HOST_IN_NETWORK];
+extern uint8_t nfa_ee_max_ee_cfg;
+extern const uint8_t  nfca_version_string [];
+extern const uint8_t  nfa_version_string [];
+static uint8_t deviceHostWhiteList [NFA_HCI_MAX_HOST_IN_NETWORK];
 static tNFA_HCI_CFG jni_nfa_hci_cfg;
 extern tNFA_HCI_CFG *p_nfa_hci_cfg;
-extern BOOLEAN nfa_poll_bail_out_mode;
+extern bool    nfa_poll_bail_out_mode;
 
 class NfcClientCallback : public INfcClientCallback {
   public:
@@ -86,7 +86,7 @@ class NfcClientCallback : public INfcClientCallback {
     Return<void> sendEvent(
             ::android::hardware::nfc::V1_0::NfcEvent event,
             ::android::hardware::nfc::V1_0::NfcStatus event_status) override {
-      mEventCallback ((UINT8)event, (tHAL_NFC_STATUS) event_status);
+      mEventCallback ((uint8_t)event, (tHAL_NFC_STATUS) event_status);
       return Void();
     };
     Return<void> sendData(const ::android::hardware::nfc::V1_0::NfcData &data ) override {
@@ -202,7 +202,7 @@ void NfcAdaptation::Initialize ()
     if (num)
     {
         memmove (&jni_nfa_hci_cfg, p_nfa_hci_cfg, sizeof(jni_nfa_hci_cfg));
-        jni_nfa_hci_cfg.num_whitelist_host = (UINT8) num; //number of HCI host ID's in the whitelist
+        jni_nfa_hci_cfg.num_whitelist_host = (uint8_t) num; //number of HCI host ID's in the whitelist
         jni_nfa_hci_cfg.p_whitelist = deviceHostWhiteList; //array of HCI host ID's
         p_nfa_hci_cfg = &jni_nfa_hci_cfg;
     }
@@ -212,7 +212,7 @@ void NfcAdaptation::Initialize ()
     verify_stack_non_volatile_store ();
     if ( GetNumValue ( NAME_PRESERVE_STORAGE, (char*)&num, sizeof ( num ) ) &&
             (num == 1) )
-        ALOGD ("%s: preserve stack NV store", __FUNCTION__);
+        ALOGD ("%s: preserve stack NV store", __func__);
     else
     {
         delete_stack_non_volatile_store (FALSE);
@@ -220,10 +220,10 @@ void NfcAdaptation::Initialize ()
 
     GKI_init ();
     GKI_enable ();
-    GKI_create_task ((TASKPTR)NFCA_TASK, BTU_TASK, (INT8*)"NFCA_TASK", 0, 0, (pthread_cond_t*)NULL, NULL);
+    GKI_create_task ((TASKPTR)NFCA_TASK, BTU_TASK, (int8_t*)"NFCA_TASK", 0, 0, (pthread_cond_t*)NULL, NULL);
     {
         AutoThreadMutex guard(mCondVar);
-        GKI_create_task ((TASKPTR)Thread, MMI_TASK, (INT8*)"NFCA_THREAD", 0, 0, (pthread_cond_t*)NULL, NULL);
+        GKI_create_task ((TASKPTR)Thread, MMI_TASK, (int8_t*)"NFCA_THREAD", 0, 0, (pthread_cond_t*)NULL, NULL);
         mCondVar.wait();
     }
 
@@ -282,7 +282,7 @@ void NfcAdaptation::signal ()
 ** Returns:     none
 **
 *******************************************************************************/
-UINT32 NfcAdaptation::NFCA_TASK (UINT32 arg)
+uint32_t NfcAdaptation::NFCA_TASK (uint32_t arg)
 {
     const char* func = "NfcAdaptation::NFCA_TASK";
     ALOGD ("%s: enter", func);
@@ -300,7 +300,7 @@ UINT32 NfcAdaptation::NFCA_TASK (UINT32 arg)
 ** Returns:     none
 **
 *******************************************************************************/
-UINT32 NfcAdaptation::Thread (UINT32 arg)
+uint32_t NfcAdaptation::Thread (uint32_t arg)
 {
     const char* func = "NfcAdaptation::Thread";
     ALOGD ("%s: enter", func);
@@ -308,7 +308,7 @@ UINT32 NfcAdaptation::Thread (UINT32 arg)
     {
         ThreadCondVar    CondVar;
         AutoThreadMutex  guard(CondVar);
-        GKI_create_task ((TASKPTR)nfc_task, NFC_TASK, (INT8*)"NFC_TASK", 0, 0, (pthread_cond_t*)CondVar, (pthread_mutex_t*)CondVar);
+        GKI_create_task ((TASKPTR)nfc_task, NFC_TASK, (int8_t*)"NFC_TASK", 0, 0, (pthread_cond_t*)CondVar, (pthread_mutex_t*)CondVar);
         CondVar.wait();
     }
 
@@ -481,7 +481,7 @@ void NfcAdaptation::HalDeviceContextDataCallback (uint16_t data_len, uint8_t* p_
 ** Returns:     None.
 **
 *******************************************************************************/
-void NfcAdaptation::HalWrite (UINT16 data_len, UINT8* p_data)
+void NfcAdaptation::HalWrite (uint16_t data_len, uint8_t* p_data)
 {
     const char* func = "NfcAdaptation::HalWrite";
     ALOGD ("%s", func);
@@ -499,7 +499,7 @@ void NfcAdaptation::HalWrite (UINT16 data_len, UINT8* p_data)
 ** Returns:     None.
 **
 *******************************************************************************/
-void NfcAdaptation::HalCoreInitialized (UINT16 data_len, UINT8* p_core_init_rsp_params)
+void NfcAdaptation::HalCoreInitialized (uint16_t data_len, uint8_t* p_core_init_rsp_params)
 {
     const char* func = "NfcAdaptation::HalCoreInitialized";
     ALOGD ("%s", func);
@@ -522,11 +522,11 @@ void NfcAdaptation::HalCoreInitialized (UINT16 data_len, UINT8* p_core_init_rsp_
 **                  FALSE if no vendor-specific pre-discovery actions are needed.
 **
 *******************************************************************************/
-BOOLEAN NfcAdaptation::HalPrediscover ()
+bool    NfcAdaptation::HalPrediscover ()
 {
     const char* func = "NfcAdaptation::HalPrediscover";
     ALOGD ("%s", func);
-    BOOLEAN retval = FALSE;
+    bool    retval = FALSE;
     mHal->prediscover();
     return retval;
 }
@@ -576,10 +576,10 @@ void NfcAdaptation::HalPowerCycle ()
 ** Returns:     None.
 **
 *******************************************************************************/
-UINT8 NfcAdaptation::HalGetMaxNfcee()
+uint8_t NfcAdaptation::HalGetMaxNfcee()
 {
     const char* func = "NfcAdaptation::HalPowerCycle";
-    UINT8 maxNfcee = 0;
+    uint8_t maxNfcee = 0;
     ALOGD ("%s", func);
 
     return nfa_ee_max_ee_cfg;

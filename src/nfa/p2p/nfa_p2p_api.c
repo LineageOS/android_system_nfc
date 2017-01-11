@@ -57,7 +57,7 @@
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-tNFA_STATUS NFA_P2pRegisterServer (UINT8              server_sap,
+tNFA_STATUS NFA_P2pRegisterServer (uint8_t            server_sap,
                                    tNFA_P2P_LINK_TYPE link_type,
                                    char               *p_service_name,
                                    tNFA_P2P_CBACK     *p_cback)
@@ -204,8 +204,8 @@ tNFA_STATUS NFA_P2pDeregister (tNFA_HANDLE handle)
 **
 *******************************************************************************/
 tNFA_STATUS NFA_P2pAcceptConn (tNFA_HANDLE handle,
-                               UINT16      miu,
-                               UINT8       rw)
+                               uint16_t    miu,
+                               uint8_t     rw)
 {
     tNFA_P2P_API_ACCEPT_CONN *p_msg;
     tNFA_HANDLE               xx;
@@ -321,7 +321,7 @@ tNFA_STATUS NFA_P2pRejectConn (tNFA_HANDLE handle)
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-tNFA_STATUS NFA_P2pDisconnect (tNFA_HANDLE handle, BOOLEAN flush)
+tNFA_STATUS NFA_P2pDisconnect (tNFA_HANDLE handle, bool    flush)
 {
     tNFA_P2P_API_DISCONNECT *p_msg;
     tNFA_HANDLE              xx;
@@ -378,8 +378,8 @@ tNFA_STATUS NFA_P2pDisconnect (tNFA_HANDLE handle, BOOLEAN flush)
 *******************************************************************************/
 tNFA_STATUS NFA_P2pConnectByName (tNFA_HANDLE client_handle,
                                   char        *p_service_name,
-                                  UINT16      miu,
-                                  UINT8       rw)
+                                  uint16_t    miu,
+                                  uint8_t     rw)
 {
     tNFA_P2P_API_CONNECT *p_msg;
     tNFA_HANDLE           xx;
@@ -438,9 +438,9 @@ tNFA_STATUS NFA_P2pConnectByName (tNFA_HANDLE client_handle,
 **
 *******************************************************************************/
 tNFA_STATUS NFA_P2pConnectBySap (tNFA_HANDLE client_handle,
-                                 UINT8       dsap,
-                                 UINT16      miu,
-                                 UINT8       rw)
+                                 uint8_t     dsap,
+                                 uint16_t    miu,
+                                 uint8_t     rw)
 {
     tNFA_P2P_API_CONNECT *p_msg;
     tNFA_HANDLE           xx;
@@ -498,9 +498,9 @@ tNFA_STATUS NFA_P2pConnectBySap (tNFA_HANDLE client_handle,
 **
 *******************************************************************************/
 tNFA_STATUS NFA_P2pSendUI (tNFA_HANDLE handle,
-                           UINT8       dsap,
-                           UINT16      length,
-                           UINT8      *p_data)
+                           uint8_t     dsap,
+                           uint16_t    length,
+                           uint8_t    *p_data)
 {
     tNFA_P2P_API_SEND_UI *p_msg;
     tNFA_STATUS           ret_status = NFA_STATUS_FAILED;
@@ -530,7 +530,7 @@ tNFA_STATUS NFA_P2pSendUI (tNFA_HANDLE handle,
                              handle);
         ret_status = NFA_STATUS_CONGESTED;
     }
-    else if (LLCP_IsLogicalLinkCongested ((UINT8)xx,
+    else if (LLCP_IsLogicalLinkCongested ((uint8_t)xx,
                                           nfa_p2p_cb.sap_cb[xx].num_pending_ui_pdu,
                                           nfa_p2p_cb.total_pending_ui_pdu,
                                           nfa_p2p_cb.total_pending_i_pdu))
@@ -552,7 +552,7 @@ tNFA_STATUS NFA_P2pSendUI (tNFA_HANDLE handle,
         {
             p_msg->p_msg->len    = length;
             p_msg->p_msg->offset = LLCP_MIN_OFFSET;
-            memcpy (((UINT8*) (p_msg->p_msg + 1) + p_msg->p_msg->offset), p_data, length);
+            memcpy (((uint8_t*) (p_msg->p_msg + 1) + p_msg->p_msg->offset), p_data, length);
 
             /* increase number of tx UI PDU which is not processed by NFA for congestion control */
             nfa_p2p_cb.sap_cb[xx].num_pending_ui_pdu++;
@@ -593,11 +593,11 @@ tNFA_STATUS NFA_P2pSendUI (tNFA_HANDLE handle,
 **
 *******************************************************************************/
 tNFA_STATUS NFA_P2pReadUI (tNFA_HANDLE handle,
-                           UINT32      max_data_len,
-                           UINT8       *p_remote_sap,
-                           UINT32      *p_data_len,
-                           UINT8       *p_data,
-                           BOOLEAN     *p_more)
+                           uint32_t    max_data_len,
+                           uint8_t     *p_remote_sap,
+                           uint32_t    *p_data_len,
+                           uint8_t     *p_data,
+                           bool        *p_more)
 {
     tNFA_STATUS ret_status;
     tNFA_HANDLE xx;
@@ -616,7 +616,7 @@ tNFA_STATUS NFA_P2pReadUI (tNFA_HANDLE handle,
     }
     else
     {
-        *p_more = LLCP_ReadLogicalLinkData ((UINT8)xx,
+        *p_more = LLCP_ReadLogicalLinkData ((uint8_t)xx,
                                             max_data_len,
                                             p_remote_sap,
                                             p_data_len,
@@ -641,7 +641,7 @@ tNFA_STATUS NFA_P2pReadUI (tNFA_HANDLE handle,
 **
 *******************************************************************************/
 tNFA_STATUS NFA_P2pFlushUI (tNFA_HANDLE handle,
-                            UINT32      *p_length)
+                            uint32_t    *p_length)
 {
     tNFA_STATUS ret_status;
     tNFA_HANDLE xx;
@@ -661,7 +661,7 @@ tNFA_STATUS NFA_P2pFlushUI (tNFA_HANDLE handle,
     }
     else
     {
-        *p_length  = LLCP_FlushLogicalLinkRxData ((UINT8)xx);
+        *p_length  = LLCP_FlushLogicalLinkRxData ((uint8_t)xx);
         ret_status = NFA_STATUS_OK;
     }
 
@@ -685,8 +685,8 @@ tNFA_STATUS NFA_P2pFlushUI (tNFA_HANDLE handle,
 **
 *******************************************************************************/
 tNFA_STATUS NFA_P2pSendData (tNFA_HANDLE handle,
-                             UINT16      length,
-                             UINT8      *p_data)
+                             uint16_t    length,
+                             uint8_t    *p_data)
 {
     tNFA_P2P_API_SEND_DATA *p_msg;
     tNFA_STATUS            ret_status = NFA_STATUS_FAILED;
@@ -745,7 +745,7 @@ tNFA_STATUS NFA_P2pSendData (tNFA_HANDLE handle,
         {
             p_msg->p_msg->len    = length;
             p_msg->p_msg->offset = LLCP_MIN_OFFSET;
-            memcpy (((UINT8*) (p_msg->p_msg + 1) + p_msg->p_msg->offset), p_data, length);
+            memcpy (((uint8_t*) (p_msg->p_msg + 1) + p_msg->p_msg->offset), p_data, length);
 
             /* increase number of tx I PDU which is not processed by NFA for congestion control */
             nfa_p2p_cb.conn_cb[xx].num_pending_i_pdu++;
@@ -784,10 +784,10 @@ tNFA_STATUS NFA_P2pSendData (tNFA_HANDLE handle,
 **
 *******************************************************************************/
 tNFA_STATUS NFA_P2pReadData (tNFA_HANDLE handle,
-                             UINT32      max_data_len,
-                             UINT32      *p_data_len,
-                             UINT8       *p_data,
-                             BOOLEAN     *p_more)
+                             uint32_t    max_data_len,
+                             uint32_t    *p_data_len,
+                             uint8_t     *p_data,
+                             bool        *p_more)
 {
     tNFA_STATUS ret_status;
     tNFA_HANDLE xx;
@@ -833,7 +833,7 @@ tNFA_STATUS NFA_P2pReadData (tNFA_HANDLE handle,
 **
 *******************************************************************************/
 tNFA_STATUS NFA_P2pFlushData (tNFA_HANDLE handle,
-                              UINT32      *p_length)
+                              uint32_t    *p_length)
 {
     tNFA_STATUS ret_status;
     tNFA_HANDLE xx;
@@ -877,7 +877,7 @@ tNFA_STATUS NFA_P2pFlushData (tNFA_HANDLE handle,
 **
 *******************************************************************************/
 tNFA_STATUS NFA_P2pSetLocalBusy (tNFA_HANDLE conn_handle,
-                                 BOOLEAN     is_busy)
+                                 bool        is_busy)
 {
     tNFA_P2P_API_SET_LOCAL_BUSY *p_msg;
     tNFA_HANDLE                  xx;
@@ -1042,15 +1042,15 @@ tNFA_STATUS NFA_P2pGetRemoteSap (tNFA_HANDLE handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-tNFA_STATUS NFA_P2pSetLLCPConfig (UINT16 link_miu,
-                                  UINT8  opt,
-                                  UINT8  wt,
-                                  UINT16 link_timeout,
-                                  UINT16 inact_timeout_init,
-                                  UINT16 inact_timeout_target,
-                                  UINT16 symm_delay,
-                                  UINT16 data_link_timeout,
-                                  UINT16 delay_first_pdu_timeout)
+tNFA_STATUS NFA_P2pSetLLCPConfig (uint16_t link_miu,
+                                  uint8_t  opt,
+                                  uint8_t  wt,
+                                  uint16_t link_timeout,
+                                  uint16_t inact_timeout_init,
+                                  uint16_t inact_timeout_target,
+                                  uint16_t symm_delay,
+                                  uint16_t data_link_timeout,
+                                  uint16_t delay_first_pdu_timeout)
 {
     tNFA_P2P_API_SET_LLCP_CFG *p_msg;
 
@@ -1108,15 +1108,15 @@ tNFA_STATUS NFA_P2pSetLLCPConfig (UINT16 link_miu,
 ** Returns          None
 **
 *******************************************************************************/
-void NFA_P2pGetLLCPConfig (UINT16 *p_link_miu,
-                           UINT8  *p_opt,
-                           UINT8  *p_wt,
-                           UINT16 *p_link_timeout,
-                           UINT16 *p_inact_timeout_init,
-                           UINT16 *p_inact_timeout_target,
-                           UINT16 *p_symm_delay,
-                           UINT16 *p_data_link_timeout,
-                           UINT16 *p_delay_first_pdu_timeout)
+void NFA_P2pGetLLCPConfig (uint16_t *p_link_miu,
+                           uint8_t  *p_opt,
+                           uint8_t  *p_wt,
+                           uint16_t *p_link_timeout,
+                           uint16_t *p_inact_timeout_init,
+                           uint16_t *p_inact_timeout_target,
+                           uint16_t *p_symm_delay,
+                           uint16_t *p_data_link_timeout,
+                           uint16_t *p_delay_first_pdu_timeout)
 {
     LLCP_GetConfig (p_link_miu,
                     p_opt,
@@ -1146,7 +1146,7 @@ void NFA_P2pGetLLCPConfig (UINT16 *p_link_miu,
 ** Returns          The new or current trace level
 **
 *******************************************************************************/
-UINT8 NFA_P2pSetTraceLevel (UINT8 new_level)
+uint8_t NFA_P2pSetTraceLevel (uint8_t new_level)
 {
     if (new_level != 0xFF)
         nfa_p2p_cb.trace_level = new_level;

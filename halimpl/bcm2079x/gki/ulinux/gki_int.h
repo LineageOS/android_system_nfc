@@ -50,7 +50,7 @@ typedef struct
 #define GKI_TIMER_TICK_STOP_COND 0
 #define GKI_TIMER_TICK_EXIT_COND 2
 
-extern void gki_system_tick_start_stop_cback(BOOLEAN start);
+extern void gki_system_tick_start_stop_cback(bool    start);
 
 /* Contains common control block as well as OS specific variables */
 typedef struct

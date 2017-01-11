@@ -149,7 +149,7 @@ void nfa_ee_sys_enable (void)
 *******************************************************************************/
 void nfa_ee_restore_one_ecb (tNFA_EE_ECB *p_cb)
 {
-    UINT8   mask;
+    uint8_t mask;
     tNFC_NFCEE_MODE_SET_REVT    rsp;
     tNFA_EE_NCI_MODE_SET        ee_msg;
 
@@ -208,11 +208,11 @@ void nfa_ee_restore_one_ecb (tNFA_EE_ECB *p_cb)
 ** Returns          None
 **
 *******************************************************************************/
-void nfa_ee_proc_nfcc_power_mode (UINT8 nfcc_power_mode)
+void nfa_ee_proc_nfcc_power_mode (uint8_t nfcc_power_mode)
 {
-    UINT32          xx;
+    uint32_t        xx;
     tNFA_EE_ECB     *p_cb;
-    BOOLEAN         proc_complete = TRUE;
+    bool            proc_complete = TRUE;
 
     NFA_TRACE_DEBUG1 ("nfa_ee_proc_nfcc_power_mode (): nfcc_power_mode=%d", nfcc_power_mode);
     /* if NFCC power state is change to full power */
@@ -272,7 +272,7 @@ void nfa_ee_proc_nfcc_power_mode (UINT8 nfcc_power_mode)
 *******************************************************************************/
 void nfa_ee_proc_hci_info_cback (void)
 {
-    UINT32          xx;
+    uint32_t        xx;
     tNFA_EE_ECB     *p_cb;
     tNFA_EE_MSG     data;
 
@@ -373,12 +373,12 @@ void nfa_ee_proc_evt (tNFC_RESPONSE_EVT event, void *p_data)
 ** Returns          the bitmask for the given ecb.
 **
 *******************************************************************************/
-UINT8 nfa_ee_ecb_to_mask (tNFA_EE_ECB *p_cb)
+uint8_t nfa_ee_ecb_to_mask (tNFA_EE_ECB *p_cb)
 {
-    UINT8   mask;
-    UINT8   index;
+    uint8_t mask;
+    uint8_t index;
 
-    index = (UINT8) (p_cb - nfa_ee_cb.ecb);
+    index = (uint8_t) (p_cb - nfa_ee_cb.ecb);
     mask  = 1 << index;
 
     return mask;
@@ -393,9 +393,9 @@ UINT8 nfa_ee_ecb_to_mask (tNFA_EE_ECB *p_cb)
 ** Returns          tNFA_EE_ECB
 **
 *******************************************************************************/
-tNFA_EE_ECB * nfa_ee_find_ecb (UINT8 nfcee_id)
+tNFA_EE_ECB * nfa_ee_find_ecb (uint8_t nfcee_id)
 {
-    UINT32  xx;
+    uint32_t  xx;
     tNFA_EE_ECB *p_ret = NULL, *p_cb;
     NFA_TRACE_DEBUG0 ("nfa_ee_find_ecb ()");
 
@@ -428,9 +428,9 @@ tNFA_EE_ECB * nfa_ee_find_ecb (UINT8 nfcee_id)
 ** Returns          tNFA_EE_ECB
 **
 *******************************************************************************/
-tNFA_EE_ECB * nfa_ee_find_ecb_by_conn_id (UINT8 conn_id)
+tNFA_EE_ECB * nfa_ee_find_ecb_by_conn_id (uint8_t conn_id)
 {
-    UINT32  xx;
+    uint32_t  xx;
     tNFA_EE_ECB *p_ret = NULL, *p_cb;
     NFA_TRACE_DEBUG0 ("nfa_ee_find_ecb_by_conn_id ()");
 
@@ -459,7 +459,7 @@ tNFA_EE_ECB * nfa_ee_find_ecb_by_conn_id (UINT8 conn_id)
 *******************************************************************************/
 void nfa_ee_sys_disable (void)
 {
-    UINT32  xx;
+    uint32_t  xx;
     tNFA_EE_ECB *p_cb;
     tNFA_EE_MSG     msg;
 
@@ -558,7 +558,7 @@ void nfa_ee_reg_cback_enable_done (tNFA_EE_ENABLE_DONE_CBACK *p_cback)
 ** Description      convert nfa-ee state to string
 **
 *******************************************************************************/
-static char *nfa_ee_sm_st_2_str (UINT8 state)
+static char *nfa_ee_sm_st_2_str (uint8_t state)
 {
     switch (state)
     {
@@ -589,7 +589,7 @@ static char *nfa_ee_sm_st_2_str (UINT8 state)
 ** Description      convert nfa-ee evt to string
 **
 *******************************************************************************/
-static char *nfa_ee_sm_evt_2_str (UINT16 event)
+static char *nfa_ee_sm_evt_2_str (uint16_t event)
 {
     switch (event)
     {
@@ -657,11 +657,11 @@ static char *nfa_ee_sm_evt_2_str (UINT16 event)
 ** Returns          TRUE if p_msg needs to be deallocated
 **
 *******************************************************************************/
-BOOLEAN nfa_ee_evt_hdlr (BT_HDR *p_msg)
+bool    nfa_ee_evt_hdlr (BT_HDR *p_msg)
 {
     tNFA_EE_MSG *p_evt_data = (tNFA_EE_MSG *) p_msg;
-    UINT16  event = p_msg->event & 0x00ff;
-    BOOLEAN act = FALSE;
+    uint16_t  event = p_msg->event & 0x00ff;
+    bool    act = FALSE;
 
 #if (BT_TRACE_VERBOSE == TRUE)
     NFA_TRACE_DEBUG4 ("nfa_ee_evt_hdlr (): Event %s(0x%02x), State: %s(%d)",

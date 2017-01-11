@@ -98,7 +98,7 @@ static const tNCI_DISCOVER_MAPS nfc_interface_mapping[NFC_NUM_INTERFACE_MAP] =
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-static char *nfc_state_name (UINT8 state)
+static char *nfc_state_name (uint8_t state)
 {
     switch (state)
     {
@@ -136,7 +136,7 @@ static char *nfc_state_name (UINT8 state)
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-static char *nfc_hal_event_name (UINT8 event)
+static char *nfc_hal_event_name (uint8_t event)
 {
     switch (event)
     {
@@ -214,8 +214,8 @@ void nfc_enabled (tNFC_STATUS nfc_status, BT_HDR *p_init_rsp_msg)
 {
     tNFC_RESPONSE evt_data;
     tNFC_CONN_CB  *p_cb = &nfc_cb.conn_cb[NFC_RF_CONN_ID];
-    UINT8   *p;
-    UINT8   num_interfaces = 0, xx;
+    uint8_t *p;
+    uint8_t num_interfaces = 0, xx;
     int     yy = 0;
 
     memset (&evt_data, 0, sizeof (tNFC_RESPONSE));
@@ -224,7 +224,7 @@ void nfc_enabled (tNFC_STATUS nfc_status, BT_HDR *p_init_rsp_msg)
     {
         nfc_set_state (NFC_STATE_IDLE);
 
-        p = (UINT8 *) (p_init_rsp_msg + 1) + p_init_rsp_msg->offset + NCI_MSG_HDR_SIZE + 1;
+        p = (uint8_t *) (p_init_rsp_msg + 1) + p_init_rsp_msg->offset + NCI_MSG_HDR_SIZE + 1;
         /* we currently only support NCI of the same version.
         * We may need to change this, when we support multiple version of NFCC */
         evt_data.enable.nci_version = NCI_VERSION;
@@ -350,7 +350,7 @@ void nfc_gen_cleanup (void)
 *******************************************************************************/
 void nfc_main_handle_hal_evt (tNFC_HAL_EVT_MSG *p_msg)
 {
-    UINT8  *ps;
+    uint8_t  *ps;
 
     NFC_TRACE_DEBUG1 ("nfc_main_handle_hal_evt(): HAL event=0x%x", p_msg->hal_evt);
 
@@ -419,7 +419,7 @@ void nfc_main_handle_hal_evt (tNFC_HAL_EVT_MSG *p_msg)
         {
             /* issue the discovery command now, if it is still pending */
             nfc_cb.flags &= ~NFC_FL_DISCOVER_PENDING;
-            ps            = (UINT8 *)nfc_cb.p_disc_pending;
+            ps            = (uint8_t *)nfc_cb.p_disc_pending;
             nci_snd_discover_cmd (*ps, (tNFC_DISCOVER_PARAMS *)(ps + 1));
             GKI_freebuf (nfc_cb.p_disc_pending);
             nfc_cb.p_disc_pending = NULL;
@@ -529,7 +529,7 @@ void nfc_main_flush_cmd_queue (void)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_main_post_hal_evt (UINT8 hal_evt, tHAL_NFC_STATUS status)
+void nfc_main_post_hal_evt (uint8_t hal_evt, tHAL_NFC_STATUS status)
 {
     tNFC_HAL_EVT_MSG *p_msg;
 
@@ -560,7 +560,7 @@ void nfc_main_post_hal_evt (UINT8 hal_evt, tHAL_NFC_STATUS status)
 ** Returns          void
 **
 *******************************************************************************/
-static void nfc_main_hal_cback(UINT8 event, tHAL_NFC_STATUS status)
+static void nfc_main_hal_cback(uint8_t event, tHAL_NFC_STATUS status)
 {
 #if (BT_TRACE_VERBOSE == TRUE)
     NFC_TRACE_DEBUG3 ("nfc_main_hal_cback event: %s(0x%x), status=%d",
@@ -614,7 +614,7 @@ static void nfc_main_hal_cback(UINT8 event, tHAL_NFC_STATUS status)
 ** Returns          void
 **
 *******************************************************************************/
-static void nfc_main_hal_data_cback(UINT16 data_len, UINT8   *p_data)
+static void nfc_main_hal_data_cback(uint16_t data_len, uint8_t *p_data)
 {
     BT_HDR *p_msg;
 
@@ -634,7 +634,7 @@ static void nfc_main_hal_data_cback(UINT16 data_len, UINT8   *p_data)
             p_msg->offset = NFC_RECEIVE_MSGS_OFFSET;
 
             /* no need to check length, it always less than pool size */
-            memcpy ((UINT8 *)(p_msg + 1) + p_msg->offset, p_data, p_msg->len);
+            memcpy ((uint8_t *)(p_msg + 1) + p_msg->offset, p_data, p_msg->len);
 
             GKI_send_msg (NFC_TASK, NFC_MBOX_ID, p_msg);
         }
@@ -766,9 +766,9 @@ void NFC_Init (tHAL_NFC_ENTRY *p_hal_entry_tbl)
 ** Returns          Listen Mode Routing Table size
 **
 *******************************************************************************/
-UINT16 NFC_GetLmrtSize (void)
+uint16_t NFC_GetLmrtSize (void)
 {
-    UINT16 size = 0;
+    uint16_t size = 0;
 #if (NFC_RW_ONLY == FALSE)
     size = nfc_cb.max_ce_table;
 #endif
@@ -790,8 +790,8 @@ UINT16 NFC_GetLmrtSize (void)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_SetConfig (UINT8     tlv_size,
-                           UINT8    *p_param_tlvs)
+tNFC_STATUS NFC_SetConfig (uint8_t   tlv_size,
+                           uint8_t  *p_param_tlvs)
 {
     return nci_snd_core_set_config (p_param_tlvs, tlv_size);
 }
@@ -810,8 +810,8 @@ tNFC_STATUS NFC_SetConfig (UINT8     tlv_size,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_GetConfig (UINT8     num_ids,
-                           UINT8    *p_param_ids)
+tNFC_STATUS NFC_GetConfig (uint8_t   num_ids,
+                           uint8_t  *p_param_ids)
 {
     return nci_snd_core_get_config (p_param_ids, num_ids);
 }
@@ -831,13 +831,13 @@ tNFC_STATUS NFC_GetConfig (UINT8     num_ids,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_DiscoveryMap (UINT8 num, tNFC_DISCOVER_MAPS *p_maps,
+tNFC_STATUS NFC_DiscoveryMap (uint8_t num, tNFC_DISCOVER_MAPS *p_maps,
                                         tNFC_DISCOVER_CBACK *p_cback)
 {
-    UINT8   num_disc_maps = num;
-    UINT8   xx, yy, num_intf, intf_mask;
+    uint8_t num_disc_maps = num;
+    uint8_t xx, yy, num_intf, intf_mask;
     tNFC_DISCOVER_MAPS  max_maps[NFC_NFCC_MAX_NUM_VS_INTERFACE + NCI_INTERFACE_MAX];
-    BOOLEAN is_supported;
+    bool    is_supported;
 
     nfc_cb.p_discv_cback = p_cback;
     num_intf             = 0;
@@ -896,11 +896,11 @@ tNFC_STATUS NFC_DiscoveryMap (UINT8 num, tNFC_DISCOVER_MAPS *p_maps,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_DiscoveryStart (UINT8                 num_params,
+tNFC_STATUS NFC_DiscoveryStart (uint8_t               num_params,
                                 tNFC_DISCOVER_PARAMS *p_params,
                                 tNFC_DISCOVER_CBACK  *p_cback)
 {
-    UINT8   *p;
+    uint8_t *p;
     int     params_size;
     tNFC_STATUS status = NFC_STATUS_NO_BUFFERS;
 
@@ -916,10 +916,10 @@ tNFC_STATUS NFC_DiscoveryStart (UINT8                 num_params,
         nfc_cb.flags        |= NFC_FL_DISCOVER_PENDING;
         nfc_cb.flags        |= NFC_FL_CONTROL_REQUESTED;
         params_size          = sizeof (tNFC_DISCOVER_PARAMS) * num_params;
-        nfc_cb.p_disc_pending = GKI_getbuf ((UINT16)(BT_HDR_SIZE + 1 + params_size));
+        nfc_cb.p_disc_pending = GKI_getbuf ((uint16_t)(BT_HDR_SIZE + 1 + params_size));
         if (nfc_cb.p_disc_pending)
         {
-            p       = (UINT8 *)nfc_cb.p_disc_pending;
+            p       = (uint8_t *)nfc_cb.p_disc_pending;
             *p++    = num_params;
             memcpy (p, p_params, params_size);
             status = NFC_STATUS_CMD_STARTED;
@@ -947,9 +947,9 @@ tNFC_STATUS NFC_DiscoveryStart (UINT8                 num_params,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_DiscoverySelect (UINT8    rf_disc_id,
-                                 UINT8    protocol,
-                                 UINT8    rf_interface)
+tNFC_STATUS NFC_DiscoverySelect (uint8_t  rf_disc_id,
+                                 uint8_t  protocol,
+                                 uint8_t  rf_interface)
 {
     return nci_snd_discover_select_cmd (rf_disc_id, protocol, rf_interface);
 }
@@ -969,15 +969,15 @@ tNFC_STATUS NFC_DiscoverySelect (UINT8    rf_disc_id,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_ConnCreate (UINT8            dest_type,
-                            UINT8            id,
-                            UINT8            protocol,
+tNFC_STATUS NFC_ConnCreate (uint8_t          dest_type,
+                            uint8_t          id,
+                            uint8_t          protocol,
                             tNFC_CONN_CBACK *p_cback)
 {
     tNFC_STATUS     status = NFC_STATUS_FAILED;
     tNFC_CONN_CB    *p_cb;
-    UINT8           num_tlv=0, tlv_size=0;
-    UINT8           param_tlvs[4], *pp;
+    uint8_t         num_tlv=0, tlv_size=0;
+    uint8_t         param_tlvs[4], *pp;
 
     p_cb = nfc_alloc_conn_cb (p_cback);
     if (p_cb)
@@ -1027,7 +1027,7 @@ tNFC_STATUS NFC_ConnCreate (UINT8            dest_type,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_ConnClose (UINT8 conn_id)
+tNFC_STATUS NFC_ConnClose (uint8_t conn_id)
 {
     tNFC_CONN_CB *p_cb = nfc_find_conn_cb_by_conn_id (conn_id);
     tNFC_STATUS     status = NFC_STATUS_FAILED;
@@ -1078,7 +1078,7 @@ void NFC_SetStaticRfCback (tNFC_CONN_CBACK    *p_cback)
 ** Returns          Nothing
 **
 *******************************************************************************/
-void NFC_SetReassemblyFlag (BOOLEAN    reassembly)
+void NFC_SetReassemblyFlag (bool       reassembly)
 {
     nfc_cb.reassembly = reassembly;
 }
@@ -1093,12 +1093,12 @@ void NFC_SetReassemblyFlag (BOOLEAN    reassembly)
 ** Parameters       conn_id - the connection id.
 **                  p_data - the data packet.
 **                  p_data->offset must be >= NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE
-**                  The data payload starts at ((UINT8 *) (p_data + 1) + p_data->offset)
+**                  The data payload starts at ((uint8_t *) (p_data + 1) + p_data->offset)
 **
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_SendData (UINT8       conn_id,
+tNFC_STATUS NFC_SendData (uint8_t     conn_id,
                           BT_HDR     *p_data)
 {
     tNFC_STATUS     status = NFC_STATUS_FAILED;
@@ -1127,7 +1127,7 @@ tNFC_STATUS NFC_SendData (UINT8       conn_id,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_FlushData (UINT8       conn_id)
+tNFC_STATUS NFC_FlushData (uint8_t     conn_id)
 {
     tNFC_STATUS     status = NFC_STATUS_FAILED;
     tNFC_CONN_CB    *p_cb = nfc_find_conn_cb_by_conn_id (conn_id);
@@ -1194,7 +1194,7 @@ tNFC_STATUS NFC_Deactivate (tNFC_DEACT_TYPE deactivate_type)
         {
             nfc_cb.flags           |= NFC_FL_DEACTIVATING;
             nfc_cb.deactivate_timer.param = (TIMER_PARAM_TYPE) deactivate_type;
-            nfc_start_timer (&nfc_cb.deactivate_timer , (UINT16) (NFC_TTYPE_WAIT_2_DEACTIVATE), NFC_DEACTIVATE_TIMEOUT);
+            nfc_start_timer (&nfc_cb.deactivate_timer , (uint16_t) (NFC_TTYPE_WAIT_2_DEACTIVATE), NFC_DEACTIVATE_TIMEOUT);
             return status;
         }
     }
@@ -1218,9 +1218,9 @@ tNFC_STATUS NFC_Deactivate (tNFC_DEACT_TYPE deactivate_type)
 *******************************************************************************/
 tNFC_STATUS NFC_UpdateRFCommParams (tNFC_RF_COMM_PARAMS *p_params)
 {
-    UINT8 tlvs[12];
-    UINT8 *p = tlvs;
-    UINT8 data_exch_config;
+    uint8_t tlvs[12];
+    uint8_t *p = tlvs;
+    uint8_t data_exch_config;
 
     /* RF Technology and Mode */
     if (p_params->include_rf_tech_mode)
@@ -1261,7 +1261,7 @@ tNFC_STATUS NFC_UpdateRFCommParams (tNFC_RF_COMM_PARAMS *p_params)
         UINT8_TO_STREAM (p, data_exch_config);
     }
 
-    return nci_snd_parameter_update_cmd (tlvs, (UINT8) (p - tlvs));
+    return nci_snd_parameter_update_cmd (tlvs, (uint8_t) (p - tlvs));
 }
 
 /*******************************************************************************
@@ -1273,7 +1273,7 @@ tNFC_STATUS NFC_UpdateRFCommParams (tNFC_RF_COMM_PARAMS *p_params)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_SetPowerOffSleep (BOOLEAN enable)
+tNFC_STATUS NFC_SetPowerOffSleep (bool    enable)
 {
     NFC_TRACE_API1 ("NFC_SetPowerOffSleep () enable = %d", enable);
 
@@ -1339,7 +1339,7 @@ tNFC_STATUS NFC_PowerCycleNFCC (void)
 ** Returns          The new or current trace level
 **
 *******************************************************************************/
-UINT8 NFC_SetTraceLevel (UINT8 new_level)
+uint8_t NFC_SetTraceLevel (uint8_t new_level)
 {
     NFC_TRACE_API1 ("NFC_SetTraceLevel () new_level = %d", new_level);
 

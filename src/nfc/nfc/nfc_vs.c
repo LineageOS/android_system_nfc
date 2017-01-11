@@ -49,7 +49,7 @@
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_RegVSCback (BOOLEAN          is_register,
+tNFC_STATUS NFC_RegVSCback (bool             is_register,
                             tNFC_VS_CBACK   *p_cback)
 {
     tNFC_STATUS status = NFC_STATUS_FAILED;
@@ -99,12 +99,12 @@ tNFC_STATUS NFC_RegVSCback (BOOLEAN          is_register,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_SendVsCommand (UINT8          oid,
+tNFC_STATUS NFC_SendVsCommand (uint8_t        oid,
                                BT_HDR        *p_data,
                                tNFC_VS_CBACK *p_cback)
 {
     tNFC_STATUS     status = NFC_STATUS_OK;
-    UINT8           *pp;
+    uint8_t         *pp;
 
     /* Allow VSC with 0-length payload */
     if (p_data == NULL)
@@ -132,10 +132,10 @@ tNFC_STATUS NFC_SendVsCommand (UINT8          oid,
     ((tNFC_NCI_VS_MSG *) p_data)->p_cback = p_cback;
 
     p_data->offset -= NCI_MSG_HDR_SIZE;
-    pp              = (UINT8 *) (p_data + 1) + p_data->offset;
+    pp              = (uint8_t *) (p_data + 1) + p_data->offset;
     NCI_MSG_BLD_HDR0 (pp, NCI_MT_CMD, NCI_GID_PROP);
     NCI_MSG_BLD_HDR1 (pp, oid);
-    *pp             = (UINT8) p_data->len;
+    *pp             = (uint8_t) p_data->len;
     p_data->len    += NCI_MSG_HDR_SIZE;
     nfc_ncif_check_cmd_queue (p_data);
     return status;

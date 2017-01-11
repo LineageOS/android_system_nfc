@@ -48,9 +48,9 @@
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_NfceeDiscover (BOOLEAN discover)
+tNFC_STATUS NFC_NfceeDiscover (bool    discover)
 {
-    return nci_snd_nfcee_discover ((UINT8) (discover ? NCI_DISCOVER_ACTION_ENABLE : NCI_DISCOVER_ACTION_DISABLE));
+    return nci_snd_nfcee_discover ((uint8_t) (discover ? NCI_DISCOVER_ACTION_ENABLE : NCI_DISCOVER_ACTION_DISABLE));
 }
 
 /*******************************************************************************
@@ -69,7 +69,7 @@ tNFC_STATUS NFC_NfceeDiscover (BOOLEAN discover)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_NfceeModeSet (UINT8              nfcee_id,
+tNFC_STATUS NFC_NfceeModeSet (uint8_t            nfcee_id,
                               tNFC_NFCEE_MODE    mode)
 {
     if (mode >= NCI_NUM_NFCEE_MODE)
@@ -97,10 +97,10 @@ tNFC_STATUS NFC_NfceeModeSet (UINT8              nfcee_id,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_SetRouting (BOOLEAN more,
-                             UINT8  num_tlv,
-                             UINT8  tlv_size,
-                             UINT8  *p_param_tlvs)
+tNFC_STATUS NFC_SetRouting (bool    more,
+                             uint8_t  num_tlv,
+                             uint8_t  tlv_size,
+                             uint8_t  *p_param_tlvs)
 {
     return nci_snd_set_routing_cmd (more, num_tlv, tlv_size, p_param_tlvs);
 }

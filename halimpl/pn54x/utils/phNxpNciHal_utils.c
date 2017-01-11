@@ -522,6 +522,6 @@ void phNxpNciHal_emergency_recovery (void)
         }
     }
 #endif
-    NXPLOG_NCIHAL_E ("%s: abort()", __FUNCTION__);
+    NXPLOG_NCIHAL_E ("%s: abort()", __func__);
     abort ();
 }

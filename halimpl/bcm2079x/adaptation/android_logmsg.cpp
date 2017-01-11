@@ -22,7 +22,7 @@
 #include <cutils/log.h>
 
 
-extern UINT32 ScrProtocolTraceFlag;
+extern uint32_t ScrProtocolTraceFlag;
 #define MAX_NCI_PACKET_SIZE 259
 #define BTE_LOG_BUF_SIZE 1024
 #define BTE_LOG_MAX_SIZE (BTE_LOG_BUF_SIZE - 12)
@@ -30,9 +30,9 @@ extern UINT32 ScrProtocolTraceFlag;
 #define PRINT(s) __android_log_write (ANDROID_LOG_DEBUG, "BrcmNci", s)
 static char log_line [MAX_LOGCAT_LINE];
 static const char* sTable = "0123456789abcdef";
-static BOOLEAN sIsUseRaw = FALSE;
-static void ToHex (const UINT8* data, UINT16 len, char* hexString, UINT16 hexStringSize);
-static void dumpbin (const char* data, int size, UINT32 trace_layer, UINT32 trace_type);
+static bool    sIsUseRaw = FALSE;
+static void ToHex (const uint8_t* data, uint16_t len, char* hexString, uint16_t hexStringSize);
+static void dumpbin (const char* data, int size, uint32_t trace_layer, uint32_t trace_type);
 static inline void word2hex (const char* data, char** hex);
 static inline void byte2char (const char* data, char** str);
 static inline void byte2hex (const char* data, char** str);
@@ -58,13 +58,13 @@ void BTDISP_UNINIT_LOCK()
 }
 
 
-void ProtoDispAdapterUseRawOutput (BOOLEAN isUseRaw)
+void ProtoDispAdapterUseRawOutput (bool    isUseRaw)
 {
     sIsUseRaw = isUseRaw;
 }
 
 
-void ProtoDispAdapterDisplayNciPacket (UINT8 *nciPacket, UINT16 nciPacketLen, BOOLEAN is_recv)
+void ProtoDispAdapterDisplayNciPacket (uint8_t *nciPacket, uint16_t nciPacketLen, bool    is_recv)
 {
     //Protocol decoder is not available, so decode NCI packet into hex numbers.
     if (!(ScrProtocolTraceFlag & SCR_PROTO_TRACE_NCI))
@@ -75,7 +75,7 @@ void ProtoDispAdapterDisplayNciPacket (UINT8 *nciPacket, UINT16 nciPacketLen, BO
 }
 
 
-void ToHex (const UINT8* data, UINT16 len, char* hexString, UINT16 hexStringSize)
+void ToHex (const uint8_t* data, uint16_t len, char* hexString, uint16_t hexStringSize)
 {
     int i=0, j=0;
     for(i = 0, j = 0; i < len && j < hexStringSize-3; i++)
@@ -89,7 +89,7 @@ void ToHex (const UINT8* data, UINT16 len, char* hexString, UINT16 hexStringSize
 
 
 //Protodisp code calls ScrLog() to print decoded texts.
-void ScrLog (UINT32 trace_set_mask, const char *fmt_str, ...)
+void ScrLog (uint32_t trace_set_mask, const char *fmt_str, ...)
 {
     static char buffer [BTE_LOG_BUF_SIZE];
     va_list ap;
@@ -101,7 +101,7 @@ void ScrLog (UINT32 trace_set_mask, const char *fmt_str, ...)
 }
 
 
-UINT8 *scru_dump_hex (UINT8 *p, char *pTitle, UINT32 len, UINT32 layer, UINT32 type)
+uint8_t *scru_dump_hex (uint8_t *p, char *pTitle, uint32_t len, uint32_t layer, uint32_t type)
 {
     if(pTitle && *pTitle)
         PRINT(pTitle);
@@ -110,7 +110,7 @@ UINT8 *scru_dump_hex (UINT8 *p, char *pTitle, UINT32 len, UINT32 layer, UINT32 t
 }
 
 
-void dumpbin(const char* data, int size, UINT32 trace_layer, UINT32 trace_type)
+void dumpbin(const char* data, int size, uint32_t trace_layer, uint32_t trace_type)
 {
     char line_buff[256];
     char *line;
@@ -198,8 +198,8 @@ inline void byte2hex (const char* data, char** str)
     //Decode a few Bluetooth HCI packets into hex numbers.
     void DispHciCmd (BT_HDR *p_buf)
     {
-        UINT32 nBytes = ((BT_HDR_SIZE + p_buf->offset + p_buf->len)*2)+1;
-        UINT8* data = (UINT8*) p_buf;
+        uint32_t nBytes = ((BT_HDR_SIZE + p_buf->offset + p_buf->len)*2)+1;
+        uint8_t* data = (uint8_t*) p_buf;
         int data_len = BT_HDR_SIZE + p_buf->offset + p_buf->len;
 
         if (appl_trace_level < BT_TRACE_LEVEL_DEBUG)
@@ -216,8 +216,8 @@ inline void byte2hex (const char* data, char** str)
     //Decode a few Bluetooth HCI packets into hex numbers.
     void DispHciEvt (BT_HDR *p_buf)
     {
-        UINT32 nBytes = ((BT_HDR_SIZE + p_buf->offset + p_buf->len)*2)+1;
-        UINT8* data = (UINT8*) p_buf;
+        uint32_t nBytes = ((BT_HDR_SIZE + p_buf->offset + p_buf->len)*2)+1;
+        uint8_t* data = (uint8_t*) p_buf;
         int data_len = BT_HDR_SIZE + p_buf->offset + p_buf->len;
 
         if (appl_trace_level < BT_TRACE_LEVEL_DEBUG)
@@ -240,10 +240,10 @@ inline void byte2hex (const char* data, char** str)
     ** Returns          None.
     **
     *******************************************************************************/
-    void DispLLCP (BT_HDR *p_buf, BOOLEAN is_recv)
+    void DispLLCP (BT_HDR *p_buf, bool    is_recv)
     {
-        UINT32 nBytes = ((BT_HDR_SIZE + p_buf->offset + p_buf->len)*2)+1;
-        UINT8 * data = (UINT8*) p_buf;
+        uint32_t nBytes = ((BT_HDR_SIZE + p_buf->offset + p_buf->len)*2)+1;
+        uint8_t * data = (uint8_t*) p_buf;
         int data_len = BT_HDR_SIZE + p_buf->offset + p_buf->len;
 
         if (appl_trace_level < BT_TRACE_LEVEL_DEBUG)
@@ -266,9 +266,9 @@ inline void byte2hex (const char* data, char** str)
     ** Returns          None.
     **
     *******************************************************************************/
-    void DispHcp (UINT8 *data, UINT16 len, BOOLEAN is_recv)
+    void DispHcp (uint8_t *data, uint16_t len, bool    is_recv)
     {
-        UINT32 nBytes = (len*2)+1;
+        uint32_t nBytes = (len*2)+1;
 
         if (appl_trace_level < BT_TRACE_LEVEL_DEBUG)
             return;
@@ -285,13 +285,13 @@ inline void byte2hex (const char* data, char** str)
     }
 
 
-    void DispSNEP (UINT8 local_sap, UINT8 remote_sap, BT_HDR *p_buf, BOOLEAN is_first, BOOLEAN is_rx) {}
-    void DispCHO (UINT8 *pMsg, UINT32 MsgLen, BOOLEAN is_rx) {}
-    void DispT3TagMessage(BT_HDR *p_msg, BOOLEAN is_rx) {}
-    void DispRWT4Tags (BT_HDR *p_buf, BOOLEAN is_rx) {}
-    void DispCET4Tags (BT_HDR *p_buf, BOOLEAN is_rx) {}
-    void DispRWI93Tag (BT_HDR *p_buf, BOOLEAN is_rx, UINT8 command_to_respond) {}
-    void DispNDEFMsg (UINT8 *pMsg, UINT32 MsgLen, BOOLEAN is_recv) {}
+    void DispSNEP (uint8_t local_sap, uint8_t remote_sap, BT_HDR *p_buf, bool    is_first, bool    is_rx) {}
+    void DispCHO (uint8_t *pMsg, uint32_t MsgLen, bool    is_rx) {}
+    void DispT3TagMessage(BT_HDR *p_msg, bool    is_rx) {}
+    void DispRWT4Tags (BT_HDR *p_buf, bool    is_rx) {}
+    void DispCET4Tags (BT_HDR *p_buf, bool    is_rx) {}
+    void DispRWI93Tag (BT_HDR *p_buf, bool    is_rx, uint8_t command_to_respond) {}
+    void DispNDEFMsg (uint8_t *pMsg, uint32_t MsgLen, bool    is_recv) {}
 
 
 /*******************************************************************************
@@ -303,11 +303,11 @@ inline void byte2hex (const char* data, char** str)
 ** Returns:         None.
 **
 *******************************************************************************/
-void LogMsg (UINT32 trace_set_mask, const char *fmt_str, ...)
+void LogMsg (uint32_t trace_set_mask, const char *fmt_str, ...)
 {
     static char buffer [BTE_LOG_BUF_SIZE];
     va_list ap;
-    UINT32 trace_type = trace_set_mask & 0x07; //lower 3 bits contain trace type
+    uint32_t trace_type = trace_set_mask & 0x07; //lower 3 bits contain trace type
     int android_log_type = ANDROID_LOG_INFO;
 
     va_start (ap, fmt_str);
@@ -319,42 +319,42 @@ void LogMsg (UINT32 trace_set_mask, const char *fmt_str, ...)
 }
 
 
-void LogMsg_0 (UINT32 maskTraceSet, const char *p_str)
+void LogMsg_0 (uint32_t maskTraceSet, const char *p_str)
 {
     LogMsg (maskTraceSet, p_str);
 }
 
 
-void LogMsg_1 (UINT32 maskTraceSet, const char *fmt_str, UINT32 p1)
+void LogMsg_1 (uint32_t maskTraceSet, const char *fmt_str, uint32_t p1)
 {
     LogMsg (maskTraceSet, fmt_str, p1);
 }
 
 
-void LogMsg_2 (UINT32 maskTraceSet, const char *fmt_str, UINT32 p1, UINT32 p2)
+void LogMsg_2 (uint32_t maskTraceSet, const char *fmt_str, uint32_t p1, uint32_t p2)
 {
     LogMsg (maskTraceSet, fmt_str, p1, p2);
 }
 
 
-void LogMsg_3 (UINT32 maskTraceSet, const char *fmt_str, UINT32 p1, UINT32 p2, UINT32 p3)
+void LogMsg_3 (uint32_t maskTraceSet, const char *fmt_str, uint32_t p1, uint32_t p2, uint32_t p3)
 {
     LogMsg (maskTraceSet, fmt_str, p1, p2, p3);
 }
 
 
-void LogMsg_4 (UINT32 maskTraceSet, const char *fmt_str, UINT32 p1, UINT32 p2, UINT32 p3, UINT32 p4)
+void LogMsg_4 (uint32_t maskTraceSet, const char *fmt_str, uint32_t p1, uint32_t p2, uint32_t p3, uint32_t p4)
 {
     LogMsg (maskTraceSet, fmt_str, p1, p2, p3, p4);
 }
 
-void LogMsg_5 (UINT32 maskTraceSet, const char *fmt_str, UINT32 p1, UINT32 p2, UINT32 p3, UINT32 p4, UINT32 p5)
+void LogMsg_5 (uint32_t maskTraceSet, const char *fmt_str, uint32_t p1, uint32_t p2, uint32_t p3, uint32_t p4, uint32_t p5)
 {
     LogMsg (maskTraceSet, fmt_str, p1, p2, p3, p4, p5);
 }
 
 
-void LogMsg_6 (UINT32 maskTraceSet, const char *fmt_str, UINT32 p1, UINT32 p2, UINT32 p3, UINT32 p4, UINT32 p5, UINT32 p6)
+void LogMsg_6 (uint32_t maskTraceSet, const char *fmt_str, uint32_t p1, uint32_t p2, uint32_t p3, uint32_t p4, uint32_t p5, uint32_t p6)
 {
     LogMsg (maskTraceSet, fmt_str, p1, p2, p3, p4, p5, p6);
 }

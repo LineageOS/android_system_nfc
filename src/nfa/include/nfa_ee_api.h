@@ -58,7 +58,7 @@ enum
     NFA_EE_NO_MEM_ERR_EVT,      /* Error - out of GKI buffers                            */
     NFA_EE_NO_CB_ERR_EVT        /* Error - Can not find control block or wrong state     */
 };
-typedef UINT8 tNFA_EE_EVT;
+typedef uint8_t tNFA_EE_EVT;
 
 /* tNFA_NFCEE_INTERFACE values */
 #define NFA_EE_INTERFACE_APDU         NFC_NFCEE_INTERFACE_APDU          /* APDU Interface       */
@@ -66,24 +66,24 @@ typedef UINT8 tNFA_EE_EVT;
 #define NFA_EE_INTERFACE_T3T          NFC_NFCEE_INTERFACE_T3T           /* T3T Command Interface*/
 #define NFA_EE_INTERFACE_TRANSPARENT  NFC_NFCEE_INTERFACE_TRANSPARENT   /* Transparent Interface*/
 #define NFA_EE_INTERFACE_PROPRIETARY  NFC_NFCEE_INTERFACE_PROPRIETARY   /* Proprietary          */
-typedef UINT8 tNFA_EE_INTERFACE;
+typedef uint8_t tNFA_EE_INTERFACE;
 
 #define NFA_EE_TAG_HW_ID             NFC_NFCEE_TAG_HW_ID                /* HW/Registration ID   */
 #define NFA_EE_TAG_ATR_BYTES         NFC_NFCEE_TAG_ATR_BYTES            /* ATR Bytes            */
 #define NFA_EE_TAG_T3T_INFO          NFC_NFCEE_TAG_T3T_INFO             /* T3T Supplement. Info */
 #define NFA_EE_TAG_HCI_HOST_ID       NFC_NFCEE_TAG_HCI_HOST_ID          /* Broadcom Proprietary */
-typedef UINT8 tNFA_EE_TAG;
+typedef uint8_t tNFA_EE_TAG;
 
 /* for NFA_EeModeSet () */
 #define NFA_EE_MD_ACTIVATE          NFC_MODE_ACTIVATE
 #define NFA_EE_MD_DEACTIVATE        NFC_MODE_DEACTIVATE
-typedef UINT8 tNFA_EE_MD;
+typedef uint8_t tNFA_EE_MD;
 
 #define NFA_EE_PWR_STATE_ON         0x01    /* The device is on                 */
 #define NFA_EE_PWR_STATE_SWITCH_OFF 0x02    /* The device is switched off       */
 #define NFA_EE_PWR_STATE_BATT_OFF   0x04    /* The device's battery is removed  */
 #define NFA_EE_PWR_STATE_NONE       0       /* used to remove a particular technology or protocol based routing cfg of a handle from the routing table. */
-typedef UINT8 tNFA_EE_PWR_STATE;
+typedef uint8_t tNFA_EE_PWR_STATE;
 
 
 #define NFA_EE_STATUS_INACTIVE          NFC_NFCEE_STATUS_INACTIVE /* NFCEE connected and inactive */
@@ -92,7 +92,7 @@ typedef UINT8 tNFA_EE_PWR_STATE;
 #define NFA_EE_STATUS_PENDING           0x10                      /* waiting for response from NFCC */
 #define NFA_EE_STATUS_ACTIVATING        (NFA_EE_STATUS_PENDING+NFC_NFCEE_STATUS_ACTIVE)
 #define NFA_EE_STATUS_DEACTIVATING      (NFA_EE_STATUS_PENDING+NFC_NFCEE_STATUS_INACTIVE)
-typedef UINT8 tNFA_EE_STATUS;
+typedef uint8_t tNFA_EE_STATUS;
 
 
 
@@ -100,17 +100,17 @@ typedef UINT8 tNFA_EE_STATUS;
 typedef struct
 {
     tNFA_EE_TAG             tag;
-    UINT8                   len;
-    UINT8                   info[NFC_MAX_EE_INFO];
+    uint8_t                 len;
+    uint8_t                 info[NFC_MAX_EE_INFO];
 } tNFA_EE_TLV;
 
 typedef struct
 {
     tNFA_HANDLE         ee_handle;              /* handle for NFCEE oe DH   */
     tNFA_EE_STATUS      ee_status;              /* The NFCEE status         */
-    UINT8               num_interface;          /* number of NFCEE interface*/
+    uint8_t             num_interface;          /* number of NFCEE interface*/
     tNFA_EE_INTERFACE   ee_interface[NFC_MAX_EE_INTERFACE];/* NFCEE supported interface */
-    UINT8               num_tlvs;               /* number of TLVs           */
+    uint8_t             num_tlvs;               /* number of TLVs           */
     tNFA_EE_TLV         ee_tlv[NFC_MAX_EE_TLVS];/* the TLV                  */
 } tNFA_EE_INFO;
 
@@ -119,7 +119,7 @@ typedef struct
 typedef struct
 {
     tNFA_STATUS         status;                         /* NFA_STATUS_OK is successful      */
-    UINT8               num_ee;                         /* number of NFCEEs found           */
+    uint8_t             num_ee;                         /* number of NFCEEs found           */
     tNFA_EE_INFO        ee_info[NFA_EE_MAX_EE_SUPPORTED];/*NFCEE information                */
 } tNFA_EE_DISCOVER;
 
@@ -171,8 +171,8 @@ typedef struct
 /* Data for NFA_EE_DISCOVER_REQ_EVT */
 typedef struct
 {
-    UINT8                   status;                         /* NFA_STATUS_OK if successful   */
-    UINT8                   num_ee;                         /* number of MFCEE information   */
+    uint8_t                 status;                         /* NFA_STATUS_OK if successful   */
+    uint8_t                 num_ee;                         /* number of MFCEE information   */
     tNFA_EE_DISCOVER_INFO   ee_disc_info[NFA_EE_MAX_EE_SUPPORTED - 1]; /* NFCEE DISCOVER Request info   */
 } tNFA_EE_DISCOVER_REQ;
 
@@ -180,8 +180,8 @@ typedef struct
 typedef struct
 {
     tNFA_HANDLE handle;     /* Connection handle */
-    UINT16      len;        /* Length of data    */
-    UINT8       *p_buf;     /* Data buffer       */
+    uint16_t    len;        /* Length of data    */
+    uint8_t     *p_buf;     /* Data buffer       */
 } tNFA_EE_DATA;
 
 /* Union of all EE callback structures */
@@ -197,7 +197,7 @@ typedef union
     tNFA_STATUS             remove_aid;
     tNFA_STATUS             set_tech;
     tNFA_STATUS             set_proto;
-    UINT16                  size;
+    uint16_t                size;
     tNFA_EE_CONNECT         connect;
     tNFA_EE_ACTION          action;
     tNFA_EE_MODE_SET        mode_set;
@@ -247,7 +247,7 @@ NFC_API extern tNFA_STATUS NFA_EeDiscover (tNFA_EE_CBACK *p_cback);
 **                  NFA_STATUS_INVALID_PARAM If bad parameter
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_EeGetInfo (UINT8        *p_num_nfcee,
+NFC_API extern tNFA_STATUS NFA_EeGetInfo (uint8_t      *p_num_nfcee,
                                           tNFA_EE_INFO *p_info);
 
 /*******************************************************************************
@@ -365,8 +365,8 @@ NFC_API extern tNFA_STATUS NFA_EeSetDefaultProtoRouting (tNFA_HANDLE         ee_
 **
 *******************************************************************************/
 NFC_API extern tNFA_STATUS NFA_EeAddAidRouting (tNFA_HANDLE          ee_handle,
-                                                UINT8                aid_len,
-                                                UINT8               *p_aid,
+                                                uint8_t              aid_len,
+                                                uint8_t             *p_aid,
                                                 tNFA_EE_PWR_STATE    power_state);
 
 /*******************************************************************************
@@ -389,8 +389,8 @@ NFC_API extern tNFA_STATUS NFA_EeAddAidRouting (tNFA_HANDLE          ee_handle,
 **                  NFA_STATUS_INVALID_PARAM If bad parameter
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_EeRemoveAidRouting (UINT8     aid_len,
-                                                   UINT8    *p_aid);
+NFC_API extern tNFA_STATUS NFA_EeRemoveAidRouting (uint8_t   aid_len,
+                                                   uint8_t  *p_aid);
 
 /*******************************************************************************
 **
@@ -439,7 +439,7 @@ NFC_API extern tNFA_STATUS NFA_EeUpdateNow (void);
 **
 *******************************************************************************/
 NFC_API extern tNFA_STATUS NFA_EeConnect (tNFA_HANDLE    ee_handle,
-                                          UINT8          ee_interface,
+                                          uint8_t        ee_interface,
                                           tNFA_EE_CBACK *p_cback);
 
 /*******************************************************************************
@@ -456,8 +456,8 @@ NFC_API extern tNFA_STATUS NFA_EeConnect (tNFA_HANDLE    ee_handle,
 **
 *******************************************************************************/
 NFC_API extern tNFA_STATUS NFA_EeSendData (tNFA_HANDLE  ee_handle,
-                                           UINT16       data_len,
-                                           UINT8       *p_data);
+                                           uint16_t     data_len,
+                                           uint8_t     *p_data);
 
 /*******************************************************************************
 **

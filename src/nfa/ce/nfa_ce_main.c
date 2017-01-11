@@ -36,7 +36,7 @@ tNFA_CE_CB nfa_ce_cb;
 ** Constants and types
 *****************************************************************************/
 #define NFA_CE_DEFAULT_ISODEP_DISC_MASK (NFA_DM_DISC_MASK_LA_ISO_DEP | NFA_DM_DISC_MASK_LB_ISO_DEP)
-static void nfa_ce_proc_nfcc_power_mode (UINT8 nfcc_power_mode);
+static void nfa_ce_proc_nfcc_power_mode (uint8_t nfcc_power_mode);
 
 static const tNFA_SYS_REG nfa_ce_sys_reg =
 {
@@ -62,7 +62,7 @@ const tNFA_CE_ACTION nfa_ce_action_tbl[] =
 ** Local function prototypes
 *****************************************************************************/
 #if (BT_TRACE_VERBOSE == TRUE)
-static char *nfa_ce_evt_2_str (UINT16 event);
+static char *nfa_ce_evt_2_str (uint16_t event);
 #endif
 
 
@@ -105,7 +105,7 @@ void nfa_ce_init (void)
 void nfa_ce_sys_disable (void)
 {
     tNFA_CE_LISTEN_INFO *p_info;
-    UINT8 xx;
+    uint8_t xx;
 
     NFC_SetStaticRfCback (NULL);
 
@@ -134,10 +134,10 @@ void nfa_ce_sys_disable (void)
 ** Returns          None
 **
 *******************************************************************************/
-static void nfa_ce_proc_nfcc_power_mode (UINT8 nfcc_power_mode)
+static void nfa_ce_proc_nfcc_power_mode (uint8_t nfcc_power_mode)
 {
     tNFA_CE_CB *p_cb = &nfa_ce_cb;
-    UINT8 listen_info_idx;
+    uint8_t listen_info_idx;
 
     NFA_TRACE_DEBUG1 ("nfa_ce_proc_nfcc_power_mode (): nfcc_power_mode=%d",
                        nfcc_power_mode);
@@ -170,13 +170,13 @@ static void nfa_ce_proc_nfcc_power_mode (UINT8 nfcc_power_mode)
 **
 ** Description      nfa rw main event handling function.
 **
-** Returns          BOOLEAN
+** Returns          bool   
 **
 *******************************************************************************/
-BOOLEAN nfa_ce_hdl_event (BT_HDR *p_msg)
+bool    nfa_ce_hdl_event (BT_HDR *p_msg)
 {
-    UINT16 act_idx;
-    BOOLEAN freebuf = TRUE;
+    uint16_t act_idx;
+    bool    freebuf = TRUE;
 
 #if (BT_TRACE_VERBOSE == TRUE)
     NFA_TRACE_EVENT3 ("nfa_ce_handle_event event: %s (0x%02x), flags: %08x", nfa_ce_evt_2_str (p_msg->event), p_msg->event, nfa_ce_cb.flags);
@@ -207,7 +207,7 @@ BOOLEAN nfa_ce_hdl_event (BT_HDR *p_msg)
 ** Description      convert nfc evt to string
 **
 *******************************************************************************/
-static char *nfa_ce_evt_2_str (UINT16 event)
+static char *nfa_ce_evt_2_str (uint16_t event)
 {
     switch (event)
     {

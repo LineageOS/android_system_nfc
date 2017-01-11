@@ -37,8 +37,8 @@
 #include "gki.h"
 
 #if (CE_TEST_INCLUDED == TRUE) /* test only */
-BOOLEAN mapping_aid_test_enabled = FALSE;
-UINT8   ce_test_tag_app_id[T4T_V20_NDEF_TAG_AID_LEN] = {0xD2, 0x76, 0x00, 0x00, 0x85, 0x01, 0x01};
+bool    mapping_aid_test_enabled = FALSE;
+uint8_t ce_test_tag_app_id[T4T_V20_NDEF_TAG_AID_LEN] = {0xD2, 0x76, 0x00, 0x00, 0x85, 0x01, 0x01};
 #endif
 
 /*******************************************************************************
@@ -50,7 +50,7 @@ UINT8   ce_test_tag_app_id[T4T_V20_NDEF_TAG_AID_LEN] = {0xD2, 0x76, 0x00, 0x00, 
 ** Returns          TRUE if success
 **
 *******************************************************************************/
-static BOOLEAN ce_t4t_send_to_lower (BT_HDR *p_r_apdu)
+static bool    ce_t4t_send_to_lower (BT_HDR *p_r_apdu)
 {
 #if (BT_TRACE_PROTOCOL == TRUE)
     DispCET4Tags (p_r_apdu, FALSE);
@@ -73,10 +73,10 @@ static BOOLEAN ce_t4t_send_to_lower (BT_HDR *p_r_apdu)
 ** Returns          TRUE if success
 **
 *******************************************************************************/
-static BOOLEAN ce_t4t_send_status (UINT16 status)
+static bool    ce_t4t_send_status (uint16_t status)
 {
     BT_HDR      *p_r_apdu;
-    UINT8       *p;
+    uint8_t     *p;
 
     CE_TRACE_DEBUG1 ("ce_t4t_send_status (): Status:0x%04X", status);
 
@@ -89,7 +89,7 @@ static BOOLEAN ce_t4t_send_status (UINT16 status)
     }
 
     p_r_apdu->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
-    p = (UINT8 *) (p_r_apdu + 1) + p_r_apdu->offset;
+    p = (uint8_t *) (p_r_apdu + 1) + p_r_apdu->offset;
 
     UINT16_TO_BE_STREAM (p, status);
 
@@ -111,7 +111,7 @@ static BOOLEAN ce_t4t_send_status (UINT16 status)
 ** Returns          TRUE if success
 **
 *******************************************************************************/
-static BOOLEAN ce_t4t_select_file (UINT16 file_id)
+static bool    ce_t4t_select_file (uint16_t file_id)
 {
     tCE_T4T_MEM *p_t4t = &ce_cb.mem.t4t;
 
@@ -159,10 +159,10 @@ static BOOLEAN ce_t4t_select_file (UINT16 file_id)
 ** Returns          TRUE if success
 **
 *******************************************************************************/
-static BOOLEAN ce_t4t_read_binary (UINT16 offset, UINT8 length)
+static bool    ce_t4t_read_binary (uint16_t offset, uint8_t length)
 {
     tCE_T4T_MEM *p_t4t = &ce_cb.mem.t4t;
-    UINT8       *p_src = NULL, *p_dst;
+    uint8_t     *p_src = NULL, *p_dst;
     BT_HDR      *p_r_apdu;
 
     CE_TRACE_DEBUG3 ("ce_t4t_read_binary (): Offset:0x%04X, Length:0x%04X, selected status = 0x%02X",
@@ -191,7 +191,7 @@ static BOOLEAN ce_t4t_read_binary (UINT16 offset, UINT8 length)
         }
 
         p_r_apdu->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
-        p_dst = (UINT8 *) (p_r_apdu + 1) + p_r_apdu->offset;
+        p_dst = (uint8_t *) (p_r_apdu + 1) + p_r_apdu->offset;
 
         p_r_apdu->len = length;
 
@@ -213,7 +213,7 @@ static BOOLEAN ce_t4t_read_binary (UINT16 offset, UINT8 length)
             }
             else if (offset == 1)
             {
-                UINT8_TO_BE_STREAM (p_dst, (UINT8) (p_t4t->nlen));
+                UINT8_TO_BE_STREAM (p_dst, (uint8_t) (p_t4t->nlen));
 
                 offset = 0;
                 length--;
@@ -260,12 +260,12 @@ static BOOLEAN ce_t4t_read_binary (UINT16 offset, UINT8 length)
 ** Returns          TRUE if success
 **
 *******************************************************************************/
-static BOOLEAN ce_t4t_update_binary (UINT16 offset, UINT8 length, UINT8 *p_data)
+static bool    ce_t4t_update_binary (uint16_t offset, uint8_t length, uint8_t *p_data)
 {
     tCE_T4T_MEM *p_t4t = &ce_cb.mem.t4t;
-    UINT8       *p;
-    UINT8        file_length[2];
-    UINT16       starting_offset;
+    uint8_t     *p;
+    uint8_t      file_length[2];
+    uint16_t     starting_offset;
     tCE_DATA     ce_data;
 
     CE_TRACE_DEBUG3 ("ce_t4t_update_binary (): Offset:0x%04X, Length:0x%04X, selected status = 0x%02X",
@@ -344,10 +344,10 @@ static BOOLEAN ce_t4t_update_binary (UINT16 offset, UINT8 length, UINT8 *p_data)
 ** Returns          None
 **
 *******************************************************************************/
-static void ce_t4t_set_version_in_cc (UINT8 version)
+static void ce_t4t_set_version_in_cc (uint8_t version)
 {
     tCE_T4T_MEM *p_t4t = &ce_cb.mem.t4t;
-    UINT8       *p;
+    uint8_t     *p;
 
     CE_TRACE_DEBUG1 ("ce_t4t_set_version_in_cc (): version = 0x%02X", version);
 
@@ -365,10 +365,10 @@ static void ce_t4t_set_version_in_cc (UINT8 version)
 ** Returns          TRUE if success
 **
 *******************************************************************************/
-static BOOLEAN ce_t4t_process_select_file_cmd (UINT8 *p_cmd)
+static bool    ce_t4t_process_select_file_cmd (uint8_t *p_cmd)
 {
-    UINT8  data_len;
-    UINT16 file_id, status_words;
+    uint8_t  data_len;
+    uint16_t file_id, status_words;
 
     CE_TRACE_DEBUG0 ("ce_t4t_process_select_file_cmd ()");
 
@@ -417,12 +417,12 @@ static BOOLEAN ce_t4t_process_select_file_cmd (UINT8 *p_cmd)
 ** Returns          none
 **
 *******************************************************************************/
-static void ce_t4t_process_select_app_cmd (UINT8 *p_cmd, BT_HDR *p_c_apdu)
+static void ce_t4t_process_select_app_cmd (uint8_t *p_cmd, BT_HDR *p_c_apdu)
 {
-    UINT8    data_len;
-    UINT16   status_words = 0x0000; /* invalid status words */
+    uint8_t  data_len;
+    uint16_t status_words = 0x0000; /* invalid status words */
     tCE_DATA ce_data;
-    UINT8    xx;
+    uint8_t  xx;
 
     CE_TRACE_DEBUG0 ("ce_t4t_process_select_app_cmd ()");
 
@@ -439,7 +439,7 @@ static void ce_t4t_process_select_app_cmd (UINT8 *p_cmd, BT_HDR *p_c_apdu)
             &&(ce_cb.mem.t4t.p_ndef_msg)  )
         {
             GKI_freebuf (p_c_apdu);
-            ce_t4t_send_status ((UINT16) T4T_RSP_CMD_CMPLTED);
+            ce_t4t_send_status ((uint16_t) T4T_RSP_CMD_CMPLTED);
             return;
         }
     }
@@ -595,12 +595,12 @@ void ce_t4t_process_timeout (TIMER_LIST_ENT *p_tle)
 ** Returns          none
 **
 *******************************************************************************/
-static void ce_t4t_data_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
+static void ce_t4t_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
 {
     BT_HDR  *p_c_apdu;
-    UINT8   *p_cmd;
-    UINT8    cla, instruct, select_type = 0, length;
-    UINT16   offset, max_file_size;
+    uint8_t *p_cmd;
+    uint8_t  cla, instruct, select_type = 0, length;
+    uint16_t offset, max_file_size;
     tCE_DATA ce_data;
 
     if (event == NFC_DEACTIVATE_CEVT)
@@ -621,7 +621,7 @@ static void ce_t4t_data_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_
 
     CE_TRACE_DEBUG1 ("ce_t4t_data_cback (): conn_id = 0x%02X", conn_id);
 
-    p_cmd = (UINT8 *) (p_c_apdu + 1) + p_c_apdu->offset;
+    p_cmd = (uint8_t *) (p_c_apdu + 1) + p_c_apdu->offset;
 
     /* Class Byte */
     BE_STREAM_TO_UINT8 (cla, p_cmd);
@@ -717,14 +717,14 @@ static void ce_t4t_data_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_
                 BE_STREAM_TO_UINT8 (length, p_cmd); /* Le     */
 
                 /* check if valid parameters */
-                if ((UINT32)length <= CE_T4T_MAX_LE)
+                if ((uint32_t)length <= CE_T4T_MAX_LE)
                 {
                     /* CE allows to read more than current file size but not max file size */
                     if (length + offset > max_file_size)
                     {
                         if (offset < max_file_size)
                         {
-                            length = (UINT8) (max_file_size - offset);
+                            length = (uint8_t) (max_file_size - offset);
 
                             CE_TRACE_DEBUG2 ("CET4T: length is reduced to %d by max_file_size (%d)",
                                               length, max_file_size);
@@ -768,7 +768,7 @@ static void ce_t4t_data_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_
                 BE_STREAM_TO_UINT8 (length, p_cmd); /* Lc     */
 
                 /* check if valid parameters */
-                if ((UINT32)length <= CE_T4T_MAX_LC)
+                if ((uint32_t)length <= CE_T4T_MAX_LC)
                 {
                     if (length + offset > ce_cb.mem.t4t.max_file_size)
                     {
@@ -857,14 +857,14 @@ tNFC_STATUS ce_select_t4t (void)
 ** Returns          NFC_STATUS_OK if success
 **
 *******************************************************************************/
-tNFC_STATUS CE_T4tSetLocalNDEFMsg (BOOLEAN    read_only,
-                                   UINT16     ndef_msg_max,
-                                   UINT16     ndef_msg_len,
-                                   UINT8      *p_ndef_msg,
-                                   UINT8      *p_scratch_buf)
+tNFC_STATUS CE_T4tSetLocalNDEFMsg (bool       read_only,
+                                   uint16_t   ndef_msg_max,
+                                   uint16_t   ndef_msg_len,
+                                   uint8_t    *p_ndef_msg,
+                                   uint8_t    *p_scratch_buf)
 {
     tCE_T4T_MEM *p_t4t = &ce_cb.mem.t4t;
-    UINT8       *p;
+    uint8_t     *p;
 
     CE_TRACE_API3 ("CE_T4tSetLocalNDEFMsg () read_only=%d, ndef_msg_max=%d, ndef_msg_len=%d",
                    read_only, ndef_msg_max, ndef_msg_len);
@@ -943,10 +943,10 @@ tNFC_STATUS CE_T4tSetLocalNDEFMsg (BOOLEAN    read_only,
 **                  CE_T4T_AID_HANDLE_INVALID otherwisse
 **
 *******************************************************************************/
-tCE_T4T_AID_HANDLE CE_T4tRegisterAID (UINT8 aid_len, UINT8 *p_aid, tCE_CBACK *p_cback)
+tCE_T4T_AID_HANDLE CE_T4tRegisterAID (uint8_t aid_len, uint8_t *p_aid, tCE_CBACK *p_cback)
 {
     tCE_T4T_MEM *p_t4t = &ce_cb.mem.t4t;
-    UINT8       xx;
+    uint8_t     xx;
 
     /* Handle registering callback for wildcard AID (all AIDs) */
     if (aid_len == 0)
@@ -1065,14 +1065,14 @@ NFC_API extern void CE_T4tDeregisterAID (tCE_T4T_AID_HANDLE aid_handle)
 ** Returns          NFC_STATUS_OK if success
 **
 *******************************************************************************/
-tNFC_STATUS CE_T4TTestSetCC (UINT16 cc_len,
-                             UINT8  version,
-                             UINT16 max_le,
-                             UINT16 max_lc)
+tNFC_STATUS CE_T4TTestSetCC (uint16_t cc_len,
+                             uint8_t  version,
+                             uint16_t max_le,
+                             uint16_t max_lc)
 {
 #if (CE_TEST_INCLUDED == TRUE)
     tCE_T4T_MEM *p_t4t = &ce_cb.mem.t4t;
-    UINT8       *p;
+    uint8_t     *p;
 
     CE_TRACE_DEBUG4 ("CE_T4TTestSetCC (): CCLen:0x%04X, Ver:0x%02X, MaxLe:0x%04X, MaxLc:0x%04X",
                       cc_len, version, max_le, max_lc);
@@ -1134,16 +1134,16 @@ tNFC_STATUS CE_T4TTestSetCC (UINT16 cc_len,
 ** Returns          NFC_STATUS_OK if success
 **
 *******************************************************************************/
-tNFC_STATUS CE_T4TTestSetNDEFCtrlTLV (UINT8  type,
-                                      UINT8  length,
-                                      UINT16 file_id,
-                                      UINT16 max_file_size,
-                                      UINT8  read_access,
-                                      UINT8  write_access)
+tNFC_STATUS CE_T4TTestSetNDEFCtrlTLV (uint8_t  type,
+                                      uint8_t  length,
+                                      uint16_t file_id,
+                                      uint16_t max_file_size,
+                                      uint8_t  read_access,
+                                      uint8_t  write_access)
 {
 #if (CE_TEST_INCLUDED == TRUE)
     tCE_T4T_MEM *p_t4t = &ce_cb.mem.t4t;
-    UINT8       *p;
+    uint8_t     *p;
 
     CE_TRACE_DEBUG6 ("CE_T4TTestSetNDEFCtrlTLV (): type:0x%02X, len:0x%02X, FileID:0x%04X, MaxFile:0x%04X, RdAcc:0x%02X, WrAcc:0x%02X",
                       type, length, file_id, max_file_size, read_access, write_access);

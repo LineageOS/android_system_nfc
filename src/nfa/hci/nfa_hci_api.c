@@ -46,10 +46,10 @@
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-tNFA_STATUS NFA_HciRegister (char *p_app_name, tNFA_HCI_CBACK *p_cback, BOOLEAN b_send_conn_evts)
+tNFA_STATUS NFA_HciRegister (char *p_app_name, tNFA_HCI_CBACK *p_cback, bool    b_send_conn_evts)
 {
     tNFA_HCI_API_REGISTER_APP *p_msg;
-    UINT8                     app_name_len;
+    uint8_t                   app_name_len;
 
     if (p_app_name == NULL)
     {
@@ -65,7 +65,7 @@ tNFA_STATUS NFA_HciRegister (char *p_app_name, tNFA_HCI_CBACK *p_cback, BOOLEAN 
 
     NFA_TRACE_API1 ("NFA_HciRegister (): Application Name: %s", p_app_name);
 
-    app_name_len = (UINT8) strlen (p_app_name);
+    app_name_len = (uint8_t) strlen (p_app_name);
 
     /* Register the application with HCI */
     if (  (nfa_hci_cb.hci_state != NFA_HCI_STATE_DISABLED)
@@ -149,7 +149,7 @@ tNFA_STATUS NFA_HciDeregister (char *p_app_name)
 {
     tNFA_HCI_API_DEREGISTER_APP *p_msg;
     int                         xx;
-    UINT8                       app_name_len;
+    uint8_t                     app_name_len;
 
     if (p_app_name == NULL)
     {
@@ -158,7 +158,7 @@ tNFA_STATUS NFA_HciDeregister (char *p_app_name)
     }
 
     NFA_TRACE_API1 ("NFA_HciDeregister (): Application Name: %s", p_app_name);
-    app_name_len = (UINT8) strlen (p_app_name);
+    app_name_len = (uint8_t) strlen (p_app_name);
 
     if (app_name_len > NFA_MAX_HCI_APP_NAME_LEN)
         return (NFA_STATUS_FAILED);
@@ -209,7 +209,7 @@ tNFA_STATUS NFA_HciDeregister (char *p_app_name)
 **                  NFA_STATUS_FAILED if no generic gate is available
 **
 *******************************************************************************/
-tNFA_STATUS NFA_HciAllocGate (tNFA_HANDLE hci_handle, UINT8 gate)
+tNFA_STATUS NFA_HciAllocGate (tNFA_HANDLE hci_handle, uint8_t gate)
 {
     tNFA_HCI_API_ALLOC_GATE *p_msg;
 
@@ -255,7 +255,7 @@ tNFA_STATUS NFA_HciAllocGate (tNFA_HANDLE hci_handle, UINT8 gate)
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-tNFA_STATUS NFA_HciDeallocGate (tNFA_HANDLE hci_handle, UINT8 gate)
+tNFA_STATUS NFA_HciDeallocGate (tNFA_HANDLE hci_handle, uint8_t gate)
 {
     tNFA_HCI_API_DEALLOC_GATE *p_msg;
 
@@ -348,12 +348,12 @@ tNFA_STATUS NFA_HciGetHostList (tNFA_HANDLE hci_handle)
 **
 *******************************************************************************/
 tNFA_STATUS NFA_HciCreatePipe (tNFA_HANDLE  hci_handle,
-                               UINT8        source_gate_id,
-                               UINT8        dest_host,
-                               UINT8        dest_gate)
+                               uint8_t      source_gate_id,
+                               uint8_t      dest_host,
+                               uint8_t      dest_gate)
 {
     tNFA_HCI_API_CREATE_PIPE_EVT *p_msg;
-    UINT8                        xx;
+    uint8_t                      xx;
 
     NFA_TRACE_API4 ("NFA_HciCreatePipe (): hci_handle:0x%04x, source gate:0x%02X, destination host:0x%02X , destination gate:0x%02X",
                                          hci_handle, source_gate_id, dest_host, dest_gate);
@@ -417,7 +417,7 @@ tNFA_STATUS NFA_HciCreatePipe (tNFA_HANDLE  hci_handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-tNFA_STATUS NFA_HciOpenPipe (tNFA_HANDLE hci_handle, UINT8 pipe)
+tNFA_STATUS NFA_HciOpenPipe (tNFA_HANDLE hci_handle, uint8_t pipe)
 {
     tNFA_HCI_API_OPEN_PIPE_EVT *p_msg;
 
@@ -467,7 +467,7 @@ tNFA_STATUS NFA_HciOpenPipe (tNFA_HANDLE hci_handle, UINT8 pipe)
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-tNFA_STATUS NFA_HciGetRegistry (tNFA_HANDLE hci_handle, UINT8 pipe, UINT8 reg_inx)
+tNFA_STATUS NFA_HciGetRegistry (tNFA_HANDLE hci_handle, uint8_t pipe, uint8_t reg_inx)
 {
     tNFA_HCI_API_GET_REGISTRY *p_msg;
 
@@ -518,10 +518,10 @@ tNFA_STATUS NFA_HciGetRegistry (tNFA_HANDLE hci_handle, UINT8 pipe, UINT8 reg_in
 **
 *******************************************************************************/
 NFC_API extern tNFA_STATUS NFA_HciSetRegistry (tNFA_HANDLE   hci_handle,
-                                               UINT8         pipe,
-                                               UINT8         reg_inx,
-                                               UINT8         data_size,
-                                               UINT8         *p_data)
+                                               uint8_t       pipe,
+                                               uint8_t       reg_inx,
+                                               uint8_t       data_size,
+                                               uint8_t       *p_data)
 {
     tNFA_HCI_API_SET_REGISTRY *p_msg;
 
@@ -580,10 +580,10 @@ NFC_API extern tNFA_STATUS NFA_HciSetRegistry (tNFA_HANDLE   hci_handle,
 **
 *******************************************************************************/
 tNFA_STATUS NFA_HciSendCommand (tNFA_HANDLE  hci_handle,
-                              UINT8        pipe,
-                              UINT8        cmd_code,
-                              UINT16       cmd_size,
-                              UINT8        *p_data)
+                              uint8_t      pipe,
+                              uint8_t      cmd_code,
+                              uint16_t     cmd_size,
+                              uint8_t      *p_data)
 {
     tNFA_HCI_API_SEND_CMD_EVT *p_msg;
 
@@ -641,10 +641,10 @@ tNFA_STATUS NFA_HciSendCommand (tNFA_HANDLE  hci_handle,
 **
 *******************************************************************************/
 NFC_API extern tNFA_STATUS NFA_HciSendResponse (tNFA_HANDLE   hci_handle,
-                                                UINT8         pipe,
-                                                UINT8         response,
-                                                UINT8         data_size,
-                                                UINT8         *p_data)
+                                                uint8_t       pipe,
+                                                uint8_t       response,
+                                                uint8_t       data_size,
+                                                uint8_t       *p_data)
 {
     tNFA_HCI_API_SEND_RSP_EVT *p_msg;
 
@@ -719,13 +719,13 @@ NFC_API extern tNFA_STATUS NFA_HciSendResponse (tNFA_HANDLE   hci_handle,
 **
 *******************************************************************************/
 tNFA_STATUS NFA_HciSendEvent (tNFA_HANDLE  hci_handle,
-                              UINT8        pipe,
-                              UINT8        evt_code,
-                              UINT16       evt_size,
-                              UINT8        *p_data,
-                              UINT16       rsp_size,
-                              UINT8        *p_rsp_buf,
-                              UINT16       rsp_timeout)
+                              uint8_t      pipe,
+                              uint8_t      evt_code,
+                              uint16_t     evt_size,
+                              uint8_t      *p_data,
+                              uint16_t     rsp_size,
+                              uint8_t      *p_rsp_buf,
+                              uint16_t     rsp_timeout)
 {
     tNFA_HCI_API_SEND_EVENT_EVT *p_msg;
 
@@ -790,7 +790,7 @@ tNFA_STATUS NFA_HciSendEvent (tNFA_HANDLE  hci_handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-tNFA_STATUS NFA_HciClosePipe (tNFA_HANDLE hci_handle, UINT8 pipe)
+tNFA_STATUS NFA_HciClosePipe (tNFA_HANDLE hci_handle, uint8_t pipe)
 {
     tNFA_HCI_API_CLOSE_PIPE_EVT *p_msg;
 
@@ -839,7 +839,7 @@ tNFA_STATUS NFA_HciClosePipe (tNFA_HANDLE hci_handle, UINT8 pipe)
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-tNFA_STATUS NFA_HciDeletePipe (tNFA_HANDLE  hci_handle, UINT8 pipe)
+tNFA_STATUS NFA_HciDeletePipe (tNFA_HANDLE  hci_handle, uint8_t pipe)
 {
     tNFA_HCI_API_DELETE_PIPE_EVT *p_msg;
 
@@ -885,10 +885,10 @@ tNFA_STATUS NFA_HciDeletePipe (tNFA_HANDLE  hci_handle, UINT8 pipe)
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-tNFA_STATUS NFA_HciAddStaticPipe (tNFA_HANDLE hci_handle, UINT8 host, UINT8 gate, UINT8 pipe)
+tNFA_STATUS NFA_HciAddStaticPipe (tNFA_HANDLE hci_handle, uint8_t host, uint8_t gate, uint8_t pipe)
 {
     tNFA_HCI_API_ADD_STATIC_PIPE_EVT *p_msg;
-    UINT8                            xx;
+    uint8_t                          xx;
 
     if ((NFA_HANDLE_GROUP_MASK & hci_handle) != NFA_HANDLE_GROUP_HCI)
     {
@@ -944,13 +944,13 @@ tNFA_STATUS NFA_HciAddStaticPipe (tNFA_HANDLE hci_handle, UINT8 host, UINT8 gate
 ** Description      Debug function.
 **
 *******************************************************************************/
-void NFA_HciDebug (UINT8 action, UINT8 size, UINT8 *p_data)
+void NFA_HciDebug (uint8_t action, uint8_t size, uint8_t *p_data)
 {
     int                 xx;
     tNFA_HCI_DYN_GATE   *pg = nfa_hci_cb.cfg.dyn_gates;
     tNFA_HCI_DYN_PIPE   *pp = nfa_hci_cb.cfg.dyn_pipes;
     BT_HDR              *p_msg;
-    UINT8               *p;
+    uint8_t             *p;
 
     switch (action)
     {
@@ -988,7 +988,7 @@ void NFA_HciDebug (UINT8 action, UINT8 size, UINT8 *p_data)
     case NFA_HCI_DEBUG_SIM_HCI_EVENT:
         if ((p_msg = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) != NULL)
         {
-            p = (UINT8 *) (p_msg + 1);
+            p = (uint8_t *) (p_msg + 1);
 
             p_msg->event  = NFA_HCI_CHECK_QUEUE_EVT;
             p_msg->len    = size;
