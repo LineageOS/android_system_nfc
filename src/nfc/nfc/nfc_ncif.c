@@ -28,7 +28,7 @@
 #include <string.h>
 #include "nfc_target.h"
 
-#if NFC_INCLUDED == TRUE
+#if (NFC_INCLUDED == TRUE)
 #include "nfc_hal_api.h"
 #include "nfc_api.h"
 #include "nci_defs.h"
@@ -1021,7 +1021,7 @@ void nfc_ncif_proc_deactivate (uint8_t status, uint8_t deact_type, bool    is_nt
 ** Returns          void
 **
 *******************************************************************************/
-#if ((NFC_NFCEE_INCLUDED == TRUE) && (NFC_RW_ONLY == FALSE))
+#if (NFC_NFCEE_INCLUDED == TRUE && NFC_RW_ONLY == FALSE)
 void nfc_ncif_proc_ee_action (uint8_t *p, uint16_t plen)
 {
     tNFC_EE_ACTION_REVT evt_data;

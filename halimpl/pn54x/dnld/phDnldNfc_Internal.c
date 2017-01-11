@@ -1094,7 +1094,7 @@ static void phDnldNfc_RspTimeOutCb(uint32_t TimerId, void *pContext)
 
             NXPLOG_FWDNLD_D("%x",pDlCtxt->tLastStatus);
 
-#if PH_LIBNFC_VEN_RESET_ON_DOWNLOAD_TIMEOUT
+#if (PH_LIBNFC_VEN_RESET_ON_DOWNLOAD_TIMEOUT == TRUE)
             if ( PH_DL_STATUS_SIGNATURE_ERROR  == pDlCtxt->tLastStatus ) {
                 /* Do a VEN Reset of the chip. */
                 NXPLOG_FWDNLD_E("Performing a VEN Reset");

@@ -25,7 +25,7 @@
 #ifndef NFA_CHO_INT_H
 #define NFA_CHO_INT_H
 
-#if (defined (NFA_CHO_INCLUDED) && (NFA_CHO_INCLUDED==TRUE))
+#if (NFA_CHO_INCLUDED == TRUE)
 #include "llcp_api.h"
 #include "llcp_defs.h"
 #include "nfa_cho_api.h"
@@ -236,7 +236,7 @@ typedef struct
 
     uint8_t             trace_level;
 
-#if (defined (NFA_CHO_TEST_INCLUDED) && (NFA_CHO_TEST_INCLUDED == TRUE))
+#if (NFA_CHO_TEST_INCLUDED == TRUE)
     uint8_t             test_enabled;
     uint8_t             test_version;
     uint16_t            test_random_number;
@@ -283,5 +283,5 @@ void nfa_cho_proc_simplified_format (uint32_t length, uint8_t *p_ndef_msg);
 tNFA_CHO_MSG_TYPE  nfa_cho_get_msg_type (uint32_t length, uint8_t *p_ndef_msg);
 tNFA_CHO_ROLE_TYPE nfa_cho_get_local_device_role (uint32_t length, uint8_t *p_ndef_msg);
 tNFA_STATUS nfa_cho_update_random_number (uint8_t *p_ndef_msg);
-#endif /* (defined (NFA_CHO_INCLUDED) && (NFA_CHO_INCLUDED==TRUE)) */
+#endif /* (NFA_CHO_INCLUDED == TRUE) */
 #endif /* NFA_CHO_INT_H */

@@ -25,7 +25,7 @@
 #ifndef NFA_SNEP_INT_H
 #define NFA_SNEP_INT_H
 
-#if (defined (NFA_SNEP_INCLUDED) && (NFA_SNEP_INCLUDED==TRUE))
+#if (NFA_SNEP_INCLUDED == TRUE)
 #include "llcp_api.h"
 #include "nfa_snep_api.h"
 
@@ -279,5 +279,5 @@ bool    nfa_snep_put_req (tNFA_SNEP_MSG *p_msg);
 bool    nfa_snep_get_req (tNFA_SNEP_MSG *p_msg);
 bool    nfa_snep_disconnect (tNFA_SNEP_MSG *p_msg);
 
-#endif /* (defined (NFA_SNEP_INCLUDED) && (NFA_SNEP_INCLUDED==TRUE)) */
+#endif /* (NFA_SNEP_INCLUDED == TRUE) */
 #endif /* NFA_SNEP_INT_H */

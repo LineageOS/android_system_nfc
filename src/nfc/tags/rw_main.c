@@ -44,7 +44,7 @@ void rw_init (void)
 
 }
 
-#if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
+#if (RW_STATS_INCLUDED == TRUE)
 /*******************************************************************************
 * Internal functions for statistics
 *******************************************************************************/
@@ -221,7 +221,7 @@ tNFC_STATUS RW_SetActivatedTagType (tNFC_ACTIVATE_DEVT *p_activate_params, tRW_C
     /* Reset tag-specific area of control block */
     memset (&rw_cb.tcb, 0, sizeof (tRW_TCB));
 
-#if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
+#if (RW_STATS_INCLUDED == TRUE)
     /* Reset RW stats */
     rw_main_reset_stats ();
 #endif  /* RW_STATS_INCLUDED */

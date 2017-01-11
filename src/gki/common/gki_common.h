@@ -67,7 +67,7 @@ typedef struct _buffer_hdr
     uint8_t status;               /* FREE, UNLINKED or QUEUED */
     uint8_t Type;
 
-#if GKI_BUFFER_DEBUG
+#if (GKI_BUFFER_DEBUG == TRUE)
     /* for tracking who allocated the buffer */
     #define _GKI_MAX_FUNCTION_NAME_LEN   (50)
     char    _function[_GKI_MAX_FUNCTION_NAME_LEN+1];
@@ -99,7 +99,7 @@ typedef struct _free_queue
 #define BUF_STATUS_UNLINKED 1
 #define BUF_STATUS_QUEUED   2
 
-#define GKI_USE_DEFERED_ALLOC_BUF_POOLS
+#define GKI_USE_DEFERED_ALLOC_BUF_POOLS TRUE
 
 /* Exception related structures (Used in debug mode only)
 */
@@ -121,7 +121,7 @@ typedef struct
     */
     /* The stack and stack size are not used on Windows
     */
-#if (!defined GKI_USE_DEFERED_ALLOC_BUF_POOLS && (GKI_USE_DYNAMIC_BUFFERS == FALSE))
+#if (GKI_USE_DYNAMIC_BUFFERS == FALSE)
 
 #if (GKI_NUM_FIXED_BUF_POOLS > 0)
     uint8_t bufpool0[(ALIGN_POOL(GKI_BUF0_SIZE) + BUFFER_PADDING_SIZE) * GKI_BUF0_MAX];
@@ -274,7 +274,7 @@ typedef struct
     /* Timer related variables
     */
     int32_t OSTicksTilExp;      /* Number of ticks till next timer expires */
-#if (defined(GKI_DELAY_STOP_SYS_TICK) && (GKI_DELAY_STOP_SYS_TICK > 0))
+#if (GKI_DELAY_STOP_SYS_TICK > 0)
     uint32_t  OSTicksTilStop;     /* inactivity delay timer; OS Ticks till stopping system tick */
 #endif
     int32_t OSNumOrigTicks;     /* Number of ticks between last timer expiration to the next one */

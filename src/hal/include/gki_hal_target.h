@@ -243,7 +243,7 @@
 #endif
 
 
-#if defined(GKI_DEBUG) && (GKI_DEBUG == TRUE)
+#if (GKI_DEBUG == TRUE)
 #ifdef LOG_TAG
 #undef LOG_TAG
 #endif

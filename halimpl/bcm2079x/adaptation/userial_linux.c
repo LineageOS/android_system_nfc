@@ -906,7 +906,7 @@ bool    userial_to_tcio_baud(uint8_t cfg_baud, uint32_t * baud)
     return true;
 }
 
-#if (USERIAL_USE_IO_BT_WAKE==TRUE)
+#if (USERIAL_USE_IO_BT_WAKE == TRUE)
 /*******************************************************************************
  **
  ** Function           userial_io_init_bt_wake
@@ -1093,7 +1093,7 @@ UDRV_API void USERIAL_Open(tUSERIAL_PORT port, tUSERIAL_OPEN_CFG *p_cfg, tUSERIA
 
             tcflush(linux_cb.sock, TCIOFLUSH);
 
-#if (USERIAL_USE_IO_BT_WAKE==TRUE)
+#if (USERIAL_USE_IO_BT_WAKE == TRUE)
             userial_io_init_bt_wake( linux_cb.sock, &linux_cb.bt_wake_state );
 #endif
             GKI_delay(gPowerOnDelay);
@@ -1110,7 +1110,7 @@ UDRV_API void USERIAL_Open(tUSERIAL_PORT port, tUSERIAL_OPEN_CFG *p_cfg, tUSERIA
     GKI_create_task ((TASKPTR)userial_read_thread, USERIAL_HAL_TASK, (int8_t*)"USERIAL_HAL_TASK", 0, 0, (pthread_cond_t*)NULL, NULL);
 
 
-#if (defined USERIAL_DEBUG) && (USERIAL_DEBUG == TRUE)
+#if (USERIAL_DEBUG == TRUE)
     ALOGD( "Leaving USERIAL_Open\n");
 #endif
 
@@ -1146,7 +1146,7 @@ UDRV_API uint16_t  USERIAL_Read(tUSERIAL_PORT port, uint8_t *p_data, uint16_t le
     uint16_t copy_len = 0;
     uint8_t * current_packet = NULL;
 
-#if (defined USERIAL_DEBUG) && (USERIAL_DEBUG == TRUE)
+#if (USERIAL_DEBUG == TRUE)
     ALOGD( "%s ++ len=%d pbuf_USERIAL_Read=%p, p_data=%p\n", __func__, len, pbuf_USERIAL_Read, p_data);
 #endif
     do
@@ -1179,7 +1179,7 @@ UDRV_API uint16_t  USERIAL_Read(tUSERIAL_PORT port, uint8_t *p_data, uint16_t le
 
     } while ((pbuf_USERIAL_Read != NULL) && (total_len < len));
 
-#if (defined USERIAL_DEBUG) && (USERIAL_DEBUG == TRUE)
+#if (USERIAL_DEBUG == TRUE)
     ALOGD( "%s: returned %d bytes", __func__, total_len);
 #endif
     return total_len;
@@ -1291,14 +1291,14 @@ UDRV_API uint16_t  USERIAL_Write(tUSERIAL_PORT port, uint8_t *p_data, uint16_t l
 *******************************************************************************/
 void userial_change_rate(uint8_t baud)
 {
-#if defined (USING_BRCM_USB) && (USING_BRCM_USB == FALSE)
+#if (USING_BRCM_USB == FALSE)
     struct termios termios;
 #endif
-#if (USERIAL_USE_TCIO_BAUD_CHANGE==TRUE)
+#if (USERIAL_USE_TCIO_BAUD_CHANGE == TRUE)
     uint32_t tcio_baud;
 #endif
 
-#if defined (USING_BRCM_USB) && (USING_BRCM_USB == FALSE)
+#if (USING_BRCM_USB == FALSE)
     tcflush(linux_cb.sock, TCIOFLUSH);
 
     tcgetattr(linux_cb.sock, &termios);
@@ -1313,7 +1313,7 @@ void userial_change_rate(uint8_t baud)
     tcflush(linux_cb.sock, TCIOFLUSH);
 
 #else
-#if (USERIAL_USE_TCIO_BAUD_CHANGE==FALSE)
+#if (USERIAL_USE_TCIO_BAUD_CHANGE == FALSE)
     fprintf(stderr, "userial_change_rate: Closing UART Port\n");
     ALOGI("userial_change_rate: Closing UART Port\n");
     USERIAL_Close(linux_cb.port);
@@ -1379,7 +1379,7 @@ void userial_close_port( void )
 
 UDRV_API void    USERIAL_Ioctl(tUSERIAL_PORT port, tUSERIAL_OP op, tUSERIAL_IOCTL_DATA *p_data)
 {
-#if (defined LINUX_OS) && (LINUX_OS == TRUE)
+#if (defined(LINUX_OS) && LINUX_OS == TRUE)
     USB_SCO_CONTROL ioctl_data;
 
     /* just ignore port parameter as we are using USB in this case  */

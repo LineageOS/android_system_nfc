@@ -1193,7 +1193,7 @@ void nfc_hal_dm_shutting_down_nfcc (void)
     nfc_hal_main_stop_quick_timer (&nfc_hal_cb.ncit_cb.nci_wait_rsp_timer);
     nfc_hal_main_stop_quick_timer (&nfc_hal_cb.dev_cb.lp_timer);
     nfc_hal_main_stop_quick_timer (&nfc_hal_cb.prm.timer);
-#if (defined(NFC_HAL_HCI_INCLUDED) && (NFC_HAL_HCI_INCLUDED == TRUE))
+#if (NFC_HAL_HCI_INCLUDED == TRUE)
     nfc_hal_cb.hci_cb.hcp_conn_id = 0;
     nfc_hal_main_stop_quick_timer (&nfc_hal_cb.hci_cb.hci_timer);
 #endif
@@ -1218,7 +1218,7 @@ void nfc_hal_dm_init (void)
 
     nfc_hal_cb.ncit_cb.nci_wait_rsp_timer.p_cback = nfc_hal_nci_cmd_timeout_cback;
 
-#if (defined(NFC_HAL_HCI_INCLUDED) && (NFC_HAL_HCI_INCLUDED == TRUE))
+#if (NFC_HAL_HCI_INCLUDED == TRUE)
     nfc_hal_cb.hci_cb.hci_timer.p_cback = nfc_hal_hci_timeout_cback;
 #endif
 
