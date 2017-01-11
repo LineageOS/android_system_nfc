@@ -548,12 +548,12 @@ extern tNFA_DM_CB nfa_dm_cb;
 
 void nfa_dm_init (void);
 void nfa_p2p_init (void);
-#if (defined (NFA_CHO_INCLUDED) && (NFA_CHO_INCLUDED==TRUE))
+#if (NFA_CHO_INCLUDED == TRUE)
 void nfa_cho_init (void);
 #else
 #define nfa_cho_init()
-#endif /* (defined (NFA_CHO_INCLUDED) && (NFA_CHO_INCLUDED==TRUE)) */
-#if (defined (NFA_SNEP_INCLUDED) && (NFA_SNEP_INCLUDED==TRUE))
+#endif /* (NFA_CHO_INCLUDED == TRUE) */
+#if (NFA_SNEP_INCLUDED == TRUE)
 void nfa_snep_init (bool    is_dta_mode);
 #else
 #define nfa_snep_init(is_dta_mode)

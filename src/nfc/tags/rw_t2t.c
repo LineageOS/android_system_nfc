@@ -86,7 +86,7 @@ static void rw_t2t_proc_data (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
         (*rw_cb.p_cback) (RW_T2T_RAW_FRAME_EVT, (tRW_DATA *)&evt_data);
         return;
     }
-#if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
+#if (RW_STATS_INCLUDED == TRUE)
     /* Update rx stats */
     rw_main_update_rx_stats (p_pkt->len);
 #endif
@@ -272,7 +272,7 @@ void rw_t2t_conn_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
         break;
 
     case NFC_DEACTIVATE_CEVT:
-#if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
+#if (RW_STATS_INCLUDED == TRUE)
         /* Display stats */
         rw_main_log_stats ();
 #endif
@@ -319,7 +319,7 @@ void rw_t2t_conn_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
             ||(p_t2t->state == RW_T2T_STATE_IDLE)
             ||(p_t2t->state == RW_T2T_STATE_HALT)  )
         {
-#if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
+#if (RW_STATS_INCLUDED == TRUE)
             rw_main_update_trans_error_stats ();
 #endif  /* RW_STATS_INCLUDED */
             if (event == NFC_ERROR_CEVT)
@@ -334,7 +334,7 @@ void rw_t2t_conn_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
             break;
         }
         nfc_stop_quick_timer (&p_t2t->t2_timer);
-#if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
+#if (RW_STATS_INCLUDED == TRUE)
         rw_main_update_trans_error_stats ();
 #endif
         if (p_t2t->state == RW_T2T_STATE_CHECK_PRESENCE)
@@ -404,7 +404,7 @@ tNFC_STATUS rw_t2t_send_cmd (uint8_t opcode, uint8_t *p_dat)
             rw_cb.cur_retry = 0;
             memcpy (p_t2t->p_cur_cmd_buf, p_data, sizeof (BT_HDR) + p_data->offset + p_data->len);
 
-#if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
+#if (RW_STATS_INCLUDED == TRUE)
             /* Update stats */
             rw_main_update_tx_stats (p_data->len, false);
 #endif
@@ -502,7 +502,7 @@ void rw_t2t_process_timeout (TIMER_LIST_ENT *p_tle)
 *******************************************************************************/
 static void rw_t2t_process_frame_error (void)
 {
-#if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
+#if (RW_STATS_INCLUDED == TRUE)
     /* Update stats */
     rw_main_update_crc_error_stats ();
 #endif
@@ -545,7 +545,7 @@ static void rw_t2t_process_error (void)
         if ((p_cmd_buf = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) != NULL)
         {
             memcpy (p_cmd_buf, p_t2t->p_cur_cmd_buf, sizeof (BT_HDR) + p_t2t->p_cur_cmd_buf->offset + p_t2t->p_cur_cmd_buf->len);
-#if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
+#if (RW_STATS_INCLUDED == TRUE)
             /* Update stats */
             rw_main_update_tx_stats (p_cmd_buf->len, true);
 #endif
@@ -571,7 +571,7 @@ static void rw_t2t_process_error (void)
         }
     }
     rw_event = rw_t2t_info_to_event (p_cmd_rsp_info);
-#if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
+#if (RW_STATS_INCLUDED == TRUE)
     /* update failure count */
     rw_main_update_fail_stats ();
 #endif
@@ -663,7 +663,7 @@ static void rw_t2t_resume_op (void)
         memcpy (p_cmd_buf, p_t2t->p_sec_cmd_buf, sizeof (BT_HDR) + p_t2t->p_sec_cmd_buf->offset + p_t2t->p_sec_cmd_buf->len);
         memcpy (p_t2t->p_cur_cmd_buf, p_t2t->p_sec_cmd_buf, sizeof (BT_HDR) + p_t2t->p_sec_cmd_buf->offset + p_t2t->p_sec_cmd_buf->len);
 
-#if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
+#if (RW_STATS_INCLUDED == TRUE)
         /* Update stats */
          rw_main_update_tx_stats (p_cmd_buf->len, true);
 #endif

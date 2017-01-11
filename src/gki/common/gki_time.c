@@ -47,7 +47,7 @@ void gki_timers_init(void)
 
     gki_cb.com.OSTicksTilExp = 0;       /* Remaining time (of OSTimeCurTimeout) before next timer expires */
     gki_cb.com.OSNumOrigTicks = 0;
-#if (defined(GKI_DELAY_STOP_SYS_TICK) && (GKI_DELAY_STOP_SYS_TICK > 0))
+#if (GKI_DELAY_STOP_SYS_TICK > 0)
     gki_cb.com.OSTicksTilStop = 0;      /* clear inactivity delay timer */
 #endif
 
@@ -216,7 +216,7 @@ void GKI_start_timer (uint8_t tnum, int32_t ticks, bool    is_continuous)
 
     if(gki_timers_is_timer_running() == false)
     {
-#if (defined(GKI_DELAY_STOP_SYS_TICK) && (GKI_DELAY_STOP_SYS_TICK > 0))
+#if (GKI_DELAY_STOP_SYS_TICK > 0)
         /* if inactivity delay timer is not running, start system tick */
         if(gki_cb.com.OSTicksTilStop == 0)
         {
@@ -227,7 +227,7 @@ void GKI_start_timer (uint8_t tnum, int32_t ticks, bool    is_continuous)
                 gki_cb.com.system_tick_running = true;
                 (gki_cb.com.p_tick_cb)(true);
             }
-#if (defined(GKI_DELAY_STOP_SYS_TICK) && (GKI_DELAY_STOP_SYS_TICK > 0))
+#if (GKI_DELAY_STOP_SYS_TICK > 0)
         }
         else
         {
@@ -345,7 +345,7 @@ void GKI_stop_timer (uint8_t tnum)
     {
         if (gki_cb.com.p_tick_cb)
         {
-#if (defined(GKI_DELAY_STOP_SYS_TICK) && (GKI_DELAY_STOP_SYS_TICK > 0))
+#if (GKI_DELAY_STOP_SYS_TICK > 0)
             /* if inactivity delay timer is not running */
             if ((gki_cb.com.system_tick_running)&&(gki_cb.com.OSTicksTilStop == 0))
             {
@@ -403,7 +403,7 @@ void GKI_timer_update (int32_t ticks_since_last_update)
 
     gki_cb.com.timer_nesting = 1;
 
-#if (defined(GKI_DELAY_STOP_SYS_TICK) && (GKI_DELAY_STOP_SYS_TICK > 0))
+#if (GKI_DELAY_STOP_SYS_TICK > 0)
     /* if inactivity delay timer is set and expired */
     if (gki_cb.com.OSTicksTilStop)
     {
@@ -469,7 +469,7 @@ void GKI_timer_update (int32_t ticks_since_last_update)
             if (gki_cb.com.OSTaskTmr0[task_id] <= 0)
             {
                 /* Set Timer 0 Expired event mask and reload timer */
-#if (defined(GKI_TIMER_UPDATES_FROM_ISR) &&  GKI_TIMER_UPDATES_FROM_ISR == TRUE)
+#if (GKI_TIMER_UPDATES_FROM_ISR == TRUE)
                 GKI_isend_event (task_id, TIMER_0_EVT_MASK);
 #else
                 GKI_send_event (task_id, TIMER_0_EVT_MASK);
@@ -492,7 +492,7 @@ void GKI_timer_update (int32_t ticks_since_last_update)
             if (gki_cb.com.OSTaskTmr1[task_id] <= 0)
             {
                 /* Set Timer 1 Expired event mask and reload timer */
-#if (defined(GKI_TIMER_UPDATES_FROM_ISR) &&  GKI_TIMER_UPDATES_FROM_ISR == TRUE)
+#if (GKI_TIMER_UPDATES_FROM_ISR == TRUE)
                 GKI_isend_event (task_id, TIMER_1_EVT_MASK);
 #else
                 GKI_send_event (task_id, TIMER_1_EVT_MASK);
@@ -515,7 +515,7 @@ void GKI_timer_update (int32_t ticks_since_last_update)
             if (gki_cb.com.OSTaskTmr2[task_id] <= 0)
             {
                 /* Set Timer 2 Expired event mask and reload timer */
-#if (defined(GKI_TIMER_UPDATES_FROM_ISR) &&  GKI_TIMER_UPDATES_FROM_ISR == TRUE)
+#if (GKI_TIMER_UPDATES_FROM_ISR == TRUE)
                 GKI_isend_event (task_id, TIMER_2_EVT_MASK);
 #else
                 GKI_send_event (task_id, TIMER_2_EVT_MASK);
@@ -538,7 +538,7 @@ void GKI_timer_update (int32_t ticks_since_last_update)
             if (gki_cb.com.OSTaskTmr3[task_id] <= 0)
             {
                 /* Set Timer 3 Expired event mask and reload timer */
-#if (defined(GKI_TIMER_UPDATES_FROM_ISR) &&  GKI_TIMER_UPDATES_FROM_ISR == TRUE)
+#if (GKI_TIMER_UPDATES_FROM_ISR == TRUE)
                 GKI_isend_event (task_id, TIMER_3_EVT_MASK);
 #else
                 GKI_send_event (task_id, TIMER_3_EVT_MASK);

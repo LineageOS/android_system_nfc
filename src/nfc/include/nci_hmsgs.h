@@ -60,7 +60,7 @@ uint8_t nci_snd_discover_map_cmd (uint8_t num, tNCI_DISCOVER_MAPS *p_maps);
 uint8_t nci_snd_t3t_polling (uint16_t system_code, uint8_t rc, uint8_t tsn);
 uint8_t nci_snd_parameter_update_cmd (uint8_t *p_param_tlvs, uint8_t tlv_size);
 
-#if ((NFC_NFCEE_INCLUDED == TRUE) && (NFC_RW_ONLY == FALSE))
+#if (NFC_NFCEE_INCLUDED == TRUE && NFC_RW_ONLY == FALSE)
 uint8_t nci_snd_nfcee_discover (uint8_t discover_action);
 uint8_t nci_snd_nfcee_mode_set (uint8_t nfcee_id, uint8_t nfcee_mode);
 uint8_t nci_snd_set_routing_cmd (bool    more, uint8_t num_tlv, uint8_t tlv_size, uint8_t *p_param_tlvs);

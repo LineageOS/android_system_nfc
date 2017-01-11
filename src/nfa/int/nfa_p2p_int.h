@@ -25,7 +25,7 @@
 #ifndef NFA_P2P_INT_H
 #define NFA_P2P_INT_H
 
-#if (defined (NFA_P2P_INCLUDED) && (NFA_P2P_INCLUDED==TRUE))
+#if (NFA_P2P_INCLUDED == TRUE)
 #include "nfa_p2p_api.h"
 #include "nfa_dm_int.h"
 
@@ -330,5 +330,5 @@ char *nfa_p2p_evt_code (uint16_t evt_code);
 #define nfa_p2p_deactivate_llcp ()
 #define nfa_p2p_set_config ()
 
-#endif /* (defined (NFA_P2P_INCLUDED) && (NFA_P2P_INCLUDED==TRUE)) */
+#endif /* (NFA_P2P_INCLUDED == TRUE) */
 #endif /* NFA_P2P_INT_H */
