@@ -1193,7 +1193,7 @@ tNFC_STATUS NFC_Deactivate (tNFC_DEACT_TYPE deactivate_type)
             (p_cb->init_credits != p_cb->num_buff))
         {
             nfc_cb.flags           |= NFC_FL_DEACTIVATING;
-            nfc_cb.deactivate_timer.param = (TIMER_PARAM_TYPE) deactivate_type;
+            nfc_cb.deactivate_timer.param = (uintptr_t) deactivate_type;
             nfc_start_timer (&nfc_cb.deactivate_timer , (uint16_t) (NFC_TTYPE_WAIT_2_DEACTIVATE), NFC_DEACTIVATE_TIMEOUT);
             return status;
         }
