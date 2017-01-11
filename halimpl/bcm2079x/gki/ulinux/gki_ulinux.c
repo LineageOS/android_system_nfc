@@ -82,7 +82,7 @@ typedef struct
 {
     uint8_t task_id;          /* GKI task id */
     TASKPTR task_entry;     /* Task entry function*/
-    uint32_t params;          /* Extra params to pass to task entry function */
+    uintptr_t params;          /* Extra params to pass to task entry function */
     pthread_cond_t* pCond;	/* for android*/
     pthread_mutex_t* pMutex;  /* for android*/
 } gki_pthread_info_t;
@@ -99,7 +99,7 @@ static void* GKI_run_worker_thread (void*);
 ** Returns          void
 **
 *******************************************************************************/
-void gki_task_entry(uint32_t params)
+void gki_task_entry(uintptr_t params)
 {
     pthread_t thread_id = pthread_self();
     gki_pthread_info_t *p_pthread_info = (gki_pthread_info_t *)params;
