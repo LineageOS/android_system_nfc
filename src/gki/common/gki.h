@@ -326,13 +326,7 @@
 /* Timer list entry callback type
 */
 typedef void (TIMER_CBACK)(void *p_tle);
-#ifndef TIMER_PARAM_TYPE
-#ifdef  WIN2000
-#define TIMER_PARAM_TYPE    void *
-#else
-#define TIMER_PARAM_TYPE    uint32_t
-#endif
-#endif
+
 /* Define a timer list entry
 */
 typedef struct _tle
@@ -341,7 +335,7 @@ typedef struct _tle
     struct _tle  *p_prev;
     TIMER_CBACK  *p_cback;
     int32_t       ticks;
-    TIMER_PARAM_TYPE   param;
+    uintptr_t     param;
     uint16_t      event;
     uint8_t       in_use;
 } TIMER_LIST_ENT;

@@ -121,7 +121,7 @@ void nfc_wait_2_deactivate_timeout (void)
 {
     NFC_TRACE_ERROR0 ("nfc_wait_2_deactivate_timeout");
     nfc_cb.flags  &= ~NFC_FL_DEACTIVATING;
-    nci_snd_deactivate_cmd ((uint8_t) ((TIMER_PARAM_TYPE) nfc_cb.deactivate_timer.param));
+    nci_snd_deactivate_cmd ((uint8_t) nfc_cb.deactivate_timer.param);
 }
 
 
@@ -163,7 +163,7 @@ uint8_t nfc_ncif_send_data (tNFC_CONN_CB *p_cb, BT_HDR *p_data)
                         nfc_cb.flags  &= ~NFC_FL_DEACTIVATING;
                         NFC_TRACE_DEBUG2 ("deactivating NFC-DEP init_credits:%d, num_buff:%d", p_cb->init_credits, p_cb->num_buff);
                         nfc_stop_timer(&nfc_cb.deactivate_timer);
-                        nci_snd_deactivate_cmd ((uint8_t)((TIMER_PARAM_TYPE)nfc_cb.deactivate_timer.param));
+                        nci_snd_deactivate_cmd ((uint8_t)nfc_cb.deactivate_timer.param);
                     }
                 }
             }
