@@ -49,19 +49,19 @@ enum {
 #endif
     NFA_ID_MAX
 };
-typedef UINT8 tNFA_SYS_ID;
+typedef uint8_t tNFA_SYS_ID;
 
 /* enable function type */
 typedef void (tNFA_SYS_ENABLE) (void);
 
 /* event handler function type */
-typedef BOOLEAN (tNFA_SYS_EVT_HDLR) (BT_HDR *p_msg);
+typedef bool    (tNFA_SYS_EVT_HDLR) (BT_HDR *p_msg);
 
 /* disable function type */
 typedef void (tNFA_SYS_DISABLE) (void);
 
 /* function type for processing the change of NFCC power mode */
-typedef void (tNFA_SYS_PROC_NFCC_PWR_MODE) (UINT8 nfcc_power_mode);
+typedef void (tNFA_SYS_PROC_NFCC_PWR_MODE) (uint8_t nfcc_power_mode);
 
 typedef void (tNFA_SYS_CBACK) (void);
 typedef void (tNFA_SYS_ENABLE_CBACK) (void);
@@ -79,10 +79,10 @@ typedef struct
 /* system manager configuration structure */
 typedef struct
 {
-    UINT16          mbox_evt;                       /* GKI mailbox event */
-    UINT8           mbox;                           /* GKI mailbox id */
-    UINT8           timer;                          /* GKI timer id */
-    UINT8           trace_level;                    /* initial trace level */
+    uint16_t        mbox_evt;                       /* GKI mailbox event */
+    uint8_t         mbox;                           /* GKI mailbox id */
+    uint8_t         timer;                          /* GKI timer id */
+    uint8_t         trace_level;                    /* initial trace level */
 } tNFA_SYS_CFG;
 
 
@@ -110,26 +110,26 @@ NFC_API extern void nfa_sys_init (void);
 NFC_API extern void nfa_sys_event (BT_HDR *p_msg);
 NFC_API extern void nfa_sys_timer_update (void);
 NFC_API extern void nfa_sys_disable_timers (void);
-NFC_API extern void nfa_sys_set_trace_level (UINT8 level);
+NFC_API extern void nfa_sys_set_trace_level (uint8_t level);
 
-extern void nfa_sys_register (UINT8 id, const tNFA_SYS_REG *p_reg);
-extern void nfa_sys_deregister (UINT8 id);
+extern void nfa_sys_register (uint8_t id, const tNFA_SYS_REG *p_reg);
+extern void nfa_sys_deregister (uint8_t id);
 extern void nfa_sys_check_disabled (void);
-extern BOOLEAN nfa_sys_is_register (UINT8 id);
-extern void nfa_sys_disable_subsystems (BOOLEAN graceful);
+extern bool    nfa_sys_is_register (uint8_t id);
+extern void nfa_sys_disable_subsystems (bool    graceful);
 extern void nfa_sys_enable_subsystems (void);
 
-extern BOOLEAN nfa_sys_is_graceful_disable (void);
+extern bool    nfa_sys_is_graceful_disable (void);
 extern void nfa_sys_sendmsg (void *p_msg);
-extern void nfa_sys_start_timer (TIMER_LIST_ENT *p_tle, UINT16 type, INT32 timeout);
+extern void nfa_sys_start_timer (TIMER_LIST_ENT *p_tle, uint16_t type, int32_t timeout);
 extern void nfa_sys_stop_timer (TIMER_LIST_ENT *p_tle);
 
 extern void nfa_sys_cback_reg_enable_complete (tNFA_SYS_ENABLE_CBACK *p_cback);
-extern void nfa_sys_cback_notify_enable_complete (UINT8 id);
+extern void nfa_sys_cback_notify_enable_complete (uint8_t id);
 
-extern void nfa_sys_notify_nfcc_power_mode (UINT8 nfcc_power_mode);
+extern void nfa_sys_notify_nfcc_power_mode (uint8_t nfcc_power_mode);
 extern void nfa_sys_cback_reg_nfcc_power_mode_proc_complete (tNFA_SYS_PROC_NFCC_PWR_MODE_CMPL *p_cback);
-extern void nfa_sys_cback_notify_nfcc_power_mode_proc_complete (UINT8 id);
+extern void nfa_sys_cback_notify_nfcc_power_mode_proc_complete (uint8_t id);
 
 #ifdef __cplusplus
 }

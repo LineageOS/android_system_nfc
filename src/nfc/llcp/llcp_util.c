@@ -41,9 +41,9 @@
 ** Returns          TRUE if success
 **
 *******************************************************************************/
-BOOLEAN llcp_util_parse_link_params (UINT16 length, UINT8 *p_bytes)
+bool    llcp_util_parse_link_params (uint16_t length, uint8_t *p_bytes)
 {
-    UINT8 param_type, param_len, *p = p_bytes;
+    uint8_t param_type, param_len, *p = p_bytes;
 
     while (length)
     {
@@ -163,7 +163,7 @@ void llcp_util_adjust_ll_congestion (void)
 *******************************************************************************/
 void llcp_util_adjust_dl_rx_congestion (void)
 {
-    UINT8 idx, rx_congest_start;
+    uint8_t idx, rx_congest_start;
 
     if (llcp_cb.num_data_link_connection)
     {
@@ -210,7 +210,7 @@ void llcp_util_adjust_dl_rx_congestion (void)
 *******************************************************************************/
 void llcp_util_check_rx_congested_status (void)
 {
-    UINT8 idx;
+    uint8_t idx;
 
     if (llcp_cb.overall_rx_congested)
     {
@@ -267,15 +267,15 @@ void llcp_util_check_rx_congested_status (void)
 ** Returns          tLLCP_STATUS
 **
 *******************************************************************************/
-tLLCP_STATUS llcp_util_send_ui (UINT8 ssap, UINT8 dsap, tLLCP_APP_CB *p_app_cb, BT_HDR *p_msg)
+tLLCP_STATUS llcp_util_send_ui (uint8_t ssap, uint8_t dsap, tLLCP_APP_CB *p_app_cb, BT_HDR *p_msg)
 {
-    UINT8        *p;
+    uint8_t      *p;
     tLLCP_STATUS status = LLCP_STATUS_SUCCESS;
 
     p_msg->offset -= LLCP_PDU_HEADER_SIZE;
     p_msg->len    += LLCP_PDU_HEADER_SIZE;
 
-    p = (UINT8 *) (p_msg + 1) + p_msg->offset;
+    p = (uint8_t *) (p_msg + 1) + p_msg->offset;
     UINT16_TO_BE_STREAM (p, LLCP_GET_PDU_HEADER (dsap, LLCP_PDU_UI_TYPE, ssap));
 
     GKI_enqueue (&p_app_cb->ui_xmit_q, p_msg);
@@ -310,10 +310,10 @@ tLLCP_STATUS llcp_util_send_ui (UINT8 ssap, UINT8 dsap, tLLCP_APP_CB *p_app_cb, 
 ** Returns          void
 **
 *******************************************************************************/
-void llcp_util_send_disc (UINT8 dsap, UINT8 ssap)
+void llcp_util_send_disc (uint8_t dsap, uint8_t ssap)
 {
     BT_HDR *p_msg;
-    UINT8  *p;
+    uint8_t  *p;
 
     p_msg = (BT_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
 
@@ -322,7 +322,7 @@ void llcp_util_send_disc (UINT8 dsap, UINT8 ssap)
         p_msg->len      = LLCP_PDU_DISC_SIZE;
         p_msg->offset   = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
 
-        p = (UINT8 *) (p_msg + 1) + p_msg->offset;
+        p = (uint8_t *) (p_msg + 1) + p_msg->offset;
         UINT16_TO_BE_STREAM (p, LLCP_GET_PDU_HEADER (dsap, LLCP_PDU_DISC_TYPE, ssap));
 
         GKI_enqueue (&llcp_cb.lcb.sig_xmit_q, p_msg);
@@ -339,7 +339,7 @@ void llcp_util_send_disc (UINT8 dsap, UINT8 ssap)
 ** Returns          tLLCP_DLCB *
 **
 ******************************************************************************/
-tLLCP_DLCB *llcp_util_allocate_data_link (UINT8 reg_sap, UINT8 remote_sap)
+tLLCP_DLCB *llcp_util_allocate_data_link (uint8_t reg_sap, uint8_t remote_sap)
 {
     tLLCP_DLCB *p_dlcb = NULL;
     int         idx;
@@ -422,8 +422,8 @@ void llcp_util_deallocate_data_link (tLLCP_DLCB *p_dlcb)
 tLLCP_STATUS llcp_util_send_connect (tLLCP_DLCB *p_dlcb, tLLCP_CONNECTION_PARAMS *p_params)
 {
     BT_HDR *p_msg;
-    UINT8  *p;
-    UINT16  miu_len = 0, rw_len = 0, sn_len = 0;
+    uint8_t  *p;
+    uint16_t  miu_len = 0, rw_len = 0, sn_len = 0;
 
     if (p_params->miu != LLCP_DEFAULT_MIU)
     {
@@ -436,7 +436,7 @@ tLLCP_STATUS llcp_util_send_connect (tLLCP_DLCB *p_dlcb, tLLCP_CONNECTION_PARAMS
     }
     if ((strlen (p_params->sn)) && (p_dlcb->remote_sap == LLCP_SAP_SDP))
     {
-        sn_len = (UINT16) (2 + strlen (p_params->sn));    /* TYPE, LEN, SN */
+        sn_len = (uint16_t) (2 + strlen (p_params->sn));    /* TYPE, LEN, SN */
     }
 
     p_msg = (BT_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
@@ -446,7 +446,7 @@ tLLCP_STATUS llcp_util_send_connect (tLLCP_DLCB *p_dlcb, tLLCP_CONNECTION_PARAMS
         p_msg->len    = LLCP_PDU_HEADER_SIZE + miu_len + rw_len + sn_len;
         p_msg->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
 
-        p = (UINT8 *) (p_msg + 1) + p_msg->offset;
+        p = (uint8_t *) (p_msg + 1) + p_msg->offset;
 
         UINT16_TO_BE_STREAM (p, LLCP_GET_PDU_HEADER (p_dlcb->remote_sap, LLCP_PDU_CONNECT_TYPE, p_dlcb->local_sap));
 
@@ -489,9 +489,9 @@ tLLCP_STATUS llcp_util_send_connect (tLLCP_DLCB *p_dlcb, tLLCP_CONNECTION_PARAMS
 ** Returns          tLLCP_STATUS
 **
 *******************************************************************************/
-tLLCP_STATUS llcp_util_parse_connect (UINT8  *p_bytes, UINT16 length, tLLCP_CONNECTION_PARAMS *p_params)
+tLLCP_STATUS llcp_util_parse_connect (uint8_t  *p_bytes, uint16_t length, tLLCP_CONNECTION_PARAMS *p_params)
 {
-    UINT8 param_type, param_len, *p = p_bytes;
+    uint8_t param_type, param_len, *p = p_bytes;
 
     p_params->miu = LLCP_DEFAULT_MIU;
     p_params->rw  = LLCP_DEFAULT_RW;
@@ -578,8 +578,8 @@ tLLCP_STATUS llcp_util_parse_connect (UINT8  *p_bytes, UINT16 length, tLLCP_CONN
 tLLCP_STATUS llcp_util_send_cc (tLLCP_DLCB *p_dlcb, tLLCP_CONNECTION_PARAMS *p_params)
 {
     BT_HDR *p_msg;
-    UINT8  *p;
-    UINT16  miu_len = 0, rw_len = 0;
+    uint8_t  *p;
+    uint16_t  miu_len = 0, rw_len = 0;
 
     if (p_params->miu != LLCP_DEFAULT_MIU)
     {
@@ -598,7 +598,7 @@ tLLCP_STATUS llcp_util_send_cc (tLLCP_DLCB *p_dlcb, tLLCP_CONNECTION_PARAMS *p_p
         p_msg->len      = LLCP_PDU_HEADER_SIZE + miu_len + rw_len;
         p_msg->offset   = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
 
-        p = (UINT8 *) (p_msg + 1) + p_msg->offset;
+        p = (uint8_t *) (p_msg + 1) + p_msg->offset;
 
         UINT16_TO_BE_STREAM (p, LLCP_GET_PDU_HEADER (p_dlcb->remote_sap, LLCP_PDU_CC_TYPE, p_dlcb->local_sap));
 
@@ -634,9 +634,9 @@ tLLCP_STATUS llcp_util_send_cc (tLLCP_DLCB *p_dlcb, tLLCP_CONNECTION_PARAMS *p_p
 ** Returns          tLLCP_STATUS
 **
 *******************************************************************************/
-tLLCP_STATUS llcp_util_parse_cc (UINT8 *p_bytes, UINT16 length, UINT16 *p_miu, UINT8 *p_rw)
+tLLCP_STATUS llcp_util_parse_cc (uint8_t *p_bytes, uint16_t length, uint16_t *p_miu, uint8_t *p_rw)
 {
-    UINT8 param_type, param_len, *p = p_bytes;
+    uint8_t param_type, param_len, *p = p_bytes;
 
     *p_miu = LLCP_DEFAULT_MIU;
     *p_rw  = LLCP_DEFAULT_RW;
@@ -692,10 +692,10 @@ tLLCP_STATUS llcp_util_parse_cc (UINT8 *p_bytes, UINT16 length, UINT16 *p_miu, U
 ** Returns          void
 **
 *******************************************************************************/
-void llcp_util_send_dm (UINT8 dsap, UINT8 ssap, UINT8 reason)
+void llcp_util_send_dm (uint8_t dsap, uint8_t ssap, uint8_t reason)
 {
     BT_HDR *p_msg;
-    UINT8  *p;
+    uint8_t  *p;
 
     p_msg = (BT_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
 
@@ -704,7 +704,7 @@ void llcp_util_send_dm (UINT8 dsap, UINT8 ssap, UINT8 reason)
         p_msg->len    = LLCP_PDU_DM_SIZE;
         p_msg->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
 
-        p = (UINT8 *) (p_msg + 1) + p_msg->offset;
+        p = (uint8_t *) (p_msg + 1) + p_msg->offset;
         UINT16_TO_BE_STREAM (p, LLCP_GET_PDU_HEADER (dsap, LLCP_PDU_DM_TYPE, ssap));
         UINT8_TO_BE_STREAM  (p, reason);
 
@@ -725,12 +725,12 @@ void llcp_util_send_dm (UINT8 dsap, UINT8 ssap, UINT8 reason)
 *******************************************************************************/
 void llcp_util_build_info_pdu (tLLCP_DLCB *p_dlcb, BT_HDR *p_msg)
 {
-    UINT8  *p;
-    UINT8  rcv_seq;
+    uint8_t  *p;
+    uint8_t  rcv_seq;
 
     p_msg->offset -= LLCP_PDU_HEADER_SIZE + LLCP_SEQUENCE_SIZE;
     p_msg->len    += LLCP_PDU_HEADER_SIZE + LLCP_SEQUENCE_SIZE;
-    p = (UINT8 *) (p_msg + 1) + p_msg->offset;
+    p = (uint8_t *) (p_msg + 1) + p_msg->offset;
 
     UINT16_TO_BE_STREAM (p, LLCP_GET_PDU_HEADER (p_dlcb->remote_sap, LLCP_PDU_I_TYPE, p_dlcb->local_sap));
 
@@ -758,10 +758,10 @@ void llcp_util_build_info_pdu (tLLCP_DLCB *p_dlcb, BT_HDR *p_msg)
 ** Returns          tLLCP_STATUS
 **
 *******************************************************************************/
-tLLCP_STATUS llcp_util_send_frmr (tLLCP_DLCB *p_dlcb, UINT8 flags, UINT8 ptype, UINT8 sequence)
+tLLCP_STATUS llcp_util_send_frmr (tLLCP_DLCB *p_dlcb, uint8_t flags, uint8_t ptype, uint8_t sequence)
 {
     BT_HDR *p_msg;
-    UINT8  *p;
+    uint8_t  *p;
 
     p_msg = (BT_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
 
@@ -770,7 +770,7 @@ tLLCP_STATUS llcp_util_send_frmr (tLLCP_DLCB *p_dlcb, UINT8 flags, UINT8 ptype, 
         p_msg->len      = LLCP_PDU_FRMR_SIZE;
         p_msg->offset   = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
 
-        p = (UINT8 *) (p_msg + 1) + p_msg->offset;
+        p = (uint8_t *) (p_msg + 1) + p_msg->offset;
 
         UINT16_TO_BE_STREAM (p, LLCP_GET_PDU_HEADER (p_dlcb->remote_sap, LLCP_PDU_FRMR_TYPE, p_dlcb->local_sap));
         UINT8_TO_BE_STREAM (p, (flags << 4) | ptype);
@@ -802,10 +802,10 @@ tLLCP_STATUS llcp_util_send_frmr (tLLCP_DLCB *p_dlcb, UINT8 flags, UINT8 ptype, 
 void llcp_util_send_rr_rnr (tLLCP_DLCB *p_dlcb)
 {
     BT_HDR *p_msg;
-    UINT8  *p;
-    UINT8   pdu_type;
-    UINT8   pdu_size;
-    UINT8   rcv_seq;
+    uint8_t  *p;
+    uint8_t pdu_type;
+    uint8_t pdu_size;
+    uint8_t rcv_seq;
 
     /* if no indication of change in local busy or rx congestion */
     if ((p_dlcb->flags & LLCP_DATA_LINK_FLAG_PENDING_RR_RNR) == 0)
@@ -859,7 +859,7 @@ void llcp_util_send_rr_rnr (tLLCP_DLCB *p_dlcb)
         p_msg->len    = pdu_size;
         p_msg->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
 
-        p = (UINT8 *) (p_msg + 1) + p_msg->offset;
+        p = (uint8_t *) (p_msg + 1) + p_msg->offset;
 
         UINT16_TO_BE_STREAM (p, LLCP_GET_PDU_HEADER (p_dlcb->remote_sap, pdu_type, p_dlcb->local_sap));
 
@@ -889,7 +889,7 @@ void llcp_util_send_rr_rnr (tLLCP_DLCB *p_dlcb)
 ** Returns          tLLCP_APP_CB *
 **
 *******************************************************************************/
-tLLCP_APP_CB *llcp_util_get_app_cb (UINT8 local_sap)
+tLLCP_APP_CB *llcp_util_get_app_cb (uint8_t local_sap)
 {
     tLLCP_APP_CB *p_app_cb = NULL;
 

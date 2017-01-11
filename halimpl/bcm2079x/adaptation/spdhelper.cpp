@@ -31,7 +31,7 @@ void SpdHelper::incErrorCount()
     getInstance().incErrorCountImpl();
 }
 
-bool SpdHelper::isPatchBad(UINT8* prm, UINT32 len)
+bool SpdHelper::isPatchBad(uint8_t* prm, uint32_t len)
 {
     return getInstance().isPatchBadImpl(prm, len);
 }
@@ -56,7 +56,7 @@ void SpdHelper::setPatchAsBadImpl()
     mIsPatchBad = true;
 }
 
-inline const char * toHex(UINT8 b)
+inline const char * toHex(uint8_t b)
 {
     static char hex[] = "0123456789ABCDEF";
     static char c[3];
@@ -66,7 +66,7 @@ inline const char * toHex(UINT8 b)
     return &c[0];
 }
 
-bool SpdHelper::isPatchBadImpl(UINT8* prm, UINT32 len)
+bool SpdHelper::isPatchBadImpl(uint8_t* prm, uint32_t len)
 {
     string strNew;
 

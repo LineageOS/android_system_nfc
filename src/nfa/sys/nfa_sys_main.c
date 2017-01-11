@@ -70,13 +70,13 @@ void nfa_sys_init (void)
 *******************************************************************************/
 void nfa_sys_event (BT_HDR *p_msg)
 {
-    UINT8       id;
-    BOOLEAN     freebuf = TRUE;
+    uint8_t     id;
+    bool        freebuf = TRUE;
 
     NFA_TRACE_EVENT1 ("NFA got event 0x%04X", p_msg->event);
 
     /* get subsystem id from event */
-    id = (UINT8) (p_msg->event >> 8);
+    id = (uint8_t) (p_msg->event >> 8);
 
     /* verify id and call subsystem event handler */
     if ((id < NFA_ID_MAX) && (nfa_sys_cb.is_reg[id]))
@@ -122,7 +122,7 @@ void nfa_sys_timer_update (void)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_register (UINT8 id, const tNFA_SYS_REG *p_reg)
+void nfa_sys_register (uint8_t id, const tNFA_SYS_REG *p_reg)
 {
     nfa_sys_cb.reg[id] = (tNFA_SYS_REG *) p_reg;
     nfa_sys_cb.is_reg[id] = TRUE;
@@ -153,8 +153,8 @@ void nfa_sys_register (UINT8 id, const tNFA_SYS_REG *p_reg)
 *******************************************************************************/
 void nfa_sys_check_disabled (void)
 {
-    UINT8 id;
-    UINT8 done = TRUE;
+    uint8_t id;
+    uint8_t done = TRUE;
 
     /* Check if all subsystems above DM have been disabled. */
     for (id = (NFA_ID_DM+1); id < NFA_ID_MAX; id++)
@@ -186,7 +186,7 @@ void nfa_sys_check_disabled (void)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_deregister (UINT8 id)
+void nfa_sys_deregister (uint8_t id)
 {
     NFA_TRACE_DEBUG1 ("nfa_sys: deregistering subsystem %i", id);
 
@@ -217,7 +217,7 @@ void nfa_sys_deregister (UINT8 id)
 ** Returns          void
 **
 *******************************************************************************/
-BOOLEAN nfa_sys_is_register (UINT8 id)
+bool    nfa_sys_is_register (uint8_t id)
 {
     return nfa_sys_cb.is_reg[id];
 }
@@ -233,7 +233,7 @@ BOOLEAN nfa_sys_is_register (UINT8 id)
 ** Returns          void
 **
 *******************************************************************************/
-BOOLEAN nfa_sys_is_graceful_disable (void)
+bool    nfa_sys_is_graceful_disable (void)
 {
     return nfa_sys_cb.graceful_disable;
 }
@@ -249,7 +249,7 @@ BOOLEAN nfa_sys_is_graceful_disable (void)
 *******************************************************************************/
 void nfa_sys_enable_subsystems (void)
 {
-    UINT8 id;
+    uint8_t id;
 
     NFA_TRACE_DEBUG0 ("nfa_sys: enabling subsystems");
 
@@ -281,10 +281,10 @@ void nfa_sys_enable_subsystems (void)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_disable_subsystems (BOOLEAN graceful)
+void nfa_sys_disable_subsystems (bool    graceful)
 {
-    UINT8 id;
-    BOOLEAN done = TRUE;
+    uint8_t id;
+    bool    done = TRUE;
 
     NFA_TRACE_DEBUG1 ("nfa_sys: disabling subsystems:%d", graceful);
     nfa_sys_cb.graceful_disable = graceful;
@@ -324,9 +324,9 @@ void nfa_sys_disable_subsystems (BOOLEAN graceful)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_notify_nfcc_power_mode (UINT8 nfcc_power_mode)
+void nfa_sys_notify_nfcc_power_mode (uint8_t nfcc_power_mode)
 {
-    UINT8 id;
+    uint8_t id;
 
     NFA_TRACE_DEBUG1 ("nfa_sys: notify NFCC power mode(%d) to subsystems", nfcc_power_mode);
 
@@ -368,7 +368,7 @@ void nfa_sys_sendmsg (void *p_msg)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_start_timer (TIMER_LIST_ENT *p_tle, UINT16 type, INT32 timeout)
+void nfa_sys_start_timer (TIMER_LIST_ENT *p_tle, uint16_t type, int32_t timeout)
 {
     nfa_sys_ptim_start_timer (&nfa_sys_cb.ptim_cb, p_tle, type, timeout);
 }
@@ -411,7 +411,7 @@ void nfa_sys_disable_timers (void)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_set_trace_level (UINT8 level)
+void nfa_sys_set_trace_level (uint8_t level)
 {
     nfa_sys_cb.trace_level = level;
 }

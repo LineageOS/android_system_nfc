@@ -142,7 +142,7 @@ tNFA_STATUS NFA_Enable (tNFA_DM_CBACK        *p_dm_cback,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-tNFA_STATUS NFA_Disable (BOOLEAN graceful)
+tNFA_STATUS NFA_Disable (bool    graceful)
 {
     tNFA_DM_API_DISABLE *p_msg;
 
@@ -179,20 +179,20 @@ tNFA_STATUS NFA_Disable (BOOLEAN graceful)
 **
 *******************************************************************************/
 tNFA_STATUS NFA_SetConfig (tNFA_PMID param_id,
-                           UINT8     length,
-                           UINT8    *p_data)
+                           uint8_t   length,
+                           uint8_t  *p_data)
 {
     tNFA_DM_API_SET_CONFIG *p_msg;
 
     NFA_TRACE_API1 ("NFA_SetConfig (): param_id:0x%X", param_id);
 
-    if ((p_msg = (tNFA_DM_API_SET_CONFIG *) GKI_getbuf ((UINT16) (sizeof (tNFA_DM_API_SET_CONFIG) + length))) != NULL)
+    if ((p_msg = (tNFA_DM_API_SET_CONFIG *) GKI_getbuf ((uint16_t) (sizeof (tNFA_DM_API_SET_CONFIG) + length))) != NULL)
     {
         p_msg->hdr.event = NFA_DM_API_SET_CONFIG_EVT;
 
         p_msg->param_id = param_id;
         p_msg->length   = length;
-        p_msg->p_data   = (UINT8 *) (p_msg + 1);
+        p_msg->p_data   = (uint8_t *) (p_msg + 1);
 
         /* Copy parameter data */
         memcpy (p_msg->p_data, p_data, length);
@@ -217,7 +217,7 @@ tNFA_STATUS NFA_SetConfig (tNFA_PMID param_id,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-tNFA_STATUS NFA_GetConfig (UINT8 num_ids,
+tNFA_STATUS NFA_GetConfig (uint8_t num_ids,
                            tNFA_PMID *p_param_ids)
 {
     tNFA_DM_API_GET_CONFIG *p_msg;
@@ -225,7 +225,7 @@ tNFA_STATUS NFA_GetConfig (UINT8 num_ids,
     NFA_TRACE_API1 ("NFA_GetConfig (): num_ids: %i", num_ids);
 
 
-    if ((p_msg = (tNFA_DM_API_GET_CONFIG *) GKI_getbuf ((UINT16) (sizeof (tNFA_DM_API_GET_CONFIG) + num_ids))) != NULL)
+    if ((p_msg = (tNFA_DM_API_GET_CONFIG *) GKI_getbuf ((uint16_t) (sizeof (tNFA_DM_API_GET_CONFIG) + num_ids))) != NULL)
     {
         p_msg->hdr.event = NFA_DM_API_GET_CONFIG_EVT;
 
@@ -689,7 +689,7 @@ tNFA_STATUS NFA_StopRfDiscovery (void)
 **                  NFA_STATUS_FAILED: otherwise
 **
 *******************************************************************************/
-tNFA_STATUS NFA_SetRfDiscoveryDuration (UINT16 discovery_period_ms)
+tNFA_STATUS NFA_SetRfDiscoveryDuration (uint16_t discovery_period_ms)
 {
     tNFA_DM_API_SET_RF_DISC_DUR *p_msg;
 
@@ -727,7 +727,7 @@ tNFA_STATUS NFA_SetRfDiscoveryDuration (UINT16 discovery_period_ms)
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-tNFA_STATUS NFA_Select (UINT8             rf_disc_id,
+tNFA_STATUS NFA_Select (uint8_t           rf_disc_id,
                         tNFA_NFC_PROTOCOL protocol,
                         tNFA_INTF_TYPE    rf_interface)
 {
@@ -743,7 +743,7 @@ tNFA_STATUS NFA_Select (UINT8             rf_disc_id,
         return (NFA_STATUS_INVALID_PARAM);
     }
 
-    if ((p_msg = (tNFA_DM_API_SELECT *) GKI_getbuf ((UINT16) (sizeof (tNFA_DM_API_SELECT)))) != NULL)
+    if ((p_msg = (tNFA_DM_API_SELECT *) GKI_getbuf ((uint16_t) (sizeof (tNFA_DM_API_SELECT)))) != NULL)
     {
         p_msg->hdr.event     = NFA_DM_API_SELECT_EVT;
         p_msg->rf_disc_id    = rf_disc_id;
@@ -778,7 +778,7 @@ tNFA_STATUS NFA_UpdateRFCommParams (tNFA_RF_COMM_PARAMS *p_params)
 
     NFA_TRACE_API0 ("NFA_UpdateRFCommParams ()");
 
-    if ((p_msg = (tNFA_DM_API_UPDATE_RF_PARAMS *) GKI_getbuf ((UINT16) (sizeof (tNFA_DM_API_UPDATE_RF_PARAMS)))) != NULL)
+    if ((p_msg = (tNFA_DM_API_UPDATE_RF_PARAMS *) GKI_getbuf ((uint16_t) (sizeof (tNFA_DM_API_UPDATE_RF_PARAMS)))) != NULL)
     {
         p_msg->hdr.event     = NFA_DM_API_UPDATE_RF_PARAMS_EVT;
         memcpy (&p_msg->params, p_params, sizeof (tNFA_RF_COMM_PARAMS));
@@ -818,13 +818,13 @@ tNFA_STATUS NFA_UpdateRFCommParams (tNFA_RF_COMM_PARAMS *p_params)
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_Deactivate (BOOLEAN sleep_mode)
+NFC_API extern tNFA_STATUS NFA_Deactivate (bool    sleep_mode)
 {
     tNFA_DM_API_DEACTIVATE *p_msg;
 
     NFA_TRACE_API1 ("NFA_Deactivate (): sleep_mode:%i", sleep_mode);
 
-    if ((p_msg = (tNFA_DM_API_DEACTIVATE *) GKI_getbuf ((UINT16) (sizeof (tNFA_DM_API_DEACTIVATE)))) != NULL)
+    if ((p_msg = (tNFA_DM_API_DEACTIVATE *) GKI_getbuf ((uint16_t) (sizeof (tNFA_DM_API_DEACTIVATE)))) != NULL)
     {
         p_msg->hdr.event    = NFA_DM_API_DEACTIVATE_EVT;
         p_msg->sleep_mode   = sleep_mode;
@@ -854,13 +854,13 @@ NFC_API extern tNFA_STATUS NFA_Deactivate (BOOLEAN sleep_mode)
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-tNFA_STATUS NFA_SendRawFrame (UINT8  *p_raw_data,
-                              UINT16  data_len,
-                              UINT16  presence_check_start_delay)
+tNFA_STATUS NFA_SendRawFrame (uint8_t  *p_raw_data,
+                              uint16_t  data_len,
+                              uint16_t  presence_check_start_delay)
 {
     BT_HDR *p_msg;
-    UINT16  size;
-    UINT8  *p;
+    uint16_t  size;
+    uint8_t  *p;
 
     NFA_TRACE_API1 ("NFA_SendRawFrame () data_len:%d", data_len);
 
@@ -876,7 +876,7 @@ tNFA_STATUS NFA_SendRawFrame (UINT8  *p_raw_data,
         p_msg->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
         p_msg->len    = data_len;
 
-        p = (UINT8 *) (p_msg + 1) + p_msg->offset;
+        p = (uint8_t *) (p_msg + 1) + p_msg->offset;
         memcpy (p, p_raw_data, data_len);
 
         nfa_sys_sendmsg (p_msg);
@@ -915,10 +915,10 @@ tNFA_STATUS NFA_SendRawFrame (UINT8  *p_raw_data,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-tNFA_STATUS NFA_RegisterNDefTypeHandler (BOOLEAN         handle_whole_message,
+tNFA_STATUS NFA_RegisterNDefTypeHandler (bool            handle_whole_message,
                                          tNFA_TNF        tnf,
-                                         UINT8           *p_type_name,
-                                         UINT8           type_name_len,
+                                         uint8_t         *p_type_name,
+                                         uint8_t         type_name_len,
                                          tNFA_NDEF_CBACK *p_ndef_cback)
 {
     tNFA_DM_API_REG_NDEF_HDLR *p_msg;
@@ -933,7 +933,7 @@ tNFA_STATUS NFA_RegisterNDefTypeHandler (BOOLEAN         handle_whole_message,
     }
 
 
-    if ((p_msg = (tNFA_DM_API_REG_NDEF_HDLR *) GKI_getbuf ((UINT16) (sizeof (tNFA_DM_API_REG_NDEF_HDLR) + type_name_len))) != NULL)
+    if ((p_msg = (tNFA_DM_API_REG_NDEF_HDLR *) GKI_getbuf ((uint16_t) (sizeof (tNFA_DM_API_REG_NDEF_HDLR) + type_name_len))) != NULL)
     {
         p_msg->hdr.event = NFA_DM_API_REG_NDEF_HDLR_EVT;
 
@@ -972,10 +972,10 @@ tNFA_STATUS NFA_RegisterNDefTypeHandler (BOOLEAN         handle_whole_message,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_RegisterNDefUriHandler (BOOLEAN          handle_whole_message,
+NFC_API extern tNFA_STATUS NFA_RegisterNDefUriHandler (bool             handle_whole_message,
                                                        tNFA_NDEF_URI_ID uri_id,
-                                                       UINT8            *p_abs_uri,
-                                                       UINT8            uri_id_len,
+                                                       uint8_t          *p_abs_uri,
+                                                       uint8_t          uri_id_len,
                                                        tNFA_NDEF_CBACK  *p_ndef_cback)
 {
     tNFA_DM_API_REG_NDEF_HDLR *p_msg;
@@ -990,7 +990,7 @@ NFC_API extern tNFA_STATUS NFA_RegisterNDefUriHandler (BOOLEAN          handle_w
     }
 
 
-    if ((p_msg = (tNFA_DM_API_REG_NDEF_HDLR *) GKI_getbuf ((UINT16) (sizeof (tNFA_DM_API_REG_NDEF_HDLR) + uri_id_len))) != NULL)
+    if ((p_msg = (tNFA_DM_API_REG_NDEF_HDLR *) GKI_getbuf ((uint16_t) (sizeof (tNFA_DM_API_REG_NDEF_HDLR) + uri_id_len))) != NULL)
     {
         p_msg->hdr.event = NFA_DM_API_REG_NDEF_HDLR_EVT;
 
@@ -1038,7 +1038,7 @@ NFC_API extern tNFA_STATUS NFA_DeregisterNDefTypeHandler (tNFA_HANDLE ndef_type_
     NFA_TRACE_API1 ("NFA_DeregisterNDefHandler (): handle 0x%08x", ndef_type_handle);
 
 
-    if ((p_msg = (tNFA_DM_API_DEREG_NDEF_HDLR *) GKI_getbuf ((UINT16) (sizeof (tNFA_DM_API_DEREG_NDEF_HDLR)))) != NULL)
+    if ((p_msg = (tNFA_DM_API_DEREG_NDEF_HDLR *) GKI_getbuf ((uint16_t) (sizeof (tNFA_DM_API_DEREG_NDEF_HDLR)))) != NULL)
     {
         p_msg->hdr.event = NFA_DM_API_DEREG_NDEF_HDLR_EVT;
         p_msg->ndef_type_handle = ndef_type_handle;
@@ -1065,7 +1065,7 @@ NFC_API extern tNFA_STATUS NFA_DeregisterNDefTypeHandler (tNFA_HANDLE ndef_type_
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-tNFA_STATUS NFA_PowerOffSleepMode (BOOLEAN start_stop)
+tNFA_STATUS NFA_PowerOffSleepMode (bool    start_stop)
 {
     BT_HDR *p_msg;
 
@@ -1106,7 +1106,7 @@ tNFA_STATUS NFA_PowerOffSleepMode (BOOLEAN start_stop)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFA_RegVSCback (BOOLEAN          is_register,
+tNFC_STATUS NFA_RegVSCback (bool             is_register,
                             tNFA_VSC_CBACK   *p_cback)
 {
     tNFA_DM_API_REG_VSC *p_msg;
@@ -1150,13 +1150,13 @@ tNFC_STATUS NFA_RegVSCback (BOOLEAN          is_register,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-tNFA_STATUS NFA_SendVsCommand (UINT8            oid,
-                               UINT8            cmd_params_len,
-                               UINT8            *p_cmd_params,
+tNFA_STATUS NFA_SendVsCommand (uint8_t          oid,
+                               uint8_t          cmd_params_len,
+                               uint8_t          *p_cmd_params,
                                tNFA_VSC_CBACK    *p_cback)
 {
     tNFA_DM_API_SEND_VSC *p_msg;
-    UINT16  size = sizeof(tNFA_DM_API_SEND_VSC) + cmd_params_len;
+    uint16_t  size = sizeof(tNFA_DM_API_SEND_VSC) + cmd_params_len;
 
     NFA_TRACE_API1 ("NFA_SendVsCommand() oid=0x%x", oid);
 
@@ -1168,7 +1168,7 @@ tNFA_STATUS NFA_SendVsCommand (UINT8            oid,
         if (cmd_params_len && p_cmd_params)
         {
             p_msg->cmd_params_len   = cmd_params_len;
-            p_msg->p_cmd_params     = (UINT8 *)(p_msg + 1);
+            p_msg->p_cmd_params     = (uint8_t *)(p_msg + 1);
             memcpy (p_msg->p_cmd_params, p_cmd_params, cmd_params_len);
         }
         else
@@ -1195,7 +1195,7 @@ tNFA_STATUS NFA_SendVsCommand (UINT8            oid,
 ** Returns          The new or current trace level
 **
 *******************************************************************************/
-UINT8 NFA_SetTraceLevel (UINT8 new_level)
+uint8_t NFA_SetTraceLevel (uint8_t new_level)
 {
     if (new_level != 0xFF)
         nfa_sys_set_trace_level (new_level);

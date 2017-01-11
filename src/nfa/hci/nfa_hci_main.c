@@ -56,15 +56,15 @@ tNFA_HCI_CB nfa_hci_cb;
 *****************************************************************************/
 
 /* event handler function type */
-static BOOLEAN nfa_hci_evt_hdlr (BT_HDR *p_msg);
+static bool    nfa_hci_evt_hdlr (BT_HDR *p_msg);
 
 static void nfa_hci_sys_enable (void);
 static void nfa_hci_sys_disable (void);
 static void nfa_hci_rsp_timeout (tNFA_HCI_EVENT_DATA *p_evt_data);
-static void nfa_hci_conn_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data);
-static void nfa_hci_set_receive_buf (UINT8 pipe);
-static void nfa_hci_assemble_msg (UINT8 *p_data, UINT16 data_len);
-static void nfa_hci_handle_nv_read (UINT8 block, tNFA_STATUS status);
+static void nfa_hci_conn_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data);
+static void nfa_hci_set_receive_buf (uint8_t pipe);
+static void nfa_hci_assemble_msg (uint8_t *p_data, uint16_t data_len);
+static void nfa_hci_handle_nv_read (uint8_t block, tNFA_STATUS status);
 
 /*****************************************************************************
 **  Constants
@@ -88,7 +88,7 @@ static const tNFA_SYS_REG nfa_hci_sys_reg =
 *******************************************************************************/
 void nfa_hci_ee_info_cback (tNFA_EE_DISC_STS status)
 {
-    UINT8           num_nfcee = 3;
+    uint8_t         num_nfcee = 3;
     tNFA_EE_INFO    ee_info[3];
 
     NFA_TRACE_DEBUG1 ("nfa_hci_ee_info_cback (): %d", status);
@@ -211,14 +211,14 @@ void nfa_hci_init (void)
 ** Returns          None
 **
 *******************************************************************************/
-BOOLEAN nfa_hci_is_valid_cfg (void)
+bool    nfa_hci_is_valid_cfg (void)
 {
-    UINT8       xx,yy,zz;
+    uint8_t     xx,yy,zz;
     tNFA_HANDLE reg_app[NFA_HCI_MAX_APP_CB];
-    UINT8       valid_gate[NFA_HCI_MAX_GATE_CB];
-    UINT8       app_count       = 0;
-    UINT8       gate_count      = 0;
-    UINT32      pipe_inx_mask   = 0;
+    uint8_t     valid_gate[NFA_HCI_MAX_GATE_CB];
+    uint8_t     app_count       = 0;
+    uint8_t     gate_count      = 0;
+    uint32_t    pipe_inx_mask   = 0;
 
     /* First, see if valid values are stored in app names, send connectivity events flag */
     for (xx = 0; xx < NFA_HCI_MAX_APP_CB; xx++)
@@ -402,7 +402,7 @@ BOOLEAN nfa_hci_is_valid_cfg (void)
 ** Returns          None
 **
 *******************************************************************************/
-void nfa_hci_restore_default_config (UINT8 *p_session_id)
+void nfa_hci_restore_default_config (uint8_t *p_session_id)
 {
     memset (&nfa_hci_cb.cfg, 0, sizeof (nfa_hci_cb.cfg));
     memcpy (nfa_hci_cb.cfg.admin_gate.session_id, p_session_id, NFA_HCI_SESSION_ID_LEN);
@@ -418,7 +418,7 @@ void nfa_hci_restore_default_config (UINT8 *p_session_id)
 ** Returns          None
 **
 *******************************************************************************/
-void nfa_hci_proc_nfcc_power_mode (UINT8 nfcc_power_mode)
+void nfa_hci_proc_nfcc_power_mode (uint8_t nfcc_power_mode)
 {
     NFA_TRACE_DEBUG1 ("nfa_hci_proc_nfcc_power_mode () nfcc_power_mode=%d", nfcc_power_mode);
 
@@ -549,10 +549,10 @@ void nfa_hci_startup (void)
 {
     tNFA_STATUS     status = NFA_STATUS_FAILED;
     tNFA_EE_INFO    ee_info[2];
-    UINT8           num_nfcee = 2;
-    UINT8           target_handle;
-    UINT8           count = 0;
-    BOOLEAN         found = FALSE;
+    uint8_t         num_nfcee = 2;
+    uint8_t         target_handle;
+    uint8_t         count = 0;
+    bool            found = FALSE;
 
     if (HCI_LOOPBACK_DEBUG)
     {
@@ -568,7 +568,7 @@ void nfa_hci_startup (void)
 
         while ((count < num_nfcee) && (!found))
         {
-            target_handle = (UINT8) ee_info[count].ee_handle;
+            target_handle = (uint8_t) ee_info[count].ee_handle;
 
             if(ee_info[count].ee_interface[0] == NFA_EE_INTERFACE_HCI_ACCESS)
             {
@@ -611,7 +611,7 @@ static void nfa_hci_sys_enable (void)
     NFA_TRACE_DEBUG0 ("nfa_hci_sys_enable ()");
     nfa_ee_reg_cback_enable_done (&nfa_hci_ee_info_cback);
 
-    nfa_nv_co_read ((UINT8 *)&nfa_hci_cb.cfg, sizeof (nfa_hci_cb.cfg),DH_NV_BLOCK);
+    nfa_nv_co_read ((uint8_t *)&nfa_hci_cb.cfg, sizeof (nfa_hci_cb.cfg),DH_NV_BLOCK);
     nfa_sys_start_timer (&nfa_hci_cb.timer, NFA_HCI_RSP_TIMEOUT_EVT, NFA_HCI_NV_READ_TIMEOUT_VAL);
 }
 
@@ -656,13 +656,13 @@ static void nfa_hci_sys_disable (void)
 ** Returns          None
 **
 *******************************************************************************/
-static void nfa_hci_conn_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
+static void nfa_hci_conn_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
 {
-    UINT8   *p;
+    uint8_t *p;
     BT_HDR  *p_pkt = (BT_HDR *) p_data->data.p_data;
-    UINT8   chaining_bit;
-    UINT8   pipe;
-    UINT16  pkt_len;
+    uint8_t chaining_bit;
+    uint8_t pipe;
+    uint16_t  pkt_len;
 #if (BT_TRACE_VERBOSE == TRUE)
     char    buff[100];
 #endif
@@ -709,11 +709,11 @@ static void nfa_hci_conn_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *p
             nfa_sys_start_timer (&nfa_hci_cb.timer, NFA_HCI_RSP_TIMEOUT_EVT, p_nfa_hci_cfg->hci_netwk_enable_timeout);
     }
 
-    p       = (UINT8 *) (p_pkt + 1) + p_pkt->offset;
+    p       = (uint8_t *) (p_pkt + 1) + p_pkt->offset;
     pkt_len = p_pkt->len;
 
 #if (BT_TRACE_PROTOCOL == TRUE)
-    DispHcp (p, pkt_len, TRUE, (BOOLEAN) !nfa_hci_cb.assembling);
+    DispHcp (p, pkt_len, TRUE, (bool   ) !nfa_hci_cb.assembling);
 #endif
 
     chaining_bit = ((*p) >> 0x07) & 0x01;
@@ -771,8 +771,8 @@ static void nfa_hci_conn_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *p
 
 #if (BT_TRACE_VERBOSE == TRUE)
     NFA_TRACE_EVENT5 ("nfa_hci_conn_cback Recvd data pipe:%d  %s  chain:%d  assmbl:%d  len:%d",
-                      (UINT8)pipe, nfa_hciu_get_type_inst_names (pipe, nfa_hci_cb.type, nfa_hci_cb.inst, buff),
-                      (UINT8)chaining_bit, (UINT8)nfa_hci_cb.assembling, p_pkt->len);
+                      (uint8_t)pipe, nfa_hciu_get_type_inst_names (pipe, nfa_hci_cb.type, nfa_hci_cb.inst, buff),
+                      (uint8_t)chaining_bit, (uint8_t)nfa_hci_cb.assembling, p_pkt->len);
 #else
     NFA_TRACE_EVENT6 ("nfa_hci_conn_cback Recvd data pipe:%d  Type: %u  Inst: %u  chain:%d reassm:%d len:%d",
                       pipe, nfa_hci_cb.type, nfa_hci_cb.inst, chaining_bit, nfa_hci_cb.assembling, p_pkt->len);
@@ -806,7 +806,7 @@ static void nfa_hci_conn_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *p
         }
             else if (nfa_hci_cb.type == NFA_HCI_RESPONSE_TYPE)
         {
-            nfa_hci_handle_admin_gate_rsp (p, (UINT8) pkt_len);
+            nfa_hci_handle_admin_gate_rsp (p, (uint8_t) pkt_len);
         }
         else if (nfa_hci_cb.type == NFA_HCI_EVENT_TYPE)
         {
@@ -846,12 +846,12 @@ static void nfa_hci_conn_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *p
 ** Returns          None
 **
 *******************************************************************************/
-void nfa_hci_handle_nv_read (UINT8 block, tNFA_STATUS status)
+void nfa_hci_handle_nv_read (uint8_t block, tNFA_STATUS status)
 {
-    UINT8   session_id[NFA_HCI_SESSION_ID_LEN];
-    UINT8   default_session[NFA_HCI_SESSION_ID_LEN] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
-    UINT8   reset_session[NFA_HCI_SESSION_ID_LEN]   = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-    UINT32  os_tick;
+    uint8_t session_id[NFA_HCI_SESSION_ID_LEN];
+    uint8_t default_session[NFA_HCI_SESSION_ID_LEN] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+    uint8_t reset_session[NFA_HCI_SESSION_ID_LEN]   = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    uint32_t  os_tick;
 
     if (block == DH_NV_BLOCK)
     {
@@ -867,7 +867,7 @@ void nfa_hci_handle_nv_read (UINT8 block, tNFA_STATUS status)
             /* Set a new session id so that we clear all pipes later after seeing a difference with the HC Session ID */
             memcpy (&session_id[(NFA_HCI_SESSION_ID_LEN / 2)], nfa_hci_cb.cfg.admin_gate.session_id, (NFA_HCI_SESSION_ID_LEN / 2));
             os_tick = GKI_get_os_tick_count ();
-            memcpy (session_id, (UINT8 *)&os_tick, (NFA_HCI_SESSION_ID_LEN / 2));
+            memcpy (session_id, (uint8_t *)&os_tick, (NFA_HCI_SESSION_ID_LEN / 2));
             nfa_hci_restore_default_config (session_id);
         }
         nfa_hci_startup ();
@@ -887,7 +887,7 @@ void nfa_hci_rsp_timeout (tNFA_HCI_EVENT_DATA *p_evt_data)
 {
     tNFA_HCI_EVT        evt = 0;
     tNFA_HCI_EVT_DATA   evt_data;
-    UINT8               delete_pipe;
+    uint8_t             delete_pipe;
 
     NFA_TRACE_EVENT2 ("nfa_hci_rsp_timeout () State: %u  Cmd: %u", nfa_hci_cb.hci_state, nfa_hci_cb.cmd_sent);
 
@@ -1057,7 +1057,7 @@ void nfa_hci_rsp_timeout (tNFA_HCI_EVENT_DATA *p_evt_data)
 ** Returns          status
 **
 *******************************************************************************/
-static void nfa_hci_set_receive_buf (UINT8 pipe)
+static void nfa_hci_set_receive_buf (uint8_t pipe)
 {
     if (  (pipe >= NFA_HCI_FIRST_DYNAMIC_PIPE)
         &&(nfa_hci_cb.type == NFA_HCI_EVENT_TYPE)  )
@@ -1083,7 +1083,7 @@ static void nfa_hci_set_receive_buf (UINT8 pipe)
 ** Returns          None
 **
 *******************************************************************************/
-static void nfa_hci_assemble_msg (UINT8 *p_data, UINT16 data_len)
+static void nfa_hci_assemble_msg (uint8_t *p_data, uint16_t data_len)
 {
     if ((nfa_hci_cb.msg_len + data_len) > nfa_hci_cb.max_msg_len)
     {
@@ -1110,7 +1110,7 @@ static void nfa_hci_assemble_msg (UINT8 *p_data, UINT16 data_len)
 ** Returns          TRUE if p_msg needs to be deallocated
 **
 *******************************************************************************/
-static BOOLEAN nfa_hci_evt_hdlr (BT_HDR *p_msg)
+static bool    nfa_hci_evt_hdlr (BT_HDR *p_msg)
 {
     tNFA_HCI_EVENT_DATA *p_evt_data = (tNFA_HCI_EVENT_DATA *)p_msg;
 
@@ -1169,7 +1169,7 @@ static BOOLEAN nfa_hci_evt_hdlr (BT_HDR *p_msg)
     if ((nfa_hci_cb.hci_state == NFA_HCI_STATE_IDLE) && (nfa_hci_cb.nv_write_needed))
     {
         nfa_hci_cb.nv_write_needed = FALSE;
-        nfa_nv_co_write ((UINT8 *)&nfa_hci_cb.cfg, sizeof (nfa_hci_cb.cfg),DH_NV_BLOCK);
+        nfa_nv_co_write ((uint8_t *)&nfa_hci_cb.cfg, sizeof (nfa_hci_cb.cfg),DH_NV_BLOCK);
     }
 
     return FALSE;

@@ -45,14 +45,14 @@
 
 /* the following 2 tables convert the technology mask in API and control block to the command for NFCC */
 #define NFA_EE_NUM_TECH     3
-const UINT8 nfa_ee_tech_mask_list[NFA_EE_NUM_TECH] =
+const uint8_t nfa_ee_tech_mask_list[NFA_EE_NUM_TECH] =
 {
     NFA_TECHNOLOGY_MASK_A,
     NFA_TECHNOLOGY_MASK_B,
     NFA_TECHNOLOGY_MASK_F
 };
 
-const UINT8 nfa_ee_tech_list[NFA_EE_NUM_TECH] =
+const uint8_t nfa_ee_tech_list[NFA_EE_NUM_TECH] =
 {
     NFC_RF_TECHNOLOGY_A,
     NFC_RF_TECHNOLOGY_B,
@@ -61,7 +61,7 @@ const UINT8 nfa_ee_tech_list[NFA_EE_NUM_TECH] =
 
 /* the following 2 tables convert the protocol mask in API and control block to the command for NFCC */
 #define NFA_EE_NUM_PROTO     5
-const UINT8 nfa_ee_proto_mask_list[NFA_EE_NUM_PROTO] =
+const uint8_t nfa_ee_proto_mask_list[NFA_EE_NUM_PROTO] =
 {
     NFA_PROTOCOL_MASK_T1T,
     NFA_PROTOCOL_MASK_T2T,
@@ -70,7 +70,7 @@ const UINT8 nfa_ee_proto_mask_list[NFA_EE_NUM_PROTO] =
     NFA_PROTOCOL_MASK_NFC_DEP
 };
 
-const UINT8 nfa_ee_proto_list[NFA_EE_NUM_PROTO] =
+const uint8_t nfa_ee_proto_list[NFA_EE_NUM_PROTO] =
 {
     NFC_PROTOCOL_T1T,
     NFC_PROTOCOL_T2T,
@@ -90,7 +90,7 @@ static void nfa_ee_build_discover_req_evt (tNFA_EE_DISCOVER_REQ *p_evt_data);
 ** Returns          void
 **
 *******************************************************************************/
-static void nfa_ee_trace_aid (char *p_str, UINT8 id,  UINT8 aid_len, UINT8 *p)
+static void nfa_ee_trace_aid (char *p_str, uint8_t id,  uint8_t aid_len, uint8_t *p)
 {
     int     len = aid_len;
     int     xx, yy = 0;
@@ -124,7 +124,7 @@ static void nfa_ee_trace_aid (char *p_str, UINT8 id,  UINT8 aid_len, UINT8 *p)
 static void nfa_ee_update_route_size(tNFA_EE_ECB *p_cb)
 {
     int     xx;
-    UINT8   power_cfg = 0;
+    uint8_t power_cfg = 0;
 
     p_cb->size_mask = 0;
     /* add the Technology based routing */
@@ -175,7 +175,7 @@ static void nfa_ee_update_route_size(tNFA_EE_ECB *p_cb)
 *******************************************************************************/
 static void nfa_ee_update_route_aid_size(tNFA_EE_ECB *p_cb)
 {
-    UINT8   *pa, len;
+    uint8_t *pa, len;
     int     start_offset;
     int     xx;
 
@@ -207,13 +207,13 @@ static void nfa_ee_update_route_aid_size(tNFA_EE_ECB *p_cb)
 **
 ** Description      the total listen mode routing table size
 **
-** Returns          UINT16
+** Returns          uint16_t
 **
 *******************************************************************************/
-static UINT16 nfa_ee_total_lmrt_size(void)
+static uint16_t nfa_ee_total_lmrt_size(void)
 {
     int xx;
-    UINT16 lmrt_size = 0;
+    uint16_t lmrt_size = 0;
     tNFA_EE_ECB          *p_cb;
 
     p_cb = &nfa_ee_cb.ecb[NFA_EE_CB_4_DH];
@@ -241,7 +241,7 @@ static UINT16 nfa_ee_total_lmrt_size(void)
 ** Returns          void
 **
 *******************************************************************************/
-static void nfa_ee_conn_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
+static void nfa_ee_conn_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
 {
     BT_HDR             *p_msg;
     tNFA_EE_NCI_CONN    cbk;
@@ -299,7 +299,7 @@ int nfa_ee_find_total_aid_len(tNFA_EE_ECB *p_cb, int start_entry)
 ** Returns          void
 **
 *******************************************************************************/
-tNFA_EE_ECB * nfa_ee_find_aid_offset(UINT8 aid_len, UINT8 *p_aid, int *p_offset, int *p_entry)
+tNFA_EE_ECB * nfa_ee_find_aid_offset(uint8_t aid_len, uint8_t *p_aid, int *p_offset, int *p_entry)
 {
     int  xx, yy, aid_len_offset, offset;
     tNFA_EE_ECB *p_ret = NULL, *p_ecb;
@@ -426,7 +426,7 @@ void nfa_ee_api_register(tNFA_EE_MSG *p_data)
     int xx;
     tNFA_EE_CBACK *p_cback = p_data->ee_register.p_cback;
     tNFA_EE_CBACK_DATA  evt_data = {0};
-    BOOLEAN found = FALSE;
+    bool    found = FALSE;
 
     evt_data.ee_register = NFA_STATUS_FAILED;
     /* loop through all entries to see if there's a matching callback */
@@ -535,7 +535,7 @@ void nfa_ee_api_set_tech_cfg(tNFA_EE_MSG *p_data)
     tNFA_TECHNOLOGY_MASK    old_tech_switch_on   = p_cb->tech_switch_on;
     tNFA_TECHNOLOGY_MASK    old_tech_switch_off  = p_cb->tech_switch_off;
     tNFA_TECHNOLOGY_MASK    old_tech_battery_off = p_cb->tech_battery_off;
-    UINT8                   old_size_mask        = p_cb->size_mask;
+    uint8_t                 old_size_mask        = p_cb->size_mask;
 
     if (   (p_cb->tech_switch_on == p_data->set_tech.technologies_switch_on)
         && (p_cb->tech_switch_off == p_data->set_tech.technologies_switch_off)
@@ -591,7 +591,7 @@ void nfa_ee_api_set_proto_cfg(tNFA_EE_MSG *p_data)
     tNFA_PROTOCOL_MASK    old_proto_switch_on   = p_cb->proto_switch_on;
     tNFA_PROTOCOL_MASK    old_proto_switch_off  = p_cb->proto_switch_off;
     tNFA_PROTOCOL_MASK    old_proto_battery_off = p_cb->proto_battery_off;
-    UINT8                   old_size_mask        = p_cb->size_mask;
+    uint8_t                 old_size_mask        = p_cb->size_mask;
 
     if (   (p_cb->proto_switch_on == p_data->set_proto.protocols_switch_on)
         && (p_cb->proto_switch_off == p_data->set_proto.protocols_switch_off)
@@ -645,11 +645,11 @@ void nfa_ee_api_add_aid(tNFA_EE_MSG *p_data)
     tNFA_EE_API_ADD_AID *p_add = &p_data->add_aid;
     tNFA_EE_ECB *p_cb = p_data->cfg_hdr.p_cb;
     tNFA_EE_ECB *p_chk_cb;
-    UINT8   *p, *p_start;
+    uint8_t *p, *p_start;
     int     len, len_needed;
     tNFA_EE_CBACK_DATA  evt_data = {0};
     int offset = 0, entry = 0;
-    UINT16  new_size;
+    uint16_t  new_size;
 
     nfa_ee_trace_aid ("nfa_ee_api_add_aid", p_cb->nfcee_id, p_add->aid_len, p_add->p_aid);
     p_chk_cb = nfa_ee_find_aid_offset(p_add->aid_len, p_add->p_aid, &offset, &entry);
@@ -710,7 +710,7 @@ void nfa_ee_api_add_aid(tNFA_EE_MSG *p_data)
                 memcpy(p, p_add->p_aid, p_add->aid_len);
                 p      += p_add->aid_len;
 
-                p_cb->aid_len[p_cb->aid_entries++]     = (UINT8)(p - p_start);
+                p_cb->aid_len[p_cb->aid_entries++]     = (uint8_t)(p - p_start);
             }
         }
         else
@@ -807,7 +807,7 @@ void nfa_ee_api_remove_aid(tNFA_EE_MSG *p_data)
 void nfa_ee_api_lmrt_size(tNFA_EE_MSG *p_data)
 {
     tNFA_EE_CBACK_DATA  evt_data = {0};
-    UINT16 total_size = NFC_GetLmrtSize();
+    uint16_t total_size = NFC_GetLmrtSize();
 
     evt_data.size       = total_size - nfa_ee_total_lmrt_size();
     NFA_TRACE_DEBUG2 ("nfa_ee_api_lmrt_size total size:%d remaining size:%d", total_size, evt_data.size);
@@ -895,8 +895,8 @@ void nfa_ee_api_send_data(tNFA_EE_MSG *p_data)
 {
     tNFA_EE_ECB  *p_cb = p_data->send_data.p_cb;
     BT_HDR *p_pkt;
-    UINT16 size = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE + p_data->send_data.data_len + BT_HDR_SIZE;
-    UINT8  *p;
+    uint16_t size = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE + p_data->send_data.data_len + BT_HDR_SIZE;
+    uint8_t  *p;
     tNFA_STATUS status = NFA_STATUS_FAILED;
 
     if (p_cb->conn_st == NFA_EE_CONN_ST_CONN)
@@ -906,7 +906,7 @@ void nfa_ee_api_send_data(tNFA_EE_MSG *p_data)
         {
             p_pkt->offset   = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
             p_pkt->len      = p_data->send_data.data_len;
-            p               = (UINT8 *)(p_pkt+1) + p_pkt->offset;
+            p               = (uint8_t *)(p_pkt+1) + p_pkt->offset;
             memcpy(p, p_data->send_data.p_data, p_pkt->len);
             NFC_SendData (p_cb->conn_id, p_pkt);
         }
@@ -953,7 +953,7 @@ void nfa_ee_api_disconnect(tNFA_EE_MSG *p_data)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_ee_report_disc_done(BOOLEAN notify_enable_done)
+void nfa_ee_report_disc_done(bool    notify_enable_done)
 {
     tNFA_EE_CBACK           *p_cback;
     tNFA_EE_CBACK_DATA      evt_data = {0};
@@ -1000,10 +1000,10 @@ void nfa_ee_report_disc_done(BOOLEAN notify_enable_done)
 ** Returns          TRUE, if all NFA_EE_STATUS_PENDING bits are removed
 **
 *******************************************************************************/
-BOOLEAN nfa_ee_restore_ntf_done(void)
+bool    nfa_ee_restore_ntf_done(void)
 {
     tNFA_EE_ECB     *p_cb;
-    BOOLEAN         is_done = TRUE;
+    bool            is_done = TRUE;
     int             xx;
 
     p_cb = nfa_ee_cb.ecb;
@@ -1068,7 +1068,7 @@ static void nfa_ee_remove_pending(void)
             p_cb_n++;
         }
     }
-    nfa_ee_cb.cur_ee -= (UINT8)num_removed;
+    nfa_ee_cb.cur_ee -= (uint8_t)num_removed;
 }
 
 
@@ -1085,9 +1085,9 @@ void nfa_ee_nci_disc_rsp(tNFA_EE_MSG *p_data)
 {
     tNFC_NFCEE_DISCOVER_REVT    *p_evt = p_data->disc_rsp.p_data;
     tNFA_EE_ECB              *p_cb;
-    UINT8   xx;
-    UINT8   num_nfcee = p_evt->num_nfcee;
-    BOOLEAN notify_enable_done = FALSE;
+    uint8_t xx;
+    uint8_t num_nfcee = p_evt->num_nfcee;
+    bool    notify_enable_done = FALSE;
 
     NFA_TRACE_DEBUG3("nfa_ee_nci_disc_rsp() em_state:%d cur_ee:%d, num_nfcee:%d", nfa_ee_cb.em_state, nfa_ee_cb.cur_ee, num_nfcee);
     switch (nfa_ee_cb.em_state)
@@ -1165,8 +1165,8 @@ void nfa_ee_nci_disc_ntf(tNFA_EE_MSG *p_data)
 {
     tNFC_NFCEE_INFO_REVT    *p_ee = p_data->disc_ntf.p_data;
     tNFA_EE_ECB             *p_cb = NULL;
-    BOOLEAN                 notify_enable_done = FALSE;
-    BOOLEAN                 notify_new_ee = FALSE;
+    bool                    notify_enable_done = FALSE;
+    bool                    notify_new_ee = FALSE;
     tNFA_EE_CBACK_DATA      evt_data = {0};
     tNFA_EE_INFO            *p_info;
     tNFA_EE_EM_STATE        new_em_state = NFA_EE_EM_STATE_MAX;
@@ -1330,9 +1330,9 @@ void nfa_ee_nci_disc_ntf(tNFA_EE_MSG *p_data)
 *******************************************************************************/
 void nfa_ee_check_restore_complete(void)
 {
-    UINT32  xx;
+    uint32_t  xx;
     tNFA_EE_ECB     *p_cb;
-    BOOLEAN         proc_complete = TRUE;
+    bool            proc_complete = TRUE;
 
     p_cb = nfa_ee_cb.ecb;
     for (xx = 0; xx < nfa_ee_cb.cur_ee; xx++, p_cb++)
@@ -1374,7 +1374,7 @@ static void nfa_ee_build_discover_req_evt (tNFA_EE_DISCOVER_REQ *p_evt_data)
 {
     tNFA_EE_ECB           *p_cb;
     tNFA_EE_DISCOVER_INFO *p_info;
-    UINT8                 xx;
+    uint8_t               xx;
 
     if (!p_evt_data)
         return;
@@ -1659,7 +1659,7 @@ void nfa_ee_nci_conn(tNFA_EE_MSG *p_data)
                 if (p_cb->p_ee_cback && p_pkt)
                 {
                     evt_data.data.len   = p_pkt->len;
-                    evt_data.data.p_buf = (UINT8 *)(p_pkt+1) + p_pkt->offset;
+                    evt_data.data.p_buf = (uint8_t *)(p_pkt+1) + p_pkt->offset;
                     event               = NFA_EE_DATA_EVT;
                     p_pkt               = NULL; /* so this function does not free this GKI buffer */
                 }
@@ -1709,8 +1709,8 @@ void nfa_ee_nci_disc_req_ntf(tNFA_EE_MSG *p_data)
     tNFC_EE_DISCOVER_REQ_REVT   *p_cbk = p_data->disc_req.p_data;
     tNFA_HANDLE         ee_handle;
     tNFA_EE_ECB         *p_cb = NULL;
-    UINT8               report_ntf = 0;
-    UINT8 xx;
+    uint8_t             report_ntf = 0;
+    uint8_t xx;
 
     NFA_TRACE_DEBUG2 ("nfa_ee_nci_disc_req_ntf () num_info: %d cur_ee:%d", p_cbk->num_info, nfa_ee_cb.cur_ee );
 
@@ -1799,9 +1799,9 @@ void nfa_ee_nci_disc_req_ntf(tNFA_EE_MSG *p_data)
 ** Returns          TRUE if the given NFCEE is active
 **
 *******************************************************************************/
-BOOLEAN nfa_ee_is_active (tNFA_HANDLE nfcee_id)
+bool    nfa_ee_is_active (tNFA_HANDLE nfcee_id)
 {
-    BOOLEAN is_active = FALSE;
+    bool    is_active = FALSE;
     int     xx;
     tNFA_EE_ECB  *p_cb = nfa_ee_cb.ecb;
 
@@ -1834,11 +1834,11 @@ BOOLEAN nfa_ee_is_active (tNFA_HANDLE nfcee_id)
 ** Returns          None
 **
 *******************************************************************************/
-void nfa_ee_get_tech_route (UINT8 power_state, UINT8 *p_handles)
+void nfa_ee_get_tech_route (uint8_t power_state, uint8_t *p_handles)
 {
     int     xx, yy;
     tNFA_EE_ECB *p_cb;
-    UINT8   tech_mask_list[NFA_EE_MAX_TECH_ROUTE] =
+    uint8_t tech_mask_list[NFA_EE_MAX_TECH_ROUTE] =
     {
         NFA_TECHNOLOGY_MASK_A,
         NFA_TECHNOLOGY_MASK_B,
@@ -1887,9 +1887,9 @@ void nfa_ee_get_tech_route (UINT8 power_state, UINT8 *p_handles)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_ee_check_set_routing(UINT16 new_size, int *p_max_len, UINT8 *p, int *p_cur_offset)
+void nfa_ee_check_set_routing(uint16_t new_size, int *p_max_len, uint8_t *p, int *p_cur_offset)
 {
-    UINT8   max_tlv = (UINT8)((*p_max_len > NFA_EE_ROUT_MAX_TLV_SIZE)?NFA_EE_ROUT_MAX_TLV_SIZE:*p_max_len);
+    uint8_t max_tlv = (uint8_t)((*p_max_len > NFA_EE_ROUT_MAX_TLV_SIZE)?NFA_EE_ROUT_MAX_TLV_SIZE:*p_max_len);
     tNFA_STATUS status = NFA_STATUS_OK;
 
     if (new_size + *p_cur_offset > max_tlv)
@@ -1918,30 +1918,30 @@ void nfa_ee_check_set_routing(UINT16 new_size, int *p_max_len, UINT8 *p, int *p_
 ** Returns          NFA_STATUS_OK, if ok to continue
 **
 *******************************************************************************/
-tNFA_STATUS nfa_ee_route_add_one_ecb(tNFA_EE_ECB *p_cb, int *p_max_len, BOOLEAN more, UINT8 *ps, int *p_cur_offset)
+tNFA_STATUS nfa_ee_route_add_one_ecb(tNFA_EE_ECB *p_cb, int *p_max_len, bool    more, uint8_t *ps, int *p_cur_offset)
 {
-    UINT8   *p, *pa;
-    UINT16  tlv_size;
-    UINT8   num_tlv, len;
+    uint8_t *p, *pa;
+    uint16_t  tlv_size;
+    uint8_t num_tlv, len;
     int     xx;
     int     start_offset;
-    UINT8   power_cfg = 0;
-    UINT8   *pp = ps + *p_cur_offset;
-    UINT8   entry_size;
-    UINT8   max_tlv;
-    UINT8   *p_start;
-    UINT8   new_size;
+    uint8_t power_cfg = 0;
+    uint8_t *pp = ps + *p_cur_offset;
+    uint8_t entry_size;
+    uint8_t max_tlv;
+    uint8_t *p_start;
+    uint8_t new_size;
     tNFA_STATUS status = NFA_STATUS_OK;
 
     nfa_ee_check_set_routing (p_cb->size_mask, p_max_len, ps, p_cur_offset);
-    max_tlv = (UINT8)((*p_max_len > NFA_EE_ROUT_MAX_TLV_SIZE)?NFA_EE_ROUT_MAX_TLV_SIZE:*p_max_len);
+    max_tlv = (uint8_t)((*p_max_len > NFA_EE_ROUT_MAX_TLV_SIZE)?NFA_EE_ROUT_MAX_TLV_SIZE:*p_max_len);
     /* use the first byte of the buffer (ps) to keep the num_tlv */
     num_tlv  = *ps;
     NFA_TRACE_DEBUG5 ("nfa_ee_route_add_one_ecb max_len:%d, max_tlv:%d, cur_offset:%d, more:%d, num_tlv:%d",
         *p_max_len, max_tlv, *p_cur_offset, more, num_tlv);
     pp       = ps + 1 + *p_cur_offset;
     p        = pp;
-    tlv_size = (UINT8)*p_cur_offset;
+    tlv_size = (uint8_t)*p_cur_offset;
     /* add the Technology based routing */
     for (xx = 0; xx < NFA_EE_NUM_TECH; xx++)
     {
@@ -2000,7 +2000,7 @@ tNFA_STATUS nfa_ee_route_add_one_ecb(tNFA_EE_ECB *p_cb, int *p_max_len, BOOLEAN 
     }
 
     /* update the num_tlv and current offset */
-    entry_size       = (UINT8)(pp - p);
+    entry_size       = (uint8_t)(pp - p);
     *p_cur_offset   += entry_size;
     *ps              = num_tlv;
     /* add the AID routing */
@@ -2026,7 +2026,7 @@ tNFA_STATUS nfa_ee_route_add_one_ecb(tNFA_EE_ECB *p_cb, int *p_max_len, BOOLEAN 
                 pp     += len;
             }
             start_offset += p_cb->aid_len[xx];
-            new_size        = (UINT8)(pp - p_start);
+            new_size        = (uint8_t)(pp - p_start);
             nfa_ee_check_set_routing(new_size, p_max_len, ps, p_cur_offset);
             if (*ps == 0)
             {
@@ -2036,8 +2036,8 @@ tNFA_STATUS nfa_ee_route_add_one_ecb(tNFA_EE_ECB *p_cb, int *p_max_len, BOOLEAN 
                 *p_cur_offset = new_size;
                 pp       = ps + 1;
                 p        = pp;
-                tlv_size = (UINT8)*p_cur_offset;
-                max_tlv  = (UINT8)((*p_max_len > NFA_EE_ROUT_MAX_TLV_SIZE)?NFA_EE_ROUT_MAX_TLV_SIZE:*p_max_len);
+                tlv_size = (uint8_t)*p_cur_offset;
+                max_tlv  = (uint8_t)((*p_max_len > NFA_EE_ROUT_MAX_TLV_SIZE)?NFA_EE_ROUT_MAX_TLV_SIZE:*p_max_len);
                 memcpy (p, p_start, new_size);
                 pp      += new_size;
             }
@@ -2075,7 +2075,7 @@ tNFA_STATUS nfa_ee_route_add_one_ecb(tNFA_EE_ECB *p_cb, int *p_max_len, BOOLEAN 
                 nfa_ee_cb.ee_cfg_sts       &= ~NFA_EE_STS_PREV_ROUTING;
             }
             NFA_TRACE_DEBUG2 ("nfa_ee_route_add_one_ecb: set routing num_tlv:%d tlv_size:%d", num_tlv, tlv_size);
-            if (NFC_SetRouting(more, num_tlv, (UINT8)(*p_cur_offset), ps + 1) == NFA_STATUS_OK)
+            if (NFC_SetRouting(more, num_tlv, (uint8_t)(*p_cur_offset), ps + 1) == NFA_STATUS_OK)
             {
                 nfa_ee_cb.wait_rsp++;
             }
@@ -2127,12 +2127,12 @@ tNFA_STATUS nfa_ee_route_add_one_ecb(tNFA_EE_ECB *p_cb, int *p_max_len, BOOLEAN 
 ** Returns          TRUE if any configuration is changed
 **
 *******************************************************************************/
-static BOOLEAN nfa_ee_need_recfg(void)
+static bool    nfa_ee_need_recfg(void)
 {
-    BOOLEAN needed = FALSE;
-    UINT32  xx;
+    bool    needed = FALSE;
+    uint32_t  xx;
     tNFA_EE_ECB  *p_cb;
-    UINT8   mask;
+    uint8_t mask;
 
     NFA_TRACE_DEBUG2("nfa_ee_need_recfg() ee_cfged: 0x%02x ee_cfg_sts: 0x%02x", nfa_ee_cb.ee_cfged, nfa_ee_cb.ee_cfg_sts);
     /* if no routing/vs is configured, do not need to send the info to NFCC */
@@ -2176,7 +2176,7 @@ static BOOLEAN nfa_ee_need_recfg(void)
 *******************************************************************************/
 void nfa_ee_rout_timeout(tNFA_EE_MSG *p_data)
 {
-    UINT8               ee_cfged = nfa_ee_cb.ee_cfged;
+    uint8_t             ee_cfged = nfa_ee_cb.ee_cfged;
 
     NFA_TRACE_DEBUG0("nfa_ee_rout_timeout()");
     if (nfa_ee_need_recfg())
@@ -2230,16 +2230,16 @@ void nfa_ee_lmrt_to_nfcc(tNFA_EE_MSG *p_data)
 {
     int xx;
     tNFA_EE_ECB          *p_cb;
-    UINT8   *p = NULL;
-    BOOLEAN more = TRUE;
-    UINT8   last_active = NFA_EE_INVALID;
+    uint8_t *p = NULL;
+    bool    more = TRUE;
+    uint8_t last_active = NFA_EE_INVALID;
     int     max_len, len;
     tNFA_STATUS status = NFA_STATUS_FAILED;
     int     cur_offset;
-    UINT8   max_tlv;
+    uint8_t max_tlv;
 
     /* update routing table: DH and the activated NFCEEs */
-    p = (UINT8 *)GKI_getbuf(NFA_EE_ROUT_BUF_SIZE);
+    p = (uint8_t *)GKI_getbuf(NFA_EE_ROUT_BUF_SIZE);
     if (p == NULL)
     {
         NFA_TRACE_ERROR0 ("nfa_ee_lmrt_to_nfcc() no buffer to send routing info.");
@@ -2268,7 +2268,7 @@ void nfa_ee_lmrt_to_nfcc(tNFA_EE_MSG *p_data)
     /* add the routing for DH first */
     status  = NFA_STATUS_OK;
     max_len = NFC_GetLmrtSize();
-    max_tlv = (UINT8)((max_len > NFA_EE_ROUT_MAX_TLV_SIZE)?NFA_EE_ROUT_MAX_TLV_SIZE:max_len);
+    max_tlv = (uint8_t)((max_len > NFA_EE_ROUT_MAX_TLV_SIZE)?NFA_EE_ROUT_MAX_TLV_SIZE:max_len);
     cur_offset  = 0;
     /* use the first byte of the buffer (p) to keep the num_tlv */
     *p          = 0;
@@ -2316,7 +2316,7 @@ void nfa_ee_update_rout(void)
 {
     int xx;
     tNFA_EE_ECB          *p_cb;
-    UINT8   mask;
+    uint8_t mask;
     BT_HDR  msg;
 
     NFA_TRACE_DEBUG1 ("nfa_ee_update_rout ee_cfg_sts:0x%02x", nfa_ee_cb.ee_cfg_sts);

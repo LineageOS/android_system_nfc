@@ -232,15 +232,15 @@
 /* Block descriptor, used to describe a block to check/update */
 typedef struct
 {
-    UINT16 service_code;    /* Block service code. Set to T3T_SERVICE_CODE_NDEF (0x000B) for NDEF data */
-    UINT16 block_number;    /* Block number */
+    uint16_t service_code;    /* Block service code. Set to T3T_SERVICE_CODE_NDEF (0x000B) for NDEF data */
+    uint16_t block_number;    /* Block number */
 } tT3T_BLOCK_DESC;
 
 /* Poll RC (request code) definitions */
 #define T3T_POLL_RC_NONE    0   /* No RD requested in SENSF_RES */
 #define T3T_POLL_RC_SC      1   /* System code requested in SENSF_RES */
 #define T3T_POLL_RC_COMM    2   /* Avanced protocol features requested in SENSF_RES */
-typedef UINT8 tT3T_POLL_RC;
+typedef uint8_t tT3T_POLL_RC;
 
 /* Definitions for constructing t3t command messages */
 

@@ -40,7 +40,7 @@
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_ptim_init (tPTIM_CB *p_cb, UINT16 period, UINT8 timer_id)
+void nfa_sys_ptim_init (tPTIM_CB *p_cb, uint16_t period, uint8_t timer_id)
 {
     GKI_init_timer_list (&p_cb->timer_queue);
     p_cb->period = period;
@@ -62,8 +62,8 @@ void nfa_sys_ptim_timer_update (tPTIM_CB *p_cb)
 {
     TIMER_LIST_ENT *p_tle;
     BT_HDR *p_msg;
-    UINT32 new_ticks_count;
-    INT32  period_in_ticks;
+    uint32_t new_ticks_count;
+    int32_t  period_in_ticks;
 
     /* To handle the case when the function is called less frequently than the period
        we must convert determine the number of ticks since the last update, then
@@ -73,11 +73,11 @@ void nfa_sys_ptim_timer_update (tPTIM_CB *p_cb)
     /* Check for wrapped condition */
     if (new_ticks_count >= p_cb->last_gki_ticks)
     {
-        period_in_ticks = (INT32) (new_ticks_count - p_cb->last_gki_ticks);
+        period_in_ticks = (int32_t) (new_ticks_count - p_cb->last_gki_ticks);
     }
     else
     {
-        period_in_ticks = (INT32) (((UINT32) 0xffffffff - p_cb->last_gki_ticks)
+        period_in_ticks = (int32_t) (((uint32_t) 0xffffffff - p_cb->last_gki_ticks)
                             + new_ticks_count + 1);
     }
 
@@ -128,7 +128,7 @@ void nfa_sys_ptim_timer_update (tPTIM_CB *p_cb)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_ptim_start_timer (tPTIM_CB *p_cb, TIMER_LIST_ENT *p_tle, UINT16 type, INT32 timeout)
+void nfa_sys_ptim_start_timer (tPTIM_CB *p_cb, TIMER_LIST_ENT *p_tle, uint16_t type, int32_t timeout)
 {
     NFA_TRACE_DEBUG1 ("nfa_sys_ptim_start_timer %08x", p_tle);
 

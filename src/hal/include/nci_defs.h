@@ -104,14 +104,14 @@ extern "C" {
 
 /* builds byte0 of NCI Command and Notification packet */
 #define NCI_MSG_BLD_HDR0(p, mt, gid) \
-    *(p)++ = (UINT8) (((mt) << NCI_MT_SHIFT) | (gid));
+    *(p)++ = (uint8_t) (((mt) << NCI_MT_SHIFT) | (gid));
 
 #define NCI_MSG_PBLD_HDR0(p, mt, pbf, gid) \
-    *(p)++ = (UINT8) (((mt) << NCI_MT_SHIFT) | ((pbf) << NCI_PBF_SHIFT) | (gid));
+    *(p)++ = (uint8_t) (((mt) << NCI_MT_SHIFT) | ((pbf) << NCI_PBF_SHIFT) | (gid));
 
 /* builds byte1 of NCI Command and Notification packet */
 #define NCI_MSG_BLD_HDR1(p, oid) \
-    *(p)++ = (UINT8) (((oid) << NCI_OID_SHIFT));
+    *(p)++ = (uint8_t) (((oid) << NCI_OID_SHIFT));
 
 /* parse byte0 of NCI packet */
 #define NCI_MSG_PRS_HDR0(p, mt, pbf, gid) \
@@ -137,10 +137,10 @@ extern "C" {
 
 /* builds 3-byte message header of NCI Data packet */
 #define NCI_DATA_BLD_HDR(p, cid, len) \
-    *(p)++ = (UINT8) (cid); *(p)++ = 0; *(p)++ = (UINT8) (len);
+    *(p)++ = (uint8_t) (cid); *(p)++ = 0; *(p)++ = (uint8_t) (len);
 
 #define NCI_DATA_PBLD_HDR(p, pbf, cid, len) \
-    *(p)++ = (UINT8) (((pbf) << NCI_PBF_SHIFT) | (cid)); *(p)++=0; *(p)++ = (len);
+    *(p)++ = (uint8_t) (((pbf) << NCI_PBF_SHIFT) | (cid)); *(p)++=0; *(p)++ = (len);
 
 #define NCI_DATA_PRS_HDR(p, pbf, cid, len) \
     (pbf) = (*(p) & NCI_PBF_MASK) >> NCI_PBF_SHIFT; (cid) = (*(p) & NCI_CID_MASK); p++; p++; (len) = *(p)++;
@@ -178,7 +178,7 @@ extern "C" {
 #define NCI_STATUS_EE_TIMEOUT           0xC3
 
 
-typedef UINT8 tNCI_STATUS;
+typedef uint8_t tNCI_STATUS;
 
 /* RF Technologies */
 #define NCI_RF_TECHNOLOGY_A             0x00
@@ -353,7 +353,7 @@ typedef UINT8 tNCI_STATUS;
 #define NCI_INTERFACE_NFC_DEP           3
 #define NCI_INTERFACE_MAX               NCI_INTERFACE_NFC_DEP
 #define NCI_INTERFACE_FIRST_VS          0x80
-typedef UINT8 tNCI_INTF_TYPE;
+typedef uint8_t tNCI_INTF_TYPE;
 
 /**********************************************
  * NCI RF Management / DISCOVERY Group Params
@@ -393,7 +393,7 @@ typedef UINT8 tNCI_INTF_TYPE;
 #define NCI_DISCOVERY_TYPE_LISTEN_ISO15693      0x86
 #define NCI_DISCOVERY_TYPE_MAX  NCI_DISCOVERY_TYPE_LISTEN_ISO15693
 
-typedef UINT8 tNCI_DISCOVERY_TYPE;
+typedef uint8_t tNCI_DISCOVERY_TYPE;
 
 #define NCI_EE_TRIG_7816_SELECT         0x00
 #define NCI_EE_TRIG_RF_PROTOCOL         0x01
@@ -546,36 +546,36 @@ typedef UINT8 tNCI_DISCOVERY_TYPE;
 
 typedef struct
 {
-    UINT16              addr;
-    UINT8               len;
-    UINT8               *data;
+    uint16_t            addr;
+    uint8_t             len;
+    uint8_t             *data;
 } NCIP_T1T_SETMEM_CMD_t;
 
 typedef struct
 {
-    UINT8               status;
+    uint8_t             status;
 } NCIP_T1T_SETMEM_RSP_t;
 
 typedef struct
 {
-    UINT16              addr;
+    uint16_t            addr;
 } NCIP_T1T_GETMEM_CMD_t;
 
 typedef struct
 {
-    UINT8               status;
-    UINT8               *data;
+    uint8_t             status;
+    uint8_t             *data;
 } NCIP_T1T_GETMEM_RSP_t;
 
 typedef struct
 {
-    UINT8               hr0;
-    UINT8               hr1;
+    uint8_t             hr0;
+    uint8_t             hr1;
 } NCIP_T1T_SETHR_CMD_t;
 
 typedef struct
 {
-    UINT8               status;
+    uint8_t             status;
 } NCIP_T1T_SETHR_RSP_t;
 
 
@@ -585,7 +585,7 @@ typedef struct
 #define NCI_GET_CMD_BUF(paramlen)    ((BT_HDR *) GKI_getpoolbuf (NFC_NCI_POOL_ID))
 #else
 /* Allocate smallest possible buffer (for platforms with limited RAM) */
-#define NCI_GET_CMD_BUF(paramlen)    ((BT_HDR *) GKI_getbuf ((UINT16) (BT_HDR_SIZE + NCI_MSG_HDR_SIZE + NCI_MSG_OFFSET_SIZE + (paramlen))))
+#define NCI_GET_CMD_BUF(paramlen)    ((BT_HDR *) GKI_getbuf ((uint16_t) (BT_HDR_SIZE + NCI_MSG_HDR_SIZE + NCI_MSG_OFFSET_SIZE + (paramlen))))
 #endif
 #endif  /* NCI_GET_CMD_BUF */
 
@@ -595,35 +595,35 @@ typedef struct
 
 typedef struct
 {
-    UINT8   type;
-    UINT8   frequency;
+    uint8_t type;
+    uint8_t frequency;
 } tNCI_DISCOVER_PARAMS;
 
 typedef struct
 {
-    UINT8   protocol;
-    UINT8   mode;
-    UINT8   intf_type;
+    uint8_t protocol;
+    uint8_t mode;
+    uint8_t intf_type;
 } tNCI_DISCOVER_MAPS;
 
 #define NCI_NFCID1_MAX_LEN    10
 #define NCI_T1T_HR_LEN        2
 typedef struct
 {
-    UINT8       sens_res[2];/* SENS_RES Response (ATQA). Available after Technology Detection */
-    UINT8       nfcid1_len;         /* 4, 7 or 10 */
-    UINT8       nfcid1[NCI_NFCID1_MAX_LEN]; /* AKA NFCID1 */
-    UINT8       sel_rsp;    /* SEL_RSP (SAK) Available after Collision Resolution */
-    UINT8       hr_len;     /* 2, if T1T HR0/HR1 is reported */
-    UINT8       hr[NCI_T1T_HR_LEN]; /* T1T HR0 is in hr[0], HR1 is in hr[1] */
+    uint8_t     sens_res[2];/* SENS_RES Response (ATQA). Available after Technology Detection */
+    uint8_t     nfcid1_len;         /* 4, 7 or 10 */
+    uint8_t     nfcid1[NCI_NFCID1_MAX_LEN]; /* AKA NFCID1 */
+    uint8_t     sel_rsp;    /* SEL_RSP (SAK) Available after Collision Resolution */
+    uint8_t     hr_len;     /* 2, if T1T HR0/HR1 is reported */
+    uint8_t     hr[NCI_T1T_HR_LEN]; /* T1T HR0 is in hr[0], HR1 is in hr[1] */
 } tNCI_RF_PA_PARAMS;
 
 
 #define NCI_MAX_SENSB_RES_LEN       12
 typedef struct
 {
-    UINT8       sensb_res_len;/* Length of SENSB_RES Response (Byte 2 - Byte 12 or 13) Available after Technology Detection */
-    UINT8       sensb_res[NCI_MAX_SENSB_RES_LEN]; /* SENSB_RES Response (ATQ) */
+    uint8_t     sensb_res_len;/* Length of SENSB_RES Response (Byte 2 - Byte 12 or 13) Available after Technology Detection */
+    uint8_t     sensb_res[NCI_MAX_SENSB_RES_LEN]; /* SENSB_RES Response (ATQ) */
 } tNCI_RF_PB_PARAMS;
 
 #define NCI_MAX_SENSF_RES_LEN       18
@@ -637,14 +637,14 @@ typedef struct
 #define NCI_MRTI_UPDATE_INDEX       14
 typedef struct
 {
-    UINT8       bit_rate;/* NFC_BIT_RATE_212 or NFC_BIT_RATE_424 */
-    UINT8       sensf_res_len;/* Length of SENSF_RES Response (Byte 2 - Byte 17 or 19) Available after Technology Detection */
-    UINT8       sensf_res[NCI_MAX_SENSF_RES_LEN]; /* SENSB_RES Response */
+    uint8_t     bit_rate;/* NFC_BIT_RATE_212 or NFC_BIT_RATE_424 */
+    uint8_t     sensf_res_len;/* Length of SENSF_RES Response (Byte 2 - Byte 17 or 19) Available after Technology Detection */
+    uint8_t     sensf_res[NCI_MAX_SENSF_RES_LEN]; /* SENSB_RES Response */
 } tNCI_RF_PF_PARAMS;
 
 typedef struct
 {
-    UINT8       nfcid2[NCI_NFCID2_LEN];  /* NFCID2 generated by the Local NFCC for NFC-DEP Protocol.Available for Frame Interface  */
+    uint8_t     nfcid2[NCI_NFCID2_LEN];  /* NFCID2 generated by the Local NFCC for NFC-DEP Protocol.Available for Frame Interface  */
 } tNCI_RF_LF_PARAMS;
 
 typedef struct
@@ -677,13 +677,13 @@ typedef struct
 #define NCI_ATS_FSCI_MASK           0x0F
 typedef struct
 {
-    UINT8       ats_res_len;  /* Length of ATS RES */
-    UINT8       ats_res[NCI_MAX_ATS_LEN];  /* ATS RES defined in [DIGPROT] */
+    uint8_t     ats_res_len;  /* Length of ATS RES */
+    uint8_t     ats_res[NCI_MAX_ATS_LEN];  /* ATS RES defined in [DIGPROT] */
 } tNCI_INTF_PA_ISO_DEP;
 
 typedef struct
 {
-    UINT8       rats;  /* RATS */
+    uint8_t     rats;  /* RATS */
 } tNCI_INTF_LA_ISO_DEP;
 
 #define NCI_P_GEN_BYTE_INDEX    15
@@ -691,15 +691,15 @@ typedef struct
 #define NCI_L_NFC_DEP_TO_INDEX  13
 typedef struct
 {
-    UINT8       atr_res_len;  /* Length of ATR_RES */
-    UINT8       atr_res[NCI_MAX_ATS_LEN];  /* ATR_RES (Byte 3 - Byte 17+n) as defined in [DIGPROT] */
+    uint8_t     atr_res_len;  /* Length of ATR_RES */
+    uint8_t     atr_res[NCI_MAX_ATS_LEN];  /* ATR_RES (Byte 3 - Byte 17+n) as defined in [DIGPROT] */
 } tNCI_INTF_PA_NFC_DEP;
 
 /* Note: keep tNCI_INTF_PA_NFC_DEP data member in the same order as tNCI_INTF_LA_NFC_DEP */
 typedef struct
 {
-    UINT8       atr_req_len;  /* Length of ATR_REQ */
-    UINT8       atr_req[NCI_MAX_ATS_LEN];  /* ATR_REQ (Byte 3 - Byte 18+n) as defined in [DIGPROT] */
+    uint8_t     atr_req_len;  /* Length of ATR_REQ */
+    uint8_t     atr_req[NCI_MAX_ATS_LEN];  /* ATR_REQ (Byte 3 - Byte 18+n) as defined in [DIGPROT] */
 } tNCI_INTF_LA_NFC_DEP;
 typedef tNCI_INTF_LA_NFC_DEP tNCI_INTF_LF_NFC_DEP;
 typedef tNCI_INTF_PA_NFC_DEP tNCI_INTF_PF_NFC_DEP;
@@ -708,14 +708,14 @@ typedef tNCI_INTF_PA_NFC_DEP tNCI_INTF_PF_NFC_DEP;
 
 typedef struct
 {
-    UINT8       attrib_res_len;  /* Length of ATTRIB RES */
-    UINT8       attrib_res[NCI_MAX_ATTRIB_LEN];  /* ATTRIB RES  as defined in [DIGPROT] */
+    uint8_t     attrib_res_len;  /* Length of ATTRIB RES */
+    uint8_t     attrib_res[NCI_MAX_ATTRIB_LEN];  /* ATTRIB RES  as defined in [DIGPROT] */
 } tNCI_INTF_PB_ISO_DEP;
 
 typedef struct
 {
-    UINT8       attrib_req_len;  /* Length of ATTRIB REQ */
-    UINT8       attrib_req[NCI_MAX_ATTRIB_LEN];  /* ATTRIB REQ (Byte 2 - Byte 10+k) as defined in [DIGPROT] */
+    uint8_t     attrib_req_len;  /* Length of ATTRIB REQ */
+    uint8_t     attrib_req[NCI_MAX_ATTRIB_LEN];  /* ATTRIB REQ (Byte 2 - Byte 10+k) as defined in [DIGPROT] */
 } tNCI_INTF_LB_ISO_DEP;
 
 typedef struct

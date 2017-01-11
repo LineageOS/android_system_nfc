@@ -71,15 +71,15 @@ tNFC_CONN_CB * nfc_alloc_conn_cb (tNFC_CONN_CBACK *p_cback)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_set_conn_id (tNFC_CONN_CB * p_cb, UINT8 conn_id)
+void nfc_set_conn_id (tNFC_CONN_CB * p_cb, uint8_t conn_id)
 {
-    UINT8   handle;
+    uint8_t handle;
 
     if (p_cb == NULL)
         return;
 
     p_cb->conn_id           = conn_id;
-    handle                  = (UINT8) (p_cb - nfc_cb.conn_cb + 1);
+    handle                  = (uint8_t) (p_cb - nfc_cb.conn_cb + 1);
     nfc_cb.conn_id[conn_id] = handle;
     NFC_TRACE_DEBUG2 ("nfc_set_conn_id conn_id:%d, handle:%d", conn_id, handle);
 }
@@ -94,7 +94,7 @@ void nfc_set_conn_id (tNFC_CONN_CB * p_cb, UINT8 conn_id)
 ** Returns          The loopback test control block or NULL
 **
 *******************************************************************************/
-tNFC_CONN_CB * nfc_find_conn_cb_by_handle (UINT8 id)
+tNFC_CONN_CB * nfc_find_conn_cb_by_handle (uint8_t id)
 {
     int xx;
     tNFC_CONN_CB *p_conn_cb = NULL;
@@ -120,11 +120,11 @@ tNFC_CONN_CB * nfc_find_conn_cb_by_handle (UINT8 id)
 ** Returns          The control block or NULL
 **
 *******************************************************************************/
-tNFC_CONN_CB * nfc_find_conn_cb_by_conn_id (UINT8 conn_id)
+tNFC_CONN_CB * nfc_find_conn_cb_by_conn_id (uint8_t conn_id)
 {
     tNFC_CONN_CB *p_conn_cb = NULL;
-    UINT8   handle;
-    UINT8   id;
+    uint8_t handle;
+    uint8_t id;
     int     xx;
 
     if (conn_id == NFC_PEND_CONN_ID)

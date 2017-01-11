@@ -672,7 +672,7 @@
 **  as the NFC stack.
 *****************************************************************************/
 #ifndef HAL_WRITE
-#define HAL_WRITE(p)    {nfc_cb.p_hal->write(p->len, (UINT8 *)(p+1) + p->offset); GKI_freebuf(p);}
+#define HAL_WRITE(p)    {nfc_cb.p_hal->write(p->len, (uint8_t *)(p+1) + p->offset); GKI_freebuf(p);}
 
 #ifdef NFC_HAL_SHARED_GKI
 

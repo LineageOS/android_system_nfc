@@ -17,8 +17,8 @@
  ******************************************************************************/
 #pragma once
 #include <pthread.h>
-#ifndef UINT32
-typedef unsigned long   UINT32;
+#ifndef uint32_t
+typedef unsigned long   uint32_t;
 #endif
 #include "nfc_target.h"
 #include "nfc_hal_api.h"
@@ -94,8 +94,8 @@ private:
     static ThreadCondVar mHalOpenCompletedEvent;
     static ThreadCondVar mHalCloseCompletedEvent;
 
-    static UINT32 NFCA_TASK (UINT32 arg);
-    static UINT32 Thread (UINT32 arg);
+    static uint32_t NFCA_TASK (uint32_t arg);
+    static uint32_t Thread (uint32_t arg);
     void InitializeHalDeviceContext ();
     static void HalDeviceContextCallback (nfc_event_t event, nfc_status_t event_status);
     static void HalDeviceContextDataCallback (uint16_t data_len, uint8_t* p_data);
@@ -104,12 +104,12 @@ private:
     static void HalTerminate ();
     static void HalOpen (tHAL_NFC_CBACK* p_hal_cback, tHAL_NFC_DATA_CBACK* p_data_cback);
     static void HalClose ();
-    static void HalCoreInitialized (UINT16 data_len, UINT8* p_core_init_rsp_params);
-    static void HalWrite (UINT16 data_len, UINT8* p_data);
-    static BOOLEAN HalPrediscover ();
+    static void HalCoreInitialized (uint16_t data_len, uint8_t* p_core_init_rsp_params);
+    static void HalWrite (uint16_t data_len, uint8_t* p_data);
+    static bool    HalPrediscover ();
     static void HalControlGranted ();
     static void HalPowerCycle ();
-    static UINT8 HalGetMaxNfcee ();
+    static uint8_t HalGetMaxNfcee ();
     static void HalDownloadFirmwareCallback (nfc_event_t event, nfc_status_t event_status);
     static void HalDownloadFirmwareDataCallback (uint16_t data_len, uint8_t* p_data);
 };

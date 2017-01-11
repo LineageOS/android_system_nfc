@@ -32,7 +32,7 @@
 #include "llcp_defs.h"
 #include "nfc_int.h"
 
-const UINT16 llcp_link_rwt[15] =  /* RWT = (302us)*2**WT; 302us = 256*16/fc; fc = 13.56MHz */
+const uint16_t llcp_link_rwt[15] =  /* RWT = (302us)*2**WT; 302us = 256*16/fc; fc = 13.56MHz */
 {
        1, /* WT=0,     302us */
        1, /* WT=1,     604us */
@@ -51,19 +51,19 @@ const UINT16 llcp_link_rwt[15] =  /* RWT = (302us)*2**WT; 302us = 256*16/fc; fc 
     4948, /* WT=14, 4948.0ms */
 };
 
-static BOOLEAN llcp_link_parse_gen_bytes (UINT8 gen_bytes_len, UINT8 *p_gen_bytes);
-static BOOLEAN llcp_link_version_agreement (void);
+static bool    llcp_link_parse_gen_bytes (uint8_t gen_bytes_len, uint8_t *p_gen_bytes);
+static bool    llcp_link_version_agreement (void);
 
 static void    llcp_link_send_SYMM (void);
-static void    llcp_link_update_status (BOOLEAN is_activated);
+static void    llcp_link_update_status (bool    is_activated);
 static void    llcp_link_check_congestion (void);
 static void    llcp_link_check_uncongested (void);
-static void    llcp_link_proc_ui_pdu (UINT8 local_sap, UINT8 remote_sap, UINT16 ui_pdu_length, UINT8 *p_ui_pdu, BT_HDR *p_msg);
+static void    llcp_link_proc_ui_pdu (uint8_t local_sap, uint8_t remote_sap, uint16_t ui_pdu_length, uint8_t *p_ui_pdu, BT_HDR *p_msg);
 static void    llcp_link_proc_agf_pdu (BT_HDR *p_msg);
-static void    llcp_link_proc_rx_pdu (UINT8 dsap, UINT8 ptype, UINT8 ssap, BT_HDR *p_msg);
+static void    llcp_link_proc_rx_pdu (uint8_t dsap, uint8_t ptype, uint8_t ssap, BT_HDR *p_msg);
 static void    llcp_link_proc_rx_data (BT_HDR *p_msg);
 
-static BT_HDR *llcp_link_get_next_pdu (BOOLEAN length_only, UINT16 *p_next_pdu_length);
+static BT_HDR *llcp_link_get_next_pdu (bool    length_only, uint16_t *p_next_pdu_length);
 static BT_HDR *llcp_link_build_next_pdu (BT_HDR *p_agf);
 static void    llcp_link_send_to_lower (BT_HDR *p_msg);
 
@@ -73,7 +73,7 @@ extern tLLCP_TEST_PARAMS llcp_test_params;
 
 /* debug functions type */
 #if (BT_TRACE_VERBOSE == TRUE)
-static char *llcp_pdu_type (UINT8 ptype);
+static char *llcp_pdu_type (uint8_t ptype);
 #endif
 
 /*******************************************************************************
@@ -93,7 +93,7 @@ static void llcp_link_start_inactivity_timer (void)
         LLCP_TRACE_DEBUG1 ("Start inactivity_timer: %d ms", llcp_cb.lcb.inact_timeout);
 
         nfc_start_quick_timer (&llcp_cb.lcb.inact_timer, NFC_TTYPE_LLCP_LINK_INACT,
-                               ((UINT32) llcp_cb.lcb.inact_timeout) * QUICK_TIMER_TICKS_PER_SEC / 1000);
+                               ((uint32_t) llcp_cb.lcb.inact_timeout) * QUICK_TIMER_TICKS_PER_SEC / 1000);
     }
 }
 
@@ -131,13 +131,13 @@ static void llcp_link_start_link_timer (void)
     {
         /* wait for application layer sending data */
         nfc_start_quick_timer (&llcp_cb.lcb.timer, NFC_TTYPE_LLCP_LINK_MANAGER,
-                               (((UINT32) llcp_cb.lcb.symm_delay) * QUICK_TIMER_TICKS_PER_SEC) / 1000);
+                               (((uint32_t) llcp_cb.lcb.symm_delay) * QUICK_TIMER_TICKS_PER_SEC) / 1000);
     }
     else
     {
         /* wait for data to receive from remote */
         nfc_start_quick_timer (&llcp_cb.lcb.timer, NFC_TTYPE_LLCP_LINK_MANAGER,
-                               ((UINT32) llcp_cb.lcb.peer_lto) * QUICK_TIMER_TICKS_PER_SEC / 1000);
+                               ((uint32_t) llcp_cb.lcb.peer_lto) * QUICK_TIMER_TICKS_PER_SEC / 1000);
     }
 }
 
@@ -251,7 +251,7 @@ tLLCP_STATUS llcp_link_activate (tLLCP_ACTIVATE_CONFIG *p_config)
         {
             /* give a chance to upper layer to send PDU if need */
             nfc_start_quick_timer (&llcp_cb.lcb.timer, NFC_TTYPE_LLCP_DELAY_FIRST_PDU,
-                                   (((UINT32) llcp_cb.lcb.delay_first_pdu_timeout) * QUICK_TIMER_TICKS_PER_SEC) / 1000);
+                                   (((uint32_t) llcp_cb.lcb.delay_first_pdu_timeout) * QUICK_TIMER_TICKS_PER_SEC) / 1000);
         }
         else
         {
@@ -295,7 +295,7 @@ tLLCP_STATUS llcp_link_activate (tLLCP_ACTIVATE_CONFIG *p_config)
 ** Returns          void
 **
 *******************************************************************************/
-static void llcp_deactivate_cleanup  (UINT8 reason)
+static void llcp_deactivate_cleanup  (uint8_t reason)
 {
     /* report SDP failure for any pending request */
     llcp_sdp_proc_deactivation ();
@@ -366,9 +366,9 @@ void llcp_link_process_link_timeout (void)
 ** Returns          void
 **
 *******************************************************************************/
-void llcp_link_deactivate (UINT8 reason)
+void llcp_link_deactivate (uint8_t reason)
 {
-    UINT8        local_sap, idx;
+    uint8_t      local_sap, idx;
     tLLCP_DLCB   *p_dlcb;
     tLLCP_APP_CB *p_app_cb;
 
@@ -432,7 +432,7 @@ void llcp_link_deactivate (UINT8 reason)
         {
             /* if DISC is sent to NFCC, wait for short period for NFCC to send it to peer */
             nfc_start_quick_timer (&llcp_cb.lcb.timer, NFC_TTYPE_LLCP_LINK_MANAGER,
-                                   ((UINT32) 50) * QUICK_TIMER_TICKS_PER_SEC / 1000);
+                                   ((uint32_t) 50) * QUICK_TIMER_TICKS_PER_SEC / 1000);
         }
 
         llcp_cb.lcb.link_deact_reason = reason;
@@ -468,10 +468,10 @@ void llcp_link_deactivate (UINT8 reason)
 ** Returns          TRUE if success
 **
 *******************************************************************************/
-static BOOLEAN llcp_link_parse_gen_bytes (UINT8 gen_bytes_len, UINT8 *p_gen_bytes)
+static bool    llcp_link_parse_gen_bytes (uint8_t gen_bytes_len, uint8_t *p_gen_bytes)
 {
-    UINT8 *p = p_gen_bytes + LLCP_MAGIC_NUMBER_LEN;
-    UINT8 length = gen_bytes_len - LLCP_MAGIC_NUMBER_LEN;
+    uint8_t *p = p_gen_bytes + LLCP_MAGIC_NUMBER_LEN;
+    uint8_t length = gen_bytes_len - LLCP_MAGIC_NUMBER_LEN;
 
     if (  (gen_bytes_len >= LLCP_MAGIC_NUMBER_LEN)
         &&(*(p_gen_bytes) == LLCP_MAGIC_NUMBER_BYTE0)
@@ -501,9 +501,9 @@ static BOOLEAN llcp_link_parse_gen_bytes (UINT8 gen_bytes_len, UINT8 *p_gen_byte
 ** Returns          TRUE if success
 **
 *******************************************************************************/
-static BOOLEAN llcp_link_version_agreement (void)
+static bool    llcp_link_version_agreement (void)
 {
-    UINT8 peer_major_version, peer_minor_version;
+    uint8_t peer_major_version, peer_minor_version;
 
     peer_major_version = LLCP_GET_MAJOR_VERSION (llcp_cb.lcb.peer_version);
     peer_minor_version = LLCP_GET_MINOR_VERSION (llcp_cb.lcb.peer_version);
@@ -558,11 +558,11 @@ static BOOLEAN llcp_link_version_agreement (void)
 ** Returns          void
 **
 *******************************************************************************/
-static void llcp_link_update_status (BOOLEAN is_activated)
+static void llcp_link_update_status (bool    is_activated)
 {
     tLLCP_SAP_CBACK_DATA data;
     tLLCP_APP_CB *p_app_cb;
-    UINT8 sap;
+    uint8_t sap;
 
     data.link_status.event        = LLCP_SAP_EVT_LINK_STATUS;
     data.link_status.is_activated = is_activated;
@@ -596,7 +596,7 @@ static void llcp_link_check_congestion (void)
 {
     tLLCP_SAP_CBACK_DATA data;
     tLLCP_APP_CB *p_app_cb;
-    UINT8 sap, idx;
+    uint8_t sap, idx;
 
     if (llcp_cb.overall_tx_congested)
     {
@@ -680,7 +680,7 @@ static void llcp_link_check_uncongested (void)
 {
     tLLCP_SAP_CBACK_DATA data;
     tLLCP_APP_CB *p_app_cb;
-    UINT8 xx, sap, idx;
+    uint8_t xx, sap, idx;
 
     if (llcp_cb.overall_tx_congested)
     {
@@ -819,7 +819,7 @@ static void llcp_link_check_uncongested (void)
 static void llcp_link_send_SYMM (void)
 {
     BT_HDR *p_msg;
-    UINT8  *p;
+    uint8_t  *p;
 
     p_msg = (BT_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
 
@@ -828,7 +828,7 @@ static void llcp_link_send_SYMM (void)
         p_msg->len    = LLCP_PDU_SYMM_SIZE;
         p_msg->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
 
-        p = (UINT8 *) (p_msg + 1) + p_msg->offset;
+        p = (uint8_t *) (p_msg + 1) + p_msg->offset;
         UINT16_TO_BE_STREAM (p, LLCP_GET_PDU_HEADER (LLCP_SAP_LM, LLCP_PDU_SYMM_TYPE, LLCP_SAP_LM ));
 
         llcp_link_send_to_lower (p_msg);
@@ -847,7 +847,7 @@ static void llcp_link_send_SYMM (void)
 static void llcp_link_send_invalid_pdu (void)
 {
     BT_HDR *p_msg;
-    UINT8  *p;
+    uint8_t  *p;
 
     p_msg = (BT_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
 
@@ -857,7 +857,7 @@ static void llcp_link_send_invalid_pdu (void)
         p_msg->len    = 1;
         p_msg->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
 
-        p = (UINT8 *) (p_msg + 1) + p_msg->offset;
+        p = (uint8_t *) (p_msg + 1) + p_msg->offset;
         *p = 0x00;
 
         NFC_SendData (NFC_RF_CONN_ID, p_msg);
@@ -953,7 +953,7 @@ void llcp_link_check_send_data (void)
         {
             /* wait for short period for NFCC to send DISC */
             nfc_start_quick_timer (&llcp_cb.lcb.timer, NFC_TTYPE_LLCP_LINK_MANAGER,
-                                   ((UINT32) 50) * QUICK_TIMER_TICKS_PER_SEC / 1000);
+                                   ((uint32_t) 50) * QUICK_TIMER_TICKS_PER_SEC / 1000);
         }
         else
         {
@@ -974,16 +974,16 @@ void llcp_link_check_send_data (void)
 ** Returns          None
 **
 *******************************************************************************/
-static void llcp_link_proc_ui_pdu (UINT8  local_sap,
-                                   UINT8  remote_sap,
-                                   UINT16 ui_pdu_length,
-                                   UINT8  *p_ui_pdu,
+static void llcp_link_proc_ui_pdu (uint8_t  local_sap,
+                                   uint8_t  remote_sap,
+                                   uint16_t ui_pdu_length,
+                                   uint8_t  *p_ui_pdu,
                                    BT_HDR *p_msg)
 {
-    BOOLEAN      appended;
+    bool         appended;
     BT_HDR       *p_last_buf;
-    UINT16       available_bytes;
-    UINT8        *p_dst;
+    uint16_t     available_bytes;
+    uint8_t      *p_dst;
     tLLCP_APP_CB *p_app_cb;
     tLLCP_SAP_CBACK_DATA data;
     tLLCP_DLCB   *p_dlcb;
@@ -1012,7 +1012,7 @@ static void llcp_link_proc_ui_pdu (UINT8  local_sap,
         if (p_msg)
         {
             ui_pdu_length = p_msg->len; /* including LLCP header */
-            p_ui_pdu      = (UINT8*) (p_msg + 1) + p_msg->offset;
+            p_ui_pdu      = (uint8_t*) (p_msg + 1) + p_msg->offset;
         }
 
         appended = FALSE;
@@ -1028,7 +1028,7 @@ static void llcp_link_proc_ui_pdu (UINT8  local_sap,
             /* if new UI PDU with length can be attached at the end of buffer */
             if (available_bytes >= LLCP_PDU_AGF_LEN_SIZE + ui_pdu_length)
             {
-                p_dst = (UINT8*) (p_last_buf + 1) + p_last_buf->offset + p_last_buf->len;
+                p_dst = (uint8_t*) (p_last_buf + 1) + p_last_buf->offset + p_last_buf->len;
 
                 /* add length of UI PDU */
                 UINT16_TO_BE_STREAM (p_dst, ui_pdu_length);
@@ -1065,7 +1065,7 @@ static void llcp_link_proc_ui_pdu (UINT8  local_sap,
 
                 if (p_msg)
                 {
-                    p_dst = (UINT8*) (p_msg + 1);
+                    p_dst = (uint8_t*) (p_msg + 1);
 
                     /* add length of PDU in front of UI PDU */
                     UINT16_TO_BE_STREAM (p_dst, ui_pdu_length);
@@ -1130,10 +1130,10 @@ static void llcp_link_proc_ui_pdu (UINT8  local_sap,
 *******************************************************************************/
 static void llcp_link_proc_agf_pdu (BT_HDR *p_agf)
 {
-    UINT16 agf_length;
-    UINT8 *p, *p_info, *p_pdu_length;
-    UINT16 pdu_hdr, pdu_length;
-    UINT8  dsap, ptype, ssap;
+    uint16_t agf_length;
+    uint8_t *p, *p_info, *p_pdu_length;
+    uint16_t pdu_hdr, pdu_length;
+    uint8_t  dsap, ptype, ssap;
 
     p_agf->len    -= LLCP_PDU_HEADER_SIZE;
     p_agf->offset += LLCP_PDU_HEADER_SIZE;
@@ -1142,7 +1142,7 @@ static void llcp_link_proc_agf_pdu (BT_HDR *p_agf)
     ** check integrity of AGF PDU and get number of PDUs in AGF PDU
     */
     agf_length = p_agf->len;
-    p = (UINT8 *) (p_agf + 1) + p_agf->offset;
+    p = (uint8_t *) (p_agf + 1) + p_agf->offset;
 
     while (agf_length > 0)
     {
@@ -1178,7 +1178,7 @@ static void llcp_link_proc_agf_pdu (BT_HDR *p_agf)
     ** Process PDUs in AGF
     */
     agf_length = p_agf->len;
-    p = (UINT8 *) (p_agf + 1) + p_agf->offset;
+    p = (uint8_t *) (p_agf + 1) + p_agf->offset;
 
     while (agf_length > 0)
     {
@@ -1192,7 +1192,7 @@ static void llcp_link_proc_agf_pdu (BT_HDR *p_agf)
         BE_STREAM_TO_UINT16 (pdu_hdr, p_info );
 
         dsap  = LLCP_GET_DSAP (pdu_hdr);
-        ptype = (UINT8) (LLCP_GET_PTYPE (pdu_hdr));
+        ptype = (uint8_t) (LLCP_GET_PTYPE (pdu_hdr));
         ssap  = LLCP_GET_SSAP (pdu_hdr);
 
 #if (BT_TRACE_VERBOSE == TRUE)
@@ -1218,7 +1218,7 @@ static void llcp_link_proc_agf_pdu (BT_HDR *p_agf)
         }
         else if (ptype == LLCP_PDU_SNL_TYPE)
         {
-            llcp_sdp_proc_snl ((UINT16) (pdu_length - LLCP_PDU_HEADER_SIZE), p_info);
+            llcp_sdp_proc_snl ((uint16_t) (pdu_length - LLCP_PDU_HEADER_SIZE), p_info);
         }
         else if ((ptype == LLCP_PDU_UI_TYPE) && (pdu_length > LLCP_PDU_HEADER_SIZE))
         {
@@ -1230,7 +1230,7 @@ static void llcp_link_proc_agf_pdu (BT_HDR *p_agf)
         }
         else /* let data link connection handle PDU */
         {
-            llcp_dlc_proc_rx_pdu (dsap, ptype, ssap, (UINT16) (pdu_length - LLCP_PDU_HEADER_SIZE), p_info);
+            llcp_dlc_proc_rx_pdu (dsap, ptype, ssap, (uint16_t) (pdu_length - LLCP_PDU_HEADER_SIZE), p_info);
         }
 
         p += pdu_length;
@@ -1249,10 +1249,10 @@ static void llcp_link_proc_agf_pdu (BT_HDR *p_agf)
 ** Returns          void
 **
 *******************************************************************************/
-static void llcp_link_proc_rx_pdu (UINT8 dsap, UINT8 ptype, UINT8 ssap, BT_HDR *p_msg)
+static void llcp_link_proc_rx_pdu (uint8_t dsap, uint8_t ptype, uint8_t ssap, BT_HDR *p_msg)
 {
-    BOOLEAN free_buffer = TRUE;
-    UINT8   *p_data;
+    bool    free_buffer = TRUE;
+    uint8_t *p_data;
 
     switch (ptype)
     {
@@ -1267,14 +1267,14 @@ static void llcp_link_proc_rx_pdu (UINT8 dsap, UINT8 ptype, UINT8 ssap, BT_HDR *
         }
         else
         {
-            p_data = (UINT8 *) (p_msg + 1) + p_msg->offset + LLCP_PDU_HEADER_SIZE;
-            llcp_dlc_proc_rx_pdu (dsap, ptype, ssap, (UINT16) (p_msg->len - LLCP_PDU_HEADER_SIZE), p_data);
+            p_data = (uint8_t *) (p_msg + 1) + p_msg->offset + LLCP_PDU_HEADER_SIZE;
+            llcp_dlc_proc_rx_pdu (dsap, ptype, ssap, (uint16_t) (p_msg->len - LLCP_PDU_HEADER_SIZE), p_data);
         }
         break;
 
     case LLCP_PDU_SNL_TYPE:
-        p_data = (UINT8 *) (p_msg + 1) + p_msg->offset + LLCP_PDU_HEADER_SIZE;
-        llcp_sdp_proc_snl ((UINT16) (p_msg->len - LLCP_PDU_HEADER_SIZE), p_data);
+        p_data = (uint8_t *) (p_msg + 1) + p_msg->offset + LLCP_PDU_HEADER_SIZE;
+        llcp_sdp_proc_snl ((uint16_t) (p_msg->len - LLCP_PDU_HEADER_SIZE), p_data);
         break;
 
     case LLCP_PDU_AGF_TYPE:
@@ -1293,8 +1293,8 @@ static void llcp_link_proc_rx_pdu (UINT8 dsap, UINT8 ptype, UINT8 ssap, BT_HDR *
         break;
 
     default:
-        p_data = (UINT8 *) (p_msg + 1) + p_msg->offset + LLCP_PDU_HEADER_SIZE;
-        llcp_dlc_proc_rx_pdu (dsap, ptype, ssap, (UINT16) (p_msg->len - LLCP_PDU_HEADER_SIZE), p_data);
+        p_data = (uint8_t *) (p_msg + 1) + p_msg->offset + LLCP_PDU_HEADER_SIZE;
+        llcp_dlc_proc_rx_pdu (dsap, ptype, ssap, (uint16_t) (p_msg->len - LLCP_PDU_HEADER_SIZE), p_data);
         break;
     }
 
@@ -1313,11 +1313,11 @@ static void llcp_link_proc_rx_pdu (UINT8 dsap, UINT8 ptype, UINT8 ssap, BT_HDR *
 *******************************************************************************/
 static void llcp_link_proc_rx_data (BT_HDR *p_msg)
 {
-    UINT8  *p;
-    UINT16  pdu_hdr, info_length = 0;
-    UINT8   dsap, ptype, ssap;
-    BOOLEAN free_buffer = TRUE;
-    BOOLEAN frame_error = FALSE;
+    uint8_t  *p;
+    uint16_t  pdu_hdr, info_length = 0;
+    uint8_t dsap, ptype, ssap;
+    bool    free_buffer = TRUE;
+    bool    frame_error = FALSE;
 
     if (llcp_cb.lcb.symm_state == LLCP_LINK_SYMM_REMOTE_XMIT_NEXT)
     {
@@ -1344,11 +1344,11 @@ static void llcp_link_proc_rx_data (BT_HDR *p_msg)
             }
             else
             {
-                p = (UINT8 *) (p_msg + 1) + p_msg->offset;
+                p = (uint8_t *) (p_msg + 1) + p_msg->offset;
                 BE_STREAM_TO_UINT16 (pdu_hdr, p );
 
                 dsap  = LLCP_GET_DSAP (pdu_hdr);
-                ptype = (UINT8) (LLCP_GET_PTYPE (pdu_hdr));
+                ptype = (uint8_t) (LLCP_GET_PTYPE (pdu_hdr));
                 ssap  = LLCP_GET_SSAP (pdu_hdr);
 
                 /* get length of information per PDU type */
@@ -1430,7 +1430,7 @@ static void llcp_link_proc_rx_data (BT_HDR *p_msg)
 **                  NULL otherwise
 **
 *******************************************************************************/
-static BT_HDR *llcp_link_get_next_pdu (BOOLEAN length_only, UINT16 *p_next_pdu_length)
+static BT_HDR *llcp_link_get_next_pdu (bool    length_only, uint16_t *p_next_pdu_length)
 {
     BT_HDR *p_msg;
     int     count, xx;
@@ -1570,8 +1570,8 @@ static BT_HDR *llcp_link_get_next_pdu (BOOLEAN length_only, UINT16 *p_next_pdu_l
 static BT_HDR *llcp_link_build_next_pdu (BT_HDR *p_pdu)
 {
     BT_HDR *p_agf = NULL, *p_msg = NULL, *p_next_pdu;
-    UINT8  *p, ptype;
-    UINT16  next_pdu_length, pdu_hdr;
+    uint8_t  *p, ptype;
+    uint16_t  next_pdu_length, pdu_hdr;
 
     LLCP_TRACE_DEBUG0 ("llcp_link_build_next_pdu ()");
 
@@ -1581,10 +1581,10 @@ static BT_HDR *llcp_link_build_next_pdu (BT_HDR *p_pdu)
     if (p_pdu)
     {
         /* get PDU type */
-        p = (UINT8 *) (p_pdu + 1) + p_pdu->offset;
+        p = (uint8_t *) (p_pdu + 1) + p_pdu->offset;
         BE_STREAM_TO_UINT16 (pdu_hdr, p);
 
-        ptype = (UINT8) (LLCP_GET_PTYPE (pdu_hdr));
+        ptype = (uint8_t) (LLCP_GET_PTYPE (pdu_hdr));
 
         if (ptype == LLCP_PDU_AGF_TYPE)
         {
@@ -1622,11 +1622,11 @@ static BT_HDR *llcp_link_build_next_pdu (BT_HDR *p_pdu)
                 {
                     p_agf->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
 
-                    p = (UINT8 *) (p_agf + 1) + p_agf->offset;
+                    p = (uint8_t *) (p_agf + 1) + p_agf->offset;
 
                     UINT16_TO_BE_STREAM (p, LLCP_GET_PDU_HEADER (LLCP_SAP_LM, LLCP_PDU_AGF_TYPE, LLCP_SAP_LM ));
                     UINT16_TO_BE_STREAM (p, p_msg->len);
-                    memcpy(p, (UINT8 *) (p_msg + 1) + p_msg->offset, p_msg->len);
+                    memcpy(p, (uint8_t *) (p_msg + 1) + p_msg->offset, p_msg->len);
 
                     p_agf->len      = LLCP_PDU_HEADER_SIZE + 2 + p_msg->len;
 
@@ -1651,10 +1651,10 @@ static BT_HDR *llcp_link_build_next_pdu (BT_HDR *p_pdu)
             /* Get a next PDU from link manager or data links */
             p_next_pdu = llcp_link_get_next_pdu (FALSE, &next_pdu_length);
 
-            p = (UINT8 *) (p_agf + 1) + p_agf->offset + p_agf->len;
+            p = (uint8_t *) (p_agf + 1) + p_agf->offset + p_agf->len;
 
             UINT16_TO_BE_STREAM (p, p_next_pdu->len);
-            memcpy (p, (UINT8 *) (p_next_pdu + 1) + p_next_pdu->offset, p_next_pdu->len);
+            memcpy (p, (uint8_t *) (p_next_pdu + 1) + p_next_pdu->offset, p_next_pdu->len);
 
             p_agf->len += 2 + p_next_pdu->len;
 
@@ -1704,7 +1704,7 @@ static void llcp_link_send_to_lower (BT_HDR *p_pdu)
 ** Returns          void
 **
 *******************************************************************************/
-void llcp_link_connection_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
+void llcp_link_connection_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
 {
     if (event == NFC_DATA_CEVT)
     {
@@ -1734,7 +1734,7 @@ void llcp_link_connection_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *
     else if (event == NFC_ERROR_CEVT)
     {
         /* RF interface specific status code */
-        llcp_link_deactivate (*(UINT8*) p_data);
+        llcp_link_deactivate (*(uint8_t*) p_data);
     }
     else if (event == NFC_DEACTIVATE_CEVT)
     {
@@ -1784,7 +1784,7 @@ void llcp_link_connection_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *
 ** Returns          string of PDU type
 **
 *******************************************************************************/
-static char *llcp_pdu_type (UINT8 ptype)
+static char *llcp_pdu_type (uint8_t ptype)
 {
     switch(ptype)
     {

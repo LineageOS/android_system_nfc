@@ -32,9 +32,9 @@
 /*******************************************************************************
 ** NFC_HAL_TASK declarations
 *******************************************************************************/
-#define NFC_HAL_TASK_STR            ((INT8 *) "NFC_HAL_TASK")
+#define NFC_HAL_TASK_STR            ((int8_t *) "NFC_HAL_TASK")
 #define NFC_HAL_TASK_STACK_SIZE     0x400
-UINT32 nfc_hal_task_stack[(NFC_HAL_TASK_STACK_SIZE+3)/4];
+uint32_t nfc_hal_task_stack[(NFC_HAL_TASK_STACK_SIZE+3)/4];
 
 /*******************************************************************************
 **
@@ -65,7 +65,7 @@ void HAL_NfcInitialize (void)
     GKI_create_task ((TASKPTR)nfc_hal_main_task,
                      NFC_HAL_TASK,
                      NFC_HAL_TASK_STR,
-                     (UINT16 *) ((UINT8 *)nfc_hal_task_stack + NFC_HAL_TASK_STACK_SIZE),
+                     (uint16_t *) ((uint8_t *)nfc_hal_task_stack + NFC_HAL_TASK_STACK_SIZE),
                      sizeof(nfc_hal_task_stack), NULL, NULL);
 
 #ifndef NFC_HAL_SHARED_GKI
@@ -151,10 +151,10 @@ void HAL_NfcClose (void)
 ** Returns          void
 **
 *******************************************************************************/
-void HAL_NfcCoreInitialized (UINT16 data_len, UINT8 *p_core_init_rsp_params)
+void HAL_NfcCoreInitialized (uint16_t data_len, uint8_t *p_core_init_rsp_params)
 {
     NFC_HDR *p_msg;
-    UINT16  size;
+    uint16_t  size;
 
     HAL_TRACE_API0 ("HAL_NfcCoreInitialized ()");
 
@@ -162,13 +162,13 @@ void HAL_NfcCoreInitialized (UINT16 data_len, UINT8 *p_core_init_rsp_params)
     size = p_core_init_rsp_params[2] + NCI_MSG_HDR_SIZE;
 
     /* Send message to NFC_HAL_TASK */
-    if ((p_msg = (NFC_HDR *)GKI_getbuf ((UINT16)(size + NFC_HDR_SIZE))) != NULL)
+    if ((p_msg = (NFC_HDR *)GKI_getbuf ((uint16_t)(size + NFC_HDR_SIZE))) != NULL)
     {
         p_msg->event  = NFC_HAL_EVT_POST_CORE_RESET;
         p_msg->offset = 0;
         p_msg->len    = size;
         p_msg->layer_specific = 0;
-        memcpy ((UINT8 *)(p_msg + 1) + p_msg->offset, p_core_init_rsp_params, size);
+        memcpy ((uint8_t *)(p_msg + 1) + p_msg->offset, p_core_init_rsp_params, size);
 
         GKI_send_msg (NFC_HAL_TASK, NFC_HAL_TASK_MBOX, p_msg);
     }
@@ -186,10 +186,10 @@ void HAL_NfcCoreInitialized (UINT16 data_len, UINT8 *p_core_init_rsp_params)
 ** Returns          void
 **
 *******************************************************************************/
-void HAL_NfcWrite (UINT16 data_len, UINT8 *p_data)
+void HAL_NfcWrite (uint16_t data_len, uint8_t *p_data)
 {
     NFC_HDR *p_msg;
-    UINT8 mt;
+    uint8_t mt;
 
     HAL_TRACE_API0 ("HAL_NfcWrite ()");
 
@@ -205,7 +205,7 @@ void HAL_NfcWrite (UINT16 data_len, UINT8 *p_data)
         p_msg->event  = NFC_HAL_EVT_TO_NFC_NCI;
         p_msg->offset = NFC_HAL_NCI_MSG_OFFSET_SIZE;
         p_msg->len    = data_len;
-        memcpy ((UINT8 *)(p_msg+1) + p_msg->offset, p_data, data_len);
+        memcpy ((uint8_t *)(p_msg+1) + p_msg->offset, p_data, data_len);
 
         /* Check if message is a command or data */
         mt = (*(p_data) & NCI_MT_MASK) >> NCI_MT_SHIFT;
@@ -229,9 +229,9 @@ void HAL_NfcWrite (UINT16 data_len, UINT8 *p_data)
 **                  FALSE if no vendor-specific pre-discovery actions are needed.
 **
 *******************************************************************************/
-BOOLEAN HAL_NfcPreDiscover (void)
+bool    HAL_NfcPreDiscover (void)
 {
-    BOOLEAN status = FALSE;
+    bool    status = FALSE;
 
     NFC_HDR *p_msg;
 
@@ -317,7 +317,7 @@ void HAL_NfcPowerCycle (void)
 ** Returns          the maximum number of NFCEEs supported by NFCC
 **
 *******************************************************************************/
-UINT8 HAL_NfcGetMaxNfcee (void)
+uint8_t HAL_NfcGetMaxNfcee (void)
 {
     HAL_TRACE_API1 ("HAL_NfcGetMaxNfcee: %d",nfc_hal_cb.max_ee);
     return nfc_hal_cb.max_ee;

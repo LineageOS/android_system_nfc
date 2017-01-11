@@ -28,7 +28,7 @@
 #include "nfc_brcm_defs.h"
 
 /* the SetConfig at start up*/
-UINT8 nfc_hal_start_up_cfg[] = {
+uint8_t nfc_hal_start_up_cfg[] = {
     /* TLV len */   31,
     /* B0 */        NCI_PARAM_ID_EMVCO_ENABLE,
     /* B1 */        1,
@@ -63,7 +63,7 @@ UINT8 nfc_hal_start_up_cfg[] = {
     /* B30*/        1,     /* (1 = active mode polling before passive, 0 = passive polling first) Default = 0.*/
 };
 
-UINT8 *p_nfc_hal_dm_start_up_cfg = (UINT8 *) nfc_hal_start_up_cfg;
+uint8_t *p_nfc_hal_dm_start_up_cfg = (uint8_t *) nfc_hal_start_up_cfg;
 
 /* the VSCs at start up:
  * The VSCs are specified in TLV format similar to nfa_start_up_cfg[]
@@ -71,7 +71,7 @@ UINT8 *p_nfc_hal_dm_start_up_cfg = (UINT8 *) nfc_hal_start_up_cfg;
  * B0 is the first T; i.e. the opcode for the VSC
  * B1 is the len of the VSC parameters/payload
  * */
-UINT8 nfc_hal_dm_start_up_vsc_cfg[] = {
+uint8_t nfc_hal_dm_start_up_vsc_cfg[] = {
     /* TLV len */   5,
     /* B0 */        NCI_MTS_CMD|NCI_GID_PROP,
     /* B1 */        NCI_MSG_FRAME_LOG,
@@ -80,10 +80,10 @@ UINT8 nfc_hal_dm_start_up_vsc_cfg[] = {
     /* B4 */        1   /* 1 to enable SWP frames */
 };
 
-UINT8 *p_nfc_hal_dm_start_up_vsc_cfg = NULL;
+uint8_t *p_nfc_hal_dm_start_up_vsc_cfg = NULL;
 
 /* the SetConfig at HAL_NfcPreDiscover. This is done once after HAL_NfcOpen */
-UINT8 nfc_hal_pre_discover_cfg[] = {
+uint8_t nfc_hal_pre_discover_cfg[] = {
     /* TLV len */   0x0A,
     /* B0 */        NCI_PARAM_ID_SWPCFG,
     /* B1 */        0x08,
@@ -97,7 +97,7 @@ UINT8 nfc_hal_pre_discover_cfg[] = {
     /* B9 */        0x01
 };
 
-UINT8 *p_nfc_hal_pre_discover_cfg = NULL;
+uint8_t *p_nfc_hal_pre_discover_cfg = NULL;
 
 /* LPTD parameters (LowPowerTagDetection)
  * This is typical values for 20791B2
@@ -105,7 +105,7 @@ UINT8 *p_nfc_hal_pre_discover_cfg = NULL;
  * depending on antenna and should be verified during a customer testing phase.
  * the data fields without comments are too complicated. Please see ""
  * */
-const UINT8 nfc_hal_dm_lptd_cfg[] =
+const uint8_t nfc_hal_dm_lptd_cfg[] =
 {
     21,             /* total TLV length excluding itself */
     NCI_PARAM_ID_TAGSNIFF_CFG,  /* type */
@@ -131,14 +131,14 @@ const UINT8 nfc_hal_dm_lptd_cfg[] =
     0x30,           /* B18 lptd rdr cfg ve */
 };
 
-UINT8 *p_nfc_hal_dm_lptd_cfg = (UINT8 *) &nfc_hal_dm_lptd_cfg[0];
+uint8_t *p_nfc_hal_dm_lptd_cfg = (uint8_t *) &nfc_hal_dm_lptd_cfg[0];
 
 /*
 ** NFCC has a table which has 9 XTAL frequencies: 9.6, 13, 16.2,  19.2, 24, 26, 38.4, 52 and 37.4 in MHz.
 ** For these 9 xtal frequencies, host doesn't need to configure PLL325.
 ** For 43341, host doesn't need to configure it at all.
 */
-UINT8 *p_nfc_hal_dm_pll_325_cfg = NULL;
+uint8_t *p_nfc_hal_dm_pll_325_cfg = NULL;
 
 /*
 ** Proprietary pre-set is required, if not NULL.
@@ -148,12 +148,12 @@ tNFC_HAL_DM_PRE_SET_MEM *p_nfc_hal_dm_pre_set_mem = NULL;
 tNFC_HAL_CFG nfc_hal_cfg =
 {
     FALSE,                                  /* set nfc_hal_prm_nvm_required to TRUE, if the platform wants to abort PRM process without NVM */
-    (UINT16) NFC_HAL_NFCC_ENABLE_TIMEOUT,   /* max time to wait for RESET NTF after setting REG_PU to high
+    (uint16_t) NFC_HAL_NFCC_ENABLE_TIMEOUT,   /* max time to wait for RESET NTF after setting REG_PU to high
                                             ** If NFCC doesn't have NVM or cannot load patch from NVM without Xtal setting
                                             ** then set it to short to optimize bootup time because NFCC cannot send RESET NTF.
                                             ** Otherwise, it depends on NVM type and size of patchram.
                                             */
-    (UINT16) NFC_HAL_NFCC_ENABLE_TIMEOUT    /* max time to wait for RESET NTF after setting Xtal frequency
+    (uint16_t) NFC_HAL_NFCC_ENABLE_TIMEOUT    /* max time to wait for RESET NTF after setting Xtal frequency
                                             ** It depends on NVM type and size of patchram.
                                             */
 #if (defined(NFC_HAL_HCI_INCLUDED) && (NFC_HAL_HCI_INCLUDED == TRUE))
@@ -165,7 +165,7 @@ tNFC_HAL_CFG nfc_hal_cfg =
 
 tNFC_HAL_CFG *p_nfc_hal_cfg= (tNFC_HAL_CFG *) &nfc_hal_cfg;
 
-const UINT8 nfc_hal_dm_xtal_params_cfg [] =
+const uint8_t nfc_hal_dm_xtal_params_cfg [] =
 {
     8,             /* length */
     0x00,           /* B0 Rfpll_cfg_pll_xtal_div_2                  */
@@ -179,4 +179,4 @@ const UINT8 nfc_hal_dm_xtal_params_cfg [] =
 };
 
 /* By default, the XTAL command does not need these extra params. */
-UINT8 *p_nfc_hal_dm_xtal_params_cfg = NULL;
+uint8_t *p_nfc_hal_dm_xtal_params_cfg = NULL;

@@ -40,7 +40,7 @@
 #include "nfc_hal_api.h"
 
 #if (NFC_RW_ONLY == FALSE)
-static const UINT8 nfc_mpl_code_to_size[] =
+static const uint8_t nfc_mpl_code_to_size[] =
 {64, 128, 192, 254};
 
 #endif /* NFC_RW_ONLY */
@@ -121,7 +121,7 @@ void nfc_wait_2_deactivate_timeout (void)
 {
     NFC_TRACE_ERROR0 ("nfc_wait_2_deactivate_timeout");
     nfc_cb.flags  &= ~NFC_FL_DEACTIVATING;
-    nci_snd_deactivate_cmd ((UINT8) ((TIMER_PARAM_TYPE) nfc_cb.deactivate_timer.param));
+    nci_snd_deactivate_cmd ((uint8_t) ((TIMER_PARAM_TYPE) nfc_cb.deactivate_timer.param));
 }
 
 
@@ -136,16 +136,16 @@ void nfc_wait_2_deactivate_timeout (void)
 ** Returns          void
 **
 *******************************************************************************/
-UINT8 nfc_ncif_send_data (tNFC_CONN_CB *p_cb, BT_HDR *p_data)
+uint8_t nfc_ncif_send_data (tNFC_CONN_CB *p_cb, BT_HDR *p_data)
 {
-    UINT8 *pp;
-    UINT8 *ps;
-    UINT8   ulen = NCI_MAX_PAYLOAD_SIZE;
+    uint8_t *pp;
+    uint8_t *ps;
+    uint8_t ulen = NCI_MAX_PAYLOAD_SIZE;
     BT_HDR *p;
-    UINT8   pbf = 1;
-    UINT8   buffer_size = p_cb->buff_size;
-    UINT8   hdr0 = p_cb->conn_id;
-    BOOLEAN fragmented = FALSE;
+    uint8_t pbf = 1;
+    uint8_t buffer_size = p_cb->buff_size;
+    uint8_t hdr0 = p_cb->conn_id;
+    bool    fragmented = FALSE;
 
     NFC_TRACE_DEBUG3 ("nfc_ncif_send_data :%d, num_buff:%d qc:%d", p_cb->conn_id, p_cb->num_buff, p_cb->tx_q.count);
     if (p_cb->id == NFC_RF_CONN_ID)
@@ -163,7 +163,7 @@ UINT8 nfc_ncif_send_data (tNFC_CONN_CB *p_cb, BT_HDR *p_data)
                         nfc_cb.flags  &= ~NFC_FL_DEACTIVATING;
                         NFC_TRACE_DEBUG2 ("deactivating NFC-DEP init_credits:%d, num_buff:%d", p_cb->init_credits, p_cb->num_buff);
                         nfc_stop_timer(&nfc_cb.deactivate_timer);
-                        nci_snd_deactivate_cmd ((UINT8)((TIMER_PARAM_TYPE)nfc_cb.deactivate_timer.param));
+                        nci_snd_deactivate_cmd ((uint8_t)((TIMER_PARAM_TYPE)nfc_cb.deactivate_timer.param));
                     }
                 }
             }
@@ -186,7 +186,7 @@ UINT8 nfc_ncif_send_data (tNFC_CONN_CB *p_cb, BT_HDR *p_data)
         if (p_data->len <= buffer_size)
         {
             pbf         = 0;   /* last fragment */
-            ulen        = (UINT8)(p_data->len);
+            ulen        = (uint8_t)(p_data->len);
             fragmented  = FALSE;
         }
         else
@@ -212,8 +212,8 @@ UINT8 nfc_ncif_send_data (tNFC_CONN_CB *p_cb, BT_HDR *p_data)
             p->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE + 1;
             if (p->len)
             {
-            pp        = (UINT8 *)(p + 1) + p->offset;
-            ps        = (UINT8 *)(p_data + 1) + p_data->offset;
+            pp        = (uint8_t *)(p + 1) + p->offset;
+            ps        = (uint8_t *)(p_data + 1) + p_data->offset;
             memcpy (pp, ps, ulen);
             }
             /* adjust the BT_HDR on the old fragment */
@@ -225,7 +225,7 @@ UINT8 nfc_ncif_send_data (tNFC_CONN_CB *p_cb, BT_HDR *p_data)
         p->layer_specific    = pbf;
         p->len              += NCI_DATA_HDR_SIZE;
         p->offset           -= NCI_DATA_HDR_SIZE;
-        pp = (UINT8 *)(p + 1) + p->offset;
+        pp = (uint8_t *)(p + 1) + p->offset;
         /* build NCI Data packet header */
         NCI_DATA_PBLD_HDR(pp, pbf, hdr0, ulen);
 
@@ -256,7 +256,7 @@ UINT8 nfc_ncif_send_data (tNFC_CONN_CB *p_cb, BT_HDR *p_data)
 *******************************************************************************/
 void nfc_ncif_check_cmd_queue (BT_HDR *p_buf)
 {
-    UINT8   *ps;
+    uint8_t *ps;
     /* If there are commands waiting in the xmit queue, or if the controller cannot accept any more commands, */
     /* then enqueue this command */
     if (p_buf)
@@ -278,7 +278,7 @@ void nfc_ncif_check_cmd_queue (BT_HDR *p_buf)
         if (p_buf)
         {
             /* save the message header to double check the response */
-            ps   = (UINT8 *)(p_buf + 1) + p_buf->offset;
+            ps   = (uint8_t *)(p_buf + 1) + p_buf->offset;
             memcpy(nfc_cb.last_hdr, ps, NFC_SAVED_HDR_SIZE);
             memcpy(nfc_cb.last_cmd, ps + NCI_MSG_HDR_SIZE, NFC_SAVED_CMD_SIZE);
             if (p_buf->layer_specific == NFC_WAIT_RSP_VSC)
@@ -294,7 +294,7 @@ void nfc_ncif_check_cmd_queue (BT_HDR *p_buf)
             nfc_cb.nci_cmd_window--;
 
             /* start NFC command-timeout timer */
-            nfc_start_timer (&nfc_cb.nci_wait_rsp_timer, (UINT16)(NFC_TTYPE_NCI_WAIT_RSP), nfc_cb.nci_wait_rsp_tout);
+            nfc_start_timer (&nfc_cb.nci_wait_rsp_timer, (uint16_t)(NFC_TTYPE_NCI_WAIT_RSP), nfc_cb.nci_wait_rsp_tout);
         }
     }
 
@@ -318,7 +318,7 @@ void nfc_ncif_check_cmd_queue (BT_HDR *p_buf)
                     /* HAL does not need to send command,
                      * - restore the command window and issue the discovery command now */
                     nfc_cb.flags         &= ~NFC_FL_DISCOVER_PENDING;
-                    ps                    = (UINT8 *)nfc_cb.p_disc_pending;
+                    ps                    = (uint8_t *)nfc_cb.p_disc_pending;
                     nci_snd_discover_cmd (*ps, (tNFC_DISCOVER_PARAMS *)(ps + 1));
                     GKI_freebuf (nfc_cb.p_disc_pending);
                     nfc_cb.p_disc_pending = NULL;
@@ -365,14 +365,14 @@ void nfc_ncif_send_cmd (BT_HDR *p_buf)
 ** Returns          TRUE if need to free buffer
 **
 *******************************************************************************/
-BOOLEAN nfc_ncif_process_event (BT_HDR *p_msg)
+bool    nfc_ncif_process_event (BT_HDR *p_msg)
 {
-    UINT8   mt, pbf, gid, *p, *pp;
-    BOOLEAN free = TRUE;
-    UINT8   oid;
-    UINT8   *p_old, old_gid, old_oid, old_mt;
+    uint8_t mt, pbf, gid, *p, *pp;
+    bool    free = TRUE;
+    uint8_t oid;
+    uint8_t *p_old, old_gid, old_oid, old_mt;
 
-    p = (UINT8 *) (p_msg + 1) + p_msg->offset;
+    p = (uint8_t *) (p_msg + 1) + p_msg->offset;
 
     pp = p;
     NCI_MSG_PRS_HDR0 (pp, mt, pbf, gid);
@@ -466,7 +466,7 @@ BOOLEAN nfc_ncif_process_event (BT_HDR *p_msg)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_rf_management_status (tNFC_DISCOVER_EVT event, UINT8 status)
+void nfc_ncif_rf_management_status (tNFC_DISCOVER_EVT event, uint8_t status)
 {
     tNFC_DISCOVER   evt_data;
     if (nfc_cb.p_discv_cback)
@@ -485,7 +485,7 @@ void nfc_ncif_rf_management_status (tNFC_DISCOVER_EVT event, UINT8 status)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_set_config_status (UINT8 *p, UINT8 len)
+void nfc_ncif_set_config_status (uint8_t *p, uint8_t len)
 {
     tNFC_RESPONSE   evt_data;
     if (nfc_cb.p_resp_cback)
@@ -511,7 +511,7 @@ void nfc_ncif_set_config_status (UINT8 *p, UINT8 len)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_event_status (tNFC_RESPONSE_EVT event, UINT8 status)
+void nfc_ncif_event_status (tNFC_RESPONSE_EVT event, uint8_t status)
 {
     tNFC_RESPONSE   evt_data;
     if (nfc_cb.p_resp_cback)
@@ -530,7 +530,7 @@ void nfc_ncif_event_status (tNFC_RESPONSE_EVT event, UINT8 status)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_error_status (UINT8 conn_id, UINT8 status)
+void nfc_ncif_error_status (uint8_t conn_id, uint8_t status)
 {
     tNFC_CONN_CB * p_cb;
     p_cb = nfc_find_conn_cb_by_conn_id (conn_id);
@@ -550,7 +550,7 @@ void nfc_ncif_error_status (UINT8 conn_id, UINT8 status)
 **
 *******************************************************************************/
 #if (NFC_RW_ONLY == FALSE)
-void nfc_ncif_proc_rf_field_ntf (UINT8 rf_status)
+void nfc_ncif_proc_rf_field_ntf (uint8_t rf_status)
 {
     tNFC_RESPONSE   evt_data;
     if (nfc_cb.p_resp_cback)
@@ -571,9 +571,9 @@ void nfc_ncif_proc_rf_field_ntf (UINT8 rf_status)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_proc_credits(UINT8 *p, UINT16 plen)
+void nfc_ncif_proc_credits(uint8_t *p, uint16_t plen)
 {
-    UINT8   num, xx;
+    uint8_t num, xx;
     tNFC_CONN_CB * p_cb;
 
     num = *p++;
@@ -612,10 +612,10 @@ void nfc_ncif_proc_credits(UINT8 *p, UINT16 plen)
 ** Returns          void
 **
 *******************************************************************************/
-UINT8 * nfc_ncif_decode_rf_params (tNFC_RF_TECH_PARAMS *p_param, UINT8 *p)
+uint8_t * nfc_ncif_decode_rf_params (tNFC_RF_TECH_PARAMS *p_param, uint8_t *p)
 {
     tNFC_RF_PA_PARAMS   *p_pa;
-    UINT8               len, *p_start, u8;
+    uint8_t             len, *p_start, u8;
     tNFC_RF_PB_PARAMS   *p_pb;
     tNFC_RF_LF_PARAMS   *p_lf;
     tNFC_RF_PF_PARAMS   *p_pf;
@@ -726,7 +726,7 @@ SENSF_RES Response Byte 2 - Byte 17 or 19  n bytes Defined in [DIGPROT] Availabl
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_proc_discover_ntf (UINT8 *p, UINT16 plen)
+void nfc_ncif_proc_discover_ntf (uint8_t *p, uint16_t plen)
 {
     tNFC_DISCOVER   evt_data;
 
@@ -756,7 +756,7 @@ void nfc_ncif_proc_discover_ntf (UINT8 *p, UINT16 plen)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_proc_activate (UINT8 *p, UINT8 len)
+void nfc_ncif_proc_activate (uint8_t *p, uint8_t len)
 {
     tNFC_DISCOVER   evt_data;
     tNFC_INTF_PARAMS        *p_intf = &evt_data.activate.intf_param;
@@ -766,13 +766,13 @@ void nfc_ncif_proc_activate (UINT8 *p, UINT8 len)
 #if (NFC_RW_ONLY == FALSE)
     tNFC_INTF_PA_NFC_DEP    *p_pa_nfc;
     int                     mpl_idx = 0;
-    UINT8                   gb_idx = 0, mpl;
+    uint8_t                 gb_idx = 0, mpl;
 #endif
-    UINT8                   t0;
+    uint8_t                 t0;
     tNCI_DISCOVERY_TYPE     mode;
     tNFC_CONN_CB * p_cb = &nfc_cb.conn_cb[NFC_RF_CONN_ID];
-    UINT8                   *pp, len_act;
-    UINT8                   buff_size, num_buff;
+    uint8_t                 *pp, len_act;
+    uint8_t                 buff_size, num_buff;
     tNFC_RF_PA_PARAMS       *p_pa;
 
     nfc_set_state (NFC_STATE_OPEN);
@@ -838,7 +838,7 @@ void nfc_ncif_proc_activate (UINT8 *p, UINT8 len)
                 p_pa_iso->nad_used  = ((*pp) & 0x01);
                 pp++;   /* TC */
             }
-            p_pa_iso->his_byte_len  = (UINT8) (p_pa_iso->ats_res_len - (pp - p_pa_iso->ats_res));
+            p_pa_iso->his_byte_len  = (uint8_t) (p_pa_iso->ats_res_len - (pp - p_pa_iso->ats_res));
             if (p_pa_iso->his_byte_len > NFC_MAX_HIS_BYTES_LEN)
                 p_pa_iso->his_byte_len = NFC_MAX_HIS_BYTES_LEN;
             memcpy (p_pa_iso->his_byte,  pp, p_pa_iso->his_byte_len);
@@ -981,7 +981,7 @@ void nfc_ncif_proc_activate (UINT8 *p, UINT8 len)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_proc_deactivate (UINT8 status, UINT8 deact_type, BOOLEAN is_ntf)
+void nfc_ncif_proc_deactivate (uint8_t status, uint8_t deact_type, bool    is_ntf)
 {
     tNFC_DISCOVER   evt_data;
     tNFC_DEACTIVATE_DEVT    *p_deact;
@@ -1022,12 +1022,12 @@ void nfc_ncif_proc_deactivate (UINT8 status, UINT8 deact_type, BOOLEAN is_ntf)
 **
 *******************************************************************************/
 #if ((NFC_NFCEE_INCLUDED == TRUE) && (NFC_RW_ONLY == FALSE))
-void nfc_ncif_proc_ee_action (UINT8 *p, UINT16 plen)
+void nfc_ncif_proc_ee_action (uint8_t *p, uint16_t plen)
 {
     tNFC_EE_ACTION_REVT evt_data;
     tNFC_RESPONSE_CBACK *p_cback = nfc_cb.p_resp_cback;
-    UINT8   data_len, ulen, tag, *p_data;
-    UINT8   max_len;
+    uint8_t data_len, ulen, tag, *p_data;
+    uint8_t max_len;
 
     if (p_cback)
     {
@@ -1039,7 +1039,7 @@ void nfc_ncif_proc_ee_action (UINT8 *p, UINT16 plen)
         if (plen >= 3)
             plen -= 3;
         if (data_len > plen)
-            data_len = (UINT8) plen;
+            data_len = (uint8_t) plen;
 
         switch (evt_data.act_data.trigger)
         {
@@ -1101,12 +1101,12 @@ void nfc_ncif_proc_ee_action (UINT8 *p, UINT16 plen)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_proc_ee_discover_req (UINT8 *p, UINT16 plen)
+void nfc_ncif_proc_ee_discover_req (uint8_t *p, uint16_t plen)
 {
     tNFC_RESPONSE_CBACK *p_cback = nfc_cb.p_resp_cback;
     tNFC_EE_DISCOVER_REQ_REVT   ee_disc_req;
     tNFC_EE_DISCOVER_INFO       *p_info;
-    UINT8                       u8;
+    uint8_t                     u8;
 
     NFC_TRACE_DEBUG2 ("nfc_ncif_proc_ee_discover_req %d len:%d", *p, plen);
     if (p_cback)
@@ -1148,10 +1148,10 @@ void nfc_ncif_proc_ee_discover_req (UINT8 *p, UINT16 plen)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_proc_get_routing (UINT8 *p, UINT8 len)
+void nfc_ncif_proc_get_routing (uint8_t *p, uint8_t len)
 {
     tNFC_GET_ROUTING_REVT evt_data;
-    UINT8       more, num_entries, xx, yy, *pn, tl;
+    uint8_t     more, num_entries, xx, yy, *pn, tl;
     tNFC_STATUS status = NFC_STATUS_CONTINUE;
 
     if (nfc_cb.p_resp_cback)
@@ -1191,13 +1191,13 @@ void nfc_ncif_proc_get_routing (UINT8 *p, UINT8 len)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_proc_conn_create_rsp (UINT8 *p, UINT16 plen, UINT8 dest_type)
+void nfc_ncif_proc_conn_create_rsp (uint8_t *p, uint16_t plen, uint8_t dest_type)
 {
     tNFC_CONN_CB * p_cb;
     tNFC_STATUS    status;
     tNFC_CONN_CBACK *p_cback;
     tNFC_CONN   evt_data;
-    UINT8           conn_id;
+    uint8_t         conn_id;
 
     /* find the pending connection control block */
     p_cb                = nfc_find_conn_cb_by_conn_id (NFC_PEND_CONN_ID);
@@ -1238,7 +1238,7 @@ void nfc_ncif_proc_conn_create_rsp (UINT8 *p, UINT16 plen, UINT8 dest_type)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_report_conn_close_evt (UINT8 conn_id, tNFC_STATUS status)
+void nfc_ncif_report_conn_close_evt (uint8_t conn_id, tNFC_STATUS status)
 {
     tNFC_CONN       evt_data;
     tNFC_CONN_CBACK *p_cback;
@@ -1264,9 +1264,9 @@ void nfc_ncif_report_conn_close_evt (UINT8 conn_id, tNFC_STATUS status)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_proc_reset_rsp (UINT8 *p, BOOLEAN is_ntf)
+void nfc_ncif_proc_reset_rsp (uint8_t *p, bool    is_ntf)
 {
-    UINT8 status = *p++;
+    uint8_t status = *p++;
 
     if (is_ntf)
     {
@@ -1322,10 +1322,10 @@ void nfc_ncif_proc_reset_rsp (UINT8 *p, BOOLEAN is_ntf)
 *******************************************************************************/
 void nfc_ncif_proc_init_rsp (BT_HDR *p_msg)
 {
-    UINT8 *p, status;
+    uint8_t *p, status;
     tNFC_CONN_CB * p_cb = &nfc_cb.conn_cb[NFC_RF_CONN_ID];
 
-    p = (UINT8 *) (p_msg + 1) + p_msg->offset;
+    p = (uint8_t *) (p_msg + 1) + p_msg->offset;
 
     /* handle init params in nfc_enabled */
     status   = *(p + NCI_MSG_HDR_SIZE);
@@ -1357,7 +1357,7 @@ void nfc_ncif_proc_init_rsp (BT_HDR *p_msg)
 *******************************************************************************/
 void nfc_ncif_proc_get_config_rsp (BT_HDR *p_evt)
 {
-    UINT8   *p;
+    uint8_t *p;
     tNFC_RESPONSE_CBACK *p_cback = nfc_cb.p_resp_cback;
     tNFC_RESPONSE  evt_data;
 
@@ -1365,7 +1365,7 @@ void nfc_ncif_proc_get_config_rsp (BT_HDR *p_evt)
     p_evt->len    -= NCI_MSG_HDR_SIZE;
     if (p_cback)
     {
-        p                                = (UINT8 *) (p_evt + 1) + p_evt->offset;
+        p                                = (uint8_t *) (p_evt + 1) + p_evt->offset;
         evt_data.get_config.status       = *p++;
         evt_data.get_config.tlv_size     = p_evt->len;
         evt_data.get_config.p_param_tlvs = p;
@@ -1382,16 +1382,16 @@ void nfc_ncif_proc_get_config_rsp (BT_HDR *p_evt)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_proc_t3t_polling_ntf (UINT8 *p, UINT16 plen)
+void nfc_ncif_proc_t3t_polling_ntf (uint8_t *p, uint16_t plen)
 {
-    UINT8 status;
-    UINT8 num_responses;
+    uint8_t status;
+    uint8_t num_responses;
 
     /* Pass result to RW_T3T for processing */
     STREAM_TO_UINT8 (status, p);
     STREAM_TO_UINT8 (num_responses, p);
     plen-=NFC_TL_SIZE;
-    rw_t3t_handle_nci_poll_ntf (status, num_responses, (UINT8) plen, p);
+    rw_t3t_handle_nci_poll_ntf (status, num_responses, (uint8_t) plen, p);
 }
 
 /*******************************************************************************
@@ -1407,7 +1407,7 @@ void nfc_data_event (tNFC_CONN_CB * p_cb)
 {
     BT_HDR      *p_evt;
     tNFC_DATA_CEVT data_cevt;
-    UINT8       *p;
+    uint8_t     *p;
 
     if (p_cb->p_cback)
     {
@@ -1451,7 +1451,7 @@ void nfc_data_event (tNFC_CONN_CB * p_cb)
                 if ((p_cb->act_protocol >= NCI_PROTOCOL_T1T) && (p_cb->act_protocol <= NCI_PROTOCOL_T3T))
                 {
                     p_evt->len--;
-                    p                = (UINT8 *) (p_evt + 1);
+                    p                = (uint8_t *) (p_evt + 1);
                     data_cevt.status = *(p + p_evt->offset + p_evt->len);
                 }
             }
@@ -1474,16 +1474,16 @@ void nfc_data_event (tNFC_CONN_CB * p_cb)
 *******************************************************************************/
 void nfc_ncif_proc_data (BT_HDR *p_msg)
 {
-    UINT8   *pp, cid;
+    uint8_t *pp, cid;
     tNFC_CONN_CB * p_cb;
-    UINT8   pbf;
+    uint8_t pbf;
     BT_HDR  *p_last;
-    UINT8   *ps, *pd;
-    UINT16  size;
+    uint8_t *ps, *pd;
+    uint16_t  size;
     BT_HDR  *p_max = NULL;
-    UINT16  len;
+    uint16_t  len;
 
-    pp   = (UINT8 *) (p_msg+1) + p_msg->offset;
+    pp   = (uint8_t *) (p_msg+1) + p_msg->offset;
     NFC_TRACE_DEBUG3 ("nfc_ncif_proc_data 0x%02x%02x%02x", pp[0], pp[1], pp[2]);
     NCI_DATA_PRS_HDR (pp, pbf, cid, len);
     p_cb = nfc_find_conn_cb_by_conn_id (cid);
@@ -1510,8 +1510,8 @@ void nfc_ncif_proc_data (BT_HDR *p_msg)
                     {
                         /* copy the content of last buffer to the new buffer */
                         memcpy(p_max, p_last, BT_HDR_SIZE);
-                        pd  = (UINT8 *)(p_max + 1) + p_max->offset;
-                        ps  = (UINT8 *)(p_last + 1) + p_last->offset;
+                        pd  = (uint8_t *)(p_max + 1) + p_max->offset;
+                        ps  = (uint8_t *)(p_last + 1) + p_last->offset;
                         memcpy(pd, ps, p_last->len);
 
                         /* place the new buffer in the queue instead */
@@ -1529,12 +1529,12 @@ void nfc_ncif_proc_data (BT_HDR *p_msg)
                 }
             }
 
-            ps   = (UINT8 *)(p_msg + 1) + p_msg->offset + NCI_MSG_HDR_SIZE;
+            ps   = (uint8_t *)(p_msg + 1) + p_msg->offset + NCI_MSG_HDR_SIZE;
             len  = p_msg->len - NCI_MSG_HDR_SIZE;
 
             if (!(p_last->layer_specific & NFC_RAS_TOO_BIG))
             {
-                pd   = (UINT8 *)(p_last + 1) + p_last->offset + p_last->len;
+                pd   = (uint8_t *)(p_last + 1) + p_last->offset + p_last->len;
                 memcpy(pd, ps, len);
                 p_last->len  += len;
                 /* do not need to update pbf and len in NCI header.
@@ -1546,7 +1546,7 @@ void nfc_ncif_proc_data (BT_HDR *p_msg)
                 if (!(p_last->layer_specific & NFC_RAS_FRAGMENTED))
                 {
                     /* this packet was reassembled. display the complete packet */
-                    DISP_NCI ((UINT8 *)(p_last + 1) + p_last->offset, p_last->len, TRUE);
+                    DISP_NCI ((uint8_t *)(p_last + 1) + p_last->offset, p_last->len, TRUE);
                 }
 #endif
                 nfc_data_event (p_cb);

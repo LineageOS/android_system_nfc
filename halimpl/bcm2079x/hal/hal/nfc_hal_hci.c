@@ -54,26 +54,26 @@
 #define NFC_HAL_HCI_NEXT_BOOT_SESSION_ID_0_VAL              0xFE
 
 /* Version string for BCM20791B3 */
-const UINT8 NFC_HAL_DM_BCM20791B3_STR[]   = "20791B3";
+const uint8_t NFC_HAL_DM_BCM20791B3_STR[]   = "20791B3";
 #define NFC_HAL_DM_BCM20791B3_STR_LEN     (sizeof (NFC_HAL_DM_BCM20791B3_STR)-1)
 
 /* Version string for BCM20791B4 */
-const UINT8 NFC_HAL_DM_BCM20791B4_STR[]   = "20791B4";
+const uint8_t NFC_HAL_DM_BCM20791B4_STR[]   = "20791B4";
 #define NFC_HAL_DM_BCM20791B4_STR_LEN     (sizeof (NFC_HAL_DM_BCM20791B4_STR)-1)
 
 /* Version string for BCM43341B0 */
-const UINT8 NFC_HAL_DM_BCM43341B0_STR[]   = "43341B0";
+const uint8_t NFC_HAL_DM_BCM43341B0_STR[]   = "43341B0";
 #define NFC_HAL_DM_BCM43341B0_STR_LEN     (sizeof (NFC_HAL_DM_BCM43341B0_STR)-1)
 
 extern tNFC_HAL_CFG *p_nfc_hal_cfg;
 /****************************************************************************
 ** Internal function prototypes
 ****************************************************************************/
-static void nfc_hal_hci_set_next_hci_netwk_config (UINT8 block);
+static void nfc_hal_hci_set_next_hci_netwk_config (uint8_t block);
 static void nfc_hal_hci_remove_dyn_pipe_to_uicc1 (void);
-static void nfc_hal_hci_handle_nv_read (UINT8 block, tHAL_NFC_STATUS status, UINT16 size);
+static void nfc_hal_hci_handle_nv_read (uint8_t block, tHAL_NFC_STATUS status, uint16_t size);
 static void nfc_hal_hci_init_complete (tHAL_NFC_STATUS status);
-static void nfc_hal_hci_vsc_cback (tNFC_HAL_NCI_EVT event, UINT16 data_len, UINT8 *p_data);
+static void nfc_hal_hci_vsc_cback (tNFC_HAL_NCI_EVT event, uint16_t data_len, uint8_t *p_data);
 
 /*******************************************************************************
 **
@@ -124,7 +124,7 @@ void nfc_hal_hci_evt_hdlr (tNFC_HAL_HCI_EVENT_DATA *p_evt_data)
 void nfc_hal_hci_enable (void)
 {
 
-    UINT8 *p_hci_netwk_cmd;
+    uint8_t *p_hci_netwk_cmd;
 
     HAL_TRACE_DEBUG0 ("nfc_hal_hci_enable ()");
 
@@ -137,14 +137,14 @@ void nfc_hal_hci_enable (void)
 
     if (nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf)
     {
-        p_hci_netwk_cmd = (UINT8 *) (nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf - NCI_MSG_HDR_SIZE);
+        p_hci_netwk_cmd = (uint8_t *) (nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf - NCI_MSG_HDR_SIZE);
         GKI_freebuf (p_hci_netwk_cmd);
         nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf = NULL;
     }
 
     if (nfc_hal_cb.hci_cb.p_hci_netwk_info_buf)
     {
-        p_hci_netwk_cmd = (UINT8 *) (nfc_hal_cb.hci_cb.p_hci_netwk_info_buf - NCI_MSG_HDR_SIZE);
+        p_hci_netwk_cmd = (uint8_t *) (nfc_hal_cb.hci_cb.p_hci_netwk_info_buf - NCI_MSG_HDR_SIZE);
         GKI_freebuf (p_hci_netwk_cmd);
         nfc_hal_cb.hci_cb.p_hci_netwk_info_buf = NULL;
     }
@@ -153,19 +153,19 @@ void nfc_hal_hci_enable (void)
         ||((p_nfc_hal_cfg->nfc_hal_hci_uicc_support & HAL_NFC_HCI_UICC1_HOST) && ((!nfc_hal_cb.hci_cb.hci_fw_workaround) || (nfc_hal_cb.nvm_cb.nvm_type == NCI_SPD_NVM_TYPE_EEPROM)))
         ||(p_nfc_hal_cfg->nfc_hal_hci_uicc_support & HAL_NFC_HCI_UICC2_HOST)  )
     {
-        if ((p_hci_netwk_cmd = (UINT8 *) GKI_getbuf (NCI_MSG_HDR_SIZE + NFC_HAL_HCI_NETWK_INFO_SIZE)) == NULL)
+        if ((p_hci_netwk_cmd = (uint8_t *) GKI_getbuf (NCI_MSG_HDR_SIZE + NFC_HAL_HCI_NETWK_INFO_SIZE)) == NULL)
         {
             HAL_TRACE_ERROR0 ("nfc_hal_hci_enable: unable to allocate buffer for reading hci network info from nvram");
             nfc_hal_hci_init_complete (HAL_NFC_STATUS_FAILED);
         }
         else
         {
-            nfc_hal_cb.hci_cb.p_hci_netwk_info_buf   = (UINT8 *) (p_hci_netwk_cmd + NCI_MSG_HDR_SIZE);
+            nfc_hal_cb.hci_cb.p_hci_netwk_info_buf   = (uint8_t *) (p_hci_netwk_cmd + NCI_MSG_HDR_SIZE);
             nfc_hal_cb.hci_cb.hci_netwk_config_block = 0;
             if (p_nfc_hal_cfg->nfc_hal_hci_uicc_support & HAL_NFC_HCI_UICC0_HOST)
             {
                 memset (nfc_hal_cb.hci_cb.p_hci_netwk_info_buf, 0, NFC_HAL_HCI_NETWK_INFO_SIZE);
-                nfc_hal_nv_co_read ((UINT8 *) nfc_hal_cb.hci_cb.p_hci_netwk_info_buf, NFC_HAL_HCI_NETWK_INFO_SIZE, HC_F3_NV_BLOCK);
+                nfc_hal_nv_co_read ((uint8_t *) nfc_hal_cb.hci_cb.p_hci_netwk_info_buf, NFC_HAL_HCI_NETWK_INFO_SIZE, HC_F3_NV_BLOCK);
                 nfc_hal_main_start_quick_timer (&nfc_hal_cb.hci_cb.hci_timer, NFC_HAL_HCI_VSC_TIMEOUT_EVT, NFC_HAL_HCI_NV_READ_TIMEOUT);
             }
             else
@@ -192,7 +192,7 @@ void nfc_hal_hci_enable (void)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_hal_hci_handle_build_info (UINT8 chipverlen, UINT8 *p_chipverstr)
+void nfc_hal_hci_handle_build_info (uint8_t chipverlen, uint8_t *p_chipverstr)
 {
     HAL_TRACE_DEBUG0 ("nfc_hal_hci_handle_build_info ()");
 
@@ -226,13 +226,13 @@ void nfc_hal_hci_handle_build_info (UINT8 chipverlen, UINT8 *p_chipverstr)
 ** Returns          None
 **
 *******************************************************************************/
-void nfc_hal_hci_handle_hci_netwk_info (UINT8 *p_data)
+void nfc_hal_hci_handle_hci_netwk_info (uint8_t *p_data)
 {
-    UINT8  *p = p_data;
-    UINT16 data_len;
-    UINT8  target_handle = 0;
-    UINT8  hci_netwk_cmd[1 + NFC_HAL_HCI_SESSION_ID_LEN];
-    UINT8  block = 0;
+    uint8_t  *p = p_data;
+    uint16_t data_len;
+    uint8_t  target_handle = 0;
+    uint8_t  hci_netwk_cmd[1 + NFC_HAL_HCI_SESSION_ID_LEN];
+    uint8_t  block = 0;
 
     HAL_TRACE_DEBUG0 ("nfc_hal_hci_handle_hci_netwk_info ()");
 
@@ -240,7 +240,7 @@ void nfc_hal_hci_handle_hci_netwk_info (UINT8 *p_data)
     p += 2;
 
     STREAM_TO_UINT8 (data_len, p);
-    target_handle = *(UINT8 *) p;
+    target_handle = *(uint8_t *) p;
 
     if (target_handle == NFC_HAL_HCI_DH_TARGET_HANDLE)
     {
@@ -298,7 +298,7 @@ void nfc_hal_hci_handle_hci_netwk_info (UINT8 *p_data)
 void nfc_hal_hci_fake_adm_notify_all_pipe_cleared_to_dh (void)
 {
     NFC_HDR  *p_msg;
-    UINT8 *p, *ps;
+    uint8_t *p, *ps;
 
     HAL_TRACE_DEBUG1 ("nfc_hal_hci_fake_adm_notify_all_pipe_cleared_to_dh (): Fake ADM_NOTIFY_ALL_PIPE_CLEARED (0x%02x) from HAL", NFC_HAL_HCI_HOST_ID_UICC1);
 
@@ -311,7 +311,7 @@ void nfc_hal_hci_fake_adm_notify_all_pipe_cleared_to_dh (void)
         p_msg->offset = 0;
         p_msg->layer_specific = 0;
 
-        p = (UINT8 *) (p_msg + 1) + p_msg->offset;
+        p = (uint8_t *) (p_msg + 1) + p_msg->offset;
         ps = p;
         NCI_DATA_BLD_HDR (p, nfc_hal_cb.hci_cb.hcp_conn_id, 0x03);
         /* HCP header with ADMIN pipe id and chaining bit set */
@@ -322,7 +322,7 @@ void nfc_hal_hci_fake_adm_notify_all_pipe_cleared_to_dh (void)
         *p = NFC_HAL_HCI_HOST_ID_UICC1;
 
 #ifdef DISP_NCI
-        DISP_NCI (ps, (UINT16) p_msg->len, TRUE);
+        DISP_NCI (ps, (uint16_t) p_msg->len, TRUE);
 #endif
         nfc_hal_send_nci_msg_to_nfc_task (p_msg);
 
@@ -343,13 +343,13 @@ void nfc_hal_hci_fake_adm_notify_all_pipe_cleared_to_dh (void)
 **                  TRUE to drop the packet and fake credit ntf for hcp connection
 **
 *******************************************************************************/
-BOOLEAN nfc_hal_hci_handle_hcp_pkt_to_hc (UINT8 *p_data)
+bool    nfc_hal_hci_handle_hcp_pkt_to_hc (uint8_t *p_data)
 {
-    UINT8   chaining_bit;
-    UINT8   pipe;
-    UINT8   type;
-    UINT8   inst;
-    UINT8   index;
+    uint8_t chaining_bit;
+    uint8_t pipe;
+    uint8_t type;
+    uint8_t inst;
+    uint8_t index;
 
     HAL_TRACE_DEBUG0 ("nfc_hal_hci_handle_hcp_pkt_to_hc ()");
 
@@ -425,15 +425,15 @@ BOOLEAN nfc_hal_hci_handle_hcp_pkt_to_hc (UINT8 *p_data)
 ** Returns          None
 **
 *******************************************************************************/
-void nfc_hal_hci_handle_hcp_pkt_from_hc (UINT8 *p_data)
+void nfc_hal_hci_handle_hcp_pkt_from_hc (uint8_t *p_data)
 {
-    UINT8   chaining_bit;
-    UINT8   pipe;
-    UINT8   type;
-    UINT8   inst;
-    UINT8   hci_netwk_cmd[1 + NFC_HAL_HCI_SESSION_ID_LEN];
-    UINT8   source_host;
-    UINT8   block = 0;
+    uint8_t chaining_bit;
+    uint8_t pipe;
+    uint8_t type;
+    uint8_t inst;
+    uint8_t hci_netwk_cmd[1 + NFC_HAL_HCI_SESSION_ID_LEN];
+    uint8_t source_host;
+    uint8_t block = 0;
 
     HAL_TRACE_DEBUG0 ("nfc_hal_hci_handle_hcp_pkt_from_hc ()");
 
@@ -515,10 +515,10 @@ void nfc_hal_hci_handle_hcp_pkt_from_hc (UINT8 *p_data)
 ** Returns          None
 **
 *******************************************************************************/
-void nfc_hal_hci_handle_nv_read (UINT8 block, tHAL_NFC_STATUS status, UINT16 size)
+void nfc_hal_hci_handle_nv_read (uint8_t block, tHAL_NFC_STATUS status, uint16_t size)
 {
-    UINT8   *p;
-    UINT8   *p_hci_netwk_info = NULL;
+    uint8_t *p;
+    uint8_t *p_hci_netwk_info = NULL;
 
     HAL_TRACE_DEBUG3 ("nfc_hal_hci_handle_nv_read (): Block: [0x%02x], Status: [0x%02x], Size: [0x%04x]", block, status, size);
 
@@ -548,7 +548,7 @@ void nfc_hal_hci_handle_nv_read (UINT8 block, tHAL_NFC_STATUS status, UINT16 siz
             size = NFC_HAL_HCI_NETWK_INFO_SIZE;
         }
 
-        p_hci_netwk_info = (UINT8 *) nfc_hal_cb.hci_cb.p_hci_netwk_info_buf - NCI_MSG_HDR_SIZE;
+        p_hci_netwk_info = (uint8_t *) nfc_hal_cb.hci_cb.p_hci_netwk_info_buf - NCI_MSG_HDR_SIZE;
         break;
 
     case HC_F2_NV_BLOCK:
@@ -568,7 +568,7 @@ void nfc_hal_hci_handle_nv_read (UINT8 block, tHAL_NFC_STATUS status, UINT16 siz
             memset (&nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf[2], 0xFF, (NFC_HAL_HCI_SESSION_ID_LEN - 1));
             memset ((nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf + NFC_HAL_HCI_SESSION_ID_LEN + 1), 0, (NFC_HAL_HCI_DH_NETWK_INFO_SIZE - NFC_HAL_HCI_SESSION_ID_LEN - 1));
             size = NFC_HAL_HCI_DH_NETWK_INFO_SIZE;
-            p_hci_netwk_info = (UINT8 *) nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf - NCI_MSG_HDR_SIZE;
+            p_hci_netwk_info = (uint8_t *) nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf - NCI_MSG_HDR_SIZE;
         }
         else
         {
@@ -581,7 +581,7 @@ void nfc_hal_hci_handle_nv_read (UINT8 block, tHAL_NFC_STATUS status, UINT16 siz
                 nfc_hal_hci_remove_dyn_pipe_to_uicc1 ();
                 size = NFC_HAL_HCI_DH_NETWK_INFO_SIZE;
             }
-            p_hci_netwk_info = (UINT8 *) (nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf - NCI_MSG_HDR_SIZE);
+            p_hci_netwk_info = (uint8_t *) (nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf - NCI_MSG_HDR_SIZE);
         }
         break;
 
@@ -593,9 +593,9 @@ void nfc_hal_hci_handle_nv_read (UINT8 block, tHAL_NFC_STATUS status, UINT16 siz
     /* Send HCI Network ntf command using nv data */
     NCI_MSG_BLD_HDR0 (p, NCI_MT_CMD, NCI_GID_PROP);
     NCI_MSG_BLD_HDR1 (p, NCI_MSG_HCI_NETWK);
-    UINT8_TO_STREAM (p, (UINT8) size);
+    UINT8_TO_STREAM (p, (uint8_t) size);
 
-    nfc_hal_dm_send_nci_cmd (p_hci_netwk_info, (UINT16) (NCI_MSG_HDR_SIZE + size), nfc_hal_hci_vsc_cback);
+    nfc_hal_dm_send_nci_cmd (p_hci_netwk_info, (uint16_t) (NCI_MSG_HDR_SIZE + size), nfc_hal_hci_vsc_cback);
 
     nfc_hal_cb.hci_cb.hci_netwk_config_block = block;
 }
@@ -612,22 +612,22 @@ void nfc_hal_hci_handle_nv_read (UINT8 block, tHAL_NFC_STATUS status, UINT16 siz
 *******************************************************************************/
 void nfc_hal_hci_remove_dyn_pipe_to_uicc1 (void)
 {
-    UINT8 *p, *np;
-    UINT8 num_dyn_pipes = 0, new_num_dyn_pipes = 0;
-    UINT8 xx;
-    UINT8 source_host, dest_host, pipe_id;
+    uint8_t *p, *np;
+    uint8_t num_dyn_pipes = 0, new_num_dyn_pipes = 0;
+    uint8_t xx;
+    uint8_t source_host, dest_host, pipe_id;
 
     HAL_TRACE_DEBUG0 ("nfc_hal_hci_remove_dyn_pipe_to_uicc1 ()");
 
-    p  = (UINT8 *) (nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf + NFC_HAL_HCI_MIN_DH_NETWK_INFO_SIZE);
+    p  = (uint8_t *) (nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf + NFC_HAL_HCI_MIN_DH_NETWK_INFO_SIZE);
     np = p;
     num_dyn_pipes = *(p - 1);
 
     for (xx = 0; xx < num_dyn_pipes; xx++,p += NFC_HAL_HCI_PIPE_INFO_SIZE)
     {
-        source_host = *(UINT8 *) (p);
-        dest_host   = *(UINT8 *) (p + 1);
-        pipe_id     = *(UINT8 *) (p + 4);
+        source_host = *(uint8_t *) (p);
+        dest_host   = *(uint8_t *) (p + 1);
+        pipe_id     = *(uint8_t *) (p + 4);
 
         if ((source_host != NFC_HAL_HCI_HOST_ID_UICC1) && (dest_host != NFC_HAL_HCI_HOST_ID_UICC1))
         {
@@ -637,10 +637,10 @@ void nfc_hal_hci_remove_dyn_pipe_to_uicc1 (void)
         }
     }
 
-    memset ((UINT8 *) (np), 0, NFC_HAL_HCI_PIPE_INFO_SIZE * (20 - new_num_dyn_pipes));
+    memset ((uint8_t *) (np), 0, NFC_HAL_HCI_PIPE_INFO_SIZE * (20 - new_num_dyn_pipes));
 
     /* Update number of pipes after removing pipes connected to UICC1 */
-    p = (UINT8 *) (nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf + NFC_HAL_HCI_MIN_DH_NETWK_INFO_SIZE);
+    p = (uint8_t *) (nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf + NFC_HAL_HCI_MIN_DH_NETWK_INFO_SIZE);
     *(p - 1) = new_num_dyn_pipes;
 }
 
@@ -655,20 +655,20 @@ void nfc_hal_hci_remove_dyn_pipe_to_uicc1 (void)
 *******************************************************************************/
 void nfc_hal_hci_init_complete (tHAL_NFC_STATUS status)
 {
-    UINT8 *p_hci_netwk_cmd;
+    uint8_t *p_hci_netwk_cmd;
 
     HAL_TRACE_DEBUG1 ("nfc_hal_hci_init_complete (): Status: [0x%02x]", status);
 
     if (nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf)
     {
-        p_hci_netwk_cmd = (UINT8 *) (nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf - NCI_MSG_HDR_SIZE);
+        p_hci_netwk_cmd = (uint8_t *) (nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf - NCI_MSG_HDR_SIZE);
         GKI_freebuf (p_hci_netwk_cmd);
         nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf = NULL;
     }
 
     if (nfc_hal_cb.hci_cb.p_hci_netwk_info_buf)
     {
-        p_hci_netwk_cmd = (UINT8 *) (nfc_hal_cb.hci_cb.p_hci_netwk_info_buf - NCI_MSG_HDR_SIZE);
+        p_hci_netwk_cmd = (uint8_t *) (nfc_hal_cb.hci_cb.p_hci_netwk_info_buf - NCI_MSG_HDR_SIZE);
         GKI_freebuf (p_hci_netwk_cmd);
         nfc_hal_cb.hci_cb.p_hci_netwk_info_buf = NULL;
     }
@@ -687,9 +687,9 @@ void nfc_hal_hci_init_complete (tHAL_NFC_STATUS status)
 ** Returns          None
 **
 *******************************************************************************/
-void nfc_hal_hci_set_next_hci_netwk_config (UINT8 block)
+void nfc_hal_hci_set_next_hci_netwk_config (uint8_t block)
 {
-    UINT8 *p_hci_netwk_cmd;
+    uint8_t *p_hci_netwk_cmd;
 
     HAL_TRACE_DEBUG1 ("nfc_hal_hci_set_next_hci_netwk_config (): Block: [0x%02x]", block);
 
@@ -702,7 +702,7 @@ void nfc_hal_hci_set_next_hci_netwk_config (UINT8 block)
         {
             /* Send command to read nvram data for 0xF4 */
             memset (nfc_hal_cb.hci_cb.p_hci_netwk_info_buf, 0, NFC_HAL_HCI_NETWK_INFO_SIZE);
-            nfc_hal_nv_co_read ((UINT8 *) nfc_hal_cb.hci_cb.p_hci_netwk_info_buf, NFC_HAL_HCI_NETWK_INFO_SIZE, HC_F4_NV_BLOCK);
+            nfc_hal_nv_co_read ((uint8_t *) nfc_hal_cb.hci_cb.p_hci_netwk_info_buf, NFC_HAL_HCI_NETWK_INFO_SIZE, HC_F4_NV_BLOCK);
             nfc_hal_main_start_quick_timer (&nfc_hal_cb.hci_cb.hci_timer, NFC_HAL_HCI_VSC_TIMEOUT_EVT, NFC_HAL_HCI_NV_READ_TIMEOUT);
             break;
         }
@@ -714,24 +714,24 @@ void nfc_hal_hci_set_next_hci_netwk_config (UINT8 block)
         {
             /* Send command to read nvram data for 0xF5 */
             memset (nfc_hal_cb.hci_cb.p_hci_netwk_info_buf, 0, NFC_HAL_HCI_NETWK_INFO_SIZE);
-            nfc_hal_nv_co_read ((UINT8 *) nfc_hal_cb.hci_cb.p_hci_netwk_info_buf, NFC_HAL_HCI_NETWK_INFO_SIZE, HC_F5_NV_BLOCK);
+            nfc_hal_nv_co_read ((uint8_t *) nfc_hal_cb.hci_cb.p_hci_netwk_info_buf, NFC_HAL_HCI_NETWK_INFO_SIZE, HC_F5_NV_BLOCK);
             nfc_hal_main_start_quick_timer (&nfc_hal_cb.hci_cb.hci_timer, NFC_HAL_HCI_VSC_TIMEOUT_EVT, NFC_HAL_HCI_NV_READ_TIMEOUT);
             break;
         }
         HAL_TRACE_DEBUG2 ("nfc_hal_hci_set_next_hci_netwk_config (): Skip send F5 HCI NETWK CMD for UICC Mask: 0x%02x & NVM Type: 0x%02x", p_nfc_hal_cfg->nfc_hal_hci_uicc_support, nfc_hal_cb.nvm_cb.nvm_type);
 
     case HC_F5_NV_BLOCK:
-        if ((p_hci_netwk_cmd = (UINT8 *) GKI_getbuf (NCI_MSG_HDR_SIZE + NFC_HAL_HCI_DH_NETWK_INFO_SIZE)) == NULL)
+        if ((p_hci_netwk_cmd = (uint8_t *) GKI_getbuf (NCI_MSG_HDR_SIZE + NFC_HAL_HCI_DH_NETWK_INFO_SIZE)) == NULL)
         {
             HAL_TRACE_ERROR0 ("nfc_hal_hci_set_next_hci_netwk_config: unable to allocate buffer for reading hci network info from nvram");
             nfc_hal_hci_init_complete (HAL_NFC_STATUS_FAILED);
         }
         else
         {
-            nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf   = (UINT8 *) (p_hci_netwk_cmd + NCI_MSG_HDR_SIZE);
+            nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf   = (uint8_t *) (p_hci_netwk_cmd + NCI_MSG_HDR_SIZE);
             /* Send command to read nvram data for 0xF2 */
             memset (nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf, 0, NFC_HAL_HCI_DH_NETWK_INFO_SIZE);
-            nfc_hal_nv_co_read ((UINT8 *) nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf, NFC_HAL_HCI_DH_NETWK_INFO_SIZE, HC_F2_NV_BLOCK);
+            nfc_hal_nv_co_read ((uint8_t *) nfc_hal_cb.hci_cb.p_hci_netwk_dh_info_buf, NFC_HAL_HCI_DH_NETWK_INFO_SIZE, HC_F2_NV_BLOCK);
             nfc_hal_main_start_quick_timer (&nfc_hal_cb.hci_cb.hci_timer, NFC_HAL_HCI_VSC_TIMEOUT_EVT, NFC_HAL_HCI_NV_READ_TIMEOUT);
         }
         break;
@@ -757,10 +757,10 @@ void nfc_hal_hci_set_next_hci_netwk_config (UINT8 block)
 ** Returns          none
 **
 *******************************************************************************/
-static void nfc_hal_hci_vsc_cback (tNFC_HAL_NCI_EVT event, UINT16 data_len, UINT8 *p_data)
+static void nfc_hal_hci_vsc_cback (tNFC_HAL_NCI_EVT event, uint16_t data_len, uint8_t *p_data)
 {
-    UINT8 *p_ret = NULL;
-    UINT8 status;
+    uint8_t *p_ret = NULL;
+    uint8_t status;
 
     p_ret  = p_data + NCI_MSG_HDR_SIZE;
     status = *p_ret;

@@ -50,7 +50,7 @@
 #define USERIAL_PORT_17           16
 #define USERIAL_PORT_18           17
 
-typedef UINT8 tUSERIAL_PORT;
+typedef uint8_t tUSERIAL_PORT;
 
 /**** baud rates ****/
 #define USERIAL_BAUD_300          0
@@ -134,7 +134,7 @@ typedef UINT8 tUSERIAL_PORT;
 #define USERIAL_OP_SCO_DOWN       21    /* LINUX SCO */
 #endif
 
-typedef UINT8 tUSERIAL_OP;
+typedef uint8_t tUSERIAL_OP;
 
 
 /**** Serial feature types ****/
@@ -188,7 +188,7 @@ typedef UINT8 tUSERIAL_OP;
 #define USERIAL_FEAT_OP_FC_RD     47
 #define USERIAL_FEAT_OP_FC_WR     48
 
-typedef UINT8 tUSERIAL_FEATURE;
+typedef uint8_t tUSERIAL_FEATURE;
 
 
 /**** Event types ****/
@@ -198,30 +198,30 @@ typedef UINT8 tUSERIAL_FEATURE;
 #define USERIAL_ERR_EVT           3
 #define USERIAL_WAKEUP_EVT        4 /* H4IBSS */
 
-typedef UINT8 tUSERIAL_EVT;
+typedef uint8_t tUSERIAL_EVT;
 
 
 /* Structure used to configure serial port during open        */
 typedef struct
 {
-    UINT16 fmt;          /* Data format                       */
-    UINT8  baud;         /* Baud rate                         */
-    UINT8  fc;           /* Flow control                      */
-    UINT8  buf;          /* Data buffering mechanism          */
-    UINT8  pool;         /* GKI buffer pool for received data */
-    UINT16 size;         /* Size of GKI buffer pool           */
-    UINT16 offset;       /* Offset in GKI buffer pool         */
+    uint16_t fmt;          /* Data format                       */
+    uint8_t  baud;         /* Baud rate                         */
+    uint8_t  fc;           /* Flow control                      */
+    uint8_t  buf;          /* Data buffering mechanism          */
+    uint8_t  pool;         /* GKI buffer pool for received data */
+    uint16_t size;         /* Size of GKI buffer pool           */
+    uint16_t offset;       /* Offset in GKI buffer pool         */
 } tUSERIAL_OPEN_CFG;
 
 /* Union used to pass ioctl arguments */
 typedef union
 {
-    UINT16 fmt;
-    UINT8  baud;
-    UINT8  fc;
-    UINT8  sigs;
+    uint16_t fmt;
+    uint8_t  baud;
+    uint8_t  fc;
+    uint8_t  sigs;
 #if (defined LINUX_OS) && (LINUX_OS == TRUE)
-    UINT16 sco_handle;
+    uint16_t sco_handle;
 #endif
 } tUSERIAL_IOCTL_DATA;
 
@@ -229,8 +229,8 @@ typedef union
 /* Union to pass event data */
 typedef union
 {
-    UINT8 sigs;
-    UINT8 error;
+    uint8_t sigs;
+    uint8_t error;
 } tUSERIAL_EVT_DATA;
 
 /* callback for events */
@@ -247,13 +247,13 @@ extern "C" {
 UDRV_API extern void    USERIAL_Init(void *);
 UDRV_API extern void    USERIAL_Open(tUSERIAL_PORT, tUSERIAL_OPEN_CFG *, tUSERIAL_CBACK *);
 UDRV_API extern void    USERIAL_ReadBuf(tUSERIAL_PORT, BT_HDR **);
-UDRV_API extern UINT16  USERIAL_Read(tUSERIAL_PORT, UINT8 *, UINT16);
-UDRV_API extern BOOLEAN USERIAL_WriteBuf(tUSERIAL_PORT, BT_HDR *);
-UDRV_API extern UINT16  USERIAL_Write(tUSERIAL_PORT, UINT8 *, UINT16);
+UDRV_API extern uint16_t  USERIAL_Read(tUSERIAL_PORT, uint8_t *, uint16_t);
+UDRV_API extern bool    USERIAL_WriteBuf(tUSERIAL_PORT, BT_HDR *);
+UDRV_API extern uint16_t  USERIAL_Write(tUSERIAL_PORT, uint8_t *, uint16_t);
 UDRV_API extern void    USERIAL_Ioctl(tUSERIAL_PORT, tUSERIAL_OP, tUSERIAL_IOCTL_DATA *);
 UDRV_API extern void    USERIAL_Close(tUSERIAL_PORT);
-UDRV_API extern BOOLEAN USERIAL_Feature(tUSERIAL_FEATURE);
-UDRV_API extern BOOLEAN USERIAL_IsClosed();
+UDRV_API extern bool    USERIAL_Feature(tUSERIAL_FEATURE);
+UDRV_API extern bool    USERIAL_IsClosed();
 UDRV_API extern void    USERIAL_SetPowerOffDelays(int,int);
 UDRV_API extern void    USERIAL_PowerupDevice(tUSERIAL_PORT port);
 
@@ -268,7 +268,7 @@ UDRV_API extern void    USERIAL_PowerupDevice(tUSERIAL_PORT port);
  ** Returns            line speed
  **
  *******************************************************************************/
-UDRV_API extern UINT32 USERIAL_GetLineSpeed(UINT8 baud);
+UDRV_API extern uint32_t USERIAL_GetLineSpeed(uint8_t baud);
 /*******************************************************************************
  **
  ** Function           USERIAL_GetBaud
@@ -280,7 +280,7 @@ UDRV_API extern UINT32 USERIAL_GetLineSpeed(UINT8 baud);
  ** Returns            line speed
  **
  *******************************************************************************/
-UDRV_API extern UINT8 USERIAL_GetBaud(UINT32 line_speed);
+UDRV_API extern uint8_t USERIAL_GetBaud(uint32_t line_speed);
 
 #ifdef __cplusplus
 }
