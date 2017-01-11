@@ -325,36 +325,36 @@ void LogMsg_0 (uint32_t maskTraceSet, const char *p_str)
 }
 
 
-void LogMsg_1 (uint32_t maskTraceSet, const char *fmt_str, uint32_t p1)
+void LogMsg_1 (uint32_t maskTraceSet, const char *fmt_str, uintptr_t p1)
 {
     LogMsg (maskTraceSet, fmt_str, p1);
 }
 
 
-void LogMsg_2 (uint32_t maskTraceSet, const char *fmt_str, uint32_t p1, uint32_t p2)
+void LogMsg_2 (uint32_t maskTraceSet, const char *fmt_str, uintptr_t p1, uintptr_t p2)
 {
     LogMsg (maskTraceSet, fmt_str, p1, p2);
 }
 
 
-void LogMsg_3 (uint32_t maskTraceSet, const char *fmt_str, uint32_t p1, uint32_t p2, uint32_t p3)
+void LogMsg_3 (uint32_t maskTraceSet, const char *fmt_str, uintptr_t p1, uintptr_t p2, uintptr_t p3)
 {
     LogMsg (maskTraceSet, fmt_str, p1, p2, p3);
 }
 
 
-void LogMsg_4 (uint32_t maskTraceSet, const char *fmt_str, uint32_t p1, uint32_t p2, uint32_t p3, uint32_t p4)
+void LogMsg_4 (uint32_t maskTraceSet, const char *fmt_str, uintptr_t p1, uintptr_t p2, uintptr_t p3, uintptr_t p4)
 {
     LogMsg (maskTraceSet, fmt_str, p1, p2, p3, p4);
 }
 
-void LogMsg_5 (uint32_t maskTraceSet, const char *fmt_str, uint32_t p1, uint32_t p2, uint32_t p3, uint32_t p4, uint32_t p5)
+void LogMsg_5 (uint32_t maskTraceSet, const char *fmt_str, uintptr_t p1, uintptr_t p2, uintptr_t p3, uintptr_t p4, uintptr_t p5)
 {
     LogMsg (maskTraceSet, fmt_str, p1, p2, p3, p4, p5);
 }
 
 
-void LogMsg_6 (uint32_t maskTraceSet, const char *fmt_str, uint32_t p1, uint32_t p2, uint32_t p3, uint32_t p4, uint32_t p5, uint32_t p6)
+void LogMsg_6 (uint32_t maskTraceSet, const char *fmt_str, uintptr_t p1, uintptr_t p2, uintptr_t p3, uintptr_t p4, uintptr_t p5, uintptr_t p6)
 {
     LogMsg (maskTraceSet, fmt_str, p1, p2, p3, p4, p5, p6);
 }
