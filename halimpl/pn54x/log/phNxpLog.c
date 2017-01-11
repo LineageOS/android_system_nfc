@@ -250,7 +250,7 @@ void phNxpLog_InitializeLogLevel(void)
     ALOGD ("%s: global =%u, Fwdnld =%u, extns =%u, \
                 hal =%u, tml =%u, ncir =%u, \
                 ncix =%u", \
-                __FUNCTION__, gLog_level.global_log_level, gLog_level.dnld_log_level,
+                __func__, gLog_level.global_log_level, gLog_level.dnld_log_level,
                     gLog_level.extns_log_level, gLog_level.hal_log_level, gLog_level.tml_log_level,
                     gLog_level.ncir_log_level, gLog_level.ncix_log_level);
 }

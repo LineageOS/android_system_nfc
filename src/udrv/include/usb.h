@@ -36,7 +36,7 @@
 #define USB_PORT_3            2
 #define USB_PORT_4            3
 
-typedef UINT8 tUSB_PORT;
+typedef uint8_t tUSB_PORT;
 
 /**** baud rates ****/
 #define USB_BAUD_300          0
@@ -108,7 +108,7 @@ typedef UINT8 tUSB_PORT;
 #define USB_OP_FC_RD          11
 #define USB_OP_FC_WR          12
 
-typedef UINT8 tUSB_OP;
+typedef uint8_t tUSB_OP;
 
 
 /**** Serial feature types ****/
@@ -162,7 +162,7 @@ typedef UINT8 tUSB_OP;
 #define USB_FEAT_OP_FC_RD     47
 #define USB_FEAT_OP_FC_WR     48
 
-typedef UINT8 tUSB_FEATURE;
+typedef uint8_t tUSB_FEATURE;
 
 
 /**** Event types ****/
@@ -171,36 +171,36 @@ typedef UINT8 tUSB_FEATURE;
 #define USB_SIG_EVT           2
 #define USB_ERR_EVT           3
 
-typedef UINT8 tUSB_EVT;
+typedef uint8_t tUSB_EVT;
 
 
 /* Structure used to configure serial port during open        */
 typedef struct
 {
-    UINT16 fmt;          /* Data format                       */
-    UINT8  baud;         /* Baud rate                         */
-    UINT8  fc;           /* Flow control                      */
-    UINT8  buf;          /* Data buffering mechanism          */
-    UINT8  pool;         /* GKI buffer pool for received data */
-    UINT16 size;         /* Size of GKI buffer pool           */
-    UINT16 offset;       /* Offset in GKI buffer pool         */
+    uint16_t fmt;          /* Data format                       */
+    uint8_t  baud;         /* Baud rate                         */
+    uint8_t  fc;           /* Flow control                      */
+    uint8_t  buf;          /* Data buffering mechanism          */
+    uint8_t  pool;         /* GKI buffer pool for received data */
+    uint16_t size;         /* Size of GKI buffer pool           */
+    uint16_t offset;       /* Offset in GKI buffer pool         */
 } tUSB_OPEN_CFG;
 
 /* Union used to pass ioctl arguments */
 typedef union
 {
-    UINT16 fmt;
-    UINT8  baud;
-    UINT8  fc;
-    UINT8  sigs;
+    uint16_t fmt;
+    uint8_t  baud;
+    uint8_t  fc;
+    uint8_t  sigs;
 } tUSB_IOCTL_DATA;
 
 
 /* Union to pass event data */
 typedef union
 {
-    UINT8 sigs;
-    UINT8 error;
+    uint8_t sigs;
+    uint8_t error;
 } tUSB_EVT_DATA;
 
 /* callback for events */
@@ -218,12 +218,12 @@ extern "C" {
 UDRV_API extern void    USB_Init(void *);
 UDRV_API extern void    USB_Open(tUSB_PORT, tUSB_OPEN_CFG *, tUSB_CBACK *);
 UDRV_API extern void    USB_ReadBuf(tUSB_PORT, BT_HDR **);
-UDRV_API extern UINT16  USB_Read(tUSB_PORT, UINT8 *, UINT16);
-UDRV_API extern BOOLEAN USB_WriteBuf(tUSB_PORT, BT_HDR *);
-UDRV_API extern UINT16  USB_Write(tUSB_PORT, UINT8 *, UINT16);
+UDRV_API extern uint16_t  USB_Read(tUSB_PORT, uint8_t *, uint16_t);
+UDRV_API extern bool    USB_WriteBuf(tUSB_PORT, BT_HDR *);
+UDRV_API extern uint16_t  USB_Write(tUSB_PORT, uint8_t *, uint16_t);
 UDRV_API extern void    USB_Ioctl(tUSB_PORT, tUSB_OP, tUSB_IOCTL_DATA *);
 UDRV_API extern void    USB_Close(tUSB_PORT);
-UDRV_API extern BOOLEAN USB_Feature(tUSB_FEATURE);
+UDRV_API extern bool    USB_Feature(tUSB_FEATURE);
 
 #ifdef __cplusplus
 }

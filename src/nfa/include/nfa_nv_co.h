@@ -51,7 +51,7 @@
 #define NFA_NV_CO_RESUME        0x08 /* used in nfa_nv_ci_open, on resume */
 #define NFA_NV_CO_NONE          0x09 /* used in nfa_nv_ci_open, on resume (no file to resume) */
 
-typedef UINT8 tNFA_NV_CO_STATUS;
+typedef uint8_t tNFA_NV_CO_STATUS;
 
 
 #define  DH_NV_BLOCK            0x01
@@ -88,7 +88,7 @@ typedef UINT8 tNFA_NV_CO_STATUS;
 **                        or an error has occurred.
 **
 *******************************************************************************/
-NFC_API extern void nfa_nv_co_read (UINT8 *p_buf, UINT16 nbytes, UINT8 block);
+NFC_API extern void nfa_nv_co_read (uint8_t *p_buf, uint16_t nbytes, uint8_t block);
 
 /*******************************************************************************
 **
@@ -108,7 +108,7 @@ NFC_API extern void nfa_nv_co_read (UINT8 *p_buf, UINT16 nbytes, UINT8 block);
 **                        bytes have been written, or an error has been detected,
 **
 *******************************************************************************/
-NFC_API extern void nfa_nv_co_write (const UINT8 *p_buf, UINT16 nbytes, UINT8 block);
+NFC_API extern void nfa_nv_co_write (const uint8_t *p_buf, uint16_t nbytes, uint8_t block);
 
 
 #endif /* NFA_NV_CO_H */

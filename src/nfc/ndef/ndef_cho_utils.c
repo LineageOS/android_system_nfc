@@ -32,7 +32,7 @@
 **
 ** Static Local Functions
 */
-static UINT8 *ndef_get_bt_oob_record (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
+static uint8_t *ndef_get_bt_oob_record (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
                                       char *p_id_str);
 
 /*******************************************************************************
@@ -41,28 +41,28 @@ static UINT8 *ndef_get_bt_oob_record (UINT8 *p_msg, UINT32 max_size, UINT32 *p_c
 */
 
 /* Handover Request Record Type */
-static UINT8 hr_rec_type[HR_REC_TYPE_LEN] = { 0x48, 0x72 }; /* "Hr" */
+static uint8_t hr_rec_type[HR_REC_TYPE_LEN] = { 0x48, 0x72 }; /* "Hr" */
 
 /* Handover Select Record Type */
-static UINT8 hs_rec_type[HS_REC_TYPE_LEN] = { 0x48, 0x73 }; /* "Hs" */
+static uint8_t hs_rec_type[HS_REC_TYPE_LEN] = { 0x48, 0x73 }; /* "Hs" */
 
 /* Handover Carrier recrod Type */
-static UINT8 hc_rec_type[HC_REC_TYPE_LEN] = { 0x48, 0x63 }; /* "Hc" */
+static uint8_t hc_rec_type[HC_REC_TYPE_LEN] = { 0x48, 0x63 }; /* "Hc" */
 
 /* Collision Resolution Record Type */
-static UINT8 cr_rec_type[CR_REC_TYPE_LEN] = { 0x63, 0x72 }; /* "cr" */
+static uint8_t cr_rec_type[CR_REC_TYPE_LEN] = { 0x63, 0x72 }; /* "cr" */
 
 /* Alternative Carrier Record Type */
-static UINT8 ac_rec_type[AC_REC_TYPE_LEN] = { 0x61, 0x63 }; /* "ac" */
+static uint8_t ac_rec_type[AC_REC_TYPE_LEN] = { 0x61, 0x63 }; /* "ac" */
 
 /* Error Record Type */
-static UINT8 err_rec_type[ERR_REC_TYPE_LEN] = { 0x65, 0x72, 0x72 }; /* "err" */
+static uint8_t err_rec_type[ERR_REC_TYPE_LEN] = { 0x65, 0x72, 0x72 }; /* "err" */
 
 /* Bluetooth OOB Data Type */
-static UINT8 *p_bt_oob_rec_type = (UINT8 *)"application/vnd.bluetooth.ep.oob";
+static uint8_t *p_bt_oob_rec_type = (uint8_t *)"application/vnd.bluetooth.ep.oob";
 
 /* Wifi WSC Data Type */
-static UINT8 *p_wifi_wsc_rec_type = (UINT8 *)"application/vnd.wfa.wsc";
+static uint8_t *p_wifi_wsc_rec_type = (uint8_t *)"application/vnd.wfa.wsc";
 
 /*******************************************************************************
 **
@@ -73,8 +73,8 @@ static UINT8 *p_wifi_wsc_rec_type = (UINT8 *)"application/vnd.wfa.wsc";
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-tNDEF_STATUS NDEF_MsgCreateWktHr (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                  UINT8 version )
+tNDEF_STATUS NDEF_MsgCreateWktHr (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                  uint8_t version )
 {
     tNDEF_STATUS    status;
 
@@ -97,8 +97,8 @@ tNDEF_STATUS NDEF_MsgCreateWktHr (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_s
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-tNDEF_STATUS NDEF_MsgCreateWktHs (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                  UINT8 version )
+tNDEF_STATUS NDEF_MsgCreateWktHs (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                  uint8_t version )
 {
     tNDEF_STATUS    status;
 
@@ -121,14 +121,14 @@ tNDEF_STATUS NDEF_MsgCreateWktHs (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_s
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-tNDEF_STATUS NDEF_MsgAddWktHc (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                               char  *p_id_str, UINT8 ctf,
-                               UINT8 carrier_type_len, UINT8 *p_carrier_type,
-                               UINT8 carrier_data_len, UINT8 *p_carrier_data)
+tNDEF_STATUS NDEF_MsgAddWktHc (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                               char  *p_id_str, uint8_t ctf,
+                               uint8_t carrier_type_len, uint8_t *p_carrier_type,
+                               uint8_t carrier_data_len, uint8_t *p_carrier_data)
 {
     tNDEF_STATUS    status;
-    UINT8           payload[256], *p, id_len;
-    UINT32          payload_len;
+    uint8_t         payload[256], *p, id_len;
+    uint32_t        payload_len;
 
     if (carrier_type_len + carrier_data_len + 2 > 256)
     {
@@ -142,13 +142,13 @@ tNDEF_STATUS NDEF_MsgAddWktHc (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size
     ARRAY_TO_STREAM (p, p_carrier_type, carrier_type_len);
     ARRAY_TO_STREAM (p, p_carrier_data, carrier_data_len);
 
-    payload_len = (UINT32)carrier_type_len + carrier_data_len + 2;
+    payload_len = (uint32_t)carrier_type_len + carrier_data_len + 2;
 
-    id_len = (UINT8)strlen (p_id_str);
+    id_len = (uint8_t)strlen (p_id_str);
 
     status = NDEF_MsgAddRec (p_msg, max_size, p_cur_size,
                              NDEF_TNF_WKT, hc_rec_type, HC_REC_TYPE_LEN,
-                             (UINT8*)p_id_str, id_len, payload, payload_len);
+                             (uint8_t*)p_id_str, id_len, payload, payload_len);
     return (status);
 }
 
@@ -161,23 +161,23 @@ tNDEF_STATUS NDEF_MsgAddWktHc (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-tNDEF_STATUS NDEF_MsgAddWktAc (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                               UINT8 cps, char *p_carrier_data_ref_str,
-                               UINT8 aux_data_ref_count, char *p_aux_data_ref_str[])
+tNDEF_STATUS NDEF_MsgAddWktAc (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                               uint8_t cps, char *p_carrier_data_ref_str,
+                               uint8_t aux_data_ref_count, char *p_aux_data_ref_str[])
 {
     tNDEF_STATUS    status;
-    UINT32          payload_len;
-    UINT8           ref_str_len, xx;
-    UINT8 *p_rec, *p;
+    uint32_t        payload_len;
+    uint8_t         ref_str_len, xx;
+    uint8_t *p_rec, *p;
 
     /* get payload length first */
 
     /* CPS, length of carrier data ref, carrier data ref, Aux data reference count */
-    payload_len = 3 + (UINT8)strlen (p_carrier_data_ref_str);
+    payload_len = 3 + (uint8_t)strlen (p_carrier_data_ref_str);
     for (xx = 0; xx < aux_data_ref_count; xx++)
     {
         /* Aux Data Reference length (1 byte) */
-        payload_len += 1 + (UINT8)strlen (p_aux_data_ref_str[xx]);
+        payload_len += 1 + (uint8_t)strlen (p_aux_data_ref_str[xx]);
     }
 
     /* reserve memory for payload */
@@ -197,7 +197,7 @@ tNDEF_STATUS NDEF_MsgAddWktAc (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size
         UINT8_TO_BE_STREAM (p, cps);
 
         /* Carrier Data Reference length */
-        ref_str_len = (UINT8)strlen (p_carrier_data_ref_str);
+        ref_str_len = (uint8_t)strlen (p_carrier_data_ref_str);
 
         UINT8_TO_BE_STREAM (p, ref_str_len);
 
@@ -210,7 +210,7 @@ tNDEF_STATUS NDEF_MsgAddWktAc (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size
         for (xx = 0; xx < aux_data_ref_count; xx++)
         {
             /* Aux Data Reference length (1 byte) */
-            ref_str_len = (UINT8)strlen (p_aux_data_ref_str[xx]);
+            ref_str_len = (uint8_t)strlen (p_aux_data_ref_str[xx]);
 
             UINT8_TO_BE_STREAM (p, ref_str_len);
 
@@ -231,11 +231,11 @@ tNDEF_STATUS NDEF_MsgAddWktAc (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-tNDEF_STATUS NDEF_MsgAddWktCr (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                               UINT16 random_number )
+tNDEF_STATUS NDEF_MsgAddWktCr (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                               uint16_t random_number )
 {
     tNDEF_STATUS    status;
-    UINT8           data[2], *p;
+    uint8_t         data[2], *p;
 
     p = data;
     UINT16_TO_BE_STREAM (p, random_number);
@@ -255,12 +255,12 @@ tNDEF_STATUS NDEF_MsgAddWktCr (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-tNDEF_STATUS NDEF_MsgAddWktErr (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                UINT8 error_reason, UINT32 error_data )
+tNDEF_STATUS NDEF_MsgAddWktErr (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                uint8_t error_reason, uint32_t error_data )
 {
     tNDEF_STATUS    status;
-    UINT8           payload[5], *p;
-    UINT32          payload_len;
+    uint8_t         payload[5], *p;
+    uint32_t        payload_len;
 
     p = payload;
 
@@ -292,13 +292,13 @@ tNDEF_STATUS NDEF_MsgAddWktErr (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_siz
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-tNDEF_STATUS NDEF_MsgAddMediaBtOob (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
+tNDEF_STATUS NDEF_MsgAddMediaBtOob (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
                                     char *p_id_str, BD_ADDR bd_addr)
 {
     tNDEF_STATUS    status;
-    UINT8           payload[BD_ADDR_LEN + 2];
-    UINT8          *p;
-    UINT8           payload_len, id_len;
+    uint8_t         payload[BD_ADDR_LEN + 2];
+    uint8_t        *p;
+    uint8_t         payload_len, id_len;
 
     p = payload;
 
@@ -309,11 +309,11 @@ tNDEF_STATUS NDEF_MsgAddMediaBtOob (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur
     BDADDR_TO_STREAM (p, bd_addr);
 
     payload_len = BD_ADDR_LEN + 2;
-    id_len = (UINT8)strlen (p_id_str);
+    id_len = (uint8_t)strlen (p_id_str);
 
     status = NDEF_MsgAddRec (p_msg, max_size, p_cur_size,
                              NDEF_TNF_MEDIA, p_bt_oob_rec_type, BT_OOB_REC_TYPE_LEN,
-                             (UINT8*)p_id_str, id_len, payload, payload_len);
+                             (uint8_t*)p_id_str, id_len, payload, payload_len);
     return (status);
 }
 
@@ -326,15 +326,15 @@ tNDEF_STATUS NDEF_MsgAddMediaBtOob (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-tNDEF_STATUS NDEF_MsgAppendMediaBtOobCod (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
+tNDEF_STATUS NDEF_MsgAppendMediaBtOobCod (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
                                           char *p_id_str, DEV_CLASS cod)
 {
     tNDEF_STATUS    status;
-    UINT8          *p_rec;
-    UINT8           eir_data[BT_OOB_COD_SIZE + 2];
-    UINT8          *p;
-    UINT8           eir_data_len;
-    UINT32          oob_data_len;
+    uint8_t        *p_rec;
+    uint8_t         eir_data[BT_OOB_COD_SIZE + 2];
+    uint8_t        *p;
+    uint8_t         eir_data_len;
+    uint32_t        oob_data_len;
 
     /* find record by Payload ID */
     p_rec = ndef_get_bt_oob_record (p_msg, max_size, p_cur_size, p_id_str);
@@ -374,16 +374,16 @@ tNDEF_STATUS NDEF_MsgAppendMediaBtOobCod (UINT8 *p_msg, UINT32 max_size, UINT32 
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-tNDEF_STATUS NDEF_MsgAppendMediaBtOobName (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                           char *p_id_str, BOOLEAN is_complete,
-                                           UINT8 name_len, UINT8 *p_name)
+tNDEF_STATUS NDEF_MsgAppendMediaBtOobName (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                           char *p_id_str, bool    is_complete,
+                                           uint8_t name_len, uint8_t *p_name)
 {
     tNDEF_STATUS    status;
-    UINT8          *p_rec;
-    UINT8           eir_data[256];
-    UINT8          *p;
-    UINT8           eir_data_len;
-    UINT32          oob_data_len;
+    uint8_t        *p_rec;
+    uint8_t         eir_data[256];
+    uint8_t        *p;
+    uint8_t         eir_data_len;
+    uint32_t        oob_data_len;
 
     /* find record by Payload ID */
     p_rec = ndef_get_bt_oob_record (p_msg, max_size, p_cur_size, p_id_str);
@@ -431,15 +431,15 @@ tNDEF_STATUS NDEF_MsgAppendMediaBtOobName (UINT8 *p_msg, UINT32 max_size, UINT32
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-tNDEF_STATUS NDEF_MsgAppendMediaBtOobHashCRandR (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                                 char *p_id_str, UINT8 *p_hash_c, UINT8 *p_rand_r)
+tNDEF_STATUS NDEF_MsgAppendMediaBtOobHashCRandR (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                                 char *p_id_str, uint8_t *p_hash_c, uint8_t *p_rand_r)
 {
     tNDEF_STATUS    status;
-    UINT8          *p_rec;
-    UINT8           eir_data[BT_OOB_HASH_C_SIZE + BT_OOB_RAND_R_SIZE + 4];
-    UINT8          *p;
-    UINT8           eir_data_len;
-    UINT32          oob_data_len;
+    uint8_t        *p_rec;
+    uint8_t         eir_data[BT_OOB_HASH_C_SIZE + BT_OOB_RAND_R_SIZE + 4];
+    uint8_t        *p;
+    uint8_t         eir_data_len;
+    uint32_t        oob_data_len;
 
     /* find record by Payload ID */
     p_rec = ndef_get_bt_oob_record (p_msg, max_size, p_cur_size, p_id_str);
@@ -484,16 +484,16 @@ tNDEF_STATUS NDEF_MsgAppendMediaBtOobHashCRandR (UINT8 *p_msg, UINT32 max_size, 
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-tNDEF_STATUS NDEF_MsgAppendMediaBtOobEirData (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
+tNDEF_STATUS NDEF_MsgAppendMediaBtOobEirData (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
                                               char *p_id_str,
-                                              UINT8 eir_type, UINT8 data_len, UINT8 *p_data)
+                                              uint8_t eir_type, uint8_t data_len, uint8_t *p_data)
 {
     tNDEF_STATUS    status;
-    UINT8          *p_rec;
-    UINT8           eir_data[256];
-    UINT8          *p;
-    UINT8           eir_data_len;
-    UINT32          oob_data_len;
+    uint8_t        *p_rec;
+    uint8_t         eir_data[256];
+    uint8_t        *p;
+    uint8_t         eir_data_len;
+    uint32_t        oob_data_len;
 
     /* find record by Payload ID */
     p_rec = ndef_get_bt_oob_record (p_msg, max_size, p_cur_size, p_id_str);
@@ -532,18 +532,18 @@ tNDEF_STATUS NDEF_MsgAppendMediaBtOobEirData (UINT8 *p_msg, UINT32 max_size, UIN
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-tNDEF_STATUS NDEF_MsgAddMediaWifiWsc (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                    char *p_id_str, UINT8 *p_payload, UINT32 payload_len)
+tNDEF_STATUS NDEF_MsgAddMediaWifiWsc (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                    char *p_id_str, uint8_t *p_payload, uint32_t payload_len)
 {
     tNDEF_STATUS    status;
-    UINT8           id_len = 0;
+    uint8_t         id_len = 0;
 
     if (p_id_str)
-        id_len = (UINT8)strlen (p_id_str);
+        id_len = (uint8_t)strlen (p_id_str);
 
     status = NDEF_MsgAddRec (p_msg, max_size, p_cur_size,
                              NDEF_TNF_MEDIA, p_wifi_wsc_rec_type, WIFI_WSC_REC_TYPE_LEN,
-                             (UINT8*)p_id_str, id_len, p_payload, payload_len);
+                             (uint8_t*)p_id_str, id_len, p_payload, payload_len);
     return (status);
 }
 
@@ -561,15 +561,15 @@ tNDEF_STATUS NDEF_MsgAddMediaWifiWsc (UINT8 *p_msg, UINT32 max_size, UINT32 *p_c
 ** Returns          pointer of record if found, otherwise NULL
 **
 *******************************************************************************/
-static UINT8 *ndef_get_bt_oob_record (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
+static uint8_t *ndef_get_bt_oob_record (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
                                       char *p_id_str)
 {
-    UINT8  *p_rec, *p_type;
-    UINT8   id_len, tnf, type_len;
+    uint8_t  *p_rec, *p_type;
+    uint8_t id_len, tnf, type_len;
 
     /* find record by Payload ID */
-    id_len = (UINT8)strlen (p_id_str);
-    p_rec = NDEF_MsgGetFirstRecById (p_msg, (UINT8*)p_id_str, id_len);
+    id_len = (uint8_t)strlen (p_id_str);
+    p_rec = NDEF_MsgGetFirstRecById (p_msg, (uint8_t*)p_id_str, id_len);
 
     if (!p_rec)
         return (NULL);

@@ -45,7 +45,7 @@ unsigned short crcChecksumCompute (const unsigned char *buffer, int bufferLen);
 ** Returns          True if file is good.
 **
 *******************************************************************************/
-BOOLEAN crcChecksumVerifyIntegrity (const char* filename);
+bool    crcChecksumVerifyIntegrity (const char* filename);
 
 
 #ifdef __cplusplus

@@ -79,7 +79,7 @@ typedef struct
 typedef struct
 {
     BT_HDR              hdr;
-    BOOLEAN             graceful;
+    bool                graceful;
 } tNFA_DM_API_DISABLE;
 
 /* data type for NFA_DM_API_SET_CONFIG_EVT */
@@ -87,15 +87,15 @@ typedef struct
 {
     BT_HDR              hdr;
     tNFA_PMID           param_id;
-    UINT8               length;
-    UINT8              *p_data;
+    uint8_t             length;
+    uint8_t            *p_data;
 } tNFA_DM_API_SET_CONFIG;
 
 /* data type for NFA_DM_API_GET_CONFIG_EVT */
 typedef struct
 {
     BT_HDR              hdr;
-    UINT8               num_ids;
+    uint8_t             num_ids;
     tNFA_PMID          *p_pmids;
 } tNFA_DM_API_GET_CONFIG;
 
@@ -127,7 +127,7 @@ typedef struct
 typedef struct
 {
     BT_HDR              hdr;
-    UINT8               rf_disc_id;
+    uint8_t             rf_disc_id;
     tNFA_NFC_PROTOCOL   protocol;
     tNFA_INTF_TYPE      rf_interface;
 } tNFA_DM_API_SELECT;
@@ -143,14 +143,14 @@ typedef struct
 typedef struct
 {
     BT_HDR              hdr;
-    BOOLEAN             sleep_mode;
+    bool                sleep_mode;
 } tNFA_DM_API_DEACTIVATE;
 
 /* data type for NFA_DM_API_SET_RF_DISC_DURATION_EVT */
 typedef struct
 {
     BT_HDR              hdr;
-    UINT16              rf_disc_dur_ms;
+    uint16_t            rf_disc_dur_ms;
 } tNFA_DM_API_SET_RF_DISC_DUR;
 #define NFA_RF_DISC_DURATION_MAX                0xFFFF
 
@@ -163,12 +163,12 @@ typedef struct
 {
     BT_HDR              hdr;
     tNFA_HANDLE         ndef_type_handle;
-    UINT8               flags;
+    uint8_t             flags;
     tNFA_NDEF_CBACK    *p_ndef_cback;
     tNFA_TNF            tnf;                /* Type-name field of record-type that was registered.                  */
     tNFA_NDEF_URI_ID    uri_id;             /* URI prefix abrieviation (for NFA_RegisterNDefUriHandler)             */
-    UINT8               name_len;           /* Length of type name or absolute URI                                  */
-    UINT8               name[1];            /* Type name or absolute URI of record-type that got was registered.    */
+    uint8_t             name_len;           /* Length of type name or absolute URI                                  */
+    uint8_t             name[1];            /* Type name or absolute URI of record-type that got was registered.    */
 } tNFA_DM_API_REG_NDEF_HDLR;
 
 /* data type for NFA_DM_API_DEREG_NDEF_HDLR_EVT */
@@ -183,7 +183,7 @@ typedef struct
 {
     BT_HDR          hdr;
     tNFA_VSC_CBACK  *p_cback;
-    BOOLEAN         is_register;
+    bool            is_register;
 } tNFA_DM_API_REG_VSC;
 
 /* data type for NFA_DM_API_SEND_VSC_EVT */
@@ -191,10 +191,10 @@ typedef struct
 {
     BT_HDR          hdr;
     tNFA_VSC_CBACK  *p_cback;
-    UINT8           oid;
-    UINT8           cmd_params_len;
-    UINT16          pad;    /* add padding to ensure the size is big enough for offset=NCI_VSC_MSG_HDR_SIZE */
-    UINT8           *p_cmd_params;
+    uint8_t         oid;
+    uint8_t         cmd_params_len;
+    uint16_t        pad;    /* add padding to ensure the size is big enough for offset=NCI_VSC_MSG_HDR_SIZE */
+    uint8_t         *p_cmd_params;
 } tNFA_DM_API_SEND_VSC;
 
 
@@ -238,7 +238,7 @@ enum
     NFA_DM_RFST_LP_LISTEN,          /* Listening in Low Power mode    */
     NFA_DM_RFST_LP_ACTIVE           /* Activated in Low Power mode    */
 };
-typedef UINT8 tNFA_DM_RF_DISC_STATE;
+typedef uint8_t tNFA_DM_RF_DISC_STATE;
 
 /* DM RF discovery state machine event */
 enum
@@ -256,12 +256,12 @@ enum
     NFA_DM_CORE_INTF_ERROR_NTF,     /* RF interface error NTF from NFCC      */
     NFA_DM_DISC_SM_MAX_EVENT
 };
-typedef UINT8 tNFA_DM_RF_DISC_SM_EVENT;
+typedef uint8_t tNFA_DM_RF_DISC_SM_EVENT;
 
 /* DM RF discovery state machine data */
 typedef struct
 {
-    UINT8               rf_disc_id;
+    uint8_t             rf_disc_id;
     tNFA_NFC_PROTOCOL   protocol;
     tNFA_INTF_TYPE      rf_interface;
 } tNFA_DM_DISC_SELECT_PARAMS;
@@ -280,7 +280,7 @@ enum
     NFA_DM_RF_DISC_ACTIVATED_EVT,       /* activated with configured protocol, technology and mode    */
     NFA_DM_RF_DISC_DEACTIVATED_EVT      /* deactivated sleep or idle                                  */
 };
-typedef UINT8 tNFA_DM_RF_DISC_EVT;
+typedef uint8_t tNFA_DM_RF_DISC_EVT;
 
 /* Combined NFC Technology and protocol bit mask */
 #define NFA_DM_DISC_MASK_PA_T1T                 0x00000001
@@ -315,12 +315,12 @@ typedef UINT8 tNFA_DM_RF_DISC_EVT;
 #define NFA_DM_DISC_MASK_NFC_DEP                0x0C481848
 
 
-typedef UINT32  tNFA_DM_DISC_TECH_PROTO_MASK;
+typedef uint32_t  tNFA_DM_DISC_TECH_PROTO_MASK;
 
 
 /* DM RF discovery host ID */
 #define NFA_DM_DISC_HOST_ID_DH          NFC_DH_ID
-typedef UINT8 tNFA_DM_DISC_HOST_ID;
+typedef uint8_t tNFA_DM_DISC_HOST_ID;
 
 /* DM deactivation callback type */
 typedef void (tNFA_DISCOVER_CBACK) (tNFA_DM_RF_DISC_EVT event, tNFC_DISCOVER *p_data);
@@ -334,12 +334,12 @@ typedef void (tNFA_DISCOVER_CBACK) (tNFA_DM_RF_DISC_EVT event, tNFC_DISCOVER *p_
 #define NFA_DM_DISC_FLAGS_W4_RSP         0x0020    /* command has been sent to NFCC in the state   */
 #define NFA_DM_DISC_FLAGS_W4_NTF         0x0040    /* wait for NTF before changing discovery state */
 
-typedef UINT16 tNFA_DM_DISC_FLAGS;
+typedef uint16_t tNFA_DM_DISC_FLAGS;
 
 /* DM Discovery control block */
 typedef struct
 {
-    BOOLEAN                         in_use;             /* TRUE if used          */
+    bool                            in_use;             /* TRUE if used          */
     tNFA_DISCOVER_CBACK            *p_disc_cback;       /* discovery callback    */
 
     tNFA_DM_DISC_FLAGS              disc_flags;         /* specific action flags */
@@ -372,30 +372,30 @@ enum {
 
 typedef struct
 {
-    UINT16                  disc_duration;          /* Disc duration                                    */
+    uint16_t                disc_duration;          /* Disc duration                                    */
     tNFA_DM_DISC_FLAGS      disc_flags;             /* specific action flags                            */
     tNFA_DM_RF_DISC_STATE   disc_state;             /* RF discovery state                               */
 
     tNFC_RF_TECH_N_MODE     activated_tech_mode;    /* activated technology and mode                    */
-    UINT8                   activated_rf_disc_id;   /* activated RF discovery ID                        */
+    uint8_t                 activated_rf_disc_id;   /* activated RF discovery ID                        */
     tNFA_INTF_TYPE          activated_rf_interface; /* activated RF interface                           */
     tNFA_NFC_PROTOCOL       activated_protocol;     /* activated protocol                               */
     tNFA_HANDLE             activated_handle;       /* handle of activated sub-module                   */
-    UINT8                   activated_sel_res;      /* activated tag's SEL_RES response                 */
+    uint8_t                 activated_sel_res;      /* activated tag's SEL_RES response                 */
 
     tNFA_DM_DISC_ENTRY      entry[NFA_DM_DISC_NUM_ENTRIES];
 
     tNFA_DM_DISC_ENTRY      excl_disc_entry;        /* exclusive RF discovery                           */
     tNFA_LISTEN_CFG         excl_listen_config;     /* listen cfg for exclusive-rf mode                 */
 
-    UINT8                   listen_RT[NFA_DM_MAX_TECH_ROUTE];/* Host ID for A, B, F, B' technology routing*/
+    uint8_t                 listen_RT[NFA_DM_MAX_TECH_ROUTE];/* Host ID for A, B, F, B' technology routing*/
     tNFA_DM_DISC_TECH_PROTO_MASK    dm_disc_mask;   /* technology and protocol waiting for activation   */
 
     TIMER_LIST_ENT          tle;                    /* timer for waiting deactivation NTF               */
     TIMER_LIST_ENT          kovio_tle;              /* timer for Kovio bar code tag presence check      */
 
-    BOOLEAN                 deact_pending;          /* TRUE if deactivate while checking presence       */
-    BOOLEAN                 deact_notify_pending;   /* TRUE if notify DEACTIVATED EVT while Stop rf discovery*/
+    bool                    deact_pending;          /* TRUE if deactivate while checking presence       */
+    bool                    deact_notify_pending;   /* TRUE if notify DEACTIVATED EVT while Stop rf discovery*/
     tNFA_DEACTIVATE_TYPE    pending_deact_type;     /* pending deactivate type                          */
 
 } tNFA_DM_DISC_CB;
@@ -426,57 +426,57 @@ typedef struct
 /* stored parameters */
 typedef struct
 {
-    UINT8 total_duration[NCI_PARAM_LEN_TOTAL_DURATION];
+    uint8_t total_duration[NCI_PARAM_LEN_TOTAL_DURATION];
 
-    UINT8 la_bit_frame_sdd[NCI_PARAM_LEN_LA_BIT_FRAME_SDD];
-    UINT8 la_bit_frame_sdd_len;
-    UINT8 la_platform_config[NCI_PARAM_LEN_LA_PLATFORM_CONFIG];
-    UINT8 la_platform_config_len;
-    UINT8 la_sel_info[NCI_PARAM_LEN_LA_SEL_INFO];
-    UINT8 la_sel_info_len;
-    UINT8 la_nfcid1[NCI_NFCID1_MAX_LEN];
-    UINT8 la_nfcid1_len;
-    UINT8 la_hist_by[NCI_MAX_HIS_BYTES_LEN];
-    UINT8 la_hist_by_len;
+    uint8_t la_bit_frame_sdd[NCI_PARAM_LEN_LA_BIT_FRAME_SDD];
+    uint8_t la_bit_frame_sdd_len;
+    uint8_t la_platform_config[NCI_PARAM_LEN_LA_PLATFORM_CONFIG];
+    uint8_t la_platform_config_len;
+    uint8_t la_sel_info[NCI_PARAM_LEN_LA_SEL_INFO];
+    uint8_t la_sel_info_len;
+    uint8_t la_nfcid1[NCI_NFCID1_MAX_LEN];
+    uint8_t la_nfcid1_len;
+    uint8_t la_hist_by[NCI_MAX_HIS_BYTES_LEN];
+    uint8_t la_hist_by_len;
 
-    UINT8 lb_sensb_info[NCI_PARAM_LEN_LB_SENSB_INFO];
-    UINT8 lb_sensb_info_len;
-    UINT8 lb_nfcid0[NCI_PARAM_LEN_LB_NFCID0];
-    UINT8 lb_nfcid0_len;
-    UINT8 lb_appdata[NCI_PARAM_LEN_LB_APPDATA];
-    UINT8 lb_appdata_len;
-    UINT8 lb_adc_fo[NCI_PARAM_LEN_LB_ADC_FO];
-    UINT8 lb_adc_fo_len;
-    UINT8 lb_h_info[NCI_MAX_ATTRIB_LEN];
-    UINT8 lb_h_info_len;
+    uint8_t lb_sensb_info[NCI_PARAM_LEN_LB_SENSB_INFO];
+    uint8_t lb_sensb_info_len;
+    uint8_t lb_nfcid0[NCI_PARAM_LEN_LB_NFCID0];
+    uint8_t lb_nfcid0_len;
+    uint8_t lb_appdata[NCI_PARAM_LEN_LB_APPDATA];
+    uint8_t lb_appdata_len;
+    uint8_t lb_adc_fo[NCI_PARAM_LEN_LB_ADC_FO];
+    uint8_t lb_adc_fo_len;
+    uint8_t lb_h_info[NCI_MAX_ATTRIB_LEN];
+    uint8_t lb_h_info_len;
 
-    UINT8 lf_protocol[NCI_PARAM_LEN_LF_PROTOCOL];
-    UINT8 lf_protocol_len;
-    UINT8 lf_t3t_flags2[NCI_PARAM_LEN_LF_T3T_FLAGS2];
-    UINT8 lf_t3t_flags2_len;
-    UINT8 lf_t3t_pmm[NCI_PARAM_LEN_LF_T3T_PMM];
-    UINT8 lf_t3t_id[NFA_CE_LISTEN_INFO_MAX][NCI_PARAM_LEN_LF_T3T_ID];
+    uint8_t lf_protocol[NCI_PARAM_LEN_LF_PROTOCOL];
+    uint8_t lf_protocol_len;
+    uint8_t lf_t3t_flags2[NCI_PARAM_LEN_LF_T3T_FLAGS2];
+    uint8_t lf_t3t_flags2_len;
+    uint8_t lf_t3t_pmm[NCI_PARAM_LEN_LF_T3T_PMM];
+    uint8_t lf_t3t_id[NFA_CE_LISTEN_INFO_MAX][NCI_PARAM_LEN_LF_T3T_ID];
 
-    UINT8 fwi[NCI_PARAM_LEN_FWI];
-    UINT8 wt[NCI_PARAM_LEN_WT];
-    UINT8 atr_req_gen_bytes[NCI_MAX_GEN_BYTES_LEN];
-    UINT8 atr_req_gen_bytes_len;
-    UINT8 atr_res_gen_bytes[NCI_MAX_GEN_BYTES_LEN];
-    UINT8 atr_res_gen_bytes_len;
+    uint8_t fwi[NCI_PARAM_LEN_FWI];
+    uint8_t wt[NCI_PARAM_LEN_WT];
+    uint8_t atr_req_gen_bytes[NCI_MAX_GEN_BYTES_LEN];
+    uint8_t atr_req_gen_bytes_len;
+    uint8_t atr_res_gen_bytes[NCI_MAX_GEN_BYTES_LEN];
+    uint8_t atr_res_gen_bytes_len;
 
-    UINT8 pf_rc[NCI_PARAM_LEN_PF_RC];
+    uint8_t pf_rc[NCI_PARAM_LEN_PF_RC];
 } tNFA_DM_PARAMS;
 
 /*
 **  NFA_NDEF CHO callback
 **  It returns TRUE if NDEF is handled by connection handover module.
 */
-typedef BOOLEAN (tNFA_NDEF_CHO_CBACK) (UINT32 ndef_len, UINT8 *p_ndef_data);
+typedef bool    (tNFA_NDEF_CHO_CBACK) (uint32_t ndef_len, uint8_t *p_ndef_data);
 
 /* DM control block */
 typedef struct
 {
-    UINT32                      flags;              /* NFA_DM flags (see definitions for NFA_DM_FLAGS_*)    */
+    uint32_t                    flags;              /* NFA_DM flags (see definitions for NFA_DM_FLAGS_*)    */
     tNFA_DM_CBACK              *p_dm_cback;         /* NFA DM callback                                      */
     TIMER_LIST_ENT              tle;
 
@@ -491,12 +491,12 @@ typedef struct
 
     tNFA_HANDLE                 poll_disc_handle;   /* discovery handle for polling         */
 
-    UINT8                      *p_activate_ntf;     /* temp holding activation notfication  */
+    uint8_t                    *p_activate_ntf;     /* temp holding activation notfication  */
     tHAL_API_GET_MAX_NFCEE     *get_max_ee;
 
     tNFC_RF_TECH_N_MODE         activated_tech_mode;/* previous activated technology and mode */
-    UINT8                       activated_nfcid[NFC_KOVIO_MAX_LEN]; /* NFCID 0/1/2 or UID of ISO15694/Kovio  */
-    UINT8                       activated_nfcid_len;/* length of NFCID or UID               */
+    uint8_t                     activated_nfcid[NFC_KOVIO_MAX_LEN]; /* NFCID 0/1/2 or UID of ISO15694/Kovio  */
+    uint8_t                     activated_nfcid_len;/* length of NFCID or UID               */
 
     /* NFC link discovery management */
     tNFA_DM_DISC_CB             disc_cb;
@@ -508,25 +508,25 @@ typedef struct
     tNFA_DM_PARAMS              params;
 
     /* SetConfig management */
-    UINT32                      setcfg_pending_mask;    /* Mask of to indicate whether pending SET_CONFIGs require NFA_DM_SET_CONFIG_EVT. LSB=oldest pending */
-    UINT8                       setcfg_pending_num;     /* Number of setconfigs pending */
+    uint32_t                    setcfg_pending_mask;    /* Mask of to indicate whether pending SET_CONFIGs require NFA_DM_SET_CONFIG_EVT. LSB=oldest pending */
+    uint8_t                     setcfg_pending_num;     /* Number of setconfigs pending */
 
     /* NFCC power mode */
-    UINT8                       nfcc_pwr_mode;          /* NFA_DM_PWR_MODE_FULL or NFA_DM_PWR_MODE_OFF_SLEEP */
+    uint8_t                     nfcc_pwr_mode;          /* NFA_DM_PWR_MODE_FULL or NFA_DM_PWR_MODE_OFF_SLEEP */
 } tNFA_DM_CB;
 
 /* Internal function prototypes */
 void nfa_dm_ndef_register_cho (tNFA_NDEF_CHO_CBACK *p_cback);
 void nfa_dm_ndef_deregister_cho (void);
-void nfa_dm_ndef_handle_message (tNFA_STATUS status, UINT8 *p_msg_buf, UINT32 len);
+void nfa_dm_ndef_handle_message (tNFA_STATUS status, uint8_t *p_msg_buf, uint32_t len);
 void nfa_dm_ndef_dereg_all (void);
-void nfa_dm_act_conn_cback_notify (UINT8 event, tNFA_CONN_EVT_DATA *p_data);
+void nfa_dm_act_conn_cback_notify (uint8_t event, tNFA_CONN_EVT_DATA *p_data);
 void nfa_dm_notify_activation_status (tNFA_STATUS status, tNFA_TAG_PARAMS *p_params);
 void nfa_dm_disable_complete (void);
 
 /* Internal functions from nfa_rw */
 void nfa_rw_init (void);
-void nfa_rw_proc_disc_evt (tNFA_DM_RF_DISC_EVT event, tNFC_DISCOVER *p_data, BOOLEAN excl_rf_not_active);
+void nfa_rw_proc_disc_evt (tNFA_DM_RF_DISC_EVT event, tNFC_DISCOVER *p_data, bool    excl_rf_not_active);
 tNFA_STATUS nfa_rw_send_raw_frame (BT_HDR *p_data);
 
 /* Internal functions from nfa_ce */
@@ -536,12 +536,12 @@ void nfa_ce_init (void);
 extern tNFA_DM_DISC_FREQ_CFG *p_nfa_dm_rf_disc_freq_cfg;
 extern tNFA_HCI_CFG *p_nfa_hci_cfg;
 extern tNFA_DM_CFG *p_nfa_dm_cfg;
-extern UINT8 *p_nfa_dm_ce_cfg;
-extern UINT8 *p_nfa_dm_gen_cfg;
-extern UINT8 nfa_ee_max_ee_cfg;
+extern uint8_t *p_nfa_dm_ce_cfg;
+extern uint8_t *p_nfa_dm_gen_cfg;
+extern uint8_t nfa_ee_max_ee_cfg;
 extern tNCI_DISCOVER_MAPS *p_nfa_dm_interface_mapping;
-extern UINT8 nfa_dm_num_dm_interface_mapping;
-extern BOOLEAN nfa_poll_bail_out_mode;
+extern uint8_t nfa_dm_num_dm_interface_mapping;
+extern bool    nfa_poll_bail_out_mode;
 
 /* NFA device manager control block */
 extern tNFA_DM_CB nfa_dm_cb;
@@ -554,7 +554,7 @@ void nfa_cho_init (void);
 #define nfa_cho_init()
 #endif /* (defined (NFA_CHO_INCLUDED) && (NFA_CHO_INCLUDED==TRUE)) */
 #if (defined (NFA_SNEP_INCLUDED) && (NFA_SNEP_INCLUDED==TRUE))
-void nfa_snep_init (BOOLEAN is_dta_mode);
+void nfa_snep_init (bool    is_dta_mode);
 #else
 #define nfa_snep_init(is_dta_mode)
 #endif
@@ -569,45 +569,45 @@ void nfa_hci_init (void);
 #endif
 
 /* Action function prototypes */
-BOOLEAN nfa_dm_enable (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_disable (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_set_config (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_get_config (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_act_request_excl_rf_ctrl (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_act_release_excl_rf_ctrl (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_act_enable_polling (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_act_disable_polling (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_act_enable_listening (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_act_disable_listening (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_act_pause_p2p (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_act_resume_p2p (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_act_send_raw_frame (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_set_p2p_listen_tech (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_act_start_rf_discovery (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_act_stop_rf_discovery (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_act_set_rf_disc_duration (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_act_select (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_act_update_rf_params (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_act_deactivate (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_act_power_off_sleep (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_ndef_reg_hdlr (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_ndef_dereg_hdlr (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_tout (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_act_reg_vsc (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_act_send_vsc (tNFA_DM_MSG *p_data);
-UINT16 nfa_dm_act_get_rf_disc_duration ();
-BOOLEAN nfa_dm_act_disable_timeout (tNFA_DM_MSG *p_data);
-BOOLEAN nfa_dm_act_nfc_cback_data (tNFA_DM_MSG *p_data);
+bool    nfa_dm_enable (tNFA_DM_MSG *p_data);
+bool    nfa_dm_disable (tNFA_DM_MSG *p_data);
+bool    nfa_dm_set_config (tNFA_DM_MSG *p_data);
+bool    nfa_dm_get_config (tNFA_DM_MSG *p_data);
+bool    nfa_dm_act_request_excl_rf_ctrl (tNFA_DM_MSG *p_data);
+bool    nfa_dm_act_release_excl_rf_ctrl (tNFA_DM_MSG *p_data);
+bool    nfa_dm_act_enable_polling (tNFA_DM_MSG *p_data);
+bool    nfa_dm_act_disable_polling (tNFA_DM_MSG *p_data);
+bool    nfa_dm_act_enable_listening (tNFA_DM_MSG *p_data);
+bool    nfa_dm_act_disable_listening (tNFA_DM_MSG *p_data);
+bool    nfa_dm_act_pause_p2p (tNFA_DM_MSG *p_data);
+bool    nfa_dm_act_resume_p2p (tNFA_DM_MSG *p_data);
+bool    nfa_dm_act_send_raw_frame (tNFA_DM_MSG *p_data);
+bool    nfa_dm_set_p2p_listen_tech (tNFA_DM_MSG *p_data);
+bool    nfa_dm_act_start_rf_discovery (tNFA_DM_MSG *p_data);
+bool    nfa_dm_act_stop_rf_discovery (tNFA_DM_MSG *p_data);
+bool    nfa_dm_act_set_rf_disc_duration (tNFA_DM_MSG *p_data);
+bool    nfa_dm_act_select (tNFA_DM_MSG *p_data);
+bool    nfa_dm_act_update_rf_params (tNFA_DM_MSG *p_data);
+bool    nfa_dm_act_deactivate (tNFA_DM_MSG *p_data);
+bool    nfa_dm_act_power_off_sleep (tNFA_DM_MSG *p_data);
+bool    nfa_dm_ndef_reg_hdlr (tNFA_DM_MSG *p_data);
+bool    nfa_dm_ndef_dereg_hdlr (tNFA_DM_MSG *p_data);
+bool    nfa_dm_tout (tNFA_DM_MSG *p_data);
+bool    nfa_dm_act_reg_vsc (tNFA_DM_MSG *p_data);
+bool    nfa_dm_act_send_vsc (tNFA_DM_MSG *p_data);
+uint16_t nfa_dm_act_get_rf_disc_duration ();
+bool    nfa_dm_act_disable_timeout (tNFA_DM_MSG *p_data);
+bool    nfa_dm_act_nfc_cback_data (tNFA_DM_MSG *p_data);
 
-void nfa_dm_proc_nfcc_power_mode (UINT8 nfcc_power_mode);
+void nfa_dm_proc_nfcc_power_mode (uint8_t nfcc_power_mode);
 
 /* Main function prototypes */
-BOOLEAN nfa_dm_evt_hdlr (BT_HDR *p_msg);
+bool    nfa_dm_evt_hdlr (BT_HDR *p_msg);
 void nfa_dm_sys_enable (void);
 void nfa_dm_sys_disable (void);
-tNFA_STATUS nfa_dm_check_set_config (UINT8 tlv_list_len, UINT8 *p_tlv_list, BOOLEAN app_init);
+tNFA_STATUS nfa_dm_check_set_config (uint8_t tlv_list_len, uint8_t *p_tlv_list, bool    app_init);
 
-void nfa_dm_conn_cback_event_notify (UINT8 event, tNFA_CONN_EVT_DATA *p_data);
+void nfa_dm_conn_cback_event_notify (uint8_t event, tNFA_CONN_EVT_DATA *p_data);
 
 /* Discovery function prototypes */
 void nfa_dm_disc_sm_execute (tNFA_DM_RF_DISC_SM_EVENT event, tNFA_DM_RF_DISC_DATA *p_data);
@@ -621,14 +621,14 @@ void nfa_dm_stop_excl_discovery (void);
 void nfa_dm_disc_new_state (tNFA_DM_RF_DISC_STATE new_state);
 
 void nfa_dm_start_rf_discover (void);
-void nfa_dm_rf_discover_select (UINT8 rf_disc_id, tNFA_NFC_PROTOCOL protocol, tNFA_INTF_TYPE rf_interface);
+void nfa_dm_rf_discover_select (uint8_t rf_disc_id, tNFA_NFC_PROTOCOL protocol, tNFA_INTF_TYPE rf_interface);
 tNFA_STATUS nfa_dm_rf_deactivate (tNFA_DEACTIVATE_TYPE deactivate_type);
-BOOLEAN nfa_dm_is_protocol_supported (tNFA_NFC_PROTOCOL protocol, UINT8 sel_res);
-BOOLEAN nfa_dm_is_active (void);
+bool    nfa_dm_is_protocol_supported (tNFA_NFC_PROTOCOL protocol, uint8_t sel_res);
+bool    nfa_dm_is_active (void);
 tNFC_STATUS nfa_dm_disc_sleep_wakeup (void);
 tNFC_STATUS nfa_dm_disc_start_kovio_presence_check (void);
-BOOLEAN nfa_dm_is_raw_frame_session (void);
-BOOLEAN nfa_dm_is_p2p_paused (void);
+bool    nfa_dm_is_raw_frame_session (void);
+bool    nfa_dm_is_p2p_paused (void);
 
 
 #if (NFC_NFCEE_INCLUDED == FALSE)

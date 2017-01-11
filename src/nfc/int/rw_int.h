@@ -54,7 +54,7 @@
 #define RW_T1T_LOCK_NOT_UPDATED                 0x00    /* Lock not yet set as part of SET TAG RO op                */
 #define RW_T1T_LOCK_UPDATE_INITIATED            0x01    /* Sent command to set the Lock bytes                       */
 #define RW_T1T_LOCK_UPDATED                     0x02    /* Lock bytes are set                                       */
-typedef UINT8 tRW_T1T_LOCK_STATUS;
+typedef uint8_t tRW_T1T_LOCK_STATUS;
 
 /* States */
 #define RW_T1T_STATE_NOT_ACTIVATED              0x00    /* Tag not activated and or response not received for RID   */
@@ -98,32 +98,32 @@ typedef UINT8 tRW_T1T_LOCK_STATUS;
 
 typedef struct
 {
-    UINT16  offset;                                     /* Offset of the lock byte in the Tag                   */
-    UINT8   num_bits;                                   /* Number of lock bits in the lock byte                 */
-    UINT8   bytes_locked_per_bit;                       /* No. of tag bytes gets locked by a bit in this byte   */
+    uint16_t  offset;                                     /* Offset of the lock byte in the Tag                   */
+    uint8_t num_bits;                                   /* Number of lock bits in the lock byte                 */
+    uint8_t bytes_locked_per_bit;                       /* No. of tag bytes gets locked by a bit in this byte   */
 } tRW_T1T_LOCK_INFO;
 
 typedef struct
 {
-    UINT16  offset;                                     /* Reserved bytes offset taken from Memory control TLV  */
-    UINT8   num_bytes;                                  /* Number of reserved bytes as per the TLV              */
+    uint16_t  offset;                                     /* Reserved bytes offset taken from Memory control TLV  */
+    uint8_t num_bytes;                                  /* Number of reserved bytes as per the TLV              */
 }tRW_T1T_RES_INFO;
 
 typedef struct
 {
-    UINT8               tlv_index;                      /* Index of Lock control tlv that points to this address*/
-    UINT8               byte_index;                     /* Index of Lock byte pointed by the TLV                */
-    UINT8               lock_byte;                      /* Value in the lock byte                               */
+    uint8_t             tlv_index;                      /* Index of Lock control tlv that points to this address*/
+    uint8_t             byte_index;                     /* Index of Lock byte pointed by the TLV                */
+    uint8_t             lock_byte;                      /* Value in the lock byte                               */
     tRW_T1T_LOCK_STATUS lock_status;                    /* Indicates if it is modifed to set tag as Read only   */
-    BOOLEAN             b_lock_read;                    /* Is the lock byte is already read from tag            */
+    bool                b_lock_read;                    /* Is the lock byte is already read from tag            */
 } tRW_T1T_LOCK;
 
 typedef struct
 {
-    UINT8               addr;                           /* ADD/ADD8/ADDS field value                            */
-    UINT8               op_code;                        /* Command sent                                         */
-    UINT8               rsp_len;                        /* expected length of the response                      */
-    UINT8               pend_retx_rsp;                  /* Number of pending rsps to retransmission on prev cmd */
+    uint8_t             addr;                           /* ADD/ADD8/ADDS field value                            */
+    uint8_t             op_code;                        /* Command sent                                         */
+    uint8_t             rsp_len;                        /* expected length of the response                      */
+    uint8_t             pend_retx_rsp;                  /* Number of pending rsps to retransmission on prev cmd */
 } tRW_T1T_PREV_CMD_RSP_INFO;
 
 #if (defined (RW_NDEF_INCLUDED) && (RW_NDEF_INCLUDED == TRUE))
@@ -135,45 +135,45 @@ typedef struct
 /* RW Type 1 Tag control blocks */
 typedef struct
 {
-    UINT8               hr[T1T_HR_LEN];                     /* Header ROM byte 0 - 0x1y,Header ROM byte 1 - 0x00    */
-    UINT8               mem[T1T_SEGMENT_SIZE];              /* Tag contents of block 0 or from block 0-E            */
+    uint8_t             hr[T1T_HR_LEN];                     /* Header ROM byte 0 - 0x1y,Header ROM byte 1 - 0x00    */
+    uint8_t             mem[T1T_SEGMENT_SIZE];              /* Tag contents of block 0 or from block 0-E            */
     tT1T_CMD_RSP_INFO   *p_cmd_rsp_info;                    /* Pointer to Command rsp info of last sent command     */
-    UINT8               state;                              /* Current state of RW module                           */
-    UINT8               tag_attribute;                      /* Present state of the Tag as interpreted by RW        */
+    uint8_t             state;                              /* Current state of RW module                           */
+    uint8_t             tag_attribute;                      /* Present state of the Tag as interpreted by RW        */
     BT_HDR              *p_cur_cmd_buf;                     /* Buffer to hold cur sent command for retransmission   */
-    UINT8               addr;                               /* ADD/ADD8/ADDS value                                  */
+    uint8_t             addr;                               /* ADD/ADD8/ADDS value                                  */
     tRW_T1T_PREV_CMD_RSP_INFO prev_cmd_rsp_info;            /* Information about previous sent command if retx      */
     TIMER_LIST_ENT      timer;                              /* timer to set timelimit for the response to command   */
-    BOOLEAN             b_update;                           /* Tag header updated                                   */
-    BOOLEAN             b_rseg;                             /* Segment 0 read from tag                              */
-    BOOLEAN             b_hard_lock;                        /* Hard lock the tag as part of config tag to Read only */
+    bool                b_update;                           /* Tag header updated                                   */
+    bool                b_rseg;                             /* Segment 0 read from tag                              */
+    bool                b_hard_lock;                        /* Hard lock the tag as part of config tag to Read only */
 #if (defined (RW_NDEF_INCLUDED) && (RW_NDEF_INCLUDED == TRUE))
-    UINT8               segment;                            /* Current Tag segment                                  */
-    UINT8               substate;                           /* Current substate of RW module                        */
-    UINT16              work_offset;                        /* Working byte offset                                  */
-    UINT8               ndef_first_block[T1T_BLOCK_SIZE];   /* Buffer for ndef first block                          */
-    UINT8               ndef_final_block[T1T_BLOCK_SIZE];   /* Buffer for ndef last block                           */
-    UINT8               *p_ndef_buffer;                     /* Buffer to store ndef message                         */
-    UINT16              new_ndef_msg_len;                   /* Lenght of new updating NDEF Message                  */
-    UINT8               block_read;                         /* Last read Block                                      */
-    UINT8               write_byte;                         /* Index of last written byte                           */
-    UINT8               tlv_detect;                         /* TLV type under detection                             */
-    UINT16              ndef_msg_offset;                    /* The offset on Tag where first NDEF message is present*/
-    UINT16              ndef_msg_len;                       /* Lenght of NDEF Message                               */
-    UINT16              max_ndef_msg_len;                   /* Maximum size of NDEF that can be written on the tag  */
-    UINT16              ndef_header_offset;                 /* The offset on Tag where first NDEF tlv is present    */
-    UINT8               ndef_block_written;                 /* Last block where NDEF bytes are written              */
-    UINT8               num_ndef_finalblock;                /* Block number where NDEF's last byte will be present  */
-    UINT8               num_lock_tlvs;                      /* Number of lcok tlvs detected in the tag              */
+    uint8_t             segment;                            /* Current Tag segment                                  */
+    uint8_t             substate;                           /* Current substate of RW module                        */
+    uint16_t            work_offset;                        /* Working byte offset                                  */
+    uint8_t             ndef_first_block[T1T_BLOCK_SIZE];   /* Buffer for ndef first block                          */
+    uint8_t             ndef_final_block[T1T_BLOCK_SIZE];   /* Buffer for ndef last block                           */
+    uint8_t             *p_ndef_buffer;                     /* Buffer to store ndef message                         */
+    uint16_t            new_ndef_msg_len;                   /* Lenght of new updating NDEF Message                  */
+    uint8_t             block_read;                         /* Last read Block                                      */
+    uint8_t             write_byte;                         /* Index of last written byte                           */
+    uint8_t             tlv_detect;                         /* TLV type under detection                             */
+    uint16_t            ndef_msg_offset;                    /* The offset on Tag where first NDEF message is present*/
+    uint16_t            ndef_msg_len;                       /* Lenght of NDEF Message                               */
+    uint16_t            max_ndef_msg_len;                   /* Maximum size of NDEF that can be written on the tag  */
+    uint16_t            ndef_header_offset;                 /* The offset on Tag where first NDEF tlv is present    */
+    uint8_t             ndef_block_written;                 /* Last block where NDEF bytes are written              */
+    uint8_t             num_ndef_finalblock;                /* Block number where NDEF's last byte will be present  */
+    uint8_t             num_lock_tlvs;                      /* Number of lcok tlvs detected in the tag              */
     tRW_T1T_LOCK_INFO   lock_tlv[RW_T1T_MAX_LOCK_TLVS];     /* Information retrieved from lock control tlv          */
-    UINT8               num_lockbytes;                      /* Number of dynamic lock bytes present in the tag      */
+    uint8_t             num_lockbytes;                      /* Number of dynamic lock bytes present in the tag      */
     tRW_T1T_LOCK        lockbyte[RW_T1T_MAX_LOCK_BYTES];    /* Dynamic Lock byte information                        */
-    UINT8               num_mem_tlvs;                       /* Number of memory tlvs detected in the tag            */
+    uint8_t             num_mem_tlvs;                       /* Number of memory tlvs detected in the tag            */
     tRW_T1T_RES_INFO    mem_tlv[RW_T1T_MAX_MEM_TLVS];       /* Information retrieved from mem tlv                   */
-    UINT8               attr_seg;                           /* Tag segment for which attributes are prepared        */
-    UINT8               lock_attr_seg;                      /* Tag segment for which lock attributes are prepared   */
-    UINT8               attr[T1T_BLOCKS_PER_SEGMENT];       /* byte information - Reserved/lock/otp or data         */
-    UINT8               lock_attr[T1T_BLOCKS_PER_SEGMENT];  /* byte information - read only or read write           */
+    uint8_t             attr_seg;                           /* Tag segment for which attributes are prepared        */
+    uint8_t             lock_attr_seg;                      /* Tag segment for which lock attributes are prepared   */
+    uint8_t             attr[T1T_BLOCKS_PER_SEGMENT];       /* byte information - Reserved/lock/otp or data         */
+    uint8_t             lock_attr[T1T_BLOCKS_PER_SEGMENT];  /* byte information - read only or read write           */
 #endif
 } tRW_T1T_CB;
 
@@ -208,7 +208,7 @@ typedef struct
 #define RW_T2T_LOCK_NOT_UPDATED                         0x00    /* Lock not yet set as part of SET TAG RO op                */
 #define RW_T2T_LOCK_UPDATE_INITIATED                    0x01    /* Sent command to set the Lock bytes                       */
 #define RW_T2T_LOCK_UPDATED                             0x02    /* Lock bytes are set                                       */
-typedef UINT8 tRW_T2T_LOCK_STATUS;
+typedef uint8_t tRW_T2T_LOCK_STATUS;
 
 
 /* States */
@@ -271,79 +271,79 @@ typedef UINT8 tRW_T2T_LOCK_STATUS;
 
 typedef struct
 {
-    UINT16              offset;                             /* Offset of the lock byte in the Tag                       */
-    UINT8               num_bits;                           /* Number of lock bits in the lock byte                     */
-    UINT8               bytes_locked_per_bit;               /* No. of tag bytes gets locked by a bit in this byte       */
+    uint16_t            offset;                             /* Offset of the lock byte in the Tag                       */
+    uint8_t             num_bits;                           /* Number of lock bits in the lock byte                     */
+    uint8_t             bytes_locked_per_bit;               /* No. of tag bytes gets locked by a bit in this byte       */
 } tRW_T2T_LOCK_INFO;
 
 typedef struct
 {
-    UINT16  offset;                                         /* Reserved bytes offset taken from Memory control TLV      */
-    UINT8   num_bytes;                                      /* Number of reserved bytes as per the TLV                  */
+    uint16_t  offset;                                         /* Reserved bytes offset taken from Memory control TLV      */
+    uint8_t num_bytes;                                      /* Number of reserved bytes as per the TLV                  */
 }tRW_T2T_RES_INFO;
 
 typedef struct
 {
-    UINT8               tlv_index;                          /* Index of Lock control tlv that points to this address    */
-    UINT8               byte_index;                         /* Index of Lock byte pointed by the TLV                    */
-    UINT8               lock_byte;                          /* Value in the lock byte                                   */
+    uint8_t             tlv_index;                          /* Index of Lock control tlv that points to this address    */
+    uint8_t             byte_index;                         /* Index of Lock byte pointed by the TLV                    */
+    uint8_t             lock_byte;                          /* Value in the lock byte                                   */
     tRW_T2T_LOCK_STATUS lock_status;                        /* Indicates if it is modifed to set tag as Read only       */
-    BOOLEAN             b_lock_read;                        /* Is the lock byte is already read from tag                */
+    bool                b_lock_read;                        /* Is the lock byte is already read from tag                */
 } tRW_T2T_LOCK;
 
 /* RW Type 2 Tag control block */
 typedef struct
 {
-    UINT8               state;                              /* Reader/writer state                                          */
-    UINT8               substate;                           /* Reader/write substate in NDEF write state                    */
-    UINT8               prev_substate;                      /* Substate of the tag before moving to different sector        */
-    UINT8               sector;                             /* Sector number that is selected                               */
-    UINT8               select_sector;                      /* Sector number that is expected to get selected               */
-    UINT8               tag_hdr[T2T_READ_DATA_LEN];         /* T2T Header blocks                                            */
-    UINT8               tag_data[T2T_READ_DATA_LEN];        /* T2T Block 4 - 7 data                                         */
-    UINT8               ndef_status;                        /* The current status of NDEF Write operation                   */
-    UINT16              block_read;                         /* Read block                                                   */
-    UINT16              block_written;                      /* Written block                                                */
+    uint8_t             state;                              /* Reader/writer state                                          */
+    uint8_t             substate;                           /* Reader/write substate in NDEF write state                    */
+    uint8_t             prev_substate;                      /* Substate of the tag before moving to different sector        */
+    uint8_t             sector;                             /* Sector number that is selected                               */
+    uint8_t             select_sector;                      /* Sector number that is expected to get selected               */
+    uint8_t             tag_hdr[T2T_READ_DATA_LEN];         /* T2T Header blocks                                            */
+    uint8_t             tag_data[T2T_READ_DATA_LEN];        /* T2T Block 4 - 7 data                                         */
+    uint8_t             ndef_status;                        /* The current status of NDEF Write operation                   */
+    uint16_t            block_read;                         /* Read block                                                   */
+    uint16_t            block_written;                      /* Written block                                                */
     tT2T_CMD_RSP_INFO   *p_cmd_rsp_info;                    /* Pointer to Command rsp info of last sent command             */
     BT_HDR              *p_cur_cmd_buf;                     /* Copy of current command, for retx/send after sector change   */
     BT_HDR              *p_sec_cmd_buf;                     /* Copy of command, to send after sector change                 */
     TIMER_LIST_ENT      t2_timer;                           /* timeout for each API call                                    */
-    BOOLEAN             b_read_hdr;                         /* Tag header read from tag                                     */
-    BOOLEAN             b_read_data;                        /* Tag data block read from tag                                 */
-    BOOLEAN             b_hard_lock;                        /* Hard lock the tag as part of config tag to Read only         */
-    BOOLEAN             check_tag_halt;                     /* Resent command after NACK rsp to find tag is in HALT State   */
+    bool                b_read_hdr;                         /* Tag header read from tag                                     */
+    bool                b_read_data;                        /* Tag data block read from tag                                 */
+    bool                b_hard_lock;                        /* Hard lock the tag as part of config tag to Read only         */
+    bool                check_tag_halt;                     /* Resent command after NACK rsp to find tag is in HALT State   */
 #if (defined (RW_NDEF_INCLUDED) && (RW_NDEF_INCLUDED == TRUE))
-    BOOLEAN             skip_dyn_locks;                     /* Skip reading dynamic lock bytes from the tag                 */
-    UINT8               found_tlv;                          /* The Tlv found while searching a particular TLV               */
-    UINT8               tlv_detect;                         /* TLV type under detection                                     */
-    UINT8               num_lock_tlvs;                      /* Number of lcok tlvs detected in the tag                      */
-    UINT8               attr_seg;                           /* Tag segment for which attributes are prepared                */
-    UINT8               lock_attr_seg;                      /* Tag segment for which lock attributes are prepared           */
-    UINT8               segment;                            /* Current operating segment                                    */
-    UINT8               ndef_final_block[T2T_BLOCK_SIZE];   /* Buffer for ndef last block                                   */
-    UINT8               num_mem_tlvs;                       /* Number of memory tlvs detected in the tag                    */
-    UINT8               num_lockbytes;                      /* Number of dynamic lock bytes present in the tag              */
-    UINT8               attr[RW_T2T_SEGMENT_SIZE];          /* byte information - Reserved/lock/otp or data                 */
-    UINT8               lock_attr[RW_T2T_SEGMENT_SIZE];     /* byte information - read only or read write                   */
-    UINT8               tlv_value[3];                       /* Read value field of TLV                                      */
-    UINT8               ndef_first_block[T2T_BLOCK_LEN];    /* NDEF TLV Header block                                        */
-    UINT8               ndef_read_block[T2T_BLOCK_LEN];     /* Buffer to hold read before write block                       */
-    UINT8               ndef_last_block[T2T_BLOCK_LEN];     /* Terminator TLV block after NDEF Write operation              */
-    UINT8               terminator_tlv_block[T2T_BLOCK_LEN];/* Terminator TLV Block                                         */
-    UINT16              ndef_last_block_num;                /* Block where last byte of updating ndef message will exist    */
-    UINT16              ndef_read_block_num;                /* Block read during NDEF Write to avoid overwritting res bytes */
-    UINT16              bytes_count;                        /* No. of bytes remaining to collect during tlv detect          */
-    UINT16              terminator_byte_index;              /* The offset of the tag where terminator tlv may be added      */
-    UINT16              work_offset;                        /* Working byte offset                                          */
-    UINT16              ndef_header_offset;
-    UINT16              ndef_msg_offset;                    /* Offset on Tag where first NDEF message is present            */
-    UINT16              ndef_msg_len;                       /* Lenght of NDEF Message                                       */
-    UINT16              max_ndef_msg_len;                   /* Maximum size of NDEF that can be written on the tag          */
-    UINT16              new_ndef_msg_len;                   /* Lenght of new updating NDEF Message                          */
-    UINT16              ndef_write_block;
-    UINT16              prop_msg_len;                       /* Proprietary tlv length                                       */
-    UINT8               *p_new_ndef_buffer;                 /* Pointer to updating NDEF Message                             */
-    UINT8               *p_ndef_buffer;                     /* Pointer to NDEF Message                                      */
+    bool                skip_dyn_locks;                     /* Skip reading dynamic lock bytes from the tag                 */
+    uint8_t             found_tlv;                          /* The Tlv found while searching a particular TLV               */
+    uint8_t             tlv_detect;                         /* TLV type under detection                                     */
+    uint8_t             num_lock_tlvs;                      /* Number of lcok tlvs detected in the tag                      */
+    uint8_t             attr_seg;                           /* Tag segment for which attributes are prepared                */
+    uint8_t             lock_attr_seg;                      /* Tag segment for which lock attributes are prepared           */
+    uint8_t             segment;                            /* Current operating segment                                    */
+    uint8_t             ndef_final_block[T2T_BLOCK_SIZE];   /* Buffer for ndef last block                                   */
+    uint8_t             num_mem_tlvs;                       /* Number of memory tlvs detected in the tag                    */
+    uint8_t             num_lockbytes;                      /* Number of dynamic lock bytes present in the tag              */
+    uint8_t             attr[RW_T2T_SEGMENT_SIZE];          /* byte information - Reserved/lock/otp or data                 */
+    uint8_t             lock_attr[RW_T2T_SEGMENT_SIZE];     /* byte information - read only or read write                   */
+    uint8_t             tlv_value[3];                       /* Read value field of TLV                                      */
+    uint8_t             ndef_first_block[T2T_BLOCK_LEN];    /* NDEF TLV Header block                                        */
+    uint8_t             ndef_read_block[T2T_BLOCK_LEN];     /* Buffer to hold read before write block                       */
+    uint8_t             ndef_last_block[T2T_BLOCK_LEN];     /* Terminator TLV block after NDEF Write operation              */
+    uint8_t             terminator_tlv_block[T2T_BLOCK_LEN];/* Terminator TLV Block                                         */
+    uint16_t            ndef_last_block_num;                /* Block where last byte of updating ndef message will exist    */
+    uint16_t            ndef_read_block_num;                /* Block read during NDEF Write to avoid overwritting res bytes */
+    uint16_t            bytes_count;                        /* No. of bytes remaining to collect during tlv detect          */
+    uint16_t            terminator_byte_index;              /* The offset of the tag where terminator tlv may be added      */
+    uint16_t            work_offset;                        /* Working byte offset                                          */
+    uint16_t            ndef_header_offset;
+    uint16_t            ndef_msg_offset;                    /* Offset on Tag where first NDEF message is present            */
+    uint16_t            ndef_msg_len;                       /* Lenght of NDEF Message                                       */
+    uint16_t            max_ndef_msg_len;                   /* Maximum size of NDEF that can be written on the tag          */
+    uint16_t            new_ndef_msg_len;                   /* Lenght of new updating NDEF Message                          */
+    uint16_t            ndef_write_block;
+    uint16_t            prop_msg_len;                       /* Proprietary tlv length                                       */
+    uint8_t             *p_new_ndef_buffer;                 /* Pointer to updating NDEF Message                             */
+    uint8_t             *p_ndef_buffer;                     /* Pointer to NDEF Message                                      */
     tRW_T2T_LOCK_INFO   lock_tlv[RW_T2T_MAX_LOCK_TLVS];     /* Information retrieved from lock control tlv                  */
     tRW_T2T_LOCK        lockbyte[RW_T2T_MAX_LOCK_BYTES];    /* Dynamic Lock byte information                                */
     tRW_T2T_RES_INFO    mem_tlv[RW_T2T_MAX_MEM_TLVS];       /* Information retrieved from mem tlv                           */
@@ -351,18 +351,18 @@ typedef struct
 } tRW_T2T_CB;
 
 /* Type 3 Tag control block */
-typedef UINT8 tRW_T3T_RW_STATE;
+typedef uint8_t tRW_T3T_RW_STATE;
 
 typedef struct
 {
     tNFC_STATUS         status;
-    UINT8               version;        /* Ver: peer version */
-    UINT8               nbr;            /* NBr: number of blocks that can be read using one Check command */
-    UINT8               nbw;            /* Nbw: number of blocks that can be written using one Update command */
-    UINT16              nmaxb;          /* Nmaxb: maximum number of blocks available for NDEF data */
-    UINT8               writef;         /* WriteFlag: 00h if writing data finished; 0Fh if writing data in progress */
-    UINT8               rwflag;         /* RWFlag: 00h NDEF is read-only; 01h if read/write available */
-    UINT32              ln;             /* Ln: actual size of stored NDEF data (in bytes) */
+    uint8_t             version;        /* Ver: peer version */
+    uint8_t             nbr;            /* NBr: number of blocks that can be read using one Check command */
+    uint8_t             nbw;            /* Nbw: number of blocks that can be written using one Update command */
+    uint16_t            nmaxb;          /* Nmaxb: maximum number of blocks available for NDEF data */
+    uint8_t             writef;         /* WriteFlag: 00h if writing data finished; 0Fh if writing data in progress */
+    uint8_t             rwflag;         /* RWFlag: 00h NDEF is read-only; 01h if read/write available */
+    uint32_t            ln;             /* Ln: actual size of stored NDEF data (in bytes) */
 } tRW_T3T_DETECT;
 
 /* RW_T3T control block flags */
@@ -375,35 +375,35 @@ typedef struct
 
 typedef struct
 {
-    UINT32              cur_tout;               /* Current command timeout */
+    uint32_t            cur_tout;               /* Current command timeout */
     /* check timeout is check_tout_a + n * check_tout_b; X is T/t3t * 4^E */
-    UINT32              check_tout_a;           /* Check command timeout (A+1)*X */
-    UINT32              check_tout_b;           /* Check command timeout (B+1)*X */
+    uint32_t            check_tout_a;           /* Check command timeout (A+1)*X */
+    uint32_t            check_tout_b;           /* Check command timeout (B+1)*X */
     /* update timeout is update_tout_a + n * update_tout_b; X is T/t3t * 4^E */
-    UINT32              update_tout_a;          /* Update command timeout (A+1)*X */
-    UINT32              update_tout_b;          /* Update command timeout (B+1)*X */
+    uint32_t            update_tout_a;          /* Update command timeout (A+1)*X */
+    uint32_t            update_tout_b;          /* Update command timeout (B+1)*X */
     tRW_T3T_RW_STATE    rw_state;               /* Reader/writer state */
-    UINT8               rw_substate;
-    UINT8               cur_cmd;                /* Current command being executed */
+    uint8_t             rw_substate;
+    uint8_t             cur_cmd;                /* Current command being executed */
     BT_HDR              *p_cur_cmd_buf;         /* Copy of current command, for retransmission */
     TIMER_LIST_ENT      timer;                  /* timeout for waiting for response */
     TIMER_LIST_ENT      poll_timer;             /* timeout for waiting for response */
 
     tRW_T3T_DETECT      ndef_attrib;            /* T3T NDEF attribute information */
 
-    UINT32              ndef_msg_len;           /* Length of ndef message to send */
-    UINT32              ndef_msg_bytes_sent;    /* Length of ndef message sent so far */
-    UINT8               *ndef_msg;              /* Buffer for outgoing NDEF message */
-    UINT32              ndef_rx_readlen;        /* Number of bytes read in current CHECK command */
-    UINT32              ndef_rx_offset;         /* Length of ndef message read so far */
+    uint32_t            ndef_msg_len;           /* Length of ndef message to send */
+    uint32_t            ndef_msg_bytes_sent;    /* Length of ndef message sent so far */
+    uint8_t             *ndef_msg;              /* Buffer for outgoing NDEF message */
+    uint32_t            ndef_rx_readlen;        /* Number of bytes read in current CHECK command */
+    uint32_t            ndef_rx_offset;         /* Length of ndef message read so far */
 
-    UINT8               num_system_codes;       /* System codes detected */
-    UINT16              system_codes[T3T_MAX_SYSTEM_CODES];
+    uint8_t             num_system_codes;       /* System codes detected */
+    uint16_t            system_codes[T3T_MAX_SYSTEM_CODES];
 
-    UINT8               peer_nfcid2[NCI_NFCID2_LEN];
-    UINT8               cur_poll_rc;            /* RC used in current POLL command */
+    uint8_t             peer_nfcid2[NCI_NFCID2_LEN];
+    uint8_t             cur_poll_rc;            /* RC used in current POLL command */
 
-    UINT8               flags;                  /* Flags see RW_T3T_FL_* */
+    uint8_t             flags;                  /* Flags see RW_T3T_FL_* */
 } tRW_T3T_CB;
 
 
@@ -422,37 +422,37 @@ typedef struct
 /* Mandatory NDEF file control */
 typedef struct
 {
-    UINT16              file_id;        /* File Identifier          */
-    UINT16              max_file_size;  /* Max NDEF file size       */
-    UINT8               read_access;    /* read access condition    */
-    UINT8               write_access;   /* write access condition   */
+    uint16_t            file_id;        /* File Identifier          */
+    uint16_t            max_file_size;  /* Max NDEF file size       */
+    uint8_t             read_access;    /* read access condition    */
+    uint8_t             write_access;   /* write access condition   */
 } tRW_T4T_NDEF_FC;
 
 /* Capability Container */
 typedef struct
 {
-    UINT16              cclen;      /* the size of this capability container        */
-    UINT8               version;    /* the mapping specification version            */
-    UINT16              max_le;     /* the max data size by a single ReadBinary     */
-    UINT16              max_lc;     /* the max data size by a single UpdateBinary   */
+    uint16_t            cclen;      /* the size of this capability container        */
+    uint8_t             version;    /* the mapping specification version            */
+    uint16_t            max_le;     /* the max data size by a single ReadBinary     */
+    uint16_t            max_lc;     /* the max data size by a single UpdateBinary   */
     tRW_T4T_NDEF_FC     ndef_fc;    /* Mandatory NDEF file control                  */
 } tRW_T4T_CC;
 
-typedef UINT8 tRW_T4T_RW_STATE;
-typedef UINT8 tRW_T4T_RW_SUBSTATE;
+typedef uint8_t tRW_T4T_RW_STATE;
+typedef uint8_t tRW_T4T_RW_SUBSTATE;
 
 /* Type 4 Tag Control Block */
 typedef struct
 {
     tRW_T4T_RW_STATE    state;              /* main state                       */
     tRW_T4T_RW_SUBSTATE sub_state;          /* sub state                        */
-    UINT8               version;            /* currently effective version      */
+    uint8_t             version;            /* currently effective version      */
     TIMER_LIST_ENT      timer;              /* timeout for each API call        */
 
-    UINT16              ndef_length;        /* length of NDEF data              */
-    UINT8              *p_update_data;      /* pointer of data to update        */
-    UINT16              rw_length;          /* remaining bytes to read/write    */
-    UINT16              rw_offset;          /* remaining offset to read/write   */
+    uint16_t            ndef_length;        /* length of NDEF data              */
+    uint8_t            *p_update_data;      /* pointer of data to update        */
+    uint16_t            rw_length;          /* remaining bytes to read/write    */
+    uint16_t            rw_offset;          /* remaining offset to read/write   */
     BT_HDR             *p_data_to_free;     /* GKI buffet to delete after done  */
 
     tRW_T4T_CC          cc_file;            /* Capability Container File        */
@@ -460,33 +460,33 @@ typedef struct
 #define RW_T4T_NDEF_STATUS_NDEF_DETECTED    0x01    /* NDEF has been detected   */
 #define RW_T4T_NDEF_STATUS_NDEF_READ_ONLY   0x02    /* NDEF file is read-only   */
 
-    UINT8               ndef_status;        /* bitmap for NDEF status           */
-    UINT8               channel;            /* channel id: used for read-binary */
+    uint8_t             ndef_status;        /* bitmap for NDEF status           */
+    uint8_t             channel;            /* channel id: used for read-binary */
 
-    UINT16              max_read_size;      /* max reading size per a command   */
-    UINT16              max_update_size;    /* max updating size per a command  */
-    UINT16              card_size;
-    UINT8               card_type;
+    uint16_t            max_read_size;      /* max reading size per a command   */
+    uint16_t            max_update_size;    /* max updating size per a command  */
+    uint16_t            card_size;
+    uint8_t             card_type;
 } tRW_T4T_CB;
 
 /* RW retransmission statistics */
 #if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
 typedef struct
 {
-    UINT32              start_tick;         /* System tick count at activation */
-    UINT32              bytes_sent;         /* Total bytes sent since activation */
-    UINT32              bytes_received;     /* Total bytes received since activation */
-    UINT32              num_ops;            /* Number of operations since activation */
-    UINT32              num_retries;        /* Number of retranmissions since activation */
-    UINT32              num_crc;            /* Number of crc failures */
-    UINT32              num_trans_err;      /* Number of transmission error notifications */
-    UINT32              num_fail;           /* Number of aborts (failures after retries) */
+    uint32_t            start_tick;         /* System tick count at activation */
+    uint32_t            bytes_sent;         /* Total bytes sent since activation */
+    uint32_t            bytes_received;     /* Total bytes received since activation */
+    uint32_t            num_ops;            /* Number of operations since activation */
+    uint32_t            num_retries;        /* Number of retranmissions since activation */
+    uint32_t            num_crc;            /* Number of crc failures */
+    uint32_t            num_trans_err;      /* Number of transmission error notifications */
+    uint32_t            num_fail;           /* Number of aborts (failures after retries) */
 } tRW_STATS;
 #endif  /* RW_STATS_INCLUDED */
 
 /* ISO 15693 RW Control Block */
-typedef UINT8 tRW_I93_RW_STATE;
-typedef UINT8 tRW_I93_RW_SUBSTATE;
+typedef uint8_t tRW_I93_RW_STATE;
+typedef uint8_t tRW_I93_RW_SUBSTATE;
 
 #define RW_I93_FLAG_READ_ONLY           0x01    /* tag is read-only                        */
 #define RW_I93_FLAG_READ_MULTI_BLOCK    0x02    /* tag supports read multi block           */
@@ -525,33 +525,33 @@ typedef struct
     tRW_I93_RW_STATE    state;                  /* main state                       */
     tRW_I93_RW_SUBSTATE sub_state;              /* sub state                        */
     TIMER_LIST_ENT      timer;                  /* timeout for each sent command    */
-    UINT8               sent_cmd;               /* last sent command                */
-    UINT8               retry_count;            /* number of retry                  */
+    uint8_t             sent_cmd;               /* last sent command                */
+    uint8_t             retry_count;            /* number of retry                  */
     BT_HDR             *p_retry_cmd;            /* buffer to store cmd sent last    */
 
-    UINT8               info_flags;             /* information flags                */
-    UINT8               uid[I93_UID_BYTE_LEN];  /* UID of currently activated       */
-    UINT8               dsfid;                  /* DSFID if I93_INFO_FLAG_DSFID     */
-    UINT8               afi;                    /* AFI if I93_INFO_FLAG_AFI         */
-    UINT8               block_size;             /* block size of tag, in bytes      */
-    UINT16              num_block;              /* number of blocks in tag          */
-    UINT8               ic_reference;           /* IC Reference of tag              */
-    UINT8               product_version;        /* tag product version              */
+    uint8_t             info_flags;             /* information flags                */
+    uint8_t             uid[I93_UID_BYTE_LEN];  /* UID of currently activated       */
+    uint8_t             dsfid;                  /* DSFID if I93_INFO_FLAG_DSFID     */
+    uint8_t             afi;                    /* AFI if I93_INFO_FLAG_AFI         */
+    uint8_t             block_size;             /* block size of tag, in bytes      */
+    uint16_t            num_block;              /* number of blocks in tag          */
+    uint8_t             ic_reference;           /* IC Reference of tag              */
+    uint8_t             product_version;        /* tag product version              */
 
-    UINT8               intl_flags;             /* flags for internal information   */
+    uint8_t             intl_flags;             /* flags for internal information   */
 
-    UINT8               tlv_detect_state;       /* TLV detecting state              */
-    UINT8               tlv_type;               /* currently detected type          */
-    UINT16              tlv_length;             /* currently detected length        */
+    uint8_t             tlv_detect_state;       /* TLV detecting state              */
+    uint8_t             tlv_type;               /* currently detected type          */
+    uint16_t            tlv_length;             /* currently detected length        */
 
-    UINT16              ndef_tlv_start_offset;  /* offset of first byte of NDEF TLV */
-    UINT16              ndef_tlv_last_offset;   /* offset of last byte of NDEF TLV  */
-    UINT16              max_ndef_length;        /* max NDEF length the tag contains */
-    UINT16              ndef_length;            /* length of NDEF data              */
+    uint16_t            ndef_tlv_start_offset;  /* offset of first byte of NDEF TLV */
+    uint16_t            ndef_tlv_last_offset;   /* offset of last byte of NDEF TLV  */
+    uint16_t            max_ndef_length;        /* max NDEF length the tag contains */
+    uint16_t            ndef_length;            /* length of NDEF data              */
 
-    UINT8              *p_update_data;          /* pointer of data to update        */
-    UINT16              rw_length;              /* bytes to read/write              */
-    UINT16              rw_offset;              /* offset to read/write             */
+    uint8_t            *p_update_data;          /* pointer of data to update        */
+    uint16_t            rw_length;              /* bytes to read/write              */
+    uint16_t            rw_offset;              /* offset to read/write             */
 } tRW_I93_CB;
 
 /* RW memory control blocks */
@@ -569,11 +569,11 @@ typedef struct
 {
     tRW_TCB             tcb;
     tRW_CBACK           *p_cback;
-    UINT32              cur_retry;          /* Retry count for the current operation */
+    uint32_t            cur_retry;          /* Retry count for the current operation */
 #if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
     tRW_STATS           stats;
 #endif  /* RW_STATS_INCLUDED */
-    UINT8               trace_level;
+    uint8_t             trace_level;
 } tRW_CB;
 
 
@@ -591,7 +591,7 @@ NFC_API extern tRW_CB  rw_cb;
 /* from .c */
 
 #if (defined (RW_NDEF_INCLUDED) && (RW_NDEF_INCLUDED == TRUE))
-extern tRW_EVENT rw_t1t_handle_rsp (const tT1T_CMD_RSP_INFO * p_info, BOOLEAN *p_notify, UINT8 *p_data, tNFC_STATUS *p_status);
+extern tRW_EVENT rw_t1t_handle_rsp (const tT1T_CMD_RSP_INFO * p_info, bool    *p_notify, uint8_t *p_data, tNFC_STATUS *p_status);
 extern tRW_EVENT rw_t1t_info_to_event (const tT1T_CMD_RSP_INFO * p_info);
 #else
 #define rw_t1t_handle_rsp(p, a, b, c)       t1t_info_to_evt (p)
@@ -599,42 +599,42 @@ extern tRW_EVENT rw_t1t_info_to_event (const tT1T_CMD_RSP_INFO * p_info);
 #endif
 
 extern void rw_init (void);
-extern tNFC_STATUS rw_t1t_select (UINT8 hr[T1T_HR_LEN], UINT8 uid[T1T_CMD_UID_LEN]);
-extern tNFC_STATUS rw_t1t_send_dyn_cmd (UINT8 opcode, UINT8 add, UINT8 *p_dat);
-extern tNFC_STATUS rw_t1t_send_static_cmd (UINT8 opcode, UINT8 add, UINT8 dat);
+extern tNFC_STATUS rw_t1t_select (uint8_t hr[T1T_HR_LEN], uint8_t uid[T1T_CMD_UID_LEN]);
+extern tNFC_STATUS rw_t1t_send_dyn_cmd (uint8_t opcode, uint8_t add, uint8_t *p_dat);
+extern tNFC_STATUS rw_t1t_send_static_cmd (uint8_t opcode, uint8_t add, uint8_t dat);
 extern void rw_t1t_process_timeout (TIMER_LIST_ENT *p_tle);
 extern void rw_t1t_handle_op_complete (void);
 
 #if (defined (RW_NDEF_INCLUDED) && (RW_NDEF_INCLUDED == TRUE))
 extern tRW_EVENT rw_t2t_info_to_event (const tT2T_CMD_RSP_INFO *p_info);
-extern void rw_t2t_handle_rsp (UINT8 *p_data);
+extern void rw_t2t_handle_rsp (uint8_t *p_data);
 #else
 #define rw_t2t_info_to_event(p)             t2t_info_to_evt (p)
 #define rw_t2t_handle_rsp(p)
 #endif
 
-extern tNFC_STATUS rw_t2t_sector_change (UINT8 sector);
-extern tNFC_STATUS rw_t2t_read (UINT16 block);
-extern tNFC_STATUS rw_t2t_write (UINT16 block, UINT8 *p_write_data);
+extern tNFC_STATUS rw_t2t_sector_change (uint8_t sector);
+extern tNFC_STATUS rw_t2t_read (uint16_t block);
+extern tNFC_STATUS rw_t2t_write (uint16_t block, uint8_t *p_write_data);
 extern void rw_t2t_process_timeout (TIMER_LIST_ENT *p_tle);
 extern tNFC_STATUS rw_t2t_select (void);
 void rw_t2t_handle_op_complete (void);
 
 extern void rw_t3t_process_timeout (TIMER_LIST_ENT *p_tle);
-extern tNFC_STATUS rw_t3t_select (UINT8 peer_nfcid2[NCI_RF_F_UID_LEN], UINT8 mrti_check, UINT8 mrti_update);
-void rw_t3t_handle_nci_poll_ntf (UINT8 nci_status, UINT8 num_responses, UINT8 sensf_res_buf_size, UINT8 *p_sensf_res_buf);
+extern tNFC_STATUS rw_t3t_select (uint8_t peer_nfcid2[NCI_RF_F_UID_LEN], uint8_t mrti_check, uint8_t mrti_update);
+void rw_t3t_handle_nci_poll_ntf (uint8_t nci_status, uint8_t num_responses, uint8_t sensf_res_buf_size, uint8_t *p_sensf_res_buf);
 
 extern tNFC_STATUS rw_t4t_select (void);
 extern void rw_t4t_process_timeout (TIMER_LIST_ENT *p_tle);
 
-extern tNFC_STATUS rw_i93_select (UINT8 *p_uid);
+extern tNFC_STATUS rw_i93_select (uint8_t *p_uid);
 extern void rw_i93_process_timeout (TIMER_LIST_ENT *p_tle);
 
 #if (defined (RW_STATS_INCLUDED) && (RW_STATS_INCLUDED == TRUE))
 /* Internal fcns for statistics (from rw_main.c) */
 void rw_main_reset_stats (void);
-void rw_main_update_tx_stats (UINT32 bytes_tx, BOOLEAN is_retry);
-void rw_main_update_rx_stats (UINT32 bytes_rx);
+void rw_main_update_tx_stats (uint32_t bytes_tx, bool    is_retry);
+void rw_main_update_rx_stats (uint32_t bytes_rx);
 void rw_main_update_crc_error_stats (void);
 void rw_main_update_trans_error_stats (void);
 void rw_main_update_fail_stats (void);

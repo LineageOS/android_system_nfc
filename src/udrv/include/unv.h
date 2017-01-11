@@ -37,14 +37,14 @@
 #define UNV_BYTE          2
 #define UNV_NOPREF        3
 
-typedef UINT8 tUNV_STORAGE_PREF;
+typedef uint8_t tUNV_STORAGE_PREF;
 
 /**** Status ****/
 #define UNV_REINIT      (-1)
 #define UNV_WRITELOCKED (-2)
 #define UNV_ERROR       (-3)
 
-typedef INT16 tUNV_STATUS;
+typedef int16_t tUNV_STATUS;
 
 /* Prototype for function to restore defaults to a block */
 typedef void  (tUNV_DEFAULT_FUNC)(void);
@@ -62,20 +62,20 @@ extern "C" {
 #endif
 
 UDRV_API extern void        UNV_Init(void *);
-UDRV_API extern BOOLEAN     UNV_MapBlock(UINT16, tUNV_STORAGE_PREF, UINT16,
-                                         UINT16, UINT16 *, void *);
-UDRV_API extern BOOLEAN     UNV_ReadMap(UINT16, tUNV_STORAGE_PREF *, UINT16 *,
-                                        UINT16 *, UINT16 *);
-UDRV_API extern BOOLEAN     UNV_EraseBlock(UINT16);
-UDRV_API extern void        UNV_Default(UINT16);
-UDRV_API extern tUNV_STATUS UNV_Read(UINT16, UINT16, UINT16, UINT16, void *);
-UDRV_API extern tUNV_STATUS UNV_Write(UINT16, UINT16, UINT16, UINT16, void *);
-UDRV_API extern tUNV_STATUS UNV_ReadBlock(UINT16, UINT16, void *);
-UDRV_API extern tUNV_STATUS UNV_WriteBlock(UINT16, void *);
-UDRV_API extern UINT32      UNV_BytesRemaining(void);
+UDRV_API extern bool        UNV_MapBlock(uint16_t, tUNV_STORAGE_PREF, uint16_t,
+                                         uint16_t, uint16_t *, void *);
+UDRV_API extern bool        UNV_ReadMap(uint16_t, tUNV_STORAGE_PREF *, uint16_t *,
+                                        uint16_t *, uint16_t *);
+UDRV_API extern bool        UNV_EraseBlock(uint16_t);
+UDRV_API extern void        UNV_Default(uint16_t);
+UDRV_API extern tUNV_STATUS UNV_Read(uint16_t, uint16_t, uint16_t, uint16_t, void *);
+UDRV_API extern tUNV_STATUS UNV_Write(uint16_t, uint16_t, uint16_t, uint16_t, void *);
+UDRV_API extern tUNV_STATUS UNV_ReadBlock(uint16_t, uint16_t, void *);
+UDRV_API extern tUNV_STATUS UNV_WriteBlock(uint16_t, void *);
+UDRV_API extern uint32_t    UNV_BytesRemaining(void);
 UDRV_API extern void        UNV_Consolidate(void);
-UDRV_API extern tUNV_STATUS UNV_ReadPtr(UINT16, UINT16, UINT8 **);
-UDRV_API extern tUNV_STATUS UNV_FreePtr(UINT16, UINT16);
+UDRV_API extern tUNV_STATUS UNV_ReadPtr(uint16_t, uint16_t, uint8_t **);
+UDRV_API extern tUNV_STATUS UNV_FreePtr(uint16_t, uint16_t);
 
 #ifdef __cplusplus
 }

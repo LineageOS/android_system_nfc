@@ -39,19 +39,19 @@
 
 #define UTIMER_NUM_TIMERS         4     /* Number of timers supported */
 
-typedef UINT8 tUTIMER_ID;
+typedef uint8_t tUTIMER_ID;
 
 /**** Timer types ****/
 
 #define UTIMER_TYPE_PERIODIC      0
 #define UTIMER_TYPE_ONESHOT       1
 
-typedef UINT8 tUTIMER_TYPE;
+typedef uint8_t tUTIMER_TYPE;
 
 
 /**** Timer time ****/
 
-typedef UINT32 tUTIMER_TIME;
+typedef uint32_t tUTIMER_TIME;
 
 
 /**** Timer configuration ****/
@@ -71,7 +71,7 @@ typedef struct
 #define UTIMER_FEAT_TYPE_PERIODIC 4
 #define UTIMER_FEAT_TYPE_ONESHOT  5
 
-typedef UINT8 tUTIMER_FEATURE;
+typedef uint8_t tUTIMER_FEATURE;
 
 
 /**** Callback for timer expiration ****/
@@ -89,7 +89,7 @@ UDRV_API extern void    UTIMER_Init(void *);
 UDRV_API extern void    UTIMER_Start(tUTIMER_ID, tUTIMER_CFG *, tUTIMER_CBACK *);
 UDRV_API extern void    UTIMER_Read(tUTIMER_ID, tUTIMER_TIME *);
 UDRV_API extern void    UTIMER_Stop(tUTIMER_ID);
-UDRV_API extern BOOLEAN UTIMER_Feature(tUTIMER_FEATURE);
+UDRV_API extern bool    UTIMER_Feature(tUTIMER_FEATURE);
 
 #ifdef __cplusplus
 }

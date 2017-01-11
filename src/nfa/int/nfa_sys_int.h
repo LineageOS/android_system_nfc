@@ -42,21 +42,21 @@
 /* system manager control block */
 typedef struct
 {
-    UINT32                  flags;                  /* nfa_sys flags (must be first element of structure) */
+    uint32_t                flags;                  /* nfa_sys flags (must be first element of structure) */
     tNFA_SYS_REG            *reg[NFA_ID_MAX];       /* registration structures */
-    BOOLEAN                 is_reg[NFA_ID_MAX];     /* registration structures */
+    bool                    is_reg[NFA_ID_MAX];     /* registration structures */
     tPTIM_CB                ptim_cb;                /* protocol timer list */
     tNFA_SYS_ENABLE_CBACK   *p_enable_cback;
-    UINT16                  enable_cplt_flags;
-    UINT16                  enable_cplt_mask;
+    uint16_t                enable_cplt_flags;
+    uint16_t                enable_cplt_mask;
 
     tNFA_SYS_PROC_NFCC_PWR_MODE_CMPL  *p_proc_nfcc_pwr_mode_cmpl_cback;
-    UINT16                  proc_nfcc_pwr_mode_cplt_flags;
-    UINT16                  proc_nfcc_pwr_mode_cplt_mask;
+    uint16_t                proc_nfcc_pwr_mode_cplt_flags;
+    uint16_t                proc_nfcc_pwr_mode_cplt_mask;
 
-    BOOLEAN                 graceful_disable;       /* TRUE if NFA_Disable () is called with TRUE */
-    BOOLEAN                 timers_disabled;        /* TRUE if sys timers disabled */
-    UINT8                   trace_level;            /* Trace level */
+    bool                    graceful_disable;       /* TRUE if NFA_Disable () is called with TRUE */
+    bool                    timers_disabled;        /* TRUE if sys timers disabled */
+    uint8_t                 trace_level;            /* Trace level */
 } tNFA_SYS_CB;
 
 
@@ -71,6 +71,6 @@ extern tNFA_SYS_CB nfa_sys_cb;
 /* system manager configuration structure */
 extern tNFA_SYS_CFG *p_nfa_sys_cfg;
 
-BOOLEAN nfa_sys_sm_execute (BT_HDR *p_msg);
+bool    nfa_sys_sm_execute (BT_HDR *p_msg);
 
 #endif /* NFA_SYS_INT_H */

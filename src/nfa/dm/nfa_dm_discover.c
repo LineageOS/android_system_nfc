@@ -41,9 +41,9 @@
 **  static functions
 */
 
-static UINT8 nfa_dm_get_rf_discover_config (tNFA_DM_DISC_TECH_PROTO_MASK dm_disc_mask,
+static uint8_t nfa_dm_get_rf_discover_config (tNFA_DM_DISC_TECH_PROTO_MASK dm_disc_mask,
                                             tNFC_DISCOVER_PARAMS disc_params[],
-                                            UINT8 max_params);
+                                            uint8_t max_params);
 static tNFA_STATUS nfa_dm_set_rf_listen_mode_config (tNFA_DM_DISC_TECH_PROTO_MASK tech_proto_mask);
 static void nfa_dm_set_rf_listen_mode_raw_config (tNFA_DM_DISC_TECH_PROTO_MASK *p_disc_mask);
 static tNFA_DM_DISC_TECH_PROTO_MASK nfa_dm_disc_get_disc_mask (tNFC_RF_TECH_N_MODE tech_n_mode,
@@ -51,21 +51,21 @@ static tNFA_DM_DISC_TECH_PROTO_MASK nfa_dm_disc_get_disc_mask (tNFC_RF_TECH_N_MO
 static void nfa_dm_notify_discovery (tNFA_DM_RF_DISC_DATA *p_data);
 static tNFA_STATUS nfa_dm_disc_notify_activation (tNFC_DISCOVER *p_data);
 static void nfa_dm_disc_notify_deactivation (tNFA_DM_RF_DISC_SM_EVENT sm_event, tNFC_DISCOVER *p_data);
-static void nfa_dm_disc_data_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data);
+static void nfa_dm_disc_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data);
 static void nfa_dm_disc_kovio_timeout_cback (TIMER_LIST_ENT *p_tle);
 static void nfa_dm_disc_report_kovio_presence_check (tNFC_STATUS status);
 
 #if (BT_TRACE_VERBOSE == TRUE)
-static char *nfa_dm_disc_state_2_str (UINT8 state);
-static char *nfa_dm_disc_event_2_str (UINT8 event);
+static char *nfa_dm_disc_state_2_str (uint8_t state);
+static char *nfa_dm_disc_event_2_str (uint8_t event);
 #endif
 
 typedef struct nfa_dm_p2p_prio_logic
 {
-    BOOLEAN          isodep_detected; /* flag to check if ISO-DEP is detected */
-    BOOLEAN          timer_expired;   /* flag to check whether timer is expired */
+    bool             isodep_detected; /* flag to check if ISO-DEP is detected */
+    bool             timer_expired;   /* flag to check whether timer is expired */
     TIMER_LIST_ENT   timer_list; /*timer structure pointer */
-    UINT8            first_tech_mode;
+    uint8_t          first_tech_mode;
 }nfa_dm_p2p_prio_logic_t;
 
 static nfa_dm_p2p_prio_logic_t p2p_prio_logic_data;
@@ -79,11 +79,11 @@ static nfa_dm_p2p_prio_logic_t p2p_prio_logic_data;
 ** Returns          number of RF discovery configurations
 **
 *******************************************************************************/
-static UINT8 nfa_dm_get_rf_discover_config (tNFA_DM_DISC_TECH_PROTO_MASK dm_disc_mask,
+static uint8_t nfa_dm_get_rf_discover_config (tNFA_DM_DISC_TECH_PROTO_MASK dm_disc_mask,
                                             tNFC_DISCOVER_PARAMS         disc_params[],
-                                            UINT8 max_params)
+                                            uint8_t max_params)
 {
-    UINT8 num_params = 0;
+    uint8_t num_params = 0;
 
     if (nfa_dm_cb.flags & NFA_DM_FLAGS_LISTEN_DISABLED)
     {
@@ -283,9 +283,9 @@ static UINT8 nfa_dm_get_rf_discover_config (tNFA_DM_DISC_TECH_PROTO_MASK dm_disc
 *******************************************************************************/
 static tNFA_STATUS nfa_dm_set_rf_listen_mode_config (tNFA_DM_DISC_TECH_PROTO_MASK tech_proto_mask)
 {
-    UINT8 params[40], *p;
-    UINT8 platform  = 0;
-    UINT8 sens_info = 0;
+    uint8_t params[40], *p;
+    uint8_t platform  = 0;
+    uint8_t sens_info = 0;
 
     NFA_TRACE_DEBUG1 ("nfa_dm_set_rf_listen_mode_config () tech_proto_mask = 0x%08X",
                        tech_proto_mask);
@@ -398,7 +398,7 @@ static tNFA_STATUS nfa_dm_set_rf_listen_mode_config (tNFA_DM_DISC_TECH_PROTO_MAS
 
     if (p > params)
     {
-        nfa_dm_check_set_config ((UINT8) (p - params), params, FALSE);
+        nfa_dm_check_set_config ((uint8_t) (p - params), params, FALSE);
     }
 
     return NFA_STATUS_OK;
@@ -415,7 +415,7 @@ static tNFA_STATUS nfa_dm_set_rf_listen_mode_config (tNFA_DM_DISC_TECH_PROTO_MAS
 *******************************************************************************/
 static void nfa_dm_set_total_duration (void)
 {
-    UINT8 params[10], *p;
+    uint8_t params[10], *p;
 
     NFA_TRACE_DEBUG0 ("nfa_dm_set_total_duration ()");
 
@@ -428,7 +428,7 @@ static void nfa_dm_set_total_duration (void)
 
     if (p > params)
     {
-        nfa_dm_check_set_config ((UINT8) (p - params), params, FALSE);
+        nfa_dm_check_set_config ((uint8_t) (p - params), params, FALSE);
     }
 }
 
@@ -445,7 +445,7 @@ static void nfa_dm_set_rf_listen_mode_raw_config (tNFA_DM_DISC_TECH_PROTO_MASK *
 {
     tNFA_DM_DISC_TECH_PROTO_MASK disc_mask = 0;
     tNFA_LISTEN_CFG  *p_cfg = &nfa_dm_cb.disc_cb.excl_listen_config;
-    UINT8 params[250], *p, xx;
+    uint8_t params[250], *p, xx;
 
     NFA_TRACE_DEBUG0 ("nfa_dm_set_rf_listen_mode_raw_config ()");
 
@@ -497,7 +497,7 @@ static void nfa_dm_set_rf_listen_mode_raw_config (tNFA_DM_DISC_TECH_PROTO_MASK *
         UINT8_TO_STREAM (p, p_cfg->la_nfcid1_len);
         ARRAY_TO_STREAM (p, p_cfg->la_nfcid1, p_cfg->la_nfcid1_len);
 
-        nfa_dm_check_set_config ((UINT8) (p - params), params, FALSE);
+        nfa_dm_check_set_config ((uint8_t) (p - params), params, FALSE);
     }
 
     /*
@@ -528,7 +528,7 @@ static void nfa_dm_set_rf_listen_mode_raw_config (tNFA_DM_DISC_TECH_PROTO_MASK *
         UINT8_TO_STREAM (p, NCI_PARAM_LEN_LB_ADC_FO);
         UINT8_TO_STREAM (p, p_cfg->lb_adc_fo);
 
-        nfa_dm_check_set_config ((UINT8) (p - params), params, FALSE);
+        nfa_dm_check_set_config ((uint8_t) (p - params), params, FALSE);
 
         if (p_cfg->lb_sensb_info & NCI_LISTEN_PROTOCOL_ISO_DEP)
         {
@@ -571,7 +571,7 @@ static void nfa_dm_set_rf_listen_mode_raw_config (tNFA_DM_DISC_TECH_PROTO_MASK *
         UINT8_TO_STREAM (p,  NCI_PARAM_LEN_LF_T3T_PMM);
         ARRAY_TO_STREAM (p,  p_cfg->lf_t3t_pmm, NCI_PARAM_LEN_LF_T3T_PMM);
 
-        nfa_dm_check_set_config ((UINT8) (p - params), params, FALSE);
+        nfa_dm_check_set_config ((uint8_t) (p - params), params, FALSE);
 
         if (p_cfg->lf_t3t_flags != NCI_LF_T3T_FLAGS2_ALL_DISABLED)
         {
@@ -609,7 +609,7 @@ static void nfa_dm_set_rf_listen_mode_raw_config (tNFA_DM_DISC_TECH_PROTO_MASK *
             ARRAY_TO_STREAM (p, p_cfg->lb_h_info_resp, p_cfg->lb_h_info_resp_len);
         }
 
-        nfa_dm_check_set_config ((UINT8) (p - params), params, FALSE);
+        nfa_dm_check_set_config ((uint8_t) (p - params), params, FALSE);
     }
 
     /*
@@ -632,7 +632,7 @@ static void nfa_dm_set_rf_listen_mode_raw_config (tNFA_DM_DISC_TECH_PROTO_MASK *
         UINT8_TO_STREAM (p, 1);
         UINT8_TO_STREAM (p, p_cfg->ln_atr_res_config);
 
-        nfa_dm_check_set_config ((UINT8) (p - params), params, FALSE);
+        nfa_dm_check_set_config ((uint8_t) (p - params), params, FALSE);
     }
 
     *p_disc_mask = disc_mask;
@@ -844,7 +844,7 @@ static void nfa_dm_disc_notify_started (tNFA_STATUS status)
 ** Returns          nothing
 **
 *******************************************************************************/
-void nfa_dm_disc_conn_event_notify (UINT8 event, tNFA_STATUS status)
+void nfa_dm_disc_conn_event_notify (uint8_t event, tNFA_STATUS status)
 {
     tNFA_CONN_EVT_DATA      evt_data;
 
@@ -970,8 +970,8 @@ void nfa_dm_start_rf_discover (void)
 {
     tNFC_DISCOVER_PARAMS    disc_params[NFA_DM_MAX_DISC_PARAMS];
     tNFA_DM_DISC_TECH_PROTO_MASK dm_disc_mask = 0, poll_mask, listen_mask;
-    UINT8                   config_params[10], *p;
-    UINT8                   num_params, xx;
+    uint8_t                 config_params[10], *p;
+    uint8_t                 num_params, xx;
 
     NFA_TRACE_DEBUG0 ("nfa_dm_start_rf_discover ()");
     /* Make sure that RF discovery was enabled, or some app has exclusive control */
@@ -1198,7 +1198,7 @@ static void nfa_dm_notify_discovery (tNFA_DM_RF_DISC_DATA *p_data)
 ** Returns          TRUE if repeated activation. No need to notify activated event to upper layer
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_disc_handle_kovio_activation (tNFC_DISCOVER *p_data, tNFA_DISCOVER_CBACK *p_disc_cback)
+bool    nfa_dm_disc_handle_kovio_activation (tNFC_DISCOVER *p_data, tNFA_DISCOVER_CBACK *p_disc_cback)
 {
     tNFC_DISCOVER disc_data;
 
@@ -1255,8 +1255,8 @@ BOOLEAN nfa_dm_disc_handle_kovio_activation (tNFC_DISCOVER *p_data, tNFA_DISCOVE
 *******************************************************************************/
 static tNFA_STATUS nfa_dm_disc_notify_activation (tNFC_DISCOVER *p_data)
 {
-    UINT8   xx, host_id_in_LRT;
-    UINT8   iso_dep_t3t__listen = NFA_DM_DISC_NUM_ENTRIES;
+    uint8_t xx, host_id_in_LRT;
+    uint8_t iso_dep_t3t__listen = NFA_DM_DISC_NUM_ENTRIES;
 
     tNFC_RF_TECH_N_MODE tech_n_mode = p_data->activate.rf_tech_param.mode;
     tNFC_PROTOCOL       protocol    = p_data->activate.protocol;
@@ -1596,7 +1596,7 @@ tNFC_STATUS nfa_dm_disc_sleep_wakeup (void)
 ** Returns          TRUE if NFA_SendRawFrame is called
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_is_raw_frame_session (void)
+bool    nfa_dm_is_raw_frame_session (void)
 {
     return ((nfa_dm_cb.flags & NFA_DM_FLAGS_RAW_FRAME) ? TRUE : FALSE);
 }
@@ -1611,7 +1611,7 @@ BOOLEAN nfa_dm_is_raw_frame_session (void)
 ** Returns          TRUE if NFA_SendRawFrame is called
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_is_p2p_paused (void)
+bool    nfa_dm_is_p2p_paused (void)
 {
     return ((nfa_dm_cb.flags & NFA_DM_FLAGS_P2P_PAUSED) ? TRUE : FALSE);
 }
@@ -1769,7 +1769,7 @@ static void nfa_dm_disc_report_kovio_presence_check (tNFC_STATUS status)
 ** Returns          void
 **
 *******************************************************************************/
-static void nfa_dm_disc_data_cback (UINT8 conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
+static void nfa_dm_disc_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
 {
     NFA_TRACE_DEBUG0 ("nfa_dm_disc_data_cback ()");
 
@@ -1854,7 +1854,7 @@ void nfa_dm_disc_new_state (tNFA_DM_RF_DISC_STATE new_state)
 static void nfa_dm_disc_sm_idle (tNFA_DM_RF_DISC_SM_EVENT event,
                                  tNFA_DM_RF_DISC_DATA *p_data)
 {
-    UINT8              xx;
+    uint8_t            xx;
 
     switch (event)
     {
@@ -2159,8 +2159,8 @@ static void nfa_dm_disc_sm_w4_host_select (tNFA_DM_RF_DISC_SM_EVENT event,
 {
     tNFA_CONN_EVT_DATA conn_evt;
     tNFA_DM_DISC_FLAGS  old_sleep_wakeup_flag = (nfa_dm_cb.disc_cb.disc_flags & NFA_DM_DISC_FLAGS_CHECKING);
-    BOOLEAN             sleep_wakeup_event = FALSE;
-    BOOLEAN             sleep_wakeup_event_processed = FALSE;
+    bool                sleep_wakeup_event = FALSE;
+    bool                sleep_wakeup_event_processed = FALSE;
     tNFA_STATUS         status;
 
     switch (event)
@@ -2273,8 +2273,8 @@ static void nfa_dm_disc_sm_poll_active (tNFA_DM_RF_DISC_SM_EVENT event,
 {
     tNFC_STATUS status;
     tNFA_DM_DISC_FLAGS  old_sleep_wakeup_flag = (nfa_dm_cb.disc_cb.disc_flags & NFA_DM_DISC_FLAGS_CHECKING);
-    BOOLEAN             sleep_wakeup_event = FALSE;
-    BOOLEAN             sleep_wakeup_event_processed = FALSE;
+    bool                sleep_wakeup_event = FALSE;
+    bool                sleep_wakeup_event_processed = FALSE;
     tNFC_DEACTIVATE_DEVT deact;
 
     switch (event)
@@ -2702,7 +2702,7 @@ tNFA_HANDLE nfa_dm_add_rf_discover (tNFA_DM_DISC_TECH_PROTO_MASK disc_mask,
                                     tNFA_DM_DISC_HOST_ID         host_id,
                                     tNFA_DISCOVER_CBACK         *p_disc_cback)
 {
-    UINT8       xx;
+    uint8_t     xx;
 
     NFA_TRACE_DEBUG1 ("nfa_dm_add_rf_discover () disc_mask=0x%x", disc_mask);
 
@@ -2837,7 +2837,7 @@ void nfa_dm_delete_rf_discover (tNFA_HANDLE handle)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_dm_rf_discover_select (UINT8             rf_disc_id,
+void nfa_dm_rf_discover_select (uint8_t           rf_disc_id,
                                        tNFA_NFC_PROTOCOL protocol,
                                        tNFA_INTF_TYPE    rf_interface)
 {
@@ -2937,7 +2937,7 @@ tNFA_STATUS nfa_dm_rf_deactivate (tNFA_DEACTIVATE_TYPE deactivate_type)
 ** Description      convert nfc discovery state to string
 **
 *******************************************************************************/
-static char *nfa_dm_disc_state_2_str (UINT8 state)
+static char *nfa_dm_disc_state_2_str (uint8_t state)
 {
     switch (state)
     {
@@ -2978,7 +2978,7 @@ static char *nfa_dm_disc_state_2_str (UINT8 state)
 ** Description      convert nfc discovery RSP/NTF to string
 **
 *******************************************************************************/
-static char *nfa_dm_disc_event_2_str (UINT8 event)
+static char *nfa_dm_disc_event_2_str (uint8_t event)
 {
     switch (event)
     {
@@ -3030,7 +3030,7 @@ static char *nfa_dm_disc_event_2_str (UINT8 event)
 ** Returns          True if success
 **
 *******************************************************************************/
-BOOLEAN nfa_dm_p2p_prio_logic (UINT8 event, UINT8 *p, UINT8 event_type)
+bool    nfa_dm_p2p_prio_logic (uint8_t event, uint8_t *p, uint8_t event_type)
 {
     if (!nfa_poll_bail_out_mode)
     {
@@ -3050,7 +3050,7 @@ BOOLEAN nfa_dm_p2p_prio_logic (UINT8 event, UINT8 *p, UINT8 event_type)
         NFA_TRACE_DEBUG0 ("nfa_dm_p2p_prio_logic starting a timer for next rf intf activated ntf");
         nfc_start_quick_timer (&p2p_prio_logic_data.timer_list,
                         NFC_TTYPE_P2P_PRIO_LOGIC_CLEANUP,
-                        ((UINT32) nfa_dm_act_get_rf_disc_duration() * QUICK_TIMER_TICKS_PER_SEC) / 1000);
+                        ((uint32_t) nfa_dm_act_get_rf_disc_duration() * QUICK_TIMER_TICKS_PER_SEC) / 1000);
         return TRUE;
     }
 
@@ -3062,10 +3062,10 @@ BOOLEAN nfa_dm_p2p_prio_logic (UINT8 event, UINT8 *p, UINT8 event_type)
 
     if (nfa_dm_cb.disc_cb.disc_state == NFA_DM_RFST_DISCOVERY)
     {
-        UINT8 rf_disc_id = 0xFF;
-        UINT8 type = 0xFF;
-        UINT8 protocol = 0xFF;
-        UINT8 tech_mode = 0xFF;
+        uint8_t rf_disc_id = 0xFF;
+        uint8_t type = 0xFF;
+        uint8_t protocol = 0xFF;
+        uint8_t tech_mode = 0xFF;
 
         NFA_TRACE_DEBUG0 ("P2P_Prio_Logic");
 
@@ -3159,7 +3159,7 @@ BOOLEAN nfa_dm_p2p_prio_logic (UINT8 event, UINT8 *p, UINT8 event_type)
 
             nfc_start_quick_timer (&p2p_prio_logic_data.timer_list,
                                    NFC_TTYPE_P2P_PRIO_RESPONSE,
-                                   ((UINT32) 160 * QUICK_TIMER_TICKS_PER_SEC) / 1000 );
+                                   ((uint32_t) 160 * QUICK_TIMER_TICKS_PER_SEC) / 1000 );
 
             NFA_TRACE_DEBUG0 ("P2P_Start_Timer");
 

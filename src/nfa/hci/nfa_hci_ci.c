@@ -38,7 +38,7 @@
 ** Returns          none
 **
 *******************************************************************************/
-void nfa_nv_ci_read (UINT16 num_bytes_read, tNFA_NV_CO_STATUS status, UINT8 block)
+void nfa_nv_ci_read (uint16_t num_bytes_read, tNFA_NV_CO_STATUS status, uint8_t block)
 {
     tNFA_HCI_EVENT_DATA *p_msg;
 

@@ -44,7 +44,7 @@ extern "C" {
 #define UUSB_DRV_UNSUPPORTED_SETUP_REQ                3   // Unsupported SETUP request (use with tUSER_EP0_SETUP_CB)
 #define UUSB_DRV_NO_BUFFER_AVAILABLE                  4   // User cannot provide a Buffer (use with CB functions)
 
-typedef UINT8 tUUSB_STATUS;
+typedef uint8_t tUUSB_STATUS;
 
 
 #define  UUSB_EP1   0
@@ -55,7 +55,7 @@ typedef UINT8 tUUSB_STATUS;
 #define  UUSB_EP6   5
 #define  UUSB_EP7   6
 
-typedef UINT8 tUUSB_EP_ID;
+typedef uint8_t tUUSB_EP_ID;
 
 typedef enum {
   UUSB_EP_TYPE_CONTROL = 0,
@@ -80,24 +80,24 @@ typedef struct tUUSB_SETUP_PKTTag
 #define UUSB_STANDARD_REQUEST	0x00	/* Standard request */
 #define	UUSB_CLASS_REQUEST		0x20	/* Class request */
 #define	UUSB_VENDOR_REQUEST		0x40	/* Vendor request */
-  UINT8 bmRequestType;
-  UINT8 bRequest;
-  UINT16 wValue;
-  UINT16 wIndex;
-  UINT16 wLength;
+  uint8_t bmRequestType;
+  uint8_t bRequest;
+  uint16_t wValue;
+  uint16_t wIndex;
+  uint16_t wLength;
 } tUUSB_SETUP_PKT;
 
 typedef union
 {
 #define UUSB_HEAD_SIZE (8)
-	UINT8           HeadBytes[UUSB_HEAD_SIZE];
+	uint8_t         HeadBytes[UUSB_HEAD_SIZE];
     tUUSB_SETUP_PKT Setup;
 } tSETUP_OR_HEAD;
 
 typedef struct
 {
-  UINT8        BufSize;
-  UINT8        NumBytesInBuf;
+  uint8_t      BufSize;
+  uint8_t      NumBytesInBuf;
   tSETUP_OR_HEAD Buf;
 } tUUSB_RX_HEAD;
 
@@ -108,7 +108,7 @@ typedef enum
   UUSB_EP_STALL
 } tUUSB_EP_STATE;
 
-typedef UINT8 tEndPoint;
+typedef uint8_t tEndPoint;
 
 #if 0
 #define  UUSB_ATTACHED      0
@@ -118,7 +118,7 @@ typedef UINT8 tEndPoint;
 #define  UUSB_CONFIGURED    4
 #define  UUSB_SUSPENDED     5
 
-typedef UINT8 tUUSB_BUS_STATE;
+typedef uint8_t tUUSB_BUS_STATE;
 #else
 typedef enum
 {
@@ -151,20 +151,20 @@ typedef enum _tUUSB_STANDART_REQ
 
 
 typedef void (*tUUSB_STATE_CB)          (tUUSB_BUS_STATE State);
-typedef void (*tUUSB_PROT_COMPLETE_CB ) (UINT8 *pBuf,UINT16 NumBytesInBuf);
+typedef void (*tUUSB_PROT_COMPLETE_CB ) (uint8_t *pBuf,uint16_t NumBytesInBuf);
 
-typedef tUUSB_STATUS (*tUUSB_PROT_SETUP_CB ) (UINT8 **ppBuf,UINT16 *pBufSize);
+typedef tUUSB_STATUS (*tUUSB_PROT_SETUP_CB ) (uint8_t **ppBuf,uint16_t *pBufSize);
 
 typedef void (*tUUSB_RX_START_CB )      (tUUSB_EP_ID EndPoint,
-                                        UINT8 **ppBuf,
-                                        UINT16 *pBufSize);
+                                        uint8_t **ppBuf,
+                                        uint16_t *pBufSize);
 
 typedef void (*tUUSB_RX_COMPLETE_CB )   (tUUSB_EP_ID EndPoint,
-                                        UINT8 *pRxBuf,
-                                        UINT16 NumBytesInBuf);
+                                        uint8_t *pRxBuf,
+                                        uint16_t NumBytesInBuf);
 
 typedef void (*tUUSB_TX_COMPLETE_CB )   (tUUSB_EP_ID EndPoint,
-                                        UINT8 *pRxBuf);
+                                        uint8_t *pRxBuf);
 /*******************************************************************************
 ** Function Prototypes
 *******************************************************************************/
@@ -235,12 +235,12 @@ BT_API extern tUUSB_STATUS    UUSB_Stop      (void);
 ** Returns
 **
 ******************************************************************************/
-BT_API extern tUUSB_STATUS    UUSB_SetEndPointCnf ( BOOLEAN         IsIN_EndPoint,
+BT_API extern tUUSB_STATUS    UUSB_SetEndPointCnf ( bool            IsIN_EndPoint,
                                                     tUUSB_EP_ID     EndPoint,
-                                                    UINT8           MaxPacketSize,
+                                                    uint8_t         MaxPacketSize,
                                                     tUUSB_EP_TYPE   EndPointType,
                                                     tUUSB_RX_HEAD   *pRxHead,
-                                                    UINT16          RxTimeOut);
+                                                    uint16_t        RxTimeOut);
 
 
 /******************************************************************************
@@ -267,8 +267,8 @@ BT_API extern tUUSB_STATUS UUSB_SetEndPointState (tUUSB_EP_ID    EndPoint,
 **
 ******************************************************************************/
 BT_API extern tUUSB_STATUS UUSB_WriteEndPoint (tUUSB_EP_ID     EndPoint,
-                                                UINT16     Length,
-                                                UINT8*    pBuf);
+                                                uint16_t   Length,
+                                                uint8_t*    pBuf);
 
 /******************************************************************************
 **

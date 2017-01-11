@@ -43,18 +43,18 @@ static void * sPrmBuf = NULL;
 static void * sI2cFixPrmBuf = NULL;
 
 #define CONFIG_MAX_LEN 256
-static UINT8 sConfig [CONFIG_MAX_LEN];
+static uint8_t sConfig [CONFIG_MAX_LEN];
 static StartupConfig sStartupConfig;
 static StartupConfig sLptdConfig;
 static StartupConfig sPreDiscoveryConfig;
 static StartupConfig sXtalCustomParam;
-extern UINT8 *p_nfc_hal_dm_start_up_cfg; //defined in the HAL
-static UINT8 nfa_dm_start_up_vsc_cfg[CONFIG_MAX_LEN];
-extern UINT8 *p_nfc_hal_dm_start_up_vsc_cfg; //defined in the HAL
-extern UINT8 *p_nfc_hal_dm_lptd_cfg; //defined in the HAL
-static UINT8 sDontSendLptd[] = { 0 };
-extern UINT8 *p_nfc_hal_pre_discover_cfg; //defined in the HAL
-extern UINT8 *p_nfc_hal_dm_xtal_params_cfg; //defined in HAL
+extern uint8_t *p_nfc_hal_dm_start_up_cfg; //defined in the HAL
+static uint8_t nfa_dm_start_up_vsc_cfg[CONFIG_MAX_LEN];
+extern uint8_t *p_nfc_hal_dm_start_up_vsc_cfg; //defined in the HAL
+extern uint8_t *p_nfc_hal_dm_lptd_cfg; //defined in the HAL
+static uint8_t sDontSendLptd[] = { 0 };
+extern uint8_t *p_nfc_hal_pre_discover_cfg; //defined in the HAL
+extern uint8_t *p_nfc_hal_dm_xtal_params_cfg; //defined in HAL
 
 extern tSNOOZE_MODE_CONFIG gSnoozeModeCfg;
 extern tNFC_HAL_CFG *p_nfc_hal_cfg;
@@ -135,7 +135,7 @@ static long getFileLength(FILE* fp)
 ** Returns          TRUE if file exists
 **
 *******************************************************************************/
-static BOOLEAN isFileExist(const char *pFilename)
+static bool    isFileExist(const char *pFilename)
 {
     FILE *pf;
 
@@ -158,21 +158,21 @@ static BOOLEAN isFileExist(const char *pFilename)
 *******************************************************************************/
 static const char* findPatchramFile(const char * pConfigName, char * pBuffer, int bufferLen)
 {
-    ALOGD("%s: config=%s", __FUNCTION__, pConfigName);
+    ALOGD("%s: config=%s", __func__, pConfigName);
 
     if (pConfigName == NULL)
     {
-        ALOGD("%s No patchfile defined\n", __FUNCTION__);
+        ALOGD("%s No patchfile defined\n", __func__);
         return NULL;
     }
 
     if (GetStrValue(pConfigName, &pBuffer[0], bufferLen))
     {
-        ALOGD("%s found patchfile %s\n", __FUNCTION__, pBuffer);
+        ALOGD("%s found patchfile %s\n", __func__, pBuffer);
         return (pBuffer[0] == '\0') ? NULL : pBuffer;
     }
 
-    ALOGD("%s Cannot find patchfile '%s'\n", __FUNCTION__, pConfigName);
+    ALOGD("%s Cannot find patchfile '%s'\n", __func__, pConfigName);
     return NULL;
 }
 
@@ -187,7 +187,7 @@ static const char* findPatchramFile(const char * pConfigName, char * pBuffer, in
 *******************************************************************************/
 static void continueAfterSetSnoozeMode(tHAL_NFC_STATUS status)
 {
-    ALOGD("%s: status=%u", __FUNCTION__, status);
+    ALOGD("%s: status=%u", __func__, status);
     //let stack download firmware during next initialization
     nfc_post_reset_cb.spd_skip_on_power_cycle = FALSE;
     if (status == NCI_STATUS_OK)
@@ -207,11 +207,11 @@ static void continueAfterSetSnoozeMode(tHAL_NFC_STATUS status)
 *******************************************************************************/
 static void postDownloadPatchram(tHAL_NFC_STATUS status)
 {
-    ALOGD("%s: status=%i", __FUNCTION__, status);
+    ALOGD("%s: status=%i", __func__, status);
     GetStrValue (NAME_SNOOZE_MODE_CFG, (char*)&gSnoozeModeCfg, sizeof(gSnoozeModeCfg));
     if (status != HAL_NFC_STATUS_OK)
     {
-        ALOGE("%s: Patch download failed", __FUNCTION__);
+        ALOGE("%s: Patch download failed", __func__);
         if (status == HAL_NFC_STATUS_REFUSED)
         {
             SpdHelper::setPatchAsBad();
@@ -225,7 +225,7 @@ static void postDownloadPatchram(tHAL_NFC_STATUS status)
         else
         {
             /* otherwise, power cycle the chip and let the stack startup normally */
-            ALOGD("%s: re-init; don't download firmware", __FUNCTION__);
+            ALOGD("%s: re-init; don't download firmware", __func__);
             //stop stack from downloading firmware during next initialization
             nfc_post_reset_cb.spd_skip_on_power_cycle = TRUE;
             USERIAL_PowerupDevice(0);
@@ -243,13 +243,13 @@ static void postDownloadPatchram(tHAL_NFC_STATUS status)
                                        continueAfterSetSnoozeMode);
         if (status != NCI_STATUS_OK)
         {
-            ALOGE("%s: Setting snooze mode failed, status=%i", __FUNCTION__, status);
+            ALOGE("%s: Setting snooze mode failed, status=%i", __func__, status);
             HAL_NfcPreInitDone(HAL_NFC_STATUS_FAILED);
         }
     }
     else
     {
-        ALOGD("%s: Not using Snooze Mode", __FUNCTION__);
+        ALOGD("%s: Not using Snooze Mode", __func__);
         HAL_NfcPreInitDone(HAL_NFC_STATUS_OK);
     }
 }
@@ -264,9 +264,9 @@ static void postDownloadPatchram(tHAL_NFC_STATUS status)
 ** Returns:     none
 **
 *******************************************************************************/
-void prmCallback(UINT8 event)
+void prmCallback(uint8_t event)
 {
-    ALOGD("%s: event=0x%x", __FUNCTION__, event);
+    ALOGD("%s: event=0x%x", __func__, event);
     switch (event)
     {
     case NFC_HAL_PRM_CONTINUE_EVT:
@@ -282,22 +282,22 @@ void prmCallback(UINT8 event)
         break;
 
     case NFC_HAL_PRM_ABORT_INVALID_PATCH_EVT:
-        ALOGD("%s: invalid patch...skipping patch download", __FUNCTION__);
+        ALOGD("%s: invalid patch...skipping patch download", __func__);
         postDownloadPatchram(HAL_NFC_STATUS_REFUSED);
         break;
 
     case NFC_HAL_PRM_ABORT_BAD_SIGNATURE_EVT:
-        ALOGD("%s: patch authentication failed", __FUNCTION__);
+        ALOGD("%s: patch authentication failed", __func__);
         postDownloadPatchram(HAL_NFC_STATUS_REFUSED);
         break;
 
     case NFC_HAL_PRM_ABORT_NO_NVM_EVT:
-        ALOGD("%s: No NVM detected", __FUNCTION__);
+        ALOGD("%s: No NVM detected", __func__);
         HAL_NfcPreInitDone(HAL_NFC_STATUS_FAILED);
         break;
 
     default:
-        ALOGD("%s: not handled event=0x%x", __FUNCTION__, event);
+        ALOGD("%s: not handled event=0x%x", __func__, event);
         break;
     }
 }
@@ -312,7 +312,7 @@ void prmCallback(UINT8 event)
 ** Returns:         None
 **
 *******************************************************************************/
-static void getNfaValues (UINT32 chipid)
+static void getNfaValues (uint32_t chipid)
 {
     unsigned long num = 0;
     int actualLen = 0;
@@ -348,7 +348,7 @@ static void getNfaValues (UINT32 chipid)
     if (actualLen)
     {
         sLptdConfig.append (sConfig, actualLen);
-        p_nfc_hal_dm_lptd_cfg = const_cast<UINT8*> (sLptdConfig.getInternalBuffer ());
+        p_nfc_hal_dm_lptd_cfg = const_cast<uint8_t*> (sLptdConfig.getInternalBuffer ());
     }
     else
     {
@@ -357,14 +357,14 @@ static void getNfaValues (UINT32 chipid)
     }
 
     mayDisableSecureElement (sStartupConfig);
-    p_nfc_hal_dm_start_up_cfg = const_cast<UINT8*> (sStartupConfig.getInternalBuffer ());
+    p_nfc_hal_dm_start_up_cfg = const_cast<uint8_t*> (sStartupConfig.getInternalBuffer ());
 
     actualLen = GetStrValue(NAME_NFA_DM_PRE_DISCOVERY_CFG, (char*)sConfig, sizeof(sConfig));
     if (actualLen)
     {
         sPreDiscoveryConfig.append (sConfig, actualLen);
         mayDisableSecureElement (sPreDiscoveryConfig);
-        p_nfc_hal_pre_discover_cfg = const_cast<UINT8*> (sPreDiscoveryConfig.getInternalBuffer ());
+        p_nfc_hal_pre_discover_cfg = const_cast<uint8_t*> (sPreDiscoveryConfig.getInternalBuffer ());
     }
 
     //configure how many secure elements are available for each type of chip
@@ -402,13 +402,13 @@ static void getNfaValues (UINT32 chipid)
 ** Returns:         None
 **
 *******************************************************************************/
-static void StartPatchDownload(UINT32 chipid)
+static void StartPatchDownload(uint32_t chipid)
 {
-    ALOGD ("%s: chipid=%lx",__FUNCTION__, chipid);
+    ALOGD ("%s: chipid=%lx",__func__, chipid);
 
     char chipID[30];
     sprintf(chipID, "%lx", chipid);
-    ALOGD ("%s: chidId=%s", __FUNCTION__, chipID);
+    ALOGD ("%s: chidId=%s", __func__, chipID);
 
     readOptionalConfig(chipID);     // Read optional chip specific settings
     readOptionalConfig("fime");     // Read optional FIME specific settings
@@ -424,29 +424,29 @@ static void StartPatchDownload(UINT32 chipid)
         {
             if ((fd = fopen(sPrePatchFn, "rb")) != NULL)
             {
-                UINT32 lenPrmBuffer = getFileLength(fd);
+                uint32_t lenPrmBuffer = getFileLength(fd);
 
                 if ((sI2cFixPrmBuf = malloc(lenPrmBuffer)) != NULL)
                 {
                     size_t actualLen = fread(sI2cFixPrmBuf, 1, lenPrmBuffer, fd);
                     if (actualLen == lenPrmBuffer)
                     {
-                        ALOGD("%s Setting I2C fix to %s (size: %lu)", __FUNCTION__, sPrePatchFn, lenPrmBuffer);
-                        HAL_NfcPrmSetI2cPatch((UINT8*)sI2cFixPrmBuf, (UINT16)lenPrmBuffer, 0);
+                        ALOGD("%s Setting I2C fix to %s (size: %lu)", __func__, sPrePatchFn, lenPrmBuffer);
+                        HAL_NfcPrmSetI2cPatch((uint8_t*)sI2cFixPrmBuf, (uint16_t)lenPrmBuffer, 0);
                     }
                     else
-                        ALOGE("%s fail reading i2c fix; actual len=%zu; expected len=%lu", __FUNCTION__, actualLen, lenPrmBuffer);
+                        ALOGE("%s fail reading i2c fix; actual len=%zu; expected len=%lu", __func__, actualLen, lenPrmBuffer);
                 }
                 else
                 {
-                    ALOGE("%s Unable to get buffer to i2c fix (%lu bytes)", __FUNCTION__, lenPrmBuffer);
+                    ALOGE("%s Unable to get buffer to i2c fix (%lu bytes)", __func__, lenPrmBuffer);
                 }
 
                 fclose(fd);
             }
             else
             {
-                ALOGE("%s Unable to open i2c fix patchfile %s", __FUNCTION__, sPrePatchFn);
+                ALOGE("%s Unable to open i2c fix patchfile %s", __func__, sPrePatchFn);
             }
         }
     }
@@ -457,35 +457,35 @@ static void StartPatchDownload(UINT32 chipid)
         /* If a patch file was specified, then download it now */
         if (sPatchFn[0] != '\0')
         {
-            UINT32 bDownloadStarted = false;
+            uint32_t bDownloadStarted = false;
 
             /* open patchfile, read it into a buffer */
             if ((fd = fopen(sPatchFn, "rb")) != NULL)
             {
-                UINT32 lenPrmBuffer = getFileLength(fd);
-                ALOGD("%s Downloading patchfile %s (size: %lu) format=%u", __FUNCTION__, sPatchFn, lenPrmBuffer, NFC_HAL_PRM_FORMAT_NCD);
+                uint32_t lenPrmBuffer = getFileLength(fd);
+                ALOGD("%s Downloading patchfile %s (size: %lu) format=%u", __func__, sPatchFn, lenPrmBuffer, NFC_HAL_PRM_FORMAT_NCD);
                 if ((sPrmBuf = malloc(lenPrmBuffer)) != NULL)
                 {
                     size_t actualLen = fread(sPrmBuf, 1, lenPrmBuffer, fd);
                     if (actualLen == lenPrmBuffer)
                     {
-                        if (!SpdHelper::isPatchBad((UINT8*)sPrmBuf, lenPrmBuffer))
+                        if (!SpdHelper::isPatchBad((uint8_t*)sPrmBuf, lenPrmBuffer))
                         {
                             /* Download patch using static memeory mode */
-                            HAL_NfcPrmDownloadStart(NFC_HAL_PRM_FORMAT_NCD, 0, (UINT8*)sPrmBuf, lenPrmBuffer, 0, prmCallback);
+                            HAL_NfcPrmDownloadStart(NFC_HAL_PRM_FORMAT_NCD, 0, (uint8_t*)sPrmBuf, lenPrmBuffer, 0, prmCallback);
                             bDownloadStarted = true;
                         }
                     }
                     else
-                        ALOGE("%s fail reading patchram", __FUNCTION__);
+                        ALOGE("%s fail reading patchram", __func__);
                 }
                 else
-                    ALOGE("%s Unable to buffer to hold patchram (%lu bytes)", __FUNCTION__, lenPrmBuffer);
+                    ALOGE("%s Unable to buffer to hold patchram (%lu bytes)", __func__, lenPrmBuffer);
 
                 fclose(fd);
             }
             else
-                ALOGE("%s Unable to open patchfile %s", __FUNCTION__, sPatchFn);
+                ALOGE("%s Unable to open patchfile %s", __func__, sPatchFn);
 
             /* If the download never got started */
             if (!bDownloadStarted)
@@ -497,12 +497,12 @@ static void StartPatchDownload(UINT32 chipid)
         }
         else
         {
-            ALOGE("%s: No patchfile specified or disabled. Proceeding to post-download procedure...", __FUNCTION__);
+            ALOGE("%s: No patchfile specified or disabled. Proceeding to post-download procedure...", __func__);
             postDownloadPatchram(HAL_NFC_STATUS_OK);
         }
     }
 
-    ALOGD ("%s: exit", __FUNCTION__);
+    ALOGD ("%s: exit", __func__);
 }
 
 /*******************************************************************************
@@ -515,11 +515,11 @@ static void StartPatchDownload(UINT32 chipid)
 ** Returns:     none
 **
 *******************************************************************************/
-void nfc_hal_post_reset_init (UINT32 brcm_hw_id, UINT8 nvm_type)
+void nfc_hal_post_reset_init (uint32_t brcm_hw_id, uint8_t nvm_type)
 {
-    ALOGD("%s: brcm_hw_id=0x%lx, nvm_type=%d", __FUNCTION__, brcm_hw_id, nvm_type);
+    ALOGD("%s: brcm_hw_id=0x%lx, nvm_type=%d", __func__, brcm_hw_id, nvm_type);
     tHAL_NFC_STATUS stat = HAL_NFC_STATUS_FAILED;
-    UINT8 max_credits = 1, allow_no_nvm=0;
+    uint8_t max_credits = 1, allow_no_nvm=0;
 
     p_nfc_hal_cfg->nfc_hal_prm_nvm_required = TRUE; //don't download firmware if controller cannot detect EERPOM
 
@@ -528,7 +528,7 @@ void nfc_hal_post_reset_init (UINT32 brcm_hw_id, UINT8 nvm_type)
         GetNumValue(NAME_ALLOW_NO_NVM, &allow_no_nvm, sizeof(allow_no_nvm));
         if (allow_no_nvm == 0)
         {
-        ALOGD("%s: No NVM detected, FAIL the init stage to force a retry", __FUNCTION__);
+        ALOGD("%s: No NVM detected, FAIL the init stage to force a retry", __func__);
         USERIAL_PowerupDevice (0);
         stat = HAL_NfcReInit ();
             return;
@@ -542,7 +542,7 @@ void nfc_hal_post_reset_init (UINT32 brcm_hw_id, UINT8 nvm_type)
 
         if (GetNumValue(MAX_RF_DATA_CREDITS, &max_credits, sizeof(max_credits)) && (max_credits > 0))
         {
-            ALOGD("%s : max_credits=%d", __FUNCTION__, max_credits);
+            ALOGD("%s : max_credits=%d", __func__, max_credits);
             HAL_NfcSetMaxRfDataCredits(max_credits);
         }
     }
@@ -570,8 +570,8 @@ void mayDisableSecureElement (StartupConfig& config)
     if (len > 0)
     {
         sscanf (valueStr, "%x", &bitmask); //read system property as a hex octet
-        ALOGD ("%s: disable 0x%02X", __FUNCTION__, (UINT8) bitmask);
-        config.disableSecureElement ((UINT8) (bitmask & 0xC0));
+        ALOGD ("%s: disable 0x%02X", __func__, (uint8_t) bitmask);
+        config.disableSecureElement ((uint8_t) (bitmask & 0xC0));
     }
 }
 
@@ -590,31 +590,31 @@ void mayDisableSecureElement (StartupConfig& config)
 void configureCrystalFrequency ()
 {
     unsigned long num = 0;
-    UINT32 hwId = 0;
-    UINT16 xtalFreq = 0;
-    UINT8 xtalIndex = 0;
+    uint32_t hwId = 0;
+    uint16_t xtalFreq = 0;
+    uint8_t xtalIndex = 0;
     int actualLen = 0;
 
     if (GetNumValue (NAME_XTAL_HARDWARE_ID, &num, sizeof(num)))
         hwId = num;
 
     if (GetNumValue (NAME_XTAL_FREQUENCY, &num, sizeof(num)))
-        xtalFreq = (UINT16) num;
+        xtalFreq = (uint16_t) num;
 
     if (GetNumValue (NAME_XTAL_FREQ_INDEX, &num, sizeof(num)))
-        xtalIndex = (UINT8) num;
+        xtalIndex = (uint8_t) num;
 
     actualLen = GetStrValue (NAME_XTAL_PARAMS_CFG, (char*)sConfig, sizeof(sConfig));
     if (actualLen && (xtalIndex == NFC_HAL_XTAL_INDEX_SPECIAL)) //whether to use custom crystal frequency
     {
         sXtalCustomParam.append (sConfig, actualLen);
-        p_nfc_hal_dm_xtal_params_cfg = const_cast<UINT8*> (sXtalCustomParam.getInternalBuffer ());
+        p_nfc_hal_dm_xtal_params_cfg = const_cast<uint8_t*> (sXtalCustomParam.getInternalBuffer ());
     }
 
     if ((hwId == 0) && (xtalFreq == 0) && (xtalIndex == 0))
         return;
 
-    ALOGD ("%s: hwId=0x%lX; freq=%u; index=%u", __FUNCTION__, hwId, xtalFreq, xtalIndex);
+    ALOGD ("%s: hwId=0x%lX; freq=%u; index=%u", __func__, hwId, xtalFreq, xtalIndex);
     nfc_post_reset_cb.dev_init_config.xtal_cfg[0].brcm_hw_id = (hwId & BRCM_NFC_GEN_MASK);
     nfc_post_reset_cb.dev_init_config.xtal_cfg[0].xtal_freq  = xtalFreq;
     nfc_post_reset_cb.dev_init_config.xtal_cfg[0].xtal_index = xtalIndex;

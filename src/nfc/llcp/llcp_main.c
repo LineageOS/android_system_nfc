@@ -46,7 +46,7 @@ tLLCP_CB llcp_cb;
 *******************************************************************************/
 void llcp_init (void)
 {
-    UINT32 pool_count;
+    uint32_t pool_count;
 
     memset (&llcp_cb, 0, sizeof (tLLCP_CB));
 
@@ -74,21 +74,21 @@ void llcp_init (void)
     llcp_cb.num_rx_buff = (pool_count * LLCP_RX_BUFF_RATIO) / 100;
 
     /* rx congestion start/end threshold */
-    llcp_cb.overall_rx_congest_start = (UINT8) ((llcp_cb.num_rx_buff * LLCP_RX_CONGEST_START) / 100);
-    llcp_cb.overall_rx_congest_end   = (UINT8) ((llcp_cb.num_rx_buff * LLCP_RX_CONGEST_END) / 100);
+    llcp_cb.overall_rx_congest_start = (uint8_t) ((llcp_cb.num_rx_buff * LLCP_RX_CONGEST_START) / 100);
+    llcp_cb.overall_rx_congest_end   = (uint8_t) ((llcp_cb.num_rx_buff * LLCP_RX_CONGEST_END) / 100);
 
     /* max number of buffers for receiving data on logical data link */
-    llcp_cb.max_num_ll_rx_buff = (UINT8) ((llcp_cb.num_rx_buff * LLCP_LL_RX_BUFF_LIMIT) / 100);
+    llcp_cb.max_num_ll_rx_buff = (uint8_t) ((llcp_cb.num_rx_buff * LLCP_LL_RX_BUFF_LIMIT) / 100);
 
     LLCP_TRACE_DEBUG4 ("num_rx_buff = %d, rx_congest_start = %d, rx_congest_end = %d, max_num_ll_rx_buff = %d",
                         llcp_cb.num_rx_buff, llcp_cb.overall_rx_congest_start,
                         llcp_cb.overall_rx_congest_end, llcp_cb.max_num_ll_rx_buff);
 
     /* max number of buffers for transmitting data */
-    llcp_cb.max_num_tx_buff    = (UINT8) (pool_count - llcp_cb.num_rx_buff);
+    llcp_cb.max_num_tx_buff    = (uint8_t) (pool_count - llcp_cb.num_rx_buff);
 
     /* max number of buffers for transmitting data on logical data link */
-    llcp_cb.max_num_ll_tx_buff = (UINT8) ((llcp_cb.max_num_tx_buff * LLCP_LL_TX_BUFF_LIMIT) / 100);
+    llcp_cb.max_num_ll_tx_buff = (uint8_t) ((llcp_cb.max_num_tx_buff * LLCP_LL_TX_BUFF_LIMIT) / 100);
 
     LLCP_TRACE_DEBUG2 ("max_num_tx_buff = %d, max_num_ll_tx_buff = %d",
                         llcp_cb.max_num_tx_buff, llcp_cb.max_num_ll_tx_buff);
@@ -109,7 +109,7 @@ void llcp_init (void)
 *******************************************************************************/
 void llcp_cleanup (void)
 {
-    UINT8 sap;
+    uint8_t sap;
     tLLCP_APP_CB *p_app_cb;
 
     LLCP_TRACE_DEBUG0 ("LLCP - llcp_cleanup ()");
@@ -140,7 +140,7 @@ void llcp_cleanup (void)
 *******************************************************************************/
 void llcp_process_timeout (TIMER_LIST_ENT *p_tle)
 {
-    UINT8 reason;
+    uint8_t reason;
 
     LLCP_TRACE_DEBUG1 ("llcp_process_timeout: event=%d", p_tle->event);
 
@@ -180,7 +180,7 @@ void llcp_process_timeout (TIMER_LIST_ENT *p_tle)
 ** Returns          The new or current trace level
 **
 *******************************************************************************/
-UINT8 LLCP_SetTraceLevel (UINT8 new_level)
+uint8_t LLCP_SetTraceLevel (uint8_t new_level)
 {
     if (new_level != 0xFF)
         llcp_cb.trace_level = new_level;

@@ -55,16 +55,16 @@ static SyncEvent gOpenCompletedEvent;
 static SyncEvent gPostInitCompletedEvent;
 static SyncEvent gCloseCompletedEvent;
 
-UINT32 ScrProtocolTraceFlag = SCR_PROTO_TRACE_ALL; //0x017F00;
+uint32_t ScrProtocolTraceFlag = SCR_PROTO_TRACE_ALL; //0x017F00;
 
-static void BroadcomHalCallback (UINT8 event, tHAL_NFC_STATUS status);
-static void BroadcomHalDataCallback (UINT16 data_len, UINT8* p_data);
+static void BroadcomHalCallback (uint8_t event, tHAL_NFC_STATUS status);
+static void BroadcomHalDataCallback (uint16_t data_len, uint8_t* p_data);
 
 static bool isColdBoot = true;
 
 extern tNFC_HAL_CFG *p_nfc_hal_cfg;
-extern const UINT8  nfca_version_string [];
-extern const UINT8  nfa_version_string [];
+extern const uint8_t  nfca_version_string [];
+extern const uint8_t  nfa_version_string [];
 
 tNFC_HAL_DM_PRE_SET_MEM nfc_hal_pre_set_mem_20795a1 [] =
 {
@@ -81,14 +81,14 @@ extern tNFC_HAL_DM_PRE_SET_MEM *p_nfc_hal_dm_pre_set_mem;
 
 int HaiInitializeLibrary (const bcm2079x_dev_t* device)
 {
-    ALOGD ("%s: enter", __FUNCTION__);
-    ALOGE ("%s: ver=%s nfa=%s", __FUNCTION__, nfca_version_string, nfa_version_string);
+    ALOGD ("%s: enter", __func__);
+    ALOGE ("%s: ver=%s nfa=%s", __func__, nfca_version_string, nfa_version_string);
     int retval = EACCES;
     unsigned long freq = 0;
     unsigned long num = 0;
     char temp[120];
     int8_t prop_value;
-    UINT8 logLevel = 0;
+    uint8_t logLevel = 0;
 
     logLevel = InitializeGlobalAppLogLevel ();
 
@@ -105,7 +105,7 @@ int HaiInitializeLibrary (const bcm2079x_dev_t* device)
     verify_hal_non_volatile_store ();
     if ( GetNumValue ( NAME_PRESERVE_STORAGE, (char*)&num, sizeof ( num ) ) &&
             (num == 1) )
-        ALOGD ("%s: preserve HAL NV store", __FUNCTION__);
+        ALOGD ("%s: preserve HAL NV store", __func__);
     else
     {
         delete_hal_non_volatile_store (false);
@@ -218,7 +218,7 @@ int HaiInitializeLibrary (const bcm2079x_dev_t* device)
     HAL_NfcSetTraceLevel (logLevel); // Initialize HAL's logging level
 
     retval = 0;
-    ALOGD ("%s: exit %d", __FUNCTION__, retval);
+    ALOGD ("%s: exit %d", __func__, retval);
     return retval;
 }
 
@@ -226,7 +226,7 @@ int HaiInitializeLibrary (const bcm2079x_dev_t* device)
 int HaiTerminateLibrary ()
 {
     int retval = EACCES;
-    ALOGD ("%s: enter", __FUNCTION__);
+    ALOGD ("%s: enter", __func__);
 
     HAL_NfcTerminate ();
     gAndroidHalCallback = NULL;
@@ -234,14 +234,14 @@ int HaiTerminateLibrary ()
     GKI_shutdown ();
     resetConfig ();
     retval = 0;
-    ALOGD ("%s: exit %d", __FUNCTION__, retval);
+    ALOGD ("%s: exit %d", __func__, retval);
     return retval;
 }
 
 
 int HaiOpen (const bcm2079x_dev_t* device, nfc_stack_callback_t* halCallbackFunc, nfc_stack_data_callback_t* halDataCallbackFunc)
 {
-    ALOGD ("%s: enter", __FUNCTION__);
+    ALOGD ("%s: enter", __func__);
     int retval = EACCES;
 
     gAndroidHalCallback = halCallbackFunc;
@@ -252,19 +252,19 @@ int HaiOpen (const bcm2079x_dev_t* device, nfc_stack_callback_t* halCallbackFunc
     gOpenCompletedEvent.wait ();
 
     retval = 0;
-    ALOGD ("%s: exit %d", __FUNCTION__, retval);
+    ALOGD ("%s: exit %d", __func__, retval);
     return retval;
 }
 
 
-void BroadcomHalCallback (UINT8 event, tHAL_NFC_STATUS status)
+void BroadcomHalCallback (uint8_t event, tHAL_NFC_STATUS status)
 {
-    ALOGD ("%s: enter; event=0x%X", __FUNCTION__, event);
+    ALOGD ("%s: enter; event=0x%X", __func__, event);
     switch (event)
     {
     case HAL_NFC_OPEN_CPLT_EVT:
         {
-            ALOGD ("%s: HAL_NFC_OPEN_CPLT_EVT; status=0x%X", __FUNCTION__, status);
+            ALOGD ("%s: HAL_NFC_OPEN_CPLT_EVT; status=0x%X", __func__, status);
             SyncEventGuard guard (gOpenCompletedEvent);
             gOpenCompletedEvent.notifyOne ();
             break;
@@ -272,7 +272,7 @@ void BroadcomHalCallback (UINT8 event, tHAL_NFC_STATUS status)
 
     case HAL_NFC_POST_INIT_CPLT_EVT:
         {
-            ALOGD ("%s: HAL_NFC_POST_INIT_CPLT_EVT", __FUNCTION__);
+            ALOGD ("%s: HAL_NFC_POST_INIT_CPLT_EVT", __func__);
             SyncEventGuard guard (gPostInitCompletedEvent);
             gPostInitCompletedEvent.notifyOne ();
             break;
@@ -280,7 +280,7 @@ void BroadcomHalCallback (UINT8 event, tHAL_NFC_STATUS status)
 
     case HAL_NFC_CLOSE_CPLT_EVT:
         {
-            ALOGD ("%s: HAL_NFC_CLOSE_CPLT_EVT", __FUNCTION__);
+            ALOGD ("%s: HAL_NFC_CLOSE_CPLT_EVT", __func__);
             SyncEventGuard guard (gCloseCompletedEvent);
             gCloseCompletedEvent.notifyOne ();
             break;
@@ -288,7 +288,7 @@ void BroadcomHalCallback (UINT8 event, tHAL_NFC_STATUS status)
 
     case HAL_NFC_ERROR_EVT:
         {
-            ALOGD ("%s: HAL_NFC_ERROR_EVT", __FUNCTION__);
+            ALOGD ("%s: HAL_NFC_ERROR_EVT", __func__);
             {
                 SyncEventGuard guard (gOpenCompletedEvent);
                 gOpenCompletedEvent.notifyOne ();
@@ -305,98 +305,98 @@ void BroadcomHalCallback (UINT8 event, tHAL_NFC_STATUS status)
         }
     }
     gAndroidHalCallback (event, status);
-    ALOGD ("%s: exit; event=0x%X", __FUNCTION__, event);
+    ALOGD ("%s: exit; event=0x%X", __func__, event);
 }
 
 
-void BroadcomHalDataCallback (UINT16 data_len, UINT8* p_data)
+void BroadcomHalDataCallback (uint16_t data_len, uint8_t* p_data)
 {
-    ALOGD ("%s: enter; len=%u", __FUNCTION__, data_len);
+    ALOGD ("%s: enter; len=%u", __func__, data_len);
     gAndroidHalDataCallback (data_len, p_data);
 }
 
 
 int HaiClose (const bcm2079x_dev_t* device)
 {
-    ALOGD ("%s: enter", __FUNCTION__);
+    ALOGD ("%s: enter", __func__);
     int retval = EACCES;
 
     SyncEventGuard guard (gCloseCompletedEvent);
     HAL_NfcClose ();
     gCloseCompletedEvent.wait ();
     retval = 0;
-    ALOGD ("%s: exit %d", __FUNCTION__, retval);
+    ALOGD ("%s: exit %d", __func__, retval);
     return retval;
 }
 
 
 int HaiCoreInitialized (const bcm2079x_dev_t* device, uint8_t* coreInitResponseParams)
 {
-    ALOGD ("%s: enter", __FUNCTION__);
+    ALOGD ("%s: enter", __func__);
     int retval = EACCES;
 
     SyncEventGuard guard (gPostInitCompletedEvent);
     HAL_NfcCoreInitialized (0, coreInitResponseParams);
     gPostInitCompletedEvent.wait ();
     retval = 0;
-    ALOGD ("%s: exit %d", __FUNCTION__, retval);
+    ALOGD ("%s: exit %d", __func__, retval);
     return retval;
 }
 
 
 int HaiWrite (const bcm2079x_dev_t* dev, uint16_t dataLen, const uint8_t* data)
 {
-    ALOGD ("%s: enter; len=%u", __FUNCTION__, dataLen);
+    ALOGD ("%s: enter; len=%u", __func__, dataLen);
     int retval = EACCES;
 
-    HAL_NfcWrite (dataLen, const_cast<UINT8*> (data));
+    HAL_NfcWrite (dataLen, const_cast<uint8_t*> (data));
     retval = 0;
-    ALOGD ("%s: exit %d", __FUNCTION__, retval);
+    ALOGD ("%s: exit %d", __func__, retval);
     return retval;
 }
 
 
 int HaiPreDiscover (const bcm2079x_dev_t* device)
 {
-    ALOGD ("%s: enter", __FUNCTION__);
+    ALOGD ("%s: enter", __func__);
     int retval = EACCES;
 
     // This function is a clear indication that the stack is initializing
     // EE.  So we can reset the cold-boot flag here.
     isColdBoot = false;
     retval = HAL_NfcPreDiscover () ? 1 : 0;
-    ALOGD ("%s: exit %d", __FUNCTION__, retval);
+    ALOGD ("%s: exit %d", __func__, retval);
     return retval;
 }
 
 
 int HaiControlGranted (const bcm2079x_dev_t* device)
 {
-    ALOGD ("%s: enter", __FUNCTION__);
+    ALOGD ("%s: enter", __func__);
     int retval = EACCES;
 
     HAL_NfcControlGranted ();
     retval = 0;
-    ALOGD ("%s: exit %d", __FUNCTION__, retval);
+    ALOGD ("%s: exit %d", __func__, retval);
     return retval;
 }
 
 
 int HaiPowerCycle (const bcm2079x_dev_t* device)
 {
-    ALOGD ("%s: enter", __FUNCTION__);
+    ALOGD ("%s: enter", __func__);
     int retval = EACCES;
 
     HAL_NfcPowerCycle ();
     retval = 0;
-    ALOGD ("%s: exit %d", __FUNCTION__, retval);
+    ALOGD ("%s: exit %d", __func__, retval);
     return retval;
 }
 
 
 int HaiGetMaxNfcee (const bcm2079x_dev_t* device, uint8_t* maxNfcee)
 {
-    ALOGD ("%s: enter", __FUNCTION__);
+    ALOGD ("%s: enter", __func__);
     int retval = EACCES;
 
     // This function is a clear indication that the stack is initializing
@@ -406,10 +406,10 @@ int HaiGetMaxNfcee (const bcm2079x_dev_t* device, uint8_t* maxNfcee)
     if ( maxNfcee )
     {
         *maxNfcee = HAL_NfcGetMaxNfcee ();
-        ALOGD("%s: max_ee from HAL to use %d", __FUNCTION__, *maxNfcee);
+        ALOGD("%s: max_ee from HAL to use %d", __func__, *maxNfcee);
         retval = 0;
     }
-    ALOGD ("%s: exit %d", __FUNCTION__, retval);
+    ALOGD ("%s: exit %d", __func__, retval);
     return retval;
 }
 

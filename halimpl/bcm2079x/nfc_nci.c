@@ -131,7 +131,7 @@ static int nfc_close (hw_device_t *dev)
 
 static int nfc_open (const hw_module_t* module, const char* name, hw_device_t** device)
 {
-    ALOGD ("%s: enter; name=%s", __FUNCTION__, name);
+    ALOGD ("%s: enter; name=%s", __func__, name);
     int retval = 0; //0 is ok; -1 is error
 
     if (strcmp (name, NFC_NCI_CONTROLLER) == 0)
@@ -164,7 +164,7 @@ static int nfc_open (const hw_module_t* module, const char* name, hw_device_t** 
     {
         retval = -EINVAL;
     }
-    ALOGD ("%s: exit %d", __FUNCTION__, retval);
+    ALOGD ("%s: exit %d", __func__, retval);
     return retval;
 }
 

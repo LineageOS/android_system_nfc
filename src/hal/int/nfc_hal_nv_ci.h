@@ -78,9 +78,9 @@ void nfc_hal_nv_ci_write (tNFC_HAL_NV_CO_STATUS status);
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_hal_nv_ci_read (UINT16                  num_bytes_read,
+void nfc_hal_nv_ci_read (uint16_t                num_bytes_read,
                          tNFC_HAL_NV_CO_STATUS   status,
-                         UINT8                   block);
+                         uint8_t                 block);
 
 
 #ifdef __cplusplus

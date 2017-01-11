@@ -44,7 +44,7 @@ enum
     NFA_P2P_LLCP_STATE_MAX
 };
 
-typedef UINT8 tNFA_P2P_LLCP_STATE;
+typedef uint8_t tNFA_P2P_LLCP_STATE;
 
 /* NFA P2P events */
 enum
@@ -71,7 +71,7 @@ enum
 typedef struct
 {
     BT_HDR              hdr;
-    UINT8               server_sap;
+    uint8_t             server_sap;
     tNFA_P2P_LINK_TYPE  link_type;
     char                service_name[LLCP_MAX_SN_LEN + 1];
     tNFA_P2P_CBACK     *p_cback;
@@ -97,8 +97,8 @@ typedef struct
 {
     BT_HDR              hdr;
     tNFA_HANDLE         conn_handle;
-    UINT16              miu;
-    UINT8               rw;
+    uint16_t            miu;
+    uint8_t             rw;
 } tNFA_P2P_API_ACCEPT_CONN;
 
 /* data type for NFA_P2P_API_REJECT_CONN_EVT */
@@ -113,7 +113,7 @@ typedef struct
 {
     BT_HDR              hdr;
     tNFA_HANDLE         conn_handle;
-    BOOLEAN             flush;
+    bool                flush;
 } tNFA_P2P_API_DISCONNECT;
 
 /* data type for NFA_P2P_API_CONNECT_EVT */
@@ -122,9 +122,9 @@ typedef struct
     BT_HDR              hdr;
     tNFA_HANDLE         client_handle;
     char                service_name[LLCP_MAX_SN_LEN + 1];
-    UINT8               dsap;
-    UINT16              miu;
-    UINT8               rw;
+    uint8_t             dsap;
+    uint16_t            miu;
+    uint8_t             rw;
 } tNFA_P2P_API_CONNECT;
 
 /* data type for NFA_P2P_API_SEND_UI_EVT */
@@ -132,7 +132,7 @@ typedef struct
 {
     BT_HDR              hdr;
     tNFA_HANDLE         handle;
-    UINT8               dsap;
+    uint8_t             dsap;
     BT_HDR             *p_msg;
 } tNFA_P2P_API_SEND_UI;
 
@@ -149,7 +149,7 @@ typedef struct
 {
     BT_HDR              hdr;
     tNFA_HANDLE         conn_handle;
-    BOOLEAN             is_busy;
+    bool                is_busy;
 } tNFA_P2P_API_SET_LOCAL_BUSY;
 
 /* data type for NFA_P2P_API_GET_LINK_INFO_EVT */
@@ -171,15 +171,15 @@ typedef struct
 typedef struct
 {
     BT_HDR              hdr;
-    UINT16              link_miu;
-    UINT8               opt;
-    UINT8               wt;
-    UINT16              link_timeout;
-    UINT16              inact_timeout_init;
-    UINT16              inact_timeout_target;
-    UINT16              symm_delay;
-    UINT16              data_link_timeout;
-    UINT16              delay_first_pdu_timeout;
+    uint16_t            link_miu;
+    uint8_t             opt;
+    uint8_t             wt;
+    uint16_t            link_timeout;
+    uint16_t            inact_timeout_init;
+    uint16_t            inact_timeout_target;
+    uint16_t            symm_delay;
+    uint16_t            data_link_timeout;
+    uint16_t            delay_first_pdu_timeout;
 } tNFA_P2P_API_SET_LLCP_CFG;
 
 /* union of all event data types */
@@ -213,11 +213,11 @@ typedef union
 
 typedef struct
 {
-    UINT8               flags;                      /* internal flags for data link connection  */
-    UINT8               local_sap;                  /* local SAP of data link connection        */
-    UINT8               remote_sap;                 /* remote SAP of data link connection       */
-    UINT16              remote_miu;                 /* MIU of remote end point                  */
-    UINT8               num_pending_i_pdu;          /* number of tx I PDU not processed by NFA  */
+    uint8_t             flags;                      /* internal flags for data link connection  */
+    uint8_t             local_sap;                  /* local SAP of data link connection        */
+    uint8_t             remote_sap;                 /* remote SAP of data link connection       */
+    uint16_t            remote_miu;                 /* MIU of remote end point                  */
+    uint8_t             num_pending_i_pdu;          /* number of tx I PDU not processed by NFA  */
 } tNFA_P2P_CONN_CB;
 
 /* NFA P2P SAP control block */
@@ -227,16 +227,16 @@ typedef struct
 
 typedef struct
 {
-    UINT8              flags;                       /* internal flags for local SAP             */
+    uint8_t            flags;                       /* internal flags for local SAP             */
     tNFA_P2P_CBACK     *p_cback;                    /* callback function for local SAP          */
-    UINT8              num_pending_ui_pdu;          /* number of tx UI PDU not processed by NFA */
+    uint8_t            num_pending_ui_pdu;          /* number of tx UI PDU not processed by NFA */
 } tNFA_P2P_SAP_CB;
 
 /* NFA P2P SDP control block */
 typedef struct
 {
-    UINT8            tid;                           /* transaction ID */
-    UINT8            local_sap;
+    uint8_t          tid;                           /* transaction ID */
+    uint8_t          local_sap;
 } tNFA_P2P_SDP_CB;
 
 #define NFA_P2P_NUM_SAP         64
@@ -248,26 +248,26 @@ typedef struct
 
     tNFA_DM_RF_DISC_STATE rf_disc_state;
     tNFA_P2P_LLCP_STATE llcp_state;
-    BOOLEAN             is_initiator;
-    BOOLEAN             is_active_mode;
-    UINT16              local_link_miu;
-    UINT16              remote_link_miu;
+    bool                is_initiator;
+    bool                is_active_mode;
+    uint16_t            local_link_miu;
+    uint16_t            remote_link_miu;
 
     tNFA_TECHNOLOGY_MASK listen_tech_mask;          /* for P2P listening */
     tNFA_TECHNOLOGY_MASK listen_tech_mask_to_restore;/* to retry without active listen mode */
     TIMER_LIST_ENT      active_listen_restore_timer; /* timer to restore active listen mode */
-    BOOLEAN             is_p2p_listening;
-    BOOLEAN             is_cho_listening;
-    BOOLEAN             is_snep_listening;
+    bool                is_p2p_listening;
+    bool                is_cho_listening;
+    bool                is_snep_listening;
 
     tNFA_P2P_SAP_CB     sap_cb[NFA_P2P_NUM_SAP];
     tNFA_P2P_CONN_CB    conn_cb[LLCP_MAX_DATA_LINK];
     tNFA_P2P_SDP_CB     sdp_cb[LLCP_MAX_SDP_TRANSAC];
 
-    UINT8               total_pending_ui_pdu;       /* total number of tx UI PDU not processed by NFA */
-    UINT8               total_pending_i_pdu;        /* total number of tx I PDU not processed by NFA */
+    uint8_t             total_pending_ui_pdu;       /* total number of tx UI PDU not processed by NFA */
+    uint8_t             total_pending_i_pdu;        /* total number of tx I PDU not processed by NFA */
 
-    UINT8               trace_level;
+    uint8_t             trace_level;
 } tNFA_P2P_CB;
 
 /*****************************************************************************
@@ -285,8 +285,8 @@ extern tNFA_P2P_CB nfa_p2p_cb;
 */
 void nfa_p2p_init (void);
 void nfa_p2p_update_listen_tech (tNFA_TECHNOLOGY_MASK tech_mask);
-void nfa_p2p_enable_listening (tNFA_SYS_ID sys_id, BOOLEAN update_wks);
-void nfa_p2p_disable_listening (tNFA_SYS_ID sys_id, BOOLEAN update_wks);
+void nfa_p2p_enable_listening (tNFA_SYS_ID sys_id, bool    update_wks);
+void nfa_p2p_disable_listening (tNFA_SYS_ID sys_id, bool    update_wks);
 void nfa_p2p_activate_llcp (tNFC_DISCOVER *p_data);
 void nfa_p2p_deactivate_llcp (void);
 void nfa_p2p_set_config (tNFA_DM_DISC_TECH_PROTO_MASK disc_mask);
@@ -302,25 +302,25 @@ void nfa_p2p_proc_llcp_disconnect_resp (tLLCP_SAP_CBACK_DATA  *p_data);
 void nfa_p2p_proc_llcp_congestion (tLLCP_SAP_CBACK_DATA  *p_data);
 void nfa_p2p_proc_llcp_link_status (tLLCP_SAP_CBACK_DATA  *p_data);
 
-BOOLEAN nfa_p2p_start_sdp (char *p_service_name, UINT8 local_sap);
+bool    nfa_p2p_start_sdp (char *p_service_name, uint8_t local_sap);
 
-BOOLEAN nfa_p2p_reg_server (tNFA_P2P_MSG *p_msg);
-BOOLEAN nfa_p2p_reg_client (tNFA_P2P_MSG *p_msg);
-BOOLEAN nfa_p2p_dereg (tNFA_P2P_MSG *p_msg);
-BOOLEAN nfa_p2p_accept_connection (tNFA_P2P_MSG *p_msg);
-BOOLEAN nfa_p2p_reject_connection (tNFA_P2P_MSG *p_msg);
-BOOLEAN nfa_p2p_disconnect (tNFA_P2P_MSG *p_msg);
-BOOLEAN nfa_p2p_create_data_link_connection (tNFA_P2P_MSG *p_msg);
-BOOLEAN nfa_p2p_send_ui (tNFA_P2P_MSG *p_msg);
-BOOLEAN nfa_p2p_send_data (tNFA_P2P_MSG *p_msg);
-BOOLEAN nfa_p2p_set_local_busy (tNFA_P2P_MSG *p_msg);
-BOOLEAN nfa_p2p_get_link_info (tNFA_P2P_MSG *p_msg);
-BOOLEAN nfa_p2p_get_remote_sap (tNFA_P2P_MSG *p_msg);
-BOOLEAN nfa_p2p_set_llcp_cfg (tNFA_P2P_MSG *p_msg);
-BOOLEAN nfa_p2p_restart_rf_discovery (tNFA_P2P_MSG *p_msg);
+bool    nfa_p2p_reg_server (tNFA_P2P_MSG *p_msg);
+bool    nfa_p2p_reg_client (tNFA_P2P_MSG *p_msg);
+bool    nfa_p2p_dereg (tNFA_P2P_MSG *p_msg);
+bool    nfa_p2p_accept_connection (tNFA_P2P_MSG *p_msg);
+bool    nfa_p2p_reject_connection (tNFA_P2P_MSG *p_msg);
+bool    nfa_p2p_disconnect (tNFA_P2P_MSG *p_msg);
+bool    nfa_p2p_create_data_link_connection (tNFA_P2P_MSG *p_msg);
+bool    nfa_p2p_send_ui (tNFA_P2P_MSG *p_msg);
+bool    nfa_p2p_send_data (tNFA_P2P_MSG *p_msg);
+bool    nfa_p2p_set_local_busy (tNFA_P2P_MSG *p_msg);
+bool    nfa_p2p_get_link_info (tNFA_P2P_MSG *p_msg);
+bool    nfa_p2p_get_remote_sap (tNFA_P2P_MSG *p_msg);
+bool    nfa_p2p_set_llcp_cfg (tNFA_P2P_MSG *p_msg);
+bool    nfa_p2p_restart_rf_discovery (tNFA_P2P_MSG *p_msg);
 
 #if (BT_TRACE_VERBOSE == TRUE)
-char *nfa_p2p_evt_code (UINT16 evt_code);
+char *nfa_p2p_evt_code (uint16_t evt_code);
 #endif
 
 #else

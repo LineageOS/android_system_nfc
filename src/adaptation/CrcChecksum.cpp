@@ -97,10 +97,10 @@ unsigned short crcChecksumCompute (const unsigned char *buffer, int bufferLen)
 ** Returns          True if file is good.
 **
 *******************************************************************************/
-BOOLEAN crcChecksumVerifyIntegrity (const char* filename)
+bool    crcChecksumVerifyIntegrity (const char* filename)
 {
-    ALOGD ("%s: filename=%s", __FUNCTION__, filename);
-    BOOLEAN isGood = FALSE;
+    ALOGD ("%s: filename=%s", __func__, filename);
+    bool    isGood = FALSE;
     int fileStream = open (filename, O_RDONLY);
     if (fileStream >= 0)
     {
@@ -119,14 +119,14 @@ BOOLEAN crcChecksumVerifyIntegrity (const char* filename)
         close (fileStream);
         if ((actualReadCrc == sizeof(checksum)) && (data.size() > 0))
         {
-            ALOGD ("%s: data size=%zu", __FUNCTION__, data.size());
+            ALOGD ("%s: data size=%zu", __func__, data.size());
             if (checksum == crcChecksumCompute ((const unsigned char*) data.data(), data.size()))
                 isGood = TRUE;
             else
-                ALOGE ("%s: checksum mismatch", __FUNCTION__);
+                ALOGE ("%s: checksum mismatch", __func__);
         }
         else
-            ALOGE ("%s: invalid length", __FUNCTION__);
+            ALOGE ("%s: invalid length", __func__);
     }
     else
         isGood = TRUE; //assume file does not exist

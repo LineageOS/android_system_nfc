@@ -46,7 +46,7 @@
 #define NFA_RW_TLV_DETECT_ST_MEM_TLV_OP_COMPLETE    0x02 /* Memory control tlv detected */
 #define NFA_RW_TLV_DETECT_ST_COMPLETE               0x03 /* Both Lock and Memory control Tlvs are detected */
 
-typedef UINT8 tNFA_RW_TLV_ST;
+typedef uint8_t tNFA_RW_TLV_ST;
 
 
 /* RW events */
@@ -115,15 +115,15 @@ enum
 
     NFA_RW_OP_MAX
 };
-typedef UINT8 tNFA_RW_OP;
+typedef uint8_t tNFA_RW_OP;
 
 /* Enumeration of parameter structios for nfa_rw operations */
 
 /* NFA_RW_OP_WRITE_NDEF params */
 typedef struct
 {
-    UINT32          len;
-    UINT8           *p_data;
+    uint32_t        len;
+    uint8_t         *p_data;
 } tNFA_RW_OP_PARAMS_WRITE_NDEF;
 
 /* NFA_RW_OP_SEND_RAW_FRAME params */
@@ -135,72 +135,72 @@ typedef struct
 /* NFA_RW_OP_SET_TAG_RO params */
 typedef struct
 {
-    BOOLEAN         b_hard_lock;
+    bool            b_hard_lock;
 } tNFA_RW_OP_PARAMS_CONFIG_READ_ONLY;
 
 /* NFA_RW_OP_T1T_READ params */
 typedef struct
 {
-    UINT8           segment_number;
-    UINT8           block_number;
-    UINT8           index;
+    uint8_t         segment_number;
+    uint8_t         block_number;
+    uint8_t         index;
 } tNFA_RW_OP_PARAMS_T1T_READ;
 
 /* NFA_RW_OP_T1T_WRITE_E8,NFA_RW_OP_T1T_WRITE_NE8
    NFA_RW_OP_T1T_WRITE_E, NFA_RW_OP_T1T_WRITE_NE params  */
 typedef struct
 {
-    BOOLEAN         b_erase;
-    UINT8           block_number;
-    UINT8           index;
-    UINT8           p_block_data[8];
+    bool            b_erase;
+    uint8_t         block_number;
+    uint8_t         index;
+    uint8_t         p_block_data[8];
 } tNFA_RW_OP_PARAMS_T1T_WRITE;
 
 /* NFA_RW_OP_T2T_READ params */
 typedef struct
 {
-    UINT8           block_number;
+    uint8_t         block_number;
 } tNFA_RW_OP_PARAMS_T2T_READ;
 
 /* NFA_RW_OP_T2T_WRITE params */
 typedef struct
 {
-    UINT8           block_number;
-    UINT8           p_block_data[4];
+    uint8_t         block_number;
+    uint8_t         p_block_data[4];
 } tNFA_RW_OP_PARAMS_T2T_WRITE;
 
 /* NFA_RW_OP_T2T_SECTOR_SELECT params */
 typedef struct
 {
-    UINT8           sector_number;
+    uint8_t         sector_number;
 } tNFA_RW_OP_PARAMS_T2T_SECTOR_SELECT;
 
 /* NFA_RW_OP_T3T_READ params */
 typedef struct
 {
-    UINT8              num_blocks;
+    uint8_t            num_blocks;
     tNFA_T3T_BLOCK_DESC *p_block_desc;
 } tNFA_RW_OP_PARAMS_T3T_READ;
 
 /* NFA_RW_OP_T3T_WRITE params */
 typedef struct
 {
-    UINT8               num_blocks;
+    uint8_t             num_blocks;
     tNFA_T3T_BLOCK_DESC *p_block_desc;
-    UINT8               *p_block_data;
+    uint8_t             *p_block_data;
 } tNFA_RW_OP_PARAMS_T3T_WRITE;
 
 /* NFA_RW_OP_I93_XXX params */
 typedef struct
 {
-    BOOLEAN             uid_present;
-    UINT8               uid[I93_UID_BYTE_LEN];
-    BOOLEAN             afi_present;
-    UINT8               afi;
-    UINT8               dsfid;
-    UINT16              first_block_number;
-    UINT16              number_blocks;
-    UINT8              *p_data;
+    bool                uid_present;
+    uint8_t             uid[I93_UID_BYTE_LEN];
+    bool                afi_present;
+    uint8_t             afi;
+    uint8_t             dsfid;
+    uint16_t            first_block_number;
+    uint16_t            number_blocks;
+    uint8_t            *p_data;
 } tNFA_RW_OP_PARAMS_I93_CMD;
 
 /* Union of params for all reader/writer operations */
@@ -249,7 +249,7 @@ typedef struct
 {
     BT_HDR              hdr;
     tNFC_ACTIVATE_DEVT  *p_activate_params; /* Data from NFC_ACTIVATE_DEVT      */
-    BOOLEAN             excl_rf_not_active; /* TRUE if not in exclusive RF mode */
+    bool                excl_rf_not_active; /* TRUE if not in exclusive RF mode */
 } tNFA_RW_ACTIVATE_NTF;
 
 /* union of all data types */
@@ -268,7 +268,7 @@ enum
     NFA_RW_NDEF_ST_TRUE,            /* Tag is NDEF */
     NFA_RW_NDEF_ST_FALSE            /* Tag is not NDEF */
 };
-typedef UINT8 tNFA_RW_NDEF_ST;
+typedef uint8_t tNFA_RW_NDEF_ST;
 
 /* flags for RW control block */
 #define NFA_RW_FL_NOT_EXCL_RF_MODE              0x01    /* Activation while not in exclusive RF mode                                */
@@ -290,10 +290,10 @@ typedef struct
     /* Tag info */
     tNFC_PROTOCOL   protocol;
     tNFC_INTF_TYPE  intf_type;
-    UINT8           pa_sel_res;
+    uint8_t         pa_sel_res;
     tNFC_RF_TECH_N_MODE  activated_tech_mode;    /* activated technology and mode */
 
-    BOOLEAN         b_hard_lock;
+    bool            b_hard_lock;
 
     tNFA_RW_MSG     *p_buffer_rw_msg; /* Buffer to hold incoming cmd while reading tag id */
 
@@ -302,50 +302,50 @@ typedef struct
 
     /* NDEF info */
     tNFA_RW_NDEF_ST ndef_st;        /* NDEF detection status */
-    UINT32          ndef_max_size;  /* max number of bytes available for NDEF data */
-    UINT32          ndef_cur_size;  /* current size of stored NDEF data (in bytes) */
-    UINT8           *p_ndef_buf;
-    UINT32          ndef_rd_offset; /* current read-offset of incoming NDEF data */
+    uint32_t        ndef_max_size;  /* max number of bytes available for NDEF data */
+    uint32_t        ndef_cur_size;  /* current size of stored NDEF data (in bytes) */
+    uint8_t         *p_ndef_buf;
+    uint32_t        ndef_rd_offset; /* current read-offset of incoming NDEF data */
 
     /* Current NDEF Write info */
-    UINT8           *p_ndef_wr_buf; /* Pointer to NDEF data being written */
-    UINT32          ndef_wr_len;    /* Length of NDEF data being written */
+    uint8_t         *p_ndef_wr_buf; /* Pointer to NDEF data being written */
+    uint32_t        ndef_wr_len;    /* Length of NDEF data being written */
 
     /* Reactivating type 2 tag after NACK rsp */
     tRW_EVENT       halt_event;     /* Event ID from stack after NACK response */
     tRW_DATA        rw_data;        /* Event Data from stack after NACK response */
-    BOOLEAN         skip_dyn_locks; /* To skip reading dynamic locks during NDEF Detect */
+    bool            skip_dyn_locks; /* To skip reading dynamic locks during NDEF Detect */
 
     /* Flags (see defintions for NFA_RW_FL_* ) */
-    UINT8           flags;
+    uint8_t         flags;
 
     /* ISO 15693 tag memory information */
-    UINT16          i93_afi_location;
-    UINT8           i93_dsfid;
-    UINT8           i93_block_size;
-    UINT16          i93_num_block;
-    UINT8           i93_uid[I93_UID_BYTE_LEN];
+    uint16_t        i93_afi_location;
+    uint8_t         i93_dsfid;
+    uint8_t         i93_block_size;
+    uint16_t        i93_num_block;
+    uint8_t         i93_uid[I93_UID_BYTE_LEN];
 } tNFA_RW_CB;
 extern tNFA_RW_CB nfa_rw_cb;
 
 
 
 /* type definition for action functions */
-typedef BOOLEAN (*tNFA_RW_ACTION) (tNFA_RW_MSG *p_data);
+typedef bool    (*tNFA_RW_ACTION) (tNFA_RW_MSG *p_data);
 
 /* Internal nfa_rw function prototypes */
 extern void    nfa_rw_stop_presence_check_timer (void);
 
 /* Action function prototypes */
-extern BOOLEAN nfa_rw_handle_op_req (tNFA_RW_MSG *p_data);
-extern BOOLEAN nfa_rw_activate_ntf (tNFA_RW_MSG *p_data);
-extern BOOLEAN nfa_rw_deactivate_ntf (tNFA_RW_MSG *p_data);
-extern BOOLEAN nfa_rw_presence_check_tick (tNFA_RW_MSG *p_data);
-extern BOOLEAN nfa_rw_presence_check_timeout (tNFA_RW_MSG *p_data);
+extern bool    nfa_rw_handle_op_req (tNFA_RW_MSG *p_data);
+extern bool    nfa_rw_activate_ntf (tNFA_RW_MSG *p_data);
+extern bool    nfa_rw_deactivate_ntf (tNFA_RW_MSG *p_data);
+extern bool    nfa_rw_presence_check_tick (tNFA_RW_MSG *p_data);
+extern bool    nfa_rw_presence_check_timeout (tNFA_RW_MSG *p_data);
 extern void    nfa_rw_handle_sleep_wakeup_rsp (tNFC_STATUS status);
 extern void    nfa_rw_handle_presence_check_rsp (tNFC_STATUS status);
 extern void    nfa_rw_command_complete (void);
-extern BOOLEAN nfa_rw_handle_event (BT_HDR *p_msg);
+extern bool    nfa_rw_handle_event (BT_HDR *p_msg);
 
 extern void    nfa_rw_free_ndef_rx_buf (void);
 extern void    nfa_rw_sys_disable (void);

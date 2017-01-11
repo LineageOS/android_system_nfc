@@ -60,7 +60,7 @@
 
 #define UIPC_CH_NUM 25
 
-typedef UINT8 tUIPC_CH_ID;
+typedef uint8_t tUIPC_CH_ID;
 
 
 typedef void (tUIPC_RCV_CBACK)(BT_HDR *p_msg); /* points to BT_HDR which describes event type and length of data; len contains the number of bytes of entire message (sizeof(BT_HDR) + offset + size of data) */
@@ -90,7 +90,7 @@ UDRV_API extern void UIPC_Init(void *);
 ** Returns          void
 **
 *******************************************************************************/
-UDRV_API extern BOOLEAN UIPC_Open(tUIPC_CH_ID ch_id, tUIPC_RCV_CBACK *p_cback);
+UDRV_API extern bool    UIPC_Open(tUIPC_CH_ID ch_id, tUIPC_RCV_CBACK *p_cback);
 
 /*******************************************************************************
 **
@@ -113,7 +113,7 @@ UDRV_API extern void UIPC_Close(tUIPC_CH_ID ch_id);
 ** Returns          void
 **
 *******************************************************************************/
-UDRV_API extern BOOLEAN UIPC_SendBuf(tUIPC_CH_ID ch_id, BT_HDR *p_msg);
+UDRV_API extern bool    UIPC_SendBuf(tUIPC_CH_ID ch_id, BT_HDR *p_msg);
 
 /*******************************************************************************
 **
@@ -124,7 +124,7 @@ UDRV_API extern BOOLEAN UIPC_SendBuf(tUIPC_CH_ID ch_id, BT_HDR *p_msg);
 ** Returns          void
 **
 *******************************************************************************/
-UDRV_API extern BOOLEAN UIPC_Send(tUIPC_CH_ID ch_id, UINT16 msg_evt, UINT8 *p_buf, UINT16 msglen);
+UDRV_API extern bool    UIPC_Send(tUIPC_CH_ID ch_id, uint16_t msg_evt, uint8_t *p_buf, uint16_t msglen);
 
 /*******************************************************************************
 **
@@ -135,7 +135,7 @@ UDRV_API extern BOOLEAN UIPC_Send(tUIPC_CH_ID ch_id, UINT16 msg_evt, UINT8 *p_bu
 ** Returns          void
 **
 *******************************************************************************/
-UDRV_API extern UINT32 UIPC_Read(tUIPC_CH_ID ch_id, UINT16 *p_msg_evt, UINT8 *p_buf, UINT32 len);
+UDRV_API extern uint32_t UIPC_Read(tUIPC_CH_ID ch_id, uint16_t *p_msg_evt, uint8_t *p_buf, uint32_t len);
 
 /*******************************************************************************
 **
@@ -146,7 +146,7 @@ UDRV_API extern UINT32 UIPC_Read(tUIPC_CH_ID ch_id, UINT16 *p_msg_evt, UINT8 *p_
 ** Returns          void
 **
 *******************************************************************************/
-UDRV_API extern BOOLEAN UIPC_Ioctl(tUIPC_CH_ID ch_id, UINT32 request, void *param);
+UDRV_API extern bool    UIPC_Ioctl(tUIPC_CH_ID ch_id, uint32_t request, void *param);
 
 #ifdef __cplusplus
 }

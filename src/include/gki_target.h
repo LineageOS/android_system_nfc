@@ -418,7 +418,7 @@ extern "C"
 {
 #endif
 
-EXPORT_API extern void LogMsg (UINT32 trace_set_mask, const char *fmt_str, ...);
+EXPORT_API extern void LogMsg (uint32_t trace_set_mask, const char *fmt_str, ...);
 
 #ifdef __cplusplus
 }

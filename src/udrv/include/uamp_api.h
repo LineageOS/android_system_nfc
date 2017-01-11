@@ -32,20 +32,20 @@
 /* UAMP identifiers */
 #define UAMP_ID_1   1
 #define UAMP_ID_2   2
-typedef UINT8 tUAMP_ID;
+typedef uint8_t tUAMP_ID;
 
 /* UAMP event ids (used by UAMP_CBACK) */
 #define UAMP_EVT_RX_READY           0   /* Data from AMP controller is ready to be read */
 #define UAMP_EVT_CTLR_REMOVED       1   /* Controller removed */
 #define UAMP_EVT_CTLR_READY         2   /* Controller added/ready */
-typedef UINT8 tUAMP_EVT;
+typedef uint8_t tUAMP_EVT;
 
 
 /* UAMP Channels */
 #define UAMP_CH_HCI_CMD            0   /* HCI Command channel */
 #define UAMP_CH_HCI_EVT            1   /* HCI Event channel */
 #define UAMP_CH_HCI_DATA           2   /* HCI ACL Data channel */
-typedef UINT8 tUAMP_CH;
+typedef uint8_t tUAMP_CH;
 
 /* tUAMP_EVT_DATA: union for event-specific data, used by UAMP_CBACK */
 typedef union {
@@ -85,7 +85,7 @@ extern "C"
 ** Parameters   p_cback:    Callback function for UAMP event notification
 **
 *****************************************************************************/
-BT_API BOOLEAN UAMP_Init(tUAMP_CBACK *p_cback);
+BT_API bool    UAMP_Init(tUAMP_CBACK *p_cback);
 
 
 /*****************************************************************************
@@ -99,7 +99,7 @@ BT_API BOOLEAN UAMP_Init(tUAMP_CBACK *p_cback);
 **                      BTU task, to identify source of the message
 **
 *****************************************************************************/
-BT_API BOOLEAN UAMP_Open(tUAMP_ID amp_id);
+BT_API bool    UAMP_Open(tUAMP_ID amp_id);
 
 /*****************************************************************************
 **
@@ -128,7 +128,7 @@ BT_API void UAMP_Close(tUAMP_ID amp_id);
 ** Returns:     number of bytes written
 **
 *****************************************************************************/
-BT_API UINT16 UAMP_Write(tUAMP_ID amp_id, UINT8 *p_buf, UINT16 num_bytes, tUAMP_CH channel);
+BT_API uint16_t UAMP_Write(tUAMP_ID amp_id, uint8_t *p_buf, uint16_t num_bytes, tUAMP_CH channel);
 
 
 /*****************************************************************************
@@ -141,7 +141,7 @@ BT_API UINT16 UAMP_Write(tUAMP_ID amp_id, UINT8 *p_buf, UINT16 num_bytes, tUAMP_
 **              p_msg:      message to send.
 **
 *****************************************************************************/
-BT_API UINT16 UAMP_WriteBuf(tUAMP_ID amp_id, BT_HDR *p_msg);
+BT_API uint16_t UAMP_WriteBuf(tUAMP_ID amp_id, BT_HDR *p_msg);
 
 
 /*****************************************************************************
@@ -159,7 +159,7 @@ BT_API UINT16 UAMP_WriteBuf(tUAMP_ID amp_id, BT_HDR *p_msg);
 ** Returns:     number of bytes read
 **
 *****************************************************************************/
-BT_API UINT16 UAMP_Read(tUAMP_ID amp_id, UINT8 *p_buf, UINT16 buf_size, tUAMP_CH channel);
+BT_API uint16_t UAMP_Read(tUAMP_ID amp_id, uint8_t *p_buf, uint16_t buf_size, tUAMP_CH channel);
 
 #ifdef __cplusplus
 }

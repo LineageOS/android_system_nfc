@@ -89,13 +89,13 @@ tNFA_STATUS NFA_EeDiscover(tNFA_EE_CBACK *p_cback)
 **                  NFA_STATUS_INVALID_PARAM If bad parameter
 **
 *******************************************************************************/
-tNFA_STATUS NFA_EeGetInfo(UINT8        *p_num_nfcee,
+tNFA_STATUS NFA_EeGetInfo(uint8_t      *p_num_nfcee,
                           tNFA_EE_INFO *p_info)
 {
     int   xx, ret = nfa_ee_cb.cur_ee;
     tNFA_EE_ECB  *p_cb = nfa_ee_cb.ecb;
-    UINT8   max_ret;
-    UINT8   num_ret  = 0;
+    uint8_t max_ret;
+    uint8_t num_ret  = 0;
 
     NFA_TRACE_DEBUG2 ("NFA_EeGetInfo em_state:%d cur_ee:%d", nfa_ee_cb.em_state, nfa_ee_cb.cur_ee);
     /* validate parameters */
@@ -234,8 +234,8 @@ tNFA_STATUS NFA_EeModeSet(tNFA_HANDLE    ee_handle,
     tNFA_EE_API_MODE_SET *p_msg;
     tNFA_STATUS status = NFA_STATUS_FAILED;
     tNFA_EE_ECB *p_cb, *p_found = NULL;
-    UINT32  xx;
-    UINT8   nfcee_id = (ee_handle & 0xFF);
+    uint32_t  xx;
+    uint8_t nfcee_id = (ee_handle & 0xFF);
 
     p_cb = nfa_ee_cb.ecb;
     for (xx = 0; xx < nfa_ee_cb.cur_ee; xx++, p_cb++)
@@ -297,7 +297,7 @@ tNFA_STATUS NFA_EeSetDefaultTechRouting(tNFA_HANDLE          ee_handle,
 {
     tNFA_EE_API_SET_TECH_CFG *p_msg;
     tNFA_STATUS status = NFA_STATUS_FAILED;
-    UINT8       nfcee_id = (UINT8)(ee_handle & 0xFF);
+    uint8_t     nfcee_id = (uint8_t)(ee_handle & 0xFF);
     tNFA_EE_ECB *p_cb;
 
     NFA_TRACE_API4 ("NFA_EeSetDefaultTechRouting(): handle:<0x%x>technology_mask:<0x%x>/<0x%x>/<0x%x>",
@@ -353,7 +353,7 @@ tNFA_STATUS NFA_EeSetDefaultProtoRouting(tNFA_HANDLE         ee_handle,
 {
     tNFA_EE_API_SET_PROTO_CFG *p_msg;
     tNFA_STATUS status = NFA_STATUS_FAILED;
-    UINT8       nfcee_id = (UINT8)(ee_handle & 0xFF);
+    uint8_t     nfcee_id = (uint8_t)(ee_handle & 0xFF);
     tNFA_EE_ECB *p_cb;
 
     NFA_TRACE_API4 ("NFA_EeSetDefaultProtoRouting(): handle:<0x%x>protocol_mask:<0x%x>/<0x%x>/<0x%x>",
@@ -402,14 +402,14 @@ tNFA_STATUS NFA_EeSetDefaultProtoRouting(tNFA_HANDLE         ee_handle,
 **
 *******************************************************************************/
 tNFA_STATUS NFA_EeAddAidRouting(tNFA_HANDLE          ee_handle,
-                                UINT8                aid_len,
-                                UINT8               *p_aid,
+                                uint8_t              aid_len,
+                                uint8_t             *p_aid,
                                 tNFA_EE_PWR_STATE    power_state)
 {
     tNFA_EE_API_ADD_AID *p_msg;
     tNFA_STATUS status = NFA_STATUS_FAILED;
-    UINT16 size = sizeof(tNFA_EE_API_ADD_AID) + aid_len;
-    UINT8       nfcee_id = (UINT8)(ee_handle & 0xFF);
+    uint16_t size = sizeof(tNFA_EE_API_ADD_AID) + aid_len;
+    uint8_t     nfcee_id = (uint8_t)(ee_handle & 0xFF);
     tNFA_EE_ECB *p_cb;
 
     NFA_TRACE_API1 ("NFA_EeAddAidRouting(): handle:<0x%x>", ee_handle);
@@ -429,7 +429,7 @@ tNFA_STATUS NFA_EeAddAidRouting(tNFA_HANDLE          ee_handle,
         p_msg->p_cb             = p_cb;
         p_msg->aid_len          = aid_len;
         p_msg->power_state      = power_state;
-        p_msg->p_aid            = (UINT8 *)(p_msg + 1);
+        p_msg->p_aid            = (uint8_t *)(p_msg + 1);
         memcpy(p_msg->p_aid, p_aid, aid_len);
 
         nfa_sys_sendmsg (p_msg);
@@ -461,12 +461,12 @@ tNFA_STATUS NFA_EeAddAidRouting(tNFA_HANDLE          ee_handle,
 **                  NFA_STATUS_INVALID_PARAM If bad parameter
 **
 *******************************************************************************/
-tNFA_STATUS NFA_EeRemoveAidRouting(UINT8     aid_len,
-                                   UINT8    *p_aid)
+tNFA_STATUS NFA_EeRemoveAidRouting(uint8_t   aid_len,
+                                   uint8_t  *p_aid)
 {
     tNFA_EE_API_REMOVE_AID *p_msg;
     tNFA_STATUS status = NFA_STATUS_FAILED;
-    UINT16 size = sizeof(tNFA_EE_API_REMOVE_AID) + aid_len;
+    uint16_t size = sizeof(tNFA_EE_API_REMOVE_AID) + aid_len;
 
     NFA_TRACE_API0 ("NFA_EeRemoveAidRouting()");
     if ((aid_len == 0) || (p_aid == NULL) || (aid_len > NFA_MAX_AID_LEN))
@@ -478,7 +478,7 @@ tNFA_STATUS NFA_EeRemoveAidRouting(UINT8     aid_len,
     {
         p_msg->hdr.event        = NFA_EE_API_REMOVE_AID_EVT;
         p_msg->aid_len          = aid_len;
-        p_msg->p_aid            = (UINT8 *)(p_msg + 1);
+        p_msg->p_aid            = (uint8_t *)(p_msg + 1);
         memcpy(p_msg->p_aid, p_aid, aid_len);
 
         nfa_sys_sendmsg (p_msg);
@@ -572,12 +572,12 @@ tNFA_STATUS NFA_EeUpdateNow(void)
 **
 *******************************************************************************/
 tNFA_STATUS NFA_EeConnect(tNFA_HANDLE    ee_handle,
-                          UINT8          ee_interface,
+                          uint8_t        ee_interface,
                           tNFA_EE_CBACK *p_cback)
 {
     tNFA_EE_API_CONNECT *p_msg;
     tNFA_STATUS status = NFA_STATUS_FAILED;
-    UINT8       nfcee_id = (UINT8)(ee_handle & 0xFF);
+    uint8_t     nfcee_id = (uint8_t)(ee_handle & 0xFF);
     tNFA_EE_ECB *p_cb;
 
     NFA_TRACE_API2 ("NFA_EeConnect(): handle:<0x%x> ee_interface:0x%x", ee_handle, ee_interface);
@@ -618,12 +618,12 @@ tNFA_STATUS NFA_EeConnect(tNFA_HANDLE    ee_handle,
 **
 *******************************************************************************/
 tNFA_STATUS NFA_EeSendData (tNFA_HANDLE  ee_handle,
-                            UINT16       data_len,
-                            UINT8       *p_data)
+                            uint16_t     data_len,
+                            uint8_t     *p_data)
 {
     tNFA_EE_API_SEND_DATA *p_msg;
     tNFA_STATUS status = NFA_STATUS_FAILED;
-    UINT8       nfcee_id = (UINT8)(ee_handle & 0xFF);
+    uint8_t     nfcee_id = (uint8_t)(ee_handle & 0xFF);
     tNFA_EE_ECB *p_cb;
 
     NFA_TRACE_API1 ("NFA_EeSendData(): handle:<0x%x>", ee_handle);
@@ -635,13 +635,13 @@ tNFA_STATUS NFA_EeSendData (tNFA_HANDLE  ee_handle,
         NFA_TRACE_ERROR0 ("Bad ee_handle or NULL data");
         status = NFA_STATUS_INVALID_PARAM;
     }
-    else if ((p_msg = (tNFA_EE_API_SEND_DATA *) GKI_getbuf ((UINT16)(sizeof(tNFA_EE_API_SEND_DATA) + data_len))) != NULL)
+    else if ((p_msg = (tNFA_EE_API_SEND_DATA *) GKI_getbuf ((uint16_t)(sizeof(tNFA_EE_API_SEND_DATA) + data_len))) != NULL)
     {
         p_msg->hdr.event        = NFA_EE_API_SEND_DATA_EVT;
         p_msg->nfcee_id         = nfcee_id;
         p_msg->p_cb             = p_cb;
         p_msg->data_len         = data_len;
-        p_msg->p_data           = (UINT8 *)(p_msg + 1);
+        p_msg->p_data           = (uint8_t *)(p_msg + 1);
         memcpy(p_msg->p_data, p_data, data_len);
 
         nfa_sys_sendmsg (p_msg);
@@ -669,7 +669,7 @@ tNFA_STATUS NFA_EeDisconnect(tNFA_HANDLE ee_handle)
 {
     tNFA_EE_API_DISCONNECT *p_msg;
     tNFA_STATUS status = NFA_STATUS_FAILED;
-    UINT8       nfcee_id = (UINT8)(ee_handle & 0xFF);
+    uint8_t     nfcee_id = (uint8_t)(ee_handle & 0xFF);
     tNFA_EE_ECB *p_cb;
 
     NFA_TRACE_API1 ("NFA_EeDisconnect(): handle:<0x%x>", ee_handle);

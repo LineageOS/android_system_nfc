@@ -26,7 +26,7 @@
 #include "StartupConfig.h"
 
 
-const UINT8 StartupConfig::mMaxLength = 255;
+const uint8_t StartupConfig::mMaxLength = 255;
 
 
 /*******************************************************************************
@@ -72,7 +72,7 @@ void StartupConfig::initialize ()
 ** Returns:         Pointer to buffer.
 **
 *******************************************************************************/
-const UINT8* StartupConfig::getInternalBuffer ()
+const uint8_t* StartupConfig::getInternalBuffer ()
 {
     return mBuffer.data ();
 }
@@ -90,7 +90,7 @@ const UINT8* StartupConfig::getInternalBuffer ()
 ** Returns:         True if ok.
 **
 *******************************************************************************/
-bool StartupConfig::append (const UINT8* newContent, UINT8 newContentLen)
+bool StartupConfig::append (const uint8_t* newContent, uint8_t newContentLen)
 {
     static const char fn [] = "StartupConfig::append";
     if ((newContentLen+mBuffer.size()) > mMaxLength)
@@ -121,10 +121,10 @@ bool StartupConfig::append (const UINT8* newContent, UINT8 newContentLen)
 ** Returns:         True if ok.
 **
 *******************************************************************************/
-bool StartupConfig::disableSecureElement (UINT8 bitmask)
+bool StartupConfig::disableSecureElement (uint8_t bitmask)
 {
-    const UINT8 maxLen = mBuffer[0];
-    UINT8 index = 1, tlvType = 0, tlvLen = 0;
+    const uint8_t maxLen = mBuffer[0];
+    uint8_t index = 1, tlvType = 0, tlvLen = 0;
     bool found0xC2 = false;
 
     while (true)
@@ -147,7 +147,7 @@ bool StartupConfig::disableSecureElement (UINT8 bitmask)
 
     if (found0xC2 == false)
     {
-        UINT8 tlv [] = {0x04, 0xC2, 0x02, 0x61, 0x00};
+        uint8_t tlv [] = {0x04, 0xC2, 0x02, 0x61, 0x00};
         tlv [4] = tlv [4] | bitmask;
         found0xC2 = append (tlv, 5);
     }

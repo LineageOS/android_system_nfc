@@ -63,7 +63,7 @@ enum
     NDEF_MSG_LENGTH_MISMATCH,           /* 9 - Overall message length doesn't match */
     NDEF_MSG_INSUFFICIENT_MEM           /* 10 - Insuffiecient memory to add record  */
 };
-typedef UINT8 tNDEF_STATUS;
+typedef uint8_t tNDEF_STATUS;
 
 
 #define HR_REC_TYPE_LEN     2       /* Handover Request Record Type     */
@@ -98,7 +98,7 @@ extern "C" {
 ** Returns          TRUE if all OK, or FALSE if the message is invalid.
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgValidate (UINT8 *p_msg, UINT32 msg_len, BOOLEAN b_allow_chunks);
+EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgValidate (uint8_t *p_msg, uint32_t msg_len, bool    b_allow_chunks);
 
 /*******************************************************************************
 **
@@ -110,7 +110,7 @@ EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgValidate (UINT8 *p_msg, UINT32 msg_l
 ** Returns          The record count, or 0 if the message is invalid.
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern INT32 NDEF_MsgGetNumRecs (UINT8 *p_msg);
+EXPORT_NDEF_API extern int32_t NDEF_MsgGetNumRecs (uint8_t *p_msg);
 
 /*******************************************************************************
 **
@@ -122,7 +122,7 @@ EXPORT_NDEF_API extern INT32 NDEF_MsgGetNumRecs (UINT8 *p_msg);
 ** Returns          Length of record
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern UINT32 NDEF_MsgGetRecLength (UINT8 *p_cur_rec);
+EXPORT_NDEF_API extern uint32_t NDEF_MsgGetRecLength (uint8_t *p_cur_rec);
 
 /*******************************************************************************
 **
@@ -134,7 +134,7 @@ EXPORT_NDEF_API extern UINT32 NDEF_MsgGetRecLength (UINT8 *p_cur_rec);
 ** Returns          Pointer to the start of the record, or NULL if no more
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern UINT8 *NDEF_MsgGetNextRec (UINT8 *p_cur_rec);
+EXPORT_NDEF_API extern uint8_t *NDEF_MsgGetNextRec (uint8_t *p_cur_rec);
 
 /*******************************************************************************
 **
@@ -146,7 +146,7 @@ EXPORT_NDEF_API extern UINT8 *NDEF_MsgGetNextRec (UINT8 *p_cur_rec);
 ** Returns          Pointer to the start of the record, or NULL
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern UINT8 *NDEF_MsgGetRecByIndex (UINT8 *p_msg, INT32 index);
+EXPORT_NDEF_API extern uint8_t *NDEF_MsgGetRecByIndex (uint8_t *p_msg, int32_t index);
 
 /*******************************************************************************
 **
@@ -158,7 +158,7 @@ EXPORT_NDEF_API extern UINT8 *NDEF_MsgGetRecByIndex (UINT8 *p_msg, INT32 index);
 ** Returns          Pointer to the start of the last record, or NULL if some problem
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern UINT8 *NDEF_MsgGetLastRecInMsg (UINT8 *p_msg);
+EXPORT_NDEF_API extern uint8_t *NDEF_MsgGetLastRecInMsg (uint8_t *p_msg);
 
 /*******************************************************************************
 **
@@ -170,7 +170,7 @@ EXPORT_NDEF_API extern UINT8 *NDEF_MsgGetLastRecInMsg (UINT8 *p_msg);
 ** Returns          Pointer to the start of the record, or NULL
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern UINT8 *NDEF_MsgGetFirstRecByType (UINT8 *p_msg, UINT8 tnf, UINT8 *p_type, UINT8 tlen);
+EXPORT_NDEF_API extern uint8_t *NDEF_MsgGetFirstRecByType (uint8_t *p_msg, uint8_t tnf, uint8_t *p_type, uint8_t tlen);
 
 /*******************************************************************************
 **
@@ -182,7 +182,7 @@ EXPORT_NDEF_API extern UINT8 *NDEF_MsgGetFirstRecByType (UINT8 *p_msg, UINT8 tnf
 ** Returns          Pointer to the start of the record, or NULL
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern UINT8 *NDEF_MsgGetNextRecByType (UINT8 *p_cur_rec, UINT8 tnf, UINT8 *p_type, UINT8 tlen);
+EXPORT_NDEF_API extern uint8_t *NDEF_MsgGetNextRecByType (uint8_t *p_cur_rec, uint8_t tnf, uint8_t *p_type, uint8_t tlen);
 
 /*******************************************************************************
 **
@@ -194,7 +194,7 @@ EXPORT_NDEF_API extern UINT8 *NDEF_MsgGetNextRecByType (UINT8 *p_cur_rec, UINT8 
 ** Returns          Pointer to the start of the record, or NULL
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern UINT8 *NDEF_MsgGetFirstRecById (UINT8 *p_msg, UINT8 *p_id, UINT8 ilen);
+EXPORT_NDEF_API extern uint8_t *NDEF_MsgGetFirstRecById (uint8_t *p_msg, uint8_t *p_id, uint8_t ilen);
 
 /*******************************************************************************
 **
@@ -206,7 +206,7 @@ EXPORT_NDEF_API extern UINT8 *NDEF_MsgGetFirstRecById (UINT8 *p_msg, UINT8 *p_id
 ** Returns          Pointer to the start of the record, or NULL
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern UINT8 *NDEF_MsgGetNextRecById (UINT8 *p_cur_rec, UINT8 *p_id, UINT8 ilen);
+EXPORT_NDEF_API extern uint8_t *NDEF_MsgGetNextRecById (uint8_t *p_cur_rec, uint8_t *p_id, uint8_t ilen);
 
 /*******************************************************************************
 **
@@ -217,7 +217,7 @@ EXPORT_NDEF_API extern UINT8 *NDEF_MsgGetNextRecById (UINT8 *p_cur_rec, UINT8 *p
 ** Returns          Pointer to Type (NULL if none). TNF and len are filled in.
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern UINT8 *NDEF_RecGetType (UINT8 *p_rec, UINT8 *p_tnf, UINT8 *p_type_len);
+EXPORT_NDEF_API extern uint8_t *NDEF_RecGetType (uint8_t *p_rec, uint8_t *p_tnf, uint8_t *p_type_len);
 
 /*******************************************************************************
 **
@@ -228,7 +228,7 @@ EXPORT_NDEF_API extern UINT8 *NDEF_RecGetType (UINT8 *p_rec, UINT8 *p_tnf, UINT8
 ** Returns          Pointer to Id (NULL if none). ID Len is filled in.
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern UINT8 *NDEF_RecGetId (UINT8 *p_rec, UINT8 *p_id_len);
+EXPORT_NDEF_API extern uint8_t *NDEF_RecGetId (uint8_t *p_rec, uint8_t *p_id_len);
 
 /*******************************************************************************
 **
@@ -239,7 +239,7 @@ EXPORT_NDEF_API extern UINT8 *NDEF_RecGetId (UINT8 *p_rec, UINT8 *p_id_len);
 ** Returns          a pointer to the payload (NULL if none). Payload len filled in.
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern UINT8 *NDEF_RecGetPayload (UINT8 *p_rec, UINT32 *p_payload_len);
+EXPORT_NDEF_API extern uint8_t *NDEF_RecGetPayload (uint8_t *p_rec, uint32_t *p_payload_len);
 
 
 /* Functions to build an NDEF Message
@@ -254,7 +254,7 @@ EXPORT_NDEF_API extern UINT8 *NDEF_RecGetPayload (UINT8 *p_rec, UINT32 *p_payloa
 **                  *p_cur_size is initialized to 0
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern void NDEF_MsgInit (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size);
+EXPORT_NDEF_API extern void NDEF_MsgInit (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size);
 
 /*******************************************************************************
 **
@@ -266,10 +266,10 @@ EXPORT_NDEF_API extern void NDEF_MsgInit (UINT8 *p_msg, UINT32 max_size, UINT32 
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS  NDEF_MsgAddRec (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                     UINT8 tnf, UINT8 *p_type, UINT8 type_len,
-                                     UINT8 *p_id, UINT8  id_len,
-                                     UINT8 *p_payload, UINT32 payload_len);
+EXPORT_NDEF_API extern tNDEF_STATUS  NDEF_MsgAddRec (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                     uint8_t tnf, uint8_t *p_type, uint8_t type_len,
+                                     uint8_t *p_id, uint8_t  id_len,
+                                     uint8_t *p_payload, uint32_t payload_len);
 
 /*******************************************************************************
 **
@@ -282,10 +282,10 @@ EXPORT_NDEF_API extern tNDEF_STATUS  NDEF_MsgAddRec (UINT8 *p_msg, UINT32 max_si
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS  NDEF_MsgInsertRec (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size, INT32 index,
-                                        UINT8 tnf, UINT8 *p_type, UINT8 type_len,
-                                        UINT8 *p_id, UINT8  id_len,
-                                        UINT8 *p_payload, UINT32 payload_len);
+EXPORT_NDEF_API extern tNDEF_STATUS  NDEF_MsgInsertRec (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size, int32_t index,
+                                        uint8_t tnf, uint8_t *p_type, uint8_t type_len,
+                                        uint8_t *p_id, uint8_t  id_len,
+                                        uint8_t *p_payload, uint32_t payload_len);
 
 /*******************************************************************************
 **
@@ -297,8 +297,8 @@ EXPORT_NDEF_API extern tNDEF_STATUS  NDEF_MsgInsertRec (UINT8 *p_msg, UINT32 max
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS  NDEF_MsgAppendRec (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                        UINT8 *p_new_rec, UINT32 new_rec_len);
+EXPORT_NDEF_API extern tNDEF_STATUS  NDEF_MsgAppendRec (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                        uint8_t *p_new_rec, uint32_t new_rec_len);
 
 /*******************************************************************************
 **
@@ -311,8 +311,8 @@ EXPORT_NDEF_API extern tNDEF_STATUS  NDEF_MsgAppendRec (UINT8 *p_msg, UINT32 max
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAppendPayload (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                           UINT8 *p_rec, UINT8 *p_add_pl, UINT32 add_pl_len);
+EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAppendPayload (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                           uint8_t *p_rec, uint8_t *p_add_pl, uint32_t add_pl_len);
 
 /*******************************************************************************
 **
@@ -325,8 +325,8 @@ EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAppendPayload (UINT8 *p_msg, UINT32 
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgReplacePayload (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                            UINT8 *p_rec, UINT8 *p_new_pl, UINT32 new_pl_len);
+EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgReplacePayload (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                            uint8_t *p_rec, uint8_t *p_new_pl, uint32_t new_pl_len);
 
 /*******************************************************************************
 **
@@ -339,8 +339,8 @@ EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgReplacePayload (UINT8 *p_msg, UINT32
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgReplaceType (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                         UINT8 *p_rec, UINT8 *p_new_type, UINT8 new_type_len);
+EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgReplaceType (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                         uint8_t *p_rec, uint8_t *p_new_type, uint8_t new_type_len);
 
 /*******************************************************************************
 **
@@ -353,8 +353,8 @@ EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgReplaceType (UINT8 *p_msg, UINT32 ma
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgReplaceId (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                       UINT8 *p_rec, UINT8 *p_new_id, UINT8 new_id_len);
+EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgReplaceId (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                       uint8_t *p_rec, uint8_t *p_new_id, uint8_t new_id_len);
 
 /*******************************************************************************
 **
@@ -367,7 +367,7 @@ EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgReplaceId (UINT8 *p_msg, UINT32 max_
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgRemoveRec (UINT8 *p_msg, UINT32 *p_cur_size, INT32 index);
+EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgRemoveRec (uint8_t *p_msg, uint32_t *p_cur_size, int32_t index);
 
 /*******************************************************************************
 **
@@ -381,7 +381,7 @@ EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgRemoveRec (UINT8 *p_msg, UINT32 *p_c
 ** Returns          The output byte count
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgCopyAndDechunk (UINT8 *p_src, UINT32 src_len, UINT8 *p_dest, UINT32 *p_out_len);
+EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgCopyAndDechunk (uint8_t *p_src, uint32_t src_len, uint8_t *p_dest, uint32_t *p_out_len);
 
 /*******************************************************************************
 **
@@ -392,8 +392,8 @@ EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgCopyAndDechunk (UINT8 *p_src, UINT32
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgCreateWktHr (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                                 UINT8 version );
+EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgCreateWktHr (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                                 uint8_t version );
 
 /*******************************************************************************
 **
@@ -404,8 +404,8 @@ EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgCreateWktHr (UINT8 *p_msg, UINT32 ma
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgCreateWktHs (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                                 UINT8 version );
+EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgCreateWktHs (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                                 uint8_t version );
 
 /*******************************************************************************
 **
@@ -416,10 +416,10 @@ EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgCreateWktHs (UINT8 *p_msg, UINT32 ma
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAddWktHc (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                              char  *p_id_str, UINT8 ctf,
-                                              UINT8 carrier_type_len, UINT8 *p_carrier_type,
-                                              UINT8 carrier_data_len, UINT8 *p_carrier_data);
+EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAddWktHc (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                              char  *p_id_str, uint8_t ctf,
+                                              uint8_t carrier_type_len, uint8_t *p_carrier_type,
+                                              uint8_t carrier_data_len, uint8_t *p_carrier_data);
 
 /*******************************************************************************
 **
@@ -430,9 +430,9 @@ EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAddWktHc (UINT8 *p_msg, UINT32 max_s
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAddWktAc (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                              UINT8 cps, char *p_carrier_data_ref_str,
-                                              UINT8 aux_data_ref_count, char *p_aux_data_ref_str[]);
+EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAddWktAc (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                              uint8_t cps, char *p_carrier_data_ref_str,
+                                              uint8_t aux_data_ref_count, char *p_aux_data_ref_str[]);
 
 /*******************************************************************************
 **
@@ -443,8 +443,8 @@ EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAddWktAc (UINT8 *p_msg, UINT32 max_s
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAddWktCr (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                              UINT16 random_number );
+EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAddWktCr (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                              uint16_t random_number );
 
 /*******************************************************************************
 **
@@ -455,8 +455,8 @@ EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAddWktCr (UINT8 *p_msg, UINT32 max_s
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAddWktErr (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                               UINT8 error_reason, UINT32 error_data );
+EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAddWktErr (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                               uint8_t error_reason, uint32_t error_data );
 
 /*******************************************************************************
 **
@@ -467,7 +467,7 @@ EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAddWktErr (UINT8 *p_msg, UINT32 max_
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAddMediaBtOob (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
+EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAddMediaBtOob (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
                                                    char *p_id_str, BD_ADDR bd_addr);
 
 /*******************************************************************************
@@ -479,7 +479,7 @@ EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAddMediaBtOob (UINT8 *p_msg, UINT32 
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAppendMediaBtOobCod (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
+EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAppendMediaBtOobCod (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
                                                          char *p_id_str, DEV_CLASS cod);
 
 /*******************************************************************************
@@ -492,9 +492,9 @@ EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAppendMediaBtOobCod (UINT8 *p_msg, U
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAppendMediaBtOobName (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                                          char *p_id_str, BOOLEAN is_complete,
-                                                          UINT8 name_len, UINT8 *p_name);
+EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAppendMediaBtOobName (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                                          char *p_id_str, bool    is_complete,
+                                                          uint8_t name_len, uint8_t *p_name);
 
 /*******************************************************************************
 **
@@ -505,8 +505,8 @@ EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAppendMediaBtOobName (UINT8 *p_msg, 
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAppendMediaBtOobHashCRandR (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                                                char *p_id_str, UINT8 *p_hash_c, UINT8 *p_rand_r);
+EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAppendMediaBtOobHashCRandR (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                                                char *p_id_str, uint8_t *p_hash_c, uint8_t *p_rand_r);
 
 /*******************************************************************************
 **
@@ -517,9 +517,9 @@ EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAppendMediaBtOobHashCRandR (UINT8 *p
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAppendMediaBtOobEirData (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
+EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAppendMediaBtOobEirData (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
                                                              char *p_id_str,
-                                                             UINT8 eir_type, UINT8 data_len, UINT8 *p_data);
+                                                             uint8_t eir_type, uint8_t data_len, uint8_t *p_data);
 
 /*******************************************************************************
 **
@@ -530,8 +530,8 @@ EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAppendMediaBtOobEirData (UINT8 *p_ms
 ** Returns          NDEF_OK if all OK
 **
 *******************************************************************************/
-EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAddMediaWifiWsc (UINT8 *p_msg, UINT32 max_size, UINT32 *p_cur_size,
-                                    char *p_id_str, UINT8 *p_payload, UINT32 payload_len);
+EXPORT_NDEF_API extern tNDEF_STATUS NDEF_MsgAddMediaWifiWsc (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
+                                    char *p_id_str, uint8_t *p_payload, uint32_t payload_len);
 
 #ifdef __cplusplus
 }

@@ -43,7 +43,7 @@ extern "C" {
 #define UCODEC_ID_4             3
 #define UCODEC_NUMBER           4
 
-typedef UINT8 tUCODEC_ID;
+typedef uint8_t tUCODEC_ID;
 
 /**** Status ****/
 #define UCODEC_SUCCESS              0x00
@@ -61,14 +61,14 @@ typedef UINT8 tUCODEC_ID;
 #define UCODEC_UNRECOVERABLE_ERROR  0x0c
 #define UCODEC_LOW_LEVEL_DRIVER_ERROR   (0x0d)
 
-typedef UINT8 tUCODEC_STATUS;
+typedef uint8_t tUCODEC_STATUS;
 
 /**** Media type ****/
 #define UCODEC_MEDIA_TYPE_AUDIO 0
 #define UCODEC_MEDIA_TYPE_VIDEO 1
 #define UCODEC_MEDIA_TYPE_MULTI 2
 
-typedef UINT8 tUCODEC_MEDIA_TYPE;
+typedef uint8_t tUCODEC_MEDIA_TYPE;
 
 /**** Audio Codec type ****/
 #define UCODEC_AUDIO_SBC        0
@@ -82,12 +82,12 @@ typedef UINT8 tUCODEC_MEDIA_TYPE;
 #define UCODEC_AUDIO_VOLUME     8   /* Volume settings */
 #define UCODEC_AUDIO_BALANCE    9   /* Balance settings */
 
-typedef UINT8 tUCODEC_AUDIO_FEAT_TYPE;
+typedef uint8_t tUCODEC_AUDIO_FEAT_TYPE;
 
 /**** Video Codec type -> TODO ****/
 /*TBD*/
 
-typedef UINT8 tUCODEC_VIDEO_FEAT_TYPE;
+typedef uint8_t tUCODEC_VIDEO_FEAT_TYPE;
 
 /**** SBC sample frequency ****/
 #define UCODEC_SBC_SMP_FREQ_16    0  /* 16 */
@@ -95,18 +95,18 @@ typedef UINT8 tUCODEC_VIDEO_FEAT_TYPE;
 #define UCODEC_SBC_SMP_FREQ_44    2  /* 44.1 */
 #define UCODEC_SBC_SMP_FREQ_48    3  /* 48 */
 
-typedef UINT8 tUCODEC_SBC_SMP_FREQ;
+typedef uint8_t tUCODEC_SBC_SMP_FREQ;
 
 /**** SBC sample frequency ****/
 #define UCODEC_SBC_SUBBAND_4    4
 #define UCODEC_SBC_SUBBAND_8    8
 
-typedef UINT8 tUCODEC_SBC_SUBBAND;
+typedef uint8_t tUCODEC_SBC_SUBBAND;
 /**** Allocation method ****/
 #define UCODEC_SBC_ALLOC_MD_S   0   /* SNR */
 #define UCODEC_SBC_ALLOC_MD_L   1   /* loundess */
 
-typedef UINT8 tUCODEC_SBC_ALLOC_MD;
+typedef uint8_t tUCODEC_SBC_ALLOC_MD;
 
 /**** MPEG sample frequency ****/
 #define UCODEC_M12_SMP_FREQ_16    0   /* 16 */
@@ -116,7 +116,7 @@ typedef UINT8 tUCODEC_SBC_ALLOC_MD;
 #define UCODEC_M12_SMP_FREQ_44    4  /* 44 */
 #define UCODEC_M12_SMP_FREQ_48    5  /* 48 */
 
-typedef UINT8 tUCODEC_M12_SMP_FREQ;
+typedef uint8_t tUCODEC_M12_SMP_FREQ;
 
 /**** Channel mode ****/
 #define UCODEC_CHN_MONO            0
@@ -124,7 +124,7 @@ typedef UINT8 tUCODEC_M12_SMP_FREQ;
 #define UCODEC_CHN_STEREO          2
 #define UCODEC_CHN_JOINT_STEREO    3
 
-typedef UINT8 tUCODEC_CH_MODE;
+typedef uint8_t tUCODEC_CH_MODE;
 /**** Audio Codec type ****/
 #define UCODEC_M24_SMP_FREQ_8     0   /*  8 */
 #define UCODEC_M24_SMP_FREQ_11    1   /* 11 */
@@ -139,44 +139,44 @@ typedef UINT8 tUCODEC_CH_MODE;
 #define UCODEC_M24_SMP_FREQ_88    10  /* 88 */
 #define UCODEC_M24_SMP_FREQ_96    11  /* 96 */
 
-typedef UINT8 tUCODEC_M24_SMP_FREQ;
+typedef uint8_t tUCODEC_M24_SMP_FREQ;
 
 /**** Codec configuration structure ****/
 typedef struct tUCODEC_CNF_SBC_TAG
 {
     tUCODEC_SBC_SMP_FREQ    SampleFreq;
     tUCODEC_CH_MODE         ChannelMode;
-    UINT16                  Offset;     /* GKI buffer based offset for UCODEC_ReadBuf */
-    UINT16                  MtuSize;    /* Max buffer len for UCODEC_ReadBuf*/
-    UINT8                   PoolId;     /* GKI pool ID for UCODEC_ReadBuf */
-    UINT8                   NumBlock;   /* Number of block in block unit : 4 blocks 8 blocks 12 blocks 16 blocks are the possible value */
-    UINT8                   Subband;
+    uint16_t                Offset;     /* GKI buffer based offset for UCODEC_ReadBuf */
+    uint16_t                MtuSize;    /* Max buffer len for UCODEC_ReadBuf*/
+    uint8_t                 PoolId;     /* GKI pool ID for UCODEC_ReadBuf */
+    uint8_t                 NumBlock;   /* Number of block in block unit : 4 blocks 8 blocks 12 blocks 16 blocks are the possible value */
+    uint8_t                 Subband;
     tUCODEC_SBC_ALLOC_MD    AllocMthd;
-    UINT8                   MinBitPool;
-    UINT8                   MaxBitPool;
+    uint8_t                 MinBitPool;
+    uint8_t                 MaxBitPool;
 } tUCODEC_CNF_SBC;
 
 typedef struct tUCODEC_CNF_M12_TAG
 {
     tUCODEC_CH_MODE         ChannelMode; /* Mono, Dual, stereo, joint stereo */
     tUCODEC_M12_SMP_FREQ    SampleFreq; /* Sample freq: 16, 22, 24, 32, 44, 48 */
-    UINT16                  BitRate;    /* Bit rate in bit per sec */
-    UINT16                  Offset;     /* GKI buffer based offset for UCODEC_ReadBuf */
-    UINT16                  MtuSize;    /* Max buffer len for UCODEC_ReadBuf*/
-    UINT8                   PoolId;     /* GKI pool ID for UCODEC_ReadBuf */
-    BOOLEAN                 VBR;        /* Variable Bit Rate */
-    BOOLEAN                 CRC_On;     /* CRC error detection */
-    BOOLEAN                 MPF;        /* Media payload format */
+    uint16_t                BitRate;    /* Bit rate in bit per sec */
+    uint16_t                Offset;     /* GKI buffer based offset for UCODEC_ReadBuf */
+    uint16_t                MtuSize;    /* Max buffer len for UCODEC_ReadBuf*/
+    uint8_t                 PoolId;     /* GKI pool ID for UCODEC_ReadBuf */
+    bool                    VBR;        /* Variable Bit Rate */
+    bool                    CRC_On;     /* CRC error detection */
+    bool                    MPF;        /* Media payload format */
 } tUCODEC_CNF_M12;
 
 typedef struct tUCODEC_CNF_M24_TAG
 {
     tUCODEC_M24_SMP_FREQ    SampleFreq; /* Sample freq: 8, 11, 12, 16, 22.05, 24, 32, 44.1, 48, 64, 88, 96 */
-    UINT32                  BitRate;    /* Bit rate */
-    UINT16                  Offset;     /* GKI buffer based offset for UCODEC_ReadBuf */
-    UINT16                  MtuSize;    /* Max buffer len for UCODEC_ReadBuf*/
-    UINT8                   PoolId;     /* GKI pool ID for UCODEC_ReadBuf */
-    UINT8                   Chanels;    /* 1 or 2 chanels */
+    uint32_t                BitRate;    /* Bit rate */
+    uint16_t                Offset;     /* GKI buffer based offset for UCODEC_ReadBuf */
+    uint16_t                MtuSize;    /* Max buffer len for UCODEC_ReadBuf*/
+    uint8_t                 PoolId;     /* GKI pool ID for UCODEC_ReadBuf */
+    uint8_t                 Chanels;    /* 1 or 2 chanels */
 } tUCODEC_CNF_M24;
 
 
@@ -192,8 +192,8 @@ typedef union tUCODEC_FEATURE_TAG
     tUCODEC_CNF_SBC SBCConfig;
     tUCODEC_CNF_M12 M12Config;
     tUCODEC_CNF_M24 M24Config;
-    UINT8           Volume;     /* 0 to mute. 0xFF for the max volume */
-    UINT8           Balance;    /* 0->100% right, 255->100% left */
+    uint8_t         Volume;     /* 0 to mute. 0xFF for the max volume */
+    uint8_t         Balance;    /* 0->100% right, 255->100% left */
     /* Add here the video feature structure */
     /* TBD */
 } tUCODEC_FEATURE;
@@ -207,8 +207,8 @@ typedef struct tUCODEC_CNF_TAG
 
 typedef struct tUCODEC_BUF_INFO_TAG
 {
-    UINT8       NumOfFrames;
-    UINT32      TimesStamp;
+    uint8_t     NumOfFrames;
+    uint32_t    TimesStamp;
 } tUCODEC_BUF_INFO;
 
 
