@@ -37,7 +37,7 @@
 #include "gki.h"
 
 #if (CE_TEST_INCLUDED == TRUE) /* test only */
-bool    mapping_aid_test_enabled = FALSE;
+bool    mapping_aid_test_enabled = false;
 uint8_t ce_test_tag_app_id[T4T_V20_NDEF_TAG_AID_LEN] = {0xD2, 0x76, 0x00, 0x00, 0x85, 0x01, 0x01};
 #endif
 
@@ -53,15 +53,15 @@ uint8_t ce_test_tag_app_id[T4T_V20_NDEF_TAG_AID_LEN] = {0xD2, 0x76, 0x00, 0x00, 
 static bool    ce_t4t_send_to_lower (BT_HDR *p_r_apdu)
 {
 #if (BT_TRACE_PROTOCOL == TRUE)
-    DispCET4Tags (p_r_apdu, FALSE);
+    DispCET4Tags (p_r_apdu, false);
 #endif
 
     if (NFC_SendData (NFC_RF_CONN_ID, p_r_apdu) != NFC_STATUS_OK)
     {
         CE_TRACE_ERROR0 ("ce_t4t_send_to_lower (): NFC_SendData () failed");
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -85,7 +85,7 @@ static bool    ce_t4t_send_status (uint16_t status)
     if (!p_r_apdu)
     {
         CE_TRACE_ERROR0 ("ce_t4t_send_status (): Cannot allocate buffer");
-        return FALSE;
+        return false;
     }
 
     p_r_apdu->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
@@ -97,9 +97,9 @@ static bool    ce_t4t_send_status (uint16_t status)
 
     if (!ce_t4t_send_to_lower (p_r_apdu))
     {
-        return FALSE;
+        return false;
     }
-    return TRUE;
+    return true;
 }
 
 /*******************************************************************************
@@ -124,7 +124,7 @@ static bool    ce_t4t_select_file (uint16_t file_id)
         p_t4t->status |= CE_T4T_STATUS_CC_FILE_SELECTED;
         p_t4t->status &= ~ (CE_T4T_STATUS_NDEF_SELECTED);
 
-        return TRUE;
+        return true;
     }
 
     if (file_id == CE_T4T_MANDATORY_NDEF_FILE_ID)
@@ -137,7 +137,7 @@ static bool    ce_t4t_select_file (uint16_t file_id)
         p_t4t->status |= CE_T4T_STATUS_NDEF_SELECTED;
         p_t4t->status &= ~ (CE_T4T_STATUS_CC_FILE_SELECTED);
 
-        return TRUE;
+        return true;
     }
     else
     {
@@ -146,7 +146,7 @@ static bool    ce_t4t_select_file (uint16_t file_id)
         p_t4t->status &= ~ (CE_T4T_STATUS_CC_FILE_SELECTED);
         p_t4t->status &= ~ (CE_T4T_STATUS_NDEF_SELECTED);
 
-        return FALSE;
+        return false;
     }
 }
 
@@ -187,7 +187,7 @@ static bool    ce_t4t_read_binary (uint16_t offset, uint8_t length)
         if (!p_r_apdu)
         {
             CE_TRACE_ERROR0 ("ce_t4t_read_binary (): Cannot allocate buffer");
-            return FALSE;
+            return false;
         }
 
         p_r_apdu->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
@@ -235,9 +235,9 @@ static bool    ce_t4t_read_binary (uint16_t offset, uint8_t length)
 
         if (!ce_t4t_send_to_lower (p_r_apdu))
         {
-            return FALSE;
+            return false;
         }
-        return TRUE;
+        return true;
     }
     else
     {
@@ -245,9 +245,9 @@ static bool    ce_t4t_read_binary (uint16_t offset, uint8_t length)
 
         if (!ce_t4t_send_status (T4T_RSP_CMD_NOT_ALLOWED))
         {
-            return FALSE;
+            return false;
         }
-        return TRUE;
+        return true;
     }
 }
 
@@ -323,11 +323,11 @@ static bool    ce_t4t_update_binary (uint16_t offset, uint8_t length, uint8_t *p
 
     if (!ce_t4t_send_status (T4T_RSP_CMD_CMPLTED))
     {
-        return FALSE;
+        return false;
     }
     else
     {
-        return TRUE;
+        return true;
     }
 }
 
@@ -398,14 +398,14 @@ static bool    ce_t4t_process_select_file_cmd (uint8_t *p_cmd)
 
     if (!ce_t4t_send_status (status_words))
     {
-        return FALSE;
+        return false;
     }
 
     if (status_words == T4T_RSP_CMD_CMPLTED)
     {
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 /*******************************************************************************
@@ -616,7 +616,7 @@ static void ce_t4t_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *
     p_c_apdu = (BT_HDR *) p_data->data.p_data;
 
 #if (BT_TRACE_PROTOCOL == TRUE)
-    DispCET4Tags (p_c_apdu, TRUE);
+    DispCET4Tags (p_c_apdu, true);
 #endif
 
     CE_TRACE_DEBUG1 ("ce_t4t_data_cback (): conn_id = 0x%02X", conn_id);
@@ -884,7 +884,7 @@ tNFC_STATUS CE_T4tSetLocalNDEFMsg (bool       read_only,
     }
 
 #if (CE_TEST_INCLUDED == TRUE)
-    mapping_aid_test_enabled = FALSE;
+    mapping_aid_test_enabled = false;
 #endif
 
     /* Initialise CC file */
@@ -1089,7 +1089,7 @@ tNFC_STATUS CE_T4TTestSetCC (uint16_t cc_len,
 
     if (version != 0xFF)
     {
-        mapping_aid_test_enabled = TRUE;
+        mapping_aid_test_enabled = true;
         if (version == T4T_VERSION_1_0)
             ce_test_tag_app_id[T4T_V20_NDEF_TAG_AID_LEN - 1] = 0x00;
         else if (version == T4T_VERSION_2_0)
@@ -1101,7 +1101,7 @@ tNFC_STATUS CE_T4TTestSetCC (uint16_t cc_len,
     }
     else
     {
-        mapping_aid_test_enabled = FALSE;
+        mapping_aid_test_enabled = false;
         p += 1;
     }
 

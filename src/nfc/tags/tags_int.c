@@ -75,13 +75,13 @@ const tT2T_CMD_RSP_INFO t2t_cmd_rsp_infos[] =
 const tT2T_INIT_TAG t2t_init_content[] =
 {
 /*  Tag Name        is_multi_v  Ver Block                   Ver No                               Vbitmask   to_calc_cc CC3      OTP     BLPB */
-    {TAG_MIFARE_MID,    TRUE,   T2T_MIFARE_VERSION_BLOCK,   T2T_MIFARE_ULTRALIGHT_VER_NO,        0xFFFF,    FALSE,     0x06,    FALSE,  T2T_DEFAULT_LOCK_BLPB},
-    {TAG_MIFARE_MID,    TRUE,   T2T_MIFARE_VERSION_BLOCK,   T2T_MIFARE_ULTRALIGHT_FAMILY_VER_NO, 0xFFFF,    TRUE,      0x00,    FALSE,  T2T_DEFAULT_LOCK_BLPB},
-    {TAG_KOVIO_MID,     FALSE,  0x00,                       0x00,                                0x0000,    FALSE,     0x1D,    TRUE,   0x04},
-    {TAG_INFINEON_MID,  TRUE,   T2T_INFINEON_VERSION_BLOCK, T2T_INFINEON_MYD_MOVE_LEAN,          0xFFF0,    FALSE,     0x06,    FALSE,  T2T_DEFAULT_LOCK_BLPB},
-    {TAG_INFINEON_MID,  TRUE,   T2T_INFINEON_VERSION_BLOCK, T2T_INFINEON_MYD_MOVE,               0xFFF0,    FALSE,     0x10,    FALSE,  T2T_DEFAULT_LOCK_BLPB},
-    {TAG_BRCM_MID,      TRUE,   T2T_BRCM_VERSION_BLOCK,     T2T_BRCM_STATIC_MEM,                 0xFFFF,    FALSE,     0x06,    FALSE,  T2T_DEFAULT_LOCK_BLPB},
-    {TAG_BRCM_MID,      TRUE,   T2T_BRCM_VERSION_BLOCK,     T2T_BRCM_DYNAMIC_MEM,                0xFFFF,    FALSE,     0x3C,    FALSE,  T2T_DEFAULT_LOCK_BLPB}
+    {TAG_MIFARE_MID,    true,   T2T_MIFARE_VERSION_BLOCK,   T2T_MIFARE_ULTRALIGHT_VER_NO,        0xFFFF,    false,     0x06,    false,  T2T_DEFAULT_LOCK_BLPB},
+    {TAG_MIFARE_MID,    true,   T2T_MIFARE_VERSION_BLOCK,   T2T_MIFARE_ULTRALIGHT_FAMILY_VER_NO, 0xFFFF,    true,      0x00,    false,  T2T_DEFAULT_LOCK_BLPB},
+    {TAG_KOVIO_MID,     false,  0x00,                       0x00,                                0x0000,    false,     0x1D,    true,   0x04},
+    {TAG_INFINEON_MID,  true,   T2T_INFINEON_VERSION_BLOCK, T2T_INFINEON_MYD_MOVE_LEAN,          0xFFF0,    false,     0x06,    false,  T2T_DEFAULT_LOCK_BLPB},
+    {TAG_INFINEON_MID,  true,   T2T_INFINEON_VERSION_BLOCK, T2T_INFINEON_MYD_MOVE,               0xFFF0,    false,     0x10,    false,  T2T_DEFAULT_LOCK_BLPB},
+    {TAG_BRCM_MID,      true,   T2T_BRCM_VERSION_BLOCK,     T2T_BRCM_STATIC_MEM,                 0xFFFF,    false,     0x06,    false,  T2T_DEFAULT_LOCK_BLPB},
+    {TAG_BRCM_MID,      true,   T2T_BRCM_VERSION_BLOCK,     T2T_BRCM_DYNAMIC_MEM,                0xFFFF,    false,     0x3C,    false,  T2T_DEFAULT_LOCK_BLPB}
 
 };
 

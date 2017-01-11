@@ -106,7 +106,7 @@ void ce_t3t_send_to_lower (BT_HDR *p_msg)
     p_msg->len += 1;            /* Increment len to include SoD */
 
 #if (BT_TRACE_PROTOCOL == TRUE)
-    DispT3TagMessage (p_msg, FALSE);
+    DispT3TagMessage (p_msg, false);
 #endif
 
     if (NFC_SendData (NFC_RF_CONN_ID, p_msg) != NFC_STATUS_OK)
@@ -571,7 +571,7 @@ void ce_t3t_handle_non_nfc_forum_cmd (tCE_CB *p_mem_cb, uint8_t cmd_id, BT_HDR *
     uint8_t *p = (uint8_t *) (p_cmd_msg +1) + p_cmd_msg->offset;
     uint16_t sc;
     uint8_t rc;
-    bool    send_response = TRUE;
+    bool    send_response = true;
 
     if ((p_rsp_msg = ce_t3t_get_rsp_buf ()) != NULL)
     {
@@ -606,7 +606,7 @@ void ce_t3t_handle_non_nfc_forum_cmd (tCE_CB *p_mem_cb, uint8_t cmd_id, BT_HDR *
             }
             else
             {
-                send_response = FALSE;
+                send_response = false;
             }
             break;
 
@@ -641,7 +641,7 @@ void ce_t3t_handle_non_nfc_forum_cmd (tCE_CB *p_mem_cb, uint8_t cmd_id, BT_HDR *
         default:
             /* Unhandled command */
             CE_TRACE_ERROR1 ("Unhandled CE opcode: %02x", cmd_id);
-            send_response = FALSE;
+            send_response = false;
             break;
         }
 
@@ -682,13 +682,13 @@ void ce_t3t_data_cback (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
     uint8_t *p = (uint8_t *) (p_msg +1) + p_msg->offset;
     uint8_t cmd_nfcid2[NCI_RF_F_UID_LEN];
     uint16_t block_list_start_offset, remaining;
-    bool    msg_processed = FALSE;
+    bool    msg_processed = false;
     bool    block_list_ok;
     uint8_t sod;
     uint8_t cmd_type;
 
 #if (BT_TRACE_PROTOCOL == TRUE)
-    DispT3TagMessage (p_msg, TRUE);
+    DispT3TagMessage (p_msg, true);
 #endif
 
     /* If activate system code is not NDEF, or if no local NDEF contents was set, then pass data up to the app */
@@ -721,7 +721,7 @@ void ce_t3t_data_cback (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
         else if (cmd_type == CE_T3T_COMMAND_FELICA)
         {
             ce_t3t_handle_non_nfc_forum_cmd (p_ce_cb, cmd_id, p_msg);
-            msg_processed = TRUE;
+            msg_processed = true;
         }
         else
         {
@@ -762,7 +762,7 @@ void ce_t3t_data_cback (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
                     }
 
                     /* Verify that block list */
-                    block_list_ok = TRUE;
+                    block_list_ok = true;
                     STREAM_TO_UINT8 (p_cb->cur_cmd.num_blocks, p);
                     remaining = p_msg->len - block_list_start_offset;
                     p_cb->cur_cmd.p_block_list_start = p;
@@ -773,7 +773,7 @@ void ce_t3t_data_cback (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
                         {
                             /* Unexpected end of message (while reading block-list) */
                             CE_TRACE_ERROR0 ("CE: received invalid T3t message (unexpected end of block-list)");
-                            block_list_ok = FALSE;
+                            block_list_ok = false;
                             break;
                         }
 
@@ -785,14 +785,14 @@ void ce_t3t_data_cback (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
                         {
                             /* Invalid service code */
                             CE_TRACE_ERROR1 ("CE: received invalid T3t message (invalid service index: %i)", (bl0 & T3T_MSG_SERVICE_LIST_MASK));
-                            block_list_ok = FALSE;
+                            block_list_ok = false;
                             break;
                         }
                         else if ((!(bl0 & T3T_MSG_MASK_TWO_BYTE_BLOCK_DESC_FORMAT)) && (remaining < 3))
                         {
                             /* Unexpected end of message (while reading 3-byte entry) */
                             CE_TRACE_ERROR0 ("CE: received invalid T3t message (unexpected end of block-list)");
-                            block_list_ok = FALSE;
+                            block_list_ok = false;
                             break;
                         }
 
@@ -814,7 +814,7 @@ void ce_t3t_data_cback (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
                                 CE_TRACE_ERROR1 ("CE: unexpected data after after CHECK command (#i bytes)", remaining);
                             }
                             ce_t3t_handle_check_cmd (p_ce_cb, p_msg);
-                            msg_processed = TRUE;
+                            msg_processed = true;
                         }
                         else
                         {
@@ -826,7 +826,7 @@ void ce_t3t_data_cback (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
                             else
                             {
                                 ce_t3t_handle_update_cmd (p_ce_cb, p_msg);
-                                msg_processed = TRUE;
+                                msg_processed = true;
                             }
                         }
                     }
@@ -939,12 +939,12 @@ tNFC_STATUS CE_T3tSetLocalNDEFMsg (bool    read_only,
     /* Check if disabling the local NDEF */
     if (!p_buf)
     {
-        p_cb->ndef_info.initialized = FALSE;
+        p_cb->ndef_info.initialized = false;
     }
     /* Save ndef attributes */
     else
     {
-        p_cb->ndef_info.initialized = TRUE;
+        p_cb->ndef_info.initialized = true;
         p_cb->ndef_info.ln = size_current;                          /* Current length */
         p_cb->ndef_info.nmaxb = (uint16_t) ((size_max + 15) / T3T_MSG_BLOCKSIZE);  /* Max length (in blocks) */
         p_cb->ndef_info.rwflag = (read_only) ? T3T_MSG_NDEF_RWFLAG_RO : T3T_MSG_NDEF_RWFLAG_RW;

@@ -47,7 +47,7 @@ bool    nci_proc_core_rsp (BT_HDR *p_msg)
 {
     uint8_t *p;
     uint8_t *pp, len, op_code;
-    bool    free = TRUE;
+    bool    free = true;
     uint8_t *p_old = nfc_cb.last_cmd;
 
     /* find the start of the NCI message and parse the NCI header */
@@ -61,12 +61,12 @@ bool    nci_proc_core_rsp (BT_HDR *p_msg)
     switch (op_code)
     {
     case NCI_MSG_CORE_RESET:
-        nfc_ncif_proc_reset_rsp (pp, FALSE);
+        nfc_ncif_proc_reset_rsp (pp, false);
         break;
 
     case NCI_MSG_CORE_INIT:
         nfc_ncif_proc_init_rsp (p_msg);
-        free = FALSE;
+        free = false;
         break;
 
     case NCI_MSG_CORE_GET_CONFIG:
@@ -119,7 +119,7 @@ void nci_proc_core_ntf (BT_HDR *p_msg)
     switch (op_code)
     {
     case NCI_MSG_CORE_RESET:
-        nfc_ncif_proc_reset_rsp (pp, TRUE);
+        nfc_ncif_proc_reset_rsp (pp, true);
         break;
 
     case NCI_MSG_CORE_GEN_ERR_STATUS:
@@ -185,11 +185,11 @@ void nci_proc_rf_management_rsp (BT_HDR *p_msg)
         break;
 
     case NCI_MSG_RF_DEACTIVATE:
-        if (FALSE == nfa_dm_p2p_prio_logic (op_code, pp, NFA_DM_P2P_PRIO_RSP))
+        if (nfa_dm_p2p_prio_logic(op_code, pp, NFA_DM_P2P_PRIO_RSP) == false)
         {
             return;
         }
-        nfc_ncif_proc_deactivate (*pp, *p_old, FALSE);
+        nfc_ncif_proc_deactivate (*pp, *p_old, false);
         break;
 
 #if (NFC_NFCEE_INCLUDED == TRUE)
@@ -243,15 +243,15 @@ void nci_proc_rf_management_ntf (BT_HDR *p_msg)
         break;
 
     case NCI_MSG_RF_DEACTIVATE:
-        if (FALSE == nfa_dm_p2p_prio_logic (op_code, pp, NFA_DM_P2P_PRIO_NTF))
+        if (nfa_dm_p2p_prio_logic(op_code, pp, NFA_DM_P2P_PRIO_NTF) == false)
         {
             return;
         }
-        nfc_ncif_proc_deactivate (NFC_STATUS_OK, *pp, TRUE);
+        nfc_ncif_proc_deactivate (NFC_STATUS_OK, *pp, true);
         break;
 
     case NCI_MSG_RF_INTF_ACTIVATED:
-        if (FALSE == nfa_dm_p2p_prio_logic (op_code, pp, NFA_DM_P2P_PRIO_NTF))
+        if (nfa_dm_p2p_prio_logic(op_code, pp, NFA_DM_P2P_PRIO_NTF) == false)
         {
             return;
         }

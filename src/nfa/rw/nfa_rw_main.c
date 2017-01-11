@@ -201,7 +201,7 @@ bool    nfa_rw_handle_event(BT_HDR *p_msg)
     else
     {
         NFA_TRACE_ERROR1 ("nfa_rw_handle_event: unhandled event 0x%02X", p_msg->event);
-        return TRUE;
+        return true;
     }
 }
 

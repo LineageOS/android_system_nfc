@@ -145,7 +145,7 @@ uint8_t nfc_ncif_send_data (tNFC_CONN_CB *p_cb, BT_HDR *p_data)
     uint8_t pbf = 1;
     uint8_t buffer_size = p_cb->buff_size;
     uint8_t hdr0 = p_cb->conn_id;
-    bool    fragmented = FALSE;
+    bool    fragmented = false;
 
     NFC_TRACE_DEBUG3 ("nfc_ncif_send_data :%d, num_buff:%d qc:%d", p_cb->conn_id, p_cb->num_buff, p_cb->tx_q.count);
     if (p_cb->id == NFC_RF_CONN_ID)
@@ -187,11 +187,11 @@ uint8_t nfc_ncif_send_data (tNFC_CONN_CB *p_cb, BT_HDR *p_data)
         {
             pbf         = 0;   /* last fragment */
             ulen        = (uint8_t)(p_data->len);
-            fragmented  = FALSE;
+            fragmented = false;
         }
         else
         {
-            fragmented  = TRUE;
+            fragmented = true;
             ulen        = buffer_size;
         }
 
@@ -368,7 +368,7 @@ void nfc_ncif_send_cmd (BT_HDR *p_buf)
 bool    nfc_ncif_process_event (BT_HDR *p_msg)
 {
     uint8_t mt, pbf, gid, *p, *pp;
-    bool    free = TRUE;
+    bool    free = true;
     uint8_t oid;
     uint8_t *p_old, old_gid, old_oid, old_mt;
 
@@ -382,7 +382,7 @@ bool    nfc_ncif_process_event (BT_HDR *p_msg)
     case NCI_MT_DATA:
         NFC_TRACE_DEBUG0 ("NFC received data");
         nfc_ncif_proc_data (p_msg);
-        free = FALSE;
+        free = false;
         break;
 
     case NCI_MT_RSP:
@@ -395,7 +395,7 @@ bool    nfc_ncif_process_event (BT_HDR *p_msg)
         if ((old_gid != gid) || (old_oid != oid))
         {
             NFC_TRACE_ERROR2 ("nfc_ncif_process_event unexpected rsp: gid:0x%x, oid:0x%x", gid, oid);
-            return TRUE;
+            return true;
         }
 
         switch (gid)
@@ -1160,7 +1160,7 @@ void nfc_ncif_proc_get_routing (uint8_t *p, uint8_t len)
         num_entries = *p++;
         for (xx = 0; xx < num_entries; xx++)
         {
-            if ((more == FALSE) && (xx == (num_entries - 1)))
+            if ((more == false) && (xx == (num_entries - 1)))
                 status = NFC_STATUS_OK;
             evt_data.status         = (tNFC_STATUS) status;
             evt_data.nfcee_id       = *p++;
@@ -1438,7 +1438,7 @@ void nfc_data_event (tNFC_CONN_CB * p_cb)
                 data_cevt.status = NFC_STATUS_CONTINUE;
             else
             {
-                nfc_cb.reassembly = TRUE;
+                nfc_cb.reassembly = true;
                 data_cevt.status = NFC_STATUS_OK;
             }
 
@@ -1546,7 +1546,8 @@ void nfc_ncif_proc_data (BT_HDR *p_msg)
                 if (!(p_last->layer_specific & NFC_RAS_FRAGMENTED))
                 {
                     /* this packet was reassembled. display the complete packet */
-                    DISP_NCI ((uint8_t *)(p_last + 1) + p_last->offset, p_last->len, TRUE);
+                    DISP_NCI ((uint8_t *)(p_last + 1) + p_last->offset, p_last->len,
+                              true);
                 }
 #endif
                 nfc_data_event (p_cb);

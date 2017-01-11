@@ -644,18 +644,18 @@ bool    LLCP_IsLogicalLinkCongested (uint8_t local_sap,
         ||((p_app_cb->link_type & LLCP_LINK_TYPE_LOGICAL_DATA_LINK) == 0)
         ||(p_app_cb->is_ui_tx_congested)  )
     {
-        return (TRUE);
+        return true;
     }
     else if (  (num_pending_ui_pdu + p_app_cb->ui_xmit_q.count >= llcp_cb.ll_tx_congest_start)
              ||(total_pending_ui_pdu + llcp_cb.total_tx_ui_pdu >= llcp_cb.max_num_ll_tx_buff)
              ||(total_pending_ui_pdu + total_pending_i_pdu + llcp_cb.total_tx_ui_pdu + llcp_cb.total_tx_i_pdu >= llcp_cb.max_num_tx_buff)  )
     {
         /* set flag so LLCP can notify uncongested status later */
-        p_app_cb->is_ui_tx_congested = TRUE;
+        p_app_cb->is_ui_tx_congested = true;
 
-        return (TRUE);
+        return true;
     }
-    return (FALSE);
+    return false;
 }
 
 /*******************************************************************************
@@ -813,18 +813,18 @@ bool    LLCP_ReadLogicalLinkData (uint8_t  local_sap,
         /* if there is more UI PDU in rx queue */
         if (p_app_cb->ui_rx_q.p_first)
         {
-            return (TRUE);
+            return true;
         }
         else
         {
-            return (FALSE);
+            return false;
         }
     }
     else
     {
         LLCP_TRACE_ERROR1 ("LLCP_ReadLogicalLinkData (): Unregistered SAP:0x%x", local_sap);
 
-        return (FALSE);
+        return false;
     }
 }
 
@@ -1111,18 +1111,18 @@ bool    LLCP_IsDataLinkCongested (uint8_t local_sap,
         if (  (p_dlcb->is_tx_congested)
             ||(p_dlcb->remote_busy)  )
         {
-            return (TRUE);
+            return true;
         }
         else if (  (num_pending_i_pdu + p_dlcb->i_xmit_q.count >= p_dlcb->remote_rw)
                  ||(total_pending_ui_pdu + total_pending_i_pdu + llcp_cb.total_tx_ui_pdu + llcp_cb.total_tx_i_pdu >= llcp_cb.max_num_tx_buff)  )
         {
             /* set flag so LLCP can notify uncongested status later */
-            p_dlcb->is_tx_congested = TRUE;
-            return (TRUE);
+            p_dlcb->is_tx_congested = true;
+            return true;
         }
-        return (FALSE);
+        return false;
     }
-    return (TRUE);
+    return true;
 }
 
 /*******************************************************************************
@@ -1270,25 +1270,25 @@ bool    LLCP_ReadDataLinkData (uint8_t  local_sap,
             &&(p_dlcb->num_rx_i_pdu <= p_dlcb->rx_congest_threshold / 2)  )
         {
             /* send RR */
-            p_dlcb->is_rx_congested = FALSE;
+            p_dlcb->is_rx_congested = false;
             p_dlcb->flags |= LLCP_DATA_LINK_FLAG_PENDING_RR_RNR;
         }
 
         /* if there is more I PDU in rx queue */
         if (p_dlcb->i_rx_q.p_first)
         {
-            return (TRUE);
+            return true;
         }
         else
         {
-            return (FALSE);
+            return false;
         }
     }
     else
     {
         LLCP_TRACE_ERROR0 ("LLCP_ReadDataLinkData (): No data link connection");
 
-        return (FALSE);
+        return false;
     }
 }
 
@@ -1350,7 +1350,7 @@ uint32_t LLCP_FlushDataLinkRxData (uint8_t  local_sap,
             &&(p_dlcb->is_rx_congested)  )
         {
             /* send RR */
-            p_dlcb->is_rx_congested = FALSE;
+            p_dlcb->is_rx_congested = false;
             p_dlcb->flags |= LLCP_DATA_LINK_FLAG_PENDING_RR_RNR;
         }
 
@@ -1469,7 +1469,7 @@ tLLCP_STATUS LLCP_SetLocalBusyStatus (uint8_t local_sap,
             /* send RR or RNR with valid sequence */
             p_dlcb->flags |= LLCP_DATA_LINK_FLAG_PENDING_RR_RNR;
 
-            if (is_busy == FALSE)
+            if (is_busy == false)
             {
                 if (p_dlcb->i_rx_q.count)
                 {

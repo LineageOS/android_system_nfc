@@ -448,7 +448,7 @@ NFCSTATUS phDnldNfc_Write(bool_t  bRecoverSeq, pphDnldNfc_Buff_t pData, pphDnldN
             }
             else
             {
-                if(FALSE == bRecoverSeq)
+                if(bRecoverSeq == false)
                 {
 
                     pImgPtr = (uint8_t *)gpphDnldContext->nxp_nfc_fw;
@@ -494,10 +494,10 @@ NFCSTATUS phDnldNfc_Write(bool_t  bRecoverSeq, pphDnldNfc_Buff_t pData, pphDnldN
                 (gpphDnldContext->tRspBuffInfo.wLen) = 0;
                 (gpphDnldContext->tUserData.pBuff) = pImgPtr;
                 (gpphDnldContext->tUserData.wLen) = wLen;
-                (gpphDnldContext->bResendLastFrame) = FALSE;
+                (gpphDnldContext->bResendLastFrame) = false;
 
                 memset(&(gpphDnldContext->tRWInfo),0,sizeof(gpphDnldContext->tRWInfo));
-                (gpphDnldContext->tRWInfo.bFirstWrReq) = TRUE;
+                (gpphDnldContext->tRWInfo.bFirstWrReq) = true;
                 (gpphDnldContext->UserCb) = pNotify;
                 (gpphDnldContext->UserCtxt) = pContext;
 
@@ -881,7 +881,7 @@ NFCSTATUS phDnldNfc_InitImgInfo(void)
     phDnldNfc_SetHwDevHandle();
 
     /*Read Firmware file name from config file*/
-    if (GetNxpStrValue(NAME_NXP_FW_NAME, fwFileName, sizeof (fwFileName)) == TRUE)
+    if (GetNxpStrValue(NAME_NXP_FW_NAME, fwFileName, sizeof(fwFileName)) == true)
     {
         strcpy (fwpathName, FW_DLL_ROOT_DIR);
         strncat (fwpathName, fwFileName, strlen (fwFileName));
@@ -890,7 +890,7 @@ NFCSTATUS phDnldNfc_InitImgInfo(void)
 
     /* load the library and get the image info pointer */
 #if(NFC_NXP_CHIP_TYPE != PN547C2)
-    if (gRecFWDwnld == TRUE)
+    if (gRecFWDwnld == true)
         wStatus = phDnldNfc_LoadRecoveryFW (pathName, &pImageInfo, &ImageInfoLen);
     else
 #endif
@@ -965,7 +965,7 @@ NFCSTATUS phDnldNfc_LoadRecInfo(void)
     /* if memory is not allocated then allocate memory for donwload context structure */
     phDnldNfc_SetHwDevHandle();
 #if(NFC_NXP_CHIP_TYPE != PN547C2)
-    if (gRecFWDwnld == TRUE)
+    if (gRecFWDwnld == true)
         wStatus = phDnldNfc_LoadRecoveryFW (PLATFORM_LIB_PATH, &pImageInfo, &ImageInfoLen);
     else
 #endif
@@ -1026,7 +1026,7 @@ NFCSTATUS phDnldNfc_LoadPKInfo(void)
 
     /* load the PKU image library */
 #if(NFC_NXP_CHIP_TYPE != PN547C2)
-    if (gRecFWDwnld == TRUE)
+    if (gRecFWDwnld == true)
         wStatus = phDnldNfc_LoadRecoveryFW (PKU_LIB_PATH, &pImageInfo, &ImageInfoLen);
     else
 #endif
