@@ -34,7 +34,7 @@
 #include "nfc_int.h"
 #include "gki.h"
 
-#if (defined (RW_NDEF_INCLUDED) && (RW_NDEF_INCLUDED == TRUE))
+#if (RW_NDEF_INCLUDED == TRUE)
 
 /* Local Functions */
 static tNFC_STATUS rw_t1t_handle_rall_rsp (bool    *p_notify,uint8_t *p_data);
@@ -2800,6 +2800,6 @@ static char *rw_t1t_get_sub_state_name (uint8_t sub_state)
 }
 #endif /* (BT_TRACE_VERBOSE == TRUE) */
 
-#endif /* (defined ((RW_NDEF_INCLUDED) && (RW_NDEF_INCLUDED == TRUE)) */
+#endif /* (RW_NDEF_INCLUDED == TRUE) */
 
 #endif /* (NFC_INCLUDED == TRUE) */

@@ -240,7 +240,7 @@ NFC_API extern void nfc_ncif_error_status (uint8_t conn_id, uint8_t status);
 NFC_API extern void nfc_ncif_proc_credits(uint8_t *p, uint16_t plen);
 NFC_API extern void nfc_ncif_proc_activate (uint8_t *p, uint8_t len);
 NFC_API extern void nfc_ncif_proc_deactivate (uint8_t status, uint8_t deact_type, bool    is_ntf);
-#if ((NFC_NFCEE_INCLUDED == TRUE) && (NFC_RW_ONLY == FALSE))
+#if (NFC_NFCEE_INCLUDED == TRUE && NFC_RW_ONLY == FALSE)
 NFC_API extern void nfc_ncif_proc_ee_action (uint8_t *p, uint16_t plen);
 NFC_API extern void nfc_ncif_proc_ee_discover_req (uint8_t *p, uint16_t plen);
 NFC_API extern void nfc_ncif_proc_get_routing (uint8_t *p, uint8_t len);

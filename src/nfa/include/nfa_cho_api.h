@@ -349,7 +349,7 @@ NFC_API extern tNFA_STATUS NFA_ChoSendSelectError (uint8_t  error_reason,
 *******************************************************************************/
 NFC_API extern uint8_t NFA_ChoSetTraceLevel (uint8_t new_level);
 
-#if (defined (NFA_CHO_TEST_INCLUDED) && (NFA_CHO_TEST_INCLUDED == TRUE))
+#if (NFA_CHO_TEST_INCLUDED == TRUE)
 
 #define NFA_CHO_TEST_VERSION    0x01
 #define NFA_CHO_TEST_RANDOM     0x02

@@ -82,7 +82,7 @@ typedef struct
     bool    nfc_hal_prm_nvm_required;       /* set nfc_hal_prm_nvm_required to TRUE, if the platform wants to abort PRM process without NVM */
     uint16_t  nfc_hal_nfcc_enable_timeout;    /* max time to wait for RESET NTF after setting REG_PU to high */
     uint16_t  nfc_hal_post_xtal_timeout;      /* max time to wait for RESET NTF after setting Xtal frequency */
-#if (defined(NFC_HAL_HCI_INCLUDED) && (NFC_HAL_HCI_INCLUDED == TRUE))
+#if (NFC_HAL_HCI_INCLUDED == TRUE)
     bool    nfc_hal_first_boot;             /* set nfc_hal_first_boot to TRUE, if platform enables NFC for the first time after bootup */
     uint8_t nfc_hal_hci_uicc_support;       /* set nfc_hal_hci_uicc_support to Zero, if no UICC is supported otherwise set corresponding bit(s) for every supported UICC(s) */
 #endif
@@ -114,7 +114,7 @@ extern "C"
 #endif
 
 /* Toolset-specific macro for exporting API funcitons */
-#if (defined(NFC_HAL_TARGET) && (NFC_HAL_TARGET == TRUE)) && (defined(_WINDLL))
+#if (NFC_HAL_TARGET == TRUE && _WINDLL == TRUE)
 #define EXPORT_HAL_API  __declspec(dllexport)
 #else
 #define EXPORT_HAL_API

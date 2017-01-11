@@ -26,7 +26,7 @@
 #include <string.h>
 #include "nfc_target.h"
 
-#if NFC_INCLUDED == TRUE
+#if (NFC_INCLUDED == TRUE)
 #include "nci_defs.h"
 #include "nci_hmsgs.h"
 #include "nfc_api.h"
