@@ -367,7 +367,7 @@ tLLCP_DLCB *llcp_util_allocate_data_link (uint8_t reg_sap, uint8_t remote_sap)
         p_dlcb->p_app_cb    = llcp_util_get_app_cb (reg_sap);
         p_dlcb->local_sap   = reg_sap;
         p_dlcb->remote_sap  = remote_sap;
-        p_dlcb->timer.param = (TIMER_PARAM_TYPE) p_dlcb;
+        p_dlcb->timer.param = (uintptr_t)p_dlcb;
 
         /* this is for inactivity timer and congestion control. */
         llcp_cb.num_data_link_connection++;
