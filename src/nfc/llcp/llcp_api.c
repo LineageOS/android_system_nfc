@@ -455,7 +455,7 @@ uint8_t LLCP_RegisterServer (uint8_t         reg_sap,
             return LLCP_INVALID_SAP;
         }
 
-        BCM_STRNCPY_S ((char *) p_app_cb->p_service_name, length + 1, (char *) p_service_name, length + 1);
+        strncpy ((char *) p_app_cb->p_service_name, (char *) p_service_name, length + 1);
         p_app_cb->p_service_name[length] = 0;
     }
     else
