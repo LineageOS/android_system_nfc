@@ -56,7 +56,7 @@ typedef uint8_t tCE_EVENT;
 typedef struct
 {
     tNFC_STATUS     status;
-    BT_HDR         *p_data;
+    NFC_HDR         *p_data;
 } tCE_T2T_DATA;
 
 typedef struct
@@ -71,7 +71,7 @@ typedef struct
 {
     tNFC_STATUS     status;
     uint8_t         aid_handle;
-    BT_HDR         *p_data;
+    NFC_HDR         *p_data;
 } tCE_RAW_FRAME;
 
 typedef union

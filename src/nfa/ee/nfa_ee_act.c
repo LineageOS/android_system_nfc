@@ -243,7 +243,7 @@ static uint16_t nfa_ee_total_lmrt_size(void)
 *******************************************************************************/
 static void nfa_ee_conn_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
 {
-    BT_HDR             *p_msg;
+    NFC_HDR             *p_msg;
     tNFA_EE_NCI_CONN    cbk;
 
     NFA_TRACE_DEBUG2("nfa_ee_conn_cback: conn_id: %d, event=0x%02x", conn_id, event);
@@ -257,7 +257,7 @@ static void nfa_ee_conn_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *
     cbk.conn_id     = conn_id;
     cbk.event       = event;
     cbk.p_data      = p_data;
-    p_msg           = (BT_HDR *)&cbk;
+    p_msg           = (NFC_HDR *)&cbk;
 
     nfa_ee_evt_hdlr (p_msg);
 }
@@ -894,14 +894,14 @@ void nfa_ee_api_connect(tNFA_EE_MSG *p_data)
 void nfa_ee_api_send_data(tNFA_EE_MSG *p_data)
 {
     tNFA_EE_ECB  *p_cb = p_data->send_data.p_cb;
-    BT_HDR *p_pkt;
-    uint16_t size = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE + p_data->send_data.data_len + BT_HDR_SIZE;
+    NFC_HDR *p_pkt;
+    uint16_t size = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE + p_data->send_data.data_len + NFC_HDR_SIZE;
     uint8_t  *p;
     tNFA_STATUS status = NFA_STATUS_FAILED;
 
     if (p_cb->conn_st == NFA_EE_CONN_ST_CONN)
     {
-        p_pkt = (BT_HDR *)GKI_getbuf(size);
+        p_pkt = (NFC_HDR *)GKI_getbuf(size);
         if (p_pkt)
         {
             p_pkt->offset   = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
@@ -1312,7 +1312,7 @@ void nfa_ee_nci_disc_ntf(tNFA_EE_MSG *p_data)
         {
             nfa_sys_stop_timer (&nfa_ee_cb.discv_timer);
             p_data->hdr.event = NFA_EE_DISCV_TIMEOUT_EVT;
-            nfa_ee_evt_hdlr((BT_HDR *)p_data);
+            nfa_ee_evt_hdlr((NFC_HDR *)p_data);
         }
     }
 }
@@ -1584,7 +1584,7 @@ void nfa_ee_nci_conn(tNFA_EE_MSG *p_data)
     tNFA_EE_ECB      *p_cb;
     tNFA_EE_NCI_CONN    *p_cbk   = &p_data->conn;
     tNFC_CONN           *p_conn  = p_data->conn.p_data;
-    BT_HDR              *p_pkt   = NULL;
+    NFC_HDR              *p_pkt   = NULL;
     tNFA_EE_CBACK_DATA  evt_data = {0};
     tNFA_EE_EVT         event    = NFA_EE_INVALID;
     tNFA_EE_CBACK       *p_cback = NULL;
@@ -2317,7 +2317,7 @@ void nfa_ee_update_rout(void)
     int xx;
     tNFA_EE_ECB          *p_cb;
     uint8_t mask;
-    BT_HDR  msg;
+    NFC_HDR  msg;
 
     NFA_TRACE_DEBUG1 ("nfa_ee_update_rout ee_cfg_sts:0x%02x", nfa_ee_cb.ee_cfg_sts);
 

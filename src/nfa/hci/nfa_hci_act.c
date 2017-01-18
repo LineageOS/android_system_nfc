@@ -70,13 +70,13 @@ static void nfa_hci_handle_generic_gate_evt (uint8_t *p_data, uint16_t data_len,
 *******************************************************************************/
 void nfa_hci_check_pending_api_requests (void)
 {
-    BT_HDR              *p_msg;
+    NFC_HDR              *p_msg;
     tNFA_HCI_EVENT_DATA *p_evt_data;
     bool                b_free;
 
     /* If busy, or API queue is empty, then exit */
     if (  (nfa_hci_cb.hci_state != NFA_HCI_STATE_IDLE)
-        ||((p_msg = (BT_HDR *) GKI_dequeue (&nfa_hci_cb.hci_host_reset_api_q)) == NULL) )
+        ||((p_msg = (NFC_HDR *) GKI_dequeue (&nfa_hci_cb.hci_host_reset_api_q)) == NULL) )
         return;
 
     /* Process API request */
@@ -128,14 +128,14 @@ void nfa_hci_check_pending_api_requests (void)
 *******************************************************************************/
 void nfa_hci_check_api_requests (void)
 {
-    BT_HDR              *p_msg;
+    NFC_HDR              *p_msg;
     tNFA_HCI_EVENT_DATA *p_evt_data;
 
     for ( ; ; )
     {
         /* If busy, or API queue is empty, then exit */
         if (  (nfa_hci_cb.hci_state != NFA_HCI_STATE_IDLE)
-            ||((p_msg = (BT_HDR *) GKI_dequeue (&nfa_hci_cb.hci_api_q)) == NULL) )
+            ||((p_msg = (NFC_HDR *) GKI_dequeue (&nfa_hci_cb.hci_api_q)) == NULL) )
             break;
 
         /* Process API request */
@@ -652,7 +652,7 @@ static bool    nfa_hci_api_create_pipe (tNFA_HCI_EVENT_DATA *p_evt_data)
     {
         if (nfa_hciu_is_host_reseting (p_evt_data->create_pipe.dest_gate))
         {
-            GKI_enqueue (&nfa_hci_cb.hci_host_reset_api_q, (BT_HDR *) p_evt_data);
+            GKI_enqueue (&nfa_hci_cb.hci_host_reset_api_q, (NFC_HDR *) p_evt_data);
             return false;
         }
 
@@ -737,7 +737,7 @@ static bool    nfa_hci_api_get_reg_value (tNFA_HCI_EVENT_DATA *p_evt_data)
 
             if (nfa_hciu_is_host_reseting (p_pipe->dest_host))
             {
-                GKI_enqueue (&nfa_hci_cb.hci_host_reset_api_q, (BT_HDR *) p_evt_data);
+                GKI_enqueue (&nfa_hci_cb.hci_host_reset_api_q, (NFC_HDR *) p_evt_data);
                 return false;
             }
 
@@ -787,7 +787,7 @@ static bool    nfa_hci_api_set_reg_value (tNFA_HCI_EVENT_DATA *p_evt_data)
 
             if (nfa_hciu_is_host_reseting (p_pipe->dest_host))
             {
-                GKI_enqueue (&nfa_hci_cb.hci_host_reset_api_q, (BT_HDR *) p_evt_data);
+                GKI_enqueue (&nfa_hci_cb.hci_host_reset_api_q, (NFC_HDR *) p_evt_data);
                 return false;
             }
 
@@ -912,7 +912,7 @@ static bool    nfa_hci_api_send_cmd (tNFA_HCI_EVENT_DATA *p_evt_data)
         {
             if (nfa_hciu_is_host_reseting (p_pipe->dest_host))
             {
-                GKI_enqueue (&nfa_hci_cb.hci_host_reset_api_q, (BT_HDR *) p_evt_data);
+                GKI_enqueue (&nfa_hci_cb.hci_host_reset_api_q, (NFC_HDR *) p_evt_data);
                 return false;
             }
 
@@ -1023,7 +1023,7 @@ static bool    nfa_hci_api_send_event (tNFA_HCI_EVENT_DATA *p_evt_data)
         {
             if (nfa_hciu_is_host_reseting (p_pipe->dest_host))
             {
-                GKI_enqueue (&nfa_hci_cb.hci_host_reset_api_q, (BT_HDR *) p_evt_data);
+                GKI_enqueue (&nfa_hci_cb.hci_host_reset_api_q, (NFC_HDR *) p_evt_data);
                 return false;
             }
 

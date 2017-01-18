@@ -152,7 +152,7 @@ static uint8_t set_nfc_off_cmd[5] = {
  * It would be better to use some ring buffer from the USERIAL_Read() is reading
  * instead of putting it into GKI buffers.
  */
-#define READ_LIMIT (USERIAL_POOL_BUF_SIZE-BT_HDR_SIZE)
+#define READ_LIMIT (USERIAL_POOL_BUF_SIZE-NFC_HDR_SIZE)
 /*
  * minimum buffer size requirement to read a full sized packet from NFCC = 255 + 4 byte header
  */
@@ -762,7 +762,7 @@ uint32_t userial_read_thread(uint32_t arg)
     int error_count = 0;
     int bErrorReported = 0;
     int iMaxError = MAX_ERROR;
-    BT_HDR *p_buf = NULL;
+    NFC_HDR *p_buf = NULL;
 
     worker_thread1 = pthread_self();
 
@@ -771,10 +771,10 @@ uint32_t userial_read_thread(uint32_t arg)
 
     for (;linux_cb.sock > 0;)
     {
-        BT_HDR *p_buf;
+        NFC_HDR *p_buf;
         uint8_t *current_packet;
 
-        if ((p_buf = (BT_HDR *) GKI_getpoolbuf( USERIAL_POOL_ID ) )!= NULL)
+        if ((p_buf = (NFC_HDR *) GKI_getpoolbuf( USERIAL_POOL_ID ) )!= NULL)
         {
             p_buf->offset = 0;
             p_buf->layer_specific = 0;
@@ -844,7 +844,7 @@ uint32_t userial_read_thread(uint32_t arg)
     } /* for */
 
     ALOGD( "userial_read_thread(): freeing GKI_buffers\n");
-    while ((p_buf = (BT_HDR *) GKI_dequeue (&Userial_in_q)) != NULL)
+    while ((p_buf = (NFC_HDR *) GKI_dequeue (&Userial_in_q)) != NULL)
     {
         GKI_freebuf(p_buf);
         ALOGD("userial_read_thread: dequeued buffer from Userial_in_q\n");
@@ -1137,7 +1137,7 @@ done_open:
 **
 *******************************************************************************/
 
-static BT_HDR *pbuf_USERIAL_Read = NULL;
+static NFC_HDR *pbuf_USERIAL_Read = NULL;
 
 UDRV_API uint16_t  USERIAL_Read(tUSERIAL_PORT port, uint8_t *p_data, uint16_t len)
 {
@@ -1174,7 +1174,7 @@ UDRV_API uint16_t  USERIAL_Read(tUSERIAL_PORT port, uint8_t *p_data, uint16_t le
         }
 
         if (pbuf_USERIAL_Read == NULL && (total_len < len))
-            pbuf_USERIAL_Read = (BT_HDR *)GKI_dequeue(&Userial_in_q);
+            pbuf_USERIAL_Read = (NFC_HDR *)GKI_dequeue(&Userial_in_q);
 
     } while ((pbuf_USERIAL_Read != NULL) && (total_len < len));
 
@@ -1201,7 +1201,7 @@ UDRV_API uint16_t  USERIAL_Read(tUSERIAL_PORT port, uint8_t *p_data, uint16_t le
 **
 *******************************************************************************/
 
-UDRV_API void    USERIAL_ReadBuf(tUSERIAL_PORT port, BT_HDR **p_buf)
+UDRV_API void    USERIAL_ReadBuf(tUSERIAL_PORT port, NFC_HDR **p_buf)
 {
 
 }
@@ -1223,7 +1223,7 @@ UDRV_API void    USERIAL_ReadBuf(tUSERIAL_PORT port, BT_HDR **p_buf)
 **
 *******************************************************************************/
 
-UDRV_API bool    USERIAL_WriteBuf(tUSERIAL_PORT port, BT_HDR *p_buf)
+UDRV_API bool    USERIAL_WriteBuf(tUSERIAL_PORT port, NFC_HDR *p_buf)
 {
     return false;
 }
@@ -1497,7 +1497,7 @@ UDRV_API void    USERIAL_Close(tUSERIAL_PORT port)
 *******************************************************************************/
 void userial_close_thread(uint32_t params)
 {
-    BT_HDR                  *p_buf = NULL;
+    NFC_HDR                  *p_buf = NULL;
     int result;
 
     ALOGD( "%s: closing transport (%d)\n", __func__, linux_cb.sock);

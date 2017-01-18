@@ -55,7 +55,7 @@ typedef uint8_t tNFA_SYS_ID;
 typedef void (tNFA_SYS_ENABLE) (void);
 
 /* event handler function type */
-typedef bool    (tNFA_SYS_EVT_HDLR) (BT_HDR *p_msg);
+typedef bool    (tNFA_SYS_EVT_HDLR) (NFC_HDR *p_msg);
 
 /* disable function type */
 typedef void (tNFA_SYS_DISABLE) (void);
@@ -107,7 +107,7 @@ extern "C" {
 #endif
 
 NFC_API extern void nfa_sys_init (void);
-NFC_API extern void nfa_sys_event (BT_HDR *p_msg);
+NFC_API extern void nfa_sys_event (NFC_HDR *p_msg);
 NFC_API extern void nfa_sys_timer_update (void);
 NFC_API extern void nfa_sys_disable_timers (void);
 NFC_API extern void nfa_sys_set_trace_level (uint8_t level);

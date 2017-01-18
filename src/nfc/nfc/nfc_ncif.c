@@ -135,12 +135,12 @@ void nfc_wait_2_deactivate_timeout (void)
 ** Returns          void
 **
 *******************************************************************************/
-uint8_t nfc_ncif_send_data (tNFC_CONN_CB *p_cb, BT_HDR *p_data)
+uint8_t nfc_ncif_send_data (tNFC_CONN_CB *p_cb, NFC_HDR *p_data)
 {
     uint8_t *pp;
     uint8_t *ps;
     uint8_t ulen = NCI_MAX_PAYLOAD_SIZE;
-    BT_HDR *p;
+    NFC_HDR *p;
     uint8_t pbf = 1;
     uint8_t buffer_size = p_cb->buff_size;
     uint8_t hdr0 = p_cb->conn_id;
@@ -177,7 +177,7 @@ uint8_t nfc_ncif_send_data (tNFC_CONN_CB *p_cb, BT_HDR *p_data)
     }
 
     /* try to send the first data packet in the tx queue  */
-    p_data = (BT_HDR *)GKI_getfirst (&p_cb->tx_q);
+    p_data = (NFC_HDR *)GKI_getfirst (&p_cb->tx_q);
 
     /* post data fragment to NCIT task as credits are available */
     while (p_data && (p_data->len >= 0) && (p_cb->num_buff > 0))
@@ -198,7 +198,7 @@ uint8_t nfc_ncif_send_data (tNFC_CONN_CB *p_cb, BT_HDR *p_data)
         {
             /* if data packet is not fragmented, use the original buffer */
             p         = p_data;
-            p_data    = (BT_HDR *)GKI_dequeue (&p_cb->tx_q);
+            p_data    = (NFC_HDR *)GKI_dequeue (&p_cb->tx_q);
         }
         else
         {
@@ -215,7 +215,7 @@ uint8_t nfc_ncif_send_data (tNFC_CONN_CB *p_cb, BT_HDR *p_data)
             ps        = (uint8_t *)(p_data + 1) + p_data->offset;
             memcpy (pp, ps, ulen);
             }
-            /* adjust the BT_HDR on the old fragment */
+            /* adjust the NFC_HDR on the old fragment */
             p_data->len     -= ulen;
             p_data->offset  += ulen;
         }
@@ -237,7 +237,7 @@ uint8_t nfc_ncif_send_data (tNFC_CONN_CB *p_cb, BT_HDR *p_data)
         if (!fragmented)
         {
             /* check if there are more data to send */
-            p_data = (BT_HDR *)GKI_getfirst (&p_cb->tx_q);
+            p_data = (NFC_HDR *)GKI_getfirst (&p_cb->tx_q);
         }
     }
 
@@ -253,7 +253,7 @@ uint8_t nfc_ncif_send_data (tNFC_CONN_CB *p_cb, BT_HDR *p_data)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_check_cmd_queue (BT_HDR *p_buf)
+void nfc_ncif_check_cmd_queue (NFC_HDR *p_buf)
 {
     uint8_t *ps;
     /* If there are commands waiting in the xmit queue, or if the controller cannot accept any more commands, */
@@ -272,7 +272,7 @@ void nfc_ncif_check_cmd_queue (BT_HDR *p_buf)
     {
         /* If no command was provided, or if older commands were in the queue, then get cmd from the queue */
         if (!p_buf)
-            p_buf = (BT_HDR *)GKI_dequeue (&nfc_cb.nci_cmd_xmit_q);
+            p_buf = (NFC_HDR *)GKI_dequeue (&nfc_cb.nci_cmd_xmit_q);
 
         if (p_buf)
         {
@@ -345,7 +345,7 @@ void nfc_ncif_check_cmd_queue (BT_HDR *p_buf)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_send_cmd (BT_HDR *p_buf)
+void nfc_ncif_send_cmd (NFC_HDR *p_buf)
 {
     /* post the p_buf to NCIT task */
     p_buf->event            = BT_EVT_TO_NFC_NCI;
@@ -364,7 +364,7 @@ void nfc_ncif_send_cmd (BT_HDR *p_buf)
 ** Returns          TRUE if need to free buffer
 **
 *******************************************************************************/
-bool    nfc_ncif_process_event (BT_HDR *p_msg)
+bool    nfc_ncif_process_event (NFC_HDR *p_msg)
 {
     uint8_t mt, pbf, gid, *p, *pp;
     bool    free = true;
@@ -1319,7 +1319,7 @@ void nfc_ncif_proc_reset_rsp (uint8_t *p, bool    is_ntf)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_proc_init_rsp (BT_HDR *p_msg)
+void nfc_ncif_proc_init_rsp (NFC_HDR *p_msg)
 {
     uint8_t *p, status;
     tNFC_CONN_CB * p_cb = &nfc_cb.conn_cb[NFC_RF_CONN_ID];
@@ -1354,7 +1354,7 @@ void nfc_ncif_proc_init_rsp (BT_HDR *p_msg)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_proc_get_config_rsp (BT_HDR *p_evt)
+void nfc_ncif_proc_get_config_rsp (NFC_HDR *p_evt)
 {
     uint8_t *p;
     tNFC_RESPONSE_CBACK *p_cback = nfc_cb.p_resp_cback;
@@ -1404,13 +1404,13 @@ void nfc_ncif_proc_t3t_polling_ntf (uint8_t *p, uint16_t plen)
 *******************************************************************************/
 void nfc_data_event (tNFC_CONN_CB * p_cb)
 {
-    BT_HDR      *p_evt;
+    NFC_HDR      *p_evt;
     tNFC_DATA_CEVT data_cevt;
     uint8_t     *p;
 
     if (p_cb->p_cback)
     {
-        while ((p_evt = (BT_HDR *)GKI_getfirst (&p_cb->rx_q)) != NULL)
+        while ((p_evt = (NFC_HDR *)GKI_getfirst (&p_cb->rx_q)) != NULL)
         {
             if (p_evt->layer_specific & NFC_RAS_FRAGMENTED)
             {
@@ -1428,7 +1428,7 @@ void nfc_data_event (tNFC_CONN_CB * p_cb)
                 }
             }
 
-            p_evt = (BT_HDR *) GKI_dequeue (&p_cb->rx_q);
+            p_evt = (NFC_HDR *) GKI_dequeue (&p_cb->rx_q);
             /* report data event */
             p_evt->offset   += NCI_MSG_HDR_SIZE;
             p_evt->len      -= NCI_MSG_HDR_SIZE;
@@ -1471,15 +1471,15 @@ void nfc_data_event (tNFC_CONN_CB * p_cb)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_proc_data (BT_HDR *p_msg)
+void nfc_ncif_proc_data (NFC_HDR *p_msg)
 {
     uint8_t *pp, cid;
     tNFC_CONN_CB * p_cb;
     uint8_t pbf;
-    BT_HDR  *p_last;
+    NFC_HDR  *p_last;
     uint8_t *ps, *pd;
     uint16_t  size;
-    BT_HDR  *p_max = NULL;
+    NFC_HDR  *p_max = NULL;
     uint16_t  len;
 
     pp   = (uint8_t *) (p_msg+1) + p_msg->offset;
@@ -1493,22 +1493,22 @@ void nfc_ncif_proc_data (BT_HDR *p_msg)
         p_msg->layer_specific       = 0;
         if (pbf)
             p_msg->layer_specific   = NFC_RAS_FRAGMENTED;
-        p_last = (BT_HDR *)GKI_getlast (&p_cb->rx_q);
+        p_last = (NFC_HDR *)GKI_getlast (&p_cb->rx_q);
         if (p_last && (p_last->layer_specific & NFC_RAS_FRAGMENTED))
         {
             /* last data buffer is not last fragment, append this new packet to the last */
             size = GKI_get_buf_size(p_last);
-            if (size < (BT_HDR_SIZE + p_last->len + p_last->offset + len))
+            if (size < (NFC_HDR_SIZE + p_last->len + p_last->offset + len))
             {
                 /* the current size of p_last is not big enough to hold the new fragment, p_msg */
                 if (size != GKI_MAX_BUF_SIZE)
                 {
                     /* try the biggest GKI pool */
-                    p_max = (BT_HDR *)GKI_getpoolbuf (GKI_MAX_BUF_SIZE_POOL_ID);
+                    p_max = (NFC_HDR *)GKI_getpoolbuf (GKI_MAX_BUF_SIZE_POOL_ID);
                     if (p_max)
                     {
                         /* copy the content of last buffer to the new buffer */
-                        memcpy(p_max, p_last, BT_HDR_SIZE);
+                        memcpy(p_max, p_last, NFC_HDR_SIZE);
                         pd  = (uint8_t *)(p_max + 1) + p_max->offset;
                         ps  = (uint8_t *)(p_last + 1) + p_last->offset;
                         memcpy(pd, ps, p_last->len);

@@ -132,13 +132,13 @@ void nfa_rw_proc_disc_evt (tNFA_DM_RF_DISC_EVT event, tNFC_DISCOVER *p_data, boo
         msg.activate_ntf.p_activate_params  = &p_data->activate;
         msg.activate_ntf.excl_rf_not_active = excl_rf_not_active;
 
-        nfa_rw_handle_event ((BT_HDR *) &msg);
+        nfa_rw_handle_event ((NFC_HDR *) &msg);
         break;
 
     case NFA_DM_RF_DISC_DEACTIVATED_EVT:
         msg.hdr.event = NFA_RW_DEACTIVATE_NTF_EVT;
 
-        nfa_rw_handle_event ((BT_HDR *) &msg);
+        nfa_rw_handle_event ((NFC_HDR *) &msg);
         break;
 
     default:
@@ -155,7 +155,7 @@ void nfa_rw_proc_disc_evt (tNFA_DM_RF_DISC_EVT event, tNFC_DISCOVER *p_data, boo
 ** Returns          tNFA_STATUS
 **
 *******************************************************************************/
-tNFA_STATUS nfa_rw_send_raw_frame (BT_HDR *p_data)
+tNFA_STATUS nfa_rw_send_raw_frame (NFC_HDR *p_data)
 {
     tNFA_RW_MSG *p_msg;
 
@@ -166,7 +166,7 @@ tNFA_STATUS nfa_rw_send_raw_frame (BT_HDR *p_data)
 
         p_msg->op_req.params.send_raw_frame.p_data = p_data;
 
-        if (nfa_rw_handle_event ((BT_HDR *) p_msg))
+        if (nfa_rw_handle_event ((NFC_HDR *) p_msg))
             GKI_freebuf (p_msg);
 
         return (NFA_STATUS_OK);
@@ -183,7 +183,7 @@ tNFA_STATUS nfa_rw_send_raw_frame (BT_HDR *p_data)
 ** Returns          TRUE if caller should free p_msg buffer
 **
 *******************************************************************************/
-bool    nfa_rw_handle_event(BT_HDR *p_msg)
+bool    nfa_rw_handle_event(NFC_HDR *p_msg)
 {
     uint16_t act_idx;
 

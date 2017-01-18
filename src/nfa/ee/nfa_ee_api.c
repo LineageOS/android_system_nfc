@@ -535,7 +535,7 @@ tNFA_STATUS NFA_EeGetLmrtRemainingSize (void)
 *******************************************************************************/
 tNFA_STATUS NFA_EeUpdateNow(void)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
     tNFA_STATUS status = NFA_STATUS_FAILED;
 
     NFA_TRACE_API0 ("NFA_EeUpdateNow()");
@@ -544,7 +544,7 @@ tNFA_STATUS NFA_EeUpdateNow(void)
         NFA_TRACE_ERROR0 ("update in progress");
         status = NFA_STATUS_SEMANTIC_ERROR;
     }
-    else if ((p_msg = (BT_HDR *) GKI_getbuf (BT_HDR_SIZE)) != NULL)
+    else if ((p_msg = (NFC_HDR *) GKI_getbuf (NFC_HDR_SIZE)) != NULL)
     {
         p_msg->event    = NFA_EE_API_UPDATE_NOW_EVT;
 

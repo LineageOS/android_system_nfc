@@ -29,7 +29,7 @@
 #include "nfa_dm_int.h"
 #include "nfa_ee_int.h"
 
-extern void nfa_ee_vs_cback (tNFC_VS_EVT event, BT_HDR *p_data);
+extern void nfa_ee_vs_cback (tNFC_VS_EVT event, NFC_HDR *p_data);
 /*****************************************************************************
 **  Global Variables
 *****************************************************************************/
@@ -302,7 +302,7 @@ void nfa_ee_proc_hci_info_cback (void)
             {
                 nfa_sys_stop_timer (&nfa_ee_cb.discv_timer);
                 data.hdr.event = NFA_EE_DISCV_TIMEOUT_EVT;
-                nfa_ee_evt_hdlr((BT_HDR *)&data);
+                nfa_ee_evt_hdlr((NFC_HDR *)&data);
             }
         }
     }
@@ -322,7 +322,7 @@ void nfa_ee_proc_evt (tNFC_RESPONSE_EVT event, void *p_data)
 {
     tNFA_EE_INT_EVT         int_event=0;
     tNFA_EE_NCI_WAIT_RSP    cbk;
-    BT_HDR                  *p_hdr;
+    NFC_HDR                  *p_hdr;
 
     switch (event)
     {
@@ -355,7 +355,7 @@ void nfa_ee_proc_evt (tNFC_RESPONSE_EVT event, void *p_data)
     NFA_TRACE_DEBUG2 ("nfa_ee_proc_evt: event=0x%02x int_event:0x%x", event, int_event);
     if (int_event)
     {
-        p_hdr           = (BT_HDR *) &cbk;
+        p_hdr           = (NFC_HDR *) &cbk;
         cbk.hdr.event   = int_event;
         cbk.p_data      = p_data;
 
@@ -657,7 +657,7 @@ static char *nfa_ee_sm_evt_2_str (uint16_t event)
 ** Returns          TRUE if p_msg needs to be deallocated
 **
 *******************************************************************************/
-bool    nfa_ee_evt_hdlr (BT_HDR *p_msg)
+bool    nfa_ee_evt_hdlr (NFC_HDR *p_msg)
 {
     tNFA_EE_MSG *p_evt_data = (tNFA_EE_MSG *) p_msg;
     uint16_t  event = p_msg->event & 0x00ff;

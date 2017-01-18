@@ -61,7 +61,7 @@ void nfa_sys_ptim_init (tPTIM_CB *p_cb, uint16_t period, uint8_t timer_id)
 void nfa_sys_ptim_timer_update (tPTIM_CB *p_cb)
 {
     TIMER_LIST_ENT *p_tle;
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
     uint32_t new_ticks_count;
     int32_t  period_in_ticks;
 
@@ -101,7 +101,7 @@ void nfa_sys_ptim_timer_update (tPTIM_CB *p_cb)
         }
         else if (p_tle->event)
         {
-            if ((p_msg = (BT_HDR *) GKI_getbuf (sizeof (BT_HDR))) != NULL)
+            if ((p_msg = (NFC_HDR *) GKI_getbuf (sizeof (NFC_HDR))) != NULL)
             {
                 p_msg->event = p_tle->event;
                 p_msg->layer_specific = 0;

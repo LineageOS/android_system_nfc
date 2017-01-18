@@ -194,7 +194,7 @@ typedef struct
 typedef struct
 {
     tNFC_STATUS     status;
-    BT_HDR         *p_data;
+    NFC_HDR         *p_data;
 } tRW_READ_DATA;
 
 typedef struct
@@ -215,7 +215,7 @@ typedef struct                              /* RW_I93_DATA_EVT               */
 {
     tNFC_STATUS     status;                 /* status of Read/Get security status command */
     uint8_t         command;                /* sent command                  */
-    BT_HDR         *p_data;                 /* block data of security status */
+    NFC_HDR         *p_data;                 /* block data of security status */
 } tRW_I93_DATA;
 
 typedef struct                              /* RW_I93_SYS_INFO_EVT             */
@@ -240,7 +240,7 @@ typedef struct                              /* RW_I93_CMD_CMPL_EVT             *
 typedef struct
 {
     tNFC_STATUS     status;
-    BT_HDR         *p_data;
+    NFC_HDR         *p_data;
 } tRW_RAW_FRAME;
 
 typedef union

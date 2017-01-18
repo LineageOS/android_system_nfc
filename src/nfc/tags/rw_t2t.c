@@ -61,7 +61,7 @@ static void rw_t2t_proc_data (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
 {
     tRW_EVENT               rw_event    = RW_RAW_FRAME_EVT;
     tRW_T2T_CB              *p_t2t      = &rw_cb.tcb.t2t;
-    BT_HDR                  *p_pkt      = p_data->p_data;
+    NFC_HDR                  *p_pkt      = p_data->p_data;
     bool                    b_notify = true;
     bool                    b_release = true;
     uint8_t                 *p;
@@ -308,7 +308,7 @@ void rw_t2t_conn_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
             else if (p_data->data.p_data != NULL)
             {
                 /* Free the response buffer in case of error response */
-                GKI_freebuf ((BT_HDR *) (p_data->data.p_data));
+                GKI_freebuf ((NFC_HDR *) (p_data->data.p_data));
                 p_data->data.p_data = NULL;
             }
         }
@@ -378,13 +378,13 @@ tNFC_STATUS rw_t2t_send_cmd (uint8_t opcode, uint8_t *p_dat)
     tNFC_STATUS             status  = NFC_STATUS_FAILED;
     tRW_T2T_CB              *p_t2t  = &rw_cb.tcb.t2t;
     const tT2T_CMD_RSP_INFO *p_cmd_rsp_info = t2t_cmd_to_rsp_info (opcode);
-    BT_HDR                  *p_data;
+    NFC_HDR                  *p_data;
     uint8_t                 *p;
 
     if (p_cmd_rsp_info)
     {
         /* a valid opcode for RW */
-        p_data = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+        p_data = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
         if (p_data)
         {
             p_t2t->p_cmd_rsp_info   = (tT2T_CMD_RSP_INFO *) p_cmd_rsp_info;
@@ -402,7 +402,7 @@ tNFC_STATUS rw_t2t_send_cmd (uint8_t opcode, uint8_t *p_dat)
 
             /* Indicate first attempt to send command, back up cmd buffer in case needed for retransmission */
             rw_cb.cur_retry = 0;
-            memcpy (p_t2t->p_cur_cmd_buf, p_data, sizeof (BT_HDR) + p_data->offset + p_data->len);
+            memcpy (p_t2t->p_cur_cmd_buf, p_data, sizeof (NFC_HDR) + p_data->offset + p_data->len);
 
 #if (RW_STATS_INCLUDED == TRUE)
             /* Update stats */
@@ -525,7 +525,7 @@ static void rw_t2t_process_error (void)
 {
     tRW_READ_DATA           evt_data;
     tRW_EVENT               rw_event;
-    BT_HDR                  *p_cmd_buf;
+    NFC_HDR                  *p_cmd_buf;
     tRW_T2T_CB              *p_t2t          = &rw_cb.tcb.t2t;
     tT2T_CMD_RSP_INFO       *p_cmd_rsp_info = (tT2T_CMD_RSP_INFO *) rw_cb.tcb.t2t.p_cmd_rsp_info;
     tRW_DETECT_NDEF_DATA    ndef_data;
@@ -542,9 +542,9 @@ static void rw_t2t_process_error (void)
         RW_TRACE_DEBUG2 ("T2T retransmission attempt %i of %i", rw_cb.cur_retry, RW_MAX_RETRIES);
 
         /* allocate a new buffer for message */
-        if ((p_cmd_buf = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) != NULL)
+        if ((p_cmd_buf = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) != NULL)
         {
-            memcpy (p_cmd_buf, p_t2t->p_cur_cmd_buf, sizeof (BT_HDR) + p_t2t->p_cur_cmd_buf->offset + p_t2t->p_cur_cmd_buf->len);
+            memcpy (p_cmd_buf, p_t2t->p_cur_cmd_buf, sizeof (NFC_HDR) + p_t2t->p_cur_cmd_buf->offset + p_t2t->p_cur_cmd_buf->len);
 #if (RW_STATS_INCLUDED == TRUE)
             /* Update stats */
             rw_main_update_tx_stats (p_cmd_buf->len, true);
@@ -645,7 +645,7 @@ static void rw_t2t_resume_op (void)
 {
     tRW_T2T_CB          *p_t2t = &rw_cb.tcb.t2t;
     tRW_READ_DATA       evt_data;
-    BT_HDR              *p_cmd_buf;
+    NFC_HDR              *p_cmd_buf;
     tRW_EVENT           event;
     const tT2T_CMD_RSP_INFO   *p_cmd_rsp_info = (tT2T_CMD_RSP_INFO *) rw_cb.tcb.t2t.p_cmd_rsp_info;
     uint8_t             *p;
@@ -658,10 +658,10 @@ static void rw_t2t_resume_op (void)
     p_t2t->p_cmd_rsp_info   = (tT2T_CMD_RSP_INFO *) p_cmd_rsp_info;
 
     /* allocate a new buffer for message */
-    if ((p_cmd_buf = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) != NULL)
+    if ((p_cmd_buf = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) != NULL)
     {
-        memcpy (p_cmd_buf, p_t2t->p_sec_cmd_buf, sizeof (BT_HDR) + p_t2t->p_sec_cmd_buf->offset + p_t2t->p_sec_cmd_buf->len);
-        memcpy (p_t2t->p_cur_cmd_buf, p_t2t->p_sec_cmd_buf, sizeof (BT_HDR) + p_t2t->p_sec_cmd_buf->offset + p_t2t->p_sec_cmd_buf->len);
+        memcpy (p_cmd_buf, p_t2t->p_sec_cmd_buf, sizeof (NFC_HDR) + p_t2t->p_sec_cmd_buf->offset + p_t2t->p_sec_cmd_buf->len);
+        memcpy (p_t2t->p_cur_cmd_buf, p_t2t->p_sec_cmd_buf, sizeof (NFC_HDR) + p_t2t->p_sec_cmd_buf->offset + p_t2t->p_sec_cmd_buf->len);
 
 #if (RW_STATS_INCLUDED == TRUE)
         /* Update stats */
@@ -698,11 +698,11 @@ static void rw_t2t_resume_op (void)
 tNFC_STATUS rw_t2t_sector_change (uint8_t sector)
 {
     tNFC_STATUS status;
-    BT_HDR      *p_data;
+    NFC_HDR      *p_data;
     uint8_t     *p;
     tRW_T2T_CB  *p_t2t = &rw_cb.tcb.t2t;
 
-    if ((p_data = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) == NULL)
+    if ((p_data = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) == NULL)
     {
         RW_TRACE_ERROR0 ("rw_t2t_sector_change - No buffer");
          return (NFC_STATUS_NO_BUFFERS);
@@ -870,7 +870,7 @@ tNFC_STATUS rw_t2t_select (void)
     /* Alloc cmd buf for retransmissions */
     if (p_t2t->p_cur_cmd_buf ==  NULL)
     {
-        if ((p_t2t->p_cur_cmd_buf = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) == NULL)
+        if ((p_t2t->p_cur_cmd_buf = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) == NULL)
         {
             RW_TRACE_ERROR0 ("rw_t2t_select: unable to allocate buffer for retransmission");
             return (NFC_STATUS_FAILED);
@@ -879,7 +879,7 @@ tNFC_STATUS rw_t2t_select (void)
     /* Alloc cmd buf for holding a command untill sector changes */
     if (p_t2t->p_sec_cmd_buf ==  NULL)
     {
-        if ((p_t2t->p_sec_cmd_buf = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) == NULL)
+        if ((p_t2t->p_sec_cmd_buf = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) == NULL)
         {
             RW_TRACE_ERROR0 ("rw_t2t_select: unable to allocate buffer used during sector change");
             return (NFC_STATUS_FAILED);

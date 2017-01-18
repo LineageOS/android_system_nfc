@@ -861,13 +861,13 @@ static void llcp_dlc_proc_dm_pdu (uint8_t dsap, uint8_t ssap, uint16_t length, u
 ** Returns          void
 **
 *******************************************************************************/
-void llcp_dlc_proc_i_pdu (uint8_t dsap, uint8_t ssap, uint16_t i_pdu_length, uint8_t *p_i_pdu, BT_HDR *p_msg)
+void llcp_dlc_proc_i_pdu (uint8_t dsap, uint8_t ssap, uint16_t i_pdu_length, uint8_t *p_i_pdu, NFC_HDR *p_msg)
 {
     uint8_t    *p, *p_dst, send_seq, rcv_seq, error_flags;
     uint16_t    info_len, available_bytes;
     tLLCP_DLCB *p_dlcb;
     bool        appended;
-    BT_HDR     *p_last_buf;
+    NFC_HDR     *p_last_buf;
 
     LLCP_TRACE_DEBUG0 ("llcp_dlc_proc_i_pdu ()");
 
@@ -950,12 +950,12 @@ void llcp_dlc_proc_i_pdu (uint8_t dsap, uint8_t ssap, uint16_t i_pdu_length, uin
             appended = false;
 
             /* get last buffer in rx queue */
-            p_last_buf = (BT_HDR *) GKI_getlast (&p_dlcb->i_rx_q);
+            p_last_buf = (NFC_HDR *) GKI_getlast (&p_dlcb->i_rx_q);
 
             if (p_last_buf)
             {
                 /* get max length to append at the end of buffer */
-                available_bytes = GKI_get_buf_size (p_last_buf) - BT_HDR_SIZE - p_last_buf->offset - p_last_buf->len;
+                available_bytes = GKI_get_buf_size (p_last_buf) - NFC_HDR_SIZE - p_last_buf->offset - p_last_buf->len;
 
                 /* if new UI PDU with length can be attached at the end of buffer */
                 if (available_bytes >= LLCP_PDU_AGF_LEN_SIZE + info_len)
@@ -998,7 +998,7 @@ void llcp_dlc_proc_i_pdu (uint8_t dsap, uint8_t ssap, uint16_t i_pdu_length, uin
                 }
                 else
                 {
-                    p_msg = (BT_HDR *) GKI_getpoolbuf (LLCP_POOL_ID);
+                    p_msg = (NFC_HDR *) GKI_getpoolbuf (LLCP_POOL_ID);
 
                     if (p_msg)
                     {
@@ -1322,12 +1322,12 @@ bool    llcp_dlc_is_rw_open (tLLCP_DLCB *p_dlcb)
 **
 ** Description      Get a PDU from tx queue of data link
 **
-** Returns          BT_HDR*
+** Returns          NFC_HDR*
 **
 *******************************************************************************/
-BT_HDR* llcp_dlc_get_next_pdu (tLLCP_DLCB *p_dlcb)
+NFC_HDR* llcp_dlc_get_next_pdu (tLLCP_DLCB *p_dlcb)
 {
-    BT_HDR *p_msg = NULL;
+    NFC_HDR *p_msg = NULL;
     bool    flush = true;
     tLLCP_SAP_CBACK_DATA data;
 
@@ -1340,7 +1340,7 @@ BT_HDR* llcp_dlc_get_next_pdu (tLLCP_DLCB *p_dlcb)
         &&(!p_dlcb->remote_busy)
         &&(llcp_dlc_is_rw_open (p_dlcb))  )
     {
-        p_msg = (BT_HDR *) GKI_dequeue (&p_dlcb->i_xmit_q);
+        p_msg = (NFC_HDR *) GKI_dequeue (&p_dlcb->i_xmit_q);
         llcp_cb.total_tx_i_pdu--;
 
         if (p_msg->offset >= LLCP_MIN_OFFSET)
@@ -1405,14 +1405,14 @@ BT_HDR* llcp_dlc_get_next_pdu (tLLCP_DLCB *p_dlcb)
 *******************************************************************************/
 uint16_t llcp_dlc_get_next_pdu_length (tLLCP_DLCB *p_dlcb)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
 
     /* if there is data to send and remote device can receive it */
     if (  (p_dlcb->i_xmit_q.count)
         &&(!p_dlcb->remote_busy)
         &&(llcp_dlc_is_rw_open (p_dlcb))  )
     {
-        p_msg = (BT_HDR *) p_dlcb->i_xmit_q.p_first;
+        p_msg = (NFC_HDR *) p_dlcb->i_xmit_q.p_first;
 
         return (p_msg->len + LLCP_PDU_HEADER_SIZE + LLCP_SEQUENCE_SIZE);
     }

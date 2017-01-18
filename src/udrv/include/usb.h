@@ -217,9 +217,9 @@ extern "C" {
 
 UDRV_API extern void    USB_Init(void *);
 UDRV_API extern void    USB_Open(tUSB_PORT, tUSB_OPEN_CFG *, tUSB_CBACK *);
-UDRV_API extern void    USB_ReadBuf(tUSB_PORT, BT_HDR **);
+UDRV_API extern void    USB_ReadBuf(tUSB_PORT, NFC_HDR **);
 UDRV_API extern uint16_t  USB_Read(tUSB_PORT, uint8_t *, uint16_t);
-UDRV_API extern bool    USB_WriteBuf(tUSB_PORT, BT_HDR *);
+UDRV_API extern bool    USB_WriteBuf(tUSB_PORT, NFC_HDR *);
 UDRV_API extern uint16_t  USB_Write(tUSB_PORT, uint8_t *, uint16_t);
 UDRV_API extern void    USB_Ioctl(tUSB_PORT, tUSB_OP, tUSB_IOCTL_DATA *);
 UDRV_API extern void    USB_Close(tUSB_PORT);
