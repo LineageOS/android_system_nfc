@@ -325,7 +325,7 @@ BT_API extern tUCODEC_STATUS    UCODEC_FlushRx      (tUCODEC_ID);
 **                                     watermark. The buffer is dropped.
 **
 ******************************************************************************/
-BT_API extern tUCODEC_STATUS    UCODEC_WriteBuf   (tUCODEC_ID, BT_HDR *);
+BT_API extern tUCODEC_STATUS    UCODEC_WriteBuf   (tUCODEC_ID, NFC_HDR *);
 
 /******************************************************************************
 **
@@ -340,7 +340,7 @@ BT_API extern tUCODEC_STATUS    UCODEC_WriteBuf   (tUCODEC_ID, BT_HDR *);
 ** Returns          Pointer on the GKI buffer. NULL if the Rx Q is empty
 **
 ******************************************************************************/
-BT_API extern tUCODEC_STATUS  UCODEC_ReadBuf    (tUCODEC_ID, BT_HDR **, tUCODEC_BUF_INFO *);
+BT_API extern tUCODEC_STATUS  UCODEC_ReadBuf    (tUCODEC_ID, NFC_HDR **, tUCODEC_BUF_INFO *);
 
 /******************************************************************************
 **

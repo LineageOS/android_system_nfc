@@ -58,7 +58,7 @@
 *******************************************************************************/
 void nfc_start_timer (TIMER_LIST_ENT *p_tle, uint16_t type, uint32_t timeout)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
 
     /* if timer list is currently empty, start periodic GKI timer */
     if (nfc_cb.timer_queue.p_first == NULL)
@@ -67,7 +67,7 @@ void nfc_start_timer (TIMER_LIST_ENT *p_tle, uint16_t type, uint32_t timeout)
         if (GKI_get_taskid () != NFC_TASK)
         {
             /* post event to start timer in NFC task */
-            if ((p_msg = (BT_HDR *) GKI_getbuf (BT_HDR_SIZE)) != NULL)
+            if ((p_msg = (NFC_HDR *) GKI_getbuf (NFC_HDR_SIZE)) != NULL)
             {
                 p_msg->event = BT_EVT_TO_START_TIMER;
                 GKI_send_msg (NFC_TASK, NFC_MBOX_ID, p_msg);
@@ -180,7 +180,7 @@ void nfc_stop_timer (TIMER_LIST_ENT *p_tle)
 *******************************************************************************/
 void nfc_start_quick_timer (TIMER_LIST_ENT *p_tle, uint16_t type, uint32_t timeout)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
 
     /* if timer list is currently empty, start periodic GKI timer */
     if (nfc_cb.quick_timer_queue.p_first == NULL)
@@ -189,7 +189,7 @@ void nfc_start_quick_timer (TIMER_LIST_ENT *p_tle, uint16_t type, uint32_t timeo
         if (GKI_get_taskid () != NFC_TASK)
         {
             /* post event to start timer in NFC task */
-            if ((p_msg = (BT_HDR *) GKI_getbuf (BT_HDR_SIZE)) != NULL)
+            if ((p_msg = (NFC_HDR *) GKI_getbuf (NFC_HDR_SIZE)) != NULL)
             {
                 p_msg->event = BT_EVT_TO_START_QUICK_TIMER;
                 GKI_send_msg (NFC_TASK, NFC_MBOX_ID, p_msg);
@@ -314,10 +314,10 @@ void nfc_process_quick_timer_evt (void)
 *******************************************************************************/
 void nfc_task_shutdown_nfcc (void)
 {
-    BT_HDR        *p_msg;
+    NFC_HDR        *p_msg;
 
     /* Free any messages still in the mbox */
-    while ((p_msg = (BT_HDR *) GKI_read_mbox (NFC_MBOX_ID)) != NULL)
+    while ((p_msg = (NFC_HDR *) GKI_read_mbox (NFC_MBOX_ID)) != NULL)
     {
         GKI_freebuf (p_msg);
     }
@@ -363,7 +363,7 @@ void nfc_task_shutdown_nfcc (void)
 uint32_t nfc_task (uint32_t param)
 {
     uint16_t  event;
-    BT_HDR  *p_msg;
+    NFC_HDR  *p_msg;
     bool    free_buf;
 
     /* Initialize the nfc control block */
@@ -390,7 +390,7 @@ uint32_t nfc_task (uint32_t param)
         if (event & NFC_MBOX_EVT_MASK)
         {
             /* Process all incoming NCI messages */
-            while ((p_msg = (BT_HDR *) GKI_read_mbox (NFC_MBOX_ID)) != NULL)
+            while ((p_msg = (NFC_HDR *) GKI_read_mbox (NFC_MBOX_ID)) != NULL)
             {
                 free_buf = true;
 
@@ -444,7 +444,7 @@ uint32_t nfc_task (uint32_t param)
 #if (NFA_INCLUDED == TRUE)
         if (event & NFA_MBOX_EVT_MASK)
         {
-            while ((p_msg = (BT_HDR *) GKI_read_mbox (NFA_MBOX_ID)) != NULL)
+            while ((p_msg = (NFC_HDR *) GKI_read_mbox (NFA_MBOX_ID)) != NULL)
             {
                 nfa_sys_event (p_msg);
             }

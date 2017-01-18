@@ -402,7 +402,7 @@ LLCP_API extern bool    LLCP_IsLogicalLinkCongested (uint8_t local_sap,
 **                  LLCP_STATUS_FAIL, otherwise
 **
 *******************************************************************************/
-LLCP_API extern tLLCP_STATUS LLCP_SendUI (uint8_t ssap, uint8_t dsap, BT_HDR *p_buf);
+LLCP_API extern tLLCP_STATUS LLCP_SendUI (uint8_t ssap, uint8_t dsap, NFC_HDR *p_buf);
 
 /*******************************************************************************
 **
@@ -515,7 +515,7 @@ LLCP_API extern bool    LLCP_IsDataLinkCongested (uint8_t local_sap,
 *******************************************************************************/
 LLCP_API extern tLLCP_STATUS LLCP_SendData (uint8_t  local_sap,
                                             uint8_t  remote_sap,
-                                            BT_HDR *p_buf);
+                                            NFC_HDR *p_buf);
 
 /*******************************************************************************
 **

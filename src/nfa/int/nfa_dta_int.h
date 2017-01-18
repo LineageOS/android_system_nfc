@@ -98,7 +98,7 @@ enum
 /* data type for NFA_DTA_API_ENABLE_EVT */
 typedef struct
 {
-    BT_HDR          hdr;
+    NFC_HDR          hdr;
     bool            auto_start;
     tNFA_DTA_CBACK  *p_cback;
 } tNFA_DTA_API_ENABLE;
@@ -106,7 +106,7 @@ typedef struct
 /* data type for NFA_DTA_API_START_EVT  */
 typedef struct
 {
-    BT_HDR                  hdr;
+    NFC_HDR                  hdr;
     uint16_t                pattern_number;
     uint8_t                 tlv_len;
     uint8_t                 *p_tlv_params;
@@ -115,7 +115,7 @@ typedef struct
 /* data type for NFA_DTA_API_CONFIG  */
 typedef struct
 {
-    BT_HDR                  hdr;
+    NFC_HDR                  hdr;
     tNFA_DTA_CFG_ITEM       item;
     tNFA_DTA_CFG            cfg_data;
 } tNFA_DTA_API_CONFIG;
@@ -159,7 +159,7 @@ typedef uint8_t tNFA_DTA_DATA_TYPE;
 
 typedef struct
 {
-    BT_HDR                  hdr;
+    NFC_HDR                  hdr;
     tNFA_DTA_DATA_TYPE      type;
     union
     {
@@ -173,7 +173,7 @@ typedef struct
 /* All API message type */
 typedef union
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_DTA_API_ENABLE enable;
     tNFA_DTA_API_CONFIG cfg;
     tNFA_DTA_API_START  start;
@@ -349,7 +349,7 @@ void nfa_dta_shutdown (void);
 void nfa_dta_discover_start (void);
 
 /* nfa_sys handler for DTA */
-bool    nfa_dta_evt_hdlr (BT_HDR *p_msg);
+bool    nfa_dta_evt_hdlr (NFC_HDR *p_msg);
 void nfa_dta_sys_disable (void);
 
 /* State machine action functions */

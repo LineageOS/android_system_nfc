@@ -343,7 +343,7 @@ bool    rw_i93_check_sys_info_prot_ext (uint8_t error_code)
 ** Returns          void
 **
 *******************************************************************************/
-void rw_i93_send_to_upper (BT_HDR *p_resp)
+void rw_i93_send_to_upper (NFC_HDR *p_resp)
 {
     uint8_t    *p = (uint8_t *) (p_resp + 1) + p_resp->offset, *p_uid;
     uint16_t   length = p_resp->len;
@@ -351,7 +351,7 @@ void rw_i93_send_to_upper (BT_HDR *p_resp)
     tRW_DATA   rw_data;
     uint8_t    event = RW_I93_MAX_EVT;
     uint8_t    flags;
-    BT_HDR     *p_buff;
+    NFC_HDR     *p_buff;
 
     RW_TRACE_DEBUG0 ("rw_i93_send_to_upper ()");
 
@@ -402,7 +402,7 @@ void rw_i93_send_to_upper (BT_HDR *p_resp)
     case I93_CMD_GET_MULTI_BLK_SEC:
 
         /* forward tag data or security status */
-        p_buff = (BT_HDR*) GKI_getbuf ((uint16_t) (length + BT_HDR_SIZE));
+        p_buff = (NFC_HDR*) GKI_getbuf ((uint16_t) (length + NFC_HDR_SIZE));
 
         if (p_buff)
         {
@@ -493,7 +493,7 @@ void rw_i93_send_to_upper (BT_HDR *p_resp)
 ** Returns          TRUE if success
 **
 *******************************************************************************/
-bool    rw_i93_send_to_lower (BT_HDR *p_msg)
+bool    rw_i93_send_to_lower (NFC_HDR *p_msg)
 {
 #if (BT_TRACE_PROTOCOL == TRUE)
     DispRWI93Tag (p_msg, false, 0x00);
@@ -506,11 +506,11 @@ bool    rw_i93_send_to_lower (BT_HDR *p_msg)
         rw_cb.tcb.i93.p_retry_cmd = NULL;
     }
 
-    rw_cb.tcb.i93.p_retry_cmd = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    rw_cb.tcb.i93.p_retry_cmd = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (rw_cb.tcb.i93.p_retry_cmd)
     {
-        memcpy (rw_cb.tcb.i93.p_retry_cmd, p_msg, sizeof (BT_HDR) + p_msg->offset + p_msg->len);
+        memcpy (rw_cb.tcb.i93.p_retry_cmd, p_msg, sizeof (NFC_HDR) + p_msg->offset + p_msg->len);
     }
 
     if (NFC_SendData (NFC_RF_CONN_ID, p_msg) != NFC_STATUS_OK)
@@ -536,12 +536,12 @@ bool    rw_i93_send_to_lower (BT_HDR *p_msg)
 *******************************************************************************/
 tNFC_STATUS rw_i93_send_cmd_inventory (uint8_t *p_uid, bool    including_afi, uint8_t afi)
 {
-    BT_HDR      *p_cmd;
+    NFC_HDR      *p_cmd;
     uint8_t     *p, flags;
 
     RW_TRACE_DEBUG2 ("rw_i93_send_cmd_inventory () including_afi:%d, AFI:0x%02X", including_afi, afi);
 
-    p_cmd = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_cmd = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_cmd)
     {
@@ -605,12 +605,12 @@ tNFC_STATUS rw_i93_send_cmd_inventory (uint8_t *p_uid, bool    including_afi, ui
 *******************************************************************************/
 tNFC_STATUS rw_i93_send_cmd_stay_quiet (void)
 {
-    BT_HDR      *p_cmd;
+    NFC_HDR      *p_cmd;
     uint8_t     *p;
 
     RW_TRACE_DEBUG0 ("rw_i93_send_cmd_stay_quiet ()");
 
-    p_cmd = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_cmd = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_cmd)
     {
@@ -657,12 +657,12 @@ tNFC_STATUS rw_i93_send_cmd_stay_quiet (void)
 *******************************************************************************/
 tNFC_STATUS rw_i93_send_cmd_read_single_block (uint16_t block_number, bool    read_security)
 {
-    BT_HDR      *p_cmd;
+    NFC_HDR      *p_cmd;
     uint8_t     *p, flags;
 
     RW_TRACE_DEBUG0 ("rw_i93_send_cmd_read_single_block ()");
 
-    p_cmd = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_cmd = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_cmd)
     {
@@ -723,12 +723,12 @@ tNFC_STATUS rw_i93_send_cmd_read_single_block (uint16_t block_number, bool    re
 *******************************************************************************/
 tNFC_STATUS rw_i93_send_cmd_write_single_block (uint16_t block_number, uint8_t *p_data)
 {
-    BT_HDR      *p_cmd;
+    NFC_HDR      *p_cmd;
     uint8_t     *p, flags;
 
     RW_TRACE_DEBUG0 ("rw_i93_send_cmd_write_single_block ()");
 
-    p_cmd = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_cmd = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_cmd)
     {
@@ -804,12 +804,12 @@ tNFC_STATUS rw_i93_send_cmd_write_single_block (uint16_t block_number, uint8_t *
 *******************************************************************************/
 tNFC_STATUS rw_i93_send_cmd_lock_block (uint8_t block_number)
 {
-    BT_HDR      *p_cmd;
+    NFC_HDR      *p_cmd;
     uint8_t     *p;
 
     RW_TRACE_DEBUG0 ("rw_i93_send_cmd_lock_block ()");
 
-    p_cmd = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_cmd = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_cmd)
     {
@@ -864,12 +864,12 @@ tNFC_STATUS rw_i93_send_cmd_lock_block (uint8_t block_number)
 *******************************************************************************/
 tNFC_STATUS rw_i93_send_cmd_read_multi_blocks (uint16_t first_block_number, uint16_t number_blocks)
 {
-    BT_HDR      *p_cmd;
+    NFC_HDR      *p_cmd;
     uint8_t     *p, flags;
 
     RW_TRACE_DEBUG0 ("rw_i93_send_cmd_read_multi_blocks ()");
 
-    p_cmd = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_cmd = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_cmd)
     {
@@ -931,12 +931,12 @@ tNFC_STATUS rw_i93_send_cmd_write_multi_blocks (uint8_t  first_block_number,
                                                 uint16_t number_blocks,
                                                 uint8_t *p_data)
 {
-    BT_HDR      *p_cmd;
+    NFC_HDR      *p_cmd;
     uint8_t     *p;
 
     RW_TRACE_DEBUG0 ("rw_i93_send_cmd_write_multi_blocks ()");
 
-    p_cmd = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_cmd = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_cmd)
     {
@@ -984,12 +984,12 @@ tNFC_STATUS rw_i93_send_cmd_write_multi_blocks (uint8_t  first_block_number,
 *******************************************************************************/
 tNFC_STATUS rw_i93_send_cmd_select (uint8_t *p_uid)
 {
-    BT_HDR      *p_cmd;
+    NFC_HDR      *p_cmd;
     uint8_t     *p;
 
     RW_TRACE_DEBUG0 ("rw_i93_send_cmd_select ()");
 
-    p_cmd = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_cmd = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_cmd)
     {
@@ -1032,12 +1032,12 @@ tNFC_STATUS rw_i93_send_cmd_select (uint8_t *p_uid)
 *******************************************************************************/
 tNFC_STATUS rw_i93_send_cmd_reset_to_ready (void)
 {
-    BT_HDR      *p_cmd;
+    NFC_HDR      *p_cmd;
     uint8_t     *p;
 
     RW_TRACE_DEBUG0 ("rw_i93_send_cmd_reset_to_ready ()");
 
-    p_cmd = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_cmd = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_cmd)
     {
@@ -1080,12 +1080,12 @@ tNFC_STATUS rw_i93_send_cmd_reset_to_ready (void)
 *******************************************************************************/
 tNFC_STATUS rw_i93_send_cmd_write_afi (uint8_t afi)
 {
-    BT_HDR      *p_cmd;
+    NFC_HDR      *p_cmd;
     uint8_t     *p;
 
     RW_TRACE_DEBUG0 ("rw_i93_send_cmd_write_afi ()");
 
-    p_cmd = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_cmd = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_cmd)
     {
@@ -1129,12 +1129,12 @@ tNFC_STATUS rw_i93_send_cmd_write_afi (uint8_t afi)
 *******************************************************************************/
 tNFC_STATUS rw_i93_send_cmd_lock_afi (void)
 {
-    BT_HDR      *p_cmd;
+    NFC_HDR      *p_cmd;
     uint8_t     *p;
 
     RW_TRACE_DEBUG0 ("rw_i93_send_cmd_lock_afi ()");
 
-    p_cmd = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_cmd = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_cmd)
     {
@@ -1177,12 +1177,12 @@ tNFC_STATUS rw_i93_send_cmd_lock_afi (void)
 *******************************************************************************/
 tNFC_STATUS rw_i93_send_cmd_write_dsfid (uint8_t dsfid)
 {
-    BT_HDR      *p_cmd;
+    NFC_HDR      *p_cmd;
     uint8_t     *p;
 
     RW_TRACE_DEBUG0 ("rw_i93_send_cmd_write_dsfid ()");
 
-    p_cmd = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_cmd = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_cmd)
     {
@@ -1226,12 +1226,12 @@ tNFC_STATUS rw_i93_send_cmd_write_dsfid (uint8_t dsfid)
 *******************************************************************************/
 tNFC_STATUS rw_i93_send_cmd_lock_dsfid (void)
 {
-    BT_HDR      *p_cmd;
+    NFC_HDR      *p_cmd;
     uint8_t     *p;
 
     RW_TRACE_DEBUG0 ("rw_i93_send_cmd_lock_dsfid ()");
 
-    p_cmd = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_cmd = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_cmd)
     {
@@ -1274,12 +1274,12 @@ tNFC_STATUS rw_i93_send_cmd_lock_dsfid (void)
 *******************************************************************************/
 tNFC_STATUS rw_i93_send_cmd_get_sys_info (uint8_t *p_uid, uint8_t extra_flags)
 {
-    BT_HDR      *p_cmd;
+    NFC_HDR      *p_cmd;
     uint8_t     *p;
 
     RW_TRACE_DEBUG0 ("rw_i93_send_cmd_get_sys_info ()");
 
-    p_cmd = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_cmd = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_cmd)
     {
@@ -1330,12 +1330,12 @@ tNFC_STATUS rw_i93_send_cmd_get_sys_info (uint8_t *p_uid, uint8_t extra_flags)
 tNFC_STATUS rw_i93_send_cmd_get_multi_block_sec (uint16_t first_block_number,
                                                  uint16_t number_blocks)
 {
-    BT_HDR      *p_cmd;
+    NFC_HDR      *p_cmd;
     uint8_t     *p, flags;
 
     RW_TRACE_DEBUG0 ("rw_i93_send_cmd_get_multi_block_sec ()");
 
-    p_cmd = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+    p_cmd = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
 
     if (!p_cmd)
     {
@@ -1490,7 +1490,7 @@ tNFC_STATUS rw_i93_get_next_block_sec (void)
 ** Returns          void
 **
 *******************************************************************************/
-void rw_i93_sm_detect_ndef (BT_HDR *p_resp)
+void rw_i93_sm_detect_ndef (NFC_HDR *p_resp)
 {
     uint8_t    *p = (uint8_t *) (p_resp + 1) + p_resp->offset, *p_uid;
     uint8_t     flags, u8 = 0, cc[4];
@@ -1946,7 +1946,7 @@ void rw_i93_sm_detect_ndef (BT_HDR *p_resp)
 ** Returns          void
 **
 *******************************************************************************/
-void rw_i93_sm_read_ndef (BT_HDR *p_resp)
+void rw_i93_sm_read_ndef (NFC_HDR *p_resp)
 {
     uint8_t    *p = (uint8_t *) (p_resp + 1) + p_resp->offset;
     uint8_t     flags;
@@ -2056,7 +2056,7 @@ void rw_i93_sm_read_ndef (BT_HDR *p_resp)
 ** Returns          void
 **
 *******************************************************************************/
-void rw_i93_sm_update_ndef (BT_HDR *p_resp)
+void rw_i93_sm_update_ndef (NFC_HDR *p_resp)
 {
     uint8_t    *p = (uint8_t *) (p_resp + 1) + p_resp->offset;
     uint8_t     flags, xx, length_offset, buff[I93_MAX_BLOCK_LENGH];
@@ -2353,7 +2353,7 @@ void rw_i93_sm_update_ndef (BT_HDR *p_resp)
 ** Returns          void
 **
 *******************************************************************************/
-void rw_i93_sm_format (BT_HDR *p_resp)
+void rw_i93_sm_format (NFC_HDR *p_resp)
 {
     uint8_t    *p = (uint8_t *) (p_resp + 1) + p_resp->offset, *p_uid;
     uint8_t     flags;
@@ -2764,7 +2764,7 @@ void rw_i93_sm_format (BT_HDR *p_resp)
 ** Returns          void
 **
 *******************************************************************************/
-void rw_i93_sm_set_read_only (BT_HDR *p_resp)
+void rw_i93_sm_set_read_only (NFC_HDR *p_resp)
 {
     uint8_t    *p = (uint8_t *) (p_resp + 1) + p_resp->offset;
     uint8_t     flags, block_number;
@@ -3002,7 +3002,7 @@ void rw_i93_handle_error (tNFC_STATUS status)
 *******************************************************************************/
 void rw_i93_process_timeout (TIMER_LIST_ENT *p_tle)
 {
-    BT_HDR *p_buf;
+    NFC_HDR *p_buf;
 
     RW_TRACE_DEBUG1 ("rw_i93_process_timeout () event=%d", p_tle->event);
 
@@ -3051,7 +3051,7 @@ void rw_i93_process_timeout (TIMER_LIST_ENT *p_tle)
 static void rw_i93_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
 {
     tRW_I93_CB *p_i93  = &rw_cb.tcb.i93;
-    BT_HDR     *p_resp;
+    NFC_HDR     *p_resp;
     tRW_DATA    rw_data;
 
 #if (BT_TRACE_VERBOSE == TRUE)
@@ -3112,7 +3112,7 @@ static void rw_i93_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *
         return;
     }
 
-    p_resp = (BT_HDR *) p_data->data.p_data;
+    p_resp = (NFC_HDR *) p_data->data.p_data;
 
     nfc_stop_quick_timer (&p_i93->timer);
 

@@ -256,7 +256,7 @@ void nfa_ce_discovery_cback (tNFA_DM_RF_DISC_EVT event, tNFC_DISCOVER *p_data)
     case NFA_DM_RF_DISC_ACTIVATED_EVT:
         ce_msg.activate_ntf.hdr.event = NFA_CE_ACTIVATE_NTF_EVT;
         ce_msg.activate_ntf.p_activation_params = &p_data->activate;
-        nfa_ce_hdl_event ((BT_HDR *) &ce_msg);
+        nfa_ce_hdl_event ((NFC_HDR *) &ce_msg);
         break;
 
     case NFA_DM_RF_DISC_DEACTIVATED_EVT:
@@ -265,7 +265,7 @@ void nfa_ce_discovery_cback (tNFA_DM_RF_DISC_EVT event, tNFC_DISCOVER *p_data)
         {
             ce_msg.hdr.event = NFA_CE_DEACTIVATE_NTF_EVT;
             ce_msg.hdr.layer_specific = p_data->deactivate.type;
-            nfa_ce_hdl_event ((BT_HDR *) &ce_msg);
+            nfa_ce_hdl_event ((NFC_HDR *) &ce_msg);
         }
         break;
 

@@ -949,7 +949,7 @@ void NFA_HciDebug (uint8_t action, uint8_t size, uint8_t *p_data)
     int                 xx;
     tNFA_HCI_DYN_GATE   *pg = nfa_hci_cb.cfg.dyn_gates;
     tNFA_HCI_DYN_PIPE   *pp = nfa_hci_cb.cfg.dyn_pipes;
-    BT_HDR              *p_msg;
+    NFC_HDR              *p_msg;
     uint8_t             *p;
 
     switch (action)
@@ -986,7 +986,7 @@ void NFA_HciDebug (uint8_t action, uint8_t size, uint8_t *p_data)
         break;
 
     case NFA_HCI_DEBUG_SIM_HCI_EVENT:
-        if ((p_msg = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) != NULL)
+        if ((p_msg = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) != NULL)
         {
             p = (uint8_t *) (p_msg + 1);
 

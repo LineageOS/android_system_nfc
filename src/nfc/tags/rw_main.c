@@ -174,13 +174,13 @@ void rw_main_log_stats (void)
 tNFC_STATUS RW_SendRawFrame (uint8_t *p_raw_data, uint16_t data_len)
 {
     tNFC_STATUS status = NFC_STATUS_FAILED;
-    BT_HDR  *p_data;
+    NFC_HDR  *p_data;
     uint8_t *p;
 
     if (rw_cb.p_cback)
     {
         /* a valid opcode for RW - remove */
-        p_data = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+        p_data = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
         if (p_data)
         {
             p_data->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;

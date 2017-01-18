@@ -71,6 +71,6 @@ extern tNFA_SYS_CB nfa_sys_cb;
 /* system manager configuration structure */
 extern tNFA_SYS_CFG *p_nfa_sys_cfg;
 
-bool    nfa_sys_sm_execute (BT_HDR *p_msg);
+bool    nfa_sys_sm_execute (NFC_HDR *p_msg);
 
 #endif /* NFA_SYS_INT_H */

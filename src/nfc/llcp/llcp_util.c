@@ -267,7 +267,7 @@ void llcp_util_check_rx_congested_status (void)
 ** Returns          tLLCP_STATUS
 **
 *******************************************************************************/
-tLLCP_STATUS llcp_util_send_ui (uint8_t ssap, uint8_t dsap, tLLCP_APP_CB *p_app_cb, BT_HDR *p_msg)
+tLLCP_STATUS llcp_util_send_ui (uint8_t ssap, uint8_t dsap, tLLCP_APP_CB *p_app_cb, NFC_HDR *p_msg)
 {
     uint8_t      *p;
     tLLCP_STATUS status = LLCP_STATUS_SUCCESS;
@@ -312,10 +312,10 @@ tLLCP_STATUS llcp_util_send_ui (uint8_t ssap, uint8_t dsap, tLLCP_APP_CB *p_app_
 *******************************************************************************/
 void llcp_util_send_disc (uint8_t dsap, uint8_t ssap)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
     uint8_t  *p;
 
-    p_msg = (BT_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
+    p_msg = (NFC_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
 
     if (p_msg)
     {
@@ -421,7 +421,7 @@ void llcp_util_deallocate_data_link (tLLCP_DLCB *p_dlcb)
 ******************************************************************************/
 tLLCP_STATUS llcp_util_send_connect (tLLCP_DLCB *p_dlcb, tLLCP_CONNECTION_PARAMS *p_params)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
     uint8_t  *p;
     uint16_t  miu_len = 0, rw_len = 0, sn_len = 0;
 
@@ -439,7 +439,7 @@ tLLCP_STATUS llcp_util_send_connect (tLLCP_DLCB *p_dlcb, tLLCP_CONNECTION_PARAMS
         sn_len = (uint16_t) (2 + strlen (p_params->sn));    /* TYPE, LEN, SN */
     }
 
-    p_msg = (BT_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
+    p_msg = (NFC_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
 
     if (p_msg)
     {
@@ -577,7 +577,7 @@ tLLCP_STATUS llcp_util_parse_connect (uint8_t  *p_bytes, uint16_t length, tLLCP_
 ******************************************************************************/
 tLLCP_STATUS llcp_util_send_cc (tLLCP_DLCB *p_dlcb, tLLCP_CONNECTION_PARAMS *p_params)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
     uint8_t  *p;
     uint16_t  miu_len = 0, rw_len = 0;
 
@@ -591,7 +591,7 @@ tLLCP_STATUS llcp_util_send_cc (tLLCP_DLCB *p_dlcb, tLLCP_CONNECTION_PARAMS *p_p
         p_params->rw &= 0x0F;
     }
 
-    p_msg = (BT_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
+    p_msg = (NFC_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
 
     if (p_msg)
     {
@@ -694,10 +694,10 @@ tLLCP_STATUS llcp_util_parse_cc (uint8_t *p_bytes, uint16_t length, uint16_t *p_
 *******************************************************************************/
 void llcp_util_send_dm (uint8_t dsap, uint8_t ssap, uint8_t reason)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
     uint8_t  *p;
 
-    p_msg = (BT_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
+    p_msg = (NFC_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
 
     if (p_msg)
     {
@@ -723,7 +723,7 @@ void llcp_util_send_dm (uint8_t dsap, uint8_t ssap, uint8_t reason)
 ** Returns          void
 **
 *******************************************************************************/
-void llcp_util_build_info_pdu (tLLCP_DLCB *p_dlcb, BT_HDR *p_msg)
+void llcp_util_build_info_pdu (tLLCP_DLCB *p_dlcb, NFC_HDR *p_msg)
 {
     uint8_t  *p;
     uint8_t  rcv_seq;
@@ -760,10 +760,10 @@ void llcp_util_build_info_pdu (tLLCP_DLCB *p_dlcb, BT_HDR *p_msg)
 *******************************************************************************/
 tLLCP_STATUS llcp_util_send_frmr (tLLCP_DLCB *p_dlcb, uint8_t flags, uint8_t ptype, uint8_t sequence)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
     uint8_t  *p;
 
-    p_msg = (BT_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
+    p_msg = (NFC_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
 
     if (p_msg)
     {
@@ -801,7 +801,7 @@ tLLCP_STATUS llcp_util_send_frmr (tLLCP_DLCB *p_dlcb, uint8_t flags, uint8_t pty
 *******************************************************************************/
 void llcp_util_send_rr_rnr (tLLCP_DLCB *p_dlcb)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
     uint8_t  *p;
     uint8_t pdu_type;
     uint8_t pdu_size;
@@ -850,7 +850,7 @@ void llcp_util_send_rr_rnr (tLLCP_DLCB *p_dlcb)
         rcv_seq = p_dlcb->sent_ack_seq;
     }
 
-    p_msg = (BT_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
+    p_msg = (NFC_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
 
     if (p_msg)
     {

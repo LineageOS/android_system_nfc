@@ -367,7 +367,7 @@
 
 /* LLCP Maximum Information Unit (between LLCP_DEFAULT_MIU(128) and LLCP_MAX_MIU (2175)*/
 #ifndef LLCP_MIU
-#define LLCP_MIU                    (LLCP_POOL_BUF_SIZE - BT_HDR_SIZE - NCI_MSG_OFFSET_SIZE - NCI_DATA_HDR_SIZE - LLCP_PDU_HEADER_SIZE)
+#define LLCP_MIU                    (LLCP_POOL_BUF_SIZE - NFC_HDR_SIZE - NCI_MSG_OFFSET_SIZE - NCI_DATA_HDR_SIZE - LLCP_PDU_HEADER_SIZE)
 #endif
 
 /* Link Timeout, LTO */

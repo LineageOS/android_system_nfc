@@ -100,7 +100,7 @@ tNFC_STATUS NFC_RegVSCback (bool             is_register,
 **
 *******************************************************************************/
 tNFC_STATUS NFC_SendVsCommand (uint8_t        oid,
-                               BT_HDR        *p_data,
+                               NFC_HDR        *p_data,
                                tNFC_VS_CBACK *p_cback)
 {
     tNFC_STATUS     status = NFC_STATUS_OK;
@@ -128,7 +128,7 @@ tNFC_STATUS NFC_SendVsCommand (uint8_t        oid,
 
     p_data->event           = BT_EVT_TO_NFC_NCI;
     p_data->layer_specific  = NFC_WAIT_RSP_VSC;
-    /* save the callback function in the BT_HDR, to receive the response */
+    /* save the callback function in the NFC_HDR, to receive the response */
     ((tNFC_NCI_VS_MSG *) p_data)->p_cback = p_cback;
 
     p_data->offset -= NCI_MSG_HDR_SIZE;
