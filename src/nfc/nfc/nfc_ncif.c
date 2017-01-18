@@ -36,7 +36,6 @@
 #include "nfc_int.h"
 #include "rw_api.h"
 #include "rw_int.h"
-#include "hcidefs.h"
 #include "nfc_hal_api.h"
 
 #if (NFC_RW_ONLY == FALSE)

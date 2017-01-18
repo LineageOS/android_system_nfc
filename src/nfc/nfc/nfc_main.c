@@ -28,7 +28,6 @@
 #include "gki.h"
 #include "nfc_target.h"
 #include "bt_types.h"
-#include "hcidefs.h"
 
 #if (NFC_INCLUDED == TRUE)
 #include "nfc_hal_api.h"
