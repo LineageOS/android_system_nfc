@@ -1948,7 +1948,8 @@ static void rw_t4t_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *
         }
         else if (p_t4t->state != RW_T4T_STATE_IDLE)
         {
-            rw_t4t_handle_error (NFC_STATUS_FAILED, 0, 0);
+            rw_data.status = (tNFC_STATUS) (*(uint8_t*) p_data);
+            rw_t4t_handle_error (rw_data.status, 0, 0);
         }
         else
         {
