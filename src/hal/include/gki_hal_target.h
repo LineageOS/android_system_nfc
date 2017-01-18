@@ -25,20 +25,6 @@
 
 #include "data_types.h"
 
-/* Define export prefixes for modules exported by HAL */
-#ifndef GKI_API
-#define GKI_API
-#endif
-
-#ifndef UDRV_API
-#define UDRV_API
-#endif
-
-#ifndef EXPORT_API
-#define EXPORT_API
-#endif
-
-
 /******************************************************************************
 **
 ** Task configuration

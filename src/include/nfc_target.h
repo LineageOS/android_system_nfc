@@ -37,10 +37,6 @@
 #define USERIAL_DEBUG                       FALSE
 #endif
 
-/* API macros for DLL (needed to export API functions from DLLs) */
-#define NFC_API         EXPORT_API
-#define LLCP_API        EXPORT_API
-
 /******************************************************************************
 **
 ** GKI Mail Box and Timer

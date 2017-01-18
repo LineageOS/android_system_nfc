@@ -530,7 +530,7 @@ BUFFER_Q Userial_in_q;
  ** Returns            line speed
  **
  *******************************************************************************/
-UDRV_API extern uint32_t USERIAL_GetLineSpeed(uint8_t baud)
+extern uint32_t USERIAL_GetLineSpeed(uint8_t baud)
 {
     return (baud <= USERIAL_BAUD_4M) ?
             userial_baud_tbl[baud-USERIAL_BAUD_300] : 0;
@@ -547,7 +547,7 @@ UDRV_API extern uint32_t USERIAL_GetLineSpeed(uint8_t baud)
  ** Returns            line speed
  **
  *******************************************************************************/
-UDRV_API extern uint8_t USERIAL_GetBaud(uint32_t line_speed)
+extern uint8_t USERIAL_GetBaud(uint32_t line_speed)
 {
     uint8_t i;
     for (i = USERIAL_BAUD_300; i <= USERIAL_BAUD_921600; i++)
@@ -571,7 +571,7 @@ UDRV_API extern uint8_t USERIAL_GetBaud(uint32_t line_speed)
 **
 *******************************************************************************/
 
-UDRV_API void    USERIAL_Init(void * p_cfg)
+void    USERIAL_Init(void * p_cfg)
 {
     ALOGI(__func__);
 
@@ -941,7 +941,7 @@ void userial_io_init_bt_wake( int fd, unsigned long * p_wake_state )
 ** Returns            Nothing
 **
 *******************************************************************************/
-UDRV_API void USERIAL_Open(tUSERIAL_PORT port, tUSERIAL_OPEN_CFG *p_cfg, tUSERIAL_CBACK *p_cback)
+void USERIAL_Open(tUSERIAL_PORT port, tUSERIAL_OPEN_CFG *p_cfg, tUSERIAL_CBACK *p_cback)
 {
     uint32_t baud = 0;
     uint8_t data_bits = 0;
@@ -1139,7 +1139,7 @@ done_open:
 
 static NFC_HDR *pbuf_USERIAL_Read = NULL;
 
-UDRV_API uint16_t  USERIAL_Read(tUSERIAL_PORT port, uint8_t *p_data, uint16_t len)
+uint16_t  USERIAL_Read(tUSERIAL_PORT port, uint8_t *p_data, uint16_t len)
 {
     uint16_t total_len = 0;
     uint16_t copy_len = 0;
@@ -1201,7 +1201,7 @@ UDRV_API uint16_t  USERIAL_Read(tUSERIAL_PORT port, uint8_t *p_data, uint16_t le
 **
 *******************************************************************************/
 
-UDRV_API void    USERIAL_ReadBuf(tUSERIAL_PORT port, NFC_HDR **p_buf)
+void    USERIAL_ReadBuf(tUSERIAL_PORT port, NFC_HDR **p_buf)
 {
 
 }
@@ -1223,7 +1223,7 @@ UDRV_API void    USERIAL_ReadBuf(tUSERIAL_PORT port, NFC_HDR **p_buf)
 **
 *******************************************************************************/
 
-UDRV_API bool    USERIAL_WriteBuf(tUSERIAL_PORT port, NFC_HDR *p_buf)
+bool    USERIAL_WriteBuf(tUSERIAL_PORT port, NFC_HDR *p_buf)
 {
     return false;
 }
@@ -1240,7 +1240,7 @@ UDRV_API bool    USERIAL_WriteBuf(tUSERIAL_PORT port, NFC_HDR *p_buf)
 **                    may be less than len.
 **
 *******************************************************************************/
-UDRV_API uint16_t  USERIAL_Write(tUSERIAL_PORT port, uint8_t *p_data, uint16_t len)
+uint16_t  USERIAL_Write(tUSERIAL_PORT port, uint8_t *p_data, uint16_t len)
 {
     int ret = 0, total = 0;
     int i = 0;
@@ -1376,7 +1376,7 @@ void userial_close_port( void )
 **
 *******************************************************************************/
 
-UDRV_API void    USERIAL_Ioctl(tUSERIAL_PORT port, tUSERIAL_OP op, tUSERIAL_IOCTL_DATA *p_data)
+void    USERIAL_Ioctl(tUSERIAL_PORT port, tUSERIAL_OP op, tUSERIAL_IOCTL_DATA *p_data)
 {
 #if (defined(LINUX_OS) && LINUX_OS == TRUE)
     USB_SCO_CONTROL ioctl_data;
@@ -1416,7 +1416,7 @@ UDRV_API void    USERIAL_Ioctl(tUSERIAL_PORT port, tUSERIAL_OP op, tUSERIAL_IOCT
 ** Returns          None.
 **
 *******************************************************************************/
-UDRV_API void USERIAL_SetPowerOffDelays(int pre_poweroff_delay, int post_poweroff_delay)
+void USERIAL_SetPowerOffDelays(int pre_poweroff_delay, int post_poweroff_delay)
 {
     gPrePowerOffDelay = pre_poweroff_delay;
     gPostPowerOffDelay = post_poweroff_delay;
@@ -1433,7 +1433,7 @@ UDRV_API void USERIAL_SetPowerOffDelays(int pre_poweroff_delay, int post_powerof
 ** Returns            Nothing
 **
 *******************************************************************************/
-UDRV_API void    USERIAL_Close(tUSERIAL_PORT port)
+void    USERIAL_Close(tUSERIAL_PORT port)
 {
     pthread_attr_t attr;
     pthread_t      close_thread;
@@ -1557,7 +1557,7 @@ void userial_close_thread(uint32_t params)
 **
 *******************************************************************************/
 
-UDRV_API bool    USERIAL_Feature(tUSERIAL_FEATURE feature)
+bool    USERIAL_Feature(tUSERIAL_FEATURE feature)
 {
     switch (feature)
     {
@@ -1620,7 +1620,7 @@ UDRV_API bool    USERIAL_Feature(tUSERIAL_FEATURE feature)
 **      None.
 **
 *****************************************************************************/
-UDRV_API void UPIO_Set(tUPIO_TYPE type, tUPIO pio, tUPIO_STATE new_state)
+void UPIO_Set(tUPIO_TYPE type, tUPIO pio, tUPIO_STATE new_state)
 {
     int     ret;
     if (type == UPIO_GENERAL)
@@ -1671,12 +1671,12 @@ void setReadPacketSize(int len)
 }
 
 
-UDRV_API bool    USERIAL_IsClosed()
+bool    USERIAL_IsClosed()
 {
     return (linux_cb.sock == -1) ? true : false;
 }
 
-UDRV_API void USERIAL_PowerupDevice(tUSERIAL_PORT port)
+void USERIAL_PowerupDevice(tUSERIAL_PORT port)
 {
     int ret = -1;
     unsigned long num = 0;
