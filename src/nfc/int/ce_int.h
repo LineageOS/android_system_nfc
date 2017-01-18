@@ -150,7 +150,7 @@ extern "C" {
 #endif
 
 /* Global NFC data */
-NFC_API extern tCE_CB  ce_cb;
+extern tCE_CB  ce_cb;
 
 extern void ce_init (void);
 

@@ -209,7 +209,7 @@ extern "C"
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_SnepStartDefaultServer (tNFA_SNEP_CBACK *p_cback);
+extern tNFA_STATUS NFA_SnepStartDefaultServer (tNFA_SNEP_CBACK *p_cback);
 
 /*******************************************************************************
 **
@@ -226,7 +226,7 @@ NFC_API extern tNFA_STATUS NFA_SnepStartDefaultServer (tNFA_SNEP_CBACK *p_cback)
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_SnepStopDefaultServer (tNFA_SNEP_CBACK *p_cback);
+extern tNFA_STATUS NFA_SnepStopDefaultServer (tNFA_SNEP_CBACK *p_cback);
 
 /*******************************************************************************
 **
@@ -250,9 +250,9 @@ NFC_API extern tNFA_STATUS NFA_SnepStopDefaultServer (tNFA_SNEP_CBACK *p_cback);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_SnepRegisterServer (uint8_t         server_sap,
-                                                   char            *p_service_name,
-                                                   tNFA_SNEP_CBACK *p_cback);
+extern tNFA_STATUS NFA_SnepRegisterServer (uint8_t         server_sap,
+                                           char            *p_service_name,
+                                           tNFA_SNEP_CBACK *p_cback);
 
 /*******************************************************************************
 **
@@ -267,7 +267,7 @@ NFC_API extern tNFA_STATUS NFA_SnepRegisterServer (uint8_t         server_sap,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_SnepRegisterClient (tNFA_SNEP_CBACK *p_cback);
+extern tNFA_STATUS NFA_SnepRegisterClient (tNFA_SNEP_CBACK *p_cback);
 
 /*******************************************************************************
 **
@@ -286,7 +286,7 @@ NFC_API extern tNFA_STATUS NFA_SnepRegisterClient (tNFA_SNEP_CBACK *p_cback);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_SnepDeregister (tNFA_HANDLE reg_handle);
+extern tNFA_STATUS NFA_SnepDeregister (tNFA_HANDLE reg_handle);
 
 /*******************************************************************************
 **
@@ -305,8 +305,8 @@ NFC_API extern tNFA_STATUS NFA_SnepDeregister (tNFA_HANDLE reg_handle);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_SnepConnect (tNFA_HANDLE     client_handle,
-                                            char            *p_service_name);
+extern tNFA_STATUS NFA_SnepConnect (tNFA_HANDLE     client_handle,
+                                    char            *p_service_name);
 
 /*******************************************************************************
 **
@@ -329,10 +329,10 @@ NFC_API extern tNFA_STATUS NFA_SnepConnect (tNFA_HANDLE     client_handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_SnepGet (tNFA_HANDLE     conn_handle,
-                                        uint32_t        buff_length,
-                                        uint32_t        ndef_length,
-                                        uint8_t         *p_ndef_buff);
+extern tNFA_STATUS NFA_SnepGet (tNFA_HANDLE     conn_handle,
+                                uint32_t        buff_length,
+                                uint32_t        ndef_length,
+                                uint8_t         *p_ndef_buff);
 
 /*******************************************************************************
 **
@@ -353,9 +353,9 @@ NFC_API extern tNFA_STATUS NFA_SnepGet (tNFA_HANDLE     conn_handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_SnepPut (tNFA_HANDLE     conn_handle,
-                                        uint32_t        ndef_length,
-                                        uint8_t         *p_ndef_buff);
+extern tNFA_STATUS NFA_SnepPut (tNFA_HANDLE     conn_handle,
+                                uint32_t        ndef_length,
+                                uint8_t         *p_ndef_buff);
 
 /*******************************************************************************
 **
@@ -387,10 +387,10 @@ NFC_API extern tNFA_STATUS NFA_SnepPut (tNFA_HANDLE     conn_handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_SnepGetResponse (tNFA_HANDLE         conn_handle,
-                                                tNFA_SNEP_RESP_CODE resp_code,
-                                                uint32_t            ndef_length,
-                                                uint8_t             *p_ndef_buff);
+extern tNFA_STATUS NFA_SnepGetResponse (tNFA_HANDLE         conn_handle,
+                                        tNFA_SNEP_RESP_CODE resp_code,
+                                        uint32_t            ndef_length,
+                                        uint8_t             *p_ndef_buff);
 
 /*******************************************************************************
 **
@@ -418,8 +418,8 @@ NFC_API extern tNFA_STATUS NFA_SnepGetResponse (tNFA_HANDLE         conn_handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_SnepPutResponse (tNFA_HANDLE         conn_handle,
-                                                tNFA_SNEP_RESP_CODE resp_code);
+extern tNFA_STATUS NFA_SnepPutResponse (tNFA_HANDLE         conn_handle,
+                                        tNFA_SNEP_RESP_CODE resp_code);
 
 /*******************************************************************************
 **
@@ -441,8 +441,8 @@ NFC_API extern tNFA_STATUS NFA_SnepPutResponse (tNFA_HANDLE         conn_handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_SnepDisconnect (tNFA_HANDLE conn_handle,
-                                               bool        flush);
+extern tNFA_STATUS NFA_SnepDisconnect (tNFA_HANDLE conn_handle,
+                                       bool        flush);
 
 /*******************************************************************************
 **
@@ -454,7 +454,7 @@ NFC_API extern tNFA_STATUS NFA_SnepDisconnect (tNFA_HANDLE conn_handle,
 ** Returns          The new or current trace level
 **
 *******************************************************************************/
-NFC_API extern uint8_t NFA_SnepSetTraceLevel (uint8_t new_level);
+extern uint8_t NFA_SnepSetTraceLevel (uint8_t new_level);
 
 #ifdef __cplusplus
 }

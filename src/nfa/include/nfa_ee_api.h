@@ -232,7 +232,7 @@ extern "C"
 **                  NFA_STATUS_INVALID_PARAM If bad parameter
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_EeDiscover (tNFA_EE_CBACK *p_cback);
+extern tNFA_STATUS NFA_EeDiscover (tNFA_EE_CBACK *p_cback);
 
 /*******************************************************************************
 **
@@ -247,8 +247,8 @@ NFC_API extern tNFA_STATUS NFA_EeDiscover (tNFA_EE_CBACK *p_cback);
 **                  NFA_STATUS_INVALID_PARAM If bad parameter
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_EeGetInfo (uint8_t      *p_num_nfcee,
-                                          tNFA_EE_INFO *p_info);
+extern tNFA_STATUS NFA_EeGetInfo (uint8_t      *p_num_nfcee,
+                                  tNFA_EE_INFO *p_info);
 
 /*******************************************************************************
 **
@@ -262,7 +262,7 @@ NFC_API extern tNFA_STATUS NFA_EeGetInfo (uint8_t      *p_num_nfcee,
 **                  NFA_STATUS_INVALID_PARAM If bad parameter
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_EeRegister (tNFA_EE_CBACK *p_cback);
+extern tNFA_STATUS NFA_EeRegister (tNFA_EE_CBACK *p_cback);
 
 /*******************************************************************************
 **
@@ -275,7 +275,7 @@ NFC_API extern tNFA_STATUS NFA_EeRegister (tNFA_EE_CBACK *p_cback);
 **                  NFA_STATUS_INVALID_PARAM If bad parameter
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_EeDeregister (tNFA_EE_CBACK *p_cback);
+extern tNFA_STATUS NFA_EeDeregister (tNFA_EE_CBACK *p_cback);
 
 /*******************************************************************************
 **
@@ -291,8 +291,8 @@ NFC_API extern tNFA_STATUS NFA_EeDeregister (tNFA_EE_CBACK *p_cback);
 **                  NFA_STATUS_INVALID_PARAM If bad parameter
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_EeModeSet (tNFA_HANDLE    ee_handle,
-                                          tNFA_EE_MD     mode);
+extern tNFA_STATUS NFA_EeModeSet (tNFA_HANDLE    ee_handle,
+                                  tNFA_EE_MD     mode);
 
 
 /*******************************************************************************
@@ -315,10 +315,10 @@ NFC_API extern tNFA_STATUS NFA_EeModeSet (tNFA_HANDLE    ee_handle,
 **                  NFA_STATUS_INVALID_PARAM If bad parameter
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_EeSetDefaultTechRouting (tNFA_HANDLE          ee_handle,
-                                                        tNFA_TECHNOLOGY_MASK technologies_switch_on,
-                                                        tNFA_TECHNOLOGY_MASK technologies_switch_off,
-                                                        tNFA_TECHNOLOGY_MASK technologies_battery_off);
+extern tNFA_STATUS NFA_EeSetDefaultTechRouting (tNFA_HANDLE          ee_handle,
+                                                tNFA_TECHNOLOGY_MASK technologies_switch_on,
+                                                tNFA_TECHNOLOGY_MASK technologies_switch_off,
+                                                tNFA_TECHNOLOGY_MASK technologies_battery_off);
 
 /*******************************************************************************
 **
@@ -340,10 +340,10 @@ NFC_API extern tNFA_STATUS NFA_EeSetDefaultTechRouting (tNFA_HANDLE          ee_
 **                  NFA_STATUS_INVALID_PARAM If bad parameter
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_EeSetDefaultProtoRouting (tNFA_HANDLE         ee_handle,
-                                                         tNFA_PROTOCOL_MASK  protocols_switch_on,
-                                                         tNFA_PROTOCOL_MASK  protocols_switch_off,
-                                                         tNFA_PROTOCOL_MASK  protocols_battery_off);
+extern tNFA_STATUS NFA_EeSetDefaultProtoRouting (tNFA_HANDLE         ee_handle,
+                                                 tNFA_PROTOCOL_MASK  protocols_switch_on,
+                                                 tNFA_PROTOCOL_MASK  protocols_switch_off,
+                                                 tNFA_PROTOCOL_MASK  protocols_battery_off);
 
 /*******************************************************************************
 **
@@ -364,10 +364,10 @@ NFC_API extern tNFA_STATUS NFA_EeSetDefaultProtoRouting (tNFA_HANDLE         ee_
 **                  NFA_STATUS_INVALID_PARAM If bad parameter
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_EeAddAidRouting (tNFA_HANDLE          ee_handle,
-                                                uint8_t              aid_len,
-                                                uint8_t             *p_aid,
-                                                tNFA_EE_PWR_STATE    power_state);
+extern tNFA_STATUS NFA_EeAddAidRouting (tNFA_HANDLE          ee_handle,
+                                        uint8_t              aid_len,
+                                        uint8_t             *p_aid,
+                                        tNFA_EE_PWR_STATE    power_state);
 
 /*******************************************************************************
 **
@@ -389,8 +389,8 @@ NFC_API extern tNFA_STATUS NFA_EeAddAidRouting (tNFA_HANDLE          ee_handle,
 **                  NFA_STATUS_INVALID_PARAM If bad parameter
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_EeRemoveAidRouting (uint8_t   aid_len,
-                                                   uint8_t  *p_aid);
+extern tNFA_STATUS NFA_EeRemoveAidRouting (uint8_t   aid_len,
+                                           uint8_t  *p_aid);
 
 /*******************************************************************************
 **
@@ -404,7 +404,7 @@ NFC_API extern tNFA_STATUS NFA_EeRemoveAidRouting (uint8_t   aid_len,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_EeGetLmrtRemainingSize (void);
+extern tNFA_STATUS NFA_EeGetLmrtRemainingSize (void);
 
 /*******************************************************************************
 **
@@ -422,7 +422,7 @@ NFC_API extern tNFA_STATUS NFA_EeGetLmrtRemainingSize (void);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_EeUpdateNow (void);
+extern tNFA_STATUS NFA_EeUpdateNow (void);
 
 /*******************************************************************************
 **
@@ -438,9 +438,9 @@ NFC_API extern tNFA_STATUS NFA_EeUpdateNow (void);
 **                  NFA_STATUS_INVALID_PARAM If bad parameter
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_EeConnect (tNFA_HANDLE    ee_handle,
-                                          uint8_t        ee_interface,
-                                          tNFA_EE_CBACK *p_cback);
+extern tNFA_STATUS NFA_EeConnect (tNFA_HANDLE    ee_handle,
+                                  uint8_t        ee_interface,
+                                  tNFA_EE_CBACK *p_cback);
 
 /*******************************************************************************
 **
@@ -455,9 +455,9 @@ NFC_API extern tNFA_STATUS NFA_EeConnect (tNFA_HANDLE    ee_handle,
 **                  NFA_STATUS_INVALID_PARAM If bad parameter
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_EeSendData (tNFA_HANDLE  ee_handle,
-                                           uint16_t     data_len,
-                                           uint8_t     *p_data);
+extern tNFA_STATUS NFA_EeSendData (tNFA_HANDLE  ee_handle,
+                                   uint16_t     data_len,
+                                   uint8_t     *p_data);
 
 /*******************************************************************************
 **
@@ -472,7 +472,7 @@ NFC_API extern tNFA_STATUS NFA_EeSendData (tNFA_HANDLE  ee_handle,
 **                  NFA_STATUS_INVALID_PARAM If bad parameter
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_EeDisconnect (tNFA_HANDLE ee_handle);
+extern tNFA_STATUS NFA_EeDisconnect (tNFA_HANDLE ee_handle);
 
 
 #ifdef __cplusplus

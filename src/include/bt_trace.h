@@ -26,7 +26,7 @@ extern "C" {
 extern uint8_t appl_trace_level ;
 
 /* Prototype for message logging function. */
-EXPORT_API extern void LogMsg (uint32_t trace_set_mask, const char *fmt_str, ...);
+extern void LogMsg (uint32_t trace_set_mask, const char *fmt_str, ...);
 extern void LogMsg_0 (uint32_t trace_set_mask, const char *p_str);
 extern void LogMsg_1 (uint32_t trace_set_mask, const char *fmt_str, uintptr_t p1);
 extern void LogMsg_2 (uint32_t trace_set_mask, const char *fmt_str, uintptr_t p1, uintptr_t p2);

@@ -244,18 +244,18 @@ typedef void (tUSERIAL_CBACK)(tUSERIAL_PORT, tUSERIAL_EVT, tUSERIAL_EVT_DATA *);
 extern "C" {
 #endif
 
-UDRV_API extern void    USERIAL_Init(void *);
-UDRV_API extern void    USERIAL_Open(tUSERIAL_PORT, tUSERIAL_OPEN_CFG *, tUSERIAL_CBACK *);
-UDRV_API extern void    USERIAL_ReadBuf(tUSERIAL_PORT, NFC_HDR **);
-UDRV_API extern uint16_t  USERIAL_Read(tUSERIAL_PORT, uint8_t *, uint16_t);
-UDRV_API extern bool    USERIAL_WriteBuf(tUSERIAL_PORT, NFC_HDR *);
-UDRV_API extern uint16_t  USERIAL_Write(tUSERIAL_PORT, uint8_t *, uint16_t);
-UDRV_API extern void    USERIAL_Ioctl(tUSERIAL_PORT, tUSERIAL_OP, tUSERIAL_IOCTL_DATA *);
-UDRV_API extern void    USERIAL_Close(tUSERIAL_PORT);
-UDRV_API extern bool    USERIAL_Feature(tUSERIAL_FEATURE);
-UDRV_API extern bool    USERIAL_IsClosed();
-UDRV_API extern void    USERIAL_SetPowerOffDelays(int,int);
-UDRV_API extern void    USERIAL_PowerupDevice(tUSERIAL_PORT port);
+extern void    USERIAL_Init(void *);
+extern void    USERIAL_Open(tUSERIAL_PORT, tUSERIAL_OPEN_CFG *, tUSERIAL_CBACK *);
+extern void    USERIAL_ReadBuf(tUSERIAL_PORT, NFC_HDR **);
+extern uint16_t  USERIAL_Read(tUSERIAL_PORT, uint8_t *, uint16_t);
+extern bool    USERIAL_WriteBuf(tUSERIAL_PORT, NFC_HDR *);
+extern uint16_t  USERIAL_Write(tUSERIAL_PORT, uint8_t *, uint16_t);
+extern void    USERIAL_Ioctl(tUSERIAL_PORT, tUSERIAL_OP, tUSERIAL_IOCTL_DATA *);
+extern void    USERIAL_Close(tUSERIAL_PORT);
+extern bool    USERIAL_Feature(tUSERIAL_FEATURE);
+extern bool    USERIAL_IsClosed();
+extern void    USERIAL_SetPowerOffDelays(int,int);
+extern void    USERIAL_PowerupDevice(tUSERIAL_PORT port);
 
 /*******************************************************************************
  **
@@ -268,7 +268,7 @@ UDRV_API extern void    USERIAL_PowerupDevice(tUSERIAL_PORT port);
  ** Returns            line speed
  **
  *******************************************************************************/
-UDRV_API extern uint32_t USERIAL_GetLineSpeed(uint8_t baud);
+extern uint32_t USERIAL_GetLineSpeed(uint8_t baud);
 /*******************************************************************************
  **
  ** Function           USERIAL_GetBaud
@@ -280,7 +280,7 @@ UDRV_API extern uint32_t USERIAL_GetLineSpeed(uint8_t baud);
  ** Returns            line speed
  **
  *******************************************************************************/
-UDRV_API extern uint8_t USERIAL_GetBaud(uint32_t line_speed);
+extern uint8_t USERIAL_GetBaud(uint32_t line_speed);
 
 #ifdef __cplusplus
 }
