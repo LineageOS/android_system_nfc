@@ -93,7 +93,6 @@ typedef uint16_t tNFA_HANDLE;
 #define NFA_HANDLE_GROUP_CE             0x0300      /* DH Card Emulation handles    */
 #define NFA_HANDLE_GROUP_EE             0x0400      /* Handles to identify NFCEE    */
 #define NFA_HANDLE_GROUP_P2P            0x0500      /* P2P handles                  */
-#define NFA_HANDLE_GROUP_CHO            0x0600      /* Connection Handvoer handles  */
 #define NFA_HANDLE_GROUP_SNEP           0x0700      /* SNEP handles                 */
 #define NFA_HANDLE_GROUP_HCI            0x0800      /* HCI handles                  */
 #define NFA_HANDLE_GROUP_LOCAL_NDEF     0x0900      /* Local NDEF message handle    */

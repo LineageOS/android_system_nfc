@@ -35,10 +35,6 @@
 #include "nfa_p2p_int.h"
 #include "nci_hmsgs.h"
 
-#if (NFA_CHO_INCLUDED == TRUE)
-#include "nfa_cho_int.h"
-#endif
-
 #if (NFC_NFCEE_INCLUDED == TRUE)
 #include "nfa_ee_int.h"
 #include "nfa_hci_int.h"

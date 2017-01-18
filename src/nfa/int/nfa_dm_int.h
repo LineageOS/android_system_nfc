@@ -516,8 +516,6 @@ typedef struct
 } tNFA_DM_CB;
 
 /* Internal function prototypes */
-void nfa_dm_ndef_register_cho (tNFA_NDEF_CHO_CBACK *p_cback);
-void nfa_dm_ndef_deregister_cho (void);
 void nfa_dm_ndef_handle_message (tNFA_STATUS status, uint8_t *p_msg_buf, uint32_t len);
 void nfa_dm_ndef_dereg_all (void);
 void nfa_dm_act_conn_cback_notify (uint8_t event, tNFA_CONN_EVT_DATA *p_data);
@@ -548,11 +546,6 @@ extern tNFA_DM_CB nfa_dm_cb;
 
 void nfa_dm_init (void);
 void nfa_p2p_init (void);
-#if (NFA_CHO_INCLUDED == TRUE)
-void nfa_cho_init (void);
-#else
-#define nfa_cho_init()
-#endif /* (NFA_CHO_INCLUDED == TRUE) */
 #if (NFA_SNEP_INCLUDED == TRUE)
 void nfa_snep_init (bool    is_dta_mode);
 #else

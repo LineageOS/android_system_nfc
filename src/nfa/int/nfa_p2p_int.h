@@ -257,7 +257,6 @@ typedef struct
     tNFA_TECHNOLOGY_MASK listen_tech_mask_to_restore;/* to retry without active listen mode */
     TIMER_LIST_ENT      active_listen_restore_timer; /* timer to restore active listen mode */
     bool                is_p2p_listening;
-    bool                is_cho_listening;
     bool                is_snep_listening;
 
     tNFA_P2P_SAP_CB     sap_cb[NFA_P2P_NUM_SAP];

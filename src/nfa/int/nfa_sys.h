@@ -39,7 +39,6 @@ enum {
     NFA_ID_DM,          /* device manager                      */
     NFA_ID_EE,          /* NFCEE sub-system                    */
     NFA_ID_P2P,         /* Peer-to-Peer sub-system             */
-    NFA_ID_CHO,         /* Connection Handover sub-system      */
     NFA_ID_SNEP,        /* SNEP sub-system                     */
     NFA_ID_RW,          /* Reader/writer sub-system            */
     NFA_ID_CE,          /* Card-emulation sub-system           */

@@ -588,39 +588,6 @@
 #define NFA_CE_LISTEN_INFO_MAX        5
 #endif
 
-#ifndef NFA_CHO_INCLUDED
-#define NFA_CHO_INCLUDED            FALSE /* Anddroid must use FALSE to exclude CHO */
-#endif
-
-/* MIU for CHO              */
-#ifndef NFA_CHO_MIU
-#define NFA_CHO_MIU                    499
-#endif
-
-/* Receiving Window for CHO */
-#ifndef NFA_CHO_RW
-#define NFA_CHO_RW                     4
-#endif
-
-/* Max number of alternative carrier information */
-#ifndef NFA_CHO_MAX_AC_INFO
-#define NFA_CHO_MAX_AC_INFO                 2
-#endif
-
-/* Max reference character length, it is up to 255 but it's RECOMMENDED short */
-#ifndef NFA_CHO_MAX_REF_NAME_LEN
-#define NFA_CHO_MAX_REF_NAME_LEN            8
-#endif
-
-/* Max auxiliary data count */
-#ifndef NFA_CHO_MAX_AUX_DATA_COUNT
-#define NFA_CHO_MAX_AUX_DATA_COUNT          2
-#endif
-
-#ifndef NFA_CHO_TEST_INCLUDED
-#define NFA_CHO_TEST_INCLUDED           FALSE
-#endif
-
 #ifndef NFA_SNEP_INCLUDED
 #define NFA_SNEP_INCLUDED               FALSE /* Android must use FALSE to exclude SNEP */
 #endif
