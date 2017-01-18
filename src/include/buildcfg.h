@@ -57,25 +57,6 @@
 #ifdef	__cplusplus
 extern "C" {
 #endif
-// +++from bte.h...
-enum
-{
-                            /* BTE                  BBY                     */
-                            /* J3   J4              SW3-3   SW3-2   SW3-1   */
-                            /* -------------------------------------------- */
-    BTE_MODE_SERIAL_APP,    /* OUT  OUT             OFF     OFF     OFF     Sample serial port application      */
-    BTE_MODE_APPL,    	    /* IN   OUT             OFF     OFF     ON      Target used with Tester through RPC */
-    BTE_MODE_RESERVED,      /* OUT  IN              OFF     ON      OFF     Reserved                            */
-    BTE_MODE_SAMPLE_APPS,   /* IN   IN              OFF     ON      ON      Sample applications (ICP/HSP)       */
-    BTE_MODE_DONGLE,        /* not yet supported    ON      OFF     OFF     Dongle mode                         */
-    BTE_MODE_APPL_PROTOCOL_TRACE, /* this is a fake mode do allow protocol tracing in application without rpc */
-    BTE_MODE_INVALID
-};
-/* Protocol trace mask */
-extern uint32_t bte_proto_trace_mask;/* = 0xFFFFFFFF;*/
-extern volatile uint8_t bte_target_mode;
-// ---from bte.h...
-
 
 extern uint8_t *scru_dump_hex (uint8_t *p, char *p_title, uint32_t len, uint32_t trace_layer, uint32_t trace_type);
 extern void ScrLog(uint32_t trace_set_mask, const char *fmt_str, ...);

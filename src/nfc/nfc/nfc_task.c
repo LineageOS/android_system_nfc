@@ -395,7 +395,7 @@ uint32_t nfc_task (uint32_t param)
                 free_buf = true;
 
                 /* Determine the input message type. */
-                switch (p_msg->event & BT_EVT_MASK)
+                switch (p_msg->event & NFC_EVT_MASK)
                 {
                     case BT_EVT_TO_NFC_NCI:
                         free_buf = nfc_ncif_process_event (p_msg);

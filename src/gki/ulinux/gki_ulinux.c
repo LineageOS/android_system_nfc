@@ -26,6 +26,7 @@
 #include <time.h>
 #include "gki_int.h"
 #include "gki_target.h"
+#include "bt_trace.h"
 
 /* Temp android logging...move to android tgt config file */
 
