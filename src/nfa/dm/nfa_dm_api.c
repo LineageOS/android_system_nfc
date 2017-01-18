@@ -325,7 +325,7 @@ tNFA_STATUS NFA_RequestExclusiveRfControl  (tNFA_TECHNOLOGY_MASK poll_mask,
 *******************************************************************************/
 tNFA_STATUS NFA_ReleaseExclusiveRfControl (void)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
 
     NFA_TRACE_API0 ("NFA_ReleaseExclusiveRfControl ()");
 
@@ -335,7 +335,7 @@ tNFA_STATUS NFA_ReleaseExclusiveRfControl (void)
         return (NFA_STATUS_FAILED);
     }
 
-    if ((p_msg = (BT_HDR *) GKI_getbuf (sizeof (BT_HDR))) != NULL)
+    if ((p_msg = (NFC_HDR *) GKI_getbuf (sizeof (NFC_HDR))) != NULL)
     {
         p_msg->event = NFA_DM_API_RELEASE_EXCL_RF_CTRL_EVT;
         nfa_sys_sendmsg (p_msg);
@@ -411,11 +411,11 @@ tNFA_STATUS NFA_EnablePolling (tNFA_TECHNOLOGY_MASK poll_mask)
 *******************************************************************************/
 tNFA_STATUS NFA_DisablePolling (void)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
 
     NFA_TRACE_API0 ("NFA_DisablePolling ()");
 
-    if ((p_msg = (BT_HDR *) GKI_getbuf (sizeof (BT_HDR))) != NULL)
+    if ((p_msg = (NFC_HDR *) GKI_getbuf (sizeof (NFC_HDR))) != NULL)
     {
         p_msg->event = NFA_DM_API_DISABLE_POLLING_EVT;
 
@@ -450,11 +450,11 @@ tNFA_STATUS NFA_DisablePolling (void)
 *******************************************************************************/
 tNFA_STATUS NFA_EnableListening (void)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
 
     NFA_TRACE_API0 ("NFA_EnableListening ()");
 
-    if ((p_msg = (BT_HDR *) GKI_getbuf (sizeof (BT_HDR))) != NULL)
+    if ((p_msg = (NFC_HDR *) GKI_getbuf (sizeof (NFC_HDR))) != NULL)
     {
         p_msg->event = NFA_DM_API_ENABLE_LISTENING_EVT;
 
@@ -483,11 +483,11 @@ tNFA_STATUS NFA_EnableListening (void)
 *******************************************************************************/
 tNFA_STATUS NFA_DisableListening (void)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
 
     NFA_TRACE_API0 ("NFA_DisableListening ()");
 
-    if ((p_msg = (BT_HDR *) GKI_getbuf (sizeof (BT_HDR))) != NULL)
+    if ((p_msg = (NFC_HDR *) GKI_getbuf (sizeof (NFC_HDR))) != NULL)
     {
         p_msg->event = NFA_DM_API_DISABLE_LISTENING_EVT;
 
@@ -520,11 +520,11 @@ tNFA_STATUS NFA_DisableListening (void)
 *******************************************************************************/
 tNFA_STATUS NFA_PauseP2p (void)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
 
     NFA_TRACE_API0 ("NFA_PauseP2p ()");
 
-    if ((p_msg = (BT_HDR *) GKI_getbuf (sizeof (BT_HDR))) != NULL)
+    if ((p_msg = (NFC_HDR *) GKI_getbuf (sizeof (NFC_HDR))) != NULL)
     {
         p_msg->event = NFA_DM_API_PAUSE_P2P_EVT;
 
@@ -553,11 +553,11 @@ tNFA_STATUS NFA_PauseP2p (void)
 *******************************************************************************/
 tNFA_STATUS NFA_ResumeP2p (void)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
 
     NFA_TRACE_API0 ("NFA_ResumeP2p ()");
 
-    if ((p_msg = (BT_HDR *) GKI_getbuf (sizeof (BT_HDR))) != NULL)
+    if ((p_msg = (NFC_HDR *) GKI_getbuf (sizeof (NFC_HDR))) != NULL)
     {
         p_msg->event = NFA_DM_API_RESUME_P2P_EVT;
 
@@ -622,11 +622,11 @@ tNFA_STATUS NFA_SetP2pListenTech (tNFA_TECHNOLOGY_MASK tech_mask)
 *******************************************************************************/
 tNFA_STATUS NFA_StartRfDiscovery (void)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
 
     NFA_TRACE_API0 ("NFA_StartRfDiscovery ()");
 
-    if ((p_msg = (BT_HDR *) GKI_getbuf (sizeof (BT_HDR))) != NULL)
+    if ((p_msg = (NFC_HDR *) GKI_getbuf (sizeof (NFC_HDR))) != NULL)
     {
         p_msg->event = NFA_DM_API_START_RF_DISCOVERY_EVT;
 
@@ -652,11 +652,11 @@ tNFA_STATUS NFA_StartRfDiscovery (void)
 *******************************************************************************/
 tNFA_STATUS NFA_StopRfDiscovery (void)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
 
     NFA_TRACE_API0 ("NFA_StopRfDiscovery ()");
 
-    if ((p_msg = (BT_HDR *) GKI_getbuf (sizeof (BT_HDR))) != NULL)
+    if ((p_msg = (NFC_HDR *) GKI_getbuf (sizeof (NFC_HDR))) != NULL)
     {
         p_msg->event = NFA_DM_API_STOP_RF_DISCOVERY_EVT;
 
@@ -696,7 +696,7 @@ tNFA_STATUS NFA_SetRfDiscoveryDuration (uint16_t discovery_period_ms)
     NFA_TRACE_API0 ("NFA_SetRfDiscoveryDuration ()");
 
     /* Post the API message */
-    if ((p_msg = (tNFA_DM_API_SET_RF_DISC_DUR *) GKI_getbuf (sizeof (BT_HDR))) != NULL)
+    if ((p_msg = (tNFA_DM_API_SET_RF_DISC_DUR *) GKI_getbuf (sizeof (NFC_HDR))) != NULL)
     {
         p_msg->hdr.event = NFA_DM_API_SET_RF_DISC_DURATION_EVT;
 
@@ -858,7 +858,7 @@ tNFA_STATUS NFA_SendRawFrame (uint8_t  *p_raw_data,
                               uint16_t  data_len,
                               uint16_t  presence_check_start_delay)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
     uint16_t  size;
     uint8_t  *p;
 
@@ -868,8 +868,8 @@ tNFA_STATUS NFA_SendRawFrame (uint8_t  *p_raw_data,
     if ((data_len == 0) || (p_raw_data == NULL))
         return (NFA_STATUS_INVALID_PARAM);
 
-    size = BT_HDR_SIZE + NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE + data_len;
-    if ((p_msg = (BT_HDR *) GKI_getbuf (size)) != NULL)
+    size = NFC_HDR_SIZE + NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE + data_len;
+    if ((p_msg = (NFC_HDR *) GKI_getbuf (size)) != NULL)
     {
         p_msg->event  = NFA_DM_API_RAW_FRAME_EVT;
         p_msg->layer_specific = presence_check_start_delay;
@@ -1067,7 +1067,7 @@ NFC_API extern tNFA_STATUS NFA_DeregisterNDefTypeHandler (tNFA_HANDLE ndef_type_
 *******************************************************************************/
 tNFA_STATUS NFA_PowerOffSleepMode (bool    start_stop)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
 
     NFA_TRACE_API1 ("NFA_PowerOffSleepState () start_stop=%d", start_stop);
 
@@ -1081,7 +1081,7 @@ tNFA_STATUS NFA_PowerOffSleepMode (bool    start_stop)
         nfa_dm_cb.flags |= NFA_DM_FLAGS_SETTING_PWR_MODE;
     }
 
-    if ((p_msg = (BT_HDR *) GKI_getbuf (sizeof (BT_HDR))) != NULL)
+    if ((p_msg = (NFC_HDR *) GKI_getbuf (sizeof (NFC_HDR))) != NULL)
     {
         p_msg->event          = NFA_DM_API_POWER_OFF_SLEEP_EVT;
         p_msg->layer_specific = start_stop;

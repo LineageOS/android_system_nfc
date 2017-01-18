@@ -65,7 +65,7 @@ typedef uint8_t tNFA_CE_REG_TYPE;
 /* data type for NFA_CE_API_CFG_LOCAL_TAG_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_PROTOCOL_MASK  protocol_mask;
     uint8_t             *p_ndef_data;
     uint16_t            ndef_cur_size;
@@ -78,14 +78,14 @@ typedef struct
 /* data type for NFA_CE_ACTIVATE_NTF_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFC_ACTIVATE_DEVT *p_activation_params;
 } tNFA_CE_ACTIVATE_NTF;
 
 /* data type for NFA_CE_API_REG_LISTEN_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_CONN_CBACK     *p_conn_cback;
 
     tNFA_CE_REG_TYPE   listen_type;
@@ -106,7 +106,7 @@ typedef struct
 /* data type for NFA_CE_API_DEREG_LISTEN_EVT */
 typedef struct
 {
-    BT_HDR          hdr;
+    NFC_HDR          hdr;
     tNFA_HANDLE     handle;
     uint32_t        listen_info;
 } tNFA_CE_API_DEREG_LISTEN;
@@ -115,7 +115,7 @@ typedef struct
 typedef union
 {
     /* GKI event buffer header */
-    BT_HDR                      hdr;
+    NFC_HDR                      hdr;
     tNFA_CE_API_CFG_LOCAL_TAG   local_tag;
     tNFA_CE_API_REG_LISTEN      reg_listen;
     tNFA_CE_API_DEREG_LISTEN    dereg_listen;
@@ -205,7 +205,7 @@ bool    nfa_ce_deactivate_ntf (tNFA_CE_MSG *p_ce_msg);
 
 /* Internal function prototypes */
 void nfa_ce_t3t_generate_rand_nfcid (uint8_t nfcid2[NCI_RF_F_UID_LEN]);
-bool    nfa_ce_hdl_event (BT_HDR *p_msg);
+bool    nfa_ce_hdl_event (NFC_HDR *p_msg);
 tNFC_STATUS nfa_ce_set_content (void);
 tNFA_STATUS nfa_ce_start_listening (void);
 void nfa_ce_remove_listen_info_entry (uint8_t listen_info_idx, bool    notify_app);

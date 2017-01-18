@@ -70,7 +70,7 @@ enum
 /* data type for NFA_P2P_API_REG_SERVER_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     uint8_t             server_sap;
     tNFA_P2P_LINK_TYPE  link_type;
     char                service_name[LLCP_MAX_SN_LEN + 1];
@@ -80,7 +80,7 @@ typedef struct
 /* data type for NFA_P2P_API_REG_CLIENT_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_P2P_LINK_TYPE  link_type;
     tNFA_P2P_CBACK     *p_cback;
 } tNFA_P2P_API_REG_CLIENT;
@@ -88,14 +88,14 @@ typedef struct
 /* data type for NFA_P2P_API_DEREG_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         handle;
 } tNFA_P2P_API_DEREG;
 
 /* data type for NFA_P2P_API_ACCEPT_CONN_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         conn_handle;
     uint16_t            miu;
     uint8_t             rw;
@@ -104,14 +104,14 @@ typedef struct
 /* data type for NFA_P2P_API_REJECT_CONN_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         conn_handle;
 } tNFA_P2P_API_REJECT_CONN;
 
 /* data type for NFA_P2P_API_DISCONNECT_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         conn_handle;
     bool                flush;
 } tNFA_P2P_API_DISCONNECT;
@@ -119,7 +119,7 @@ typedef struct
 /* data type for NFA_P2P_API_CONNECT_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         client_handle;
     char                service_name[LLCP_MAX_SN_LEN + 1];
     uint8_t             dsap;
@@ -130,24 +130,24 @@ typedef struct
 /* data type for NFA_P2P_API_SEND_UI_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         handle;
     uint8_t             dsap;
-    BT_HDR             *p_msg;
+    NFC_HDR             *p_msg;
 } tNFA_P2P_API_SEND_UI;
 
 /* data type for NFA_P2P_API_SEND_DATA_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         conn_handle;
-    BT_HDR             *p_msg;
+    NFC_HDR             *p_msg;
 } tNFA_P2P_API_SEND_DATA;
 
 /* data type for NFA_P2P_API_SET_LOCAL_BUSY_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         conn_handle;
     bool                is_busy;
 } tNFA_P2P_API_SET_LOCAL_BUSY;
@@ -155,14 +155,14 @@ typedef struct
 /* data type for NFA_P2P_API_GET_LINK_INFO_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         handle;
 } tNFA_P2P_API_GET_LINK_INFO;
 
 /* data type for NFA_P2P_API_GET_REMOTE_SAP_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         handle;
     char                service_name[LLCP_MAX_SN_LEN + 1];
 } tNFA_P2P_API_GET_REMOTE_SAP;
@@ -170,7 +170,7 @@ typedef struct
 /* data type for NFA_P2P_API_SET_LLCP_CFG_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     uint16_t            link_miu;
     uint8_t             opt;
     uint8_t             wt;
@@ -185,7 +185,7 @@ typedef struct
 /* union of all event data types */
 typedef union
 {
-    BT_HDR                      hdr;
+    NFC_HDR                      hdr;
     tNFA_P2P_API_REG_SERVER     api_reg_server;
     tNFA_P2P_API_REG_CLIENT     api_reg_client;
     tNFA_P2P_API_DEREG          api_dereg;

@@ -124,7 +124,7 @@ tLLCP_STATUS llcp_sdp_send_sdreq (uint8_t tid, char *p_name)
     /* if there is no pending SNL */
     if (!llcp_cb.sdp_cb.p_snl)
     {
-        llcp_cb.sdp_cb.p_snl = (BT_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
+        llcp_cb.sdp_cb.p_snl = (NFC_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
 
         if (llcp_cb.sdp_cb.p_snl)
         {
@@ -136,7 +136,7 @@ tLLCP_STATUS llcp_sdp_send_sdreq (uint8_t tid, char *p_name)
     if (llcp_cb.sdp_cb.p_snl)
     {
         available_bytes = GKI_get_buf_size (llcp_cb.sdp_cb.p_snl)
-                          - BT_HDR_SIZE - llcp_cb.sdp_cb.p_snl->offset
+                          - NFC_HDR_SIZE - llcp_cb.sdp_cb.p_snl->offset
                           - llcp_cb.sdp_cb.p_snl->len;
 
         name_len = (uint16_t) strlen (p_name);
@@ -153,7 +153,7 @@ tLLCP_STATUS llcp_sdp_send_sdreq (uint8_t tid, char *p_name)
             /* send pending SNL PDU to LM */
             llcp_sdp_check_send_snl ();
 
-            llcp_cb.sdp_cb.p_snl = (BT_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
+            llcp_cb.sdp_cb.p_snl = (NFC_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
 
             if (llcp_cb.sdp_cb.p_snl)
             {
@@ -229,7 +229,7 @@ static tLLCP_STATUS llcp_sdp_send_sdres (uint8_t tid, uint8_t sap)
     /* if there is no pending SNL */
     if (!llcp_cb.sdp_cb.p_snl)
     {
-        llcp_cb.sdp_cb.p_snl = (BT_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
+        llcp_cb.sdp_cb.p_snl = (NFC_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
 
         if (llcp_cb.sdp_cb.p_snl)
         {
@@ -241,7 +241,7 @@ static tLLCP_STATUS llcp_sdp_send_sdres (uint8_t tid, uint8_t sap)
     if (llcp_cb.sdp_cb.p_snl)
     {
         available_bytes = GKI_get_buf_size (llcp_cb.sdp_cb.p_snl)
-                          - BT_HDR_SIZE - llcp_cb.sdp_cb.p_snl->offset
+                          - NFC_HDR_SIZE - llcp_cb.sdp_cb.p_snl->offset
                           - llcp_cb.sdp_cb.p_snl->len;
 
         /* if SDRES parameter can be added in SNL */
@@ -256,7 +256,7 @@ static tLLCP_STATUS llcp_sdp_send_sdres (uint8_t tid, uint8_t sap)
             /* send pending SNL PDU to LM */
             llcp_sdp_check_send_snl ();
 
-            llcp_cb.sdp_cb.p_snl = (BT_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
+            llcp_cb.sdp_cb.p_snl = (NFC_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
 
             if (llcp_cb.sdp_cb.p_snl)
             {

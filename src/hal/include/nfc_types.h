@@ -20,6 +20,18 @@
 #ifndef NFC_TYPES_H
 #define NFC_TYPES_H
 
+/****************************************************************************
+** NFC_HDR header definition for NFC messages
+*****************************************************************************/
+typedef struct
+{
+    uint16_t        event;
+    uint16_t        len;
+    uint16_t        offset;
+    uint16_t        layer_specific;
+} NFC_HDR;
+#define NFC_HDR_SIZE (sizeof (NFC_HDR))
+
 /* Mask for NFC_HDR event field */
 #define NFC_EVT_MASK                    0xFF00
 #define NFC_SUB_EVT_MASK                0x00FF

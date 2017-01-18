@@ -246,9 +246,9 @@ extern "C" {
 
 UDRV_API extern void    USERIAL_Init(void *);
 UDRV_API extern void    USERIAL_Open(tUSERIAL_PORT, tUSERIAL_OPEN_CFG *, tUSERIAL_CBACK *);
-UDRV_API extern void    USERIAL_ReadBuf(tUSERIAL_PORT, BT_HDR **);
+UDRV_API extern void    USERIAL_ReadBuf(tUSERIAL_PORT, NFC_HDR **);
 UDRV_API extern uint16_t  USERIAL_Read(tUSERIAL_PORT, uint8_t *, uint16_t);
-UDRV_API extern bool    USERIAL_WriteBuf(tUSERIAL_PORT, BT_HDR *);
+UDRV_API extern bool    USERIAL_WriteBuf(tUSERIAL_PORT, NFC_HDR *);
 UDRV_API extern uint16_t  USERIAL_Write(tUSERIAL_PORT, uint8_t *, uint16_t);
 UDRV_API extern void    USERIAL_Ioctl(tUSERIAL_PORT, tUSERIAL_OP, tUSERIAL_IOCTL_DATA *);
 UDRV_API extern void    USERIAL_Close(tUSERIAL_PORT);

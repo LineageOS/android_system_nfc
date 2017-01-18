@@ -322,7 +322,7 @@ typedef struct
 typedef struct
 {
     tNFC_STATUS             status;         /* The event status                 */
-    BT_HDR                  *p_data;        /* The received Data                */
+    NFC_HDR                  *p_data;        /* The received Data                */
 } tNFC_DATA_CEVT;
 
 /* RF Field Status */
@@ -785,7 +785,7 @@ typedef uint16_t tNFC_TEST_EVT;
 typedef struct
 {
     tNFC_STATUS             status;     /* The event status.            */
-    BT_HDR                  *p_data;    /* The loop back data from NFCC */
+    NFC_HDR                  *p_data;    /* The loop back data from NFCC */
 } tNFC_LOOPBACK_TEVT;
 
 /* the data type associated with NFC_RF_CONTROL_TEVT */
@@ -1109,7 +1109,7 @@ NFC_API extern void NFC_SetReassemblyFlag (bool       reassembly);
 **
 *******************************************************************************/
 NFC_API extern tNFC_STATUS NFC_SendData(uint8_t     conn_id,
-                                        BT_HDR     *p_data);
+                                        NFC_HDR     *p_data);
 
 /*******************************************************************************
 **
@@ -1242,7 +1242,7 @@ NFC_API extern tNFC_STATUS NFC_RegVSCback (bool             is_register,
 **
 *******************************************************************************/
 NFC_API extern tNFC_STATUS NFC_SendVsCommand(uint8_t        oid,
-                                             BT_HDR        *p_data,
+                                             NFC_HDR        *p_data,
                                              tNFC_VS_CBACK *p_cback);
 
 /*******************************************************************************
@@ -1259,7 +1259,7 @@ NFC_API extern tNFC_STATUS NFC_SendVsCommand(uint8_t        oid,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_TestLoopback(BT_HDR *p_data);
+NFC_API extern tNFC_STATUS NFC_TestLoopback(NFC_HDR *p_data);
 
 
 /*******************************************************************************

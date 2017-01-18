@@ -167,28 +167,28 @@ typedef struct
 /* data type for NFA_EE_API_DISCOVER_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_EE_CBACK       *p_cback;
 } tNFA_EE_API_DISCOVER;
 
 /* data type for NFA_EE_API_REGISTER_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_EE_CBACK       *p_cback;
 } tNFA_EE_API_REGISTER;
 
 /* data type for NFA_EE_API_DEREGISTER_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     int                 index;
 } tNFA_EE_API_DEREGISTER;
 
 /* data type for NFA_EE_API_MODE_SET_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_EE_ECB        *p_cb;
     uint8_t             nfcee_id;
     uint8_t             mode;
@@ -197,7 +197,7 @@ typedef struct
 /* data type for NFA_EE_API_SET_TECH_CFG_EVT */
 typedef struct
 {
-    BT_HDR                  hdr;
+    NFC_HDR                  hdr;
     tNFA_EE_ECB            *p_cb;
     uint8_t                 nfcee_id;
     tNFA_TECHNOLOGY_MASK    technologies_switch_on;
@@ -208,7 +208,7 @@ typedef struct
 /* data type for NFA_EE_API_SET_PROTO_CFG_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_EE_ECB        *p_cb;
     uint8_t             nfcee_id;
     tNFA_PROTOCOL_MASK  protocols_switch_on;
@@ -219,7 +219,7 @@ typedef struct
 /* data type for NFA_EE_API_ADD_AID_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_EE_ECB        *p_cb;
     uint8_t             nfcee_id;
     uint8_t             aid_len;
@@ -230,18 +230,18 @@ typedef struct
 /* data type for NFA_EE_API_REMOVE_AID_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     uint8_t             aid_len;
     uint8_t             *p_aid;
 } tNFA_EE_API_REMOVE_AID;
 
 /* data type for NFA_EE_API_LMRT_SIZE_EVT */
-typedef  BT_HDR tNFA_EE_API_LMRT_SIZE;
+typedef  NFC_HDR tNFA_EE_API_LMRT_SIZE;
 
 /* data type for NFA_EE_API_CONNECT_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_EE_ECB        *p_cb;
     uint8_t             nfcee_id;
     uint8_t             ee_interface;
@@ -251,7 +251,7 @@ typedef struct
 /* data type for NFA_EE_API_SEND_DATA_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_EE_ECB        *p_cb;
     uint8_t             nfcee_id;
     uint16_t            data_len;
@@ -261,7 +261,7 @@ typedef struct
 /* data type for NFA_EE_API_DISCONNECT_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_EE_ECB        *p_cb;
     uint8_t             nfcee_id;
 } tNFA_EE_API_DISCONNECT;
@@ -269,14 +269,14 @@ typedef struct
 
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFC_STATUS         status;                 /* The event status. */
 } tNFA_EE_MSG_STATUS;
 
 /* common data type for internal events with nfa_ee_use_cfg_cb[] as TRUE */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_EE_ECB        *p_cb;
     uint8_t             nfcee_id;
 } tNFA_EE_CFG_HDR;
@@ -284,35 +284,35 @@ typedef struct
 /* data type for tNFC_RESPONSE_EVT */
 typedef struct
 {
-    BT_HDR                      hdr;
+    NFC_HDR                      hdr;
     void                        *p_data;
 } tNFA_EE_NCI_RESPONSE;
 
 /* data type for NFA_EE_NCI_DISC_RSP_EVT */
 typedef struct
 {
-    BT_HDR                      hdr;
+    NFC_HDR                      hdr;
     tNFC_NFCEE_DISCOVER_REVT    *p_data;
 } tNFA_EE_NCI_DISC_RSP;
 
 /* data type for NFA_EE_NCI_DISC_NTF_EVT */
 typedef struct
 {
-    BT_HDR                      hdr;
+    NFC_HDR                      hdr;
     tNFC_NFCEE_INFO_REVT        *p_data;
 } tNFA_EE_NCI_DISC_NTF;
 
 /* data type for NFA_EE_NCI_MODE_SET_RSP_EVT */
 typedef struct
 {
-    BT_HDR                      hdr;
+    NFC_HDR                      hdr;
     tNFC_NFCEE_MODE_SET_REVT    *p_data;
 } tNFA_EE_NCI_MODE_SET;
 
 /* data type for NFA_EE_NCI_WAIT_RSP_EVT */
 typedef struct
 {
-    BT_HDR                      hdr;
+    NFC_HDR                      hdr;
     void                        *p_data;
     uint8_t                     opcode;
 } tNFA_EE_NCI_WAIT_RSP;
@@ -320,7 +320,7 @@ typedef struct
 /* data type for NFA_EE_NCI_CONN_EVT and NFA_EE_NCI_DATA_EVT */
 typedef struct
 {
-    BT_HDR                      hdr;
+    NFC_HDR                      hdr;
     uint8_t                     conn_id;
     tNFC_CONN_EVT               event;
     tNFC_CONN                   *p_data;
@@ -329,21 +329,21 @@ typedef struct
 /* data type for NFA_EE_NCI_ACTION_NTF_EVT */
 typedef struct
 {
-    BT_HDR                      hdr;
+    NFC_HDR                      hdr;
     tNFC_EE_ACTION_REVT         *p_data;
 } tNFA_EE_NCI_ACTION;
 
 /* data type for NFA_EE_NCI_DISC_REQ_NTF_EVT */
 typedef struct
 {
-    BT_HDR                      hdr;
+    NFC_HDR                      hdr;
     tNFC_EE_DISCOVER_REQ_REVT   *p_data;
 } tNFA_EE_NCI_DISC_REQ;
 
 /* union of all event data types */
 typedef union
 {
-    BT_HDR                      hdr;
+    NFC_HDR                      hdr;
     tNFA_EE_CFG_HDR             cfg_hdr;
     tNFA_EE_API_DISCOVER        ee_discover;
     tNFA_EE_API_REGISTER        ee_register;
@@ -436,7 +436,7 @@ void nfa_ee_sys_enable (void);
 void nfa_ee_sys_disable (void);
 
 /* event handler function type */
-bool    nfa_ee_evt_hdlr (BT_HDR *p_msg);
+bool    nfa_ee_evt_hdlr (NFC_HDR *p_msg);
 void nfa_ee_proc_nfcc_power_mode (uint8_t nfcc_power_mode);
 #if (NFC_NFCEE_INCLUDED == TRUE)
 void nfa_ee_get_tech_route (uint8_t power_state, uint8_t *p_handles);

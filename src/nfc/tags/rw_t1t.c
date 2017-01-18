@@ -35,7 +35,7 @@
 #include "gki.h"
 
 /* Local Functions */
-static tRW_EVENT rw_t1t_handle_rid_rsp (BT_HDR *p_pkt);
+static tRW_EVENT rw_t1t_handle_rid_rsp (NFC_HDR *p_pkt);
 static void rw_t1t_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data);
 static void rw_t1t_process_frame_error (void);
 static void rw_t1t_process_error (void);
@@ -61,14 +61,14 @@ static void rw_t1t_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *
     tRW_EVENT               rw_event    = RW_RAW_FRAME_EVT;
     bool                    b_notify = true;
     tRW_DATA                evt_data;
-    BT_HDR                  *p_pkt;
+    NFC_HDR                  *p_pkt;
     uint8_t                 *p;
     tT1T_CMD_RSP_INFO       *p_cmd_rsp_info     = (tT1T_CMD_RSP_INFO *) rw_cb.tcb.t1t.p_cmd_rsp_info;
 #if (BT_TRACE_VERBOSE == TRUE)
     uint8_t                 begin_state         = p_t1t->state;
 #endif
 
-    p_pkt = (BT_HDR *) (p_data->data.p_data);
+    p_pkt = (NFC_HDR *) (p_data->data.p_data);
     if (p_pkt == NULL)
         return;
     /* Assume the data is just the response byte sequence */
@@ -264,7 +264,7 @@ void rw_t1t_conn_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
             else if (p_data->data.p_data != NULL)
             {
                 /* Free the response buffer in case of error response */
-                GKI_freebuf ((BT_HDR *) (p_data->data.p_data));
+                GKI_freebuf ((NFC_HDR *) (p_data->data.p_data));
                 p_data->data.p_data = NULL;
             }
         }
@@ -327,13 +327,13 @@ tNFC_STATUS rw_t1t_send_static_cmd (uint8_t opcode, uint8_t add, uint8_t dat)
     tNFC_STATUS             status  = NFC_STATUS_FAILED;
     tRW_T1T_CB              *p_t1t  = &rw_cb.tcb.t1t;
     const tT1T_CMD_RSP_INFO *p_cmd_rsp_info = t1t_cmd_to_rsp_info (opcode);
-    BT_HDR                  *p_data;
+    NFC_HDR                  *p_data;
     uint8_t                 *p;
 
     if (p_cmd_rsp_info)
     {
         /* a valid opcode for RW */
-        p_data = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+        p_data = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
         if (p_data)
         {
             p_t1t->p_cmd_rsp_info   = (tT1T_CMD_RSP_INFO *) p_cmd_rsp_info;
@@ -349,7 +349,7 @@ tNFC_STATUS rw_t1t_send_static_cmd (uint8_t opcode, uint8_t add, uint8_t dat)
 
             /* Indicate first attempt to send command, back up cmd buffer in case needed for retransmission */
             rw_cb.cur_retry = 0;
-            memcpy (p_t1t->p_cur_cmd_buf, p_data, sizeof (BT_HDR) + p_data->offset + p_data->len);
+            memcpy (p_t1t->p_cur_cmd_buf, p_data, sizeof (NFC_HDR) + p_data->offset + p_data->len);
 
 #if (RW_STATS_INCLUDED == TRUE)
             /* Update stats */
@@ -387,13 +387,13 @@ tNFC_STATUS rw_t1t_send_dyn_cmd (uint8_t opcode, uint8_t add, uint8_t *p_dat)
     tNFC_STATUS             status  = NFC_STATUS_FAILED;
     tRW_T1T_CB              *p_t1t  = &rw_cb.tcb.t1t;
     const tT1T_CMD_RSP_INFO *p_cmd_rsp_info = t1t_cmd_to_rsp_info (opcode);
-    BT_HDR                  *p_data;
+    NFC_HDR                  *p_data;
     uint8_t                 *p;
 
     if (p_cmd_rsp_info)
     {
         /* a valid opcode for RW */
-        p_data = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
+        p_data = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID);
         if (p_data)
         {
             p_t1t->p_cmd_rsp_info   = (tT1T_CMD_RSP_INFO *) p_cmd_rsp_info;
@@ -417,7 +417,7 @@ tNFC_STATUS rw_t1t_send_dyn_cmd (uint8_t opcode, uint8_t add, uint8_t *p_dat)
 
             /* Indicate first attempt to send command, back up cmd buffer in case needed for retransmission */
             rw_cb.cur_retry = 0;
-            memcpy (p_t1t->p_cur_cmd_buf, p_data, sizeof (BT_HDR) + p_data->offset + p_data->len);
+            memcpy (p_t1t->p_cur_cmd_buf, p_data, sizeof (NFC_HDR) + p_data->offset + p_data->len);
 
 #if (RW_STATS_INCLUDED == TRUE)
             /* Update stats */
@@ -450,7 +450,7 @@ tNFC_STATUS rw_t1t_send_dyn_cmd (uint8_t opcode, uint8_t add, uint8_t *p_dat)
 ** Returns          event to notify application
 **
 *****************************************************************************/
-static tRW_EVENT rw_t1t_handle_rid_rsp (BT_HDR *p_pkt)
+static tRW_EVENT rw_t1t_handle_rid_rsp (NFC_HDR *p_pkt)
 {
     tRW_T1T_CB  *p_t1t   = &rw_cb.tcb.t1t;
     tRW_DATA    evt_data;
@@ -506,7 +506,7 @@ tNFC_STATUS rw_t1t_select (uint8_t hr[T1T_HR_LEN], uint8_t uid[T1T_CMD_UID_LEN])
     /* Alloc cmd buf for retransmissions */
     if (p_t1t->p_cur_cmd_buf ==  NULL)
     {
-        if ((p_t1t->p_cur_cmd_buf = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) == NULL)
+        if ((p_t1t->p_cur_cmd_buf = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) == NULL)
         {
             RW_TRACE_ERROR0 ("rw_t1t_select: unable to allocate buffer for retransmission");
             return status;
@@ -587,7 +587,7 @@ static void rw_t1t_process_error (void)
 {
     tRW_READ_DATA           evt_data;
     tRW_EVENT               rw_event;
-    BT_HDR                  *p_cmd_buf;
+    NFC_HDR                  *p_cmd_buf;
     tRW_T1T_CB              *p_t1t  = &rw_cb.tcb.t1t;
     tT1T_CMD_RSP_INFO       *p_cmd_rsp_info = (tT1T_CMD_RSP_INFO *) rw_cb.tcb.t1t.p_cmd_rsp_info;
     tRW_DETECT_NDEF_DATA    ndef_data;
@@ -603,9 +603,9 @@ static void rw_t1t_process_error (void)
         RW_TRACE_DEBUG2 ("T1T retransmission attempt %i of %i", rw_cb.cur_retry, RW_MAX_RETRIES);
 
         /* allocate a new buffer for message */
-        if ((p_cmd_buf = (BT_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) != NULL)
+        if ((p_cmd_buf = (NFC_HDR *) GKI_getpoolbuf (NFC_RW_POOL_ID)) != NULL)
         {
-            memcpy (p_cmd_buf, p_t1t->p_cur_cmd_buf, sizeof (BT_HDR) + p_t1t->p_cur_cmd_buf->offset + p_t1t->p_cur_cmd_buf->len);
+            memcpy (p_cmd_buf, p_t1t->p_cur_cmd_buf, sizeof (NFC_HDR) + p_t1t->p_cur_cmd_buf->offset + p_t1t->p_cur_cmd_buf->len);
 
 #if (RW_STATS_INCLUDED == TRUE)
             /* Update stats */

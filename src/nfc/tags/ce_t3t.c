@@ -95,7 +95,7 @@ void ce_t3t_init (void)
 ** Returns          none
 **
 *******************************************************************************/
-void ce_t3t_send_to_lower (BT_HDR *p_msg)
+void ce_t3t_send_to_lower (NFC_HDR *p_msg)
 {
     uint8_t *p;
 
@@ -150,14 +150,14 @@ uint8_t ce_t3t_is_valid_opcode (uint8_t cmd_id)
 **
 ** Description      Get a buffer for sending T3T messages
 **
-** Returns          BT_HDR *
+** Returns          NFC_HDR *
 **
 *****************************************************************************/
-BT_HDR *ce_t3t_get_rsp_buf (void)
+NFC_HDR *ce_t3t_get_rsp_buf (void)
 {
-    BT_HDR *p_cmd_buf;
+    NFC_HDR *p_cmd_buf;
 
-    if ((p_cmd_buf = (BT_HDR *) GKI_getpoolbuf (NFC_CE_POOL_ID)) != NULL)
+    if ((p_cmd_buf = (NFC_HDR *) GKI_getpoolbuf (NFC_CE_POOL_ID)) != NULL)
     {
         /* Reserve offset for NCI_DATA_HDR and NFC-F Sod (LEN) field */
         p_cmd_buf->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE + 1;
@@ -179,7 +179,7 @@ BT_HDR *ce_t3t_get_rsp_buf (void)
 void ce_t3t_send_rsp (tCE_CB *p_ce_cb, uint8_t *p_nfcid2, uint8_t opcode, uint8_t status1, uint8_t status2)
 {
     tCE_T3T_MEM *p_cb = &p_ce_cb->mem.t3t;
-    BT_HDR *p_rsp_msg;
+    NFC_HDR *p_rsp_msg;
     uint8_t *p_dst, *p_rsp_start;
 
     /* If p_nfcid2 is NULL, then used activated NFCID2 */
@@ -220,7 +220,7 @@ void ce_t3t_send_rsp (tCE_CB *p_ce_cb, uint8_t *p_nfcid2, uint8_t opcode, uint8_
 ** Returns          none
 **
 *******************************************************************************/
-void ce_t3t_handle_update_cmd (tCE_CB *p_ce_cb, BT_HDR *p_cmd_msg)
+void ce_t3t_handle_update_cmd (tCE_CB *p_ce_cb, NFC_HDR *p_cmd_msg)
 {
     tCE_T3T_MEM *p_cb = &p_ce_cb->mem.t3t;
     uint8_t *p_temp;
@@ -405,10 +405,10 @@ void ce_t3t_handle_update_cmd (tCE_CB *p_ce_cb, BT_HDR *p_cmd_msg)
 ** Returns          Nothing
 **
 *******************************************************************************/
-void ce_t3t_handle_check_cmd (tCE_CB *p_ce_cb, BT_HDR *p_cmd_msg)
+void ce_t3t_handle_check_cmd (tCE_CB *p_ce_cb, NFC_HDR *p_cmd_msg)
 {
     tCE_T3T_MEM *p_cb = &p_ce_cb->mem.t3t;
-    BT_HDR *p_rsp_msg;
+    NFC_HDR *p_rsp_msg;
     uint8_t *p_rsp_start;
     uint8_t *p_dst, *p_temp, *p_status;
     uint8_t *p_src = p_cb->cur_cmd.p_block_list_start;
@@ -562,10 +562,10 @@ void ce_t3t_handle_check_cmd (tCE_CB *p_ce_cb, BT_HDR *p_cmd_msg)
 ** Returns          Nothing
 **
 *******************************************************************************/
-void ce_t3t_handle_non_nfc_forum_cmd (tCE_CB *p_mem_cb, uint8_t cmd_id, BT_HDR *p_cmd_msg)
+void ce_t3t_handle_non_nfc_forum_cmd (tCE_CB *p_mem_cb, uint8_t cmd_id, NFC_HDR *p_cmd_msg)
 {
     tCE_T3T_MEM *p_cb = &p_mem_cb->mem.t3t;
-    BT_HDR *p_rsp_msg;
+    NFC_HDR *p_rsp_msg;
     uint8_t *p_rsp_start;
     uint8_t *p_dst;
     uint8_t *p = (uint8_t *) (p_cmd_msg +1) + p_cmd_msg->offset;
@@ -675,7 +675,7 @@ void ce_t3t_data_cback (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
 {
     tCE_CB *p_ce_cb = &ce_cb;
     tCE_T3T_MEM *p_cb = &p_ce_cb->mem.t3t;
-    BT_HDR *p_msg = p_data->p_data;
+    NFC_HDR *p_msg = p_data->p_data;
     tCE_DATA     ce_data;
     uint8_t cmd_id, bl0, entry_len, i;
     uint8_t *p_nfcid2 = NULL;
@@ -1007,7 +1007,7 @@ tNFC_STATUS CE_T3tSendCheckRsp (uint8_t status1, uint8_t status2, uint8_t num_bl
 {
     tCE_T3T_MEM *p_cb = &ce_cb.mem.t3t;
     tNFC_STATUS retval = NFC_STATUS_OK;
-    BT_HDR *p_rsp_msg;
+    NFC_HDR *p_rsp_msg;
     uint8_t *p_dst, *p_rsp_start;
 
     CE_TRACE_API3 ("CE_T3tCheckRsp: status1=0x%02X, status2=0x%02X, num_blocks=%i", status1, status2, num_blocks);

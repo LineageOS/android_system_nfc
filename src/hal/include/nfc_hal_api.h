@@ -27,18 +27,6 @@
 #include <hardware/nfc.h>
 #include "data_types.h"
 
-/****************************************************************************
-** NFC_HDR header definition for NFC messages
-*****************************************************************************/
-typedef struct
-{
-    uint16_t        event;
-    uint16_t        len;
-    uint16_t        offset;
-    uint16_t        layer_specific;
-} NFC_HDR;
-#define NFC_HDR_SIZE (sizeof (NFC_HDR))
-
 /*******************************************************************************
 ** tHAL_HCI_NETWK_CMD Definitions
 *******************************************************************************/

@@ -103,13 +103,13 @@ typedef uint16_t tNFA_HCI_INT_EVT;
 
 /* Internal event structures.
 **
-** Note, every internal structure starts with a BT_HDR and an app handle
+** Note, every internal structure starts with a NFC_HDR and an app handle
 */
 
 /* data type for NFA_HCI_API_REGISTER_APP_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         hci_handle;
     char                app_name[NFA_MAX_HCI_APP_NAME_LEN + 1];
     tNFA_HCI_CBACK      *p_cback;
@@ -119,7 +119,7 @@ typedef struct
 /* data type for NFA_HCI_API_DEREGISTER_APP_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         hci_handle;
     char                app_name[NFA_MAX_HCI_APP_NAME_LEN + 1];
 } tNFA_HCI_API_DEREGISTER_APP;
@@ -127,14 +127,14 @@ typedef struct
 /* data type for NFA_HCI_API_GET_APP_GATE_PIPE_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         hci_handle;
 } tNFA_HCI_API_GET_APP_GATE_PIPE;
 
 /* data type for NFA_HCI_API_ALLOC_GATE_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         hci_handle;
     uint8_t             gate;
 } tNFA_HCI_API_ALLOC_GATE;
@@ -142,7 +142,7 @@ typedef struct
 /* data type for NFA_HCI_API_DEALLOC_GATE_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         hci_handle;
     uint8_t             gate;
 } tNFA_HCI_API_DEALLOC_GATE;
@@ -150,7 +150,7 @@ typedef struct
 /* data type for NFA_HCI_API_GET_HOST_LIST_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         hci_handle;
     tNFA_STATUS         status;
 } tNFA_HCI_API_GET_HOST_LIST;
@@ -158,7 +158,7 @@ typedef struct
 /* data type for NFA_HCI_API_GET_REGISTRY_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         hci_handle;
     uint8_t             pipe;
     uint8_t             reg_inx;
@@ -167,7 +167,7 @@ typedef struct
 /* data type for NFA_HCI_API_SET_REGISTRY_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         hci_handle;
     uint8_t             pipe;
     uint8_t             reg_inx;
@@ -178,7 +178,7 @@ typedef struct
 /* data type for NFA_HCI_API_CREATE_PIPE_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         hci_handle;
     tNFA_STATUS         status;
     uint8_t             source_gate;
@@ -189,7 +189,7 @@ typedef struct
 /* data type for NFA_HCI_API_OPEN_PIPE_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         hci_handle;
     tNFA_STATUS         status;
     uint8_t             pipe;
@@ -198,7 +198,7 @@ typedef struct
 /* data type for NFA_HCI_API_CLOSE_PIPE_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         hci_handle;
     tNFA_STATUS         status;
     uint8_t             pipe;
@@ -207,7 +207,7 @@ typedef struct
 /* data type for NFA_HCI_API_DELETE_PIPE_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         hci_handle;
     tNFA_STATUS         status;
     uint8_t             pipe;
@@ -216,7 +216,7 @@ typedef struct
 /* data type for NFA_HCI_API_ADD_STATIC_PIPE_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         hci_handle;
     tNFA_STATUS         status;
     uint8_t             host;
@@ -227,7 +227,7 @@ typedef struct
 /* data type for NFA_HCI_API_SEND_EVENT_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         hci_handle;
     uint8_t             pipe;
     uint8_t             evt_code;
@@ -241,7 +241,7 @@ typedef struct
 /* data type for NFA_HCI_API_SEND_CMD_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         hci_handle;
     uint8_t             pipe;
     uint8_t             cmd_code;
@@ -252,7 +252,7 @@ typedef struct
 /* data type for NFA_HCI_RSP_NV_READ_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     uint8_t             block;
     uint16_t            size;
     tNFA_STATUS         status;
@@ -261,14 +261,14 @@ typedef struct
 /* data type for NFA_HCI_RSP_NV_WRITE_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_STATUS         status;
 } tNFA_HCI_RSP_NV_WRITE_EVT;
 
 /* data type for NFA_HCI_API_SEND_RSP_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         hci_handle;
     uint8_t             pipe;
     uint8_t             response;
@@ -279,14 +279,14 @@ typedef struct
 /* common data type for internal events */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         hci_handle;
 } tNFA_HCI_COMM_DATA;
 
 /* union of all event data types */
 typedef union
 {
-    BT_HDR                              hdr;
+    NFC_HDR                              hdr;
     tNFA_HCI_COMM_DATA                  comm;
 
     /* API events */

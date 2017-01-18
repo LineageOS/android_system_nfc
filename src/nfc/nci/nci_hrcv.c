@@ -43,7 +43,7 @@
 ** Returns          TRUE-caller of this function to free the GKI buffer p_msg
 **
 *******************************************************************************/
-bool    nci_proc_core_rsp (BT_HDR *p_msg)
+bool    nci_proc_core_rsp (NFC_HDR *p_msg)
 {
     uint8_t *p;
     uint8_t *pp, len, op_code;
@@ -102,7 +102,7 @@ bool    nci_proc_core_rsp (BT_HDR *p_msg)
 ** Returns          void
 **
 *******************************************************************************/
-void nci_proc_core_ntf (BT_HDR *p_msg)
+void nci_proc_core_ntf (NFC_HDR *p_msg)
 {
     uint8_t *p;
     uint8_t *pp, len, op_code;
@@ -154,7 +154,7 @@ void nci_proc_core_ntf (BT_HDR *p_msg)
 ** Returns          void
 **
 *******************************************************************************/
-void nci_proc_rf_management_rsp (BT_HDR *p_msg)
+void nci_proc_rf_management_rsp (NFC_HDR *p_msg)
 {
     uint8_t *p;
     uint8_t *pp, len, op_code;
@@ -225,7 +225,7 @@ void nci_proc_rf_management_rsp (BT_HDR *p_msg)
 ** Returns          void
 **
 *******************************************************************************/
-void nci_proc_rf_management_ntf (BT_HDR *p_msg)
+void nci_proc_rf_management_ntf (NFC_HDR *p_msg)
 {
     uint8_t *p;
     uint8_t *pp, len, op_code;
@@ -301,7 +301,7 @@ void nci_proc_rf_management_ntf (BT_HDR *p_msg)
 ** Returns          void
 **
 *******************************************************************************/
-void nci_proc_ee_management_rsp (BT_HDR *p_msg)
+void nci_proc_ee_management_rsp (NFC_HDR *p_msg)
 {
     uint8_t *p;
     uint8_t *pp, len, op_code;
@@ -361,7 +361,7 @@ void nci_proc_ee_management_rsp (BT_HDR *p_msg)
 ** Returns          void
 **
 *******************************************************************************/
-void nci_proc_ee_management_ntf (BT_HDR *p_msg)
+void nci_proc_ee_management_ntf (NFC_HDR *p_msg)
 {
     uint8_t               *p;
     uint8_t               *pp, len, op_code;
@@ -443,7 +443,7 @@ void nci_proc_ee_management_ntf (BT_HDR *p_msg)
 ** Returns          void
 **
 *******************************************************************************/
-void nci_proc_prop_rsp (BT_HDR *p_msg)
+void nci_proc_prop_rsp (NFC_HDR *p_msg)
 {
     uint8_t *p;
     uint8_t *p_evt;
@@ -470,7 +470,7 @@ void nci_proc_prop_rsp (BT_HDR *p_msg)
 ** Returns          void
 **
 *******************************************************************************/
-void nci_proc_prop_ntf (BT_HDR *p_msg)
+void nci_proc_prop_ntf (NFC_HDR *p_msg)
 {
     uint8_t *p;
     uint8_t *p_evt;

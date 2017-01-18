@@ -672,7 +672,7 @@ bool    LLCP_IsLogicalLinkCongested (uint8_t local_sap,
 *******************************************************************************/
 tLLCP_STATUS LLCP_SendUI (uint8_t ssap,
                           uint8_t dsap,
-                          BT_HDR *p_buf)
+                          NFC_HDR *p_buf)
 {
     tLLCP_STATUS status = LLCP_STATUS_FAIL;
     tLLCP_APP_CB *p_app_cb;
@@ -748,7 +748,7 @@ bool    LLCP_ReadLogicalLinkData (uint8_t  local_sap,
                                   uint8_t  *p_data)
 {
     tLLCP_APP_CB *p_app_cb;
-    BT_HDR       *p_buf;
+    NFC_HDR       *p_buf;
     uint8_t      *p_ui_pdu;
     uint16_t     pdu_hdr, ui_pdu_length;
 
@@ -764,7 +764,7 @@ bool    LLCP_ReadLogicalLinkData (uint8_t  local_sap,
         /* if any UI PDU in rx queue */
         if (p_app_cb->ui_rx_q.p_first)
         {
-            p_buf    = (BT_HDR *) p_app_cb->ui_rx_q.p_first;
+            p_buf    = (NFC_HDR *) p_app_cb->ui_rx_q.p_first;
             p_ui_pdu = (uint8_t*) (p_buf + 1) + p_buf->offset;
 
             /* get length of UI PDU */
@@ -840,7 +840,7 @@ bool    LLCP_ReadLogicalLinkData (uint8_t  local_sap,
 *******************************************************************************/
 uint32_t LLCP_FlushLogicalLinkRxData (uint8_t local_sap)
 {
-    BT_HDR       *p_buf;
+    NFC_HDR       *p_buf;
     uint32_t     flushed_length = 0;
     tLLCP_APP_CB *p_app_cb;
     uint8_t      *p_ui_pdu;
@@ -856,7 +856,7 @@ uint32_t LLCP_FlushLogicalLinkRxData (uint8_t local_sap)
         /* if any UI PDU in rx queue */
         while (p_app_cb->ui_rx_q.p_first)
         {
-            p_buf    = (BT_HDR *) p_app_cb->ui_rx_q.p_first;
+            p_buf    = (NFC_HDR *) p_app_cb->ui_rx_q.p_first;
             p_ui_pdu = (uint8_t*) (p_buf + 1) + p_buf->offset;
 
             /* get length of UI PDU */
@@ -1138,7 +1138,7 @@ bool    LLCP_IsDataLinkCongested (uint8_t local_sap,
 *******************************************************************************/
 tLLCP_STATUS LLCP_SendData (uint8_t local_sap,
                             uint8_t remote_sap,
-                            BT_HDR *p_buf)
+                            NFC_HDR *p_buf)
 {
     tLLCP_STATUS  status = LLCP_STATUS_FAIL;
     tLLCP_DLCB   *p_dlcb;
@@ -1202,7 +1202,7 @@ bool    LLCP_ReadDataLinkData (uint8_t  local_sap,
                                uint8_t  *p_data)
 {
     tLLCP_DLCB *p_dlcb;
-    BT_HDR     *p_buf;
+    NFC_HDR     *p_buf;
     uint8_t    *p_i_pdu;
     uint16_t   i_pdu_length;
 
@@ -1217,7 +1217,7 @@ bool    LLCP_ReadDataLinkData (uint8_t  local_sap,
         /* if any I PDU in rx queue */
         if (p_dlcb->i_rx_q.p_first)
         {
-            p_buf   = (BT_HDR *) p_dlcb->i_rx_q.p_first;
+            p_buf   = (NFC_HDR *) p_dlcb->i_rx_q.p_first;
             p_i_pdu = (uint8_t*) (p_buf + 1) + p_buf->offset;
 
             /* get length of I PDU */
@@ -1306,7 +1306,7 @@ uint32_t LLCP_FlushDataLinkRxData (uint8_t  local_sap,
                                  uint8_t  remote_sap)
 {
     tLLCP_DLCB *p_dlcb;
-    BT_HDR     *p_buf;
+    NFC_HDR     *p_buf;
     uint32_t   flushed_length = 0;
     uint8_t    *p_i_pdu;
     uint16_t   i_pdu_length;
@@ -1321,7 +1321,7 @@ uint32_t LLCP_FlushDataLinkRxData (uint8_t  local_sap,
         /* if any I PDU in rx queue */
         while (p_dlcb->i_rx_q.p_first)
         {
-            p_buf   = (BT_HDR *) p_dlcb->i_rx_q.p_first;
+            p_buf   = (NFC_HDR *) p_dlcb->i_rx_q.p_first;
             p_i_pdu = (uint8_t*) (p_buf + 1) + p_buf->offset;
 
             /* get length of I PDU */
