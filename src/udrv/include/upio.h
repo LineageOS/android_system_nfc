@@ -264,7 +264,7 @@ extern "C" {
 ** Returns          nothing
 **
 *****************************************************************************/
-UDRV_API void UPIO_Init(void *p_cfg);
+void UPIO_Init(void *p_cfg);
 
 
 /*****************************************************************************
@@ -289,7 +289,7 @@ UDRV_API void UPIO_Init(void *p_cfg);
 **      None.
 **
 *****************************************************************************/
-UDRV_API void UPIO_Set(tUPIO_TYPE type, tUPIO pio, tUPIO_STATE state);
+void UPIO_Set(tUPIO_TYPE type, tUPIO pio, tUPIO_STATE state);
 
 
 /*****************************************************************************
@@ -312,7 +312,7 @@ UDRV_API void UPIO_Set(tUPIO_TYPE type, tUPIO pio, tUPIO_STATE state);
 **      State of GPIO (UPIO_ON or UPIO_OFF).
 **
 *****************************************************************************/
-UDRV_API tUPIO_STATE UPIO_Read(tUPIO_TYPE type, tUPIO pio);
+tUPIO_STATE UPIO_Read(tUPIO_TYPE type, tUPIO pio);
 
 
 /*****************************************************************************
@@ -337,7 +337,7 @@ UDRV_API tUPIO_STATE UPIO_Read(tUPIO_TYPE type, tUPIO pio);
 **      None.
 **
 *****************************************************************************/
-UDRV_API void UPIO_Config(tUPIO_TYPE type, tUPIO pio, tUPIO_CONFIG config, tUPIO_CBACK *cback);
+void UPIO_Config(tUPIO_TYPE type, tUPIO pio, tUPIO_CONFIG config, tUPIO_CBACK *cback);
 
 
 /*****************************************************************************
@@ -357,7 +357,7 @@ UDRV_API void UPIO_Config(tUPIO_TYPE type, tUPIO pio, tUPIO_CONFIG config, tUPIO
 **      TRUE if feature is supported, FALSE if it is not.
 **
 *****************************************************************************/
-UDRV_API bool    UPIO_Feature(tUPIO_FEATURE feature);
+bool    UPIO_Feature(tUPIO_FEATURE feature);
 
 #ifdef __cplusplus
 }

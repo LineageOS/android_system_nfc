@@ -190,7 +190,7 @@ void nfc_free_conn_cb (tNFC_CONN_CB *p_cb)
 ** Returns          void
 **
 *******************************************************************************/
-NFC_API extern void nfc_reset_all_conn_cbs (void)
+extern void nfc_reset_all_conn_cbs (void)
 {
     int xx;
     tNFC_CONN_CB *p_conn_cb = &nfc_cb.conn_cb[0];

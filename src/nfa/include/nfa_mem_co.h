@@ -51,7 +51,7 @@ extern "C"
 **                  NULL otherwise
 **
 *******************************************************************************/
-NFC_API extern void *nfa_mem_co_alloc (uint32_t num_bytes);
+extern void *nfa_mem_co_alloc (uint32_t num_bytes);
 
 
 /*******************************************************************************
@@ -64,7 +64,7 @@ NFC_API extern void *nfa_mem_co_alloc (uint32_t num_bytes);
 **                  Nothing
 **
 *******************************************************************************/
-NFC_API extern void nfa_mem_co_free (void *p_buf);
+extern void nfa_mem_co_free (void *p_buf);
 
 
 #ifdef __cplusplus

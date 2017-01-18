@@ -105,11 +105,11 @@ typedef struct
 extern "C" {
 #endif
 
-NFC_API extern void nfa_sys_init (void);
-NFC_API extern void nfa_sys_event (NFC_HDR *p_msg);
-NFC_API extern void nfa_sys_timer_update (void);
-NFC_API extern void nfa_sys_disable_timers (void);
-NFC_API extern void nfa_sys_set_trace_level (uint8_t level);
+extern void nfa_sys_init (void);
+extern void nfa_sys_event (NFC_HDR *p_msg);
+extern void nfa_sys_timer_update (void);
+extern void nfa_sys_disable_timers (void);
+extern void nfa_sys_set_trace_level (uint8_t level);
 
 extern void nfa_sys_register (uint8_t id, const tNFA_SYS_REG *p_reg);
 extern void nfa_sys_deregister (uint8_t id);

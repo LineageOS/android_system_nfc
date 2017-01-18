@@ -271,7 +271,7 @@ typedef void (tRW_CBACK) (tRW_EVENT event, tRW_DATA *p_data);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T1tRid (void);
+extern tNFC_STATUS RW_T1tRid (void);
 
 /*******************************************************************************
 **
@@ -282,7 +282,7 @@ NFC_API extern tNFC_STATUS RW_T1tRid (void);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T1tReadAll (void);
+extern tNFC_STATUS RW_T1tReadAll (void);
 
 /*******************************************************************************
 **
@@ -293,7 +293,7 @@ NFC_API extern tNFC_STATUS RW_T1tReadAll (void);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T1tRead (uint8_t block, uint8_t byte);
+extern tNFC_STATUS RW_T1tRead (uint8_t block, uint8_t byte);
 
 /*******************************************************************************
 **
@@ -304,7 +304,7 @@ NFC_API extern tNFC_STATUS RW_T1tRead (uint8_t block, uint8_t byte);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T1tWriteErase (uint8_t block, uint8_t byte, uint8_t new_byte);
+extern tNFC_STATUS RW_T1tWriteErase (uint8_t block, uint8_t byte, uint8_t new_byte);
 
 /*******************************************************************************
 **
@@ -315,7 +315,7 @@ NFC_API extern tNFC_STATUS RW_T1tWriteErase (uint8_t block, uint8_t byte, uint8_
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T1tWriteNoErase (uint8_t block, uint8_t byte, uint8_t new_byte);
+extern tNFC_STATUS RW_T1tWriteNoErase (uint8_t block, uint8_t byte, uint8_t new_byte);
 
 /*******************************************************************************
 **
@@ -326,7 +326,7 @@ NFC_API extern tNFC_STATUS RW_T1tWriteNoErase (uint8_t block, uint8_t byte, uint
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T1tReadSeg (uint8_t segment);
+extern tNFC_STATUS RW_T1tReadSeg (uint8_t segment);
 
 /*******************************************************************************
 **
@@ -337,7 +337,7 @@ NFC_API extern tNFC_STATUS RW_T1tReadSeg (uint8_t segment);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T1tRead8 (uint8_t block);
+extern tNFC_STATUS RW_T1tRead8 (uint8_t block);
 
 /*******************************************************************************
 **
@@ -348,7 +348,7 @@ NFC_API extern tNFC_STATUS RW_T1tRead8 (uint8_t block);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T1tWriteErase8 (uint8_t block, uint8_t *p_new_dat);
+extern tNFC_STATUS RW_T1tWriteErase8 (uint8_t block, uint8_t *p_new_dat);
 
 /*******************************************************************************
 **
@@ -359,7 +359,7 @@ NFC_API extern tNFC_STATUS RW_T1tWriteErase8 (uint8_t block, uint8_t *p_new_dat)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T1tWriteNoErase8 (uint8_t block, uint8_t *p_new_dat);
+extern tNFC_STATUS RW_T1tWriteNoErase8 (uint8_t block, uint8_t *p_new_dat);
 
 /*******************************************************************************
 **
@@ -372,7 +372,7 @@ NFC_API extern tNFC_STATUS RW_T1tWriteNoErase8 (uint8_t block, uint8_t *p_new_da
 ** Returns          NCI_STATUS_OK, if detection was started. Otherwise, error status.
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T1tLocateTlv (uint8_t tlv_type);
+extern tNFC_STATUS RW_T1tLocateTlv (uint8_t tlv_type);
 
 /*******************************************************************************
 **
@@ -386,7 +386,7 @@ NFC_API extern tNFC_STATUS RW_T1tLocateTlv (uint8_t tlv_type);
 ** Returns          NCI_STATUS_OK, if detection was started. Otherwise, error status.
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T1tDetectNDef (void);
+extern tNFC_STATUS RW_T1tDetectNDef (void);
 
 /*******************************************************************************
 **
@@ -400,7 +400,7 @@ NFC_API extern tNFC_STATUS RW_T1tDetectNDef (void);
 ** Returns          NCI_STATUS_OK, if read was started. Otherwise, error status.
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T1tReadNDef (uint8_t *p_buffer, uint16_t buf_len);
+extern tNFC_STATUS RW_T1tReadNDef (uint8_t *p_buffer, uint16_t buf_len);
 
 /*******************************************************************************
 **
@@ -414,7 +414,7 @@ NFC_API extern tNFC_STATUS RW_T1tReadNDef (uint8_t *p_buffer, uint16_t buf_len);
 ** Returns          NCI_STATUS_OK, if write was started. Otherwise, error status.
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T1tWriteNDef (uint16_t msg_len, uint8_t *p_msg);
+extern tNFC_STATUS RW_T1tWriteNDef (uint16_t msg_len, uint8_t *p_msg);
 
 /*******************************************************************************
 **
@@ -429,7 +429,7 @@ NFC_API extern tNFC_STATUS RW_T1tWriteNDef (uint16_t msg_len, uint8_t *p_msg);
 **                                 Otherwise, error status.
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T1tSetTagReadOnly (bool    b_hard_lock);
+extern tNFC_STATUS RW_T1tSetTagReadOnly (bool    b_hard_lock);
 
 /*****************************************************************************
 **
@@ -447,7 +447,7 @@ NFC_API extern tNFC_STATUS RW_T1tSetTagReadOnly (bool    b_hard_lock);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-NFC_API extern tNFC_STATUS RW_T1tPresenceCheck (void);
+extern tNFC_STATUS RW_T1tPresenceCheck (void);
 
 /*****************************************************************************
 **
@@ -473,7 +473,7 @@ tNFC_STATUS RW_T1tFormatNDef (void);
 ** Returns          Pointer to the TLV, if successful. Otherwise, NULL.
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T2tLocateTlv(uint8_t tlv_type);
+extern tNFC_STATUS RW_T2tLocateTlv(uint8_t tlv_type);
 
 /*******************************************************************************
 **
@@ -486,7 +486,7 @@ NFC_API extern tNFC_STATUS RW_T2tLocateTlv(uint8_t tlv_type);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T2tRead (uint16_t block);
+extern tNFC_STATUS RW_T2tRead (uint16_t block);
 
 /*******************************************************************************
 **
@@ -501,7 +501,7 @@ NFC_API extern tNFC_STATUS RW_T2tRead (uint16_t block);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T2tWrite (uint16_t block, uint8_t *p_write_data);
+extern tNFC_STATUS RW_T2tWrite (uint16_t block, uint8_t *p_write_data);
 
 /*******************************************************************************
 **
@@ -520,7 +520,7 @@ NFC_API extern tNFC_STATUS RW_T2tWrite (uint16_t block, uint8_t *p_write_data);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T2tSectorSelect (uint8_t sector);
+extern tNFC_STATUS RW_T2tSectorSelect (uint8_t sector);
 
 /*******************************************************************************
 **
@@ -531,7 +531,7 @@ NFC_API extern tNFC_STATUS RW_T2tSectorSelect (uint8_t sector);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T2tDetectNDef (bool    skip_dyn_locks);
+extern tNFC_STATUS RW_T2tDetectNDef (bool    skip_dyn_locks);
 
 /*******************************************************************************
 **
@@ -545,7 +545,7 @@ NFC_API extern tNFC_STATUS RW_T2tDetectNDef (bool    skip_dyn_locks);
 ** Returns          NCI_STATUS_OK, if read was started. Otherwise, error status.
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T2tReadNDef (uint8_t *p_buffer, uint16_t buf_len);
+extern tNFC_STATUS RW_T2tReadNDef (uint8_t *p_buffer, uint16_t buf_len);
 
 /*******************************************************************************
 **
@@ -559,7 +559,7 @@ NFC_API extern tNFC_STATUS RW_T2tReadNDef (uint8_t *p_buffer, uint16_t buf_len);
 ** Returns          NCI_STATUS_OK, if write was started. Otherwise, error status.
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T2tWriteNDef (uint16_t msg_len, uint8_t *p_msg );
+extern tNFC_STATUS RW_T2tWriteNDef (uint16_t msg_len, uint8_t *p_msg );
 
 /*******************************************************************************
 **
@@ -574,7 +574,7 @@ NFC_API extern tNFC_STATUS RW_T2tWriteNDef (uint16_t msg_len, uint8_t *p_msg );
 **                                 Otherwise, error status.
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T2tSetTagReadOnly (bool    b_hard_lock);
+extern tNFC_STATUS RW_T2tSetTagReadOnly (bool    b_hard_lock);
 
 /*****************************************************************************
 **
@@ -592,7 +592,7 @@ NFC_API extern tNFC_STATUS RW_T2tSetTagReadOnly (bool    b_hard_lock);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-NFC_API extern tNFC_STATUS RW_T2tPresenceCheck (void);
+extern tNFC_STATUS RW_T2tPresenceCheck (void);
 
 /*****************************************************************************
 **
@@ -626,7 +626,7 @@ tNFC_STATUS RW_T2tFormatNDef (void);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-NFC_API extern tNFC_STATUS RW_T3tDetectNDef (void);
+extern tNFC_STATUS RW_T3tDetectNDef (void);
 
 /*****************************************************************************
 **
@@ -644,7 +644,7 @@ NFC_API extern tNFC_STATUS RW_T3tDetectNDef (void);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-NFC_API extern tNFC_STATUS RW_T3tFormatNDef (void);
+extern tNFC_STATUS RW_T3tFormatNDef (void);
 
 /*****************************************************************************
 **
@@ -662,7 +662,7 @@ NFC_API extern tNFC_STATUS RW_T3tFormatNDef (void);
 **      NFC_STATUS_FAILED if T3T is busy or other error
 **
 *****************************************************************************/
-NFC_API extern tNFC_STATUS RW_T3tSetReadOnly (bool    b_hard_lock);
+extern tNFC_STATUS RW_T3tSetReadOnly (bool    b_hard_lock);
 
 /*****************************************************************************
 **
@@ -689,7 +689,7 @@ NFC_API extern tNFC_STATUS RW_T3tSetReadOnly (bool    b_hard_lock);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-NFC_API extern tNFC_STATUS RW_T3tCheckNDef (void);
+extern tNFC_STATUS RW_T3tCheckNDef (void);
 
 /*****************************************************************************
 **
@@ -717,7 +717,7 @@ NFC_API extern tNFC_STATUS RW_T3tCheckNDef (void);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-NFC_API extern tNFC_STATUS RW_T3tUpdateNDef (uint32_t len, uint8_t *p_data);
+extern tNFC_STATUS RW_T3tUpdateNDef (uint32_t len, uint8_t *p_data);
 
 /*****************************************************************************
 **
@@ -740,7 +740,7 @@ NFC_API extern tNFC_STATUS RW_T3tUpdateNDef (uint32_t len, uint8_t *p_data);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-NFC_API extern tNFC_STATUS RW_T3tCheck (uint8_t num_blocks, tT3T_BLOCK_DESC *t3t_blocks);
+extern tNFC_STATUS RW_T3tCheck (uint8_t num_blocks, tT3T_BLOCK_DESC *t3t_blocks);
 
 /*****************************************************************************
 **
@@ -762,7 +762,7 @@ NFC_API extern tNFC_STATUS RW_T3tCheck (uint8_t num_blocks, tT3T_BLOCK_DESC *t3t
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-NFC_API extern tNFC_STATUS RW_T3tUpdate (uint8_t num_blocks, tT3T_BLOCK_DESC *t3t_blocks, uint8_t *p_data);
+extern tNFC_STATUS RW_T3tUpdate (uint8_t num_blocks, tT3T_BLOCK_DESC *t3t_blocks, uint8_t *p_data);
 
 /*****************************************************************************
 **
@@ -784,7 +784,7 @@ NFC_API extern tNFC_STATUS RW_T3tUpdate (uint8_t num_blocks, tT3T_BLOCK_DESC *t3
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-NFC_API extern tNFC_STATUS RW_T3tSendRawFrame (uint16_t len, uint8_t *p_data);
+extern tNFC_STATUS RW_T3tSendRawFrame (uint16_t len, uint8_t *p_data);
 
 /*****************************************************************************
 **
@@ -799,7 +799,7 @@ NFC_API extern tNFC_STATUS RW_T3tSendRawFrame (uint16_t len, uint8_t *p_data);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-NFC_API extern tNFC_STATUS RW_T3tPoll (uint16_t system_code, tT3T_POLL_RC rc, uint8_t tsn);
+extern tNFC_STATUS RW_T3tPoll (uint16_t system_code, tT3T_POLL_RC rc, uint8_t tsn);
 
 /*****************************************************************************
 **
@@ -817,7 +817,7 @@ NFC_API extern tNFC_STATUS RW_T3tPoll (uint16_t system_code, tT3T_POLL_RC rc, ui
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-NFC_API extern tNFC_STATUS RW_T3tPresenceCheck (void);
+extern tNFC_STATUS RW_T3tPresenceCheck (void);
 
 /*****************************************************************************
 **
@@ -839,7 +839,7 @@ NFC_API extern tNFC_STATUS RW_T3tPresenceCheck (void);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-NFC_API extern tNFC_STATUS RW_T3tGetSystemCodes (void);
+extern tNFC_STATUS RW_T3tGetSystemCodes (void);
 
 /*****************************************************************************
 **
@@ -855,7 +855,7 @@ NFC_API extern tNFC_STATUS RW_T3tGetSystemCodes (void);
 **      NFC_STATUS_OK: if success
 **      NFC_STATUS_FAILED: other error
 *****************************************************************************/
-NFC_API extern tNFC_STATUS RW_T4tFormatNDef (void);
+extern tNFC_STATUS RW_T4tFormatNDef (void);
 
 /*******************************************************************************
 **
@@ -869,7 +869,7 @@ NFC_API extern tNFC_STATUS RW_T4tFormatNDef (void);
 **                  NFC_STATUS_FAILED if T4T is busy or other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T4tDetectNDef (void);
+extern tNFC_STATUS RW_T4tDetectNDef (void);
 
 /*******************************************************************************
 **
@@ -887,7 +887,7 @@ NFC_API extern tNFC_STATUS RW_T4tDetectNDef (void);
 **                  NFC_STATUS_FAILED if T4T is busy or other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T4tReadNDef (void);
+extern tNFC_STATUS RW_T4tReadNDef (void);
 
 /*******************************************************************************
 **
@@ -905,7 +905,7 @@ NFC_API extern tNFC_STATUS RW_T4tReadNDef (void);
 **                  NFC_STATUS_FAILED if T4T is busy or other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_T4tUpdateNDef (uint16_t length, uint8_t *p_data);
+extern tNFC_STATUS RW_T4tUpdateNDef (uint16_t length, uint8_t *p_data);
 
 /*****************************************************************************
 **
@@ -924,7 +924,7 @@ NFC_API extern tNFC_STATUS RW_T4tUpdateNDef (uint16_t length, uint8_t *p_data);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-NFC_API extern tNFC_STATUS RW_T4tPresenceCheck (uint8_t option);
+extern tNFC_STATUS RW_T4tPresenceCheck (uint8_t option);
 
 /*****************************************************************************
 **
@@ -939,7 +939,7 @@ NFC_API extern tNFC_STATUS RW_T4tPresenceCheck (uint8_t option);
 **                  NFC_STATUS_FAILED if T4T is busy or other error
 **
 *****************************************************************************/
-NFC_API extern tNFC_STATUS RW_T4tSetNDefReadOnly (void);
+extern tNFC_STATUS RW_T4tSetNDefReadOnly (void);
 
 /*******************************************************************************
 **
@@ -955,7 +955,7 @@ NFC_API extern tNFC_STATUS RW_T4tSetNDefReadOnly (void);
 **                  NFC_STATUS_FAILED if T4T is busy or other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93Inventory (bool    including_afi, uint8_t afi, uint8_t *p_uid);
+extern tNFC_STATUS RW_I93Inventory (bool    including_afi, uint8_t afi, uint8_t *p_uid);
 
 /*******************************************************************************
 **
@@ -971,7 +971,7 @@ NFC_API extern tNFC_STATUS RW_I93Inventory (bool    including_afi, uint8_t afi, 
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93StayQuiet (void);
+extern tNFC_STATUS RW_I93StayQuiet (void);
 
 /*******************************************************************************
 **
@@ -987,7 +987,7 @@ NFC_API extern tNFC_STATUS RW_I93StayQuiet (void);
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93ReadSingleBlock (uint16_t block_number);
+extern tNFC_STATUS RW_I93ReadSingleBlock (uint16_t block_number);
 
 /*******************************************************************************
 **
@@ -1004,8 +1004,7 @@ NFC_API extern tNFC_STATUS RW_I93ReadSingleBlock (uint16_t block_number);
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93WriteSingleBlock (uint16_t block_number,
-                                                   uint8_t  *p_data);
+extern tNFC_STATUS RW_I93WriteSingleBlock (uint16_t block_number, uint8_t  *p_data);
 
 /*******************************************************************************
 **
@@ -1021,7 +1020,7 @@ NFC_API extern tNFC_STATUS RW_I93WriteSingleBlock (uint16_t block_number,
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93LockBlock (uint8_t block_number);
+extern tNFC_STATUS RW_I93LockBlock (uint8_t block_number);
 
 /*******************************************************************************
 **
@@ -1037,8 +1036,8 @@ NFC_API extern tNFC_STATUS RW_I93LockBlock (uint8_t block_number);
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93ReadMultipleBlocks (uint16_t first_block_number,
-                                                     uint16_t number_blocks);
+extern tNFC_STATUS RW_I93ReadMultipleBlocks (uint16_t first_block_number,
+                                             uint16_t number_blocks);
 
 /*******************************************************************************
 **
@@ -1054,9 +1053,9 @@ NFC_API extern tNFC_STATUS RW_I93ReadMultipleBlocks (uint16_t first_block_number
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93WriteMultipleBlocks (uint8_t  first_block_number,
-                                                      uint16_t number_blocks,
-                                                      uint8_t *p_data);
+extern tNFC_STATUS RW_I93WriteMultipleBlocks (uint8_t  first_block_number,
+                                              uint16_t number_blocks,
+                                              uint8_t *p_data);
 
 /*******************************************************************************
 **
@@ -1077,7 +1076,7 @@ NFC_API extern tNFC_STATUS RW_I93WriteMultipleBlocks (uint8_t  first_block_numbe
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93Select (uint8_t *p_uid);
+extern tNFC_STATUS RW_I93Select (uint8_t *p_uid);
 
 /*******************************************************************************
 **
@@ -1093,7 +1092,7 @@ NFC_API extern tNFC_STATUS RW_I93Select (uint8_t *p_uid);
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93ResetToReady (void);
+extern tNFC_STATUS RW_I93ResetToReady (void);
 
 /*******************************************************************************
 **
@@ -1109,7 +1108,7 @@ NFC_API extern tNFC_STATUS RW_I93ResetToReady (void);
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93WriteAFI (uint8_t afi);
+extern tNFC_STATUS RW_I93WriteAFI (uint8_t afi);
 
 /*******************************************************************************
 **
@@ -1125,7 +1124,7 @@ NFC_API extern tNFC_STATUS RW_I93WriteAFI (uint8_t afi);
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93LockAFI (void);
+extern tNFC_STATUS RW_I93LockAFI (void);
 
 /*******************************************************************************
 **
@@ -1141,7 +1140,7 @@ NFC_API extern tNFC_STATUS RW_I93LockAFI (void);
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93WriteDSFID (uint8_t dsfid);
+extern tNFC_STATUS RW_I93WriteDSFID (uint8_t dsfid);
 
 /*******************************************************************************
 **
@@ -1157,7 +1156,7 @@ NFC_API extern tNFC_STATUS RW_I93WriteDSFID (uint8_t dsfid);
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93LockDSFID (void);
+extern tNFC_STATUS RW_I93LockDSFID (void);
 
 /*******************************************************************************
 **
@@ -1174,7 +1173,7 @@ NFC_API extern tNFC_STATUS RW_I93LockDSFID (void);
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93GetSysInfo (uint8_t *p_uid);
+extern tNFC_STATUS RW_I93GetSysInfo (uint8_t *p_uid);
 
 /*******************************************************************************
 **
@@ -1190,8 +1189,8 @@ NFC_API extern tNFC_STATUS RW_I93GetSysInfo (uint8_t *p_uid);
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93GetMultiBlockSecurityStatus (uint16_t first_block_number,
-                                                              uint16_t number_blocks);
+extern tNFC_STATUS RW_I93GetMultiBlockSecurityStatus (uint16_t first_block_number,
+                                                      uint16_t number_blocks);
 
 /*******************************************************************************
 **
@@ -1205,7 +1204,7 @@ NFC_API extern tNFC_STATUS RW_I93GetMultiBlockSecurityStatus (uint16_t first_blo
 **                  NFC_STATUS_FAILED if busy or other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93DetectNDef (void);
+extern tNFC_STATUS RW_I93DetectNDef (void);
 
 /*******************************************************************************
 **
@@ -1223,7 +1222,7 @@ NFC_API extern tNFC_STATUS RW_I93DetectNDef (void);
 **                  NFC_STATUS_FAILED if I93 is busy or other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93ReadNDef (void);
+extern tNFC_STATUS RW_I93ReadNDef (void);
 
 /*******************************************************************************
 **
@@ -1241,7 +1240,7 @@ NFC_API extern tNFC_STATUS RW_I93ReadNDef (void);
 **                  NFC_STATUS_FAILED if I93 is busy or other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93UpdateNDef (uint16_t length, uint8_t *p_data);
+extern tNFC_STATUS RW_I93UpdateNDef (uint16_t length, uint8_t *p_data);
 
 /*******************************************************************************
 **
@@ -1255,7 +1254,7 @@ NFC_API extern tNFC_STATUS RW_I93UpdateNDef (uint16_t length, uint8_t *p_data);
 **                  NFC_STATUS_FAILED if busy or other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93FormatNDef (void);
+extern tNFC_STATUS RW_I93FormatNDef (void);
 
 /*******************************************************************************
 **
@@ -1271,7 +1270,7 @@ NFC_API extern tNFC_STATUS RW_I93FormatNDef (void);
 **                  NFC_STATUS_FAILED if I93 is busy or other error
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93SetTagReadOnly (void);
+extern tNFC_STATUS RW_I93SetTagReadOnly (void);
 
 /*****************************************************************************
 **
@@ -1287,7 +1286,7 @@ NFC_API extern tNFC_STATUS RW_I93SetTagReadOnly (void);
 **                  NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-NFC_API extern tNFC_STATUS RW_I93PresenceCheck (void);
+extern tNFC_STATUS RW_I93PresenceCheck (void);
 
 /*******************************************************************************
 **
@@ -1298,7 +1297,7 @@ NFC_API extern tNFC_STATUS RW_I93PresenceCheck (void);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_SendRawFrame (uint8_t *p_raw_data, uint16_t data_len);
+extern tNFC_STATUS RW_SendRawFrame (uint8_t *p_raw_data, uint16_t data_len);
 
 /*******************************************************************************
 **
@@ -1309,7 +1308,7 @@ NFC_API extern tNFC_STATUS RW_SendRawFrame (uint8_t *p_raw_data, uint16_t data_l
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS RW_SetActivatedTagType (tNFC_ACTIVATE_DEVT *p_activate_params, tRW_CBACK *p_cback);
+extern tNFC_STATUS RW_SetActivatedTagType (tNFC_ACTIVATE_DEVT *p_activate_params, tRW_CBACK *p_cback);
 
 /*******************************************************************************
 **
@@ -1322,6 +1321,6 @@ NFC_API extern tNFC_STATUS RW_SetActivatedTagType (tNFC_ACTIVATE_DEVT *p_activat
 ** Returns          The new or current trace level
 **
 *******************************************************************************/
-NFC_API extern uint8_t RW_SetTraceLevel (uint8_t new_level);
+extern uint8_t RW_SetTraceLevel (uint8_t new_level);
 
 #endif /* RW_API_H */

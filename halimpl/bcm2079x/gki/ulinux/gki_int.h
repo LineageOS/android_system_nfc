@@ -64,7 +64,7 @@ typedef struct
 extern "C" {
 #endif
 
-GKI_API extern tGKI_CB  gki_cb;
+extern tGKI_CB  gki_cb;
 
 #ifdef __cplusplus
 }

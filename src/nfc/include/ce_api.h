@@ -98,11 +98,11 @@ typedef uint8_t tCE_T4T_AID_HANDLE;           /* Handle for AID registration  */
 ** Returns          NFC_STATUS_OK if success
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS CE_T3tSetLocalNDEFMsg (bool    read_only,
-                                uint32_t size_max,
-                                uint32_t size_current,
-                                uint8_t *p_buf,
-                                uint8_t *p_scratch_buf);
+extern tNFC_STATUS CE_T3tSetLocalNDEFMsg (bool    read_only,
+                                          uint32_t size_max,
+                                          uint32_t size_current,
+                                          uint8_t *p_buf,
+                                          uint8_t *p_scratch_buf);
 
 /*******************************************************************************
 **
@@ -114,7 +114,7 @@ NFC_API extern tNFC_STATUS CE_T3tSetLocalNDEFMsg (bool    read_only,
 ** Returns          NFC_STATUS_OK if success
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS CE_T3tSetLocalNDefParams (uint8_t nbr, uint8_t nbw);
+extern tNFC_STATUS CE_T3tSetLocalNDefParams (uint8_t nbr, uint8_t nbw);
 
 /*******************************************************************************
 **
@@ -125,7 +125,7 @@ NFC_API extern tNFC_STATUS CE_T3tSetLocalNDefParams (uint8_t nbr, uint8_t nbw);
 ** Returns          NFC_STATUS_OK if success
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS CE_T3tSendCheckRsp (uint8_t status1, uint8_t status2, uint8_t num_blocks, uint8_t *p_block_data);
+extern tNFC_STATUS CE_T3tSendCheckRsp (uint8_t status1, uint8_t status2, uint8_t num_blocks, uint8_t *p_block_data);
 
 /*******************************************************************************
 **
@@ -136,7 +136,7 @@ NFC_API extern tNFC_STATUS CE_T3tSendCheckRsp (uint8_t status1, uint8_t status2,
 ** Returns          NFC_STATUS_OK if success
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS CE_T3tSendUpdateRsp (uint8_t status1, uint8_t status2);
+extern tNFC_STATUS CE_T3tSendUpdateRsp (uint8_t status1, uint8_t status2);
 
 /*******************************************************************************
 **
@@ -159,11 +159,11 @@ NFC_API extern tNFC_STATUS CE_T3tSendUpdateRsp (uint8_t status1, uint8_t status2
 ** Returns          NFC_STATUS_OK if success
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS CE_T4tSetLocalNDEFMsg (bool       read_only,
-                                                  uint16_t   ndef_msg_max,
-                                                  uint16_t   ndef_msg_len,
-                                                  uint8_t   *p_ndef_msg,
-                                                  uint8_t   *p_scratch_buf);
+extern tNFC_STATUS CE_T4tSetLocalNDEFMsg (bool       read_only,
+                                          uint16_t   ndef_msg_max,
+                                          uint16_t   ndef_msg_len,
+                                          uint8_t   *p_ndef_msg,
+                                          uint8_t   *p_scratch_buf);
 
 /*******************************************************************************
 **
@@ -179,9 +179,9 @@ NFC_API extern tNFC_STATUS CE_T4tSetLocalNDEFMsg (bool       read_only,
 **                  CE_T4T_AID_HANDLE_INVALID otherwisse
 **
 *******************************************************************************/
-NFC_API extern tCE_T4T_AID_HANDLE CE_T4tRegisterAID (uint8_t    aid_len,
-                                                     uint8_t    *p_aid,
-                                                     tCE_CBACK  *p_cback);
+extern tCE_T4T_AID_HANDLE CE_T4tRegisterAID (uint8_t    aid_len,
+                                             uint8_t    *p_aid,
+                                             tCE_CBACK  *p_cback);
 
 /*******************************************************************************
 **
@@ -195,7 +195,7 @@ NFC_API extern tCE_T4T_AID_HANDLE CE_T4tRegisterAID (uint8_t    aid_len,
 ** Returns          NFC_STATUS_OK if success
 **
 *******************************************************************************/
-NFC_API extern void CE_T4tDeregisterAID (tCE_T4T_AID_HANDLE aid_handle);
+extern void CE_T4tDeregisterAID (tCE_T4T_AID_HANDLE aid_handle);
 
 /*******************************************************************************
 **
@@ -206,10 +206,10 @@ NFC_API extern void CE_T4tDeregisterAID (tCE_T4T_AID_HANDLE aid_handle);
 ** Returns          NFC_STATUS_OK if success
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS CE_T4TTestSetCC (uint16_t cc_len,
-                                            uint8_t  version,
-                                            uint16_t max_le,
-                                            uint16_t max_lc);
+extern tNFC_STATUS CE_T4TTestSetCC (uint16_t cc_len,
+                                    uint8_t  version,
+                                    uint16_t max_le,
+                                    uint16_t max_lc);
 
 /*******************************************************************************
 **
@@ -220,12 +220,12 @@ NFC_API extern tNFC_STATUS CE_T4TTestSetCC (uint16_t cc_len,
 ** Returns          NFC_STATUS_OK if success
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS CE_T4TTestSetNDEFCtrlTLV (uint8_t  type,
-                                                     uint8_t  length,
-                                                     uint16_t file_id,
-                                                     uint16_t max_file_size,
-                                                     uint8_t  read_access,
-                                                     uint8_t  write_access);
+extern tNFC_STATUS CE_T4TTestSetNDEFCtrlTLV (uint8_t  type,
+                                             uint8_t  length,
+                                             uint16_t file_id,
+                                             uint16_t max_file_size,
+                                             uint8_t  read_access,
+                                             uint8_t  write_access);
 
 /*******************************************************************************
 **
@@ -236,7 +236,7 @@ NFC_API extern tNFC_STATUS CE_T4TTestSetNDEFCtrlTLV (uint8_t  type,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS CE_SendRawFrame (uint8_t *p_raw_data, uint16_t data_len);
+extern tNFC_STATUS CE_SendRawFrame (uint8_t *p_raw_data, uint16_t data_len);
 
 /*******************************************************************************
 **
@@ -247,7 +247,7 @@ NFC_API extern tNFC_STATUS CE_SendRawFrame (uint8_t *p_raw_data, uint16_t data_l
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS CE_SetActivatedTagType (tNFC_ACTIVATE_DEVT *p_activate_params, uint16_t t3t_system_code, tCE_CBACK *p_cback);
+extern tNFC_STATUS CE_SetActivatedTagType (tNFC_ACTIVATE_DEVT *p_activate_params, uint16_t t3t_system_code, tCE_CBACK *p_cback);
 
 /*******************************************************************************
 **
@@ -260,6 +260,6 @@ NFC_API extern tNFC_STATUS CE_SetActivatedTagType (tNFC_ACTIVATE_DEVT *p_activat
 ** Returns          The new or current trace level
 **
 *******************************************************************************/
-NFC_API extern uint8_t CE_SetTraceLevel (uint8_t new_level);
+extern uint8_t CE_SetTraceLevel (uint8_t new_level);
 
 #endif /* CE_API_H */

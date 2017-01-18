@@ -204,7 +204,7 @@ void gki_print_buffer_statistics(FP_PRINT print, int16_t pool)
 ** Description      Dumps used buffers in the particular pool
 **
 *******************************************************************************/
-GKI_API void gki_print_used_bufs (FP_PRINT print, uint8_t pool_id)
+void gki_print_used_bufs (FP_PRINT print, uint8_t pool_id)
 {
     uint8_t      *p_start;
     uint16_t     buf_size;
