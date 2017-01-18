@@ -33,7 +33,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <gki_int.h>
-#include "hcidefs.h"
 #include <poll.h>
 #include "upio.h"
 #include "bcm2079x.h"
