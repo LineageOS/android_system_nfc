@@ -817,7 +817,7 @@ tNFA_STATUS NFA_UpdateRFCommParams (tNFA_RF_COMM_PARAMS *p_params)
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_Deactivate (bool    sleep_mode)
+extern tNFA_STATUS NFA_Deactivate (bool    sleep_mode)
 {
     tNFA_DM_API_DEACTIVATE *p_msg;
 
@@ -971,7 +971,7 @@ tNFA_STATUS NFA_RegisterNDefTypeHandler (bool            handle_whole_message,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_RegisterNDefUriHandler (bool             handle_whole_message,
+extern tNFA_STATUS NFA_RegisterNDefUriHandler (bool             handle_whole_message,
                                                        tNFA_NDEF_URI_ID uri_id,
                                                        uint8_t          *p_abs_uri,
                                                        uint8_t          uri_id_len,
@@ -1030,7 +1030,7 @@ NFC_API extern tNFA_STATUS NFA_RegisterNDefUriHandler (bool             handle_w
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_DeregisterNDefTypeHandler (tNFA_HANDLE ndef_type_handle)
+extern tNFA_STATUS NFA_DeregisterNDefTypeHandler (tNFA_HANDLE ndef_type_handle)
 {
     tNFA_DM_API_DEREG_NDEF_HDLR *p_msg;
 

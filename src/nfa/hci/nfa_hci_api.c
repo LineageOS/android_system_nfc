@@ -517,11 +517,11 @@ tNFA_STATUS NFA_HciGetRegistry (tNFA_HANDLE hci_handle, uint8_t pipe, uint8_t re
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_HciSetRegistry (tNFA_HANDLE   hci_handle,
-                                               uint8_t       pipe,
-                                               uint8_t       reg_inx,
-                                               uint8_t       data_size,
-                                               uint8_t       *p_data)
+extern tNFA_STATUS NFA_HciSetRegistry (tNFA_HANDLE   hci_handle,
+                                       uint8_t       pipe,
+                                       uint8_t       reg_inx,
+                                       uint8_t       data_size,
+                                       uint8_t       *p_data)
 {
     tNFA_HCI_API_SET_REGISTRY *p_msg;
 
@@ -640,11 +640,11 @@ tNFA_STATUS NFA_HciSendCommand (tNFA_HANDLE  hci_handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_HciSendResponse (tNFA_HANDLE   hci_handle,
-                                                uint8_t       pipe,
-                                                uint8_t       response,
-                                                uint8_t       data_size,
-                                                uint8_t       *p_data)
+extern tNFA_STATUS NFA_HciSendResponse (tNFA_HANDLE   hci_handle,
+                                        uint8_t       pipe,
+                                        uint8_t       response,
+                                        uint8_t       data_size,
+                                        uint8_t       *p_data)
 {
     tNFA_HCI_API_SEND_RSP_EVT *p_msg;
 

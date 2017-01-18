@@ -381,89 +381,89 @@ extern "C" {
 
 /* Task management
 */
-GKI_API extern uint8_t GKI_create_task (TASKPTR, uint8_t, int8_t *, uint16_t *, uint16_t, void*, void*);
-GKI_API extern void    GKI_exit_task(uint8_t);
-GKI_API extern uint8_t GKI_get_taskid(void);
-GKI_API extern void    GKI_init(void);
-GKI_API extern uint8_t *GKI_map_taskname(uint8_t);
-GKI_API extern uint8_t GKI_resume_task(uint8_t);
-GKI_API extern void    GKI_run(void *);
-GKI_API extern void    GKI_stop(void);
-GKI_API extern uint8_t GKI_suspend_task(uint8_t);
-GKI_API extern uint8_t GKI_is_task_running(uint8_t);
-GKI_API extern void    GKI_shutdown(void);
+extern uint8_t GKI_create_task (TASKPTR, uint8_t, int8_t *, uint16_t *, uint16_t, void*, void*);
+extern void    GKI_exit_task(uint8_t);
+extern uint8_t GKI_get_taskid(void);
+extern void    GKI_init(void);
+extern uint8_t *GKI_map_taskname(uint8_t);
+extern uint8_t GKI_resume_task(uint8_t);
+extern void    GKI_run(void *);
+extern void    GKI_stop(void);
+extern uint8_t GKI_suspend_task(uint8_t);
+extern uint8_t GKI_is_task_running(uint8_t);
+extern void    GKI_shutdown(void);
 
 /* memory management
 */
-GKI_API extern void GKI_shiftdown (uint8_t *p_mem, uint32_t len, uint32_t shift_amount);
-GKI_API extern void GKI_shiftup (uint8_t *p_dest, uint8_t *p_src, uint32_t len);
+extern void GKI_shiftdown (uint8_t *p_mem, uint32_t len, uint32_t shift_amount);
+extern void GKI_shiftup (uint8_t *p_dest, uint8_t *p_src, uint32_t len);
 
 /* To send buffers and events between tasks
 */
-GKI_API extern uint8_t GKI_isend_event (uint8_t, uint16_t);
-GKI_API extern void    GKI_isend_msg (uint8_t, uint8_t, void *);
-GKI_API extern void   *GKI_read_mbox  (uint8_t);
-GKI_API extern void    GKI_send_msg   (uint8_t, uint8_t, void *);
-GKI_API extern uint8_t GKI_send_event (uint8_t, uint16_t);
+extern uint8_t GKI_isend_event (uint8_t, uint16_t);
+extern void    GKI_isend_msg (uint8_t, uint8_t, void *);
+extern void   *GKI_read_mbox  (uint8_t);
+extern void    GKI_send_msg   (uint8_t, uint8_t, void *);
+extern uint8_t GKI_send_event (uint8_t, uint16_t);
 
 
 /* To get and release buffers, change owner and get size
 */
-GKI_API extern void    GKI_change_buf_owner (void *, uint8_t);
-GKI_API extern uint8_t GKI_create_pool (uint16_t, uint16_t, uint8_t, void *);
-GKI_API extern void    GKI_delete_pool (uint8_t);
-GKI_API extern void   *GKI_find_buf_start (void *);
-GKI_API extern void    GKI_freebuf (void *);
+extern void    GKI_change_buf_owner (void *, uint8_t);
+extern uint8_t GKI_create_pool (uint16_t, uint16_t, uint8_t, void *);
+extern void    GKI_delete_pool (uint8_t);
+extern void   *GKI_find_buf_start (void *);
+extern void    GKI_freebuf (void *);
 #if (GKI_BUFFER_DEBUG == TRUE)
 #define GKI_getbuf(size)    GKI_getbuf_debug(size, __func__, __LINE__)
-GKI_API extern void   *GKI_getbuf_debug (uint16_t, const char *, int);
+extern void   *GKI_getbuf_debug (uint16_t, const char *, int);
 #else
-GKI_API extern void   *GKI_getbuf (uint16_t);
+extern void   *GKI_getbuf (uint16_t);
 #endif
-GKI_API extern uint16_t  GKI_get_buf_size (void *);
+extern uint16_t  GKI_get_buf_size (void *);
 #if (GKI_BUFFER_DEBUG == TRUE)
 #define GKI_getpoolbuf(id)    GKI_getpoolbuf_debug(id, __func__, __LINE__)
-GKI_API extern void   *GKI_getpoolbuf_debug (uint8_t, const char *, int);
+extern void   *GKI_getpoolbuf_debug (uint8_t, const char *, int);
 #else
-GKI_API extern void   *GKI_getpoolbuf (uint8_t);
+extern void   *GKI_getpoolbuf (uint8_t);
 #endif
 
-GKI_API extern uint16_t  GKI_poolcount (uint8_t);
-GKI_API extern uint16_t  GKI_poolfreecount (uint8_t);
-GKI_API extern uint16_t  GKI_poolutilization (uint8_t);
-GKI_API extern void    GKI_register_mempool (void *p_mem);
-GKI_API extern uint8_t GKI_set_pool_permission(uint8_t, uint8_t);
+extern uint16_t  GKI_poolcount (uint8_t);
+extern uint16_t  GKI_poolfreecount (uint8_t);
+extern uint16_t  GKI_poolutilization (uint8_t);
+extern void    GKI_register_mempool (void *p_mem);
+extern uint8_t GKI_set_pool_permission(uint8_t, uint8_t);
 
 
 /* User buffer queue management
 */
-GKI_API extern void   *GKI_dequeue  (BUFFER_Q *);
-GKI_API extern void    GKI_enqueue (BUFFER_Q *, void *);
-GKI_API extern void    GKI_enqueue_head (BUFFER_Q *, void *);
-GKI_API extern void   *GKI_getfirst (BUFFER_Q *);
-GKI_API extern void   *GKI_getlast (BUFFER_Q *);
-GKI_API extern void   *GKI_getnext (void *);
-GKI_API extern void    GKI_init_q (BUFFER_Q *);
-GKI_API extern bool    GKI_queue_is_empty(BUFFER_Q *);
-GKI_API extern void   *GKI_remove_from_queue (BUFFER_Q *, void *);
-GKI_API extern uint16_t  GKI_get_pool_bufsize (uint8_t);
+extern void   *GKI_dequeue  (BUFFER_Q *);
+extern void    GKI_enqueue (BUFFER_Q *, void *);
+extern void    GKI_enqueue_head (BUFFER_Q *, void *);
+extern void   *GKI_getfirst (BUFFER_Q *);
+extern void   *GKI_getlast (BUFFER_Q *);
+extern void   *GKI_getnext (void *);
+extern void    GKI_init_q (BUFFER_Q *);
+extern bool    GKI_queue_is_empty(BUFFER_Q *);
+extern void   *GKI_remove_from_queue (BUFFER_Q *, void *);
+extern uint16_t  GKI_get_pool_bufsize (uint8_t);
 
 /* Timer management
 */
-GKI_API extern void    GKI_add_to_timer_list (TIMER_LIST_Q *, TIMER_LIST_ENT  *);
-GKI_API extern void    GKI_delay(uint32_t);
-GKI_API extern uint32_t  GKI_get_tick_count(void);
-GKI_API extern int8_t *GKI_get_time_stamp(int8_t *);
-GKI_API extern void    GKI_init_timer_list (TIMER_LIST_Q *);
-GKI_API extern void    GKI_init_timer_list_entry (TIMER_LIST_ENT  *);
-GKI_API extern int32_t GKI_ready_to_sleep (void);
-GKI_API extern void    GKI_remove_from_timer_list (TIMER_LIST_Q *, TIMER_LIST_ENT  *);
-GKI_API extern void    GKI_start_timer(uint8_t, int32_t, bool   );
-GKI_API extern void    GKI_stop_timer (uint8_t);
-GKI_API extern void    GKI_timer_update(int32_t);
-GKI_API extern uint16_t  GKI_update_timer_list (TIMER_LIST_Q *, int32_t);
-GKI_API extern uint32_t  GKI_get_remaining_ticks (TIMER_LIST_Q *, TIMER_LIST_ENT  *);
-GKI_API extern uint16_t  GKI_wait(uint16_t, uint32_t);
+extern void    GKI_add_to_timer_list (TIMER_LIST_Q *, TIMER_LIST_ENT  *);
+extern void    GKI_delay(uint32_t);
+extern uint32_t  GKI_get_tick_count(void);
+extern int8_t *GKI_get_time_stamp(int8_t *);
+extern void    GKI_init_timer_list (TIMER_LIST_Q *);
+extern void    GKI_init_timer_list_entry (TIMER_LIST_ENT  *);
+extern int32_t GKI_ready_to_sleep (void);
+extern void    GKI_remove_from_timer_list (TIMER_LIST_Q *, TIMER_LIST_ENT  *);
+extern void    GKI_start_timer(uint8_t, int32_t, bool   );
+extern void    GKI_stop_timer (uint8_t);
+extern void    GKI_timer_update(int32_t);
+extern uint16_t  GKI_update_timer_list (TIMER_LIST_Q *, int32_t);
+extern uint32_t  GKI_get_remaining_ticks (TIMER_LIST_Q *, TIMER_LIST_ENT  *);
+extern uint16_t  GKI_wait(uint16_t, uint32_t);
 
 /* Start and Stop system time tick callback
  * true for start system tick if time queue is not empty
@@ -473,32 +473,32 @@ typedef void (SYSTEM_TICK_CBACK)(bool   );
 
 /* Time queue management for system ticks
 */
-GKI_API extern bool    GKI_timer_queue_empty (void);
-GKI_API extern void    GKI_timer_queue_register_callback(SYSTEM_TICK_CBACK *);
+extern bool    GKI_timer_queue_empty (void);
+extern void    GKI_timer_queue_register_callback(SYSTEM_TICK_CBACK *);
 
 /* Disable Interrupts, Enable Interrupts
 */
-GKI_API extern void    GKI_enable(void);
-GKI_API extern void    GKI_disable(void);
-GKI_API extern void    GKI_sched_lock(void);
-GKI_API extern void    GKI_sched_unlock(void);
+extern void    GKI_enable(void);
+extern void    GKI_disable(void);
+extern void    GKI_sched_lock(void);
+extern void    GKI_sched_unlock(void);
 
 /* Allocate (Free) memory from an OS
 */
-GKI_API extern void     *GKI_os_malloc (uint32_t);
-GKI_API extern void      GKI_os_free (void *);
+extern void     *GKI_os_malloc (uint32_t);
+extern void      GKI_os_free (void *);
 
 /* os timer operation */
-GKI_API extern uint32_t GKI_get_os_tick_count(void);
+extern uint32_t GKI_get_os_tick_count(void);
 
 /* Exception handling
 */
-GKI_API extern void    GKI_exception (uint16_t, char *);
+extern void    GKI_exception (uint16_t, char *);
 
 #if (GKI_DEBUG == TRUE)
-GKI_API extern void    GKI_PrintBufferUsage(uint8_t *p_num_pools, uint16_t *p_cur_used);
-GKI_API extern void    GKI_PrintBuffer(void);
-GKI_API extern void    GKI_print_task(void);
+extern void    GKI_PrintBufferUsage(uint8_t *p_num_pools, uint16_t *p_cur_used);
+extern void    GKI_PrintBuffer(void);
+extern void    GKI_print_task(void);
 #else
 #undef GKI_PrintBufferUsage
 #define GKI_PrintBuffer() NULL

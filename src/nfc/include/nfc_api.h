@@ -856,7 +856,7 @@ extern "C" {
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_Enable (tNFC_RESPONSE_CBACK *p_cback);
+extern tNFC_STATUS NFC_Enable (tNFC_RESPONSE_CBACK *p_cback);
 
 /*******************************************************************************
 **
@@ -873,7 +873,7 @@ NFC_API extern tNFC_STATUS NFC_Enable (tNFC_RESPONSE_CBACK *p_cback);
 ** Returns          nothing
 **
 *******************************************************************************/
-NFC_API extern void NFC_Disable (void);
+extern void NFC_Disable (void);
 
 /*******************************************************************************
 **
@@ -884,7 +884,7 @@ NFC_API extern void NFC_Disable (void);
 ** Returns          nothing
 **
 *******************************************************************************/
-NFC_API extern void NFC_Init(tHAL_NFC_ENTRY *p_hal_entry_tbl);
+extern void NFC_Init(tHAL_NFC_ENTRY *p_hal_entry_tbl);
 
 /*******************************************************************************
 **
@@ -896,7 +896,7 @@ NFC_API extern void NFC_Init(tHAL_NFC_ENTRY *p_hal_entry_tbl);
 ** Returns          Listen Mode Routing Table size
 **
 *******************************************************************************/
-NFC_API extern uint16_t NFC_GetLmrtSize(void);
+extern uint16_t NFC_GetLmrtSize(void);
 
 /*******************************************************************************
 **
@@ -912,8 +912,8 @@ NFC_API extern uint16_t NFC_GetLmrtSize(void);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_SetConfig (uint8_t   tlv_size,
-                                          uint8_t  *p_param_tlvs);
+extern tNFC_STATUS NFC_SetConfig (uint8_t   tlv_size,
+                                  uint8_t  *p_param_tlvs);
 
 /*******************************************************************************
 **
@@ -929,8 +929,8 @@ NFC_API extern tNFC_STATUS NFC_SetConfig (uint8_t   tlv_size,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_GetConfig (uint8_t   num_ids,
-                                          uint8_t  *p_param_ids);
+extern tNFC_STATUS NFC_GetConfig (uint8_t   num_ids,
+                                  uint8_t  *p_param_ids);
 
 /*******************************************************************************
 **
@@ -947,7 +947,7 @@ NFC_API extern tNFC_STATUS NFC_GetConfig (uint8_t   num_ids,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_NfceeDiscover (bool    discover);
+extern tNFC_STATUS NFC_NfceeDiscover (bool    discover);
 
 /*******************************************************************************
 **
@@ -964,8 +964,8 @@ NFC_API extern tNFC_STATUS NFC_NfceeDiscover (bool    discover);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_NfceeModeSet (uint8_t            nfcee_id,
-                                             tNFC_NFCEE_MODE    mode);
+extern tNFC_STATUS NFC_NfceeModeSet (uint8_t            nfcee_id,
+                                     tNFC_NFCEE_MODE    mode);
 /*******************************************************************************
 **
 ** Function         NFC_DiscoveryMap
@@ -981,8 +981,8 @@ NFC_API extern tNFC_STATUS NFC_NfceeModeSet (uint8_t            nfcee_id,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_DiscoveryMap(uint8_t num, tNFC_DISCOVER_MAPS *p_maps,
-                                        tNFC_DISCOVER_CBACK *p_cback);
+extern tNFC_STATUS NFC_DiscoveryMap(uint8_t num, tNFC_DISCOVER_MAPS *p_maps,
+                                    tNFC_DISCOVER_CBACK *p_cback);
 
 /*******************************************************************************
 **
@@ -1000,9 +1000,9 @@ NFC_API extern tNFC_STATUS NFC_DiscoveryMap(uint8_t num, tNFC_DISCOVER_MAPS *p_m
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_DiscoveryStart(uint8_t               num_params,
-                                              tNFC_DISCOVER_PARAMS *p_params,
-                                              tNFC_DISCOVER_CBACK  *p_cback);
+extern tNFC_STATUS NFC_DiscoveryStart(uint8_t               num_params,
+                                      tNFC_DISCOVER_PARAMS *p_params,
+                                      tNFC_DISCOVER_CBACK  *p_cback);
 
 /*******************************************************************************
 **
@@ -1020,9 +1020,9 @@ NFC_API extern tNFC_STATUS NFC_DiscoveryStart(uint8_t               num_params,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_DiscoverySelect (uint8_t  rf_disc_id,
-                                                uint8_t  protocol,
-                                                uint8_t  rf_interface);
+extern tNFC_STATUS NFC_DiscoverySelect (uint8_t  rf_disc_id,
+                                        uint8_t  protocol,
+                                        uint8_t  rf_interface);
 
 /*******************************************************************************
 **
@@ -1041,10 +1041,10 @@ NFC_API extern tNFC_STATUS NFC_DiscoverySelect (uint8_t  rf_disc_id,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_ConnCreate(uint8_t           dest_type,
-                                          uint8_t           id,
-                                          uint8_t           protocol,
-                                          tNFC_CONN_CBACK  *p_cback);
+extern tNFC_STATUS NFC_ConnCreate(uint8_t           dest_type,
+                                  uint8_t           id,
+                                  uint8_t           protocol,
+                                  tNFC_CONN_CBACK  *p_cback);
 
 /*******************************************************************************
 **
@@ -1060,7 +1060,7 @@ NFC_API extern tNFC_STATUS NFC_ConnCreate(uint8_t           dest_type,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_ConnClose(uint8_t conn_id);
+extern tNFC_STATUS NFC_ConnClose(uint8_t conn_id);
 
 /*******************************************************************************
 **
@@ -1074,7 +1074,7 @@ NFC_API extern tNFC_STATUS NFC_ConnClose(uint8_t conn_id);
 ** Returns          Nothing
 **
 *******************************************************************************/
-NFC_API extern void NFC_SetStaticRfCback(tNFC_CONN_CBACK    *p_cback);
+extern void NFC_SetStaticRfCback(tNFC_CONN_CBACK    *p_cback);
 
 /*******************************************************************************
 **
@@ -1093,7 +1093,7 @@ NFC_API extern void NFC_SetStaticRfCback(tNFC_CONN_CBACK    *p_cback);
 ** Returns          Nothing
 **
 *******************************************************************************/
-NFC_API extern void NFC_SetReassemblyFlag (bool       reassembly);
+extern void NFC_SetReassemblyFlag (bool       reassembly);
 
 /*******************************************************************************
 **
@@ -1108,8 +1108,8 @@ NFC_API extern void NFC_SetReassemblyFlag (bool       reassembly);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_SendData(uint8_t     conn_id,
-                                        NFC_HDR     *p_data);
+extern tNFC_STATUS NFC_SendData(uint8_t     conn_id,
+                                NFC_HDR     *p_data);
 
 /*******************************************************************************
 **
@@ -1123,7 +1123,7 @@ NFC_API extern tNFC_STATUS NFC_SendData(uint8_t     conn_id,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_FlushData (uint8_t     conn_id);
+extern tNFC_STATUS NFC_FlushData (uint8_t     conn_id);
 
 /*******************************************************************************
 **
@@ -1142,7 +1142,7 @@ NFC_API extern tNFC_STATUS NFC_FlushData (uint8_t     conn_id);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_Deactivate(tNFC_DEACT_TYPE deactivate_type);
+extern tNFC_STATUS NFC_Deactivate(tNFC_DEACT_TYPE deactivate_type);
 
 /*******************************************************************************
 **
@@ -1157,7 +1157,7 @@ NFC_API extern tNFC_STATUS NFC_Deactivate(tNFC_DEACT_TYPE deactivate_type);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_UpdateRFCommParams (tNFC_RF_COMM_PARAMS *p_params);
+extern tNFC_STATUS NFC_UpdateRFCommParams (tNFC_RF_COMM_PARAMS *p_params);
 
 /*******************************************************************************
 **
@@ -1168,7 +1168,7 @@ NFC_API extern tNFC_STATUS NFC_UpdateRFCommParams (tNFC_RF_COMM_PARAMS *p_params
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_SetPowerOffSleep (bool    enable);
+extern tNFC_STATUS NFC_SetPowerOffSleep (bool    enable);
 
 /*******************************************************************************
 **
@@ -1179,7 +1179,7 @@ NFC_API extern tNFC_STATUS NFC_SetPowerOffSleep (bool    enable);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_PowerCycleNFCC (void);
+extern tNFC_STATUS NFC_PowerCycleNFCC (void);
 
 /*******************************************************************************
 **
@@ -1194,10 +1194,10 @@ NFC_API extern tNFC_STATUS NFC_PowerCycleNFCC (void);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_SetRouting(bool        more,
-                                            uint8_t     num_tlv,
-                                            uint8_t     tlv_size,
-                                            uint8_t    *p_param_tlvs);
+extern tNFC_STATUS NFC_SetRouting(bool        more,
+                                  uint8_t     num_tlv,
+                                  uint8_t     tlv_size,
+                                  uint8_t    *p_param_tlvs);
 
 /*******************************************************************************
 **
@@ -1210,7 +1210,7 @@ NFC_API extern tNFC_STATUS NFC_SetRouting(bool        more,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_GetRouting(void);
+extern tNFC_STATUS NFC_GetRouting(void);
 
 /*******************************************************************************
 **
@@ -1224,8 +1224,8 @@ NFC_API extern tNFC_STATUS NFC_GetRouting(void);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_RegVSCback (bool             is_register,
-                                           tNFC_VS_CBACK   *p_cback);
+extern tNFC_STATUS NFC_RegVSCback (bool             is_register,
+                                   tNFC_VS_CBACK   *p_cback);
 
 /*******************************************************************************
 **
@@ -1241,9 +1241,9 @@ NFC_API extern tNFC_STATUS NFC_RegVSCback (bool             is_register,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_SendVsCommand(uint8_t        oid,
-                                             NFC_HDR        *p_data,
-                                             tNFC_VS_CBACK *p_cback);
+extern tNFC_STATUS NFC_SendVsCommand(uint8_t        oid,
+                                     NFC_HDR        *p_data,
+                                     tNFC_VS_CBACK *p_cback);
 
 /*******************************************************************************
 **
@@ -1259,7 +1259,7 @@ NFC_API extern tNFC_STATUS NFC_SendVsCommand(uint8_t        oid,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFC_TestLoopback(NFC_HDR *p_data);
+extern tNFC_STATUS NFC_TestLoopback(NFC_HDR *p_data);
 
 
 /*******************************************************************************
@@ -1272,7 +1272,7 @@ NFC_API extern tNFC_STATUS NFC_TestLoopback(NFC_HDR *p_data);
 ** Returns          The new or current trace level
 **
 *******************************************************************************/
-NFC_API extern uint8_t NFC_SetTraceLevel (uint8_t new_level);
+extern uint8_t NFC_SetTraceLevel (uint8_t new_level);
 
 #if (BT_TRACE_VERBOSE == TRUE)
 /*******************************************************************************
@@ -1286,7 +1286,7 @@ NFC_API extern uint8_t NFC_SetTraceLevel (uint8_t new_level);
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-NFC_API extern char * NFC_GetStatusName (tNFC_STATUS status);
+extern char * NFC_GetStatusName (tNFC_STATUS status);
 #endif
 
 #ifdef __cplusplus

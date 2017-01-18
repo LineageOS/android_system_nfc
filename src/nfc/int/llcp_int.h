@@ -286,7 +286,7 @@ extern "C" {
 ** LLCP global data
 */
 
-LLCP_API extern tLLCP_CB  llcp_cb;
+extern tLLCP_CB  llcp_cb;
 
 /*
 ** Functions provided by llcp_main.c

@@ -1024,7 +1024,7 @@ tCE_T4T_AID_HANDLE CE_T4tRegisterAID (uint8_t aid_len, uint8_t *p_aid, tCE_CBACK
 ** Returns          NFC_STATUS_OK if success
 **
 *******************************************************************************/
-NFC_API extern void CE_T4tDeregisterAID (tCE_T4T_AID_HANDLE aid_handle)
+extern void CE_T4tDeregisterAID (tCE_T4T_AID_HANDLE aid_handle)
 {
     tCE_T4T_MEM *p_t4t = &ce_cb.mem.t4t;
 

@@ -351,7 +351,7 @@ extern "C" {
 
 /* Internal GKI function prototypes
 */
-GKI_API extern bool      gki_chk_buf_damage(void *);
+extern bool      gki_chk_buf_damage(void *);
 extern bool      gki_chk_buf_owner(void *);
 extern void      gki_buffer_init (void);
 extern void      gki_timers_init(void);
@@ -379,7 +379,7 @@ extern void gki_print_timer(FP_PRINT);
 extern void gki_print_stack(FP_PRINT);
 extern void gki_print_buffer(FP_PRINT);
 extern void gki_print_buffer_statistics(FP_PRINT, int16_t);
-GKI_API extern void gki_print_used_bufs (FP_PRINT, uint8_t);
+extern void gki_print_used_bufs (FP_PRINT, uint8_t);
 extern void gki_dump(uint8_t *, uint16_t, FP_PRINT);
 extern void gki_dump2(uint16_t *, uint16_t, FP_PRINT);
 extern void gki_dump4(uint32_t *, uint16_t, FP_PRINT);

@@ -682,7 +682,7 @@ extern "C"
 ** Returns          none
 **
 *******************************************************************************/
-NFC_API extern void NFA_Init (tHAL_NFC_ENTRY *p_hal_entry_tbl);
+extern void NFA_Init (tHAL_NFC_ENTRY *p_hal_entry_tbl);
 
 /*******************************************************************************
 **
@@ -709,8 +709,8 @@ NFC_API extern void NFA_Init (tHAL_NFC_ENTRY *p_hal_entry_tbl);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_Enable (tNFA_DM_CBACK       *p_dm_cback,
-                                       tNFA_CONN_CBACK     *p_conn_cback);
+extern tNFA_STATUS NFA_Enable (tNFA_DM_CBACK       *p_dm_cback,
+                               tNFA_CONN_CBACK     *p_conn_cback);
 
 /*******************************************************************************
 **
@@ -732,7 +732,7 @@ NFC_API extern tNFA_STATUS NFA_Enable (tNFA_DM_CBACK       *p_dm_cback,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_Disable (bool    graceful);
+extern tNFA_STATUS NFA_Disable (bool    graceful);
 
 /*******************************************************************************
 **
@@ -751,9 +751,9 @@ NFC_API extern tNFA_STATUS NFA_Disable (bool    graceful);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_SetConfig (tNFA_PMID    param_id,
-                                          uint8_t      length,
-                                          uint8_t     *p_data);
+extern tNFA_STATUS NFA_SetConfig (tNFA_PMID    param_id,
+                                  uint8_t      length,
+                                  uint8_t     *p_data);
 
 /*******************************************************************************
 **
@@ -767,7 +767,7 @@ NFC_API extern tNFA_STATUS NFA_SetConfig (tNFA_PMID    param_id,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_GetConfig (uint8_t num_ids, tNFA_PMID *p_param_ids);
+extern tNFA_STATUS NFA_GetConfig (uint8_t num_ids, tNFA_PMID *p_param_ids);
 
 /*******************************************************************************
 **
@@ -803,10 +803,10 @@ NFC_API extern tNFA_STATUS NFA_GetConfig (uint8_t num_ids, tNFA_PMID *p_param_id
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_RequestExclusiveRfControl (tNFA_TECHNOLOGY_MASK poll_mask,
-                                                          tNFA_LISTEN_CFG *p_listen_cfg,
-                                                          tNFA_CONN_CBACK *p_conn_cback,
-                                                          tNFA_NDEF_CBACK *p_ndef_cback);
+extern tNFA_STATUS NFA_RequestExclusiveRfControl (tNFA_TECHNOLOGY_MASK poll_mask,
+                                                  tNFA_LISTEN_CFG *p_listen_cfg,
+                                                  tNFA_CONN_CBACK *p_conn_cback,
+                                                  tNFA_NDEF_CBACK *p_ndef_cback);
 
 /*******************************************************************************
 **
@@ -820,7 +820,7 @@ Note??
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_ReleaseExclusiveRfControl (void);
+extern tNFA_STATUS NFA_ReleaseExclusiveRfControl (void);
 
 /*******************************************************************************
 **
@@ -852,7 +852,7 @@ NFC_API extern tNFA_STATUS NFA_ReleaseExclusiveRfControl (void);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_EnablePolling (tNFA_TECHNOLOGY_MASK poll_mask);
+extern tNFA_STATUS NFA_EnablePolling (tNFA_TECHNOLOGY_MASK poll_mask);
 
 /*******************************************************************************
 **
@@ -868,7 +868,7 @@ NFC_API extern tNFA_STATUS NFA_EnablePolling (tNFA_TECHNOLOGY_MASK poll_mask);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_DisablePolling (void);
+extern tNFA_STATUS NFA_DisablePolling (void);
 
 /*******************************************************************************
 **
@@ -891,7 +891,7 @@ NFC_API extern tNFA_STATUS NFA_DisablePolling (void);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_EnableListening (void);
+extern tNFA_STATUS NFA_EnableListening (void);
 
 /*******************************************************************************
 **
@@ -908,7 +908,7 @@ NFC_API extern tNFA_STATUS NFA_EnableListening (void);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_DisableListening (void);
+extern tNFA_STATUS NFA_DisableListening (void);
 
 /*******************************************************************************
 **
@@ -929,7 +929,7 @@ NFC_API extern tNFA_STATUS NFA_DisableListening (void);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_PauseP2p (void);
+extern tNFA_STATUS NFA_PauseP2p (void);
 
 /*******************************************************************************
 **
@@ -946,7 +946,7 @@ NFC_API extern tNFA_STATUS NFA_PauseP2p (void);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_ResumeP2p (void);
+extern tNFA_STATUS NFA_ResumeP2p (void);
 
 /*******************************************************************************
 **
@@ -967,7 +967,7 @@ NFC_API extern tNFA_STATUS NFA_ResumeP2p (void);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_SetP2pListenTech (tNFA_TECHNOLOGY_MASK tech_mask);
+extern tNFA_STATUS NFA_SetP2pListenTech (tNFA_TECHNOLOGY_MASK tech_mask);
 
 /*******************************************************************************
 **
@@ -982,7 +982,7 @@ NFC_API extern tNFA_STATUS NFA_SetP2pListenTech (tNFA_TECHNOLOGY_MASK tech_mask)
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_StartRfDiscovery (void);
+extern tNFA_STATUS NFA_StartRfDiscovery (void);
 
 /*******************************************************************************
 **
@@ -996,7 +996,7 @@ NFC_API extern tNFA_STATUS NFA_StartRfDiscovery (void);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_StopRfDiscovery (void);
+extern tNFA_STATUS NFA_StopRfDiscovery (void);
 
 /*******************************************************************************
 **
@@ -1016,7 +1016,7 @@ NFC_API extern tNFA_STATUS NFA_StopRfDiscovery (void);
 **                  NFA_STATUS_FAILED: otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_SetRfDiscoveryDuration (uint16_t discovery_period_ms);
+extern tNFA_STATUS NFA_SetRfDiscoveryDuration (uint16_t discovery_period_ms);
 
 /*******************************************************************************
 **
@@ -1032,9 +1032,9 @@ NFC_API extern tNFA_STATUS NFA_SetRfDiscoveryDuration (uint16_t discovery_period
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_Select (uint8_t           rf_disc_id,
-                                       tNFA_NFC_PROTOCOL protocol,
-                                       tNFA_INTF_TYPE    rf_interface);
+extern tNFA_STATUS NFA_Select (uint8_t           rf_disc_id,
+                               tNFA_NFC_PROTOCOL protocol,
+                               tNFA_INTF_TYPE    rf_interface);
 
 /*******************************************************************************
 **
@@ -1050,7 +1050,7 @@ NFC_API extern tNFA_STATUS NFA_Select (uint8_t           rf_disc_id,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_UpdateRFCommParams (tNFA_RF_COMM_PARAMS *p_params);
+extern tNFA_STATUS NFA_UpdateRFCommParams (tNFA_RF_COMM_PARAMS *p_params);
 
 /*******************************************************************************
 **
@@ -1079,7 +1079,7 @@ NFC_API extern tNFA_STATUS NFA_UpdateRFCommParams (tNFA_RF_COMM_PARAMS *p_params
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_Deactivate (bool    sleep_mode);
+extern tNFA_STATUS NFA_Deactivate (bool    sleep_mode);
 
 /*******************************************************************************
 **
@@ -1098,9 +1098,9 @@ NFC_API extern tNFA_STATUS NFA_Deactivate (bool    sleep_mode);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_SendRawFrame (uint8_t  *p_raw_data,
-                                             uint16_t  data_len,
-                                             uint16_t  presence_check_start_delay);
+extern tNFA_STATUS NFA_SendRawFrame (uint8_t  *p_raw_data,
+                                     uint16_t  data_len,
+                                     uint16_t  presence_check_start_delay);
 
 /*******************************************************************************
 ** NDEF APIs
@@ -1131,11 +1131,11 @@ NFC_API extern tNFA_STATUS NFA_SendRawFrame (uint8_t  *p_raw_data,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_RegisterNDefTypeHandler (bool             handle_whole_message,
-                                                        tNFA_TNF         tnf,
-                                                        uint8_t         *p_type_name,
-                                                        uint8_t          type_name_len,
-                                                        tNFA_NDEF_CBACK *p_ndef_cback);
+extern tNFA_STATUS NFA_RegisterNDefTypeHandler (bool             handle_whole_message,
+                                                tNFA_TNF         tnf,
+                                                uint8_t         *p_type_name,
+                                                uint8_t          type_name_len,
+                                                tNFA_NDEF_CBACK *p_ndef_cback);
 
 /*******************************************************************************
 **
@@ -1158,11 +1158,11 @@ NFC_API extern tNFA_STATUS NFA_RegisterNDefTypeHandler (bool             handle_
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_RegisterNDefUriHandler (bool             handle_whole_message,
-                                                       tNFA_NDEF_URI_ID uri_id,
-                                                       uint8_t          *p_abs_uri,
-                                                       uint8_t          uri_id_len,
-                                                       tNFA_NDEF_CBACK  *p_ndef_cback);
+extern tNFA_STATUS NFA_RegisterNDefUriHandler (bool             handle_whole_message,
+                                               tNFA_NDEF_URI_ID uri_id,
+                                               uint8_t          *p_abs_uri,
+                                               uint8_t          uri_id_len,
+                                               tNFA_NDEF_CBACK  *p_ndef_cback);
 
 
 /*******************************************************************************
@@ -1175,7 +1175,7 @@ NFC_API extern tNFA_STATUS NFA_RegisterNDefUriHandler (bool             handle_w
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_DeregisterNDefTypeHandler (tNFA_HANDLE ndef_type_handle);
+extern tNFA_STATUS NFA_DeregisterNDefTypeHandler (tNFA_HANDLE ndef_type_handle);
 
 
 /*******************************************************************************
@@ -1193,7 +1193,7 @@ Note??
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_PowerOffSleepMode (bool    start_stop);
+extern tNFA_STATUS NFA_PowerOffSleepMode (bool    start_stop);
 
 /*******************************************************************************
 **
@@ -1207,8 +1207,8 @@ NFC_API extern tNFA_STATUS NFA_PowerOffSleepMode (bool    start_stop);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-NFC_API extern tNFC_STATUS NFA_RegVSCback (bool             is_register,
-                                           tNFA_VSC_CBACK   *p_cback);
+extern tNFC_STATUS NFA_RegVSCback (bool             is_register,
+                                   tNFA_VSC_CBACK   *p_cback);
 
 /*******************************************************************************
 **
@@ -1227,10 +1227,10 @@ NFC_API extern tNFC_STATUS NFA_RegVSCback (bool             is_register,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-NFC_API extern tNFA_STATUS NFA_SendVsCommand (uint8_t          oid,
-                                              uint8_t          cmd_params_len,
-                                              uint8_t          *p_cmd_params,
-                                              tNFA_VSC_CBACK   *p_cback);
+extern tNFA_STATUS NFA_SendVsCommand (uint8_t          oid,
+                                      uint8_t          cmd_params_len,
+                                      uint8_t          *p_cmd_params,
+                                      tNFA_VSC_CBACK   *p_cback);
 
 /*******************************************************************************
 **
@@ -1242,7 +1242,7 @@ NFC_API extern tNFA_STATUS NFA_SendVsCommand (uint8_t          oid,
 ** Returns          The new or current trace level
 **
 *******************************************************************************/
-NFC_API extern uint8_t NFA_SetTraceLevel (uint8_t new_level);
+extern uint8_t NFA_SetTraceLevel (uint8_t new_level);
 
 
 #ifdef __cplusplus

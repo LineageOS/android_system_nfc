@@ -1563,8 +1563,8 @@ uint8_t LLCP_GetRemoteVersion (void)
 ** Returns          None
 **
 *******************************************************************************/
-LLCP_API void LLCP_GetLinkMIU (uint16_t *p_local_link_miu,
-                               uint16_t *p_remote_link_miu)
+void LLCP_GetLinkMIU (uint16_t *p_local_link_miu,
+                      uint16_t *p_remote_link_miu)
 {
     LLCP_TRACE_API0 ("LLCP_GetLinkMIU ()");
 

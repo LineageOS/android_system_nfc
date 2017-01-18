@@ -586,7 +586,7 @@ extern "C" {
 #endif
 
 /* Global NFC data */
-NFC_API extern tRW_CB  rw_cb;
+extern tRW_CB  rw_cb;
 
 /* from .c */
 
