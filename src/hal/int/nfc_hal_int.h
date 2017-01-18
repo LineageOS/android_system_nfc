@@ -122,7 +122,6 @@ extern NFC_HAL_TRANS_CFG_QUALIFIER tNFC_HAL_TRANS_CFG nfc_hal_trans_cfg;
 /*****************************************************************************
 * BT HCI definitions
 *****************************************************************************/
-#define BT_HDR      NFC_HDR
 
 /* Tranport message type */
 #define HCIT_TYPE_COMMAND   0x01
@@ -525,8 +524,8 @@ void DispNci (uint8_t *p, uint16_t len, bool    is_recv);
 #endif  /* DISP_NCI */
 
 /* For displaying vendor-specific HCI commands */
-void DispHciCmd (BT_HDR *p_buf);
-void DispHciEvt (BT_HDR *p_buf);
+void DispHciCmd (NFC_HDR *p_buf);
+void DispHciEvt (NFC_HDR *p_buf);
 #endif /* NFC_HAL_TRACE_PROTOCOL */
 
 #ifdef __cplusplus

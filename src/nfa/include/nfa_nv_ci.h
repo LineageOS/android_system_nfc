@@ -34,7 +34,7 @@
 /* Read Ready Event */
 typedef struct
 {
-    BT_HDR            hdr;
+    NFC_HDR            hdr;
     tNFA_NV_CO_STATUS status;
     int               fd;
     uint16_t          num_read;
@@ -43,7 +43,7 @@ typedef struct
 /* Write Ready Event */
 typedef struct
 {
-    BT_HDR            hdr;
+    NFC_HDR            hdr;
     tNFA_NV_CO_STATUS status;
     int               fd;
 } tNFA_NV_CI_WRITE_EVT;

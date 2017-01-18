@@ -476,7 +476,7 @@ void nfa_rw_handle_sleep_wakeup_rsp (tNFC_STATUS status)
 *******************************************************************************/
 void nfa_rw_handle_presence_check_rsp (tNFC_STATUS status)
 {
-    BT_HDR *p_pending_msg;
+    NFC_HDR *p_pending_msg;
 
     /* Stop the presence check timer - timer may have been started when presence check started */
     nfa_rw_stop_presence_check_timer();
@@ -511,7 +511,7 @@ void nfa_rw_handle_presence_check_rsp (tNFC_STATUS status)
             else if (status == NFC_STATUS_OK)
             {
                 NFA_TRACE_DEBUG0("Performing deferred operation after presence check...");
-                p_pending_msg = (BT_HDR *)nfa_rw_cb.p_pending_msg;
+                p_pending_msg = (NFC_HDR *)nfa_rw_cb.p_pending_msg;
                 nfa_rw_cb.p_pending_msg = NULL;
                 nfa_rw_handle_event(p_pending_msg);
                 GKI_freebuf (p_pending_msg);
@@ -2578,7 +2578,7 @@ static bool    nfa_rw_i93_command (tNFA_RW_MSG *p_data)
 *******************************************************************************/
 static void nfa_rw_raw_mode_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
 {
-    BT_HDR             *p_msg;
+    NFC_HDR             *p_msg;
     tNFA_CONN_EVT_DATA evt_data;
 
     NFA_TRACE_DEBUG1 ("nfa_rw_raw_mode_data_cback(): event = 0x%X", event);
@@ -2587,7 +2587,7 @@ static void nfa_rw_raw_mode_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tN
         &&(  (p_data->data.status == NFC_STATUS_OK)
            ||(p_data->data.status == NFC_STATUS_CONTINUE)  )  )
     {
-        p_msg = (BT_HDR *)p_data->data.p_data;
+        p_msg = (NFC_HDR *)p_data->data.p_data;
 
         if (p_msg)
         {

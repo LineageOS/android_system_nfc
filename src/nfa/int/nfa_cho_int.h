@@ -116,24 +116,24 @@ typedef uint16_t tNFA_CHO_INT_EVT;
 /* data type for NFA_CHO_API_REG_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     bool                enable_server;
     tNFA_CHO_CBACK     *p_cback;
 } tNFA_CHO_API_REG;
 
 /* data type for NFA_CHO_API_DEREG_EVT */
-typedef BT_HDR tNFA_CHO_API_DEREG;
+typedef NFC_HDR tNFA_CHO_API_DEREG;
 
 /* data type for NFA_CHO_API_CONNECT_EVT */
-typedef BT_HDR tNFA_CHO_API_CONNECT;
+typedef NFC_HDR tNFA_CHO_API_CONNECT;
 
 /* data type for NFA_CHO_API_DISCONNECT_EVT */
-typedef BT_HDR tNFA_CHO_API_DISCONNECT;
+typedef NFC_HDR tNFA_CHO_API_DISCONNECT;
 
 /* data type for NFA_CHO_API_SEND_HR_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     uint8_t             num_ac_info;
     tNFA_CHO_AC_INFO   *p_ac_info;
     uint8_t            *p_ndef;
@@ -144,7 +144,7 @@ typedef struct
 /* data type for NFA_CHO_API_SEND_HS_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     uint8_t             num_ac_info;
     tNFA_CHO_AC_INFO   *p_ac_info;
     uint8_t            *p_ndef;
@@ -153,12 +153,12 @@ typedef struct
 } tNFA_CHO_API_SEND_HS;
 
 /* data type for NFA_CHO_API_STOP_EVT */
-typedef BT_HDR tNFA_CHO_API_STOP;
+typedef NFC_HDR tNFA_CHO_API_STOP;
 
 /* data type for NFA_CHO_API_SEL_ERR_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     uint8_t             error_reason;
     uint32_t            error_data;
 } tNFA_CHO_API_SEL_ERR;
@@ -166,7 +166,7 @@ typedef struct
 /* data type for NFA_CHO_NDEF_TYPE_HANDLER_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_NDEF_EVT       event;
     tNFA_NDEF_EVT_DATA  data;
 } tNFA_CHO_NDEF_TYPE_HDLR_EVT;
@@ -174,7 +174,7 @@ typedef struct
 /* union of all event data types */
 typedef union
 {
-    BT_HDR                      hdr;                /* NFA_CHO_TIMEOUT_EVT        */
+    NFC_HDR                      hdr;                /* NFA_CHO_TIMEOUT_EVT        */
     tNFA_CHO_API_REG            api_reg;            /* NFA_CHO_API_REG_EVT        */
     tNFA_CHO_API_DEREG          api_dereg;          /* NFA_CHO_API_DEREG_EVT      */
     tNFA_CHO_API_CONNECT        api_connect;        /* NFA_CHO_API_CONNECT_EVT    */

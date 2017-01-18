@@ -141,7 +141,7 @@ BT_API uint16_t UAMP_Write(tUAMP_ID amp_id, uint8_t *p_buf, uint16_t num_bytes, 
 **              p_msg:      message to send.
 **
 *****************************************************************************/
-BT_API uint16_t UAMP_WriteBuf(tUAMP_ID amp_id, BT_HDR *p_msg);
+BT_API uint16_t UAMP_WriteBuf(tUAMP_ID amp_id, NFC_HDR *p_msg);
 
 
 /*****************************************************************************

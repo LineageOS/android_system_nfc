@@ -133,7 +133,7 @@ void disp_sleepmode_evt(uint8_t* p)
 **                  Nothing
 **
 *******************************************************************************/
-void ProtoDispBluetoothHciCmd (BT_HDR *p_buf)
+void ProtoDispBluetoothHciCmd (NFC_HDR *p_buf)
 {
     if (!(ScrProtocolTraceFlag & SCR_PROTO_TRACE_HCI_SUMMARY))
         return;
@@ -155,7 +155,7 @@ void ProtoDispBluetoothHciCmd (BT_HDR *p_buf)
 **                  Nothing
 **
 *******************************************************************************/
-void ProtoDispBluetoothHciEvt (BT_HDR *pBuffer)
+void ProtoDispBluetoothHciEvt (NFC_HDR *pBuffer)
 {
     if (!(ScrProtocolTraceFlag & SCR_PROTO_TRACE_HCI_SUMMARY))
         return;

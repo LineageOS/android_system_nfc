@@ -582,10 +582,10 @@ typedef struct
 #ifndef NCI_GET_CMD_BUF
 #if (HCI_USE_VARIABLE_SIZE_CMD_BUF == FALSE)
 /* Allocate fixed-size buffer from HCI_CMD_POOL (default case) */
-#define NCI_GET_CMD_BUF(paramlen)    ((BT_HDR *) GKI_getpoolbuf (NFC_NCI_POOL_ID))
+#define NCI_GET_CMD_BUF(paramlen)    ((NFC_HDR *) GKI_getpoolbuf (NFC_NCI_POOL_ID))
 #else
 /* Allocate smallest possible buffer (for platforms with limited RAM) */
-#define NCI_GET_CMD_BUF(paramlen)    ((BT_HDR *) GKI_getbuf ((uint16_t) (BT_HDR_SIZE + NCI_MSG_HDR_SIZE + NCI_MSG_OFFSET_SIZE + (paramlen))))
+#define NCI_GET_CMD_BUF(paramlen)    ((NFC_HDR *) GKI_getbuf ((uint16_t) (NFC_HDR_SIZE + NCI_MSG_HDR_SIZE + NCI_MSG_OFFSET_SIZE + (paramlen))))
 #endif
 #endif  /* NCI_GET_CMD_BUF */
 

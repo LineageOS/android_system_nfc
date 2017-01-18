@@ -211,7 +211,7 @@ typedef struct
 {
     uint8_t             next_tid;                       /* next TID to use         */
     tLLCP_SDP_TRANSAC   transac[LLCP_MAX_SDP_TRANSAC];  /* active SDP transactions */
-    BT_HDR              *p_snl;                         /* buffer for SNL PDU      */
+    NFC_HDR              *p_snl;                         /* buffer for SNL PDU      */
 } tLLCP_SDP_CB;
 
 
@@ -312,7 +312,7 @@ void         llcp_util_adjust_ll_congestion (void);
 void         llcp_util_adjust_dl_rx_congestion (void);
 void         llcp_util_check_rx_congested_status (void);
 bool         llcp_util_parse_link_params (uint16_t length, uint8_t *p_bytes);
-tLLCP_STATUS llcp_util_send_ui (uint8_t ssap, uint8_t dsap, tLLCP_APP_CB *p_app_cb, BT_HDR *p_msg);
+tLLCP_STATUS llcp_util_send_ui (uint8_t ssap, uint8_t dsap, tLLCP_APP_CB *p_app_cb, NFC_HDR *p_msg);
 void         llcp_util_send_disc (uint8_t dsap, uint8_t ssap);
 tLLCP_DLCB  *llcp_util_allocate_data_link (uint8_t reg_sap, uint8_t remote_sap);
 void         llcp_util_deallocate_data_link (tLLCP_DLCB *p_dlcb);
@@ -321,7 +321,7 @@ tLLCP_STATUS llcp_util_parse_connect (uint8_t *p_bytes, uint16_t length, tLLCP_C
 tLLCP_STATUS llcp_util_send_cc (tLLCP_DLCB *p_dlcb, tLLCP_CONNECTION_PARAMS *p_params);
 tLLCP_STATUS llcp_util_parse_cc (uint8_t *p_bytes, uint16_t length, uint16_t *p_miu, uint8_t *p_rw);
 void         llcp_util_send_dm (uint8_t dsap, uint8_t ssap, uint8_t reason);
-void         llcp_util_build_info_pdu (tLLCP_DLCB *p_dlcb, BT_HDR *p_msg);
+void         llcp_util_build_info_pdu (tLLCP_DLCB *p_dlcb, NFC_HDR *p_msg);
 tLLCP_STATUS llcp_util_send_frmr (tLLCP_DLCB *p_dlcb, uint8_t flags, uint8_t ptype, uint8_t sequence);
 void         llcp_util_send_rr_rnr (tLLCP_DLCB *p_dlcb);
 tLLCP_APP_CB *llcp_util_get_app_cb (uint8_t sap);
@@ -331,11 +331,11 @@ tLLCP_APP_CB *llcp_util_get_app_cb (uint8_t sap);
 tLLCP_STATUS llcp_dlsm_execute (tLLCP_DLCB *p_dlcb, tLLCP_DLC_EVENT event, void *p_data);
 tLLCP_DLCB  *llcp_dlc_find_dlcb_by_sap (uint8_t local_sap, uint8_t remote_sap);
 void         llcp_dlc_flush_q (tLLCP_DLCB *p_dlcb);
-void         llcp_dlc_proc_i_pdu (uint8_t dsap, uint8_t ssap, uint16_t i_pdu_length, uint8_t *p_i_pdu, BT_HDR *p_msg);
+void         llcp_dlc_proc_i_pdu (uint8_t dsap, uint8_t ssap, uint16_t i_pdu_length, uint8_t *p_i_pdu, NFC_HDR *p_msg);
 void         llcp_dlc_proc_rx_pdu (uint8_t dsap, uint8_t ptype, uint8_t ssap, uint16_t length, uint8_t *p_data);
 void         llcp_dlc_check_to_send_rr_rnr (void);
 bool         llcp_dlc_is_rw_open (tLLCP_DLCB *p_dlcb);
-BT_HDR      *llcp_dlc_get_next_pdu (tLLCP_DLCB *p_dlcb);
+NFC_HDR      *llcp_dlc_get_next_pdu (tLLCP_DLCB *p_dlcb);
 uint16_t     llcp_dlc_get_next_pdu_length (tLLCP_DLCB *p_dlcb);
 
 /*

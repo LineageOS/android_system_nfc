@@ -859,9 +859,9 @@ bool    nfa_dm_act_reg_vsc(tNFA_DM_MSG *p_data)
 *******************************************************************************/
 bool    nfa_dm_act_send_vsc(tNFA_DM_MSG *p_data)
 {
-    BT_HDR  *p_cmd = (BT_HDR *)p_data;
+    NFC_HDR  *p_cmd = (NFC_HDR *)p_data;
 
-    p_cmd->offset   = sizeof (tNFA_DM_API_SEND_VSC) - BT_HDR_SIZE;
+    p_cmd->offset   = sizeof (tNFA_DM_API_SEND_VSC) - NFC_HDR_SIZE;
     p_cmd->len      = p_data->send_vsc.cmd_params_len;
     NFC_SendVsCommand (p_data->send_vsc.oid, p_cmd, p_data->send_vsc.p_cback);
 
@@ -1186,11 +1186,11 @@ bool    nfa_dm_act_send_raw_frame (tNFA_DM_MSG *p_data)
                ||(nfa_dm_cb.disc_cb.activated_protocol == NFA_PROTOCOL_ISO15693)  )  )
         {
             /* if RW is checking presence then it will put into pending queue */
-            status = nfa_rw_send_raw_frame ((BT_HDR*)p_data);
+            status = nfa_rw_send_raw_frame ((NFC_HDR*)p_data);
         }
         else
         {
-            status = NFC_SendData (NFC_RF_CONN_ID, (BT_HDR*) p_data);
+            status = NFC_SendData (NFC_RF_CONN_ID, (NFC_HDR*) p_data);
             if (status != NFC_STATUS_OK)
             {
                 NFC_SetReassemblyFlag (true);
@@ -1455,14 +1455,14 @@ void nfa_dm_act_conn_cback_notify (uint8_t event, tNFA_CONN_EVT_DATA *p_data)
 *******************************************************************************/
 static void nfa_dm_act_data_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data)
 {
-    BT_HDR             *p_msg;
+    NFC_HDR             *p_msg;
     tNFA_CONN_EVT_DATA evt_data;
 
     NFA_TRACE_DEBUG1 ("nfa_dm_act_data_cback (): event = 0x%X", event);
 
     if (event == NFC_DATA_CEVT)
     {
-        p_msg = (BT_HDR *) p_data->data.p_data;
+        p_msg = (NFC_HDR *) p_data->data.p_data;
 
         if (p_msg)
         {

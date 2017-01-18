@@ -58,14 +58,14 @@ static void    llcp_link_send_SYMM (void);
 static void    llcp_link_update_status (bool    is_activated);
 static void    llcp_link_check_congestion (void);
 static void    llcp_link_check_uncongested (void);
-static void    llcp_link_proc_ui_pdu (uint8_t local_sap, uint8_t remote_sap, uint16_t ui_pdu_length, uint8_t *p_ui_pdu, BT_HDR *p_msg);
-static void    llcp_link_proc_agf_pdu (BT_HDR *p_msg);
-static void    llcp_link_proc_rx_pdu (uint8_t dsap, uint8_t ptype, uint8_t ssap, BT_HDR *p_msg);
-static void    llcp_link_proc_rx_data (BT_HDR *p_msg);
+static void    llcp_link_proc_ui_pdu (uint8_t local_sap, uint8_t remote_sap, uint16_t ui_pdu_length, uint8_t *p_ui_pdu, NFC_HDR *p_msg);
+static void    llcp_link_proc_agf_pdu (NFC_HDR *p_msg);
+static void    llcp_link_proc_rx_pdu (uint8_t dsap, uint8_t ptype, uint8_t ssap, NFC_HDR *p_msg);
+static void    llcp_link_proc_rx_data (NFC_HDR *p_msg);
 
-static BT_HDR *llcp_link_get_next_pdu (bool    length_only, uint16_t *p_next_pdu_length);
-static BT_HDR *llcp_link_build_next_pdu (BT_HDR *p_agf);
-static void    llcp_link_send_to_lower (BT_HDR *p_msg);
+static NFC_HDR *llcp_link_get_next_pdu (bool    length_only, uint16_t *p_next_pdu_length);
+static NFC_HDR *llcp_link_build_next_pdu (NFC_HDR *p_agf);
+static void    llcp_link_send_to_lower (NFC_HDR *p_msg);
 
 #if (LLCP_TEST_INCLUDED == TRUE) /* this is for LLCP testing */
 extern tLLCP_TEST_PARAMS llcp_test_params;
@@ -817,10 +817,10 @@ static void llcp_link_check_uncongested (void)
 *******************************************************************************/
 static void llcp_link_send_SYMM (void)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
     uint8_t  *p;
 
-    p_msg = (BT_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
+    p_msg = (NFC_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
 
     if (p_msg)
     {
@@ -845,10 +845,10 @@ static void llcp_link_send_SYMM (void)
 *******************************************************************************/
 static void llcp_link_send_invalid_pdu (void)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
     uint8_t  *p;
 
-    p_msg = (BT_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
+    p_msg = (NFC_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
 
     if (p_msg)
     {
@@ -874,7 +874,7 @@ static void llcp_link_send_invalid_pdu (void)
 *******************************************************************************/
 void llcp_link_check_send_data (void)
 {
-    BT_HDR *p_pdu;
+    NFC_HDR *p_pdu;
 
     /* don't re-enter while processing to prevent out of sequence */
     if (llcp_cb.lcb.is_sending_data)
@@ -977,10 +977,10 @@ static void llcp_link_proc_ui_pdu (uint8_t  local_sap,
                                    uint8_t  remote_sap,
                                    uint16_t ui_pdu_length,
                                    uint8_t  *p_ui_pdu,
-                                   BT_HDR *p_msg)
+                                   NFC_HDR *p_msg)
 {
     bool         appended;
-    BT_HDR       *p_last_buf;
+    NFC_HDR       *p_last_buf;
     uint16_t     available_bytes;
     uint8_t      *p_dst;
     tLLCP_APP_CB *p_app_cb;
@@ -1017,12 +1017,12 @@ static void llcp_link_proc_ui_pdu (uint8_t  local_sap,
         appended = false;
 
         /* get last buffer in rx queue */
-        p_last_buf = (BT_HDR *) GKI_getlast (&p_app_cb->ui_rx_q);
+        p_last_buf = (NFC_HDR *) GKI_getlast (&p_app_cb->ui_rx_q);
 
         if (p_last_buf)
         {
             /* get max length to append at the end of buffer */
-            available_bytes = GKI_get_buf_size (p_last_buf) - BT_HDR_SIZE - p_last_buf->offset - p_last_buf->len;
+            available_bytes = GKI_get_buf_size (p_last_buf) - NFC_HDR_SIZE - p_last_buf->offset - p_last_buf->len;
 
             /* if new UI PDU with length can be attached at the end of buffer */
             if (available_bytes >= LLCP_PDU_AGF_LEN_SIZE + ui_pdu_length)
@@ -1060,7 +1060,7 @@ static void llcp_link_proc_ui_pdu (uint8_t  local_sap,
             }
             else
             {
-                p_msg = (BT_HDR *) GKI_getpoolbuf (LLCP_POOL_ID);
+                p_msg = (NFC_HDR *) GKI_getpoolbuf (LLCP_POOL_ID);
 
                 if (p_msg)
                 {
@@ -1127,7 +1127,7 @@ static void llcp_link_proc_ui_pdu (uint8_t  local_sap,
 ** Returns          void
 **
 *******************************************************************************/
-static void llcp_link_proc_agf_pdu (BT_HDR *p_agf)
+static void llcp_link_proc_agf_pdu (NFC_HDR *p_agf)
 {
     uint16_t agf_length;
     uint8_t *p, *p_info, *p_pdu_length;
@@ -1248,7 +1248,7 @@ static void llcp_link_proc_agf_pdu (BT_HDR *p_agf)
 ** Returns          void
 **
 *******************************************************************************/
-static void llcp_link_proc_rx_pdu (uint8_t dsap, uint8_t ptype, uint8_t ssap, BT_HDR *p_msg)
+static void llcp_link_proc_rx_pdu (uint8_t dsap, uint8_t ptype, uint8_t ssap, NFC_HDR *p_msg)
 {
     bool    free_buffer = true;
     uint8_t *p_data;
@@ -1310,7 +1310,7 @@ static void llcp_link_proc_rx_pdu (uint8_t dsap, uint8_t ptype, uint8_t ssap, BT
 ** Returns          void
 **
 *******************************************************************************/
-static void llcp_link_proc_rx_data (BT_HDR *p_msg)
+static void llcp_link_proc_rx_data (NFC_HDR *p_msg)
 {
     uint8_t  *p;
     uint16_t  pdu_hdr, info_length = 0;
@@ -1429,9 +1429,9 @@ static void llcp_link_proc_rx_data (BT_HDR *p_msg)
 **                  NULL otherwise
 **
 *******************************************************************************/
-static BT_HDR *llcp_link_get_next_pdu (bool    length_only, uint16_t *p_next_pdu_length)
+static NFC_HDR *llcp_link_get_next_pdu (bool    length_only, uint16_t *p_next_pdu_length)
 {
-    BT_HDR *p_msg;
+    NFC_HDR *p_msg;
     int     count, xx;
     tLLCP_APP_CB *p_app_cb;
 
@@ -1440,12 +1440,12 @@ static BT_HDR *llcp_link_get_next_pdu (bool    length_only, uint16_t *p_next_pdu
     {
         if (length_only)
         {
-            p_msg = (BT_HDR*) llcp_cb.lcb.sig_xmit_q.p_first;
+            p_msg = (NFC_HDR*) llcp_cb.lcb.sig_xmit_q.p_first;
             *p_next_pdu_length = p_msg->len;
             return NULL;
         }
         else
-            p_msg = (BT_HDR*) GKI_dequeue (&llcp_cb.lcb.sig_xmit_q);
+            p_msg = (NFC_HDR*) GKI_dequeue (&llcp_cb.lcb.sig_xmit_q);
 
         return p_msg;
     }
@@ -1469,7 +1469,7 @@ static BT_HDR *llcp_link_get_next_pdu (bool    length_only, uint16_t *p_next_pdu
                         if (length_only)
                         {
                             /* don't alternate next data link to return the same length of PDU */
-                            p_msg = (BT_HDR *) p_app_cb->ui_xmit_q.p_first;
+                            p_msg = (NFC_HDR *) p_app_cb->ui_xmit_q.p_first;
                             *p_next_pdu_length = p_msg->len;
                             return NULL;
                         }
@@ -1478,7 +1478,7 @@ static BT_HDR *llcp_link_get_next_pdu (bool    length_only, uint16_t *p_next_pdu
                             /* check data link connection first in next time */
                             llcp_cb.lcb.ll_served = !llcp_cb.lcb.ll_served;
 
-                            p_msg = (BT_HDR*) GKI_dequeue (&p_app_cb->ui_xmit_q);
+                            p_msg = (NFC_HDR*) GKI_dequeue (&p_app_cb->ui_xmit_q);
                             llcp_cb.total_tx_ui_pdu--;
 
                             /* this logical link has been served, so start from next logical link next time */
@@ -1563,12 +1563,12 @@ static BT_HDR *llcp_link_get_next_pdu (bool    length_only, uint16_t *p_next_pdu
 ** Description      Build a PDU from Link Manager and Data Link
 **                  Perform aggregation procedure if necessary
 **
-** Returns          BT_HDR* if sent any PDU
+** Returns          NFC_HDR* if sent any PDU
 **
 *******************************************************************************/
-static BT_HDR *llcp_link_build_next_pdu (BT_HDR *p_pdu)
+static NFC_HDR *llcp_link_build_next_pdu (NFC_HDR *p_pdu)
 {
-    BT_HDR *p_agf = NULL, *p_msg = NULL, *p_next_pdu;
+    NFC_HDR *p_agf = NULL, *p_msg = NULL, *p_next_pdu;
     uint8_t  *p, ptype;
     uint16_t  next_pdu_length, pdu_hdr;
 
@@ -1616,7 +1616,7 @@ static BT_HDR *llcp_link_build_next_pdu (BT_HDR *p_pdu)
             /* if next PDU fits into MIU, allocate AGF PDU and copy the first PDU */
             if (2 + p_msg->len + 2 + next_pdu_length <= llcp_cb.lcb.effective_miu)
             {
-                p_agf = (BT_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
+                p_agf = (NFC_HDR*) GKI_getpoolbuf (LLCP_POOL_ID);
                 if (p_agf)
                 {
                     p_agf->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
@@ -1683,7 +1683,7 @@ static BT_HDR *llcp_link_build_next_pdu (BT_HDR *p_pdu)
 ** Returns          void
 **
 *******************************************************************************/
-static void llcp_link_send_to_lower (BT_HDR *p_pdu)
+static void llcp_link_send_to_lower (NFC_HDR *p_pdu)
 {
 #if (BT_TRACE_PROTOCOL == TRUE)
     DispLLCP (p_pdu, false);
@@ -1708,13 +1708,13 @@ void llcp_link_connection_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN
     if (event == NFC_DATA_CEVT)
     {
 #if (BT_TRACE_PROTOCOL == TRUE)
-        DispLLCP ((BT_HDR *)p_data->data.p_data, true);
+        DispLLCP ((NFC_HDR *)p_data->data.p_data, true);
 #endif
         if (llcp_cb.lcb.link_state == LLCP_LINK_STATE_DEACTIVATED)
         {
             /* respoding SYMM while LLCP is deactivated but RF link is not deactivated yet */
             llcp_link_send_SYMM ();
-            GKI_freebuf ((BT_HDR *) p_data->data.p_data);
+            GKI_freebuf ((NFC_HDR *) p_data->data.p_data);
         }
         else if (llcp_cb.lcb.link_state == LLCP_LINK_STATE_ACTIVATION_FAILED)
         {
@@ -1722,12 +1722,12 @@ void llcp_link_connection_cback (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN
             ** so that initiator knows LLCP link activation was failed.
             */
             llcp_link_send_invalid_pdu ();
-            GKI_freebuf ((BT_HDR *) p_data->data.p_data);
+            GKI_freebuf ((NFC_HDR *) p_data->data.p_data);
         }
         else
         {
             llcp_cb.lcb.flags |= LLCP_LINK_FLAGS_RX_ANY_LLC_PDU;
-            llcp_link_proc_rx_data ((BT_HDR *) p_data->data.p_data);
+            llcp_link_proc_rx_data ((NFC_HDR *) p_data->data.p_data);
         }
     }
     else if (event == NFC_ERROR_CEVT)

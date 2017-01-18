@@ -43,7 +43,7 @@
 *******************************************************************************/
 uint8_t nci_snd_core_reset (uint8_t reset_type)
 {
-    BT_HDR *p;
+    NFC_HDR *p;
     uint8_t *pp;
 
     if ((p = NCI_GET_CMD_BUF (NCI_CORE_PARAM_SIZE_RESET)) == NULL)
@@ -75,7 +75,7 @@ uint8_t nci_snd_core_reset (uint8_t reset_type)
 *******************************************************************************/
 uint8_t nci_snd_core_init (void)
 {
-    BT_HDR *p;
+    NFC_HDR *p;
     uint8_t *pp;
 
     if ((p = NCI_GET_CMD_BUF (NCI_CORE_PARAM_SIZE_INIT)) == NULL)
@@ -106,7 +106,7 @@ uint8_t nci_snd_core_init (void)
 *******************************************************************************/
 uint8_t nci_snd_core_get_config (uint8_t *param_ids, uint8_t num_ids)
 {
-    BT_HDR *p;
+    NFC_HDR *p;
     uint8_t *pp;
 
     if ((p = NCI_GET_CMD_BUF (num_ids)) == NULL)
@@ -139,7 +139,7 @@ uint8_t nci_snd_core_get_config (uint8_t *param_ids, uint8_t num_ids)
 *******************************************************************************/
 uint8_t nci_snd_core_set_config (uint8_t *p_param_tlvs, uint8_t tlv_size)
 {
-    BT_HDR *p;
+    NFC_HDR *p;
     uint8_t *pp;
     uint8_t  num = 0, ulen, len, *pt;
 
@@ -192,7 +192,7 @@ uint8_t nci_snd_core_set_config (uint8_t *p_param_tlvs, uint8_t tlv_size)
 *******************************************************************************/
 uint8_t nci_snd_core_conn_create (uint8_t dest_type, uint8_t num_tlv, uint8_t tlv_size, uint8_t *p_param_tlvs)
 {
-    BT_HDR *p;
+    NFC_HDR *p;
     uint8_t *pp;
     uint8_t size = NCI_CORE_PARAM_SIZE_CON_CREATE+tlv_size;
 
@@ -231,7 +231,7 @@ uint8_t nci_snd_core_conn_create (uint8_t dest_type, uint8_t num_tlv, uint8_t tl
 *******************************************************************************/
 uint8_t nci_snd_core_conn_close (uint8_t conn_id)
 {
-    BT_HDR *p;
+    NFC_HDR *p;
     uint8_t *pp;
 
     if ((p = NCI_GET_CMD_BUF (NCI_CORE_PARAM_SIZE_CON_CLOSE)) == NULL)
@@ -267,7 +267,7 @@ uint8_t nci_snd_core_conn_close (uint8_t conn_id)
 *******************************************************************************/
 uint8_t nci_snd_nfcee_discover (uint8_t discover_action)
 {
-    BT_HDR *p;
+    NFC_HDR *p;
     uint8_t *pp;
 
     if ((p = NCI_GET_CMD_BUF (NCI_PARAM_SIZE_DISCOVER_NFCEE)) == NULL)
@@ -300,7 +300,7 @@ uint8_t nci_snd_nfcee_discover (uint8_t discover_action)
 *******************************************************************************/
 uint8_t nci_snd_nfcee_mode_set (uint8_t nfcee_id, uint8_t nfcee_mode)
 {
-    BT_HDR *p;
+    NFC_HDR *p;
     uint8_t *pp;
 
     if ((p = NCI_GET_CMD_BUF (NCI_CORE_PARAM_SIZE_NFCEE_MODE_SET)) == NULL)
@@ -335,7 +335,7 @@ uint8_t nci_snd_nfcee_mode_set (uint8_t nfcee_id, uint8_t nfcee_mode)
 *******************************************************************************/
 uint8_t nci_snd_discover_cmd (uint8_t num, tNCI_DISCOVER_PARAMS *p_param)
 {
-    BT_HDR *p;
+    NFC_HDR *p;
     uint8_t *pp, *p_size, *p_start;
     int xx;
     int size;
@@ -379,7 +379,7 @@ uint8_t nci_snd_discover_cmd (uint8_t num, tNCI_DISCOVER_PARAMS *p_param)
 *******************************************************************************/
 uint8_t nci_snd_discover_select_cmd (uint8_t rf_disc_id, uint8_t protocol, uint8_t rf_interface)
 {
-    BT_HDR *p;
+    NFC_HDR *p;
     uint8_t *pp;
 
     if ((p = NCI_GET_CMD_BUF (NCI_DISCOVER_PARAM_SIZE_SELECT)) == NULL)
@@ -414,7 +414,7 @@ uint8_t nci_snd_discover_select_cmd (uint8_t rf_disc_id, uint8_t protocol, uint8
 *******************************************************************************/
 uint8_t nci_snd_deactivate_cmd (uint8_t de_act_type )
 {
-    BT_HDR *p;
+    NFC_HDR *p;
     uint8_t *pp;
 
     nfc_cb.reassembly = true;
@@ -449,7 +449,7 @@ uint8_t nci_snd_deactivate_cmd (uint8_t de_act_type )
 *******************************************************************************/
 uint8_t nci_snd_discover_map_cmd (uint8_t num, tNCI_DISCOVER_MAPS *p_maps)
 {
-    BT_HDR *p;
+    NFC_HDR *p;
     uint8_t *pp, *p_size, *p_start;
     int xx;
     int size;
@@ -493,7 +493,7 @@ uint8_t nci_snd_discover_map_cmd (uint8_t num, tNCI_DISCOVER_MAPS *p_maps)
 *******************************************************************************/
 uint8_t nci_snd_t3t_polling (uint16_t system_code, uint8_t rc, uint8_t tsn)
 {
-    BT_HDR *p;
+    NFC_HDR *p;
     uint8_t *pp;
 
     if ((p = NCI_GET_CMD_BUF (NCI_RF_PARAM_SIZE_T3T_POLLING)) == NULL)
@@ -528,7 +528,7 @@ uint8_t nci_snd_t3t_polling (uint16_t system_code, uint8_t rc, uint8_t tsn)
 *******************************************************************************/
 uint8_t nci_snd_parameter_update_cmd (uint8_t *p_param_tlvs, uint8_t tlv_size)
 {
-    BT_HDR *p;
+    NFC_HDR *p;
     uint8_t *pp;
     uint8_t  num = 0, ulen, len, *pt;
 
@@ -584,7 +584,7 @@ uint8_t nci_snd_parameter_update_cmd (uint8_t *p_param_tlvs, uint8_t tlv_size)
 *******************************************************************************/
 uint8_t nci_snd_set_routing_cmd (bool    more, uint8_t num_tlv, uint8_t tlv_size, uint8_t *p_param_tlvs)
 {
-    BT_HDR *p;
+    NFC_HDR *p;
     uint8_t *pp;
     uint8_t size = tlv_size + 2;
 
@@ -634,7 +634,7 @@ uint8_t nci_snd_set_routing_cmd (bool    more, uint8_t num_tlv, uint8_t tlv_size
 *******************************************************************************/
 uint8_t nci_snd_get_routing_cmd (void)
 {
-    BT_HDR *p;
+    NFC_HDR *p;
     uint8_t *pp;
     uint8_t param_size = 0;
 

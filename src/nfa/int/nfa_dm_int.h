@@ -70,7 +70,7 @@ enum
 /* data type for NFA_DM_API_ENABLE_EVT */
 typedef struct
 {
-    BT_HDR                  hdr;
+    NFC_HDR                  hdr;
     tNFA_DM_CBACK           *p_dm_cback;
     tNFA_CONN_CBACK         *p_conn_cback;
 } tNFA_DM_API_ENABLE;
@@ -78,14 +78,14 @@ typedef struct
 /* data type for NFA_DM_API_DISABLE_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     bool                graceful;
 } tNFA_DM_API_DISABLE;
 
 /* data type for NFA_DM_API_SET_CONFIG_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_PMID           param_id;
     uint8_t             length;
     uint8_t            *p_data;
@@ -94,7 +94,7 @@ typedef struct
 /* data type for NFA_DM_API_GET_CONFIG_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     uint8_t             num_ids;
     tNFA_PMID          *p_pmids;
 } tNFA_DM_API_GET_CONFIG;
@@ -102,7 +102,7 @@ typedef struct
 /* data type for NFA_DM_API_REQ_EXCL_RF_CTRL_EVT */
 typedef struct
 {
-    BT_HDR               hdr;
+    NFC_HDR               hdr;
     tNFA_TECHNOLOGY_MASK poll_mask;
     tNFA_LISTEN_CFG      listen_cfg;
     tNFA_CONN_CBACK     *p_conn_cback;
@@ -112,21 +112,21 @@ typedef struct
 /* data type for NFA_DM_API_ENABLE_POLLING_EVT */
 typedef struct
 {
-    BT_HDR               hdr;
+    NFC_HDR               hdr;
     tNFA_TECHNOLOGY_MASK poll_mask;
 } tNFA_DM_API_ENABLE_POLL;
 
 /* data type for NFA_DM_API_SET_P2P_LISTEN_TECH_EVT */
 typedef struct
 {
-    BT_HDR                  hdr;
+    NFC_HDR                  hdr;
     tNFA_TECHNOLOGY_MASK    tech_mask;
 } tNFA_DM_API_SET_P2P_LISTEN_TECH;
 
 /* data type for NFA_DM_API_SELECT_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     uint8_t             rf_disc_id;
     tNFA_NFC_PROTOCOL   protocol;
     tNFA_INTF_TYPE      rf_interface;
@@ -135,21 +135,21 @@ typedef struct
 /* data type for NFA_DM_API_UPDATE_RF_PARAMS_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_RF_COMM_PARAMS params;
 } tNFA_DM_API_UPDATE_RF_PARAMS;
 
 /* data type for NFA_DM_API_DEACTIVATE_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     bool                sleep_mode;
 } tNFA_DM_API_DEACTIVATE;
 
 /* data type for NFA_DM_API_SET_RF_DISC_DURATION_EVT */
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     uint16_t            rf_disc_dur_ms;
 } tNFA_DM_API_SET_RF_DISC_DUR;
 #define NFA_RF_DISC_DURATION_MAX                0xFFFF
@@ -161,7 +161,7 @@ typedef struct
 
 typedef struct
 {
-    BT_HDR              hdr;
+    NFC_HDR              hdr;
     tNFA_HANDLE         ndef_type_handle;
     uint8_t             flags;
     tNFA_NDEF_CBACK    *p_ndef_cback;
@@ -174,14 +174,14 @@ typedef struct
 /* data type for NFA_DM_API_DEREG_NDEF_HDLR_EVT */
 typedef struct
 {
-    BT_HDR      hdr;
+    NFC_HDR      hdr;
     tNFA_HANDLE ndef_type_handle;
 } tNFA_DM_API_DEREG_NDEF_HDLR;
 
 /* data type for NFA_DM_API_REG_VSC_EVT */
 typedef struct
 {
-    BT_HDR          hdr;
+    NFC_HDR          hdr;
     tNFA_VSC_CBACK  *p_cback;
     bool            is_register;
 } tNFA_DM_API_REG_VSC;
@@ -189,7 +189,7 @@ typedef struct
 /* data type for NFA_DM_API_SEND_VSC_EVT */
 typedef struct
 {
-    BT_HDR          hdr;
+    NFC_HDR          hdr;
     tNFA_VSC_CBACK  *p_cback;
     uint8_t         oid;
     uint8_t         cmd_params_len;
@@ -202,7 +202,7 @@ typedef struct
 typedef union
 {
     /* GKI event buffer header */
-    BT_HDR                          hdr;                /* NFA_DM_API_RAW_FRAME_EVT             */
+    NFC_HDR                          hdr;                /* NFA_DM_API_RAW_FRAME_EVT             */
                                                         /* NFA_DM_API_MULTI_TECH_RSP_EVT        */
                                                         /* NFA_DM_API_RELEASE_EXCL_RF_CTRL      */
                                                         /* NFA_DM_API_DISABLE_POLLING_EVT       */
@@ -527,7 +527,7 @@ void nfa_dm_disable_complete (void);
 /* Internal functions from nfa_rw */
 void nfa_rw_init (void);
 void nfa_rw_proc_disc_evt (tNFA_DM_RF_DISC_EVT event, tNFC_DISCOVER *p_data, bool    excl_rf_not_active);
-tNFA_STATUS nfa_rw_send_raw_frame (BT_HDR *p_data);
+tNFA_STATUS nfa_rw_send_raw_frame (NFC_HDR *p_data);
 
 /* Internal functions from nfa_ce */
 void nfa_ce_init (void);
@@ -602,7 +602,7 @@ bool    nfa_dm_act_nfc_cback_data (tNFA_DM_MSG *p_data);
 void nfa_dm_proc_nfcc_power_mode (uint8_t nfcc_power_mode);
 
 /* Main function prototypes */
-bool    nfa_dm_evt_hdlr (BT_HDR *p_msg);
+bool    nfa_dm_evt_hdlr (NFC_HDR *p_msg);
 void nfa_dm_sys_enable (void);
 void nfa_dm_sys_disable (void);
 tNFA_STATUS nfa_dm_check_set_config (uint8_t tlv_list_len, uint8_t *p_tlv_list, bool    app_init);

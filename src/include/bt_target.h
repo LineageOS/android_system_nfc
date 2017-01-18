@@ -36,8 +36,8 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-BT_API extern void bte_ncisu_send (BT_HDR *p_pkt, uint16_t event);
-BT_API extern void bte_hcisu_send (BT_HDR *p_msg, uint16_t event);
+BT_API extern void bte_ncisu_send (NFC_HDR *p_pkt, uint16_t event);
+BT_API extern void bte_hcisu_send (NFC_HDR *p_msg, uint16_t event);
 #if (HCISU_H4_INCLUDED == TRUE)
 BT_API extern void bte_hcisu_lp_allow_bt_device_sleep (void);
 BT_API extern void bte_hcisu_lp_wakeup_host (void);
@@ -55,36 +55,36 @@ BT_API extern void HCILL_RegState( tHCILL_STATE_CBACK *p_cback);
 
 /* Sends ACL data received from the upper stack to the BD/EDR HCI transport. */
 #ifndef HCI_ACL_DATA_TO_LOWER
-#define HCI_ACL_DATA_TO_LOWER(p)    bte_hcisu_send((BT_HDR *)(p), BT_EVT_TO_LM_HCI_ACL);
+#define HCI_ACL_DATA_TO_LOWER(p)    bte_hcisu_send((NFC_HDR *)(p), BT_EVT_TO_LM_HCI_ACL);
 #endif
 
 #ifndef HCI_BLE_ACL_DATA_TO_LOWER
-#define HCI_BLE_ACL_DATA_TO_LOWER(p)    bte_hcisu_send((BT_HDR *)(p), (uint16_t)(BT_EVT_TO_LM_HCI_ACL|LOCAL_BLE_CONTROLLER_ID));
+#define HCI_BLE_ACL_DATA_TO_LOWER(p)    bte_hcisu_send((NFC_HDR *)(p), (uint16_t)(BT_EVT_TO_LM_HCI_ACL|LOCAL_BLE_CONTROLLER_ID));
 #endif
 
 /* Sends ACL data received from the upper stack to the AMP HCI transport. */
 #ifndef HCI_AMP_DATA_TO_LOWER
-#define HCI_AMP_DATA_TO_LOWER(p,x)    bte_hcisu_send((BT_HDR *)(p), (uint16_t)(BT_EVT_TO_LM_HCI_ACL|((uint16_t)(x))));
+#define HCI_AMP_DATA_TO_LOWER(p,x)    bte_hcisu_send((NFC_HDR *)(p), (uint16_t)(BT_EVT_TO_LM_HCI_ACL|((uint16_t)(x))));
 #endif
 
 /* Sends SCO data received from the upper stack to the HCI transport. */
 #ifndef HCI_SCO_DATA_TO_LOWER
-#define HCI_SCO_DATA_TO_LOWER(p)    bte_hcisu_send((BT_HDR *)(p), BT_EVT_TO_LM_HCI_SCO);
+#define HCI_SCO_DATA_TO_LOWER(p)    bte_hcisu_send((NFC_HDR *)(p), BT_EVT_TO_LM_HCI_SCO);
 #endif
 
 /* Sends an HCI command received from the upper stack to the BD/EDR HCI transport. */
 #ifndef HCI_CMD_TO_LOWER
-#define HCI_CMD_TO_LOWER(p)         bte_hcisu_send((BT_HDR *)(p), BT_EVT_TO_LM_HCI_CMD);
+#define HCI_CMD_TO_LOWER(p)         bte_hcisu_send((NFC_HDR *)(p), BT_EVT_TO_LM_HCI_CMD);
 #endif
 
 /* Sends an HCI command received from the upper stack to the AMP HCI transport. */
 #ifndef HCI_CMD_TO_AMP
-#define HCI_CMD_TO_AMP(x,p)         bte_hcisu_send((BT_HDR *)(p), (uint16_t)(BT_EVT_TO_LM_HCI_CMD|((uint16_t)(x))));
+#define HCI_CMD_TO_AMP(x,p)         bte_hcisu_send((NFC_HDR *)(p), (uint16_t)(BT_EVT_TO_LM_HCI_CMD|((uint16_t)(x))));
 #endif
 
 /* Sends an LM Diagnosic command received from the upper stack to the HCI transport. */
 #ifndef HCI_LM_DIAG_TO_LOWER
-#define HCI_LM_DIAG_TO_LOWER(p)     bte_hcisu_send((BT_HDR *)(p), BT_EVT_TO_LM_DIAG);
+#define HCI_LM_DIAG_TO_LOWER(p)     bte_hcisu_send((NFC_HDR *)(p), BT_EVT_TO_LM_DIAG);
 #endif
 
 /* Send HCISU a message to allow BT sleep */
