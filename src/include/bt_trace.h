@@ -441,49 +441,6 @@ extern void LogMsg_6 (uint32_t trace_set_mask, const char *fmt_str, uintptr_t p1
 #define P2P_TRACE_DEBUG5(m,p1,p2,p3,p4,p5)      {if (nfa_p2p_cb.trace_level >= BT_TRACE_LEVEL_DEBUG) BT_TRACE_5(TRACE_LAYER_P2P, TRACE_TYPE_DEBUG, m,p1,p2,p3,p4,p5);}
 #define P2P_TRACE_DEBUG6(m,p1,p2,p3,p4,p5,p6)   {if (nfa_p2p_cb.trace_level >= BT_TRACE_LEVEL_DEBUG) BT_TRACE_6(TRACE_LAYER_P2P, TRACE_TYPE_DEBUG, m,p1,p2,p3,p4,p5,p6);}
 
-/* Define tracing for the NFA CHO unit
-*/
-#define CHO_TRACE_ERROR0(m)                     {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_ERROR) BT_TRACE_0(TRACE_LAYER_CHO, TRACE_TYPE_ERROR, m);}
-#define CHO_TRACE_ERROR1(m,p1)                  {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_ERROR) BT_TRACE_1(TRACE_LAYER_CHO, TRACE_TYPE_ERROR, m,p1);}
-#define CHO_TRACE_ERROR2(m,p1,p2)               {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_ERROR) BT_TRACE_2(TRACE_LAYER_CHO, TRACE_TYPE_ERROR, m,p1,p2);}
-#define CHO_TRACE_ERROR3(m,p1,p2,p3)            {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_ERROR) BT_TRACE_3(TRACE_LAYER_CHO, TRACE_TYPE_ERROR, m,p1,p2,p3);}
-#define CHO_TRACE_ERROR4(m,p1,p2,p3,p4)         {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_ERROR) BT_TRACE_4(TRACE_LAYER_CHO, TRACE_TYPE_ERROR, m,p1,p2,p3,p4);}
-#define CHO_TRACE_ERROR5(m,p1,p2,p3,p4,p5)      {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_ERROR) BT_TRACE_5(TRACE_LAYER_CHO, TRACE_TYPE_ERROR, m,p1,p2,p3,p4,p5);}
-#define CHO_TRACE_ERROR6(m,p1,p2,p3,p4,p5,p6)   {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_ERROR) BT_TRACE_6(TRACE_LAYER_CHO, TRACE_TYPE_ERROR, m,p1,p2,p3,p4,p5,p6);}
-
-#define CHO_TRACE_WARNING0(m)                   {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_WARNING) BT_TRACE_0(TRACE_LAYER_CHO, TRACE_TYPE_WARNING, m);}
-#define CHO_TRACE_WARNING1(m,p1)                {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_WARNING) BT_TRACE_1(TRACE_LAYER_CHO, TRACE_TYPE_WARNING, m,p1);}
-#define CHO_TRACE_WARNING2(m,p1,p2)             {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_WARNING) BT_TRACE_2(TRACE_LAYER_CHO, TRACE_TYPE_WARNING, m,p1,p2);}
-#define CHO_TRACE_WARNING3(m,p1,p2,p3)          {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_WARNING) BT_TRACE_3(TRACE_LAYER_CHO, TRACE_TYPE_WARNING, m,p1,p2,p3);}
-#define CHO_TRACE_WARNING4(m,p1,p2,p3,p4)       {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_WARNING) BT_TRACE_4(TRACE_LAYER_CHO, TRACE_TYPE_WARNING, m,p1,p2,p3,p4);}
-#define CHO_TRACE_WARNING5(m,p1,p2,p3,p4,p5)    {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_WARNING) BT_TRACE_5(TRACE_LAYER_CHO, TRACE_TYPE_WARNING, m,p1,p2,p3,p4,p5);}
-#define CHO_TRACE_WARNING6(m,p1,p2,p3,p4,p5,p6) {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_WARNING) BT_TRACE_6(TRACE_LAYER_CHO, TRACE_TYPE_WARNING, m,p1,p2,p3,p4,p5,p6);}
-
-#define CHO_TRACE_API0(m)                       {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_API) BT_TRACE_0(TRACE_LAYER_CHO, TRACE_TYPE_API, m);}
-#define CHO_TRACE_API1(m,p1)                    {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_API) BT_TRACE_1(TRACE_LAYER_CHO, TRACE_TYPE_API, m,p1);}
-#define CHO_TRACE_API2(m,p1,p2)                 {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_API) BT_TRACE_2(TRACE_LAYER_CHO, TRACE_TYPE_API, m,p1,p2);}
-#define CHO_TRACE_API3(m,p1,p2,p3)              {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_API) BT_TRACE_3(TRACE_LAYER_CHO, TRACE_TYPE_API, m,p1,p2,p3);}
-#define CHO_TRACE_API4(m,p1,p2,p3,p4)           {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_API) BT_TRACE_4(TRACE_LAYER_CHO, TRACE_TYPE_API, m,p1,p2,p3,p4);}
-#define CHO_TRACE_API5(m,p1,p2,p3,p4,p5)        {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_API) BT_TRACE_5(TRACE_LAYER_CHO, TRACE_TYPE_API, m,p1,p2,p3,p4,p5);}
-#define CHO_TRACE_API6(m,p1,p2,p3,p4,p5,p6)     {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_API) BT_TRACE_6(TRACE_LAYER_CHO, TRACE_TYPE_API, m,p1,p2,p3,p4,p5,p6);}
-
-#define CHO_TRACE_EVENT0(m)                     {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_EVENT) BT_TRACE_0(TRACE_LAYER_CHO, TRACE_TYPE_EVENT, m);}
-#define CHO_TRACE_EVENT1(m,p1)                  {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_EVENT) BT_TRACE_1(TRACE_LAYER_CHO, TRACE_TYPE_EVENT, m, p1);}
-#define CHO_TRACE_EVENT2(m,p1,p2)               {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_EVENT) BT_TRACE_2(TRACE_LAYER_CHO, TRACE_TYPE_EVENT, m,p1,p2);}
-#define CHO_TRACE_EVENT3(m,p1,p2,p3)            {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_EVENT) BT_TRACE_3(TRACE_LAYER_CHO, TRACE_TYPE_EVENT, m,p1,p2,p3);}
-#define CHO_TRACE_EVENT4(m,p1,p2,p3,p4)         {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_EVENT) BT_TRACE_4(TRACE_LAYER_CHO, TRACE_TYPE_EVENT, m,p1,p2,p3,p4);}
-#define CHO_TRACE_EVENT5(m,p1,p2,p3,p4,p5)      {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_EVENT) BT_TRACE_5(TRACE_LAYER_CHO, TRACE_TYPE_EVENT, m,p1,p2,p3,p4,p5);}
-#define CHO_TRACE_EVENT6(m,p1,p2,p3,p4,p5,p6)   {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_EVENT) BT_TRACE_6(TRACE_LAYER_CHO, TRACE_TYPE_EVENT, m,p1,p2,p3,p4,p5,p6);}
-
-#define CHO_TRACE_DEBUG0(m)                     {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_DEBUG) BT_TRACE_0(TRACE_LAYER_CHO, TRACE_TYPE_DEBUG, m);}
-#define CHO_TRACE_DEBUG1(m,p1)                  {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_DEBUG) BT_TRACE_1(TRACE_LAYER_CHO, TRACE_TYPE_DEBUG, m,p1);}
-#define CHO_TRACE_DEBUG2(m,p1,p2)               {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_DEBUG) BT_TRACE_2(TRACE_LAYER_CHO, TRACE_TYPE_DEBUG, m,p1,p2);}
-#define CHO_TRACE_DEBUG3(m,p1,p2,p3)            {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_DEBUG) BT_TRACE_3(TRACE_LAYER_CHO, TRACE_TYPE_DEBUG, m,p1,p2,p3);}
-#define CHO_TRACE_DEBUG4(m,p1,p2,p3,p4)         {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_DEBUG) BT_TRACE_4(TRACE_LAYER_CHO, TRACE_TYPE_DEBUG, m,p1,p2,p3,p4);}
-#define CHO_TRACE_DEBUG5(m,p1,p2,p3,p4,p5)      {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_DEBUG) BT_TRACE_5(TRACE_LAYER_CHO, TRACE_TYPE_DEBUG, m,p1,p2,p3,p4,p5);}
-#define CHO_TRACE_DEBUG6(m,p1,p2,p3,p4,p5,p6)   {if (nfa_cho_cb.trace_level >= BT_TRACE_LEVEL_DEBUG) BT_TRACE_6(TRACE_LAYER_CHO, TRACE_TYPE_DEBUG, m,p1,p2,p3,p4,p5,p6);}
-
-
 /* define traces for application */
 #define APPL_TRACE_ERROR0(m)                    {if (appl_trace_level >= BT_TRACE_LEVEL_ERROR) LogMsg_0(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_ERROR, (m));}
 #define APPL_TRACE_ERROR1(m,p1)                 {if (appl_trace_level >= BT_TRACE_LEVEL_ERROR) LogMsg_1(TRACE_CTRL_GENERAL | TRACE_LAYER_NONE | TRACE_ORG_APPL | TRACE_TYPE_ERROR, \
