@@ -57,7 +57,6 @@ void NFA_Init(tHAL_NFC_ENTRY *p_hal_entry_tbl)
     nfa_sys_init();
     nfa_dm_init();
     nfa_p2p_init();
-    nfa_cho_init();
     nfa_snep_init(false);
     nfa_rw_init();
     nfa_ce_init();
