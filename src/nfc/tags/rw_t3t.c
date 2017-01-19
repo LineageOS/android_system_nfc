@@ -96,11 +96,6 @@ enum
 /* Sub-states */
 enum
 {
-    /* Sub states for getting system codes */
-    RW_T3T_GET_SC_SST_POLL_WILDCARD,        /* Waiting for wilcard poll response */
-    RW_T3T_GET_SC_SST_POLL_NDEF,            /* Waiting for NDEF poll response */
-    RW_T3T_GET_SC_SST_REQUEST_SC,           /* Waiting for REQUEST_SYSTEM_CODE response */
-
     /* Sub states for formatting Felica-Lite */
     RW_T3T_FMT_SST_POLL_FELICA_LITE,        /* Waiting for POLL Felica-Lite response (for formatting) */
     RW_T3T_FMT_SST_CHECK_MC_BLK,            /* Waiting for Felica-Lite MC (MemoryControl) block-read to complete */
@@ -236,7 +231,7 @@ void rw_t3t_process_error (tNFC_STATUS status)
     {
         if (p_cb->cur_cmd == RW_T3T_CMD_GET_SYSTEM_CODES)
         {
-            /* For GetSystemCode: either tag did not respond to requested POLL, or REQUEST_SYSTEM_CODE command */
+            /* For GetSystemCode: tag did not respond to requested POLL */
             rw_t3t_handle_get_system_codes_cplt ();
             return;
         }
@@ -1647,78 +1642,22 @@ void rw_t3t_act_handle_update_ndef_rsp (tRW_T3T_CB *p_cb, NFC_HDR *p_msg_rsp)
 *****************************************************************************/
 static void rw_t3t_handle_get_sc_poll_rsp (tRW_T3T_CB *p_cb, uint8_t nci_status, uint8_t num_responses, uint8_t sensf_res_buf_size, uint8_t *p_sensf_res_buf)
 {
-    NFC_HDR *p_cmd_buf;
-    uint8_t *p, *p_cmd_start;
+    uint8_t *p;
     uint16_t sc;
-    tNFC_STATUS status = NFC_STATUS_FAILED;
 
-    /* If waiting for wildcard POLL */
-    if (p_cb->rw_substate == RW_T3T_GET_SC_SST_POLL_WILDCARD)
+    /* Get the system code from the response */
+    if (  (nci_status == NCI_STATUS_OK)
+          &&(num_responses > 0)
+          &&(sensf_res_buf_size >= (RW_T3T_SENSF_RES_RD_OFFSET + RW_T3T_SENSF_RES_RD_LEN))  )
     {
-        /* Get the system code from the response */
-        if (  (nci_status == NCI_STATUS_OK)
-            &&(num_responses > 0)
-            &&(sensf_res_buf_size >= (RW_T3T_SENSF_RES_RD_OFFSET + RW_T3T_SENSF_RES_RD_LEN))  )
-        {
-            p = &p_sensf_res_buf[RW_T3T_SENSF_RES_RD_OFFSET];
-            BE_STREAM_TO_UINT16 (sc, p);
+        p = &p_sensf_res_buf[RW_T3T_SENSF_RES_RD_OFFSET];
+        BE_STREAM_TO_UINT16 (sc, p);
 
-            /* Handle felica lite */
-            if (sc == T3T_SYSTEM_CODE_FELICA_LITE)
-            {
-                RW_TRACE_DEBUG1 ("FeliCa Lite tag detected (system code %04X)", sc);
-                /* Store system code */
-                p_cb->system_codes[p_cb->num_system_codes++] = sc;
-
-                /* Poll for NDEF system code */
-                if ((status = (tNFC_STATUS) nci_snd_t3t_polling (T3T_SYSTEM_CODE_NDEF, 0, 0)) == NCI_STATUS_OK)
-                {
-                    p_cb->rw_substate = RW_T3T_GET_SC_SST_POLL_NDEF;
-                    p_cb->cur_poll_rc = 0;
-                    p_cb->flags |= RW_T3T_FL_W4_GET_SC_POLL_RSP;
-
-                    /* start timer for waiting for responses */
-                    rw_t3t_start_poll_timer (p_cb);
-                }
-            }
-            else
-            {
-                /* All other types, send REQUEST_SYSTEM_CODE command */
-                if ((p_cmd_buf = rw_t3t_get_cmd_buf ()) != NULL)
-                {
-                    p_cb->rw_substate = RW_T3T_GET_SC_SST_REQUEST_SC;
-
-                    /* Construct T3T message */
-                    p_cmd_start = p = (uint8_t *) (p_cmd_buf+1) + p_cmd_buf->offset;
-                    UINT8_TO_STREAM (p, T3T_MSG_OPC_REQ_SYSTEMCODE_CMD);
-                    ARRAY_TO_STREAM (p, p_cb->peer_nfcid2, NCI_NFCID2_LEN);
-
-                    /* Fill in length field */
-                    p_cmd_buf->len = (uint16_t) (p - p_cmd_start);
-
-                    /* Send the T3T message */
-                    status = rw_t3t_send_cmd (p_cb, RW_T3T_CMD_GET_SYSTEM_CODES, p_cmd_buf, RW_T3T_DEFAULT_CMD_TIMEOUT_TICKS);
-                }
-            }
-        }
-
-        /* Error proceeding. Notify upper layer of system codes found so far */
-        if (status != NFC_STATUS_OK)
-        {
-            rw_t3t_handle_get_system_codes_cplt ();
-        }
+        RW_TRACE_DEBUG1 ("FeliCa detected (RD, system code %04X)", sc);
+        p_cb->system_codes[p_cb->num_system_codes++] = sc;
     }
-    /* If waiting for NDEF POLL */
-    else if (p_cb->rw_substate == RW_T3T_GET_SC_SST_POLL_NDEF)
-    {
-        /* Validate response for NDEF poll */
-        if ((nci_status == NCI_STATUS_OK) && (num_responses > 0))
-        {
-            /* Tag responded for NDEF poll */
-            p_cb->system_codes[p_cb->num_system_codes++] = T3T_SYSTEM_CODE_NDEF;
-        }
-        rw_t3t_handle_get_system_codes_cplt ();
-    }
+
+    rw_t3t_handle_get_system_codes_cplt ();
 }
 
 /*****************************************************************************
@@ -1783,52 +1722,6 @@ static void rw_t3t_handle_ndef_detect_poll_rsp (tRW_T3T_CB *p_cb, uint8_t nci_st
     evt_data.ndef.flags  = RW_NDEF_FL_UNKNOWN;
     rw_t3t_update_ndef_flag (&evt_data.ndef.flags);
     (*(rw_cb.p_cback)) (RW_T3T_NDEF_DETECT_EVT, &evt_data);
-}
-
-
-/*****************************************************************************
-**
-** Function         rw_t3t_act_handle_get_sc_rsp
-**
-** Description      Handle response for getting system codes
-**
-** Returns          Nothing
-**
-*****************************************************************************/
-void rw_t3t_act_handle_get_sc_rsp (tRW_T3T_CB *p_cb, NFC_HDR *p_msg_rsp)
-{
-    uint8_t *p_t3t_rsp = (uint8_t *) (p_msg_rsp+1) + p_msg_rsp->offset;
-    uint8_t *p;
-    uint16_t sc;
-    uint8_t num_sc, i;
-
-    /* Validate response opcode */
-    if (p_t3t_rsp[T3T_MSG_RSP_OFFSET_RSPCODE] != T3T_MSG_OPC_REQ_SYSTEMCODE_RSP)
-    {
-        RW_TRACE_ERROR2 ("Response error: expecting rsp_code %02X, but got %02X", T3T_MSG_OPC_REQ_SYSTEMCODE_RSP, p_t3t_rsp[T3T_MSG_RSP_OFFSET_RSPCODE]);
-    }
-    else
-    {
-        /* Point to number of systems parameter */
-        p = &p_t3t_rsp[T3T_MSG_RSP_OFFSET_NUMSYS];
-        STREAM_TO_UINT8 (num_sc, p);
-
-        /* Validate maximum */
-        if (num_sc>T3T_MAX_SYSTEM_CODES)
-        {
-            RW_TRACE_DEBUG2 ("Tag's number of systems (%i) exceeds NFA max (%i)", num_sc, T3T_MAX_SYSTEM_CODES);
-            num_sc = T3T_MAX_SYSTEM_CODES;
-        }
-
-        for (i = 0; i < num_sc; i++)
-        {
-            BE_STREAM_TO_UINT16 (sc, p);
-            p_cb->system_codes[p_cb->num_system_codes++] = sc;
-        }
-    }
-    rw_t3t_handle_get_system_codes_cplt ();
-
-    GKI_freebuf (p_msg_rsp);
 }
 
 /*****************************************************************************
@@ -2309,10 +2202,6 @@ void rw_t3t_data_cback (uint8_t conn_id, tNFC_DATA_CEVT *p_data)
 
             case RW_T3T_CMD_SEND_RAW_FRAME:
                 rw_t3t_act_handle_raw_senddata_rsp (p_cb, p_data);
-                break;
-
-            case RW_T3T_CMD_GET_SYSTEM_CODES:
-                rw_t3t_act_handle_get_sc_rsp (p_cb, p_msg);
                 break;
 
             case RW_T3T_CMD_FORMAT:
@@ -3006,10 +2895,7 @@ tNFC_STATUS RW_T3tSendRawFrame (uint16_t len, uint8_t *p_data)
 **
 ** Description
 **      Get systems codes supported by the activated tag:
-**              Poll for wildcard (FFFF):
-**                  - If felica-lite code then poll for ndef (12fc)
-**                  - Otherwise send RequestSystmCode command to get
-**                    system codes.
+**              Poll for wildcard (FFFF, RC=1):
 **
 **      Before using this API, the application must call RW_SelectTagType to
 **      indicate that a Type 3 tag has been activated.
@@ -3041,7 +2927,6 @@ tNFC_STATUS RW_T3tGetSystemCodes (void)
             p_cb->cur_tout = RW_T3T_DEFAULT_CMD_TIMEOUT_TICKS;
             p_cb->cur_poll_rc = T3T_POLL_RC_SC;
             p_cb->rw_state = RW_T3T_STATE_COMMAND_PENDING;
-            p_cb->rw_substate = RW_T3T_GET_SC_SST_POLL_WILDCARD;
             p_cb->flags |= RW_T3T_FL_W4_GET_SC_POLL_RSP;
             p_cb->num_system_codes = 0;
 
@@ -3049,8 +2934,6 @@ tNFC_STATUS RW_T3tGetSystemCodes (void)
             rw_t3t_start_poll_timer (p_cb);
         }
     }
-
-
 
     return (retval);
 }
