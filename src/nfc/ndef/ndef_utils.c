@@ -104,12 +104,20 @@ tNDEF_STATUS NDEF_MsgValidate (uint8_t *p_msg, uint32_t msg_len, bool    b_allow
 
         rec_hdr = *p_rec++;
 
+        /* header should have a valid TNF */
+        if ((rec_hdr & NDEF_TNF_MASK) == NDEF_TNF_MASK)
+            return NDEF_MSG_INVALID_CHUNK;
+
         /* The second and all subsequent records must NOT have the MB bit set */
         if ( (count > 0) && (rec_hdr & NDEF_MB_MASK) )
             return (NDEF_MSG_EXTRA_MSG_BEGIN);
 
         /* Type field length */
         type_len = *p_rec++;
+
+        /* If the record is chunked, first record must contain the type */
+        if ((rec_hdr & NDEF_CF_MASK) && (rec_hdr & NDEF_MB_MASK) && type_len == 0)
+            return (NDEF_MSG_INVALID_CHUNK);
 
         /* Payload length - can be 1 or 4 bytes */
         if (rec_hdr & NDEF_SR_MASK)
@@ -133,7 +141,12 @@ tNDEF_STATUS NDEF_MsgValidate (uint8_t *p_msg, uint32_t msg_len, bool    b_allow
             id_len = *p_rec++;
         }
         else
+        {
             id_len = 0;
+            /* Empty record must have the id_len */
+            if ((rec_hdr & NDEF_TNF_MASK) == NDEF_TNF_EMPTY)
+                return (NDEF_MSG_INVALID_EMPTY_REC);
+        }
 
         /* A chunk must have type "unchanged", and no type or ID fields */
         if (rec_hdr & NDEF_CF_MASK)
@@ -185,6 +198,30 @@ tNDEF_STATUS NDEF_MsgValidate (uint8_t *p_msg, uint32_t msg_len, bool    b_allow
         {
             if (type_len != 0)
                 return (NDEF_MSG_LENGTH_MISMATCH);
+        }
+
+        /* External type should have non-zero type length */
+        if ((rec_hdr & NDEF_TNF_MASK) == NDEF_TNF_EXT)
+        {
+            if (type_len == 0)
+                return (NDEF_MSG_LENGTH_MISMATCH);
+        }
+
+        /* External type and Well Known types should have valid characters
+           in the TYPE field */
+        if ((rec_hdr & NDEF_TNF_MASK) == NDEF_TNF_EXT ||
+                (rec_hdr & NDEF_TNF_MASK) == NDEF_TNF_WKT)
+        {
+            uint8_t *p_rec_type = p_rec;
+            if ((p_rec_type + type_len) > p_end)
+                return (NDEF_MSG_TOO_SHORT);
+
+            for (int type_index = 0; type_index < type_len; type_index++)
+            {
+                if (p_rec_type[type_index] < NDEF_RTD_VALID_START ||
+                        p_rec_type[type_index] > NDEF_RTD_VALID_END)
+                    return (NDEF_MSG_INVALID_TYPE);
+            }
         }
 
         /* Point to next record */
