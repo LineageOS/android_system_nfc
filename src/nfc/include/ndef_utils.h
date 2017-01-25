@@ -35,6 +35,8 @@
 #define NDEF_SR_MASK            0x10    /* Short Record */
 #define NDEF_IL_MASK            0x08    /* ID Length */
 #define NDEF_TNF_MASK           0x07    /* Type Name Format */
+#define NDEF_RTD_VALID_START    0x20    /* First valid ASCII as per RTD specification */
+#define NDEF_RTD_VALID_END      0x7E    /* Last valid ASCII as per RTD specification */
 
 /* NDEF Type Name Format */
 #define NDEF_TNF_EMPTY          0   /* Empty (type/id/payload len =0) */
@@ -61,7 +63,8 @@ enum
     NDEF_MSG_INVALID_EMPTY_REC,         /* 7 - Empty record with non-zero contents  */
     NDEF_MSG_INVALID_CHUNK,             /* 8 - Invalid chunk found                  */
     NDEF_MSG_LENGTH_MISMATCH,           /* 9 - Overall message length doesn't match */
-    NDEF_MSG_INSUFFICIENT_MEM           /* 10 - Insuffiecient memory to add record  */
+    NDEF_MSG_INSUFFICIENT_MEM,          /* 10 - Insuffiecient memory to add record  */
+    NDEF_MSG_INVALID_TYPE               /* 11 - TYPE field contains invalid characters  */
 };
 typedef uint8_t tNDEF_STATUS;
 
