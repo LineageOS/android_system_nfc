@@ -27,6 +27,7 @@ extern "C"
 
 
 #include "data_types.h"
+#include "nfc_types.h"
 
 
 #define DISP_NCI    ProtoDispAdapterDisplayNciPacket
