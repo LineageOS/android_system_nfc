@@ -23,7 +23,7 @@
  ******************************************************************************/
 
 #define LOG_TAG "NfcNciHal"
-#include "OverrideLog.h"
+#include "_OverrideLog.h"
 #include "Mutex.h"
 #include <errno.h>
 #include <string.h>
