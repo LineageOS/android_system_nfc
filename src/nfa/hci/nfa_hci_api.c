@@ -36,11 +36,12 @@
 **
 ** Description      This function will register an application with hci and
 **                  returns an application handle and provides a mechanism to
-**                  register a callback with HCI to receive NFA HCI event notification.
-**                  When the application is registered (or if an error occurs),
-**                  the app will be notified with NFA_HCI_REGISTER_EVT. Previous
-**                  session information including allocated gates, created pipes
-**                  and pipes states will be returned as part of tNFA_HCI_REGISTER data.
+**                  register a callback with HCI to receive NFA HCI event
+**                  notification. When the application is registered (or if an
+**                  error occurs), the app will be notified with
+**                  NFA_HCI_REGISTER_EVT. Previous session information including
+**                  allocated gates, created pipes and pipes states will be
+**                  returned as part of tNFA_HCI_REGISTER data.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -136,12 +137,13 @@ tNFA_STATUS NFA_HciGetGateAndPipeList (tNFA_HANDLE hci_handle)
 **
 ** Description      This function is called to deregister an application
 **                  from HCI. The app will be notified by NFA_HCI_DEREGISTER_EVT
-**                  after deleting all the pipes owned by the app and deallocating
-**                  all the gates allocated to the app or if an error occurs.
-**                  Even if deregistration fails, the app has to register again
-**                  to provide a new cback function.
+**                  after deleting all the pipes owned by the app and
+**                  deallocating all the gates allocated to the app or if an
+**                  error occurs. Even if deregistration fails, the app has to
+**                  register again to provide a new cback function.
 **
-** Returns          NFA_STATUS_OK if the application is deregistered successfully
+** Returns          NFA_STATUS_OK if the application is deregistered
+**                  successfully
 **                  NFA_STATUS_FAILED otherwise
 
 *******************************************************************************/
@@ -202,8 +204,9 @@ tNFA_STATUS NFA_HciDeregister (char *p_app_name)
 **                  for a particular service to other host or to establish
 **                  communication with other host. When the gate is
 **                  allocated (or if an error occurs), the app will be notified
-**                  with NFA_HCI_ALLOCATE_GATE_EVT with the gate id. The allocated
-**                  Gate information will be stored in non volatile memory.
+**                  with NFA_HCI_ALLOCATE_GATE_EVT with the gate id. The
+**                  allocated Gate information will be stored in non volatile
+**                  memory.
 **
 ** Returns          NFA_STATUS_OK if this API started
 **                  NFA_STATUS_FAILED if no generic gate is available
@@ -878,9 +881,10 @@ tNFA_STATUS NFA_HciDeletePipe (tNFA_HANDLE  hci_handle, uint8_t pipe)
 ** Function         NFA_HciAddStaticPipe
 **
 ** Description      This function is called to add a static pipe for sending
-**                  7816 APDUs. When the static pipe is added (or if an error occurs),
-**                  the app will be notified with NFA_HCI_ADD_STATIC_PIPE_EVT with
-**                  the status.
+**                  7816 APDUs. When the static pipe is added (or if an error
+**                  occurs), the app will be notified with
+**                  NFA_HCI_ADD_STATIC_PIPE_EVT with the status.
+**
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
 **

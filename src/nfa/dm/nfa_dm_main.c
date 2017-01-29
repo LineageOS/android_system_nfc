@@ -142,7 +142,8 @@ bool    nfa_dm_evt_hdlr (NFC_HDR *p_msg)
 **
 ** Function         nfa_dm_sys_disable
 **
-** Description      This function is called after all subsystems have been disabled.
+** Description      This function is called after all subsystems have been
+**                  disabled.
 **
 ** Returns          void
 **
@@ -199,7 +200,8 @@ bool    nfa_dm_is_protocol_supported (tNFC_PROTOCOL protocol, uint8_t sel_res)
 ** Description      check if all modules of NFA is done with enable process and
 **                  NFA is not restoring NFCC.
 **
-** Returns          TRUE, if NFA_DM_ENABLE_EVT is reported and it is not restoring NFCC
+** Returns          TRUE, if NFA_DM_ENABLE_EVT is reported and it is not
+**                  restoring NFCC
 **
 *******************************************************************************/
 bool    nfa_dm_is_active (void)

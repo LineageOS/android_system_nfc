@@ -50,10 +50,11 @@ static void phDnldNfc_ReadComplete(void* pContext, NFCSTATUS status, void* pInfo
 **                  pContext - caller context
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_SUCCESS     - reset request to NFCC is successful
-**                  NFCSTATUS_FAILED      - reset request failed due to internal error
+**                  NFCSTATUS_SUCCESS - reset request to NFCC is successful
+**                  NFCSTATUS_FAILED - reset request failed due to internal
+**                                     error
 **                  NFCSTATUS_NOT_ALLOWED - command not allowed
-**                  Other command specific errors                -
+**                  Other command specific errors
 **
 *******************************************************************************/
 NFCSTATUS phDnldNfc_Reset(pphDnldNfc_RspCb_t pNotify, void *pContext)
@@ -105,18 +106,21 @@ NFCSTATUS phDnldNfc_Reset(pphDnldNfc_RspCb_t pNotify, void *pContext)
 **
 ** Function         phDnldNfc_GetVersion
 **
-** Description      Retrieves Hardware version, ROM Code version, Protected Data version,
-**                  Trim data version, User data version, and Firmware version information
+** Description      Retrieves Hardware version, ROM Code version, Protected Data
+**                  version, Trim data version, User data version, and Firmware
+**                  version information
 **
-** Parameters       pVersionInfo - response buffer which gets updated with complete version info from NFCC
-**                  pNotify      - notify caller after getting response
-**                  pContext     - caller context
+** Parameters       pVersionInfo - response buffer which gets updated with
+**                                 complete version info from NFCC
+**                  pNotify - notify caller after getting response
+**                  pContext - caller context
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_SUCCESS     - GetVersion request to NFCC is successful
-**                  NFCSTATUS_FAILED      - GetVersion request failed due to internal error
+**                  NFCSTATUS_SUCCESS - GetVersion request to NFCC is successful
+**                  NFCSTATUS_FAILED - GetVersion request failed due to internal
+**                                     error
 **                  NFCSTATUS_NOT_ALLOWED - command not allowed
-**                  Other command specific errors                -
+**                  Other command specific errors
 **
 *******************************************************************************/
 NFCSTATUS phDnldNfc_GetVersion(pphDnldNfc_Buff_t pVersionInfo, pphDnldNfc_RspCb_t pNotify, void *pContext)
@@ -178,15 +182,18 @@ NFCSTATUS phDnldNfc_GetVersion(pphDnldNfc_Buff_t pVersionInfo, pphDnldNfc_RspCb_
 **
 ** Description      Retrieves the current session state of NFCC
 **
-** Parameters       pSession - response buffer which gets updated with complete version info from NFCC
-**                  pNotify  - notify caller after getting response
+** Parameters       pSession - response buffer which gets updated with complete
+**                             version info from NFCC
+**                  pNotify - notify caller after getting response
 **                  pContext - caller context
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_SUCCESS     - GetSessionState request to NFCC is successful
-**                  NFCSTATUS_FAILED      - GetSessionState request failed due to internal error
+**                  NFCSTATUS_SUCCESS - GetSessionState request to NFCC is
+**                                      successful
+**                  NFCSTATUS_FAILED - GetSessionState request failed due to
+**                                     internal error
 **                  NFCSTATUS_NOT_ALLOWED - command not allowed
-**                  Other command specific errors                -
+**                  Other command specific errors
 **
 *******************************************************************************/
 NFCSTATUS phDnldNfc_GetSessionState(pphDnldNfc_Buff_t pSession, pphDnldNfc_RspCb_t pNotify, void *pContext)
@@ -246,21 +253,25 @@ NFCSTATUS phDnldNfc_GetSessionState(pphDnldNfc_Buff_t pSession, pphDnldNfc_RspCb
 **
 ** Function         phDnldNfc_CheckIntegrity
 **
-** Description      Inspects the integrity of EEPROM and FLASH contents of the NFCC,
-**                  provides CRC for each section
-**                  NOTE: The user data section CRC is valid only after fresh download
+** Description      Inspects the integrity of EEPROM and FLASH contents of the
+**                  NFCC, provides CRC for each section
+**                  NOTE: The user data section CRC is valid only after fresh
+**                        download
 **
-** Parameters       bChipVer - current ChipVersion for including additional parameters in request payload
-**                  pCRCData - response buffer which gets updated with respective section CRC status
-**                             and CRC bytes from NFCC
-**                  pNotify  - notify caller after getting response
+** Parameters       bChipVer - current ChipVersion for including additional
+**                             parameters in request payload
+**                  pCRCData - response buffer which gets updated with
+**                             respective section CRC status and CRC bytes from
+**                             NFCC
+**                  pNotify - notify caller after getting response
 **                  pContext - caller context
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_SUCCESS     - CheckIntegrity request is successful
-**                  NFCSTATUS_FAILED      - CheckIntegrity request failed due to internal error
+**                  NFCSTATUS_SUCCESS - CheckIntegrity request is successful
+**                  NFCSTATUS_FAILED - CheckIntegrity request failed due to
+**                                     internal error
 **                  NFCSTATUS_NOT_ALLOWED - command not allowed
-**                  Other command specific errors                -
+**                  Other command specific errors
 **
 *******************************************************************************/
 NFCSTATUS phDnldNfc_CheckIntegrity(uint8_t bChipVer, pphDnldNfc_Buff_t pCRCData, pphDnldNfc_RspCb_t pNotify, void *pContext)
@@ -335,15 +346,16 @@ NFCSTATUS phDnldNfc_CheckIntegrity(uint8_t bChipVer, pphDnldNfc_Buff_t pCRCData,
 **
 ** Description      Retrieves log data from EEPROM
 **
-** Parameters       pData    - response buffer which gets updated with data from EEPROM
-**                  pNotify  - notify caller after getting response
+** Parameters       pData - response buffer which gets updated with data from
+**                          EEPROM
+**                  pNotify - notify caller after getting response
 **                  pContext - caller context
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_SUCCESS     - Read request to NFCC is successful
-**                  NFCSTATUS_FAILED      - Read request failed due to internal error
+**                  NFCSTATUS_SUCCESS - Read request to NFCC is successful
+**                  NFCSTATUS_FAILED - Read request failed due to internal error
 **                  NFCSTATUS_NOT_ALLOWED - command not allowed
-**                  Other command specific errors                -
+**                  Other command specific errors
 **
 *******************************************************************************/
 NFCSTATUS phDnldNfc_ReadLog(pphDnldNfc_Buff_t pData, pphDnldNfc_RspCb_t pNotify, void *pContext)
@@ -406,18 +418,21 @@ NFCSTATUS phDnldNfc_ReadLog(pphDnldNfc_Buff_t pData, pphDnldNfc_RspCb_t pNotify,
 **
 ** Function         phDnldNfc_Write
 **
-** Description      Writes requested  data of length len to desired EEPROM/FLASH address
+** Description      Writes requested  data of length len to desired EEPROM/FLASH
+**                  address
 **
-** Parameters       bRecoverSeq - flag to indicate whether recover sequence data needs to be written or not
-**                  pData       - data buffer to write into EEPROM/FLASH by user
-**                  pNotify     - notify caller after getting response
-**                  pContext    - caller context
+** Parameters       bRecoverSeq - flag to indicate whether recover sequence data
+**                                needs to be written or not
+**                  pData - data buffer to write into EEPROM/FLASH by user
+**                  pNotify - notify caller after getting response
+**                  pContext - caller context
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_SUCCESS     - Write request to NFCC is successful
-**                  NFCSTATUS_FAILED      - Write request failed due to internal error
+**                  NFCSTATUS_SUCCESS - Write request to NFCC is successful
+**                  NFCSTATUS_FAILED - Write request failed due to internal
+**                                     error
 **                  NFCSTATUS_NOT_ALLOWED - command not allowed
-**                  Other command specific errors                -
+**                  Other command specific errors
 **
 *******************************************************************************/
 NFCSTATUS phDnldNfc_Write(bool_t  bRecoverSeq, pphDnldNfc_Buff_t pData, pphDnldNfc_RspCb_t pNotify, void *pContext)
@@ -529,15 +544,16 @@ NFCSTATUS phDnldNfc_Write(bool_t  bRecoverSeq, pphDnldNfc_Buff_t pData, pphDnldN
 **
 ** Description      Provides a full page free write to EEPROM
 **
-** Parameters       pData       - data buffer to write into EEPROM/FLASH by user
-**                  pNotify     - notify caller after getting response
-**                  pContext    - caller context
+** Parameters       pData - data buffer to write into EEPROM/FLASH by user
+**                  pNotify - notify caller after getting response
+**                  pContext - caller context
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_SUCCESS     - Write request to NFCC is successful
-**                  NFCSTATUS_FAILED      - Write request failed due to internal error
+**                  NFCSTATUS_SUCCESS - Write request to NFCC is successful
+**                  NFCSTATUS_FAILED - Write request failed due to internal
+**                                     error
 **                  NFCSTATUS_NOT_ALLOWED - command not allowed
-**                  Other command specific errors                -
+**                  Other command specific error
 **
 *******************************************************************************/
 NFCSTATUS phDnldNfc_Log(pphDnldNfc_Buff_t pData, pphDnldNfc_RspCb_t pNotify, void *pContext)
@@ -599,18 +615,21 @@ NFCSTATUS phDnldNfc_Log(pphDnldNfc_Buff_t pData, pphDnldNfc_RspCb_t pNotify, voi
 **
 ** Function         phDnldNfc_Force
 **
-** Description      Used as an emergency recovery procedure for NFCC due to corrupt
-**                  settings of system platform specific parameters by the host
+** Description      Used as an emergency recovery procedure for NFCC due to
+**                  corrupt settings of system platform specific parameters by
+**                  the host
 **
-** Parameters       pInputs  - input buffer which contains  clk src & clk freq settings for desired platform
-**                  pNotify  - notify caller after getting response
+** Parameters       pInputs - input buffer which contains  clk src & clk freq
+**                            settings for desired platform
+**                  pNotify - notify caller after getting response
 **                  pContext - caller context
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_SUCCESS     - Emergency Recovery request is successful
-**                  NFCSTATUS_FAILED      - Emergency Recovery failed due to internal error
+**                  NFCSTATUS_SUCCESS - Emergency Recovery request is successful
+**                  NFCSTATUS_FAILED - Emergency Recovery failed due to internal
+**                                     error
 **                  NFCSTATUS_NOT_ALLOWED - command not allowed
-**                  Other command specific errors                -
+**                  Other command specific errors
 **
 *******************************************************************************/
 NFCSTATUS phDnldNfc_Force(pphDnldNfc_Buff_t pInputs, pphDnldNfc_RspCb_t pNotify, void *pContext)
@@ -723,7 +742,8 @@ NFCSTATUS phDnldNfc_Force(pphDnldNfc_Buff_t pInputs, pphDnldNfc_RspCb_t pNotify,
 **
 ** Function         phDnldNfc_SetHwDevHandle
 **
-** Description      Stores the HwDev handle to download context. The handle is required for subsequent operations
+** Description      Stores the HwDev handle to download context. The handle is
+**                  required for subsequent operations
 **
 ** Parameters       None
 **
@@ -787,18 +807,22 @@ void phDnldNfc_ReSetHwDevHandle(void)
 ** Function         phDnldNfc_RawReq
 **
 ** Description      Sends raw frame request to NFCC.
-**                  It is currently used for sending an NCI RESET cmd after doing a production key update
+**                  It is currently used for sending an NCI RESET cmd after
+**                  doing a production key update
 **
-** Parameters       pFrameData - input buffer, contains raw frame packet to be sent to NFCC
-**                  pRspData   - response buffer received from NFCC
-**                  pNotify    - notify caller after getting response
-**                  pContext   - caller context
+** Parameters       pFrameData - input buffer, contains raw frame packet to be
+**                               sent to NFCC
+**                  pRspData - response buffer received from NFCC
+**                  pNotify - notify caller after getting response
+**                  pContext - caller context
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_SUCCESS     - GetSessionState request to NFCC is successful
-**                  NFCSTATUS_FAILED      - GetSessionState request failed due to internal error
+**                  NFCSTATUS_SUCCESS - GetSessionState request to NFCC is
+**                                      successful
+**                  NFCSTATUS_FAILED - GetSessionState request failed due to
+**                                     internal error
 **                  NFCSTATUS_NOT_ALLOWED - command not allowed
-**                  Other command specific errors                -
+**                  Other command specific errors
 **
 *******************************************************************************/
 NFCSTATUS phDnldNfc_RawReq(pphDnldNfc_Buff_t pFrameData, pphDnldNfc_Buff_t pRspData, pphDnldNfc_RspCb_t pNotify, void *pContext)
@@ -860,8 +884,8 @@ NFCSTATUS phDnldNfc_RawReq(pphDnldNfc_Buff_t pFrameData, pphDnldNfc_Buff_t pRspD
 **
 ** Function         phDnldNfc_InitImgInfo
 **
-** Description      Extracts image information and stores it in respective variables,
-**                  to be used internally for write operation
+** Description      Extracts image information and stores it in respective
+**                  variables, to be used internally for write operation
 **
 ** Parameters       None
 **
@@ -949,7 +973,8 @@ NFCSTATUS phDnldNfc_InitImgInfo(void)
 ** Function         phDnldNfc_LoadRecInfo
 **
 ** Description      Extracts recovery sequence image information and stores it
-**                  in respective variables, to be used internally for write operation
+**                  in respective variables, to be used internally for write
+**                  operation
 **
 ** Parameters       None
 **
@@ -1008,7 +1033,8 @@ NFCSTATUS phDnldNfc_LoadRecInfo(void)
 ** Function         phDnldNfc_LoadPKInfo
 **
 ** Description      Extracts production sequence image information and stores it
-**                  in respective variables, to be used internally for write operation
+**                  in respective variables, to be used internally for write
+**                  operation
 **
 ** Parameters       None
 **
@@ -1167,9 +1193,9 @@ NFCSTATUS phDnldNfc_LoadFW(const char* pathName, uint8_t **pImgInfo, uint16_t* p
 **
 ** Function         phDnldNfc_LoadRecoveryFW
 **
-** Description      Load the dummy firmware version form firmware lib for recovery
-**                  This will change the FW version of the NFCC firmware
-**                  and enable flashing of firmware of same version.
+** Description      Load the dummy firmware version form firmware lib for
+**                  recovery. This will change the FW version of the NFCC
+**                  firmware and enable flashing of firmware of same version.
 **
 ** Parameters       pathName    - Firmware image path
 **                  pImgInfo    - Firmware image handle
@@ -1275,17 +1301,18 @@ NFCSTATUS phDnldNfc_UnloadFW(void)
 **
 ** Function         phDnldNfc_ReadMem
 **
-** Description      Dumps the contents of EEPROM. The handle is required for subsequent operations
+** Description      Dumps the contents of EEPROM. The handle is required for
+**                  subsequent operations
 **
-** Parameters       pHwRef   - pointer to the hardware device
-**                  pNotify  - notify caller after getting response
+** Parameters       pHwRef - pointer to the hardware device
+**                  pNotify - notify caller after getting response
 **                  pContext - caller context
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_SUCCESS     - request to NFCC is successful
-**                  NFCSTATUS_FAILED      - request failed due to internal error
+**                  NFCSTATUS_SUCCESS - request to NFCC is successful
+**                  NFCSTATUS_FAILED - request failed due to internal error
 **                  NFCSTATUS_NOT_ALLOWED - command not allowed
-**                  Other command specific errors                -
+**                  Other command specific errors
 **
 *******************************************************************************/
 NFCSTATUS phDnldNfc_ReadMem(void *pHwRef, pphDnldNfc_RspCb_t pNotify, void *pContext)
@@ -1391,18 +1418,20 @@ static void phDnldNfc_ReadComplete(void* pContext,NFCSTATUS status,void* pInfo)
 **
 ** Function         phDnldNfc_Read
 **
-** Description      Retrieves requested data of specified length from desired EEPROM address
+** Description      Retrieves requested data of specified length from desired
+**                  EEPROM address
 **
-** Parameters       pData    - response buffer which gets updated with data from EEPROM
+** Parameters       pData - response buffer which gets updated with data from
+**                          EEPROM
 **                  dwRdAddr - EEPROM address for data read
-**                  pNotify  - notify caller after getting response
+**                  pNotify - notify caller after getting response
 **                  pContext - caller context
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_SUCCESS     - Read request to NFCC is successful
-**                  NFCSTATUS_FAILED      - Read request failed due to internal error
+**                  NFCSTATUS_SUCCESS - Read request to NFCC is successful
+**                  NFCSTATUS_FAILED - Read request failed due to internal error
 **                  NFCSTATUS_NOT_ALLOWED - command not allowed
-**                  Other command specific errors                -
+**                  Other command specific errors
 **
 *******************************************************************************/
 NFCSTATUS phDnldNfc_Read(pphDnldNfc_Buff_t pData, uint32_t dwRdAddr, pphDnldNfc_RspCb_t pNotify, void *pContext)

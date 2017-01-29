@@ -39,19 +39,22 @@
 **
 ** Function         NFA_P2pRegisterServer
 **
-** Description      This function is called to listen to a SAP as server on LLCP.
+** Description      This function is called to listen to a SAP as server on
+**                  LLCP.
 **
-**                  NFA_P2P_REG_SERVER_EVT will be returned with status and handle.
+**                  NFA_P2P_REG_SERVER_EVT will be returned with status and
+**                  handle.
 **
-**                  If server_sap is set to NFA_P2P_ANY_SAP, then NFA will allocate
-**                  a SAP between LLCP_LOWER_BOUND_SDP_SAP and LLCP_UPPER_BOUND_SDP_SAP
-**                  Otherwise, server_sap must be between (LLCP_SDP_SAP + 1) and
-**                  LLCP_UPPER_BOUND_SDP_SAP
+**                  If server_sap is set to NFA_P2P_ANY_SAP, then NFA will
+**                  allocate a SAP between LLCP_LOWER_BOUND_SDP_SAP and
+**                  LLCP_UPPER_BOUND_SDP_SAP Otherwise, server_sap must be
+**                  between (LLCP_SDP_SAP + 1) and LLCP_UPPER_BOUND_SDP_SAP
 **
 **                  link_type : NFA_P2P_LLINK_TYPE and/or NFA_P2P_DLINK_TYPE
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -105,9 +108,11 @@ tNFA_STATUS NFA_P2pRegisterServer (uint8_t            server_sap,
 **
 ** Function         NFA_P2pRegisterClient
 **
-** Description      This function is called to register a client service on LLCP.
+** Description      This function is called to register a client service on
+**                  LLCP.
 **
-**                  NFA_P2P_REG_CLIENT_EVT will be returned with status and handle.
+**                  NFA_P2P_REG_CLIENT_EVT will be returned with status and
+**                  handle.
 **
 **                  link_type : NFA_P2P_LLINK_TYPE and/or NFA_P2P_DLINK_TYPE
 **
@@ -151,9 +156,10 @@ tNFA_STATUS NFA_P2pRegisterClient (tNFA_P2P_LINK_TYPE link_type,
 ** Description      This function is called to stop listening to a SAP as server
 **                  or stop client service on LLCP.
 **
-** Note:            If this function is called to de-register a server and RF discovery
-**                  is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If this function is called to de-register a server and RF
+**                  discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_BAD_HANDLE if handle is not valid
@@ -312,9 +318,11 @@ tNFA_STATUS NFA_P2pRejectConn (tNFA_HANDLE handle)
 ** Description      This function is called to disconnect an existing or
 **                  connecting data link connection.
 **
-**                  discard any pending data on data link connection if flush is set to TRUE
+**                  discard any pending data on data link connection if flush is
+**                  set to TRUE
 **
-**                  NFA_P2P_DISC_EVT will be returned after data link connection is disconnected
+**                  NFA_P2P_DISC_EVT will be returned after data link connection
+**                  is disconnected
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_BAD_HANDLE if handle is not valid
@@ -366,8 +374,8 @@ tNFA_STATUS NFA_P2pDisconnect (tNFA_HANDLE handle, bool    flush)
 **
 ** Function         NFA_P2pConnectByName
 **
-** Description      This function is called to create a connection-oriented transport
-**                  by a service name.
+** Description      This function is called to create a connection-oriented
+**                  transport by a service name.
 **                  NFA_P2P_CONNECTED_EVT if success
 **                  NFA_P2P_DISC_EVT if failed
 **
@@ -427,8 +435,8 @@ tNFA_STATUS NFA_P2pConnectByName (tNFA_HANDLE client_handle,
 **
 ** Function         NFA_P2pConnectBySap
 **
-** Description      This function is called to create a connection-oriented transport
-**                  by a SAP.
+** Description      This function is called to create a connection-oriented
+**                  transport by a SAP.
 **                  NFA_P2P_CONNECTED_EVT if success
 **                  NFA_P2P_DISC_EVT if failed
 **
@@ -492,7 +500,8 @@ tNFA_STATUS NFA_P2pConnectBySap (tNFA_HANDLE client_handle,
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_BAD_HANDLE if handle is not valid
-**                  NFA_STATUS_BAD_LENGTH if data length is more than remote link MIU
+**                  NFA_STATUS_BAD_LENGTH if data length is more than remote
+**                  link MIU
 **                  NFA_STATUS_CONGESTED  if congested
 **                  NFA_STATUS_FAILED otherwise
 **
@@ -580,12 +589,14 @@ tNFA_STATUS NFA_P2pSendUI (tNFA_HANDLE handle,
 ** Function         NFA_P2pReadUI
 **
 ** Description      This function is called to read data on connectionless
-**                  transport when receiving NFA_P2P_DATA_EVT with NFA_P2P_LLINK_TYPE.
+**                  transport when receiving NFA_P2P_DATA_EVT with
+**                  NFA_P2P_LLINK_TYPE.
 **
 **                  - Remote SAP who sent UI PDU is returned.
-**                  - Information of UI PDU up to max_data_len is copied into p_data.
-**                  - If more information of UI PDU or more UI PDU in queue then more
-**                    is returned to TRUE.
+**                  - Information of UI PDU up to max_data_len is copied into
+**                    p_data.
+**                  - If more information of UI PDU or more UI PDU in queue then
+**                    more is returned to TRUE.
 **                  - Information of next UI PDU is not concatenated.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
@@ -772,11 +783,13 @@ tNFA_STATUS NFA_P2pSendData (tNFA_HANDLE handle,
 ** Function         NFA_P2pReadData
 **
 ** Description      This function is called to read data on connection-oriented
-**                  transport when receiving NFA_P2P_DATA_EVT with NFA_P2P_DLINK_TYPE.
+**                  transport when receiving NFA_P2P_DATA_EVT with
+**                  NFA_P2P_DLINK_TYPE.
 **
-**                  - Information of I PDU is copied into p_data up to max_data_len.
-**                  - If more information of I PDU or more I PDU in queue, then more
-**                    is returned to TRUE.
+**                  - Information of I PDU is copied into p_data up to
+**                    max_data_len.
+**                  - If more information of I PDU or more I PDU in queue, then
+**                    more is returned to TRUE.
 **                  - Information of next I PDU is not concatenated.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
@@ -923,8 +936,8 @@ tNFA_STATUS NFA_P2pSetLocalBusy (tNFA_HANDLE conn_handle,
 ** Function         NFA_P2pGetLinkInfo
 **
 ** Description      This function is called to get local/remote link MIU and
-**                  Well-Known Service list encoded as a 16-bit field of connected LLCP.
-**                  NFA_P2P_LINK_INFO_EVT will be returned.
+**                  Well-Known Service list encoded as a 16-bit field of
+**                  connected LLCP. NFA_P2P_LINK_INFO_EVT will be returned.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_BAD_HANDLE if server or client is not registered
@@ -971,8 +984,8 @@ tNFA_STATUS NFA_P2pGetLinkInfo (tNFA_HANDLE handle)
 **
 ** Function         NFA_P2pGetRemoteSap
 **
-** Description      This function is called to get SAP associated by service name
-**                  on connected remote LLCP.
+** Description      This function is called to get SAP associated by service
+**                  name on connected remote LLCP.
 **                  NFA_P2P_SDP_EVT will be returned.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
@@ -1032,11 +1045,15 @@ tNFA_STATUS NFA_P2pGetRemoteSap (tNFA_HANDLE handle,
 **                  - Option parameter (LLCP_OPT_VALUE)
 **                  - Response Waiting Time Index (LLCP_WAITING_TIME)
 **                  - Local Link Timeout (LLCP_LTO_VALUE)
-**                  - Inactivity Timeout as initiator role (LLCP_INIT_INACTIVITY_TIMEOUT)
-**                  - Inactivity Timeout as target role (LLCP_TARGET_INACTIVITY_TIMEOUT)
+**                  - Inactivity Timeout as initiator role
+**                    (LLCP_INIT_INACTIVITY_TIMEOUT)
+**                  - Inactivity Timeout as target role
+**                    (LLCP_TARGET_INACTIVITY_TIMEOUT)
 **                  - Delay SYMM response (LLCP_DELAY_RESP_TIME)
-**                  - Data link connection timeout (LLCP_DATA_LINK_CONNECTION_TOUT)
-**                  - Delay timeout to send first PDU as initiator (LLCP_DELAY_TIME_TO_SEND_FIRST_PDU)
+**                  - Data link connection timeout
+**                    (LLCP_DATA_LINK_CONNECTION_TOUT)
+**                  - Delay timeout to send first PDU as initiator
+**                    (LLCP_DELAY_TIME_TO_SEND_FIRST_PDU)
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise

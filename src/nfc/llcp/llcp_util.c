@@ -176,8 +176,8 @@ void llcp_util_adjust_dl_rx_congestion (void)
                 if (rx_congest_start > llcp_cb.dlcb[idx].local_rw)
                 {
                     /*
-                    ** set rx congestion threshold LLCP_DL_MIN_RX_CONGEST at least
-                    ** so, we don't need to flow off too often.
+                    ** set rx congestion threshold LLCP_DL_MIN_RX_CONGEST at
+                    ** least so, we don't need to flow off too often.
                     */
                     if (llcp_cb.dlcb[idx].local_rw + 1 > LLCP_DL_MIN_RX_CONGEST)
                         llcp_cb.dlcb[idx].rx_congest_threshold = llcp_cb.dlcb[idx].local_rw + 1;
@@ -717,8 +717,8 @@ void llcp_util_send_dm (uint8_t dsap, uint8_t ssap, uint8_t reason)
 **
 ** Function         llcp_util_build_info_pdu
 **
-** Description      Add DSAP, PTYPE, SSAP and sequence numbers and update local ack
-**                  sequence
+** Description      Add DSAP, PTYPE, SSAP and sequence numbers and update local
+**                  ack sequence
 **
 ** Returns          void
 **

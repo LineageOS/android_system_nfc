@@ -96,17 +96,22 @@ static void phDnldNfc_ResendTimeOutCb(uint32_t TimerId, void *pContext);
 **
 ** Description      Download Command Handler Mechanism
 **                  - holds the sub states for each command processing
-**                  - coordinates with TML download thread to complete a download command request
+**                  - coordinates with TML download thread to complete a
+**                    download command request
 **                  - calls the user callback on completion of a cmd
 **
 ** Parameters       pContext  - pointer to the download context structure
 **                  TrigEvent - event requested by user
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_PENDING           - download request sent to NFCC successfully,response pending
-**                  NFCSTATUS_BUSY              - handler is busy processing a download request
-**                  NFCSTATUS_INVALID_PARAMETER - one or more of the supplied parameters could not be interpreted properly
-**                  Other errors                -
+**                  NFCSTATUS_PENDING - download request sent to NFCC
+**                                      successfully,response pending
+**                  NFCSTATUS_BUSY - handler is busy processing a download
+**                                   request
+**                  NFCSTATUS_INVALID_PARAMETER - one or more of the supplied
+**                                                parameters could not be
+**                                                interpreted properly
+**                  Other errors
 **
 *******************************************************************************/
 NFCSTATUS phDnldNfc_CmdHandler(void *pContext, phDnldNfc_Event_t TrigEvent)
@@ -188,7 +193,8 @@ NFCSTATUS phDnldNfc_CmdHandler(void *pContext, phDnldNfc_Event_t TrigEvent)
 ** Description      Processes all cmd/resp sequences except read & write
 **
 ** Parameters       pContext - pointer to the download context structure
-**                  pInfo    - pointer to the Transaction buffer updated by TML Thread
+**                  pInfo - pointer to the Transaction buffer updated by TML
+**                          Thread
 **
 ** Returns          None
 **
@@ -364,7 +370,8 @@ static void phDnldNfc_ProcessSeqState(void *pContext, phTmlNfc_TransactInfo_t *p
 ** Description      Processes read/write cmd/rsp sequence
 **
 ** Parameters       pContext - pointer to the download context structure
-**                  pInfo    - pointer to the Transaction buffer updated by TML Thread
+**                  pInfo - pointer to the Transaction buffer updated by TML
+**                             Thread
 **
 ** Returns          None
 **
@@ -897,10 +904,11 @@ static NFCSTATUS phDnldNfc_CreateFramePld(pphDnldNfc_DlContext_t pDlContext)
 ** Description      Processes response frame received
 **
 ** Parameters       pContext - pointer to the download context structure
-**                  pInfo    - pointer to the Transaction buffer updated by TML Thread
+**                  pInfo - pointer to the Transaction buffer updated by TML
+**                          Thread
 **
-** Returns          NFCSTATUS_SUCCESS               - parameters successfully validated
-**                  NFCSTATUS_INVALID_PARAMETER     - invalid parameters
+** Returns          NFCSTATUS_SUCCESS - parameters successfully validated
+**                  NFCSTATUS_INVALID_PARAMETER - invalid parameters
 **
 *******************************************************************************/
 static NFCSTATUS phDnldNfc_ProcessFrame(void *pContext, phTmlNfc_TransactInfo_t *pInfo)
@@ -986,10 +994,11 @@ static NFCSTATUS phDnldNfc_ProcessFrame(void *pContext, phTmlNfc_TransactInfo_t 
 ** Description      Processes the response during the state phDnldNfc_StateRecv
 **
 ** Parameters       pContext - pointer to the download context structure
-**                  pInfo    - pointer to the Transaction buffer updated by TML Thread
+**                  pInfo - pointer to the Transaction buffer updated by TML
+**                          Thread
 **
-** Returns          NFCSTATUS_SUCCESS               - parameters successfully validated
-**                  NFCSTATUS_INVALID_PARAMETER     - invalid parameters
+** Returns          NFCSTATUS_SUCCESS - parameters successfully validated
+**                  NFCSTATUS_INVALID_PARAMETER - invalid parameters
 **
 *******************************************************************************/
 static NFCSTATUS phDnldNfc_ProcessRecvInfo(void *pContext, phTmlNfc_TransactInfo_t *pInfo)
@@ -1125,7 +1134,8 @@ static void phDnldNfc_RspTimeOutCb(uint32_t TimerId, void *pContext)
 **
 ** Function         phDnldNfc_ResendTimeOutCb
 **
-** Description      Callback function in case of Frame Resend Wait timer expiration
+** Description      Callback function in case of Frame Resend Wait timer
+**                  expiration
 **
 ** Parameters       TimerId  - expired timer id
 **                  pContext - pointer to the download context structure
@@ -1168,8 +1178,10 @@ static void phDnldNfc_ResendTimeOutCb(uint32_t TimerId, void *pContext)
 **                  to response buffer if successful
 **
 ** Parameters       pDlContext - pointer to the download context structure
-**                  pInfo      - pointer to the Transaction buffer updated by TML Thread
-**                  wPldLen    - Length of the payload bytes to copy to response buffer
+**                  pInfo - pointer to the Transaction buffer updated by TML
+**                          Thread
+**                  wPldLen - Length of the payload bytes to copy to response
+**                            buffer
 **
 ** Returns          NFC status
 **

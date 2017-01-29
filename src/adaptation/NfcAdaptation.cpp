@@ -508,13 +508,14 @@ void NfcAdaptation::HalCoreInitialized (uint16_t data_len, uint8_t* p_core_init_
 **
 ** Function:    NfcAdaptation::HalPrediscover
 **
-** Description:     Perform any vendor-specific pre-discovery actions (if needed)
-**                  If any actions were performed TRUE will be returned, and
-**                  HAL_PRE_DISCOVER_CPLT_EVT will notify when actions are
+** Description:     Perform any vendor-specific pre-discovery actions (if
+**                  needed) If any actions were performed TRUE will be returned,
+**                  and HAL_PRE_DISCOVER_CPLT_EVT will notify when actions are
 **                  completed.
 **
-** Returns:          TRUE if vendor-specific pre-discovery actions initialized
-**                  FALSE if no vendor-specific pre-discovery actions are needed.
+** Returns:         TRUE if vendor-specific pre-discovery actions initialized
+**                  FALSE if no vendor-specific pre-discovery actions are
+**                  needed.
 **
 *******************************************************************************/
 bool    NfcAdaptation::HalPrediscover ()

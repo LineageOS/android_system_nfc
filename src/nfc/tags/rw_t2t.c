@@ -1046,12 +1046,13 @@ tNFC_STATUS RW_T2tWrite (uint16_t block, uint8_t *p_write_data)
 ** Function         RW_T2tSectorSelect
 **
 ** Description      This function issues the Type 2 Tag SECTOR-SELECT command
-**                  packet 1. If a NACK is received as the response, the callback
-**                  function will be called with a RW_T2T_SECTOR_SELECT_EVT. If
-**                  an ACK is received as the response, the command packet 2 with
-**                  the given sector number is sent to the peer device. When the
-**                  response for packet 2 is received, the callback function will
-**                  be called with a RW_T2T_SECTOR_SELECT_EVT.
+**                  packet 1. If a NACK is received as the response, the
+**                  callback function will be called with a
+**                  RW_T2T_SECTOR_SELECT_EVT. If an ACK is received as the
+**                  response, the command packet 2 with the given sector number
+**                  is sent to the peer device. When the response for packet 2
+**                  is received, the callback function will be called with a
+**                  RW_T2T_SECTOR_SELECT_EVT.
 **
 **                  A sector is 256 contiguous blocks (1024 bytes).
 **

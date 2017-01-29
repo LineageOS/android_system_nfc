@@ -372,11 +372,13 @@
 #endif
 
 /*
-** LTO is max time interval between the last bit received and the first bit sent over the air.
-** Link timeout must be delayed as much as time between the packet sent from LLCP and the last bit transmitted at NFCC.
-**  - 200ms, max OTA transmitting time between the first bit and the last bit at NFCC
-**    Largest MIU(2175bytes) of LLCP must be fragmented and sent on NFC-DEP over the air.
-**    8 * (DEP_REQ/RES+ACK) + DEP_REQ/RES for 2175 MIU at 106kbps bit rate.
+** LTO is max time interval between the last bit received and the first bit sent
+** over the air. Link timeout must be delayed as much as time between the packet
+** sent from LLCP and the last bit transmitted at NFCC.
+**  - 200ms, max OTA transmitting time between the first bit and the last bit at
+**    NFCC. Largest MIU(2175bytes) of LLCP must be fragmented and sent on
+**    NFC-DEP over the air. 8 * (DEP_REQ/RES+ACK) + DEP_REQ/RES for 2175 MIU at
+**    106kbps bit rate.
 **  - 10ms, processing time
 */
 #ifndef LLCP_INTERNAL_TX_DELAY
@@ -384,11 +386,13 @@
 #endif
 
 /*
-** LTO is max time interval between the last bit received and the first bit sent over the air.
-** Link timeout must be delayed as much as time between the first bit received at NFCC and the packet received at LLCP.
-**  - 200ms, max OTA transmitting time between the first bit and the last bit at NFCC
-**    LLCP cannot receive data packet until all bit are received and reassembled in NCI.
-**    8 * (DEP_REQ/RES+ACK) + DEP_REQ/RES for 2175 MIU at 106kbps bit rate.
+** LTO is max time interval between the last bit received and the first bit sent
+** over the air. Link timeout must be delayed as much as time between the first
+** bit received at NFCC and the packet received at LLCP.
+**  - 200ms, max OTA transmitting time between the first bit and the last bit at
+**    NFCC. LLCP cannot receive data packet until all bit are received and
+**    reassembled in NCI. 8 * (DEP_REQ/RES+ACK) + DEP_REQ/RES for 2175 MIU at
+**    106kbps bit rate.
 **  - 10ms, processing time
 */
 #ifndef LLCP_INTERNAL_RX_DELAY

@@ -138,11 +138,12 @@ static NFCSTATUS phNxpNciHal_rf_deactivate()
 **                  managed by NFCC. But since PN54X does not handle this, the
 **                  presence check is mimiced here.
 **                  For the very first time Kovio is detected, NTF has to be
-**                  passed on to upper layer. for every NTF, DH send a deactivated
-**                  command to NFCC and NFCC follows this up with another activated
-**                  notification. When the tag is removed, activated notification
-**                  stops coming and this is indicated to upper layer with a HAL
-**                  generated deactivated notification.
+**                  passed on to upper layer. for every NTF, DH send a
+**                  deactivated command to NFCC and NFCC follows this up with
+**                  another activated notification. When the tag is removed,
+**                  activated notification stops coming and this is indicated to
+**                  upper layer with a HAL generated deactivated notification.
+**
 ** Returns          NFCSTATUS_SUCCESS if successful,otherwise NFCSTATUS_FAILED
 **
 *******************************************************************************/

@@ -59,13 +59,15 @@ static void phOsalNfc_Timer_Expired(union sigval sv);
 **
 ** Function         phOsalNfc_Timer_Create
 **
-** Description      Creates a timer which shall call back the specified function when the timer expires
-**                  Fails if OSAL module is not initialized or timers are already occupied
+** Description      Creates a timer which shall call back the specified function
+**                  when the timer expires. Fails if OSAL module is not
+**                  initialized or timers are already occupied
 **
 ** Parameters       None
 **
 ** Returns          TimerId
-**                  TimerId value of PH_OSALNFC_TIMER_ID_INVALID indicates that timer is not created                -
+**                  TimerId value of PH_OSALNFC_TIMER_ID_INVALID indicates that
+**                  timer is not created
 **
 *******************************************************************************/
 uint32_t phOsalNfc_Timer_Create(void)
@@ -114,21 +116,27 @@ uint32_t phOsalNfc_Timer_Create(void)
 **
 ** Function         phOsalNfc_Timer_Start
 **
-** Description      Starts the requested, already created, timer
-**                  If the timer is already running, timer stops and restarts with the new timeout value
-**                  and new callback function in case any ??????
-**                  Creates a timer which shall call back the specified function when the timer expires
+** Description      Starts the requested, already created, timer.
+**                  If the timer is already running, timer stops and restarts
+**                  with the new timeout value and new callback function in case
+**                  any ??????
+**                  Creates a timer which shall call back the specified function
+**                  when the timer expires
 **
-** Parameters       dwTimerId             - valid timer ID obtained during timer creation
-**                  dwRegTimeCnt          - requested timeout in milliseconds
-**                  pApplication_callback - application callback interface to be called when timer expires
-**                  pContext              - caller context, to be passed to the application callback function
+** Parameters       dwTimerId - valid timer ID obtained during timer creation
+**                  dwRegTimeCnt - requested timeout in milliseconds
+**                  pApplication_callback - application callback interface to be
+**                                          called when timer expires
+**                  pContext - caller context, to be passed to the application
+**                             callback function
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_SUCCESS            - the operation was successful
-**                  NFCSTATUS_NOT_INITIALISED    - OSAL Module is not initialized
-**                  NFCSTATUS_INVALID_PARAMETER  - invalid parameter passed to the function
-**                  PH_OSALNFC_TIMER_START_ERROR - timer could not be created due to system error
+**                  NFCSTATUS_SUCCESS - the operation was successful
+**                  NFCSTATUS_NOT_INITIALISED - OSAL Module is not initialized
+**                  NFCSTATUS_INVALID_PARAMETER - invalid parameter passed to
+**                                                the function
+**                  PH_OSALNFC_TIMER_START_ERROR - timer could not be created
+**                                                 due to system error
 **
 *******************************************************************************/
 NFCSTATUS phOsalNfc_Timer_Start(uint32_t dwTimerId, uint32_t dwRegTimeCnt, pphOsalNfc_TimerCallbck_t pApplication_callback, void *pContext)
@@ -177,16 +185,18 @@ NFCSTATUS phOsalNfc_Timer_Start(uint32_t dwTimerId, uint32_t dwRegTimeCnt, pphOs
 ** Function         phOsalNfc_Timer_Stop
 **
 ** Description      Stops already started timer
-**                  Allows to stop running timer. In case timer is stopped, timer callback
-**                  will not be notified any more
+**                  Allows to stop running timer. In case timer is stopped,
+**                  timer callback will not be notified any more
 **
-** Parameters       dwTimerId             - valid timer ID obtained during timer creation
+** Parameters       dwTimerId - valid timer ID obtained during timer creation
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_SUCCESS            - the operation was successful
-**                  NFCSTATUS_NOT_INITIALISED    - OSAL Module is not initialized
-**                  NFCSTATUS_INVALID_PARAMETER  - invalid parameter passed to the function
-**                  PH_OSALNFC_TIMER_STOP_ERROR  - timer could not be stopped due to system error
+**                  NFCSTATUS_SUCCESS - the operation was successful
+**                  NFCSTATUS_NOT_INITIALISED - OSAL Module is not initialized
+**                  NFCSTATUS_INVALID_PARAMETER - invalid parameter passed to
+**                                                the function
+**                  PH_OSALNFC_TIMER_STOP_ERROR - timer could not be stopped due
+**                                                to system error
 **
 *******************************************************************************/
 NFCSTATUS phOsalNfc_Timer_Stop(uint32_t dwTimerId)
@@ -230,16 +240,18 @@ NFCSTATUS phOsalNfc_Timer_Stop(uint32_t dwTimerId)
 ** Function         phOsalNfc_Timer_Delete
 **
 ** Description      Deletes previously created timer
-**                  Allows to delete previously created timer. In case timer is running,
-**                  it is first stopped and then deleted
+**                  Allows to delete previously created timer. In case timer is
+**                  running, it is first stopped and then deleted
 **
-** Parameters       dwTimerId             - valid timer ID obtained during timer creation
+** Parameters       dwTimerId - valid timer ID obtained during timer creation
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_SUCCESS             - the operation was successful
-**                  NFCSTATUS_NOT_INITIALISED     - OSAL Module is not initialized
-**                  NFCSTATUS_INVALID_PARAMETER   - invalid parameter passed to the function
-**                  PH_OSALNFC_TIMER_DELETE_ERROR - timer could not be stopped due to system error
+**                  NFCSTATUS_SUCCESS - the operation was successful
+**                  NFCSTATUS_NOT_INITIALISED - OSAL Module is not initialized
+**                  NFCSTATUS_INVALID_PARAMETER - invalid parameter passed to
+**                                                the function
+**                  PH_OSALNFC_TIMER_DELETE_ERROR - timer could not be stopped
+**                                                  due to system error
 **
 *******************************************************************************/
 NFCSTATUS phOsalNfc_Timer_Delete(uint32_t dwTimerId)
@@ -277,8 +289,8 @@ NFCSTATUS phOsalNfc_Timer_Delete(uint32_t dwTimerId)
 ** Function         phOsalNfc_Timer_Cleanup
 **
 ** Description      Deletes all previously created timers
-**                  Allows to delete previously created timers. In case timer is running,
-**                  it is first stopped and then deleted
+**                  Allows to delete previously created timers. In case timer is
+**                  running, it is first stopped and then deleted
 **
 ** Parameters       None
 **
@@ -318,7 +330,8 @@ void phOsalNfc_Timer_Cleanup(void)
 ** Function         phOsalNfc_DeferredCall
 **
 ** Description      Invokes the timer callback function after timer expiration.
-**                  Shall invoke the callback function registered by the timer caller function
+**                  Shall invoke the callback function registered by the timer
+**                  caller function
 **
 ** Parameters       pParams - parameters indicating the ID of the timer
 **
@@ -351,11 +364,13 @@ static void phOsalNfc_DeferredCall (void *pParams)
 **
 ** Description      Posts message on the user thread
 **                  Shall be invoked upon expiration of a timer
-**                  Shall post message on user thread through which timer callback function shall be invoked
+**                  Shall post message on user thread through which timer
+**                  callback function shall be invoked
 **
-** Parameters       pMsg - pointer to the message structure posted on user thread
+** Parameters       pMsg - pointer to the message structure posted on user
+**                         thread
 **
-** Returns          None                -
+** Returns          None
 **
 *******************************************************************************/
 static void phOsalNfc_PostTimerMsg(phLibNfc_Message_t *pMsg)

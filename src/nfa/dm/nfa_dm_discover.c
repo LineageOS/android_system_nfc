@@ -74,7 +74,8 @@ static nfa_dm_p2p_prio_logic_t p2p_prio_logic_data;
 **
 ** Function         nfa_dm_get_rf_discover_config
 **
-** Description      Build RF discovery configurations from tNFA_DM_DISC_TECH_PROTO_MASK
+** Description      Build RF discovery configurations from
+**                  tNFA_DM_DISC_TECH_PROTO_MASK
 **
 ** Returns          number of RF discovery configurations
 **
@@ -293,7 +294,8 @@ static tNFA_STATUS nfa_dm_set_rf_listen_mode_config (tNFA_DM_DISC_TECH_PROTO_MAS
     /*
     ** T1T listen     LA_PROT 0x80, LA_SENS_RES byte1:0x00 byte2:0x0C
     ** T2T listen     LA_PROT 0x00
-    ** T3T listen     No bit for T3T in LF_PROT (CE T3T set listen parameters, system code, NFCID2, etc.)
+    ** T3T listen     No bit for T3T in LF_PROT (CE T3T set listen parameters,
+    **                system code, NFCID2, etc.)
     ** ISO-DEP listen LA_PROT 0x01, LB_PROT 0x01
     ** NFC-DEP listen LA_PROT 0x02, LF_PROT 0x02
     */
@@ -881,7 +883,8 @@ static tNFC_STATUS nfa_dm_disc_force_to_idle (void)
 
     NFA_TRACE_DEBUG1 ("nfa_dm_disc_force_to_idle() disc_flags = 0x%x", nfa_dm_cb.disc_cb.disc_flags);
 
-    if (nfa_dm_cb.disc_cb.disc_flags & NFA_DM_DISC_FLAGS_W4_NTF) /* do not execute more than one */
+    /* do not execute more than one */
+    if (nfa_dm_cb.disc_cb.disc_flags & NFA_DM_DISC_FLAGS_W4_NTF)
     {
         nfa_dm_cb.disc_cb.disc_flags &= ~(NFA_DM_DISC_FLAGS_W4_NTF);
         nfa_dm_cb.disc_cb.disc_flags |= (NFA_DM_DISC_FLAGS_W4_RSP);
@@ -1005,7 +1008,8 @@ void nfa_dm_start_rf_discover (void)
                 listen_mask = 0;
 
                 /*
-                ** add listen mode technolgies and protocols if host ID is matched to listen mode routing table
+                ** add listen mode technolgies and protocols if host ID is
+                ** matched to listen mode routing table
                 */
 
                 /* NFC-A */
@@ -1048,7 +1052,8 @@ void nfa_dm_start_rf_discover (void)
                 }
 
                 /*
-                ** clear listen mode technolgies and protocols which are already used by others
+                ** clear listen mode technolgies and protocols which are already
+                ** used by others
                 */
 
                 /* Check if other modules are listening T1T or T2T */
@@ -1128,8 +1133,8 @@ void nfa_dm_start_rf_discover (void)
     {
         /*
         ** NFCC will abort programming personality slots if not available.
-        ** NFCC programs the personality slots in the following order of RF technologies:
-        **      NFC-A, NFC-B, NFC-BP, NFC-I93
+        ** NFCC programs the personality slots in the following order of RF
+        ** technologies: NFC-A, NFC-B, NFC-BP, NFC-I93
         */
 
         /* if this is not for exclusive control */
@@ -1193,9 +1198,11 @@ static void nfa_dm_notify_discovery (tNFA_DM_RF_DISC_DATA *p_data)
 **
 ** Function         nfa_dm_disc_handle_kovio_activation
 **
-** Description      Handle Kovio activation; whether it's new or repeated activation
+** Description      Handle Kovio activation; whether it's new or repeated
+**                  activation
 **
-** Returns          TRUE if repeated activation. No need to notify activated event to upper layer
+** Returns          TRUE if repeated activation. No need to notify activated
+**                  event to upper layer
 **
 *******************************************************************************/
 bool    nfa_dm_disc_handle_kovio_activation (tNFC_DISCOVER *p_data, tNFA_DISCOVER_CBACK *p_disc_cback)
@@ -1455,8 +1462,10 @@ static void nfa_dm_disc_notify_deactivation (tNFA_DM_RF_DISC_SM_EVENT sm_event,
     if (sm_event == NFA_DM_RF_DEACTIVATE_RSP)
     {
         /*
-        ** Activation has been aborted by upper layer in NFA_DM_RFST_W4_ALL_DISCOVERIES or NFA_DM_RFST_W4_HOST_SELECT
-        ** Deactivation by upper layer or RF link loss in NFA_DM_RFST_LISTEN_SLEEP
+        ** Activation has been aborted by upper layer in
+        ** NFA_DM_RFST_W4_ALL_DISCOVERIES or NFA_DM_RFST_W4_HOST_SELECT
+        ** Deactivation by upper layer or RF link loss in
+        ** NFA_DM_RFST_LISTEN_SLEEP
         ** No sub-module is activated at this state.
         */
 
@@ -1809,8 +1818,9 @@ void nfa_dm_disc_new_state (tNFA_DM_RF_DISC_STATE new_state)
 
     nfa_dm_cb.disc_cb.disc_state = new_state;
 
+    /* not error recovering */
     if (  (new_state == NFA_DM_RFST_IDLE)
-        &&(!(nfa_dm_cb.disc_cb.disc_flags & NFA_DM_DISC_FLAGS_W4_RSP))  ) /* not error recovering */
+        &&(!(nfa_dm_cb.disc_cb.disc_flags & NFA_DM_DISC_FLAGS_W4_RSP))  )
     {
         if (nfa_dm_cb.disc_cb.disc_flags & NFA_DM_DISC_FLAGS_STOPPING)
         {
@@ -2085,7 +2095,8 @@ static void nfa_dm_disc_sm_discovery (tNFA_DM_RF_DISC_SM_EVENT event,
 **
 ** Function         nfa_dm_disc_sm_w4_all_discoveries
 **
-** Description      Processing discovery events in NFA_DM_RFST_W4_ALL_DISCOVERIES state
+** Description      Processing discovery events in
+**                  NFA_DM_RFST_W4_ALL_DISCOVERIES state
 **
 ** Returns          void
 **
@@ -2127,7 +2138,8 @@ static void nfa_dm_disc_sm_w4_all_discoveries (tNFA_DM_RF_DISC_SM_EVENT event,
     case NFA_DM_RF_INTF_ACTIVATED_NTF:
         /*
         ** This is only for ISO15693.
-        ** FW sends activation NTF when all responses are received from tags without host selecting.
+        ** FW sends activation NTF when all responses are received from tags
+        ** without host selecting.
         */
         nfa_dm_disc_new_state (NFA_DM_RFST_POLL_ACTIVE);
 
@@ -2149,7 +2161,8 @@ static void nfa_dm_disc_sm_w4_all_discoveries (tNFA_DM_RF_DISC_SM_EVENT event,
 **
 ** Function         nfa_dm_disc_sm_w4_host_select
 **
-** Description      Processing discovery events in NFA_DM_RFST_W4_HOST_SELECT state
+** Description      Processing discovery events in NFA_DM_RFST_W4_HOST_SELECT
+**                  state
 **
 ** Returns          void
 **
@@ -2408,7 +2421,8 @@ static void nfa_dm_disc_sm_poll_active (tNFA_DM_RF_DISC_SM_EVENT event,
 **
 ** Function         nfa_dm_disc_sm_listen_active
 **
-** Description      Processing discovery events in NFA_DM_RFST_LISTEN_ACTIVE state
+** Description      Processing discovery events in NFA_DM_RFST_LISTEN_ACTIVE
+**                  state
 **
 ** Returns          void
 **
@@ -2489,7 +2503,8 @@ static void nfa_dm_disc_sm_listen_active (tNFA_DM_RF_DISC_SM_EVENT event,
 **
 ** Function         nfa_dm_disc_sm_listen_sleep
 **
-** Description      Processing discovery events in NFA_DM_RFST_LISTEN_SLEEP state
+** Description      Processing discovery events in NFA_DM_RFST_LISTEN_SLEEP
+**                  state
 **
 ** Returns          void
 **

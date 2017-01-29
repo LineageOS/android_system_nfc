@@ -82,8 +82,8 @@ extern void nfa_nv_ci_write (tNFA_NV_CO_STATUS status);
 **
 ** Description      This function sends an event to NFA indicating the phone has
 **                  read in the requested amount of data specified in the
-**                  nfa_nv_co_read () call-out function.  It should only be called
-**                  when the requested number of bytes has been read.
+**                  nfa_nv_co_read () call-out function.  It should only be
+**                  called when the requested number of bytes has been read.
 **
 ** Parameters       num_bytes_read - number of bytes read into the buffer
 **                      specified in the read callout-function.

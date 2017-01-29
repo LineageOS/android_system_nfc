@@ -148,11 +148,15 @@ typedef struct phOsalNfc_TimerHandle
 {
     uint32_t TimerId;                                   /* ID of the timer */
     timer_t hTimerHandle;                               /* Handle of the timer */
-    pphOsalNfc_TimerCallbck_t   Application_callback;   /* Timer callback function to be invoked */
+    /* Timer callback function to be invoked */
+    pphOsalNfc_TimerCallbck_t   Application_callback;
     void *pContext;                                     /* Parameter to be passed to the callback function */
     phOsalNfc_TimerStates_t eState;                     /* Timer states */
-    phLibNfc_Message_t tOsalMessage;                    /* Osal Timer message posted on User Thread */
-    phOsalNfc_DeferedCallInfo_t tDeferedCallInfo;       /* Deferred Call structure to Invoke Callback function */
-}phOsalNfc_TimerHandle_t,*pphOsalNfc_TimerHandle_t;     /* Variables for Structure Instance and Structure Ptr */
+    /* Osal Timer message posted on User Thread */
+    phLibNfc_Message_t tOsalMessage;
+    /* Deferred Call structure to Invoke Callback function */
+    phOsalNfc_DeferedCallInfo_t tDeferedCallInfo;
+/* Variables for Structure Instance and Structure Ptr */
+}phOsalNfc_TimerHandle_t,*pphOsalNfc_TimerHandle_t;
 
 #endif /*  PHOSALNFC_H  */
