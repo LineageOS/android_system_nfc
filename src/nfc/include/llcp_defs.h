@@ -124,20 +124,25 @@
 #define LLCP_WKS_MASK_LM    0x0001  /* Link Management */
 #define LLCP_WKS_MASK_SDP   0x0002  /* Service Discovery "urn:nfc:sn:sdp" */
 #define LLCP_WKS_MASK_IP    0x0004  /* IP over LLCP Binding "urn:nfc:sn:ip" */
-#define LLCP_WKS_MASK_OBEX  0x0008  /* OBEX over LLCP Binding "urn:nfc:sn:obex" */
-#define LLCP_WKS_MASK_SNEP  0x0010  /* Simple NDEP Exchange Protocol "urn:nfc:sn:snep" */
+/* OBEX over LLCP Binding "urn:nfc:sn:obex" */
+#define LLCP_WKS_MASK_OBEX 0x0008
+/* Simple NDEP Exchange Protocol "urn:nfc:sn:snep" */
+#define LLCP_WKS_MASK_SNEP 0x0010
 
 /* Well-Known Service Access Points */
 #define LLCP_SAP_LM         0x00    /* Link Management */
 #define LLCP_SAP_SDP        0x01    /* Service Discovery "urn:nfc:sn:sdp" */
 #define LLCP_SAP_IP         0x02    /* IP over LLCP Binding "urn:nfc:sn:ip" */
-#define LLCP_SAP_OBEX       0x03    /* OBEX over LLCP Binding "urn:nfc:sn:obex" */
-#define LLCP_SAP_SNEP       0x04    /* Simple NDEP Exchange Protocol "urn:nfc:sn:snep" */
+/* OBEX over LLCP Binding "urn:nfc:sn:obex" */
+#define LLCP_SAP_OBEX 0x03
+/* Simple NDEP Exchange Protocol "urn:nfc:sn:snep" */
+#define LLCP_SAP_SNEP 0x04
 
 /* Link Timeout, LTO */
 #define LLCP_LTO_TYPE       0x04
 #define LLCP_LTO_LEN        0x01
-#define LLCP_DEFAULT_LTO_IN_MS    100     /* default 100ms. It should be sufficiently larget than RWT */
+/* default 100ms. It should be sufficiently larget than RWT */
+#define LLCP_DEFAULT_LTO_IN_MS 100
 #define LLCP_LTO_UNIT       10      /* 10 ms */
 #define LLCP_MAX_LTO_IN_MS  2550    /* 2550 ms; 8bits * 10ms */
 
@@ -156,7 +161,8 @@
 
 /* Service Discovery Request, SDREQ */
 #define LLCP_SDREQ_TYPE     0x08
-#define LLCP_SDREQ_MIN_LEN  0x03    /* type(1 byte), length(1 byte), TID(1 byte) */
+/* type(1 byte), length(1 byte), TID(1 byte) */
+#define LLCP_SDREQ_MIN_LEN 0x03
 
 /* Service Discovery Response, SDRES */
 #define LLCP_SDRES_TYPE     0x09
@@ -184,8 +190,10 @@
 #define LLCP_UPPER_BOUND_LOCAL_SAP  0x3F
 
 /* Max Payload */
-#define LLCP_NCI_MAX_PAYL_SIZE      254 /* Maximum Payload size, Length Reduction LRi/LRt */
-#define LLCP_NFC_DEP_HEADER_SIZE      3 /* Data exchange protocol header, 3 bytes */
+/* Maximum Payload size, Length Reduction LRi/LRt */
+#define LLCP_NCI_MAX_PAYL_SIZE 254
+/* Data exchange protocol header, 3 bytes */
+#define LLCP_NFC_DEP_HEADER_SIZE 3
 #define LLCP_MAX_PAYLOAD_SIZE       (LLCP_NCI_MAX_PAYL_SIZE - LLCP_NFC_DEP_HEADER_SIZE)
 
 #define LLCP_MAX_GEN_BYTES          48

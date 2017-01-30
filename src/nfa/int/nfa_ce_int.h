@@ -125,18 +125,26 @@ typedef union
 /****************************************************************************
 ** LISTEN_INFO definitions
 *****************************************************************************/
-#define NFA_CE_LISTEN_INFO_IDX_NDEF     0                           /* Entry 0 is reserved for local NDEF tag */
+/* Entry 0 is reserved for local NDEF tag */
+#define NFA_CE_LISTEN_INFO_IDX_NDEF 0
 #define NFA_CE_LISTEN_INFO_IDX_INVALID  (NFA_CE_LISTEN_INFO_MAX)
 
 
 /* Flags for listen request */
-#define NFA_CE_LISTEN_INFO_IN_USE           0x00000001  /* LISTEN_INFO entry is in use                                      */
-#define NFC_CE_LISTEN_INFO_READONLY_NDEF    0x00000010  /* NDEF is read-only                                                */
-#define NFA_CE_LISTEN_INFO_T4T_ACTIVATE_PND 0x00000040  /* App has not been notified of ACTIVATE_EVT yet for this T4T AID   */
-#define NFA_CE_LISTEN_INFO_T4T_AID          0x00000080  /* This is a listen_info for T4T AID                                */
-#define NFA_CE_LISTEN_INFO_START_NTF_PND    0x00000100  /* App has not been notified of LISTEN_START yet                    */
-#define NFA_CE_LISTEN_INFO_FELICA           0x00000200  /* This is a listen_info for non-NDEF Felica                        */
-#define NFA_CE_LISTEN_INFO_UICC             0x00000400  /* This is a listen_info for UICC                                   */
+/* LISTEN_INFO entry is in use                                      */
+#define NFA_CE_LISTEN_INFO_IN_USE 0x00000001
+/* NDEF is read-only                                                */
+#define NFC_CE_LISTEN_INFO_READONLY_NDEF 0x00000010
+/* App has not been notified of ACTIVATE_EVT yet for this T4T AID   */
+#define NFA_CE_LISTEN_INFO_T4T_ACTIVATE_PND 0x00000040
+/* This is a listen_info for T4T AID                                */
+#define NFA_CE_LISTEN_INFO_T4T_AID 0x00000080
+/* App has not been notified of LISTEN_START yet                    */
+#define NFA_CE_LISTEN_INFO_START_NTF_PND 0x00000100
+/* This is a listen_info for non-NDEF Felica                        */
+#define NFA_CE_LISTEN_INFO_FELICA 0x00000200
+/* This is a listen_info for UICC                                   */
+#define NFA_CE_LISTEN_INFO_UICC 0x00000400
 
 
 /* Structure for listen look up table */
@@ -162,8 +170,10 @@ typedef struct
 /****************************************************************************/
 
 /* Internal flags for nfa_ce */
-#define NFA_CE_FLAGS_APP_INIT_DEACTIVATION  0x00000001  /* Deactivation locally initiated by application */
-#define NFA_CE_FLAGS_LISTEN_ACTIVE_SLEEP    0x00000002  /* Tag is in listen active or sleep state        */
+/* Deactivation locally initiated by application */
+#define NFA_CE_FLAGS_APP_INIT_DEACTIVATION 0x00000001
+/* Tag is in listen active or sleep state        */
+#define NFA_CE_FLAGS_LISTEN_ACTIVE_SLEEP 0x00000002
 typedef uint32_t tNFA_CE_FLAGS;
 
 /* NFA_CE control block */

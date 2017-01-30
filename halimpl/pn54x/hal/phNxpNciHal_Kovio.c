@@ -18,7 +18,8 @@
 #include <phNxpLog.h>
 
 
-#define KOVIO_TIMEOUT 1000    /* Timeout value to wait for RF INTF Activated NTF.*/
+/* Timeout value to wait for RF INTF Activated NTF.*/
+#define KOVIO_TIMEOUT 1000
 #define KOVIO_ACT_NTF_TEMP_BUFF_LEN 64    /* length of temp buffer to manipulate
                                     the activated notification to match BCM format*/
 #define MAX_WRITE_RETRY 5

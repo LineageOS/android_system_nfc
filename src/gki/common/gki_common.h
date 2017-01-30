@@ -90,9 +90,12 @@ typedef struct _free_queue
 /* Buffer related defines
 */
 #define ALIGN_POOL(pl_size)  ( (((pl_size) + 3) / sizeof(uint32_t)) * sizeof(uint32_t))
-#define BUFFER_HDR_SIZE     (sizeof(BUFFER_HDR_T))                  /* Offset past header */
-#define BUFFER_PADDING_SIZE (sizeof(BUFFER_HDR_T) + sizeof(uint32_t)) /* Header + Magic Number */
-#define MAX_USER_BUF_SIZE   ((uint16_t)0xffff - BUFFER_PADDING_SIZE)  /* pool size must allow for header */
+/* Offset past header */
+#define BUFFER_HDR_SIZE (sizeof(BUFFER_HDR_T))
+/* Header + Magic Number */
+#define BUFFER_PADDING_SIZE (sizeof(BUFFER_HDR_T) + sizeof(uint32_t))
+/* pool size must allow for header */
+#define MAX_USER_BUF_SIZE ((uint16_t)0xffff - BUFFER_PADDING_SIZE)
 #define MAGIC_NO            0xDDBADDBA
 
 #define BUF_STATUS_FREE     0

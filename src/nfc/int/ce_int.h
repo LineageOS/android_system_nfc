@@ -37,7 +37,8 @@
 #define CE_MAX_SUP_PROTO    NCI_PROTOCOL_MIFARE
 #endif
 
-#define CE_MAX_BYTE_PER_PAGE    7   /* 2^8=256. CB use uint8_t for BytesPerPage, so max is 7 */
+/* 2^8=256. CB use uint8_t for BytesPerPage, so max is 7 */
+#define CE_MAX_BYTE_PER_PAGE 7
 
 /* CE Type 3 Tag structures */
 
@@ -96,13 +97,20 @@ typedef struct
     uint16_t            max_file_size;      /* size of storage + 2 bytes for NLEN   */
     uint8_t            *p_scratch_buf;      /* temp storage of NDEF message for update */
 
-#define CE_T4T_STATUS_T4T_APP_SELECTED      0x01    /* T4T CE App is selected       */
-#define CE_T4T_STATUS_REG_AID_SELECTED      0x02    /* Registered AID is selected   */
-#define CE_T4T_STATUS_CC_FILE_SELECTED      0x04    /* CC file is selected          */
-#define CE_T4T_STATUS_NDEF_SELECTED         0x08    /* NDEF file is selected        */
-#define CE_T4T_STATUS_NDEF_FILE_READ_ONLY   0x10    /* NDEF is read-only            */
-#define CE_T4T_STATUS_NDEF_FILE_UPDATING    0x20    /* NDEF is updating             */
-#define CE_T4T_STATUS_WILDCARD_AID_SELECTED 0x40    /* Wildcard AID selected        */
+/* T4T CE App is selected       */
+#define CE_T4T_STATUS_T4T_APP_SELECTED 0x01
+/* Registered AID is selected   */
+#define CE_T4T_STATUS_REG_AID_SELECTED 0x02
+/* CC file is selected          */
+#define CE_T4T_STATUS_CC_FILE_SELECTED 0x04
+/* NDEF file is selected        */
+#define CE_T4T_STATUS_NDEF_SELECTED 0x08
+/* NDEF is read-only            */
+#define CE_T4T_STATUS_NDEF_FILE_READ_ONLY 0x10
+/* NDEF is updating             */
+#define CE_T4T_STATUS_NDEF_FILE_UPDATING 0x20
+/* Wildcard AID selected        */
+#define CE_T4T_STATUS_WILDCARD_AID_SELECTED 0x40
 
     uint8_t             status;
 

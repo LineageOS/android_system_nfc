@@ -18,7 +18,8 @@
 #include <phNxpLog.h>
 #include <phNxpNciHal.h>
 
-#define CUSTOM_POLL_TIMEOUT 160    /* Timeout value to wait for NFC-DEP detection.*/
+/* Timeout value to wait for NFC-DEP detection.*/
+#define CUSTOM_POLL_TIMEOUT 160
 #define CLEAN_UP_TIMEOUT 250
 #define MAX_WRITE_RETRY 5
 

@@ -48,10 +48,12 @@
 #define NFC_HAL_NV_CO_ENOTEMPTY     0x03
 #define NFC_HAL_NV_CO_EOF           0x04
 #define NFC_HAL_NV_CO_EODIR         0x05
-#define NFC_HAL_NV_CO_ENOSPACE      0x06 /* Returned in nfa_nv_ci_open if no room */
+/* Returned in nfa_nv_ci_open if no room */
+#define NFC_HAL_NV_CO_ENOSPACE 0x06
 #define NFC_HAL_NV_CO_EIS_DIR       0x07
 #define NFC_HAL_NV_CO_RESUME        0x08 /* used in nfa_nv_ci_open, on resume */
-#define NFC_HAL_NV_CO_NONE          0x09 /* used in nfa_nv_ci_open, on resume (no file to resume) */
+/* used in nfa_nv_ci_open, on resume (no file to resume) */
+#define NFC_HAL_NV_CO_NONE 0x09
 
 typedef uint8_t tNFC_HAL_NV_CO_STATUS;
 

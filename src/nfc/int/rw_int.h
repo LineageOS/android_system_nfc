@@ -32,68 +32,113 @@
 #include "rw_api.h"
 
 /* Proprietary definitions for HR0 and HR1 */
-#define RW_T1T_HR0_HI_NIB                       0xF0    /* HI NIB Tag                                               */
-#define RW_T1T_IS_JEWEL64                       0x20    /* Jewel 64 Tag                                             */
-#define RW_T1T_IS_JEWEL                         0x00    /* Jewel Tag                                                */
-#define RW_T1T_IS_TOPAZ                         0x10    /* TOPAZ Tag                                                */
-#define RW_T1T_IS_TOPAZ96                       0x11    /* TOPAZ96 Tag                                              */
-#define RW_T1T_IS_TOPAZ512                      0x12    /* TOPAZ512 Tag                                             */
-#define RW_T1T_HR1_MIN                          0x49    /* Supports dynamic commands on static tag if HR1 > 0x49    */
+/* HI NIB Tag                                               */
+#define RW_T1T_HR0_HI_NIB 0xF0
+/* Jewel 64 Tag                                             */
+#define RW_T1T_IS_JEWEL64 0x20
+/* Jewel Tag                                                */
+#define RW_T1T_IS_JEWEL 0x00
+/* TOPAZ Tag                                                */
+#define RW_T1T_IS_TOPAZ 0x10
+/* TOPAZ96 Tag                                              */
+#define RW_T1T_IS_TOPAZ96 0x11
+/* TOPAZ512 Tag                                             */
+#define RW_T1T_IS_TOPAZ512 0x12
+/* Supports dynamic commands on static tag if HR1 > 0x49    */
+#define RW_T1T_HR1_MIN 0x49
 
-#define RW_T1T_MAX_MEM_TLVS                     0x05    /* Maximum supported Memory control TLVS in the tag         */
-#define RW_T1T_MAX_LOCK_TLVS                    0x05    /* Maximum supported Lock control TLVS in the tag           */
-#define RW_T1T_MAX_LOCK_BYTES                   0x1E    /* Maximum supported dynamic lock bytes                     */
+/* Maximum supported Memory control TLVS in the tag         */
+#define RW_T1T_MAX_MEM_TLVS 0x05
+/* Maximum supported Lock control TLVS in the tag           */
+#define RW_T1T_MAX_LOCK_TLVS 0x05
+/* Maximum supported dynamic lock bytes                     */
+#define RW_T1T_MAX_LOCK_BYTES 0x1E
 
 /* State of the Tag as interpreted by RW */
-#define RW_T1_TAG_ATTRB_UNKNOWN                 0x00    /* TAG State is unknown to RW                               */
-#define RW_T1_TAG_ATTRB_INITIALIZED             0x01    /* TAG is in INITIALIZED state                              */
-#define RW_T1_TAG_ATTRB_INITIALIZED_NDEF        0x02    /* TAG is in INITIALIZED state and has NDEF tlv with len=0  */
-#define RW_T1_TAG_ATTRB_READ_ONLY               0x03    /* TAG is in READ ONLY state                                */
-#define RW_T1_TAG_ATTRB_READ_WRITE              0x04    /* TAG is in READ WRITE state                               */
+/* TAG State is unknown to RW                               */
+#define RW_T1_TAG_ATTRB_UNKNOWN 0x00
+/* TAG is in INITIALIZED state                              */
+#define RW_T1_TAG_ATTRB_INITIALIZED 0x01
+/* TAG is in INITIALIZED state and has NDEF tlv with len=0  */
+#define RW_T1_TAG_ATTRB_INITIALIZED_NDEF 0x02
+/* TAG is in READ ONLY state                                */
+#define RW_T1_TAG_ATTRB_READ_ONLY 0x03
+/* TAG is in READ WRITE state                               */
+#define RW_T1_TAG_ATTRB_READ_WRITE 0x04
 
-#define RW_T1T_LOCK_NOT_UPDATED                 0x00    /* Lock not yet set as part of SET TAG RO op                */
-#define RW_T1T_LOCK_UPDATE_INITIATED            0x01    /* Sent command to set the Lock bytes                       */
-#define RW_T1T_LOCK_UPDATED                     0x02    /* Lock bytes are set                                       */
+/* Lock not yet set as part of SET TAG RO op                */
+#define RW_T1T_LOCK_NOT_UPDATED 0x00
+/* Sent command to set the Lock bytes                       */
+#define RW_T1T_LOCK_UPDATE_INITIATED 0x01
+/* Lock bytes are set                                       */
+#define RW_T1T_LOCK_UPDATED 0x02
 typedef uint8_t tRW_T1T_LOCK_STATUS;
 
 /* States */
-#define RW_T1T_STATE_NOT_ACTIVATED              0x00    /* Tag not activated and or response not received for RID   */
-#define RW_T1T_STATE_IDLE                       0x01    /* T1 Tag activated and ready to perform rw operation on Tag*/
-#define RW_T1T_STATE_READ                       0x02    /* waiting rsp for read command sent to tag                 */
-#define RW_T1T_STATE_WRITE                      0x03    /* waiting rsp for write command sent to tag                */
-#define RW_T1T_STATE_TLV_DETECT                 0x04    /* performing TLV detection procedure                       */
-#define RW_T1T_STATE_READ_NDEF                  0x05    /* performing read NDEF procedure                           */
-#define RW_T1T_STATE_WRITE_NDEF                 0x06    /* performing update NDEF procedure                         */
-#define RW_T1T_STATE_SET_TAG_RO                 0x07    /* Setting Tag as read only tag                             */
-#define RW_T1T_STATE_CHECK_PRESENCE             0x08    /* Check if Tag is still present                            */
-#define RW_T1T_STATE_FORMAT_TAG                 0x09    /* Format T1 Tag                                            */
+/* Tag not activated and or response not received for RID   */
+#define RW_T1T_STATE_NOT_ACTIVATED 0x00
+/* T1 Tag activated and ready to perform rw operation on Tag*/
+#define RW_T1T_STATE_IDLE 0x01
+/* waiting rsp for read command sent to tag                 */
+#define RW_T1T_STATE_READ 0x02
+/* waiting rsp for write command sent to tag                */
+#define RW_T1T_STATE_WRITE 0x03
+/* performing TLV detection procedure                       */
+#define RW_T1T_STATE_TLV_DETECT 0x04
+/* performing read NDEF procedure                           */
+#define RW_T1T_STATE_READ_NDEF 0x05
+/* performing update NDEF procedure                         */
+#define RW_T1T_STATE_WRITE_NDEF 0x06
+/* Setting Tag as read only tag                             */
+#define RW_T1T_STATE_SET_TAG_RO 0x07
+/* Check if Tag is still present                            */
+#define RW_T1T_STATE_CHECK_PRESENCE 0x08
+/* Format T1 Tag                                            */
+#define RW_T1T_STATE_FORMAT_TAG 0x09
 
 /* Sub states */
-#define RW_T1T_SUBSTATE_NONE                    0x00    /* Default substate                                         */
+/* Default substate                                         */
+#define RW_T1T_SUBSTATE_NONE 0x00
 
 /* Sub states in RW_T1T_STATE_TLV_DETECT state */
-#define RW_T1T_SUBSTATE_WAIT_TLV_DETECT         0x01    /* waiting for the detection of a tlv in a tag              */
-#define RW_T1T_SUBSTATE_WAIT_FIND_LEN_FIELD_LEN 0x02    /* waiting for finding the len field is 1 or 3 bytes long   */
-#define RW_T1T_SUBSTATE_WAIT_READ_TLV_LEN0      0x03    /* waiting for extracting len field value                   */
-#define RW_T1T_SUBSTATE_WAIT_READ_TLV_LEN1      0x04    /* waiting for extracting len field value                   */
-#define RW_T1T_SUBSTATE_WAIT_READ_TLV_VALUE     0x05    /* waiting for extracting value field in the TLV            */
-#define RW_T1T_SUBSTATE_WAIT_READ_LOCKS         0x06    /* waiting for reading dynamic locks in the TLV             */
+/* waiting for the detection of a tlv in a tag              */
+#define RW_T1T_SUBSTATE_WAIT_TLV_DETECT 0x01
+/* waiting for finding the len field is 1 or 3 bytes long   */
+#define RW_T1T_SUBSTATE_WAIT_FIND_LEN_FIELD_LEN 0x02
+/* waiting for extracting len field value                   */
+#define RW_T1T_SUBSTATE_WAIT_READ_TLV_LEN0 0x03
+/* waiting for extracting len field value                   */
+#define RW_T1T_SUBSTATE_WAIT_READ_TLV_LEN1 0x04
+/* waiting for extracting value field in the TLV            */
+#define RW_T1T_SUBSTATE_WAIT_READ_TLV_VALUE 0x05
+/* waiting for reading dynamic locks in the TLV             */
+#define RW_T1T_SUBSTATE_WAIT_READ_LOCKS 0x06
 
 /* Sub states in RW_T1T_STATE_WRITE_NDEF state */
-#define RW_T1T_SUBSTATE_WAIT_READ_NDEF_BLOCK    0x07    /* waiting for response of reading a block that will be partially updated */
-#define RW_T1T_SUBSTATE_WAIT_INVALIDATE_NDEF    0x08    /* waiting for response of invalidating NDEF Msg                          */
-#define RW_T1T_SUBSTATE_WAIT_NDEF_WRITE         0x09    /* waiting for response of writing a part of NDEF Msg                     */
-#define RW_T1T_SUBSTATE_WAIT_NDEF_UPDATED       0x0A    /* waiting for response of writing last part of NDEF Msg                  */
-#define RW_T1T_SUBSTATE_WAIT_VALIDATE_NDEF      0x0B    /* waiting for response of validating NDEF Msg                            */
+/* waiting for response of reading a block that will be partially updated */
+#define RW_T1T_SUBSTATE_WAIT_READ_NDEF_BLOCK 0x07
+/* waiting for response of invalidating NDEF Msg                          */
+#define RW_T1T_SUBSTATE_WAIT_INVALIDATE_NDEF 0x08
+/* waiting for response of writing a part of NDEF Msg                     */
+#define RW_T1T_SUBSTATE_WAIT_NDEF_WRITE 0x09
+/* waiting for response of writing last part of NDEF Msg                  */
+#define RW_T1T_SUBSTATE_WAIT_NDEF_UPDATED 0x0A
+/* waiting for response of validating NDEF Msg                            */
+#define RW_T1T_SUBSTATE_WAIT_VALIDATE_NDEF 0x0B
 
 /* Sub states in RW_T1T_STATE_SET_TAG_RO state */
-#define RW_T1T_SUBSTATE_WAIT_SET_CC_RWA_RO      0x0C    /* waiting for response of setting CC-RWA to read only      */
-#define RW_T1T_SUBSTATE_WAIT_SET_ST_LOCK_BITS   0x0D    /* waiting for response of setting all static lock bits     */
-#define RW_T1T_SUBSTATE_WAIT_SET_DYN_LOCK_BITS  0x0E    /* waiting for response of setting all dynamic lock bits    */
+/* waiting for response of setting CC-RWA to read only      */
+#define RW_T1T_SUBSTATE_WAIT_SET_CC_RWA_RO 0x0C
+/* waiting for response of setting all static lock bits     */
+#define RW_T1T_SUBSTATE_WAIT_SET_ST_LOCK_BITS 0x0D
+/* waiting for response of setting all dynamic lock bits    */
+#define RW_T1T_SUBSTATE_WAIT_SET_DYN_LOCK_BITS 0x0E
 
 /* Sub states in RW_T1T_STATE_FORMAT_TAG state */
-#define RW_T1T_SUBSTATE_WAIT_SET_CC             0x0F    /* waiting for response to format/set capability container  */
-#define RW_T1T_SUBSTATE_WAIT_SET_NULL_NDEF      0x10    /* waiting for response to format/set NULL NDEF             */
+/* waiting for response to format/set capability container  */
+#define RW_T1T_SUBSTATE_WAIT_SET_CC 0x0F
+/* waiting for response to format/set NULL NDEF             */
+#define RW_T1T_SUBSTATE_WAIT_SET_NULL_NDEF 0x10
 
 
 typedef struct
@@ -127,9 +172,11 @@ typedef struct
 } tRW_T1T_PREV_CMD_RSP_INFO;
 
 #if (RW_NDEF_INCLUDED == TRUE)
-#define T1T_BUFFER_SIZE             T1T_STATIC_SIZE     /* Buffer 0-E block, for easier tlv operation           */
+/* Buffer 0-E block, for easier tlv operation           */
+#define T1T_BUFFER_SIZE T1T_STATIC_SIZE
 #else
-#define T1T_BUFFER_SIZE             T1T_UID_LEN         /* Buffer UID                                           */
+/* Buffer UID                                           */
+#define T1T_BUFFER_SIZE T1T_UID_LEN
 #endif
 
 /* RW Type 1 Tag control blocks */
@@ -178,9 +225,12 @@ typedef struct
 } tRW_T1T_CB;
 
 /* Mifare Ultalight/ Ultralight Family blank tag version block settings */
-#define T2T_MIFARE_VERSION_BLOCK                        0x04    /* Block where version number of the tag is stored */
-#define T2T_MIFARE_ULTRALIGHT_VER_NO                    0xFFFF  /* Blank Ultralight tag - Block 4 (byte 0, byte 1) */
-#define T2T_MIFARE_ULTRALIGHT_FAMILY_VER_NO             0x0200  /* Blank Ultralight family tag - Block 4 (byte 0, byte 1) */
+/* Block where version number of the tag is stored */
+#define T2T_MIFARE_VERSION_BLOCK 0x04
+/* Blank Ultralight tag - Block 4 (byte 0, byte 1) */
+#define T2T_MIFARE_ULTRALIGHT_VER_NO 0xFFFF
+/* Blank Ultralight family tag - Block 4 (byte 0, byte 1) */
+#define T2T_MIFARE_ULTRALIGHT_FAMILY_VER_NO 0x0200
 
 /* Infineon my-d move / my-d blank tag uid block settings */
 #define T2T_INFINEON_VERSION_BLOCK                      0x00
@@ -195,35 +245,54 @@ typedef struct
 #define T2T_NDEF_DETECTED                               0x01
 #define T2T_NDEF_READ                                   0x02
 
-#define T2T_MAX_NDEF_OFFSET                             128     /* Max offset of an NDEF message in a T2 tag */
+/* Max offset of an NDEF message in a T2 tag */
+#define T2T_MAX_NDEF_OFFSET 128
 #define T2T_MAX_RESERVED_BYTES_IN_TAG                   0x64
 #define T2T_MAX_LOCK_BYTES_IN_TAG                       0x64
 
-#define RW_T2T_MAX_MEM_TLVS                             0x05    /* Maximum supported Memory control TLVS in the tag         */
-#define RW_T2T_MAX_LOCK_TLVS                            0x05    /* Maximum supported Lock control TLVS in the tag           */
-#define RW_T2T_MAX_LOCK_BYTES                           0x1E    /* Maximum supported dynamic lock bytes                     */
+/* Maximum supported Memory control TLVS in the tag         */
+#define RW_T2T_MAX_MEM_TLVS 0x05
+/* Maximum supported Lock control TLVS in the tag           */
+#define RW_T2T_MAX_LOCK_TLVS 0x05
+/* Maximum supported dynamic lock bytes                     */
+#define RW_T2T_MAX_LOCK_BYTES 0x1E
 #define RW_T2T_SEGMENT_BYTES                            128
 #define RW_T2T_SEGMENT_SIZE                             16
 
-#define RW_T2T_LOCK_NOT_UPDATED                         0x00    /* Lock not yet set as part of SET TAG RO op                */
-#define RW_T2T_LOCK_UPDATE_INITIATED                    0x01    /* Sent command to set the Lock bytes                       */
-#define RW_T2T_LOCK_UPDATED                             0x02    /* Lock bytes are set                                       */
+/* Lock not yet set as part of SET TAG RO op                */
+#define RW_T2T_LOCK_NOT_UPDATED 0x00
+/* Sent command to set the Lock bytes                       */
+#define RW_T2T_LOCK_UPDATE_INITIATED 0x01
+/* Lock bytes are set                                       */
+#define RW_T2T_LOCK_UPDATED 0x02
 typedef uint8_t tRW_T2T_LOCK_STATUS;
 
 
 /* States */
-#define RW_T2T_STATE_NOT_ACTIVATED                      0x00    /* Tag not activated                                        */
-#define RW_T2T_STATE_IDLE                               0x01    /* T1 Tag activated and ready to perform rw operation on Tag*/
-#define RW_T2T_STATE_READ                               0x02    /* waiting response for read command sent to tag            */
-#define RW_T2T_STATE_WRITE                              0x03    /* waiting response for write command sent to tag           */
-#define RW_T2T_STATE_SELECT_SECTOR                      0x04    /* Waiting response for sector select command               */
-#define RW_T2T_STATE_DETECT_TLV                         0x05    /* Detecting Lock/Memory/NDEF/Proprietary TLV in the Tag    */
-#define RW_T2T_STATE_READ_NDEF                          0x06    /* Performing NDEF Read procedure                           */
-#define RW_T2T_STATE_WRITE_NDEF                         0x07    /* Performing NDEF Write procedure                          */
-#define RW_T2T_STATE_SET_TAG_RO                         0x08    /* Setting Tag as Read only tag                             */
-#define RW_T2T_STATE_CHECK_PRESENCE                     0x09    /* Check if Tag is still present                            */
-#define RW_T2T_STATE_FORMAT_TAG                         0x0A    /* Format the tag                                           */
-#define RW_T2T_STATE_HALT                               0x0B    /* Tag is in HALT State */
+/* Tag not activated                                        */
+#define RW_T2T_STATE_NOT_ACTIVATED 0x00
+/* T1 Tag activated and ready to perform rw operation on Tag*/
+#define RW_T2T_STATE_IDLE 0x01
+/* waiting response for read command sent to tag            */
+#define RW_T2T_STATE_READ 0x02
+/* waiting response for write command sent to tag           */
+#define RW_T2T_STATE_WRITE 0x03
+/* Waiting response for sector select command               */
+#define RW_T2T_STATE_SELECT_SECTOR 0x04
+/* Detecting Lock/Memory/NDEF/Proprietary TLV in the Tag    */
+#define RW_T2T_STATE_DETECT_TLV 0x05
+/* Performing NDEF Read procedure                           */
+#define RW_T2T_STATE_READ_NDEF 0x06
+/* Performing NDEF Write procedure                          */
+#define RW_T2T_STATE_WRITE_NDEF 0x07
+/* Setting Tag as Read only tag                             */
+#define RW_T2T_STATE_SET_TAG_RO 0x08
+/* Check if Tag is still present                            */
+#define RW_T2T_STATE_CHECK_PRESENCE 0x09
+/* Format the tag                                           */
+#define RW_T2T_STATE_FORMAT_TAG 0x0A
+/* Tag is in HALT State */
+#define RW_T2T_STATE_HALT 0x0B
 
 /* rw_t2t_read/rw_t2t_write takes care of sector change if the block to read/write is in a different sector
  * Next Substate should be assigned to control variable 'substate' before calling these function for State Machine to
@@ -233,41 +302,66 @@ typedef uint8_t tRW_T2T_LOCK_STATUS;
 #define RW_T2T_SUBSTATE_NONE                            0x00
 
 /* Sub states in RW_T2T_STATE_SELECT_SECTOR state */
-#define RW_T2T_SUBSTATE_WAIT_SELECT_SECTOR_SUPPORT      0x01    /* waiting for response of sector select CMD 1              */
-#define RW_T2T_SUBSTATE_WAIT_SELECT_SECTOR              0x02    /* waiting for response of sector select CMD 2              */
+/* waiting for response of sector select CMD 1              */
+#define RW_T2T_SUBSTATE_WAIT_SELECT_SECTOR_SUPPORT 0x01
+/* waiting for response of sector select CMD 2              */
+#define RW_T2T_SUBSTATE_WAIT_SELECT_SECTOR 0x02
 
 /* Sub states in RW_T1T_STATE_DETECT_XXX state */
-#define RW_T2T_SUBSTATE_WAIT_READ_CC                    0x03    /* waiting for the detection of a tlv in a tag              */
-#define RW_T2T_SUBSTATE_WAIT_TLV_DETECT                 0x04    /* waiting for the detection of a tlv in a tag              */
-#define RW_T2T_SUBSTATE_WAIT_FIND_LEN_FIELD_LEN         0x05    /* waiting for finding the len field is 1 or 3 bytes long   */
-#define RW_T2T_SUBSTATE_WAIT_READ_TLV_LEN0              0x06    /* waiting for extracting len field value                   */
-#define RW_T2T_SUBSTATE_WAIT_READ_TLV_LEN1              0x07    /* waiting for extracting len field value                   */
-#define RW_T2T_SUBSTATE_WAIT_READ_TLV_VALUE             0x08    /* waiting for extracting value field in the TLV            */
-#define RW_T2T_SUBSTATE_WAIT_READ_LOCKS                 0x09    /* waiting for reading dynamic locks in the TLV             */
+/* waiting for the detection of a tlv in a tag              */
+#define RW_T2T_SUBSTATE_WAIT_READ_CC 0x03
+/* waiting for the detection of a tlv in a tag              */
+#define RW_T2T_SUBSTATE_WAIT_TLV_DETECT 0x04
+/* waiting for finding the len field is 1 or 3 bytes long   */
+#define RW_T2T_SUBSTATE_WAIT_FIND_LEN_FIELD_LEN 0x05
+/* waiting for extracting len field value                   */
+#define RW_T2T_SUBSTATE_WAIT_READ_TLV_LEN0 0x06
+/* waiting for extracting len field value                   */
+#define RW_T2T_SUBSTATE_WAIT_READ_TLV_LEN1 0x07
+/* waiting for extracting value field in the TLV            */
+#define RW_T2T_SUBSTATE_WAIT_READ_TLV_VALUE 0x08
+/* waiting for reading dynamic locks in the TLV             */
+#define RW_T2T_SUBSTATE_WAIT_READ_LOCKS 0x09
 
 /* Sub states in RW_T2T_STATE_WRITE_NDEF state */
-#define RW_T2T_SUBSTATE_WAIT_READ_NDEF_FIRST_BLOCK      0x0A    /* waiting for rsp to reading the block where NDEF starts   */
-#define RW_T2T_SUBSTATE_WAIT_READ_NDEF_LAST_BLOCK       0x0B    /* waiting for rsp to reading block where new NDEF Msg ends */
-#define RW_T2T_SUBSTATE_WAIT_READ_TERM_TLV_BLOCK        0x0C    /* waiting for rsp to reading block where Trm tlv gets added*/
-#define RW_T2T_SUBSTATE_WAIT_READ_NDEF_NEXT_BLOCK       0x0D    /* waiting for rsp to reading block where nxt NDEF write    */
-#define RW_T2T_SUBSTATE_WAIT_WRITE_NDEF_NEXT_BLOCK      0x0E    /* waiting for rsp to writting NDEF block                   */
-#define RW_T2T_SUBSTATE_WAIT_WRITE_NDEF_LAST_BLOCK      0x0F    /* waiting for rsp to last NDEF block write cmd             */
-#define RW_T2T_SUBSTATE_WAIT_READ_NDEF_LEN_BLOCK        0x10    /* waiting for rsp to reading NDEF len field block          */
-#define RW_T2T_SUBSTATE_WAIT_WRITE_NDEF_LEN_BLOCK       0x11    /* waiting for rsp of updating first NDEF len field block   */
-#define RW_T2T_SUBSTATE_WAIT_WRITE_NDEF_LEN_NEXT_BLOCK  0x12    /* waiting for rsp of updating next NDEF len field block    */
-#define RW_T2T_SUBSTATE_WAIT_WRITE_TERM_TLV_CMPLT       0x13    /* waiting for rsp to writing to Terminator tlv             */
+/* waiting for rsp to reading the block where NDEF starts   */
+#define RW_T2T_SUBSTATE_WAIT_READ_NDEF_FIRST_BLOCK 0x0A
+/* waiting for rsp to reading block where new NDEF Msg ends */
+#define RW_T2T_SUBSTATE_WAIT_READ_NDEF_LAST_BLOCK 0x0B
+/* waiting for rsp to reading block where Trm tlv gets added*/
+#define RW_T2T_SUBSTATE_WAIT_READ_TERM_TLV_BLOCK 0x0C
+/* waiting for rsp to reading block where nxt NDEF write    */
+#define RW_T2T_SUBSTATE_WAIT_READ_NDEF_NEXT_BLOCK 0x0D
+/* waiting for rsp to writting NDEF block                   */
+#define RW_T2T_SUBSTATE_WAIT_WRITE_NDEF_NEXT_BLOCK 0x0E
+/* waiting for rsp to last NDEF block write cmd             */
+#define RW_T2T_SUBSTATE_WAIT_WRITE_NDEF_LAST_BLOCK 0x0F
+/* waiting for rsp to reading NDEF len field block          */
+#define RW_T2T_SUBSTATE_WAIT_READ_NDEF_LEN_BLOCK 0x10
+/* waiting for rsp of updating first NDEF len field block   */
+#define RW_T2T_SUBSTATE_WAIT_WRITE_NDEF_LEN_BLOCK 0x11
+/* waiting for rsp of updating next NDEF len field block    */
+#define RW_T2T_SUBSTATE_WAIT_WRITE_NDEF_LEN_NEXT_BLOCK 0x12
+/* waiting for rsp to writing to Terminator tlv             */
+#define RW_T2T_SUBSTATE_WAIT_WRITE_TERM_TLV_CMPLT 0x13
 
 /* Sub states in RW_T2T_STATE_FORMAT_TAG state */
 #define RW_T2T_SUBSTATE_WAIT_READ_VERSION_INFO          0x14
-#define RW_T2T_SUBSTATE_WAIT_SET_CC                     0x15    /* waiting for response to format/set capability container  */
+/* waiting for response to format/set capability container  */
+#define RW_T2T_SUBSTATE_WAIT_SET_CC 0x15
 #define RW_T2T_SUBSTATE_WAIT_SET_LOCK_TLV               0x16
-#define RW_T2T_SUBSTATE_WAIT_SET_NULL_NDEF              0x17    /* waiting for response to format/set NULL NDEF             */
+/* waiting for response to format/set NULL NDEF             */
+#define RW_T2T_SUBSTATE_WAIT_SET_NULL_NDEF 0x17
 
 /* Sub states in RW_T2T_STATE_SET_TAG_RO state */
-#define RW_T2T_SUBSTATE_WAIT_SET_CC_RO                  0x19    /* waiting for response to set CC3 to RO                    */
-#define RW_T2T_SUBSTATE_WAIT_READ_DYN_LOCK_BYTE_BLOCK   0x1A    /* waiting for response to read dynamic lock bytes block    */
-#define RW_T2T_SUBSTATE_WAIT_SET_DYN_LOCK_BITS          0x1B    /* waiting for response to set dynamic lock bits            */
-#define RW_T2T_SUBSTATE_WAIT_SET_ST_LOCK_BITS           0x1C    /* waiting for response to set static lock bits             */
+/* waiting for response to set CC3 to RO                    */
+#define RW_T2T_SUBSTATE_WAIT_SET_CC_RO 0x19
+/* waiting for response to read dynamic lock bytes block    */
+#define RW_T2T_SUBSTATE_WAIT_READ_DYN_LOCK_BYTE_BLOCK 0x1A
+/* waiting for response to set dynamic lock bits            */
+#define RW_T2T_SUBSTATE_WAIT_SET_DYN_LOCK_BITS 0x1B
+/* waiting for response to set static lock bits             */
+#define RW_T2T_SUBSTATE_WAIT_SET_ST_LOCK_BITS 0x1C
 
 typedef struct
 {
@@ -366,12 +460,18 @@ typedef struct
 } tRW_T3T_DETECT;
 
 /* RW_T3T control block flags */
-#define RW_T3T_FL_IS_FINAL_NDEF_SEGMENT         0x01    /* The final command for completing the NDEF read/write */
-#define RW_T3T_FL_W4_PRESENCE_CHECK_POLL_RSP    0x02    /* Waiting for POLL response for presence check */
-#define RW_T3T_FL_W4_GET_SC_POLL_RSP            0x04    /* Waiting for POLL response for RW_T3tGetSystemCodes */
-#define RW_T3T_FL_W4_NDEF_DETECT_POLL_RSP       0x08    /* Waiting for POLL response for RW_T3tDetectNDef */
-#define RW_T3T_FL_W4_FMT_FELICA_LITE_POLL_RSP   0x10    /* Waiting for POLL response for RW_T3tFormat */
-#define RW_T3T_FL_W4_SRO_FELICA_LITE_POLL_RSP   0x20    /* Waiting for POLL response for RW_T3tSetReadOnly */
+/* The final command for completing the NDEF read/write */
+#define RW_T3T_FL_IS_FINAL_NDEF_SEGMENT 0x01
+/* Waiting for POLL response for presence check */
+#define RW_T3T_FL_W4_PRESENCE_CHECK_POLL_RSP 0x02
+/* Waiting for POLL response for RW_T3tGetSystemCodes */
+#define RW_T3T_FL_W4_GET_SC_POLL_RSP 0x04
+/* Waiting for POLL response for RW_T3tDetectNDef */
+#define RW_T3T_FL_W4_NDEF_DETECT_POLL_RSP 0x08
+/* Waiting for POLL response for RW_T3tFormat */
+#define RW_T3T_FL_W4_FMT_FELICA_LITE_POLL_RSP 0x10
+/* Waiting for POLL response for RW_T3tSetReadOnly */
+#define RW_T3T_FL_W4_SRO_FELICA_LITE_POLL_RSP 0x20
 
 typedef struct
 {
@@ -457,8 +557,10 @@ typedef struct
 
     tRW_T4T_CC          cc_file;            /* Capability Container File        */
 
-#define RW_T4T_NDEF_STATUS_NDEF_DETECTED    0x01    /* NDEF has been detected   */
-#define RW_T4T_NDEF_STATUS_NDEF_READ_ONLY   0x02    /* NDEF file is read-only   */
+/* NDEF has been detected   */
+#define RW_T4T_NDEF_STATUS_NDEF_DETECTED 0x01
+/* NDEF file is read-only   */
+#define RW_T4T_NDEF_STATUS_NDEF_READ_ONLY 0x02
 
     uint8_t             ndef_status;        /* bitmap for NDEF status           */
     uint8_t             channel;            /* channel id: used for read-binary */
@@ -488,17 +590,27 @@ typedef struct
 typedef uint8_t tRW_I93_RW_STATE;
 typedef uint8_t tRW_I93_RW_SUBSTATE;
 
-#define RW_I93_FLAG_READ_ONLY           0x01    /* tag is read-only                        */
-#define RW_I93_FLAG_READ_MULTI_BLOCK    0x02    /* tag supports read multi block           */
-#define RW_I93_FLAG_RESET_DSFID         0x04    /* need to reset DSFID for formatting      */
-#define RW_I93_FLAG_RESET_AFI           0x08    /* need to reset AFI for formatting        */
-#define RW_I93_FLAG_16BIT_NUM_BLOCK     0x10    /* use 2 bytes for number of blocks        */
+/* tag is read-only                        */
+#define RW_I93_FLAG_READ_ONLY 0x01
+/* tag supports read multi block           */
+#define RW_I93_FLAG_READ_MULTI_BLOCK 0x02
+/* need to reset DSFID for formatting      */
+#define RW_I93_FLAG_RESET_DSFID 0x04
+/* need to reset AFI for formatting        */
+#define RW_I93_FLAG_RESET_AFI 0x08
+/* use 2 bytes for number of blocks        */
+#define RW_I93_FLAG_16BIT_NUM_BLOCK 0x10
 
-#define RW_I93_TLV_DETECT_STATE_TYPE      0x01  /* searching for type                      */
-#define RW_I93_TLV_DETECT_STATE_LENGTH_1  0x02  /* searching for the first byte of length  */
-#define RW_I93_TLV_DETECT_STATE_LENGTH_2  0x03  /* searching for the second byte of length */
-#define RW_I93_TLV_DETECT_STATE_LENGTH_3  0x04  /* searching for the third byte of length  */
-#define RW_I93_TLV_DETECT_STATE_VALUE     0x05  /* reading value field                     */
+/* searching for type                      */
+#define RW_I93_TLV_DETECT_STATE_TYPE 0x01
+/* searching for the first byte of length  */
+#define RW_I93_TLV_DETECT_STATE_LENGTH_1 0x02
+/* searching for the second byte of length */
+#define RW_I93_TLV_DETECT_STATE_LENGTH_2 0x03
+/* searching for the third byte of length  */
+#define RW_I93_TLV_DETECT_STATE_LENGTH_3 0x04
+/* reading value field                     */
+#define RW_I93_TLV_DETECT_STATE_VALUE 0x05
 
 enum
 {

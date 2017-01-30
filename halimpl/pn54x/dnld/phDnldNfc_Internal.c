@@ -25,50 +25,71 @@
 #include <phNxpLog.h>
 #include <phNxpNciHal_utils.h>
 
-#define PHDNLDNFC_MIN_PLD_LEN   (0x04U)                      /* Minimum length of payload including 1 byte CmdId */
+/* Minimum length of payload including 1 byte CmdId */
+#define PHDNLDNFC_MIN_PLD_LEN (0x04U)
 
-#define PHDNLDNFC_FRAME_HDR_OFFSET  (0x00)                    /* Offset of Length byte within the frame */
-#define PHDNLDNFC_FRAMEID_OFFSET (PHDNLDNFC_FRAME_HDR_LEN)        /* Offset of FrameId within the frame */
-#define PHDNLDNFC_FRAMESTATUS_OFFSET PHDNLDNFC_FRAMEID_OFFSET  /* Offset of status byte within the frame */
-#define PHDNLDNFC_PLD_OFFSET    (PHDNLDNFC_MIN_PLD_LEN - 1)    /* Offset within frame where payload starts*/
+/* Offset of Length byte within the frame */
+#define PHDNLDNFC_FRAME_HDR_OFFSET (0x00)
+/* Offset of FrameId within the frame */
+#define PHDNLDNFC_FRAMEID_OFFSET (PHDNLDNFC_FRAME_HDR_LEN)
+/* Offset of status byte within the frame */
+#define PHDNLDNFC_FRAMESTATUS_OFFSET PHDNLDNFC_FRAMEID_OFFSET
+/* Offset within frame where payload starts*/
+#define PHDNLDNFC_PLD_OFFSET (PHDNLDNFC_MIN_PLD_LEN - 1)
 
 #define PHDNLDNFC_FRAME_RDDATA_OFFSET ((PHDNLDNFC_FRAME_HDR_LEN) + \
                                       (PHDNLDNFC_MIN_PLD_LEN)) /* recvd frame offset where data starts */
 
-#define PHDNLDNFC_FRAME_SIGNATURE_SIZE   (0xC0U)        /* Size of first secure write frame Signature */
-#define PHDNLDNFC_FIRST_FRAME_PLD_SIZE   (0xE4U)        /* Size of first secure write frame payload */
+/* Size of first secure write frame Signature */
+#define PHDNLDNFC_FRAME_SIGNATURE_SIZE (0xC0U)
+/* Size of first secure write frame payload */
+#define PHDNLDNFC_FIRST_FRAME_PLD_SIZE (0xE4U)
 
-#define PHDNLDNFC_FIRST_FRAGFRAME_RESP   (0x2DU)        /* Status response for first fragmented write frame */
-#define PHDNLDNFC_NEXT_FRAGFRAME_RESP    (0x2EU)        /* Status response for subsequent fragmented write frame */
+/* Status response for first fragmented write frame */
+#define PHDNLDNFC_FIRST_FRAGFRAME_RESP (0x2DU)
+/* Status response for subsequent fragmented write frame */
+#define PHDNLDNFC_NEXT_FRAGFRAME_RESP (0x2EU)
 
 #define PHDNLDNFC_SET_HDR_FRAGBIT(n)      ((n) | (1<<10))    /* Header chunk bit set macro */
 #define PHDNLDNFC_CLR_HDR_FRAGBIT(n)      ((n) & ~(1U<<10))   /* Header chunk bit clear macro */
 #define PHDNLDNFC_CHK_HDR_FRAGBIT(n)      ((n) & 0x04)       /* macro to check if frag bit is set in Hdr */
 
-#define PHDNLDNFC_RSP_TIMEOUT   (2500)                /* Timeout value to wait for response from NFCC */
-#define PHDNLDNFC_RETRY_FRAME_WRITE   (50)            /* Timeout value to wait before resending the last frame */
+/* Timeout value to wait for response from NFCC */
+#define PHDNLDNFC_RSP_TIMEOUT (2500)
+/* Timeout value to wait before resending the last frame */
+#define PHDNLDNFC_RETRY_FRAME_WRITE (50)
 
-#define PHDNLDNFC_USERDATA_EEPROM_LENSIZE    (0x02U)    /* size of EEPROM user data length */
-#define PHDNLDNFC_USERDATA_EEPROM_OFFSIZE    (0x02U)    /* size of EEPROM offset */
+/* size of EEPROM user data length */
+#define PHDNLDNFC_USERDATA_EEPROM_LENSIZE (0x02U)
+/* size of EEPROM offset */
+#define PHDNLDNFC_USERDATA_EEPROM_OFFSIZE (0x02U)
 
 #ifdef  NXP_PN547C1_DOWNLOAD
 /* EEPROM offset and length value for PN547C1 */
-#define PHDNLDNFC_USERDATA_EEPROM_OFFSET  (0x003CU)    /* 16 bits offset indicating user data area start location */
-#define PHDNLDNFC_USERDATA_EEPROM_LEN     (0x0DC0U)    /* 16 bits length of user data area */
+/* 16 bits offset indicating user data area start location */
+#define PHDNLDNFC_USERDATA_EEPROM_OFFSET (0x003CU)
+/* 16 bits length of user data area */
+#define PHDNLDNFC_USERDATA_EEPROM_LEN (0x0DC0U)
 #else
 
 #if(NFC_NXP_CHIP_TYPE == PN548C2)
 /* EEPROM offset and length value for PN548AD */
-#define PHDNLDNFC_USERDATA_EEPROM_OFFSET  (0x02BCU)    /* 16 bits offset indicating user data area start location */
-#define PHDNLDNFC_USERDATA_EEPROM_LEN     (0x0C00U)    /* 16 bits length of user data area */
+/* 16 bits offset indicating user data area start location */
+#define PHDNLDNFC_USERDATA_EEPROM_OFFSET (0x02BCU)
+/* 16 bits length of user data area */
+#define PHDNLDNFC_USERDATA_EEPROM_LEN (0x0C00U)
 #elif(NFC_NXP_CHIP_TYPE == PN551)
 /* EEPROM offset and length value for PN551 */
-#define PHDNLDNFC_USERDATA_EEPROM_OFFSET  (0x02BCU)    /* 16 bits offset indicating user data area start location */
-#define PHDNLDNFC_USERDATA_EEPROM_LEN     (0x0C00U)    /* 16 bits length of user data area */
+/* 16 bits offset indicating user data area start location */
+#define PHDNLDNFC_USERDATA_EEPROM_OFFSET (0x02BCU)
+/* 16 bits length of user data area */
+#define PHDNLDNFC_USERDATA_EEPROM_LEN (0x0C00U)
 #else
 /* EEPROM offset and length value for PN547C2 */
-#define PHDNLDNFC_USERDATA_EEPROM_OFFSET  (0x023CU)    /* 16 bits offset indicating user data area start location */
-#define PHDNLDNFC_USERDATA_EEPROM_LEN     (0x0C80U)    /* 16 bits length of user data area */
+/* 16 bits offset indicating user data area start location */
+#define PHDNLDNFC_USERDATA_EEPROM_OFFSET (0x023CU)
+/* 16 bits length of user data area */
+#define PHDNLDNFC_USERDATA_EEPROM_LEN (0x0C80U)
 #endif
 
 #endif
