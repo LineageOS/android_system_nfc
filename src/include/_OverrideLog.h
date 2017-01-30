@@ -27,22 +27,19 @@
  ******************************************************************************/
 #pragma once
 
-//Override Android's ALOGD macro by adding a boolean expression.
-#define ALOGD(...) ((void)ALOGD_IF(appl_trace_level>=BT_TRACE_LEVEL_DEBUG, __VA_ARGS__))
+// Override Android's ALOGD macro by adding a boolean expression.
+#define ALOGD(...) \
+  ((void)ALOGD_IF(appl_trace_level >= BT_TRACE_LEVEL_DEBUG, __VA_ARGS__))
 
-
-#include <cutils/log.h> //define Android logging macros
+#include <cutils/log.h>  //define Android logging macros
 #include "bt_types.h"
-
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-
 extern unsigned char appl_trace_level;
 extern uint32_t ScrProtocolTraceFlag;
-
 
 /*******************************************************************************
 **
@@ -61,9 +58,8 @@ extern uint32_t ScrProtocolTraceFlag;
 **                  BT_TRACE_LEVEL_DEBUG   5 * Debug messages (general)
 **
 *******************************************************************************/
-unsigned char initializeGlobalAppLogLevel ();
-uint32_t initializeProtocolLogLevel ();
-
+unsigned char initializeGlobalAppLogLevel();
+uint32_t initializeProtocolLogLevel();
 
 #ifdef __cplusplus
 }

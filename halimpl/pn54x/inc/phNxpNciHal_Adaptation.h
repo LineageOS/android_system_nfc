@@ -20,18 +20,17 @@
 #include <hardware/hardware.h>
 #include <hardware/nfc.h>
 
-typedef struct
-{
-    struct nfc_nci_device nci_device;
+typedef struct {
+  struct nfc_nci_device nci_device;
 
-    /* Local definitions */
+  /* Local definitions */
 } pn547_dev_t;
 
 /* NXP HAL functions */
 
-int phNxpNciHal_open(nfc_stack_callback_t *p_cback,
-        nfc_stack_data_callback_t *p_data_cback);
-int phNxpNciHal_write(uint16_t data_len, const uint8_t *p_data);
+int phNxpNciHal_open(nfc_stack_callback_t* p_cback,
+                     nfc_stack_data_callback_t* p_data_cback);
+int phNxpNciHal_write(uint16_t data_len, const uint8_t* p_data);
 int phNxpNciHal_core_initialized(uint8_t* p_core_init_rsp_params);
 int phNxpNciHal_pre_discover(void);
 int phNxpNciHal_close(void);

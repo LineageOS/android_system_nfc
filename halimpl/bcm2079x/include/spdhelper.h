@@ -23,25 +23,24 @@
 using namespace std;
 #define DEFAULT_SPD_MAXRETRYCOUNT (3)
 
-class SpdHelper
-{
-public:
-    static bool isPatchBad(uint8_t* prm, uint32_t len);
-    static void setPatchAsBad();
-    static void incErrorCount();
-    static bool isSpdDebug();
+class SpdHelper {
+ public:
+  static bool isPatchBad(uint8_t* prm, uint32_t len);
+  static void setPatchAsBad();
+  static void incErrorCount();
+  static bool isSpdDebug();
 
-private:
-    SpdHelper();
-    static SpdHelper& getInstance();
+ private:
+  SpdHelper();
+  static SpdHelper& getInstance();
 
-    bool isPatchBadImpl(uint8_t* prm, uint32_t len);
-    void setPatchAsBadImpl();
-    void incErrorCountImpl();
-    bool isSpdDebugImpl() {return mSpdDebug;}
-    string mPatchId;
-    int  mErrorCount;
-    int  mMaxErrorCount;
-    bool mIsPatchBad;
-    bool mSpdDebug;
+  bool isPatchBadImpl(uint8_t* prm, uint32_t len);
+  void setPatchAsBadImpl();
+  void incErrorCountImpl();
+  bool isSpdDebugImpl() { return mSpdDebug; }
+  string mPatchId;
+  int mErrorCount;
+  int mMaxErrorCount;
+  bool mIsPatchBad;
+  bool mSpdDebug;
 };

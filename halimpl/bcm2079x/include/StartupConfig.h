@@ -22,72 +22,68 @@
  ******************************************************************************/
 
 #pragma once
-#include "bt_types.h"
 #include <string>
+#include "bt_types.h"
 
+class StartupConfig {
+ public:
+  typedef std::basic_string<uint8_t> uint8_string;
+  StartupConfig();
 
-class StartupConfig
-{
-public:
-    typedef std::basic_string<uint8_t> uint8_string;
-    StartupConfig ();
+  /*******************************************************************************
+  **
+  ** Function:        initialize
+  **
+  ** Description:     Reset all member variables.
+  **
+  ** Returns:         None
+  **
+  *******************************************************************************/
+  void initialize();
 
+  /*******************************************************************************
+  **
+  ** Function:        getInternalBuffer
+  **
+  ** Description:     Get the pointer to buffer that contains multiple
+  **                  Type-Length-Value contents.
+  **
+  ** Returns:         Pointer to buffer.
+  **
+  *******************************************************************************/
+  const uint8_t* getInternalBuffer();
 
-    /*******************************************************************************
-    **
-    ** Function:        initialize
-    **
-    ** Description:     Reset all member variables.
-    **
-    ** Returns:         None
-    **
-    *******************************************************************************/
-    void initialize ();
+  /*******************************************************************************
+  **
+  ** Function:        append
+  **
+  ** Description:     Append new config data to internal buffer.
+  **                  newContent: buffer containing new content; newContent[0]
+  *is
+  **                          payload length; newContent[1..end] is payload.
+  **                  newContentLen: total length of newContent.
+  **
+  ** Returns:         True if ok.
+  **
+  *******************************************************************************/
+  bool append(const uint8_t* newContent, uint8_t newContentLen);
 
+  /*******************************************************************************
+  **
+  ** Function:        disableSecureElement
+  **
+  ** Description:     Adjust a TLV to disable secure element(s).  The TLV's type
+  *is 0xC2.
+  **                  bitmask: 0xC0 = do not detect any secure element.
+  **                           0x40 = do not detect secure element in slot 0.
+  **                           0x80 = do not detect secure element in slot 1.
+  **
+  ** Returns:         True if ok.
+  **
+  *******************************************************************************/
+  bool disableSecureElement(uint8_t bitmask);
 
-    /*******************************************************************************
-    **
-    ** Function:        getInternalBuffer
-    **
-    ** Description:     Get the pointer to buffer that contains multiple
-    **                  Type-Length-Value contents.
-    **
-    ** Returns:         Pointer to buffer.
-    **
-    *******************************************************************************/
-    const uint8_t* getInternalBuffer ();
-
-
-    /*******************************************************************************
-    **
-    ** Function:        append
-    **
-    ** Description:     Append new config data to internal buffer.
-    **                  newContent: buffer containing new content; newContent[0] is
-    **                          payload length; newContent[1..end] is payload.
-    **                  newContentLen: total length of newContent.
-    **
-    ** Returns:         True if ok.
-    **
-    *******************************************************************************/
-    bool append (const uint8_t* newContent, uint8_t newContentLen);
-
-
-    /*******************************************************************************
-    **
-    ** Function:        disableSecureElement
-    **
-    ** Description:     Adjust a TLV to disable secure element(s).  The TLV's type is 0xC2.
-    **                  bitmask: 0xC0 = do not detect any secure element.
-    **                           0x40 = do not detect secure element in slot 0.
-    **                           0x80 = do not detect secure element in slot 1.
-    **
-    ** Returns:         True if ok.
-    **
-    *******************************************************************************/
-    bool disableSecureElement (uint8_t bitmask);
-
-private:
-    static const uint8_t mMaxLength;
-    uint8_string mBuffer;
+ private:
+  static const uint8_t mMaxLength;
+  uint8_string mBuffer;
 };

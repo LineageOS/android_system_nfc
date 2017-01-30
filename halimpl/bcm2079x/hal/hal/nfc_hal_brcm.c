@@ -16,7 +16,6 @@
  *
  ******************************************************************************/
 
-
 /******************************************************************************
  *
  *  This file contains function of the NFC unit to receive/process NFC VS
@@ -27,4 +26,3 @@
 #include "gki.h"
 #include "nfc_hal_int.h"
 #include "userial.h"
-

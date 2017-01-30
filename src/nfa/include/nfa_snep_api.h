@@ -16,7 +16,6 @@
  *
  ******************************************************************************/
 
-
 /******************************************************************************
  *
  *  This is the public interface file for NFA SNEP, Broadcom's NFC
@@ -31,7 +30,7 @@
 /*****************************************************************************
 **  Constants and data types
 *****************************************************************************/
-#define NFA_SNEP_VERSION                0x10    /* SNEP Version 1.0          */
+#define NFA_SNEP_VERSION 0x10 /* SNEP Version 1.0          */
 
 /* send remaining fragments         */
 #define NFA_SNEP_REQ_CODE_CONTINUE 0x00
@@ -42,7 +41,7 @@
 /* do not send remaining fragments  */
 #define NFA_SNEP_REQ_CODE_REJECT 0x7F
 
-#define tNFA_SNEP_REQ_CODE  uint8_t
+#define tNFA_SNEP_REQ_CODE uint8_t
 
 /* continue send remaining fragments    */
 #define NFA_SNEP_RESP_CODE_CONTINUE 0x80
@@ -83,8 +82,10 @@
 /* Failed to connect or disconnected    */
 #define NFA_SNEP_DISC_EVT 0x08
 
-#define NFA_SNEP_ALLOC_BUFF_EVT	            0x09    /* Request to allocate a buffer for NDEF*/
-#define NFA_SNEP_FREE_BUFF_EVT	            0x0A    /* Request to deallocate buffer for NDEF*/
+#define NFA_SNEP_ALLOC_BUFF_EVT                                         \
+  0x09                              /* Request to allocate a buffer for \
+                                       NDEF*/
+#define NFA_SNEP_FREE_BUFF_EVT 0x0A /* Request to deallocate buffer for NDEF*/
 /* GET response sent to client          */
 #define NFA_SNEP_GET_RESP_CMPL_EVT 0x0B
 
@@ -95,20 +96,18 @@
 
 typedef uint8_t tNFA_SNEP_EVT;
 
-#define NFA_SNEP_ANY_SAP         LLCP_INVALID_SAP
+#define NFA_SNEP_ANY_SAP LLCP_INVALID_SAP
 
 /* Data for NFA_SNEP_REG_EVT */
-typedef struct
-{
-    tNFA_STATUS         status;
-    tNFA_HANDLE         reg_handle;         /* handle for registered server/client */
-    char                service_name[LLCP_MAX_SN_LEN + 1];      /* only for server */
+typedef struct {
+  tNFA_STATUS status;
+  tNFA_HANDLE reg_handle; /* handle for registered server/client */
+  char service_name[LLCP_MAX_SN_LEN + 1]; /* only for server */
 } tNFA_SNEP_REG;
 
 /* Data for NFA_SNEP_ACTIVATED_EVT */
-typedef struct
-{
-    tNFA_HANDLE         client_handle;      /* handle for registered client    */
+typedef struct {
+  tNFA_HANDLE client_handle; /* handle for registered client    */
 } tNFA_SNEP_ACTIVATED;
 
 /* Data for NFA_SNEP_DEACTIVATED_EVT */
@@ -119,102 +118,92 @@ typedef tNFA_SNEP_ACTIVATED tNFA_SNEP_DEACTIVATED;
 ** for server, new handle will be assigned for conn_handle
 ** for client, handle used in NFA_SnepConnect () is returned in conn_handle
 */
-typedef struct
-{
-    tNFA_HANDLE         reg_handle;         /* server/client handle            */
-    tNFA_HANDLE         conn_handle;        /* handle for data link connection */
+typedef struct {
+  tNFA_HANDLE reg_handle;  /* server/client handle            */
+  tNFA_HANDLE conn_handle; /* handle for data link connection */
 } tNFA_SNEP_CONNECT;
 
 /* Data for NFA_SNEP_GET_REQ_EVT */
-typedef struct
-{
-    tNFA_HANDLE         conn_handle;        /* handle for data link connection */
-    uint32_t            acceptable_length;  /* acceptable length from client   */
-    uint32_t            ndef_length;        /* NDEF message length             */
-    uint8_t             *p_ndef;            /* NDEF message                    */
+typedef struct {
+  tNFA_HANDLE conn_handle;    /* handle for data link connection */
+  uint32_t acceptable_length; /* acceptable length from client   */
+  uint32_t ndef_length;       /* NDEF message length             */
+  uint8_t* p_ndef;            /* NDEF message                    */
 } tNFA_SNEP_GET_REQ;
 
 /* Data for NFA_SNEP_PUT_REQ_EVT */
-typedef struct
-{
-    tNFA_HANDLE         conn_handle;        /* handle for data link connection */
-    uint32_t            ndef_length;        /* NDEF message length             */
-    uint8_t             *p_ndef;            /* NDEF message                    */
+typedef struct {
+  tNFA_HANDLE conn_handle; /* handle for data link connection */
+  uint32_t ndef_length;    /* NDEF message length             */
+  uint8_t* p_ndef;         /* NDEF message                    */
 } tNFA_SNEP_PUT_REQ;
 
 /* Data for NFA_SNEP_GET_RESP_EVT */
-typedef struct
-{
-    tNFA_HANDLE         conn_handle;        /* handle for data link connection */
-    tNFA_SNEP_RESP_CODE resp_code;          /* response code from server       */
-    uint32_t            ndef_length;        /* NDEF message length             */
-    uint8_t             *p_ndef;            /* NDEF message                    */
+typedef struct {
+  tNFA_HANDLE conn_handle;       /* handle for data link connection */
+  tNFA_SNEP_RESP_CODE resp_code; /* response code from server       */
+  uint32_t ndef_length;          /* NDEF message length             */
+  uint8_t* p_ndef;               /* NDEF message                    */
 } tNFA_SNEP_GET_RESP;
 
 /* Data for NFA_SNEP_PUT_RESP_EVT */
-typedef struct
-{
-    tNFA_HANDLE         conn_handle;        /* handle for data link connection */
-    tNFA_SNEP_RESP_CODE resp_code;          /* response code from server       */
+typedef struct {
+  tNFA_HANDLE conn_handle;       /* handle for data link connection */
+  tNFA_SNEP_RESP_CODE resp_code; /* response code from server       */
 } tNFA_SNEP_PUT_RESP;
 
 /* Data for NFA_SNEP_DISC_EVT */
-typedef struct
-{
-    tNFA_HANDLE         conn_handle;        /* handle for data link connection */
-                                            /* client_handle if connection failed */
+typedef struct {
+  tNFA_HANDLE conn_handle; /* handle for data link connection */
+                           /* client_handle if connection failed */
 } tNFA_SNEP_DISC;
 
 /* Data for NFA_SNEP_ALLOC_BUFF_EVT */
-typedef struct
-{
-    tNFA_HANDLE         conn_handle;        /* handle for data link connection                */
-    tNFA_SNEP_REQ_CODE  req_code;           /* NFA_SNEP_REQ_CODE_GET or NFA_SNEP_REQ_CODE_PUT */
-    tNFA_SNEP_RESP_CODE resp_code;          /* Response code if cannot allocate buffer        */
-    uint32_t            ndef_length;        /* NDEF message length                            */
-    uint8_t             *p_buff;            /* buffer for NDEF message                        */
+typedef struct {
+  tNFA_HANDLE conn_handle; /* handle for data link connection                */
+  tNFA_SNEP_REQ_CODE
+      req_code; /* NFA_SNEP_REQ_CODE_GET or NFA_SNEP_REQ_CODE_PUT */
+  tNFA_SNEP_RESP_CODE resp_code; /* Response code if cannot allocate buffer */
+  uint32_t ndef_length; /* NDEF message length                            */
+  uint8_t* p_buff;      /* buffer for NDEF message                        */
 } tNFA_SNEP_ALLOC;
 
 /* Data for NFA_SNEP_FREE_BUFF_EVT */
-typedef struct
-{
-    tNFA_HANDLE         conn_handle;        /* handle for data link connection */
-    uint8_t             *p_buff;            /* buffer to free                  */
+typedef struct {
+  tNFA_HANDLE conn_handle; /* handle for data link connection */
+  uint8_t* p_buff;         /* buffer to free                  */
 } tNFA_SNEP_FREE;
 
 /* Data for NFA_SNEP_GET_RESP_CMPL_EVT */
-typedef struct
-{
-    tNFA_HANDLE         conn_handle;        /* handle for data link connection */
-    uint8_t             *p_buff;            /* buffer for NDEF message         */
+typedef struct {
+  tNFA_HANDLE conn_handle; /* handle for data link connection */
+  uint8_t* p_buff;         /* buffer for NDEF message         */
 } tNFA_SNEP_GET_RESP_CMPL;
 
 /* Union of all SNEP callback structures */
-typedef union
-{
-    tNFA_SNEP_REG           reg;            /* NFA_SNEP_REG_EVT             */
-    tNFA_SNEP_ACTIVATED     activated;      /* NFA_SNEP_ACTIVATED_EVT       */
-    tNFA_SNEP_DEACTIVATED   deactivated;    /* NFA_SNEP_DEACTIVATED_EVT     */
-    tNFA_SNEP_CONNECT       connect;        /* NFA_SNEP_CONNECTED_EVT       */
-    tNFA_SNEP_GET_REQ       get_req;        /* NFA_SNEP_GET_REQ_EVT         */
-    tNFA_SNEP_PUT_REQ       put_req;        /* NFA_SNEP_PUT_REQ_EVT         */
-    tNFA_SNEP_GET_RESP      get_resp;       /* NFA_SNEP_GET_RESP_EVT        */
-    tNFA_SNEP_PUT_RESP      put_resp;       /* NFA_SNEP_PUT_RESP_EVT        */
-    tNFA_SNEP_DISC          disc;           /* NFA_SNEP_DISC_EVT            */
-    tNFA_SNEP_ALLOC         alloc;          /* NFA_SNEP_ALLOC_BUFF_EVT      */
-    tNFA_SNEP_FREE          free;           /* NFA_SNEP_FREE_BUFF_EVT       */
-    tNFA_SNEP_GET_RESP_CMPL get_resp_cmpl;  /* NFA_SNEP_GET_RESP_CMPL_EVT   */
+typedef union {
+  tNFA_SNEP_REG reg;                     /* NFA_SNEP_REG_EVT             */
+  tNFA_SNEP_ACTIVATED activated;         /* NFA_SNEP_ACTIVATED_EVT       */
+  tNFA_SNEP_DEACTIVATED deactivated;     /* NFA_SNEP_DEACTIVATED_EVT     */
+  tNFA_SNEP_CONNECT connect;             /* NFA_SNEP_CONNECTED_EVT       */
+  tNFA_SNEP_GET_REQ get_req;             /* NFA_SNEP_GET_REQ_EVT         */
+  tNFA_SNEP_PUT_REQ put_req;             /* NFA_SNEP_PUT_REQ_EVT         */
+  tNFA_SNEP_GET_RESP get_resp;           /* NFA_SNEP_GET_RESP_EVT        */
+  tNFA_SNEP_PUT_RESP put_resp;           /* NFA_SNEP_PUT_RESP_EVT        */
+  tNFA_SNEP_DISC disc;                   /* NFA_SNEP_DISC_EVT            */
+  tNFA_SNEP_ALLOC alloc;                 /* NFA_SNEP_ALLOC_BUFF_EVT      */
+  tNFA_SNEP_FREE free;                   /* NFA_SNEP_FREE_BUFF_EVT       */
+  tNFA_SNEP_GET_RESP_CMPL get_resp_cmpl; /* NFA_SNEP_GET_RESP_CMPL_EVT   */
 } tNFA_SNEP_EVT_DATA;
 
 /* NFA SNEP callback */
-typedef void (tNFA_SNEP_CBACK) (tNFA_SNEP_EVT event, tNFA_SNEP_EVT_DATA *p_data);
+typedef void(tNFA_SNEP_CBACK)(tNFA_SNEP_EVT event, tNFA_SNEP_EVT_DATA* p_data);
 
 /*****************************************************************************
 **  External Function Declarations
 *****************************************************************************/
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 /*******************************************************************************
@@ -235,7 +224,7 @@ extern "C"
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_SnepStartDefaultServer (tNFA_SNEP_CBACK *p_cback);
+extern tNFA_STATUS NFA_SnepStartDefaultServer(tNFA_SNEP_CBACK* p_cback);
 
 /*******************************************************************************
 **
@@ -254,7 +243,7 @@ extern tNFA_STATUS NFA_SnepStartDefaultServer (tNFA_SNEP_CBACK *p_cback);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_SnepStopDefaultServer (tNFA_SNEP_CBACK *p_cback);
+extern tNFA_STATUS NFA_SnepStopDefaultServer(tNFA_SNEP_CBACK* p_cback);
 
 /*******************************************************************************
 **
@@ -282,9 +271,9 @@ extern tNFA_STATUS NFA_SnepStopDefaultServer (tNFA_SNEP_CBACK *p_cback);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_SnepRegisterServer (uint8_t         server_sap,
-                                           char            *p_service_name,
-                                           tNFA_SNEP_CBACK *p_cback);
+extern tNFA_STATUS NFA_SnepRegisterServer(uint8_t server_sap,
+                                          char* p_service_name,
+                                          tNFA_SNEP_CBACK* p_cback);
 
 /*******************************************************************************
 **
@@ -299,7 +288,7 @@ extern tNFA_STATUS NFA_SnepRegisterServer (uint8_t         server_sap,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_SnepRegisterClient (tNFA_SNEP_CBACK *p_cback);
+extern tNFA_STATUS NFA_SnepRegisterClient(tNFA_SNEP_CBACK* p_cback);
 
 /*******************************************************************************
 **
@@ -319,7 +308,7 @@ extern tNFA_STATUS NFA_SnepRegisterClient (tNFA_SNEP_CBACK *p_cback);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_SnepDeregister (tNFA_HANDLE reg_handle);
+extern tNFA_STATUS NFA_SnepDeregister(tNFA_HANDLE reg_handle);
 
 /*******************************************************************************
 **
@@ -340,8 +329,8 @@ extern tNFA_STATUS NFA_SnepDeregister (tNFA_HANDLE reg_handle);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_SnepConnect (tNFA_HANDLE     client_handle,
-                                    char            *p_service_name);
+extern tNFA_STATUS NFA_SnepConnect(tNFA_HANDLE client_handle,
+                                   char* p_service_name);
 
 /*******************************************************************************
 **
@@ -365,10 +354,8 @@ extern tNFA_STATUS NFA_SnepConnect (tNFA_HANDLE     client_handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_SnepGet (tNFA_HANDLE     conn_handle,
-                                uint32_t        buff_length,
-                                uint32_t        ndef_length,
-                                uint8_t         *p_ndef_buff);
+extern tNFA_STATUS NFA_SnepGet(tNFA_HANDLE conn_handle, uint32_t buff_length,
+                               uint32_t ndef_length, uint8_t* p_ndef_buff);
 
 /*******************************************************************************
 **
@@ -390,9 +377,8 @@ extern tNFA_STATUS NFA_SnepGet (tNFA_HANDLE     conn_handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_SnepPut (tNFA_HANDLE     conn_handle,
-                                uint32_t        ndef_length,
-                                uint8_t         *p_ndef_buff);
+extern tNFA_STATUS NFA_SnepPut(tNFA_HANDLE conn_handle, uint32_t ndef_length,
+                               uint8_t* p_ndef_buff);
 
 /*******************************************************************************
 **
@@ -426,10 +412,10 @@ extern tNFA_STATUS NFA_SnepPut (tNFA_HANDLE     conn_handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_SnepGetResponse (tNFA_HANDLE         conn_handle,
-                                        tNFA_SNEP_RESP_CODE resp_code,
-                                        uint32_t            ndef_length,
-                                        uint8_t             *p_ndef_buff);
+extern tNFA_STATUS NFA_SnepGetResponse(tNFA_HANDLE conn_handle,
+                                       tNFA_SNEP_RESP_CODE resp_code,
+                                       uint32_t ndef_length,
+                                       uint8_t* p_ndef_buff);
 
 /*******************************************************************************
 **
@@ -459,8 +445,8 @@ extern tNFA_STATUS NFA_SnepGetResponse (tNFA_HANDLE         conn_handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_SnepPutResponse (tNFA_HANDLE         conn_handle,
-                                        tNFA_SNEP_RESP_CODE resp_code);
+extern tNFA_STATUS NFA_SnepPutResponse(tNFA_HANDLE conn_handle,
+                                       tNFA_SNEP_RESP_CODE resp_code);
 
 /*******************************************************************************
 **
@@ -482,8 +468,7 @@ extern tNFA_STATUS NFA_SnepPutResponse (tNFA_HANDLE         conn_handle,
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_SnepDisconnect (tNFA_HANDLE conn_handle,
-                                       bool        flush);
+extern tNFA_STATUS NFA_SnepDisconnect(tNFA_HANDLE conn_handle, bool flush);
 
 /*******************************************************************************
 **
@@ -495,11 +480,10 @@ extern tNFA_STATUS NFA_SnepDisconnect (tNFA_HANDLE conn_handle,
 ** Returns          The new or current trace level
 **
 *******************************************************************************/
-extern uint8_t NFA_SnepSetTraceLevel (uint8_t new_level);
+extern uint8_t NFA_SnepSetTraceLevel(uint8_t new_level);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* NFA_P2P_API_H */
-

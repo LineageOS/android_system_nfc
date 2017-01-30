@@ -16,7 +16,6 @@
  *
  ******************************************************************************/
 
-
 /******************************************************************************
  *
  *  This file contains functions that interface with the NFC NCI transport.
@@ -25,18 +24,17 @@
  *
  ******************************************************************************/
 #include <string.h>
+#include "bt_types.h"
 #include "gki.h"
 #include "nfc_target.h"
-#include "bt_types.h"
 
 #if (NFC_INCLUDED == TRUE)
-#include "nfc_hal_api.h"
-#include "nfc_api.h"
-#include "nfc_int.h"
-#include "nci_hmsgs.h"
-#include "rw_int.h"
 #include "ce_int.h"
-
+#include "nci_hmsgs.h"
+#include "nfc_api.h"
+#include "nfc_hal_api.h"
+#include "nfc_int.h"
+#include "rw_int.h"
 
 #if (NFC_RW_ONLY == FALSE)
 #include "ce_api.h"
@@ -45,7 +43,8 @@
 
 /* NFC mandates support for at least one logical connection;
  * Update max_conn to the NFCC capability on InitRsp */
-#define NFC_SET_MAX_CONN_DEFAULT()    {nfc_cb.max_conn = 1;}
+#define NFC_SET_MAX_CONN_DEFAULT() \
+  { nfc_cb.max_conn = 1; }
 
 #else /* NFC_RW_ONLY */
 #define ce_init()
@@ -60,30 +59,23 @@
 tNFC_CB nfc_cb;
 
 #if (NFC_RW_ONLY == FALSE)
-#define NFC_NUM_INTERFACE_MAP   2
+#define NFC_NUM_INTERFACE_MAP 2
 #else
-#define NFC_NUM_INTERFACE_MAP   1
+#define NFC_NUM_INTERFACE_MAP 1
 #endif
 
-static const tNCI_DISCOVER_MAPS nfc_interface_mapping[NFC_NUM_INTERFACE_MAP] =
-{
-    /* Protocols that use Frame Interface do not need to be included in the interface mapping */
-    {
-        NCI_PROTOCOL_ISO_DEP,
-        NCI_INTERFACE_MODE_POLL_N_LISTEN,
-        NCI_INTERFACE_ISO_DEP
-    }
+static const tNCI_DISCOVER_MAPS nfc_interface_mapping[NFC_NUM_INTERFACE_MAP] = {
+    /* Protocols that use Frame Interface do not need to be included in the
+       interface mapping */
+    {NCI_PROTOCOL_ISO_DEP, NCI_INTERFACE_MODE_POLL_N_LISTEN,
+     NCI_INTERFACE_ISO_DEP}
 #if (NFC_RW_ONLY == FALSE)
     ,
     /* this can not be set here due to 2079xB0 NFCC issues */
-    {
-        NCI_PROTOCOL_NFC_DEP,
-        NCI_INTERFACE_MODE_POLL_N_LISTEN,
-        NCI_INTERFACE_NFC_DEP
-    }
+    {NCI_PROTOCOL_NFC_DEP, NCI_INTERFACE_MODE_POLL_N_LISTEN,
+     NCI_INTERFACE_NFC_DEP}
 #endif
 };
-
 
 #if (BT_TRACE_VERBOSE == TRUE)
 /*******************************************************************************
@@ -97,31 +89,29 @@ static const tNCI_DISCOVER_MAPS nfc_interface_mapping[NFC_NUM_INTERFACE_MAP] =
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-static char *nfc_state_name (uint8_t state)
-{
-    switch (state)
-    {
+static char* nfc_state_name(uint8_t state) {
+  switch (state) {
     case NFC_STATE_NONE:
-        return ("NONE");
+      return ("NONE");
     case NFC_STATE_W4_HAL_OPEN:
-        return ("W4_HAL_OPEN");
+      return ("W4_HAL_OPEN");
     case NFC_STATE_CORE_INIT:
-        return ("CORE_INIT");
+      return ("CORE_INIT");
     case NFC_STATE_W4_POST_INIT_CPLT:
-        return ("W4_POST_INIT_CPLT");
+      return ("W4_POST_INIT_CPLT");
     case NFC_STATE_IDLE:
-        return ("IDLE");
+      return ("IDLE");
     case NFC_STATE_OPEN:
-        return ("OPEN");
+      return ("OPEN");
     case NFC_STATE_CLOSING:
-        return ("CLOSING");
+      return ("CLOSING");
     case NFC_STATE_W4_HAL_CLOSE:
-        return ("W4_HAL_CLOSE");
+      return ("W4_HAL_CLOSE");
     case NFC_STATE_NFCC_POWER_OFF_SLEEP:
-        return ("NFCC_POWER_OFF_SLEEP");
+      return ("NFCC_POWER_OFF_SLEEP");
     default:
-        return ("???? UNKNOWN STATE");
-    }
+      return ("???? UNKNOWN STATE");
+  }
 }
 
 /*******************************************************************************
@@ -135,34 +125,32 @@ static char *nfc_state_name (uint8_t state)
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-static char *nfc_hal_event_name (uint8_t event)
-{
-    switch (event)
-    {
+static char* nfc_hal_event_name(uint8_t event) {
+  switch (event) {
     case HAL_NFC_OPEN_CPLT_EVT:
-        return ("HAL_NFC_OPEN_CPLT_EVT");
+      return ("HAL_NFC_OPEN_CPLT_EVT");
 
     case HAL_NFC_CLOSE_CPLT_EVT:
-        return ("HAL_NFC_CLOSE_CPLT_EVT");
+      return ("HAL_NFC_CLOSE_CPLT_EVT");
 
     case HAL_NFC_POST_INIT_CPLT_EVT:
-        return ("HAL_NFC_POST_INIT_CPLT_EVT");
+      return ("HAL_NFC_POST_INIT_CPLT_EVT");
 
     case HAL_NFC_PRE_DISCOVER_CPLT_EVT:
-        return ("HAL_NFC_PRE_DISCOVER_CPLT_EVT");
+      return ("HAL_NFC_PRE_DISCOVER_CPLT_EVT");
 
     case HAL_NFC_REQUEST_CONTROL_EVT:
-        return ("HAL_NFC_REQUEST_CONTROL_EVT");
+      return ("HAL_NFC_REQUEST_CONTROL_EVT");
 
     case HAL_NFC_RELEASE_CONTROL_EVT:
-        return ("HAL_NFC_RELEASE_CONTROL_EVT");
+      return ("HAL_NFC_RELEASE_CONTROL_EVT");
 
     case HAL_NFC_ERROR_EVT:
-        return ("HAL_NFC_ERROR_EVT");
+      return ("HAL_NFC_ERROR_EVT");
 
     default:
-        return ("???? UNKNOWN EVENT");
-    }
+      return ("???? UNKNOWN EVENT");
+  }
 }
 #endif /* BT_TRACE_VERBOSE == TRUE */
 
@@ -173,32 +161,24 @@ static char *nfc_hal_event_name (uint8_t event)
 ** Description      Notify status of Enable/PowerOffSleep/PowerCycle
 **
 *******************************************************************************/
-static void nfc_main_notify_enable_status (tNFC_STATUS nfc_status)
-{
-    tNFC_RESPONSE   evt_data;
+static void nfc_main_notify_enable_status(tNFC_STATUS nfc_status) {
+  tNFC_RESPONSE evt_data;
 
-    evt_data.status = nfc_status;
+  evt_data.status = nfc_status;
 
-    if (nfc_cb.p_resp_cback)
-    {
-        /* if getting out of PowerOffSleep mode or restarting NFCC */
-        if (nfc_cb.flags & (NFC_FL_RESTARTING|NFC_FL_POWER_CYCLE_NFCC))
-        {
-            nfc_cb.flags &= ~(NFC_FL_RESTARTING|NFC_FL_POWER_CYCLE_NFCC);
-            if (nfc_status != NFC_STATUS_OK)
-            {
-                nfc_cb.flags |= NFC_FL_POWER_OFF_SLEEP;
-            }
-            (*nfc_cb.p_resp_cback) (NFC_NFCC_RESTART_REVT, &evt_data);
-        }
-        else
-        {
-            (*nfc_cb.p_resp_cback) (NFC_ENABLE_REVT, &evt_data);
-        }
+  if (nfc_cb.p_resp_cback) {
+    /* if getting out of PowerOffSleep mode or restarting NFCC */
+    if (nfc_cb.flags & (NFC_FL_RESTARTING | NFC_FL_POWER_CYCLE_NFCC)) {
+      nfc_cb.flags &= ~(NFC_FL_RESTARTING | NFC_FL_POWER_CYCLE_NFCC);
+      if (nfc_status != NFC_STATUS_OK) {
+        nfc_cb.flags |= NFC_FL_POWER_OFF_SLEEP;
+      }
+      (*nfc_cb.p_resp_cback)(NFC_NFCC_RESTART_REVT, &evt_data);
+    } else {
+      (*nfc_cb.p_resp_cback)(NFC_ENABLE_REVT, &evt_data);
     }
+  }
 }
-
-
 
 /*******************************************************************************
 **
@@ -209,80 +189,74 @@ static void nfc_main_notify_enable_status (tNFC_STATUS nfc_status)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_enabled (tNFC_STATUS nfc_status, NFC_HDR *p_init_rsp_msg)
-{
-    tNFC_RESPONSE evt_data;
-    tNFC_CONN_CB  *p_cb = &nfc_cb.conn_cb[NFC_RF_CONN_ID];
-    uint8_t *p;
-    uint8_t num_interfaces = 0, xx;
-    int     yy = 0;
+void nfc_enabled(tNFC_STATUS nfc_status, NFC_HDR* p_init_rsp_msg) {
+  tNFC_RESPONSE evt_data;
+  tNFC_CONN_CB* p_cb = &nfc_cb.conn_cb[NFC_RF_CONN_ID];
+  uint8_t* p;
+  uint8_t num_interfaces = 0, xx;
+  int yy = 0;
 
-    memset (&evt_data, 0, sizeof (tNFC_RESPONSE));
+  memset(&evt_data, 0, sizeof(tNFC_RESPONSE));
 
-    if (nfc_status == NCI_STATUS_OK)
-    {
-        nfc_set_state (NFC_STATE_IDLE);
+  if (nfc_status == NCI_STATUS_OK) {
+    nfc_set_state(NFC_STATE_IDLE);
 
-        p = (uint8_t *) (p_init_rsp_msg + 1) + p_init_rsp_msg->offset + NCI_MSG_HDR_SIZE + 1;
-        /* we currently only support NCI of the same version.
-        * We may need to change this, when we support multiple version of NFCC */
-        evt_data.enable.nci_version = NCI_VERSION;
-        STREAM_TO_UINT32 (evt_data.enable.nci_features, p);
-        STREAM_TO_UINT8 (num_interfaces, p);
+    p = (uint8_t*)(p_init_rsp_msg + 1) + p_init_rsp_msg->offset +
+        NCI_MSG_HDR_SIZE + 1;
+    /* we currently only support NCI of the same version.
+    * We may need to change this, when we support multiple version of NFCC */
+    evt_data.enable.nci_version = NCI_VERSION;
+    STREAM_TO_UINT32(evt_data.enable.nci_features, p);
+    STREAM_TO_UINT8(num_interfaces, p);
 
-        evt_data.enable.nci_interfaces = 0;
-        for (xx = 0; xx < num_interfaces; xx++)
-        {
-            if ((*p) <= NCI_INTERFACE_MAX)
-                evt_data.enable.nci_interfaces |= (1 << (*p));
-            else if (((*p) >= NCI_INTERFACE_FIRST_VS) && (yy < NFC_NFCC_MAX_NUM_VS_INTERFACE))
-            {
-                /* save the VS RF interface in control block, if there's still room */
-                nfc_cb.vs_interface[yy++] = *p;
-            }
-            p++;
-        }
-        nfc_cb.nci_interfaces    = evt_data.enable.nci_interfaces;
-        memcpy (evt_data.enable.vs_interface, nfc_cb.vs_interface, NFC_NFCC_MAX_NUM_VS_INTERFACE);
-        evt_data.enable.max_conn = *p++;
-        STREAM_TO_UINT16 (evt_data.enable.max_ce_table, p);
+    evt_data.enable.nci_interfaces = 0;
+    for (xx = 0; xx < num_interfaces; xx++) {
+      if ((*p) <= NCI_INTERFACE_MAX)
+        evt_data.enable.nci_interfaces |= (1 << (*p));
+      else if (((*p) >= NCI_INTERFACE_FIRST_VS) &&
+               (yy < NFC_NFCC_MAX_NUM_VS_INTERFACE)) {
+        /* save the VS RF interface in control block, if there's still room */
+        nfc_cb.vs_interface[yy++] = *p;
+      }
+      p++;
+    }
+    nfc_cb.nci_interfaces = evt_data.enable.nci_interfaces;
+    memcpy(evt_data.enable.vs_interface, nfc_cb.vs_interface,
+           NFC_NFCC_MAX_NUM_VS_INTERFACE);
+    evt_data.enable.max_conn = *p++;
+    STREAM_TO_UINT16(evt_data.enable.max_ce_table, p);
 #if (NFC_RW_ONLY == FALSE)
-        nfc_cb.max_ce_table          = evt_data.enable.max_ce_table;
-        nfc_cb.nci_features          = evt_data.enable.nci_features;
-        nfc_cb.max_conn              = evt_data.enable.max_conn;
+    nfc_cb.max_ce_table = evt_data.enable.max_ce_table;
+    nfc_cb.nci_features = evt_data.enable.nci_features;
+    nfc_cb.max_conn = evt_data.enable.max_conn;
 #endif
-        nfc_cb.nci_ctrl_size         = *p++; /* Max Control Packet Payload Length */
-        p_cb->init_credits           = p_cb->num_buff = 0;
-        STREAM_TO_UINT16 (evt_data.enable.max_param_size, p);
-        nfc_set_conn_id (p_cb, NFC_RF_CONN_ID);
-        evt_data.enable.manufacture_id   = *p++;
-        STREAM_TO_ARRAY (evt_data.enable.nfcc_info, p, NFC_NFCC_INFO_LEN);
-        NFC_DiscoveryMap (nfc_cb.num_disc_maps, (tNCI_DISCOVER_MAPS *) nfc_cb.p_disc_maps, NULL);
-    }
-    /* else not successful. the buffers will be freed in nfc_free_conn_cb () */
-    else
-    {
-        if (nfc_cb.flags & NFC_FL_RESTARTING)
-        {
-            nfc_set_state (NFC_STATE_NFCC_POWER_OFF_SLEEP);
-        }
-        else
-        {
-            nfc_free_conn_cb (p_cb);
+    nfc_cb.nci_ctrl_size = *p++; /* Max Control Packet Payload Length */
+    p_cb->init_credits = p_cb->num_buff = 0;
+    STREAM_TO_UINT16(evt_data.enable.max_param_size, p);
+    nfc_set_conn_id(p_cb, NFC_RF_CONN_ID);
+    evt_data.enable.manufacture_id = *p++;
+    STREAM_TO_ARRAY(evt_data.enable.nfcc_info, p, NFC_NFCC_INFO_LEN);
+    NFC_DiscoveryMap(nfc_cb.num_disc_maps,
+                     (tNCI_DISCOVER_MAPS*)nfc_cb.p_disc_maps, NULL);
+  }
+  /* else not successful. the buffers will be freed in nfc_free_conn_cb () */
+  else {
+    if (nfc_cb.flags & NFC_FL_RESTARTING) {
+      nfc_set_state(NFC_STATE_NFCC_POWER_OFF_SLEEP);
+    } else {
+      nfc_free_conn_cb(p_cb);
 
-            /* if NFCC didn't respond to CORE_RESET or CORE_INIT */
-            if (nfc_cb.nfc_state == NFC_STATE_CORE_INIT)
-            {
-                /* report status after closing HAL */
-                nfc_cb.p_hal->close ();
-                return;
-            }
-            else
-                nfc_set_state (NFC_STATE_NONE);
-        }
+      /* if NFCC didn't respond to CORE_RESET or CORE_INIT */
+      if (nfc_cb.nfc_state == NFC_STATE_CORE_INIT) {
+        /* report status after closing HAL */
+        nfc_cb.p_hal->close();
+        return;
+      } else
+        nfc_set_state(NFC_STATE_NONE);
     }
+  }
 
-    nfc_main_notify_enable_status (nfc_status);
+  nfc_main_notify_enable_status(nfc_status);
 }
 
 /*******************************************************************************
@@ -294,14 +268,15 @@ void nfc_enabled (tNFC_STATUS nfc_status, NFC_HDR *p_init_rsp_msg)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_set_state (tNFC_STATE nfc_state)
-{
+void nfc_set_state(tNFC_STATE nfc_state) {
 #if (BT_TRACE_VERBOSE == TRUE)
-    NFC_TRACE_DEBUG4 ("nfc_set_state %d (%s)->%d (%s)", nfc_cb.nfc_state, nfc_state_name (nfc_cb.nfc_state), nfc_state, nfc_state_name (nfc_state));
+  NFC_TRACE_DEBUG4("nfc_set_state %d (%s)->%d (%s)", nfc_cb.nfc_state,
+                   nfc_state_name(nfc_cb.nfc_state), nfc_state,
+                   nfc_state_name(nfc_state));
 #else
-    NFC_TRACE_DEBUG2 ("nfc_set_state %d->%d", nfc_cb.nfc_state, nfc_state);
+  NFC_TRACE_DEBUG2("nfc_set_state %d->%d", nfc_cb.nfc_state, nfc_state);
 #endif
-    nfc_cb.nfc_state = nfc_state;
+  nfc_cb.nfc_state = nfc_state;
 }
 
 /*******************************************************************************
@@ -312,33 +287,32 @@ void nfc_set_state (tNFC_STATE nfc_state)
 **                  NFC
 **
 *******************************************************************************/
-void nfc_gen_cleanup (void)
-{
-    nfc_cb.flags  &= ~NFC_FL_DEACTIVATING;
+void nfc_gen_cleanup(void) {
+  nfc_cb.flags &= ~NFC_FL_DEACTIVATING;
 
-    /* the HAL pre-discover is still active - clear the pending flag/free the buffer */
-    if (nfc_cb.flags & NFC_FL_DISCOVER_PENDING)
-    {
-        nfc_cb.flags &= ~NFC_FL_DISCOVER_PENDING;
-        GKI_freebuf (nfc_cb.p_disc_pending);
-        nfc_cb.p_disc_pending = NULL;
-    }
+  /* the HAL pre-discover is still active - clear the pending flag/free the
+   * buffer */
+  if (nfc_cb.flags & NFC_FL_DISCOVER_PENDING) {
+    nfc_cb.flags &= ~NFC_FL_DISCOVER_PENDING;
+    GKI_freebuf(nfc_cb.p_disc_pending);
+    nfc_cb.p_disc_pending = NULL;
+  }
 
-    nfc_cb.flags &= ~(NFC_FL_CONTROL_REQUESTED | NFC_FL_CONTROL_GRANTED | NFC_FL_HAL_REQUESTED);
+  nfc_cb.flags &= ~(NFC_FL_CONTROL_REQUESTED | NFC_FL_CONTROL_GRANTED |
+                    NFC_FL_HAL_REQUESTED);
 
-    nfc_stop_timer (&nfc_cb.deactivate_timer);
+  nfc_stop_timer(&nfc_cb.deactivate_timer);
 
-    /* Reset the connection control blocks */
-    nfc_reset_all_conn_cbs ();
+  /* Reset the connection control blocks */
+  nfc_reset_all_conn_cbs();
 
-    if (nfc_cb.p_nci_init_rsp)
-    {
-        GKI_freebuf (nfc_cb.p_nci_init_rsp);
-        nfc_cb.p_nci_init_rsp = NULL;
-    }
+  if (nfc_cb.p_nci_init_rsp) {
+    GKI_freebuf(nfc_cb.p_nci_init_rsp);
+    nfc_cb.p_nci_init_rsp = NULL;
+  }
 
-    /* clear any pending CMD/RSP */
-    nfc_main_flush_cmd_queue ();
+  /* clear any pending CMD/RSP */
+  nfc_main_flush_cmd_queue();
 }
 
 /*******************************************************************************
@@ -348,149 +322,130 @@ void nfc_gen_cleanup (void)
 ** Description      Handle BT_EVT_TO_NFC_MSGS
 **
 *******************************************************************************/
-void nfc_main_handle_hal_evt (tNFC_HAL_EVT_MSG *p_msg)
-{
-    uint8_t  *ps;
+void nfc_main_handle_hal_evt(tNFC_HAL_EVT_MSG* p_msg) {
+  uint8_t* ps;
 
-    NFC_TRACE_DEBUG1 ("nfc_main_handle_hal_evt(): HAL event=0x%x", p_msg->hal_evt);
+  NFC_TRACE_DEBUG1("nfc_main_handle_hal_evt(): HAL event=0x%x", p_msg->hal_evt);
 
-    switch (p_msg->hal_evt)
-    {
+  switch (p_msg->hal_evt) {
     case HAL_NFC_OPEN_CPLT_EVT: /* only for failure case */
-        nfc_enabled (NFC_STATUS_FAILED, NULL);
-        break;
+      nfc_enabled(NFC_STATUS_FAILED, NULL);
+      break;
 
     case HAL_NFC_CLOSE_CPLT_EVT:
-        if (nfc_cb.p_resp_cback)
-        {
-            if (nfc_cb.nfc_state == NFC_STATE_W4_HAL_CLOSE)
-            {
-                if (nfc_cb.flags & NFC_FL_POWER_OFF_SLEEP)
-                {
-                    nfc_cb.flags &= ~NFC_FL_POWER_OFF_SLEEP;
-                    nfc_set_state (NFC_STATE_NFCC_POWER_OFF_SLEEP);
-                    (*nfc_cb.p_resp_cback) (NFC_NFCC_POWER_OFF_REVT, NULL);
-                }
-                else
-                {
-                    nfc_set_state (NFC_STATE_NONE);
-                    (*nfc_cb.p_resp_cback) (NFC_DISABLE_REVT, NULL);
-                    nfc_cb.p_resp_cback = NULL;
-                }
-            }
-            else
-            {
-                /* found error during initialization */
-                nfc_set_state (NFC_STATE_NONE);
-                nfc_main_notify_enable_status (NFC_STATUS_FAILED);
-            }
+      if (nfc_cb.p_resp_cback) {
+        if (nfc_cb.nfc_state == NFC_STATE_W4_HAL_CLOSE) {
+          if (nfc_cb.flags & NFC_FL_POWER_OFF_SLEEP) {
+            nfc_cb.flags &= ~NFC_FL_POWER_OFF_SLEEP;
+            nfc_set_state(NFC_STATE_NFCC_POWER_OFF_SLEEP);
+            (*nfc_cb.p_resp_cback)(NFC_NFCC_POWER_OFF_REVT, NULL);
+          } else {
+            nfc_set_state(NFC_STATE_NONE);
+            (*nfc_cb.p_resp_cback)(NFC_DISABLE_REVT, NULL);
+            nfc_cb.p_resp_cback = NULL;
+          }
+        } else {
+          /* found error during initialization */
+          nfc_set_state(NFC_STATE_NONE);
+          nfc_main_notify_enable_status(NFC_STATUS_FAILED);
         }
-        break;
+      }
+      break;
 
     case HAL_NFC_POST_INIT_CPLT_EVT:
-        if (nfc_cb.p_nci_init_rsp)
-        {
-            /*
-            ** if NFC_Disable() is called before receiving
-            ** HAL_NFC_POST_INIT_CPLT_EVT, then wait for HAL_NFC_CLOSE_CPLT_EVT.
-            */
-            if (nfc_cb.nfc_state == NFC_STATE_W4_POST_INIT_CPLT)
-            {
-                if (p_msg->status == HAL_NFC_STATUS_OK)
-                {
-                    nfc_enabled (NCI_STATUS_OK, nfc_cb.p_nci_init_rsp);
-                }
-                else /* if post initailization failed */
-                {
-                    nfc_enabled (NCI_STATUS_FAILED, NULL);
-                }
-            }
-
-            GKI_freebuf (nfc_cb.p_nci_init_rsp);
-            nfc_cb.p_nci_init_rsp = NULL;
+      if (nfc_cb.p_nci_init_rsp) {
+        /*
+        ** if NFC_Disable() is called before receiving
+        ** HAL_NFC_POST_INIT_CPLT_EVT, then wait for HAL_NFC_CLOSE_CPLT_EVT.
+        */
+        if (nfc_cb.nfc_state == NFC_STATE_W4_POST_INIT_CPLT) {
+          if (p_msg->status == HAL_NFC_STATUS_OK) {
+            nfc_enabled(NCI_STATUS_OK, nfc_cb.p_nci_init_rsp);
+          } else /* if post initailization failed */
+          {
+            nfc_enabled(NCI_STATUS_FAILED, NULL);
+          }
         }
-        break;
+
+        GKI_freebuf(nfc_cb.p_nci_init_rsp);
+        nfc_cb.p_nci_init_rsp = NULL;
+      }
+      break;
 
     case HAL_NFC_PRE_DISCOVER_CPLT_EVT:
-        /* restore the command window, no matter if the discover command is still pending */
-        nfc_cb.nci_cmd_window = NCI_MAX_CMD_WINDOW;
-        nfc_cb.flags         &= ~NFC_FL_CONTROL_GRANTED;
-        if (nfc_cb.flags & NFC_FL_DISCOVER_PENDING)
-        {
-            /* issue the discovery command now, if it is still pending */
-            nfc_cb.flags &= ~NFC_FL_DISCOVER_PENDING;
-            ps            = (uint8_t *)nfc_cb.p_disc_pending;
-            nci_snd_discover_cmd (*ps, (tNFC_DISCOVER_PARAMS *)(ps + 1));
-            GKI_freebuf (nfc_cb.p_disc_pending);
-            nfc_cb.p_disc_pending = NULL;
-        }
-        else
-        {
-            /* check if there's other pending commands */
-            nfc_ncif_check_cmd_queue (NULL);
-        }
+      /* restore the command window, no matter if the discover command is still
+       * pending */
+      nfc_cb.nci_cmd_window = NCI_MAX_CMD_WINDOW;
+      nfc_cb.flags &= ~NFC_FL_CONTROL_GRANTED;
+      if (nfc_cb.flags & NFC_FL_DISCOVER_PENDING) {
+        /* issue the discovery command now, if it is still pending */
+        nfc_cb.flags &= ~NFC_FL_DISCOVER_PENDING;
+        ps = (uint8_t*)nfc_cb.p_disc_pending;
+        nci_snd_discover_cmd(*ps, (tNFC_DISCOVER_PARAMS*)(ps + 1));
+        GKI_freebuf(nfc_cb.p_disc_pending);
+        nfc_cb.p_disc_pending = NULL;
+      } else {
+        /* check if there's other pending commands */
+        nfc_ncif_check_cmd_queue(NULL);
+      }
 
-        if (p_msg->status == HAL_NFC_STATUS_ERR_CMD_TIMEOUT)
-            nfc_ncif_event_status (NFC_NFCC_TIMEOUT_REVT, NFC_STATUS_HW_TIMEOUT);
-        break;
+      if (p_msg->status == HAL_NFC_STATUS_ERR_CMD_TIMEOUT)
+        nfc_ncif_event_status(NFC_NFCC_TIMEOUT_REVT, NFC_STATUS_HW_TIMEOUT);
+      break;
 
     case HAL_NFC_REQUEST_CONTROL_EVT:
-        nfc_cb.flags    |= NFC_FL_CONTROL_REQUESTED;
-        nfc_cb.flags    |= NFC_FL_HAL_REQUESTED;
-        nfc_ncif_check_cmd_queue (NULL);
-        break;
+      nfc_cb.flags |= NFC_FL_CONTROL_REQUESTED;
+      nfc_cb.flags |= NFC_FL_HAL_REQUESTED;
+      nfc_ncif_check_cmd_queue(NULL);
+      break;
 
     case HAL_NFC_RELEASE_CONTROL_EVT:
-        if (nfc_cb.flags & NFC_FL_CONTROL_GRANTED)
-        {
-            nfc_cb.flags &= ~NFC_FL_CONTROL_GRANTED;
-            nfc_cb.nci_cmd_window = NCI_MAX_CMD_WINDOW;
-            nfc_ncif_check_cmd_queue (NULL);
+      if (nfc_cb.flags & NFC_FL_CONTROL_GRANTED) {
+        nfc_cb.flags &= ~NFC_FL_CONTROL_GRANTED;
+        nfc_cb.nci_cmd_window = NCI_MAX_CMD_WINDOW;
+        nfc_ncif_check_cmd_queue(NULL);
 
-            if (p_msg->status == HAL_NFC_STATUS_ERR_CMD_TIMEOUT)
-                nfc_ncif_event_status (NFC_NFCC_TIMEOUT_REVT, NFC_STATUS_HW_TIMEOUT);
-        }
-        break;
+        if (p_msg->status == HAL_NFC_STATUS_ERR_CMD_TIMEOUT)
+          nfc_ncif_event_status(NFC_NFCC_TIMEOUT_REVT, NFC_STATUS_HW_TIMEOUT);
+      }
+      break;
 
     case HAL_NFC_ERROR_EVT:
-        switch (p_msg->status)
-        {
+      switch (p_msg->status) {
         case HAL_NFC_STATUS_ERR_TRANSPORT:
-            /* Notify app of transport error */
-            if (nfc_cb.p_resp_cback)
-            {
-                (*nfc_cb.p_resp_cback) (NFC_NFCC_TRANSPORT_ERR_REVT, NULL);
+          /* Notify app of transport error */
+          if (nfc_cb.p_resp_cback) {
+            (*nfc_cb.p_resp_cback)(NFC_NFCC_TRANSPORT_ERR_REVT, NULL);
 
-                /* if enabling NFC, notify upper layer of failure after closing HAL */
-                if (nfc_cb.nfc_state < NFC_STATE_IDLE)
-                {
-                    nfc_enabled (NFC_STATUS_FAILED, NULL);
-                }
+            /* if enabling NFC, notify upper layer of failure after closing HAL
+             */
+            if (nfc_cb.nfc_state < NFC_STATE_IDLE) {
+              nfc_enabled(NFC_STATUS_FAILED, NULL);
             }
-            break;
+          }
+          break;
 
         case HAL_NFC_STATUS_ERR_CMD_TIMEOUT:
-            nfc_ncif_event_status (NFC_NFCC_TIMEOUT_REVT, NFC_STATUS_HW_TIMEOUT);
+          nfc_ncif_event_status(NFC_NFCC_TIMEOUT_REVT, NFC_STATUS_HW_TIMEOUT);
 
-            /* if enabling NFC, notify upper layer of failure after closing HAL */
-            if (nfc_cb.nfc_state < NFC_STATE_IDLE)
-            {
-                nfc_enabled (NFC_STATUS_FAILED, NULL);
-                return;
-            }
-            break;
+          /* if enabling NFC, notify upper layer of failure after closing HAL */
+          if (nfc_cb.nfc_state < NFC_STATE_IDLE) {
+            nfc_enabled(NFC_STATUS_FAILED, NULL);
+            return;
+          }
+          break;
 
         default:
-            break;
-        }
-        break;
+          break;
+      }
+      break;
 
     default:
-        NFC_TRACE_ERROR1 ("nfc_main_handle_hal_evt (): unhandled event (0x%x).", p_msg->hal_evt);
-        break;
-    }
+      NFC_TRACE_ERROR1("nfc_main_handle_hal_evt (): unhandled event (0x%x).",
+                       p_msg->hal_evt);
+      break;
+  }
 }
-
 
 /*******************************************************************************
 **
@@ -501,23 +456,21 @@ void nfc_main_handle_hal_evt (tNFC_HAL_EVT_MSG *p_msg)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_main_flush_cmd_queue (void)
-{
-    NFC_HDR *p_msg;
+void nfc_main_flush_cmd_queue(void) {
+  NFC_HDR* p_msg;
 
-    NFC_TRACE_DEBUG0 ("nfc_main_flush_cmd_queue ()");
+  NFC_TRACE_DEBUG0("nfc_main_flush_cmd_queue ()");
 
-    /* initialize command window */
-    nfc_cb.nci_cmd_window = NCI_MAX_CMD_WINDOW;
+  /* initialize command window */
+  nfc_cb.nci_cmd_window = NCI_MAX_CMD_WINDOW;
 
-    /* Stop command-pending timer */
-    nfc_stop_timer(&nfc_cb.nci_wait_rsp_timer);
+  /* Stop command-pending timer */
+  nfc_stop_timer(&nfc_cb.nci_wait_rsp_timer);
 
-    /* dequeue and free buffer */
-    while ((p_msg = (NFC_HDR *)GKI_dequeue (&nfc_cb.nci_cmd_xmit_q)) != NULL)
-    {
-        GKI_freebuf (p_msg);
-    }
+  /* dequeue and free buffer */
+  while ((p_msg = (NFC_HDR*)GKI_dequeue(&nfc_cb.nci_cmd_xmit_q)) != NULL) {
+    GKI_freebuf(p_msg);
+  }
 }
 
 /*******************************************************************************
@@ -529,27 +482,23 @@ void nfc_main_flush_cmd_queue (void)
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_main_post_hal_evt (uint8_t hal_evt, tHAL_NFC_STATUS status)
-{
-    tNFC_HAL_EVT_MSG *p_msg;
+void nfc_main_post_hal_evt(uint8_t hal_evt, tHAL_NFC_STATUS status) {
+  tNFC_HAL_EVT_MSG* p_msg;
 
-    if ((p_msg = (tNFC_HAL_EVT_MSG *) GKI_getbuf (sizeof(tNFC_HAL_EVT_MSG))) != NULL)
-    {
-        /* Initialize NFC_HDR */
-        p_msg->hdr.len    = 0;
-        p_msg->hdr.event  = BT_EVT_TO_NFC_MSGS;
-        p_msg->hdr.offset = 0;
-        p_msg->hdr.layer_specific = 0;
-        p_msg->hal_evt = hal_evt;
-        p_msg->status  = status;
-        GKI_send_msg (NFC_TASK, NFC_MBOX_ID, p_msg);
-    }
-    else
-    {
-        NFC_TRACE_ERROR0 ("nfc_main_post_hal_evt (): No buffer");
-    }
+  if ((p_msg = (tNFC_HAL_EVT_MSG*)GKI_getbuf(sizeof(tNFC_HAL_EVT_MSG))) !=
+      NULL) {
+    /* Initialize NFC_HDR */
+    p_msg->hdr.len = 0;
+    p_msg->hdr.event = BT_EVT_TO_NFC_MSGS;
+    p_msg->hdr.offset = 0;
+    p_msg->hdr.layer_specific = 0;
+    p_msg->hal_evt = hal_evt;
+    p_msg->status = status;
+    GKI_send_msg(NFC_TASK, NFC_MBOX_ID, p_msg);
+  } else {
+    NFC_TRACE_ERROR0("nfc_main_post_hal_evt (): No buffer");
+  }
 }
-
 
 /*******************************************************************************
 **
@@ -560,35 +509,29 @@ void nfc_main_post_hal_evt (uint8_t hal_evt, tHAL_NFC_STATUS status)
 ** Returns          void
 **
 *******************************************************************************/
-static void nfc_main_hal_cback(uint8_t event, tHAL_NFC_STATUS status)
-{
+static void nfc_main_hal_cback(uint8_t event, tHAL_NFC_STATUS status) {
 #if (BT_TRACE_VERBOSE == TRUE)
-    NFC_TRACE_DEBUG3 ("nfc_main_hal_cback event: %s(0x%x), status=%d",
-                       nfc_hal_event_name (event), event, status);
+  NFC_TRACE_DEBUG3("nfc_main_hal_cback event: %s(0x%x), status=%d",
+                   nfc_hal_event_name(event), event, status);
 #else
-    NFC_TRACE_DEBUG2 ("nfc_main_hal_cback event: 0x%x, status=%d", event, status);
+  NFC_TRACE_DEBUG2("nfc_main_hal_cback event: 0x%x, status=%d", event, status);
 #endif
 
-    switch (event)
-    {
+  switch (event) {
     case HAL_NFC_OPEN_CPLT_EVT:
-        /*
-        ** if NFC_Disable() is called before receiving HAL_NFC_OPEN_CPLT_EVT,
-        ** then wait for HAL_NFC_CLOSE_CPLT_EVT.
-        */
-        if (nfc_cb.nfc_state == NFC_STATE_W4_HAL_OPEN)
-        {
-            if (status == HAL_NFC_STATUS_OK)
-            {
-                /* Notify NFC_TASK that NCI tranport is initialized */
-                GKI_send_event (NFC_TASK, NFC_TASK_EVT_TRANSPORT_READY);
-            }
-            else
-            {
-                nfc_main_post_hal_evt (event, status);
-            }
+      /*
+      ** if NFC_Disable() is called before receiving HAL_NFC_OPEN_CPLT_EVT,
+      ** then wait for HAL_NFC_CLOSE_CPLT_EVT.
+      */
+      if (nfc_cb.nfc_state == NFC_STATE_W4_HAL_OPEN) {
+        if (status == HAL_NFC_STATUS_OK) {
+          /* Notify NFC_TASK that NCI tranport is initialized */
+          GKI_send_event(NFC_TASK, NFC_TASK_EVT_TRANSPORT_READY);
+        } else {
+          nfc_main_post_hal_evt(event, status);
         }
-        break;
+      }
+      break;
 
     case HAL_NFC_CLOSE_CPLT_EVT:
     case HAL_NFC_POST_INIT_CPLT_EVT:
@@ -596,13 +539,13 @@ static void nfc_main_hal_cback(uint8_t event, tHAL_NFC_STATUS status)
     case HAL_NFC_REQUEST_CONTROL_EVT:
     case HAL_NFC_RELEASE_CONTROL_EVT:
     case HAL_NFC_ERROR_EVT:
-        nfc_main_post_hal_evt (event, status);
-        break;
+      nfc_main_post_hal_evt(event, status);
+      break;
 
     default:
-        NFC_TRACE_DEBUG1 ("nfc_main_hal_cback unhandled event %x", event);
-        break;
-    }
+      NFC_TRACE_DEBUG1("nfc_main_hal_cback unhandled event %x", event);
+      break;
+  }
 }
 
 /*******************************************************************************
@@ -614,35 +557,29 @@ static void nfc_main_hal_cback(uint8_t event, tHAL_NFC_STATUS status)
 ** Returns          void
 **
 *******************************************************************************/
-static void nfc_main_hal_data_cback(uint16_t data_len, uint8_t *p_data)
-{
-    NFC_HDR *p_msg;
+static void nfc_main_hal_data_cback(uint16_t data_len, uint8_t* p_data) {
+  NFC_HDR* p_msg;
 
-    /* ignore all data while shutting down NFCC */
-    if (nfc_cb.nfc_state == NFC_STATE_W4_HAL_CLOSE)
-    {
-        return;
+  /* ignore all data while shutting down NFCC */
+  if (nfc_cb.nfc_state == NFC_STATE_W4_HAL_CLOSE) {
+    return;
+  }
+
+  if (p_data) {
+    if ((p_msg = (NFC_HDR*)GKI_getpoolbuf(NFC_NCI_POOL_ID)) != NULL) {
+      /* Initialize NFC_HDR */
+      p_msg->len = data_len;
+      p_msg->event = BT_EVT_TO_NFC_NCI;
+      p_msg->offset = NFC_RECEIVE_MSGS_OFFSET;
+
+      /* no need to check length, it always less than pool size */
+      memcpy((uint8_t*)(p_msg + 1) + p_msg->offset, p_data, p_msg->len);
+
+      GKI_send_msg(NFC_TASK, NFC_MBOX_ID, p_msg);
+    } else {
+      NFC_TRACE_ERROR0("nfc_main_hal_data_cback (): No buffer");
     }
-
-    if (p_data)
-    {
-        if ((p_msg = (NFC_HDR *) GKI_getpoolbuf (NFC_NCI_POOL_ID)) != NULL)
-        {
-            /* Initialize NFC_HDR */
-            p_msg->len    = data_len;
-            p_msg->event  = BT_EVT_TO_NFC_NCI;
-            p_msg->offset = NFC_RECEIVE_MSGS_OFFSET;
-
-            /* no need to check length, it always less than pool size */
-            memcpy ((uint8_t *)(p_msg + 1) + p_msg->offset, p_data, p_msg->len);
-
-            GKI_send_msg (NFC_TASK, NFC_MBOX_ID, p_msg);
-        }
-        else
-        {
-            NFC_TRACE_ERROR0 ("nfc_main_hal_data_cback (): No buffer");
-        }
-    }
+  }
 }
 
 /*******************************************************************************
@@ -668,22 +605,20 @@ static void nfc_main_hal_data_cback(uint16_t data_len, uint8_t *p_data)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_Enable (tNFC_RESPONSE_CBACK *p_cback)
-{
-    NFC_TRACE_API0 ("NFC_Enable ()");
+tNFC_STATUS NFC_Enable(tNFC_RESPONSE_CBACK* p_cback) {
+  NFC_TRACE_API0("NFC_Enable ()");
 
-    /* Validate callback */
-    if (!p_cback)
-    {
-        return (NFC_STATUS_INVALID_PARAM);
-    }
-    nfc_cb.p_resp_cback = p_cback;
+  /* Validate callback */
+  if (!p_cback) {
+    return (NFC_STATUS_INVALID_PARAM);
+  }
+  nfc_cb.p_resp_cback = p_cback;
 
-    /* Open HAL transport. */
-    nfc_set_state (NFC_STATE_W4_HAL_OPEN);
-    nfc_cb.p_hal->open (nfc_main_hal_cback, nfc_main_hal_data_cback);
+  /* Open HAL transport. */
+  nfc_set_state(NFC_STATE_W4_HAL_OPEN);
+  nfc_cb.p_hal->open(nfc_main_hal_cback, nfc_main_hal_data_cback);
 
-    return (NFC_STATUS_OK);
+  return (NFC_STATUS_OK);
 }
 
 /*******************************************************************************
@@ -701,23 +636,21 @@ tNFC_STATUS NFC_Enable (tNFC_RESPONSE_CBACK *p_cback)
 ** Returns          nothing
 **
 *******************************************************************************/
-void NFC_Disable (void)
-{
-    NFC_TRACE_API1 ("NFC_Disable (): nfc_state = %d", nfc_cb.nfc_state);
+void NFC_Disable(void) {
+  NFC_TRACE_API1("NFC_Disable (): nfc_state = %d", nfc_cb.nfc_state);
 
-    if ((nfc_cb.nfc_state == NFC_STATE_NONE) || (nfc_cb.nfc_state == NFC_STATE_NFCC_POWER_OFF_SLEEP))
-    {
-        nfc_set_state (NFC_STATE_NONE);
-        if (nfc_cb.p_resp_cback)
-        {
-            (*nfc_cb.p_resp_cback) (NFC_DISABLE_REVT, NULL);
-            nfc_cb.p_resp_cback = NULL;
-        }
-        return;
+  if ((nfc_cb.nfc_state == NFC_STATE_NONE) ||
+      (nfc_cb.nfc_state == NFC_STATE_NFCC_POWER_OFF_SLEEP)) {
+    nfc_set_state(NFC_STATE_NONE);
+    if (nfc_cb.p_resp_cback) {
+      (*nfc_cb.p_resp_cback)(NFC_DISABLE_REVT, NULL);
+      nfc_cb.p_resp_cback = NULL;
     }
+    return;
+  }
 
-    /* Close transport and clean up */
-    nfc_task_shutdown_nfcc ();
+  /* Close transport and clean up */
+  nfc_task_shutdown_nfcc();
 }
 
 /*******************************************************************************
@@ -729,34 +662,32 @@ void NFC_Disable (void)
 ** Returns          nothing
 **
 *******************************************************************************/
-void NFC_Init (tHAL_NFC_ENTRY *p_hal_entry_tbl)
-{
-    int xx;
+void NFC_Init(tHAL_NFC_ENTRY* p_hal_entry_tbl) {
+  int xx;
 
-    /* Clear nfc control block */
-    memset (&nfc_cb, 0, sizeof (tNFC_CB));
+  /* Clear nfc control block */
+  memset(&nfc_cb, 0, sizeof(tNFC_CB));
 
-    /* Reset the nfc control block */
-    for (xx = 0; xx < NCI_MAX_CONN_CBS; xx++)
-    {
-        nfc_cb.conn_cb[xx].conn_id = NFC_ILLEGAL_CONN_ID;
-    }
+  /* Reset the nfc control block */
+  for (xx = 0; xx < NCI_MAX_CONN_CBS; xx++) {
+    nfc_cb.conn_cb[xx].conn_id = NFC_ILLEGAL_CONN_ID;
+  }
 
-    /* NCI init */
-    nfc_cb.p_hal            = p_hal_entry_tbl;
-    nfc_cb.nfc_state        = NFC_STATE_NONE;
-    nfc_cb.nci_cmd_window   = NCI_MAX_CMD_WINDOW;
-    nfc_cb.nci_wait_rsp_tout= NFC_CMD_CMPL_TIMEOUT;
-    nfc_cb.p_disc_maps      = nfc_interface_mapping;
-    nfc_cb.num_disc_maps    = NFC_NUM_INTERFACE_MAP;
-    nfc_cb.trace_level      = NFC_INITIAL_TRACE_LEVEL;
-    nfc_cb.nci_ctrl_size    = NCI_CTRL_INIT_SIZE;
-    nfc_cb.reassembly = true;
+  /* NCI init */
+  nfc_cb.p_hal = p_hal_entry_tbl;
+  nfc_cb.nfc_state = NFC_STATE_NONE;
+  nfc_cb.nci_cmd_window = NCI_MAX_CMD_WINDOW;
+  nfc_cb.nci_wait_rsp_tout = NFC_CMD_CMPL_TIMEOUT;
+  nfc_cb.p_disc_maps = nfc_interface_mapping;
+  nfc_cb.num_disc_maps = NFC_NUM_INTERFACE_MAP;
+  nfc_cb.trace_level = NFC_INITIAL_TRACE_LEVEL;
+  nfc_cb.nci_ctrl_size = NCI_CTRL_INIT_SIZE;
+  nfc_cb.reassembly = true;
 
-    rw_init ();
-    ce_init ();
-    llcp_init ();
-    NFC_SET_MAX_CONN_DEFAULT ();
+  rw_init();
+  ce_init();
+  llcp_init();
+  NFC_SET_MAX_CONN_DEFAULT();
 }
 
 /*******************************************************************************
@@ -769,15 +700,13 @@ void NFC_Init (tHAL_NFC_ENTRY *p_hal_entry_tbl)
 ** Returns          Listen Mode Routing Table size
 **
 *******************************************************************************/
-uint16_t NFC_GetLmrtSize (void)
-{
-    uint16_t size = 0;
+uint16_t NFC_GetLmrtSize(void) {
+  uint16_t size = 0;
 #if (NFC_RW_ONLY == FALSE)
-    size = nfc_cb.max_ce_table;
+  size = nfc_cb.max_ce_table;
 #endif
-    return size;
+  return size;
 }
-
 
 /*******************************************************************************
 **
@@ -793,10 +722,8 @@ uint16_t NFC_GetLmrtSize (void)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_SetConfig (uint8_t   tlv_size,
-                           uint8_t  *p_param_tlvs)
-{
-    return nci_snd_core_set_config (p_param_tlvs, tlv_size);
+tNFC_STATUS NFC_SetConfig(uint8_t tlv_size, uint8_t* p_param_tlvs) {
+  return nci_snd_core_set_config(p_param_tlvs, tlv_size);
 }
 
 /*******************************************************************************
@@ -813,10 +740,8 @@ tNFC_STATUS NFC_SetConfig (uint8_t   tlv_size,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_GetConfig (uint8_t   num_ids,
-                           uint8_t  *p_param_ids)
-{
-    return nci_snd_core_get_config (p_param_ids, num_ids);
+tNFC_STATUS NFC_GetConfig(uint8_t num_ids, uint8_t* p_param_ids) {
+  return nci_snd_core_get_config(p_param_ids, num_ids);
 }
 
 /*******************************************************************************
@@ -834,53 +759,50 @@ tNFC_STATUS NFC_GetConfig (uint8_t   num_ids,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_DiscoveryMap (uint8_t num, tNFC_DISCOVER_MAPS *p_maps,
-                                        tNFC_DISCOVER_CBACK *p_cback)
-{
-    uint8_t num_disc_maps = num;
-    uint8_t xx, yy, num_intf, intf_mask;
-    tNFC_DISCOVER_MAPS  max_maps[NFC_NFCC_MAX_NUM_VS_INTERFACE + NCI_INTERFACE_MAX];
-    bool    is_supported;
+tNFC_STATUS NFC_DiscoveryMap(uint8_t num, tNFC_DISCOVER_MAPS* p_maps,
+                             tNFC_DISCOVER_CBACK* p_cback) {
+  uint8_t num_disc_maps = num;
+  uint8_t xx, yy, num_intf, intf_mask;
+  tNFC_DISCOVER_MAPS
+      max_maps[NFC_NFCC_MAX_NUM_VS_INTERFACE + NCI_INTERFACE_MAX];
+  bool is_supported;
 
-    nfc_cb.p_discv_cback = p_cback;
-    num_intf             = 0;
-    NFC_TRACE_DEBUG1 ("nci_interfaces supported by NFCC: 0x%x", nfc_cb.nci_interfaces);
+  nfc_cb.p_discv_cback = p_cback;
+  num_intf = 0;
+  NFC_TRACE_DEBUG1("nci_interfaces supported by NFCC: 0x%x",
+                   nfc_cb.nci_interfaces);
 
-    for (xx = 0; xx < NFC_NFCC_MAX_NUM_VS_INTERFACE + NCI_INTERFACE_MAX; xx++)
-    {
-        memset (&max_maps[xx], 0x00, sizeof(tNFC_DISCOVER_MAPS));
+  for (xx = 0; xx < NFC_NFCC_MAX_NUM_VS_INTERFACE + NCI_INTERFACE_MAX; xx++) {
+    memset(&max_maps[xx], 0x00, sizeof(tNFC_DISCOVER_MAPS));
+  }
+
+  for (xx = 0; xx < num_disc_maps; xx++) {
+    is_supported = false;
+    if (p_maps[xx].intf_type > NCI_INTERFACE_MAX) {
+      for (yy = 0; yy < NFC_NFCC_MAX_NUM_VS_INTERFACE; yy++) {
+        if (nfc_cb.vs_interface[yy] == p_maps[xx].intf_type)
+          is_supported = true;
+      }
+      NFC_TRACE_DEBUG3("[%d]: vs intf_type:0x%x is_supported:%d", xx,
+                       p_maps[xx].intf_type, is_supported);
+    } else {
+      intf_mask = (1 << (p_maps[xx].intf_type));
+      if (intf_mask & nfc_cb.nci_interfaces) {
+        is_supported = true;
+      }
+      NFC_TRACE_DEBUG4("[%d]: intf_type:%d intf_mask: 0x%x is_supported:%d", xx,
+                       p_maps[xx].intf_type, intf_mask, is_supported);
     }
-
-    for (xx = 0; xx < num_disc_maps; xx++)
-    {
-        is_supported = false;
-        if (p_maps[xx].intf_type > NCI_INTERFACE_MAX)
-        {
-            for (yy = 0; yy < NFC_NFCC_MAX_NUM_VS_INTERFACE; yy++)
-            {
-                if (nfc_cb.vs_interface[yy] == p_maps[xx].intf_type)
-                    is_supported = true;
-            }
-            NFC_TRACE_DEBUG3 ("[%d]: vs intf_type:0x%x is_supported:%d", xx, p_maps[xx].intf_type, is_supported);
-        }
-        else
-        {
-            intf_mask = (1 << (p_maps[xx].intf_type));
-            if (intf_mask & nfc_cb.nci_interfaces)
-            {
-                is_supported = true;
-            }
-            NFC_TRACE_DEBUG4 ("[%d]: intf_type:%d intf_mask: 0x%x is_supported:%d", xx, p_maps[xx].intf_type, intf_mask, is_supported);
-        }
-        if (is_supported)
-            memcpy (&max_maps[num_intf++], &p_maps[xx], sizeof (tNFC_DISCOVER_MAPS));
-        else
-        {
-            NFC_TRACE_WARNING1 ("NFC_DiscoveryMap interface=0x%x is not supported by NFCC", p_maps[xx].intf_type);
-        }
+    if (is_supported)
+      memcpy(&max_maps[num_intf++], &p_maps[xx], sizeof(tNFC_DISCOVER_MAPS));
+    else {
+      NFC_TRACE_WARNING1(
+          "NFC_DiscoveryMap interface=0x%x is not supported by NFCC",
+          p_maps[xx].intf_type);
     }
+  }
 
-    return nci_snd_discover_map_cmd (num_intf, (tNCI_DISCOVER_MAPS *) max_maps);
+  return nci_snd_discover_map_cmd(num_intf, (tNCI_DISCOVER_MAPS*)max_maps);
 }
 
 /*******************************************************************************
@@ -899,39 +821,35 @@ tNFC_STATUS NFC_DiscoveryMap (uint8_t num, tNFC_DISCOVER_MAPS *p_maps,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_DiscoveryStart (uint8_t               num_params,
-                                tNFC_DISCOVER_PARAMS *p_params,
-                                tNFC_DISCOVER_CBACK  *p_cback)
-{
-    uint8_t *p;
-    int     params_size;
-    tNFC_STATUS status = NFC_STATUS_NO_BUFFERS;
+tNFC_STATUS NFC_DiscoveryStart(uint8_t num_params,
+                               tNFC_DISCOVER_PARAMS* p_params,
+                               tNFC_DISCOVER_CBACK* p_cback) {
+  uint8_t* p;
+  int params_size;
+  tNFC_STATUS status = NFC_STATUS_NO_BUFFERS;
 
-    NFC_TRACE_API0 ("NFC_DiscoveryStart");
-    if (nfc_cb.p_disc_pending)
-    {
-        NFC_TRACE_ERROR0 ("There's pending NFC_DiscoveryStart");
-        status = NFC_STATUS_BUSY;
+  NFC_TRACE_API0("NFC_DiscoveryStart");
+  if (nfc_cb.p_disc_pending) {
+    NFC_TRACE_ERROR0("There's pending NFC_DiscoveryStart");
+    status = NFC_STATUS_BUSY;
+  } else {
+    nfc_cb.p_discv_cback = p_cback;
+    nfc_cb.flags |= NFC_FL_DISCOVER_PENDING;
+    nfc_cb.flags |= NFC_FL_CONTROL_REQUESTED;
+    params_size = sizeof(tNFC_DISCOVER_PARAMS) * num_params;
+    nfc_cb.p_disc_pending =
+        GKI_getbuf((uint16_t)(NFC_HDR_SIZE + 1 + params_size));
+    if (nfc_cb.p_disc_pending) {
+      p = (uint8_t*)nfc_cb.p_disc_pending;
+      *p++ = num_params;
+      memcpy(p, p_params, params_size);
+      status = NFC_STATUS_CMD_STARTED;
+      nfc_ncif_check_cmd_queue(NULL);
     }
-    else
-    {
-        nfc_cb.p_discv_cback = p_cback;
-        nfc_cb.flags        |= NFC_FL_DISCOVER_PENDING;
-        nfc_cb.flags        |= NFC_FL_CONTROL_REQUESTED;
-        params_size          = sizeof (tNFC_DISCOVER_PARAMS) * num_params;
-        nfc_cb.p_disc_pending = GKI_getbuf ((uint16_t)(NFC_HDR_SIZE + 1 + params_size));
-        if (nfc_cb.p_disc_pending)
-        {
-            p       = (uint8_t *)nfc_cb.p_disc_pending;
-            *p++    = num_params;
-            memcpy (p, p_params, params_size);
-            status = NFC_STATUS_CMD_STARTED;
-            nfc_ncif_check_cmd_queue (NULL);
-        }
-    }
+  }
 
-    NFC_TRACE_API1 ("NFC_DiscoveryStart status: 0x%x", status);
-    return status;
+  NFC_TRACE_API1("NFC_DiscoveryStart status: 0x%x", status);
+  return status;
 }
 
 /*******************************************************************************
@@ -950,11 +868,9 @@ tNFC_STATUS NFC_DiscoveryStart (uint8_t               num_params,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_DiscoverySelect (uint8_t  rf_disc_id,
-                                 uint8_t  protocol,
-                                 uint8_t  rf_interface)
-{
-    return nci_snd_discover_select_cmd (rf_disc_id, protocol, rf_interface);
+tNFC_STATUS NFC_DiscoverySelect(uint8_t rf_disc_id, uint8_t protocol,
+                                uint8_t rf_interface) {
+  return nci_snd_discover_select_cmd(rf_disc_id, protocol, rf_interface);
 }
 
 /*******************************************************************************
@@ -972,50 +888,41 @@ tNFC_STATUS NFC_DiscoverySelect (uint8_t  rf_disc_id,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_ConnCreate (uint8_t          dest_type,
-                            uint8_t          id,
-                            uint8_t          protocol,
-                            tNFC_CONN_CBACK *p_cback)
-{
-    tNFC_STATUS     status = NFC_STATUS_FAILED;
-    tNFC_CONN_CB    *p_cb;
-    uint8_t         num_tlv=0, tlv_size=0;
-    uint8_t         param_tlvs[4], *pp;
+tNFC_STATUS NFC_ConnCreate(uint8_t dest_type, uint8_t id, uint8_t protocol,
+                           tNFC_CONN_CBACK* p_cback) {
+  tNFC_STATUS status = NFC_STATUS_FAILED;
+  tNFC_CONN_CB* p_cb;
+  uint8_t num_tlv = 0, tlv_size = 0;
+  uint8_t param_tlvs[4], *pp;
 
-    p_cb = nfc_alloc_conn_cb (p_cback);
-    if (p_cb)
-    {
-        p_cb->id = id;
-        pp = param_tlvs;
-        if (dest_type == NCI_DEST_TYPE_NFCEE)
-        {
-            num_tlv = 1;
-            UINT8_TO_STREAM (pp, NCI_CON_CREATE_TAG_NFCEE_VAL);
-            UINT8_TO_STREAM (pp, 2);
-            UINT8_TO_STREAM (pp, id);
-            UINT8_TO_STREAM (pp, protocol);
-            tlv_size = 4;
-        }
-        else if (dest_type == NCI_DEST_TYPE_REMOTE)
-        {
-            num_tlv = 1;
-            UINT8_TO_STREAM (pp, NCI_CON_CREATE_TAG_RF_DISC_ID);
-            UINT8_TO_STREAM (pp, 1);
-            UINT8_TO_STREAM (pp, id);
-            tlv_size = 3;
-        }
-        else if (dest_type == NCI_DEST_TYPE_NFCC)
-        {
-            p_cb->id = NFC_TEST_ID;
-        }
-        /* Add handling of NCI_DEST_TYPE_REMOTE when more RF interface definitions are added */
-        p_cb->act_protocol = protocol;
-        p_cb->p_cback = p_cback;
-        status = nci_snd_core_conn_create (dest_type, num_tlv, tlv_size, param_tlvs);
-        if (status == NFC_STATUS_FAILED)
-            nfc_free_conn_cb (p_cb);
+  p_cb = nfc_alloc_conn_cb(p_cback);
+  if (p_cb) {
+    p_cb->id = id;
+    pp = param_tlvs;
+    if (dest_type == NCI_DEST_TYPE_NFCEE) {
+      num_tlv = 1;
+      UINT8_TO_STREAM(pp, NCI_CON_CREATE_TAG_NFCEE_VAL);
+      UINT8_TO_STREAM(pp, 2);
+      UINT8_TO_STREAM(pp, id);
+      UINT8_TO_STREAM(pp, protocol);
+      tlv_size = 4;
+    } else if (dest_type == NCI_DEST_TYPE_REMOTE) {
+      num_tlv = 1;
+      UINT8_TO_STREAM(pp, NCI_CON_CREATE_TAG_RF_DISC_ID);
+      UINT8_TO_STREAM(pp, 1);
+      UINT8_TO_STREAM(pp, id);
+      tlv_size = 3;
+    } else if (dest_type == NCI_DEST_TYPE_NFCC) {
+      p_cb->id = NFC_TEST_ID;
     }
-    return status;
+    /* Add handling of NCI_DEST_TYPE_REMOTE when more RF interface definitions
+     * are added */
+    p_cb->act_protocol = protocol;
+    p_cb->p_cback = p_cback;
+    status = nci_snd_core_conn_create(dest_type, num_tlv, tlv_size, param_tlvs);
+    if (status == NFC_STATUS_FAILED) nfc_free_conn_cb(p_cb);
+  }
+  return status;
 }
 
 /*******************************************************************************
@@ -1030,16 +937,14 @@ tNFC_STATUS NFC_ConnCreate (uint8_t          dest_type,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_ConnClose (uint8_t conn_id)
-{
-    tNFC_CONN_CB *p_cb = nfc_find_conn_cb_by_conn_id (conn_id);
-    tNFC_STATUS     status = NFC_STATUS_FAILED;
+tNFC_STATUS NFC_ConnClose(uint8_t conn_id) {
+  tNFC_CONN_CB* p_cb = nfc_find_conn_cb_by_conn_id(conn_id);
+  tNFC_STATUS status = NFC_STATUS_FAILED;
 
-    if (p_cb)
-    {
-        status = nci_snd_core_conn_close (conn_id);
-    }
-    return status;
+  if (p_cb) {
+    status = nci_snd_core_conn_close(conn_id);
+  }
+  return status;
 }
 
 /*******************************************************************************
@@ -1054,14 +959,13 @@ tNFC_STATUS NFC_ConnClose (uint8_t conn_id)
 ** Returns          Nothing
 **
 *******************************************************************************/
-void NFC_SetStaticRfCback (tNFC_CONN_CBACK    *p_cback)
-{
-    tNFC_CONN_CB * p_cb = &nfc_cb.conn_cb[NFC_RF_CONN_ID];
+void NFC_SetStaticRfCback(tNFC_CONN_CBACK* p_cback) {
+  tNFC_CONN_CB* p_cb = &nfc_cb.conn_cb[NFC_RF_CONN_ID];
 
-    p_cb->p_cback = p_cback;
-    /* just in case DH has received NCI data before the data callback is set
-     * check if there's any data event to report on this connection id */
-    nfc_data_event (p_cb);
+  p_cb->p_cback = p_cback;
+  /* just in case DH has received NCI data before the data callback is set
+   * check if there's any data event to report on this connection id */
+  nfc_data_event(p_cb);
 }
 
 /*******************************************************************************
@@ -1081,10 +985,7 @@ void NFC_SetStaticRfCback (tNFC_CONN_CBACK    *p_cback)
 ** Returns          Nothing
 **
 *******************************************************************************/
-void NFC_SetReassemblyFlag (bool       reassembly)
-{
-    nfc_cb.reassembly = reassembly;
-}
+void NFC_SetReassemblyFlag(bool reassembly) { nfc_cb.reassembly = reassembly; }
 
 /*******************************************************************************
 **
@@ -1103,21 +1004,18 @@ void NFC_SetReassemblyFlag (bool       reassembly)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_SendData (uint8_t     conn_id,
-                          NFC_HDR     *p_data)
-{
-    tNFC_STATUS     status = NFC_STATUS_FAILED;
-    tNFC_CONN_CB *p_cb = nfc_find_conn_cb_by_conn_id (conn_id);
+tNFC_STATUS NFC_SendData(uint8_t conn_id, NFC_HDR* p_data) {
+  tNFC_STATUS status = NFC_STATUS_FAILED;
+  tNFC_CONN_CB* p_cb = nfc_find_conn_cb_by_conn_id(conn_id);
 
-    if (p_cb && p_data && p_data->offset >= NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE)
-    {
-        status = nfc_ncif_send_data (p_cb, p_data);
-    }
+  if (p_cb && p_data &&
+      p_data->offset >= NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE) {
+    status = nfc_ncif_send_data(p_cb, p_data);
+  }
 
-    if (status != NFC_STATUS_OK)
-        GKI_freebuf (p_data);
+  if (status != NFC_STATUS_OK) GKI_freebuf(p_data);
 
-    return status;
+  return status;
 }
 
 /*******************************************************************************
@@ -1132,20 +1030,17 @@ tNFC_STATUS NFC_SendData (uint8_t     conn_id,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_FlushData (uint8_t     conn_id)
-{
-    tNFC_STATUS     status = NFC_STATUS_FAILED;
-    tNFC_CONN_CB    *p_cb = nfc_find_conn_cb_by_conn_id (conn_id);
-    void            *p_buf;
+tNFC_STATUS NFC_FlushData(uint8_t conn_id) {
+  tNFC_STATUS status = NFC_STATUS_FAILED;
+  tNFC_CONN_CB* p_cb = nfc_find_conn_cb_by_conn_id(conn_id);
+  void* p_buf;
 
-    if (p_cb)
-    {
-        status  = NFC_STATUS_OK;
-        while ((p_buf = GKI_dequeue (&p_cb->tx_q)) != NULL)
-            GKI_freebuf (p_buf);
-    }
+  if (p_cb) {
+    status = NFC_STATUS_OK;
+    while ((p_buf = GKI_dequeue(&p_cb->tx_q)) != NULL) GKI_freebuf(p_buf);
+  }
 
-    return status;
+  return status;
 }
 
 /*******************************************************************************
@@ -1167,47 +1062,47 @@ tNFC_STATUS NFC_FlushData (uint8_t     conn_id)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_Deactivate (tNFC_DEACT_TYPE deactivate_type)
-{
-    tNFC_CONN_CB * p_cb = &nfc_cb.conn_cb[NFC_RF_CONN_ID];
-    tNFC_STATUS  status = NFC_STATUS_OK;
+tNFC_STATUS NFC_Deactivate(tNFC_DEACT_TYPE deactivate_type) {
+  tNFC_CONN_CB* p_cb = &nfc_cb.conn_cb[NFC_RF_CONN_ID];
+  tNFC_STATUS status = NFC_STATUS_OK;
 
 #if (BT_TRACE_VERBOSE == TRUE)
-    NFC_TRACE_API3 ("NFC_Deactivate %d (%s) deactivate_type:%d", nfc_cb.nfc_state, nfc_state_name (nfc_cb.nfc_state), deactivate_type);
+  NFC_TRACE_API3("NFC_Deactivate %d (%s) deactivate_type:%d", nfc_cb.nfc_state,
+                 nfc_state_name(nfc_cb.nfc_state), deactivate_type);
 #else
-    NFC_TRACE_API2 ("NFC_Deactivate %d deactivate_type:%d", nfc_cb.nfc_state, deactivate_type);
+  NFC_TRACE_API2("NFC_Deactivate %d deactivate_type:%d", nfc_cb.nfc_state,
+                 deactivate_type);
 #endif
 
-    if (nfc_cb.flags & NFC_FL_DISCOVER_PENDING)
-    {
-        /* the HAL pre-discover is still active - clear the pending flag */
-        nfc_cb.flags &= ~NFC_FL_DISCOVER_PENDING;
-        if (!(nfc_cb.flags & NFC_FL_HAL_REQUESTED))
-        {
-            /* if HAL did not request for control, clear this bit now */
-            nfc_cb.flags &= ~NFC_FL_CONTROL_REQUESTED;
-        }
-        GKI_freebuf (nfc_cb.p_disc_pending);
-        nfc_cb.p_disc_pending = NULL;
-        return NFC_STATUS_OK;
+  if (nfc_cb.flags & NFC_FL_DISCOVER_PENDING) {
+    /* the HAL pre-discover is still active - clear the pending flag */
+    nfc_cb.flags &= ~NFC_FL_DISCOVER_PENDING;
+    if (!(nfc_cb.flags & NFC_FL_HAL_REQUESTED)) {
+      /* if HAL did not request for control, clear this bit now */
+      nfc_cb.flags &= ~NFC_FL_CONTROL_REQUESTED;
     }
+    GKI_freebuf(nfc_cb.p_disc_pending);
+    nfc_cb.p_disc_pending = NULL;
+    return NFC_STATUS_OK;
+  }
 
-    if (nfc_cb.nfc_state == NFC_STATE_OPEN)
-    {
-        nfc_set_state (NFC_STATE_CLOSING);
-        NFC_TRACE_DEBUG3 ( "act_protocol %d credits:%d/%d", p_cb->act_protocol, p_cb->init_credits, p_cb->num_buff);
-        if ((p_cb->act_protocol == NCI_PROTOCOL_NFC_DEP) &&
-            (p_cb->init_credits != p_cb->num_buff))
-        {
-            nfc_cb.flags           |= NFC_FL_DEACTIVATING;
-            nfc_cb.deactivate_timer.param = (uintptr_t) deactivate_type;
-            nfc_start_timer (&nfc_cb.deactivate_timer , (uint16_t) (NFC_TTYPE_WAIT_2_DEACTIVATE), NFC_DEACTIVATE_TIMEOUT);
-            return status;
-        }
+  if (nfc_cb.nfc_state == NFC_STATE_OPEN) {
+    nfc_set_state(NFC_STATE_CLOSING);
+    NFC_TRACE_DEBUG3("act_protocol %d credits:%d/%d", p_cb->act_protocol,
+                     p_cb->init_credits, p_cb->num_buff);
+    if ((p_cb->act_protocol == NCI_PROTOCOL_NFC_DEP) &&
+        (p_cb->init_credits != p_cb->num_buff)) {
+      nfc_cb.flags |= NFC_FL_DEACTIVATING;
+      nfc_cb.deactivate_timer.param = (uintptr_t)deactivate_type;
+      nfc_start_timer(&nfc_cb.deactivate_timer,
+                      (uint16_t)(NFC_TTYPE_WAIT_2_DEACTIVATE),
+                      NFC_DEACTIVATE_TIMEOUT);
+      return status;
     }
+  }
 
-    status = nci_snd_deactivate_cmd (deactivate_type);
-    return status;
+  status = nci_snd_deactivate_cmd(deactivate_type);
+  return status;
 }
 
 /*******************************************************************************
@@ -1223,52 +1118,50 @@ tNFC_STATUS NFC_Deactivate (tNFC_DEACT_TYPE deactivate_type)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_UpdateRFCommParams (tNFC_RF_COMM_PARAMS *p_params)
-{
-    uint8_t tlvs[12];
-    uint8_t *p = tlvs;
-    uint8_t data_exch_config;
+tNFC_STATUS NFC_UpdateRFCommParams(tNFC_RF_COMM_PARAMS* p_params) {
+  uint8_t tlvs[12];
+  uint8_t* p = tlvs;
+  uint8_t data_exch_config;
 
-    /* RF Technology and Mode */
-    if (p_params->include_rf_tech_mode)
-    {
-        UINT8_TO_STREAM (p, NCI_RF_PARAM_ID_TECH_N_MODE);
-        UINT8_TO_STREAM (p, 1);
-        UINT8_TO_STREAM (p, p_params->rf_tech_n_mode);
-    }
+  /* RF Technology and Mode */
+  if (p_params->include_rf_tech_mode) {
+    UINT8_TO_STREAM(p, NCI_RF_PARAM_ID_TECH_N_MODE);
+    UINT8_TO_STREAM(p, 1);
+    UINT8_TO_STREAM(p, p_params->rf_tech_n_mode);
+  }
 
-    /* Transmit Bit Rate */
-    if (p_params->include_tx_bit_rate)
-    {
-        UINT8_TO_STREAM (p, NCI_RF_PARAM_ID_TX_BIT_RATE);
-        UINT8_TO_STREAM (p, 1);
-        UINT8_TO_STREAM (p, p_params->tx_bit_rate);
-    }
+  /* Transmit Bit Rate */
+  if (p_params->include_tx_bit_rate) {
+    UINT8_TO_STREAM(p, NCI_RF_PARAM_ID_TX_BIT_RATE);
+    UINT8_TO_STREAM(p, 1);
+    UINT8_TO_STREAM(p, p_params->tx_bit_rate);
+  }
 
-    /* Receive Bit Rate */
-    if (p_params->include_tx_bit_rate)
-    {
-        UINT8_TO_STREAM (p, NCI_RF_PARAM_ID_RX_BIT_RATE);
-        UINT8_TO_STREAM (p, 1);
-        UINT8_TO_STREAM (p, p_params->rx_bit_rate);
-    }
+  /* Receive Bit Rate */
+  if (p_params->include_tx_bit_rate) {
+    UINT8_TO_STREAM(p, NCI_RF_PARAM_ID_RX_BIT_RATE);
+    UINT8_TO_STREAM(p, 1);
+    UINT8_TO_STREAM(p, p_params->rx_bit_rate);
+  }
 
-    /* NFC-B Data Exchange Configuration */
-    if (p_params->include_nfc_b_config)
-    {
-        UINT8_TO_STREAM (p, NCI_RF_PARAM_ID_B_DATA_EX_PARAM);
-        UINT8_TO_STREAM (p, 1);
+  /* NFC-B Data Exchange Configuration */
+  if (p_params->include_nfc_b_config) {
+    UINT8_TO_STREAM(p, NCI_RF_PARAM_ID_B_DATA_EX_PARAM);
+    UINT8_TO_STREAM(p, 1);
 
-        data_exch_config =  (p_params->min_tr0 & 0x03) << 6;          /* b7b6 : Mininum TR0 */
-        data_exch_config |= (p_params->min_tr1 & 0x03) << 4;          /* b5b4 : Mininum TR1 */
-        data_exch_config |= (p_params->suppression_eos & 0x01) << 3;  /* b3 :   Suppression of EoS */
-        data_exch_config |= (p_params->suppression_sos & 0x01) << 2;  /* b2 :   Suppression of SoS */
-        data_exch_config |= (p_params->min_tr2 & 0x03);               /* b1b0 : Mininum TR2 */
+    data_exch_config = (p_params->min_tr0 & 0x03) << 6; /* b7b6 : Mininum TR0 */
+    data_exch_config |= (p_params->min_tr1 & 0x03)
+                        << 4; /* b5b4 : Mininum TR1 */
+    data_exch_config |= (p_params->suppression_eos & 0x01)
+                        << 3; /* b3 :   Suppression of EoS */
+    data_exch_config |= (p_params->suppression_sos & 0x01)
+                        << 2; /* b2 :   Suppression of SoS */
+    data_exch_config |= (p_params->min_tr2 & 0x03); /* b1b0 : Mininum TR2 */
 
-        UINT8_TO_STREAM (p, data_exch_config);
-    }
+    UINT8_TO_STREAM(p, data_exch_config);
+  }
 
-    return nci_snd_parameter_update_cmd (tlvs, (uint8_t) (p - tlvs));
+  return nci_snd_parameter_update_cmd(tlvs, (uint8_t)(p - tlvs));
 }
 
 /*******************************************************************************
@@ -1280,33 +1173,29 @@ tNFC_STATUS NFC_UpdateRFCommParams (tNFC_RF_COMM_PARAMS *p_params)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_SetPowerOffSleep (bool    enable)
-{
-    NFC_TRACE_API1 ("NFC_SetPowerOffSleep () enable = %d", enable);
+tNFC_STATUS NFC_SetPowerOffSleep(bool enable) {
+  NFC_TRACE_API1("NFC_SetPowerOffSleep () enable = %d", enable);
 
-    if (  (enable == false)
-        &&(nfc_cb.nfc_state == NFC_STATE_NFCC_POWER_OFF_SLEEP)  )
-    {
-        nfc_cb.flags |= NFC_FL_RESTARTING;
+  if ((enable == false) &&
+      (nfc_cb.nfc_state == NFC_STATE_NFCC_POWER_OFF_SLEEP)) {
+    nfc_cb.flags |= NFC_FL_RESTARTING;
 
-        /* open transport */
-        nfc_set_state (NFC_STATE_W4_HAL_OPEN);
-        nfc_cb.p_hal->open (nfc_main_hal_cback, nfc_main_hal_data_cback);
+    /* open transport */
+    nfc_set_state(NFC_STATE_W4_HAL_OPEN);
+    nfc_cb.p_hal->open(nfc_main_hal_cback, nfc_main_hal_data_cback);
 
-        return NFC_STATUS_OK;
-    }
-    else if (  (enable == true)
-             &&(nfc_cb.nfc_state == NFC_STATE_IDLE)  )
-    {
-        /* close transport to turn off NFCC and clean up */
-        nfc_cb.flags |= NFC_FL_POWER_OFF_SLEEP;
-        nfc_task_shutdown_nfcc ();
+    return NFC_STATUS_OK;
+  } else if ((enable == true) && (nfc_cb.nfc_state == NFC_STATE_IDLE)) {
+    /* close transport to turn off NFCC and clean up */
+    nfc_cb.flags |= NFC_FL_POWER_OFF_SLEEP;
+    nfc_task_shutdown_nfcc();
 
-        return NFC_STATUS_OK;
-    }
+    return NFC_STATUS_OK;
+  }
 
-    NFC_TRACE_ERROR1 ("NFC_SetPowerOffSleep () invalid state = %d", nfc_cb.nfc_state);
-    return NFC_STATUS_FAILED;
+  NFC_TRACE_ERROR1("NFC_SetPowerOffSleep () invalid state = %d",
+                   nfc_cb.nfc_state);
+  return NFC_STATUS_FAILED;
 }
 
 /*******************************************************************************
@@ -1318,23 +1207,21 @@ tNFC_STATUS NFC_SetPowerOffSleep (bool    enable)
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_PowerCycleNFCC (void)
-{
-    NFC_TRACE_API0 ("NFC_PowerCycleNFCC ()");
+tNFC_STATUS NFC_PowerCycleNFCC(void) {
+  NFC_TRACE_API0("NFC_PowerCycleNFCC ()");
 
-    if (nfc_cb.nfc_state == NFC_STATE_IDLE)
-    {
-        /* power cycle NFCC */
-        nfc_cb.flags |= NFC_FL_POWER_CYCLE_NFCC;
-        nfc_task_shutdown_nfcc ();
+  if (nfc_cb.nfc_state == NFC_STATE_IDLE) {
+    /* power cycle NFCC */
+    nfc_cb.flags |= NFC_FL_POWER_CYCLE_NFCC;
+    nfc_task_shutdown_nfcc();
 
-        return NFC_STATUS_OK;
-    }
+    return NFC_STATUS_OK;
+  }
 
-    NFC_TRACE_ERROR1 ("NFC_PowerCycleNFCC () invalid state = %d", nfc_cb.nfc_state);
-    return NFC_STATUS_FAILED;
+  NFC_TRACE_ERROR1("NFC_PowerCycleNFCC () invalid state = %d",
+                   nfc_cb.nfc_state);
+  return NFC_STATUS_FAILED;
 }
-
 
 /*******************************************************************************
 **
@@ -1346,14 +1233,12 @@ tNFC_STATUS NFC_PowerCycleNFCC (void)
 ** Returns          The new or current trace level
 **
 *******************************************************************************/
-uint8_t NFC_SetTraceLevel (uint8_t new_level)
-{
-    NFC_TRACE_API1 ("NFC_SetTraceLevel () new_level = %d", new_level);
+uint8_t NFC_SetTraceLevel(uint8_t new_level) {
+  NFC_TRACE_API1("NFC_SetTraceLevel () new_level = %d", new_level);
 
-    if (new_level != 0xFF)
-        nfc_cb.trace_level = new_level;
+  if (new_level != 0xFF) nfc_cb.trace_level = new_level;
 
-    return (nfc_cb.trace_level);
+  return (nfc_cb.trace_level);
 }
 
 #if (BT_TRACE_VERBOSE == TRUE)
@@ -1368,83 +1253,81 @@ uint8_t NFC_SetTraceLevel (uint8_t new_level)
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-char *NFC_GetStatusName (tNFC_STATUS status)
-{
-    switch (status)
-    {
+char* NFC_GetStatusName(tNFC_STATUS status) {
+  switch (status) {
     case NFC_STATUS_OK:
-        return "OK";
+      return "OK";
     case NFC_STATUS_REJECTED:
-        return "REJECTED";
+      return "REJECTED";
     case NFC_STATUS_MSG_CORRUPTED:
-        return "CORRUPTED";
+      return "CORRUPTED";
     case NFC_STATUS_BUFFER_FULL:
-        return "BUFFER_FULL";
+      return "BUFFER_FULL";
     case NFC_STATUS_FAILED:
-        return "FAILED";
+      return "FAILED";
     case NFC_STATUS_NOT_INITIALIZED:
-        return "NOT_INITIALIZED";
+      return "NOT_INITIALIZED";
     case NFC_STATUS_SYNTAX_ERROR:
-        return "SYNTAX_ERROR";
+      return "SYNTAX_ERROR";
     case NFC_STATUS_SEMANTIC_ERROR:
-        return "SEMANTIC_ERROR";
+      return "SEMANTIC_ERROR";
     case NFC_STATUS_UNKNOWN_GID:
-        return "UNKNOWN_GID";
+      return "UNKNOWN_GID";
     case NFC_STATUS_UNKNOWN_OID:
-        return "UNKNOWN_OID";
+      return "UNKNOWN_OID";
     case NFC_STATUS_INVALID_PARAM:
-        return "INVALID_PARAM";
+      return "INVALID_PARAM";
     case NFC_STATUS_MSG_SIZE_TOO_BIG:
-        return "MSG_SIZE_TOO_BIG";
+      return "MSG_SIZE_TOO_BIG";
     case NFC_STATUS_ALREADY_STARTED:
-        return "ALREADY_STARTED";
+      return "ALREADY_STARTED";
     case NFC_STATUS_ACTIVATION_FAILED:
-        return "ACTIVATION_FAILED";
+      return "ACTIVATION_FAILED";
     case NFC_STATUS_TEAR_DOWN:
-        return "TEAR_DOWN";
+      return "TEAR_DOWN";
     case NFC_STATUS_RF_TRANSMISSION_ERR:
-        return "RF_TRANSMISSION_ERR";
+      return "RF_TRANSMISSION_ERR";
     case NFC_STATUS_RF_PROTOCOL_ERR:
-        return "RF_PROTOCOL_ERR";
+      return "RF_PROTOCOL_ERR";
     case NFC_STATUS_TIMEOUT:
-        return "TIMEOUT";
+      return "TIMEOUT";
     case NFC_STATUS_EE_INTF_ACTIVE_FAIL:
-        return "EE_INTF_ACTIVE_FAIL";
+      return "EE_INTF_ACTIVE_FAIL";
     case NFC_STATUS_EE_TRANSMISSION_ERR:
-        return "EE_TRANSMISSION_ERR";
+      return "EE_TRANSMISSION_ERR";
     case NFC_STATUS_EE_PROTOCOL_ERR:
-        return "EE_PROTOCOL_ERR";
+      return "EE_PROTOCOL_ERR";
     case NFC_STATUS_EE_TIMEOUT:
-        return "EE_TIMEOUT";
+      return "EE_TIMEOUT";
     case NFC_STATUS_CMD_STARTED:
-        return "CMD_STARTED";
+      return "CMD_STARTED";
     case NFC_STATUS_HW_TIMEOUT:
-        return "HW_TIMEOUT";
+      return "HW_TIMEOUT";
     case NFC_STATUS_CONTINUE:
-        return "CONTINUE";
+      return "CONTINUE";
     case NFC_STATUS_REFUSED:
-        return "REFUSED";
+      return "REFUSED";
     case NFC_STATUS_BAD_RESP:
-        return "BAD_RESP";
+      return "BAD_RESP";
     case NFC_STATUS_CMD_NOT_CMPLTD:
-        return "CMD_NOT_CMPLTD";
+      return "CMD_NOT_CMPLTD";
     case NFC_STATUS_NO_BUFFERS:
-        return "NO_BUFFERS";
+      return "NO_BUFFERS";
     case NFC_STATUS_WRONG_PROTOCOL:
-        return "WRONG_PROTOCOL";
+      return "WRONG_PROTOCOL";
     case NFC_STATUS_BUSY:
-        return "BUSY";
+      return "BUSY";
     case NFC_STATUS_LINK_LOSS:
-        return "LINK_LOSS";
+      return "LINK_LOSS";
     case NFC_STATUS_BAD_LENGTH:
-        return "BAD_LENGTH";
+      return "BAD_LENGTH";
     case NFC_STATUS_BAD_HANDLE:
-        return "BAD_HANDLE";
+      return "BAD_HANDLE";
     case NFC_STATUS_CONGESTED:
-        return "CONGESTED";
+      return "CONGESTED";
     default:
-        return"UNKNOWN";
-    }
+      return "UNKNOWN";
+  }
 }
 #endif
 
