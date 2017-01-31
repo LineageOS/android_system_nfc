@@ -180,7 +180,8 @@ bool nfa_ce_hdl_event(NFC_HDR* p_msg) {
 #endif
 
   /* Get NFA_RW sub-event */
-  if ((act_idx = (p_msg->event & 0x00FF)) < NFA_CE_ACTION_TBL_SIZE) {
+  act_idx = (p_msg->event & 0x00FF);
+  if (act_idx < NFA_CE_ACTION_TBL_SIZE) {
     freebuf = (*nfa_ce_action_tbl[act_idx])((tNFA_CE_MSG*)p_msg);
   }
 

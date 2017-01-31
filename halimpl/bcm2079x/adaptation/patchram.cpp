@@ -135,7 +135,8 @@ static long getFileLength(FILE* fp) {
 static bool isFileExist(const char* pFilename) {
   FILE* pf;
 
-  if ((pf = fopen(pFilename, "r")) != NULL) {
+  pf = fopen(pFilename, "r");
+  if (pf != NULL) {
     fclose(pf);
     return TRUE;
   }
@@ -391,10 +392,12 @@ static void StartPatchDownload(uint32_t chipid) {
     FILE* fd;
     /* If an I2C fix patch file was specified, then tell the stack about it */
     if (sPrePatchFn[0] != '\0') {
-      if ((fd = fopen(sPrePatchFn, "rb")) != NULL) {
+      fd = fopen(sPrePatchFn, "rb");
+      if (fd != NULL) {
         uint32_t lenPrmBuffer = getFileLength(fd);
 
-        if ((sI2cFixPrmBuf = malloc(lenPrmBuffer)) != NULL) {
+        sI2cFixPrmBuf = malloc(lenPrmBuffer);
+        if (sI2cFixPrmBuf != NULL) {
           size_t actualLen = fread(sI2cFixPrmBuf, 1, lenPrmBuffer, fd);
           if (actualLen == lenPrmBuffer) {
             ALOGD("%s Setting I2C fix to %s (size: %lu)", __func__, sPrePatchFn,
@@ -424,11 +427,13 @@ static void StartPatchDownload(uint32_t chipid) {
       uint32_t bDownloadStarted = false;
 
       /* open patchfile, read it into a buffer */
-      if ((fd = fopen(sPatchFn, "rb")) != NULL) {
+      fd = fopen(sPatchFn, "rb");
+      if (fd != NULL) {
         uint32_t lenPrmBuffer = getFileLength(fd);
         ALOGD("%s Downloading patchfile %s (size: %lu) format=%u", __func__,
               sPatchFn, lenPrmBuffer, NFC_HAL_PRM_FORMAT_NCD);
-        if ((sPrmBuf = malloc(lenPrmBuffer)) != NULL) {
+        sPrmBuf = malloc(lenPrmBuffer);
+        if (sPrmBuf != NULL) {
           size_t actualLen = fread(sPrmBuf, 1, lenPrmBuffer, fd);
           if (actualLen == lenPrmBuffer) {
             if (!SpdHelper::isPatchBad((uint8_t*)sPrmBuf, lenPrmBuffer)) {

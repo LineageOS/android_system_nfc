@@ -218,7 +218,8 @@ static void nfa_rw_handle_ndef_detect(tRW_EVENT event, tRW_DATA* p_rw_data) {
     if (nfa_rw_cb.cur_op == NFA_RW_OP_READ_NDEF) {
       /* if ndef detection was done as part of ndef-read operation, then perform
        * ndef read now */
-      if ((conn_evt_data.status = nfa_rw_start_ndef_read()) != NFA_STATUS_OK) {
+      conn_evt_data.status = nfa_rw_start_ndef_read();
+      if (conn_evt_data.status != NFA_STATUS_OK) {
         /* Failed to start NDEF Read */
 
         /* Command complete - perform cleanup, notify app */
@@ -228,7 +229,8 @@ static void nfa_rw_handle_ndef_detect(tRW_EVENT event, tRW_DATA* p_rw_data) {
     } else if (nfa_rw_cb.cur_op == NFA_RW_OP_WRITE_NDEF) {
       /* if ndef detection was done as part of ndef-write operation, then
        * perform ndef write now */
-      if ((conn_evt_data.status = nfa_rw_start_ndef_write()) != NFA_STATUS_OK) {
+      conn_evt_data.status = nfa_rw_start_ndef_write();
+      if (conn_evt_data.status != NFA_STATUS_OK) {
         /* Failed to start NDEF Write.  */
 
         /* Command complete - perform cleanup, notify app */
@@ -706,7 +708,8 @@ static void nfa_rw_handle_t2t_evt(tRW_EVENT event, tRW_DATA* p_rw_data) {
         "response!");
     /* Received NACK. Let DM wakeup the tag first (by putting tag to sleep and
      * then waking it up) */
-    if ((p_rw_data->status = nfa_dm_disc_sleep_wakeup()) == NFC_STATUS_OK) {
+    p_rw_data->status = nfa_dm_disc_sleep_wakeup();
+    if (p_rw_data->status == NFC_STATUS_OK) {
       nfa_rw_cb.halt_event = event;
       memcpy(&nfa_rw_cb.rw_data, p_rw_data, sizeof(tRW_DATA));
       return;
@@ -1466,8 +1469,8 @@ static tNFC_STATUS nfa_rw_start_ndef_read(void) {
   /* Allocate buffer for incoming NDEF message (free previous NDEF rx buffer, if
    * needed) */
   nfa_rw_free_ndef_rx_buf();
-  if ((nfa_rw_cb.p_ndef_buf =
-           (uint8_t*)nfa_mem_co_alloc(nfa_rw_cb.ndef_cur_size)) == NULL) {
+  nfa_rw_cb.p_ndef_buf = (uint8_t*)nfa_mem_co_alloc(nfa_rw_cb.ndef_cur_size);
+  if (nfa_rw_cb.p_ndef_buf == NULL) {
     NFA_TRACE_ERROR1("Unable to allocate a buffer for reading NDEF (size=%i)",
                      nfa_rw_cb.ndef_cur_size);
 
@@ -1516,8 +1519,8 @@ static bool nfa_rw_detect_ndef(tNFA_RW_MSG* p_data) {
   tNFA_CONN_EVT_DATA conn_evt_data;
   NFA_TRACE_DEBUG0("nfa_rw_detect_ndef");
 
-  if ((conn_evt_data.ndef_detect.status = nfa_rw_start_ndef_detection()) !=
-      NFC_STATUS_OK) {
+  conn_evt_data.ndef_detect.status = nfa_rw_start_ndef_detection();
+  if (conn_evt_data.ndef_detect.status != NFC_STATUS_OK) {
     /* Command complete - perform cleanup, notify app */
     nfa_rw_command_complete();
     conn_evt_data.ndef_detect.cur_size = 0;
@@ -1634,9 +1637,9 @@ static bool nfa_rw_write_ndef(tNFA_RW_MSG* p_data) {
   NFA_TRACE_DEBUG0("nfa_rw_write_ndef");
 
   /* Validate NDEF message */
-  if ((ndef_status = NDEF_MsgValidate(p_data->op_req.params.write_ndef.p_data,
-                                      p_data->op_req.params.write_ndef.len,
-                                      false)) != NDEF_OK) {
+  ndef_status = NDEF_MsgValidate(p_data->op_req.params.write_ndef.p_data,
+                                 p_data->op_req.params.write_ndef.len, false);
+  if (ndef_status != NDEF_OK) {
     NFA_TRACE_ERROR1("Invalid NDEF message. NDEF_MsgValidate returned %i",
                      ndef_status);
 

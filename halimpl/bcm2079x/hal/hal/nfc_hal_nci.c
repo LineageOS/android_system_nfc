@@ -178,8 +178,8 @@ static bool nfc_hal_nci_receive_nci_msg(tNFC_HAL_NCIT_CB* p_cb, uint8_t byte) {
       p_cb->rcv_len = NCI_MSG_HDR_SIZE;
 
       /* Start of new message. Allocate a buffer for message */
-      if ((p_cb->p_rcv_msg = (NFC_HDR*)GKI_getpoolbuf(NFC_HAL_NCI_POOL_ID)) !=
-          NULL) {
+      p_cb->p_rcv_msg = (NFC_HDR*)GKI_getpoolbuf(NFC_HAL_NCI_POOL_ID);
+      if (p_cb->p_rcv_msg != NULL) {
         /* Initialize NFC_HDR */
         p_cb->p_rcv_msg->len = 0;
         p_cb->p_rcv_msg->event = 0;
@@ -268,8 +268,8 @@ static bool nfc_hal_nci_receive_bt_msg(tNFC_HAL_NCIT_CB* p_cb, uint8_t byte) {
       p_cb->rcv_state = NFC_HAL_RCV_BT_HDR_ST;
       p_cb->rcv_len = HCIE_PREAMBLE_SIZE;
 
-      if ((p_cb->p_rcv_msg = (NFC_HDR*)GKI_getpoolbuf(NFC_HAL_NCI_POOL_ID)) !=
-          NULL) {
+      p_cb->p_rcv_msg = (NFC_HDR*)GKI_getpoolbuf(NFC_HAL_NCI_POOL_ID);
+      if (p_cb->p_rcv_msg != NULL) {
         /* Initialize NFC_HDR */
         p_cb->p_rcv_msg->len = 0;
         p_cb->p_rcv_msg->event = 0;

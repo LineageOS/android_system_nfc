@@ -743,7 +743,8 @@ uint32_t userial_read_thread(uint32_t arg) {
     NFC_HDR* p_buf;
     uint8_t* current_packet;
 
-    if ((p_buf = (NFC_HDR*)GKI_getpoolbuf(USERIAL_POOL_ID)) != NULL) {
+    p_buf = (NFC_HDR*)GKI_getpoolbuf(USERIAL_POOL_ID);
+    if (p_buf != NULL) {
       p_buf->offset = 0;
       p_buf->layer_specific = 0;
 
@@ -1012,7 +1013,8 @@ void USERIAL_Open(tUSERIAL_PORT port, tUSERIAL_OPEN_CFG* p_cfg,
 
   {
     ALOGD("%s Opening %s\n", __func__, device_name);
-    if ((linux_cb.sock = open((char*)device_name, O_RDWR | O_NOCTTY)) == -1) {
+    linux_cb.sock = open((char*)device_name, O_RDWR | O_NOCTTY);
+    if (linux_cb.sock == -1) {
       ALOGI("%s unable to open %s", __func__, device_name);
       GKI_send_event(NFC_HAL_TASK, NFC_HAL_TASK_EVT_TERMINATE);
       goto done_open;
@@ -1024,8 +1026,9 @@ void USERIAL_Open(tUSERIAL_PORT port, tUSERIAL_OPEN_CFG* p_cfg,
       if (strcmp(power_control_dev, userial_dev) == 0)
         linux_cb.sock_power_control = linux_cb.sock;
       else {
-        if ((linux_cb.sock_power_control =
-                 open((char*)power_control_dev, O_RDWR | O_NOCTTY)) == -1) {
+        linux_cb.sock_power_control =
+            open((char*)power_control_dev, O_RDWR | O_NOCTTY);
+        if (linux_cb.sock_power_control == -1) {
           ALOGI("%s unable to open %s", __func__, power_control_dev);
         }
       }

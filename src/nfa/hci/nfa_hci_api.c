@@ -965,7 +965,8 @@ void NFA_HciDebug(uint8_t action, uint8_t size, uint8_t* p_data) {
       break;
 
     case NFA_HCI_DEBUG_SIM_HCI_EVENT:
-      if ((p_msg = (NFC_HDR*)GKI_getpoolbuf(NFC_RW_POOL_ID)) != NULL) {
+      p_msg = (NFC_HDR*)GKI_getpoolbuf(NFC_RW_POOL_ID);
+      if (p_msg != NULL) {
         p = (uint8_t*)(p_msg + 1);
 
         p_msg->event = NFA_HCI_CHECK_QUEUE_EVT;

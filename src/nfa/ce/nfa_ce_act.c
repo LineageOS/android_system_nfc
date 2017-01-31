@@ -641,8 +641,9 @@ tNFA_STATUS nfa_ce_realloc_scratch_buffer(void) {
       /* Free existing scratch buffer, if one was allocated */
       nfa_ce_free_scratch_buf();
 
-      if ((nfa_ce_cb.p_scratch_buf =
-               (uint8_t*)nfa_mem_co_alloc(nfa_ce_cb.ndef_max_size)) != NULL) {
+      nfa_ce_cb.p_scratch_buf =
+          (uint8_t*)nfa_mem_co_alloc(nfa_ce_cb.ndef_max_size);
+      if (nfa_ce_cb.p_scratch_buf != NULL) {
         nfa_ce_cb.scratch_buf_size = nfa_ce_cb.ndef_max_size;
       } else {
         NFA_TRACE_ERROR1(
@@ -689,7 +690,8 @@ tNFC_STATUS nfa_ce_set_content(void) {
       p_cb->listen_info[NFA_CE_LISTEN_INFO_IDX_NDEF].protocol_mask;
 
   /* Allocate a scratch buffer if needed (for handling write-requests) */
-  if ((status = nfa_ce_realloc_scratch_buffer()) == NFA_STATUS_OK) {
+  status = nfa_ce_realloc_scratch_buffer();
+  if (status == NFA_STATUS_OK) {
     if ((ndef_protocol_mask & NFA_PROTOCOL_MASK_T3T) &&
         (status == NFA_STATUS_OK)) {
       /* Type3Tag    - NFC-F */
@@ -1211,10 +1213,11 @@ bool nfa_ce_api_reg_listen(tNFA_CE_MSG* p_ce_msg) {
             p_ce_msg->reg_listen.p_conn_cback;
 
         /* Register this AID with CE_T4T */
-        if ((p_cb->listen_info[listen_info_idx].t4t_aid_handle =
-                 CE_T4tRegisterAID(
-                     p_ce_msg->reg_listen.aid_len, p_ce_msg->reg_listen.aid,
-                     nfa_ce_handle_t4t_aid_evt)) == CE_T4T_AID_HANDLE_INVALID) {
+        p_cb->listen_info[listen_info_idx].t4t_aid_handle = CE_T4tRegisterAID(
+            p_ce_msg->reg_listen.aid_len, p_ce_msg->reg_listen.aid,
+            nfa_ce_handle_t4t_aid_evt);
+        if (p_cb->listen_info[listen_info_idx].t4t_aid_handle ==
+            CE_T4T_AID_HANDLE_INVALID) {
           NFA_TRACE_ERROR0("Unable to register AID");
           p_cb->listen_info[listen_info_idx].flags = 0;
 
@@ -1262,7 +1265,8 @@ bool nfa_ce_api_reg_listen(tNFA_CE_MSG* p_ce_msg) {
   }
 
   /* Start listening */
-  if ((conn_evt.status = nfa_ce_start_listening()) != NFA_STATUS_OK) {
+  conn_evt.status = nfa_ce_start_listening();
+  if (conn_evt.status != NFA_STATUS_OK) {
     NFA_TRACE_ERROR0(
         "nfa_ce_api_reg_listen: unable to register new listen params with DM");
     p_cb->listen_info[listen_info_idx].flags = 0;

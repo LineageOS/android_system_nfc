@@ -622,7 +622,8 @@ static bool nfc_hal_prm_nvm_rw_cmd(void) {
   }
   cmd_len = len + 7;
 
-  if ((p_buff = (uint8_t*)GKI_getbuf(cmd_len)) == NULL) {
+  p_buff = (uint8_t*)GKI_getbuf(cmd_len);
+  if (p_buff == NULL) {
     HAL_TRACE_ERROR0("NVM No buffer");
     nfc_hal_prm_spd_handle_download_complete(NFC_HAL_PRM_ABORT_EVT);
     return true;

@@ -396,8 +396,8 @@ tNFA_STATUS nfa_dm_check_set_config(uint8_t tlv_list_len, uint8_t* p_tlv_list,
   /* If any TVLs to update, or if the SetConfig was initiated by the
    * application, then send the SET_CONFIG command */
   if (updated_len || app_init) {
-    if ((nfc_status = NFC_SetConfig(updated_len, p_tlv_list)) ==
-        NFC_STATUS_OK) {
+    nfc_status = NFC_SetConfig(updated_len, p_tlv_list);
+    if (nfc_status == NFC_STATUS_OK) {
       /* Keep track of whether we will need to notify NFA_DM_SET_CONFIG_EVT on
        * NFC_SET_CONFIG_REVT */
 
