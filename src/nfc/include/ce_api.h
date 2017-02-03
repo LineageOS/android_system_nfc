@@ -27,6 +27,9 @@
 #ifndef CE_API_H
 #define CE_API_H
 
+#include "nfc_api.h"
+#include "nfc_types.h"
+#include <stdbool.h>
 #include "tags_defs.h"
 
 #define CE_T3T_FIRST_EVT    0x60
