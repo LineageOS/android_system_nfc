@@ -197,13 +197,15 @@ extern "C"
 **
 ** Function         NFA_SnepStartDefaultServer
 **
-** Description      This function is called to listen to SAP, 0x04 as SNEP default
-**                  server ("urn:nfc:sn:snep") on LLCP.
+** Description      This function is called to listen to SAP, 0x04 as SNEP
+**                  default server ("urn:nfc:sn:snep") on LLCP.
 **
-**                  NFA_SNEP_DEFAULT_SERVER_STARTED_EVT without data will be returned.
+**                  NFA_SNEP_DEFAULT_SERVER_STARTED_EVT without data will be
+**                  returned.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -217,10 +219,12 @@ extern tNFA_STATUS NFA_SnepStartDefaultServer (tNFA_SNEP_CBACK *p_cback);
 **
 ** Description      This function is called to stop SNEP default server on LLCP.
 **
-**                  NFA_SNEP_DEFAULT_SERVER_STOPPED_EVT without data will be returned.
+**                  NFA_SNEP_DEFAULT_SERVER_STOPPED_EVT without data will be
+**                  returned.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -234,19 +238,23 @@ extern tNFA_STATUS NFA_SnepStopDefaultServer (tNFA_SNEP_CBACK *p_cback);
 **
 ** Description      This function is called to listen to a SAP as SNEP server.
 **
-**                  If server_sap is set to NFA_SNEP_ANY_SAP, then NFA will allocate
-**                  a SAP between LLCP_LOWER_BOUND_SDP_SAP and LLCP_UPPER_BOUND_SDP_SAP
+**                  If server_sap is set to NFA_SNEP_ANY_SAP, then NFA will
+**                  allocate a SAP between LLCP_LOWER_BOUND_SDP_SAP and
+**                  LLCP_UPPER_BOUND_SDP_SAP
 **
-**                  NFC Forum default SNEP server ("urn:nfc:sn:snep") may be launched
-**                  by NFA_SnepStartDefaultServer ().
+**                  NFC Forum default SNEP server ("urn:nfc:sn:snep") may be
+**                  launched by NFA_SnepStartDefaultServer ().
 **
-**                  NFA_SNEP_REG_EVT will be returned with status, handle and service name.
+**                  NFA_SNEP_REG_EVT will be returned with status, handle and
+**                  service name.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
-**                  NFA_STATUS_INVALID_PARAM if p_service_name or p_cback is NULL
+**                  NFA_STATUS_INVALID_PARAM if p_service_name or p_cback is
+**                  NULL
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
@@ -277,9 +285,10 @@ extern tNFA_STATUS NFA_SnepRegisterClient (tNFA_SNEP_CBACK *p_cback);
 **                  or SNEP client. Application shall use reg_handle returned in
 **                  NFA_SNEP_REG_EVT.
 **
-** Note:            If this function is called to de-register a SNEP server and RF
-**                  discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If this function is called to de-register a SNEP server and
+**                  RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_BAD_HANDLE if handle is not valid
@@ -292,16 +301,18 @@ extern tNFA_STATUS NFA_SnepDeregister (tNFA_HANDLE reg_handle);
 **
 ** Function         NFA_SnepConnect
 **
-** Description      This function is called by client to create data link connection
-**                  to SNEP server on peer device.
+** Description      This function is called by client to create data link
+**                  connection to SNEP server on peer device.
 **
-**                  Client handle and service name of server to connect shall be provided.
-**                  A conn_handle will be returned in NFA_SNEP_CONNECTED_EVT, if
-**                  successfully connected. Otherwise NFA_SNEP_DISC_EVT will be returned.
+**                  Client handle and service name of server to connect shall be
+**                  provided. A conn_handle will be returned in
+**                  NFA_SNEP_CONNECTED_EVT, if successfully connected. Otherwise
+**                  NFA_SNEP_DISC_EVT will be returned.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_BAD_HANDLE if handle is not valid
-**                  NFA_STATUS_INVALID_PARAM if p_service_name or p_cback is NULL
+**                  NFA_STATUS_INVALID_PARAM if p_service_name or p_cback is
+**                  NULL
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
@@ -314,10 +325,11 @@ extern tNFA_STATUS NFA_SnepConnect (tNFA_HANDLE     client_handle,
 **
 ** Description      This function is called by client to send GET request.
 **
-**                  Application shall allocate a buffer and put NDEF message with
-**                  desired record type to get from server. NDEF message from server
-**                  will be returned in the same buffer with NFA_SNEP_GET_RESP_EVT.
-**                  The size of buffer will be used as "Acceptable Length".
+**                  Application shall allocate a buffer and put NDEF message
+**                  with desired record type to get from server. NDEF message
+**                  from server will be returned in the same buffer with
+**                  NFA_SNEP_GET_RESP_EVT. The size of buffer will be used as
+**                  "Acceptable Length".
 **
 **                  NFA_SNEP_GET_RESP_EVT or NFA_SNEP_DISC_EVT will be returned
 **                  through registered p_cback. Application may free the buffer
@@ -340,16 +352,17 @@ extern tNFA_STATUS NFA_SnepGet (tNFA_HANDLE     conn_handle,
 **
 ** Description      This function is called by client to send PUT request.
 **
-**                  Application shall allocate a buffer and put desired NDEF message
-**                  to send to server.
+**                  Application shall allocate a buffer and put desired NDEF
+**                  message to send to server.
 **
 **                  NFA_SNEP_PUT_RESP_EVT or NFA_SNEP_DISC_EVT will be returned
-**                  through p_cback. Application may free the buffer after receiving
-**                  these events.
+**                  through p_cback. Application may free the buffer after
+**                  receiving these events.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_BAD_HANDLE if handle is not valid
-**                  NFA_STATUS_INVALID_PARAM if p_service_name or p_cback is NULL
+**                  NFA_STATUS_INVALID_PARAM if p_service_name or p_cback is
+**                  NULL
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
@@ -361,26 +374,28 @@ extern tNFA_STATUS NFA_SnepPut (tNFA_HANDLE     conn_handle,
 **
 ** Function         NFA_SnepGetResponse
 **
-** Description      This function is called by server to send response of GET request.
+** Description      This function is called by server to send response of GET
+**                  request.
 **
 **                  When server application receives NFA_SNEP_ALLOC_BUFF_EVT,
 **                  it shall allocate a buffer for incoming NDEF message and
-**                  pass the pointer within callback context. This buffer will be
-**                  returned with NFA_SNEP_GET_REQ_EVT after receiving complete
-**                  NDEF message. If buffer is not allocated, NFA_SNEP_RESP_CODE_NOT_FOUND
-**                  (Note:There is no proper response code for this case)
-**                  or NFA_SNEP_RESP_CODE_REJECT will be sent to client.
+**                  pass the pointer within callback context. This buffer will
+**                  be returned with NFA_SNEP_GET_REQ_EVT after receiving
+**                  complete NDEF message. If buffer is not allocated,
+**                  NFA_SNEP_RESP_CODE_NOT_FOUND (Note:There is no proper
+**                  response code for this case) or NFA_SNEP_RESP_CODE_REJECT
+**                  will be sent to client.
 **
-**                  Server application shall provide conn_handle which is received in
-**                  NFA_SNEP_GET_REQ_EVT.
+**                  Server application shall provide conn_handle which is
+**                  received in NFA_SNEP_GET_REQ_EVT.
 **
-**                  Server application shall allocate a buffer and put NDEF message if
-**                  response code is NFA_SNEP_RESP_CODE_SUCCESS. Otherwise, ndef_length
-**                  shall be set to zero.
+**                  Server application shall allocate a buffer and put NDEF
+**                  message if response code is NFA_SNEP_RESP_CODE_SUCCESS.
+**                  Otherwise, ndef_length shall be set to zero.
 **
-**                  NFA_SNEP_GET_RESP_CMPL_EVT or NFA_SNEP_DISC_EVT will be returned
-**                  through registered callback function. Application may free
-**                  the buffer after receiving these events.
+**                  NFA_SNEP_GET_RESP_CMPL_EVT or NFA_SNEP_DISC_EVT will be
+**                  returned through registered callback function. Application
+**                  may free the buffer after receiving these events.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_BAD_HANDLE if handle is not valid
@@ -396,22 +411,24 @@ extern tNFA_STATUS NFA_SnepGetResponse (tNFA_HANDLE         conn_handle,
 **
 ** Function         NFA_SnepPutResponse
 **
-** Description      This function is called by server to send response of PUT request.
+** Description      This function is called by server to send response of PUT
+**                  request.
 **
 **                  When server application receives NFA_SNEP_ALLOC_BUFF_EVT,
 **                  it shall allocate a buffer for incoming NDEF message and
-**                  pass the pointer within callback context. This buffer will be
-**                  returned with NFA_SNEP_PUT_REQ_EVT after receiving complete
-**                  NDEF message.  If buffer is not allocated, NFA_SNEP_RESP_CODE_REJECT
-**                  will be sent to client or NFA will discard request and send
-**                  NFA_SNEP_RESP_CODE_SUCCESS (Note:There is no proper response code for
-**                  this case).
+**                  pass the pointer within callback context. This buffer will
+**                  be returned with NFA_SNEP_PUT_REQ_EVT after receiving
+**                  complete NDEF message.  If buffer is not allocated,
+**                  NFA_SNEP_RESP_CODE_REJECT will be sent to client or NFA will
+**                  discard request and send NFA_SNEP_RESP_CODE_SUCCESS
+**                  (Note:There is no proper response code for this case).
 **
-**                  Server application shall provide conn_handle which is received in
-**                  NFA_SNEP_PUT_REQ_EVT.
+**                  Server application shall provide conn_handle which is
+**                  received in NFA_SNEP_PUT_REQ_EVT.
 **
-**                  NFA_SNEP_DISC_EVT will be returned through registered callback
-**                  function when client disconnects data link connection.
+**                  NFA_SNEP_DISC_EVT will be returned through registered
+**                  callback function when client disconnects data link
+**                  connection.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_BAD_HANDLE if handle is not valid
@@ -428,11 +445,11 @@ extern tNFA_STATUS NFA_SnepPutResponse (tNFA_HANDLE         conn_handle,
 ** Description      This function is called to disconnect data link connection.
 **                  discard any pending data if flush is set to TRUE
 **
-**                  Client application shall provide conn_handle in NFA_SNEP_GET_RESP_EVT
-**                  or NFA_SNEP_PUT_RESP_EVT.
+**                  Client application shall provide conn_handle in
+**                  NFA_SNEP_GET_RESP_EVT or NFA_SNEP_PUT_RESP_EVT.
 **
-**                  Server application shall provide conn_handle in NFA_SNEP_GET_REQ_EVT
-**                  or NFA_SNEP_PUT_REQ_EVT.
+**                  Server application shall provide conn_handle in
+**                  NFA_SNEP_GET_REQ_EVT or NFA_SNEP_PUT_REQ_EVT.
 **
 **                  NFA_SNEP_DISC_EVT will be returned
 **

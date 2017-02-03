@@ -84,15 +84,15 @@ tNFA_STATUS nfa_ce_api_deregister_listen (tNFA_HANDLE handle, uint32_t listen_in
 **                  Tag events will be notifed using the tNFA_CONN_CBACK
 **                  (registered during NFA_Enable)
 **
-**                  The NFA_CE_LOCAL_TAG_CONFIGURED_EVT reports the status of the
-**                  operation.
+**                  The NFA_CE_LOCAL_TAG_CONFIGURED_EVT reports the status of
+**                  the operation.
 **
 **                  Activation and deactivation are reported using the
 **                  NFA_ACTIVATED_EVT and NFA_DEACTIVATED_EVT events
 **
 **                  If a write-request is received to update the tag memory,
-**                  an NFA_CE_NDEF_WRITE_CPLT_EVT will notify the application, along
-**                  with a buffer containing the updated contents.
+**                  an NFA_CE_NDEF_WRITE_CPLT_EVT will notify the application,
+**                  along with a buffer containing the updated contents.
 **
 **                  To disable the local NDEF tag, set protocol_mask=0
 **
@@ -100,9 +100,10 @@ tNFA_STATUS nfa_ce_api_deregister_listen (tNFA_HANDLE handle, uint32_t listen_in
 **                  as long as the local NDEF tag is enabled.
 **
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function. Also, Input parameters p_uid and
-**                  uid_len are reserved for future use.
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function. Also, Input parameters
+**                  p_uid and uid_len are reserved for future use.
 **
 ** Returns:
 **                  NFA_STATUS_OK,            if command accepted
@@ -182,14 +183,15 @@ tNFA_STATUS NFA_CeConfigureLocalTag (tNFA_PROTOCOL_MASK protocol_mask,
 **                  Events will be notifed using the tNFA_CONN_CBACK
 **                  (registered during NFA_Enable)
 **
-**                  The NFA_CE_UICC_LISTEN_CONFIGURED_EVT reports the status of the
-**                  operation.
+**                  The NFA_CE_UICC_LISTEN_CONFIGURED_EVT reports the status of
+**                  the operation.
 **
 **                  Activation and deactivation are reported using the
 **                  NFA_ACTIVATED_EVT and NFA_DEACTIVATED_EVT events
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns:
 **                  NFA_STATUS_OK, if command accepted
@@ -238,8 +240,9 @@ tNFA_STATUS NFA_CeConfigureUiccListenTech (tNFA_HANDLE ee_handle,
 **                  The NFA_CE_REGISTERED_EVT reports the status of the
 **                  operation.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns:
 **                  NFA_STATUS_OK, if command accepted
@@ -281,13 +284,15 @@ tNFA_STATUS NFA_CeRegisterFelicaSystemCodeOnDH (uint16_t system_code,
 ** Function         NFA_CeDeregisterFelicaSystemCodeOnDH
 **
 ** Description      Deregister listening callback for Felica
-**                  (previously registered using NFA_CeRegisterFelicaSystemCodeOnDH)
+**                  (previously registered using
+**                  NFA_CeRegisterFelicaSystemCodeOnDH)
 **
 **                  The NFA_CE_DEREGISTERED_EVT reports the status of the
 **                  operation.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_BAD_HANDLE if invalid handle
@@ -313,8 +318,9 @@ tNFA_STATUS NFA_CeDeregisterFelicaSystemCodeOnDH (tNFA_HANDLE handle)
 **                  will get notifications for any AIDs routed to the DH. This
 **                  over-rides callbacks registered for specific AIDs.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns:
 **                  NFA_STATUS_OK, if command accepted
@@ -361,8 +367,9 @@ tNFA_STATUS NFA_CeRegisterAidOnDH (uint8_t aid[NFC_MAX_AID_LEN],
 **                  The NFA_CE_DEREGISTERED_EVT reports the status of the
 **                  operation.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_BAD_HANDLE if invalid handle
@@ -380,18 +387,21 @@ tNFA_STATUS NFA_CeDeregisterAidOnDH (tNFA_HANDLE handle)
 ** Function         NFA_CeSetIsoDepListenTech
 **
 ** Description      Set the technologies (NFC-A and/or NFC-B) to listen for when
-**                  NFA_CeConfigureLocalTag or NFA_CeDeregisterAidOnDH are called.
+**                  NFA_CeConfigureLocalTag or NFA_CeDeregisterAidOnDH are
+**                  called.
 **
 **                  By default (if this API is not called), NFA will listen
 **                  for both NFC-A and NFC-B for ISODEP.
 **
 ** Note:            If listening for ISODEP on UICC, the DH listen callbacks
-**                  may still get activate notifications for ISODEP if the reader/
-**                  writer selects an AID that is not routed to the UICC (regardless
-**                  of whether A or B was disabled using NFA_CeSetIsoDepListenTech)
+**                  may still get activate notifications for ISODEP if the
+**                  reader/writer selects an AID that is not routed to the UICC
+**                  (regardless of whether A or B was disabled using
+**                  NFA_CeSetIsoDepListenTech)
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns:
 **                  NFA_STATUS_OK, if command accepted

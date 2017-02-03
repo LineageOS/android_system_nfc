@@ -375,8 +375,8 @@ tNFC_STATUS rw_t1t_send_static_cmd (uint8_t opcode, uint8_t add, uint8_t dat)
 **
 ** Function         rw_t1t_send_dyn_cmd
 **
-** Description      This function composes a Type 1 Tag command for dynamic memory
-**                  and send through NCI to NFCC.
+** Description      This function composes a Type 1 Tag command for dynamic
+**                  memory and send through NCI to NFCC.
 **
 ** Returns          NFC_STATUS_OK if the command is successfuly sent to NCI
 **                  otherwise, error status
@@ -857,7 +857,8 @@ tNFC_STATUS RW_T1tRead (uint8_t block, uint8_t byte)
 **
 ** Function         RW_T1tWriteErase
 **
-** Description      This function sends a WRITE-E command for Reader/Writer mode.
+** Description      This function sends a WRITE-E command for Reader/Writer
+**                  mode.
 **
 ** Returns          tNFC_STATUS
 **
@@ -910,7 +911,8 @@ tNFC_STATUS RW_T1tWriteErase (uint8_t block, uint8_t byte, uint8_t new_byte)
 **
 ** Function         RW_T1tWriteNoErase
 **
-** Description      This function sends a WRITE-NE command for Reader/Writer mode.
+** Description      This function sends a WRITE-NE command for Reader/Writer
+**                  mode.
 **
 ** Returns          tNFC_STATUS
 **
@@ -1031,7 +1033,8 @@ tNFC_STATUS RW_T1tRead8 (uint8_t block)
 **
 ** Function         RW_T1tWriteErase8
 **
-** Description      This function sends a WRITE-E8 command for Reader/Writer mode.
+** Description      This function sends a WRITE-E8 command for Reader/Writer
+**                  mode.
 **
 ** Returns          tNFC_STATUS
 **
@@ -1081,7 +1084,8 @@ tNFC_STATUS RW_T1tWriteErase8 (uint8_t block, uint8_t *p_new_dat)
 **
 ** Function         RW_T1tWriteNoErase8
 **
-** Description      This function sends a WRITE-NE8 command for Reader/Writer mode.
+** Description      This function sends a WRITE-NE8 command for Reader/Writer
+**                  mode.
 **
 ** Returns          tNFC_STATUS
 **

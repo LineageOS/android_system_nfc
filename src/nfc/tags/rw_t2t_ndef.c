@@ -166,7 +166,8 @@ void rw_t2t_handle_rsp (uint8_t *p_data)
 **
 ** Function         rw_t2t_info_to_event
 **
-** Description      This function returns RW event code based on the current state
+** Description      This function returns RW event code based on the current
+**                  state
 **
 ** Returns          RW event code
 **
@@ -944,8 +945,8 @@ void rw_t2t_extract_default_locks_info (void)
 **                  locate the offset of Terminator TLV based on the size of
 **                  new NDEF Message
 **
-** Returns          NCI_STATUS_OK,if able to locate last ndef block & read started
-**                  Otherwise, error status.
+** Returns          NCI_STATUS_OK, if able to locate last ndef block & read
+**                  started. Otherwise, error status.
 **
 *******************************************************************************/
 tNFC_STATUS rw_t2t_read_ndef_last_block (void)
@@ -1151,7 +1152,8 @@ static bool    rw_t2t_is_read_before_write_block (uint16_t block, uint16_t *p_bl
 **                  Also after writting NDEF this function may be called to
 **                  update new NDEF length
 **
-** Returns          NCI_STATUS_OK, if write was started. Otherwise, error status.
+** Returns          NCI_STATUS_OK, if write was started.
+**                  Otherwise, error status.
 **
 *******************************************************************************/
 tNFC_STATUS rw_t2t_write_ndef_first_block (uint16_t msg_len, bool    b_update_len)
@@ -1257,7 +1259,8 @@ tNFC_STATUS rw_t2t_write_ndef_first_block (uint16_t msg_len, bool    b_update_le
 **
 ** Description      This function can be called to write an NDEF message block
 **
-** Returns          NCI_STATUS_OK, if write was started. Otherwise, error status.
+** Returns          NCI_STATUS_OK, if write was started.
+**                  Otherwise, error status.
 **
 *******************************************************************************/
 tNFC_STATUS rw_t2t_write_ndef_next_block (uint16_t block, uint16_t msg_len, bool    b_update_len)
@@ -1380,7 +1383,8 @@ tNFC_STATUS rw_t2t_write_ndef_next_block (uint16_t block, uint16_t msg_len, bool
 **
 ** Description      This function can be called to write an NDEF message block
 **
-** Returns          NCI_STATUS_OK, if write was started. Otherwise, error status.
+** Returns          NCI_STATUS_OK, if write was started.
+**                  Otherwise, error status.
 **
 *******************************************************************************/
 static void rw_t2t_update_cb (uint16_t block, uint8_t *p_write_block, bool    b_update_len)
@@ -1538,7 +1542,8 @@ static uint16_t rw_t2t_get_ndef_max_size (void)
 **
 ** Description      This function will add terminator TLV after NDEF Message
 **
-** Returns          NCI_STATUS_OK, if write was started. Otherwise, error status.
+** Returns          NCI_STATUS_OK, if write was started.
+**                  Otherwise, error status.
 **
 *******************************************************************************/
 tNFC_STATUS rw_t2t_add_terminator_tlv (void)
@@ -1624,7 +1629,8 @@ static void rw_t2t_handle_ndef_read_rsp (uint8_t *p_data)
 **
 ** Function         rw_t2t_handle_ndef_write_rsp
 **
-** Description      Handle response received to reading (or part of) NDEF message.
+** Description      Handle response received to reading (or part of) NDEF
+**                  message.
 **
 ** Returns          none
 **
@@ -2131,9 +2137,10 @@ static void rw_t2t_update_attributes (void)
 ** Description      This function returns the offset of lock bits associated for
 **                  the specified segment
 **
-** Parameters:      segment: The segment number to which lock bits are associated
-**                  p_start_byte: The offset of lock byte that contains the first
-**                                lock bit for the segment
+** Parameters:      segment: The segment number to which lock bits are
+**                           associated
+**                  p_start_byte: The offset of lock byte that contains the
+**                                first lock bit for the segment
 **                  p_start_bit:  The offset of the lock bit in the lock byte
 **
 **                  p_end_byte:   The offset of the last bit associcated to the
@@ -2606,8 +2613,8 @@ tNFC_STATUS rw_t2t_set_lock_tlv (uint16_t addr, uint8_t num_dyn_lock_bits, uint1
 ** Function         rw_t2t_set_cc
 **
 ** Description      This function will set Capability Container on the activated
-**                  type 2 tag with default values of CC0, CC1, CC4 and specified
-**                  CC3 value
+**                  type 2 tag with default values of CC0, CC1, CC4 and
+**                  specified CC3 value
 **
 ** Parameters:      CC3 value of the tag
 **
@@ -2841,7 +2848,8 @@ tNFC_STATUS RW_T2tFormatNDef (void)
 **
 ** Parameters:      tlv_type : TLV to detect
 **
-** Returns          NCI_STATUS_OK, if detection was started. Otherwise, error status.
+** Returns          NCI_STATUS_OK, if detection was started. Otherwise, error
+**                  status.
 **
 *******************************************************************************/
 tNFC_STATUS RW_T2tLocateTlv (uint8_t tlv_type)
@@ -2970,8 +2978,9 @@ tNFC_STATUS RW_T2tDetectNDef (bool    skip_dyn_locks)
 **                  be called to verify that the tag contains NDEF data, and to
 **                  retrieve the NDEF attributes.
 **
-**                  Internally, this command will be separated into multiple Tag2
-**                  Read commands (if necessary) - depending on the NDEF Msg size
+**                  Internally, this command will be separated into multiple
+**                  Tag2 Read commands (if necessary) - depending on the NDEF
+**                  Msg size
 **
 ** Parameters:      p_buffer:   The buffer into which to read the NDEF message
 **                  buf_len:    The length of the buffer
@@ -3049,8 +3058,9 @@ tNFC_STATUS RW_T2tReadNDef (uint8_t *p_buffer, uint16_t buf_len)
 **                  The RW_T2T_NDEF_WRITE_EVT callback event will be used to
 **                  notify the application of the response.
 **
-**                  Internally, this command will be separated into multiple Tag2
-**                  Write commands (if necessary) - depending on the NDEF Msg size
+**                  Internally, this command will be separated into multiple
+**                  Tag2 Write commands (if necessary) - depending on the NDEF
+**                  Msg size
 **
 ** Parameters:      msg_len:    The length of the buffer
 **                  p_msg:      The NDEF message to write

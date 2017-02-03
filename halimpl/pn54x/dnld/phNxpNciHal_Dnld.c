@@ -154,7 +154,7 @@ phNxpNciHal_fw_dnld_recover(void* pContext, NFCSTATUS status, void* pInfo);
 static NFCSTATUS
 phNxpNciHal_fw_dnld_complete(void* pContext, NFCSTATUS status, void* pInfo);
 
-/** Internal function to verify Crc Status byte received during CheckIntegrity */
+/* Internal function to verify Crc Status byte received during CheckIntegrity */
 static NFCSTATUS
 phLibNfc_VerifyCrcStatus(uint8_t bCrcStatus);
 

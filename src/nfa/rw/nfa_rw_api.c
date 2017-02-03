@@ -50,8 +50,8 @@
 **                  size, etc.).
 **
 **                  It is not mandatory to call this function -  NFA_RwReadNDef
-**                  and NFA_RwWriteNDef will perform NDEF detection internally if
-**                  not performed already. This API may be called to get a
+**                  and NFA_RwWriteNDef will perform NDEF detection internally
+**                  if not performed already. This API may be called to get a
 **                  tag's NDEF size before issuing a write-request.
 **
 ** Returns:
@@ -89,18 +89,20 @@ tNFA_STATUS NFA_RwDetectNDef (void)
 **                  appropriate method for the currently activated tag.
 **
 **                  Upon successful completion of NDEF detection (if performed),
-**                  a NFA_NDEF_DETECT_EVT will be sent, to notify the application
-**                  of the NDEF attributes (NDEF total memory size, current size,
-**                  etc.).
+**                  a NFA_NDEF_DETECT_EVT will be sent, to notify the
+**                  application of the NDEF attributes (NDEF total memory size,
+**                  current size, etc.).
 **
 **                  Upon receiving the NDEF message, the message will be sent to
 **                  the handler registered with NFA_RegisterNDefTypeHandler or
-**                  NFA_RequestExclusiveRfControl (if exclusive RF mode is active)
+**                  NFA_RequestExclusiveRfControl (if exclusive RF mode is
+**                  active)
 **
 ** Returns:
 **                  NFA_STATUS_OK if successfully initiated
 **                  NFC_STATUS_REFUSED if tag does not support NDEF
-**                  NFC_STATUS_NOT_INITIALIZED if NULL NDEF was detected on the tag
+**                  NFC_STATUS_NOT_INITIALIZED if NULL NDEF was detected on the
+**                  tag
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
@@ -315,15 +317,17 @@ tNFA_STATUS NFA_RwSetTagReadOnly (bool    b_hard_lock)
 **                  calling NFA_RwDetectNDef and should expect to receive
 **                  NFA_NDEF_DETECT_EVT instead of NFA_TLV_DETECT_EVT
 **
-**                  It is not mandatory to call this function -  NFA_RwDetectNDef,
-**                  NFA_RwReadNDef and NFA_RwWriteNDef will perform TLV detection
-**                  internally if not performed already. An application may call
-**                  this API to check the a tag/card-emulator's total Reserved/
+**                  It is not mandatory to call this function -
+**                  NFA_RwDetectNDef, NFA_RwReadNDef and NFA_RwWriteNDef will
+**                  perform TLV detection internally if not performed already.
+**                  An application may call this API to check the a
+**                  tag/card-emulator's total Reserved/
 **                  Lock bytes before issuing a write-request.
 **
 ** Returns:
 **                  NFA_STATUS_OK if successfully initiated
-**                  NFC_STATUS_REFUSED if tlv_type is NDEF & tag won't support NDEF
+**                  NFC_STATUS_REFUSED if tlv_type is NDEF & tag won't support
+**                  NDEF
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
@@ -367,9 +371,9 @@ tNFA_STATUS NFA_RwLocateTlv (uint8_t tlv_type)
 ** Description:
 **      Send a RID command to the activated Type 1 tag.
 **
-**      Data is returned to the application using the NFA_DATA_EVT. When the read
-**      operation has completed, or if an error occurs, the app will be notified with
-**      NFA_READ_CPLT_EVT.
+**      Data is returned to the application using the NFA_DATA_EVT. When the
+**      read operation has completed, or if an error occurs, the app will be
+**      notified with NFA_READ_CPLT_EVT.
 **
 ** Returns:
 **      NFA_STATUS_OK if successfully initiated
@@ -399,9 +403,9 @@ tNFA_STATUS NFA_RwT1tRid (void)
 ** Description:
 **      Send a RALL command to the activated Type 1 tag.
 **
-**      Data is returned to the application using the NFA_DATA_EVT. When the read
-**      operation has completed, or if an error occurs, the app will be notified with
-**      NFA_READ_CPLT_EVT.
+**      Data is returned to the application using the NFA_DATA_EVT. When the
+**      read operation has completed, or if an error occurs, the app will be
+**      notified with NFA_READ_CPLT_EVT.
 **
 ** Returns:
 **      NFA_STATUS_OK if successfully initiated
@@ -431,9 +435,9 @@ tNFA_STATUS NFA_RwT1tReadAll (void)
 ** Description:
 **      Send a READ command to the activated Type 1 tag.
 **
-**      Data is returned to the application using the NFA_DATA_EVT. When the read
-**      operation has completed, or if an error occurs, the app will be notified with
-**      NFA_READ_CPLT_EVT.
+**      Data is returned to the application using the NFA_DATA_EVT. When the
+**      read operation has completed, or if an error occurs, the app will be
+**      notified with NFA_READ_CPLT_EVT.
 **
 ** Returns:
 **      NFA_STATUS_OK if successfully initiated
@@ -465,9 +469,9 @@ tNFA_STATUS NFA_RwT1tRead (uint8_t block_number, uint8_t index)
 ** Description:
 **      Send a WRITE command to the activated Type 1 tag.
 **
-**      Data is returned to the application using the NFA_DATA_EVT. When the write
-**      operation has completed, or if an error occurs, the app will be notified with
-**      NFA_WRITE_CPLT_EVT.
+**      Data is returned to the application using the NFA_DATA_EVT. When the
+**      write operation has completed, or if an error occurs, the app will be
+**      notified with NFA_WRITE_CPLT_EVT.
 **
 ** Returns:
 **      NFA_STATUS_OK if successfully initiated
@@ -501,9 +505,9 @@ tNFA_STATUS NFA_RwT1tWrite (uint8_t block_number, uint8_t index, uint8_t data, b
 ** Description:
 **      Send a RSEG command to the activated Type 1 tag.
 **
-**      Data is returned to the application using the NFA_DATA_EVT. When the read
-**      operation has completed, or if an error occurs, the app will be notified with
-**      NFA_READ_CPLT_EVT.
+**      Data is returned to the application using the NFA_DATA_EVT. When the
+**      read operation has completed, or if an error occurs, the app will be
+**      notified with NFA_READ_CPLT_EVT.
 **
 ** Returns:
 **      NFA_STATUS_OK if successfully initiated
@@ -534,9 +538,9 @@ tNFA_STATUS NFA_RwT1tReadSeg (uint8_t segment_number)
 ** Description:
 **      Send a READ8 command to the activated Type 1 tag.
 **
-**      Data is returned to the application using the NFA_DATA_EVT. When the read
-**      operation has completed, or if an error occurs, the app will be notified with
-**      NFA_READ_CPLT_EVT.
+**      Data is returned to the application using the NFA_DATA_EVT. When the
+**      read operation has completed, or if an error occurs, the app will be
+**      notified with NFA_READ_CPLT_EVT.
 **
 ** Returns:
 **      NFA_STATUS_OK if successfully initiated
@@ -567,9 +571,9 @@ tNFA_STATUS NFA_RwT1tRead8 (uint8_t block_number)
 ** Description:
 **      Send a WRITE8_E / WRITE8_NE command to the activated Type 1 tag.
 **
-**      Data is returned to the application using the NFA_DATA_EVT. When the read
-**      operation has completed, or if an error occurs, the app will be notified with
-**      NFA_READ_CPLT_EVT.
+**      Data is returned to the application using the NFA_DATA_EVT. When the
+**      read operation has completed, or if an error occurs, the app will be
+**      notified with NFA_READ_CPLT_EVT.
 **
 ** Returns:
 **      NFA_STATUS_OK if successfully initiated
@@ -603,9 +607,9 @@ tNFA_STATUS NFA_RwT1tWrite8 (uint8_t block_number, uint8_t *p_data, bool    b_er
 ** Description:
 **      Send a READ command to the activated Type 2 tag.
 **
-**      Data is returned to the application using the NFA_DATA_EVT. When the read
-**      operation has completed, or if an error occurs, the app will be notified with
-**      NFA_READ_CPLT_EVT.
+**      Data is returned to the application using the NFA_DATA_EVT. When the
+**      read operation has completed, or if an error occurs, the app will be
+**      notified with NFA_READ_CPLT_EVT.
 **
 ** Returns:
 **      NFA_STATUS_OK if successfully initiated
@@ -675,8 +679,8 @@ tNFA_STATUS NFA_RwT2tWrite (uint8_t block_number,	uint8_t *p_data)
 ** Description:
 **      Send SECTOR SELECT command to the activated Type 2 tag.
 **
-**      When the sector select operation has completed (or if an error occurs), the
-**      app will be notified with NFA_SECTOR_SELECT_CPLT_EVT.
+**      When the sector select operation has completed (or if an error occurs),
+**      the app will be notified with NFA_SECTOR_SELECT_CPLT_EVT.
 **
 ** Returns:
 **      NFA_STATUS_OK if successfully initiated
@@ -710,9 +714,9 @@ tNFA_STATUS NFA_RwT2tSectorSelect (uint8_t sector_number)
 ** Description:
 **      Send a CHECK (read) command to the activated Type 3 tag.
 **
-**      Data is returned to the application using the NFA_DATA_EVT. When the read
-**      operation has completed, or if an error occurs, the app will be notified with
-**      NFA_READ_CPLT_EVT.
+**      Data is returned to the application using the NFA_DATA_EVT. When the
+**      read operation has completed, or if an error occurs, the app will be
+**      notified with NFA_READ_CPLT_EVT.
 **
 ** Returns:
 **      NFA_STATUS_OK if successfully initiated
@@ -910,9 +914,9 @@ tNFA_STATUS NFA_RwI93StayQuiet (void)
 ** Description:
 **      Send Read Single Block command to the activated ISO 15693 tag.
 **
-**      Data is returned to the application using the NFA_DATA_EVT. When the read
-**      operation has completed, or if an error occurs, the app will be notified with
-**      NFA_I93_CMD_CPLT_EVT.
+**      Data is returned to the application using the NFA_DATA_EVT. When the
+**      read operation has completed, or if an error occurs, the app will be
+**      notified with NFA_I93_CMD_CPLT_EVT.
 **
 ** Returns:
 **      NFA_STATUS_OK if successfully initiated
@@ -1051,9 +1055,9 @@ tNFA_STATUS NFA_RwI93LockBlock (uint8_t block_number)
 ** Description:
 **      Send Read Multiple Block command to the activated ISO 15693 tag.
 **
-**      Data is returned to the application using the NFA_DATA_EVT. When the read
-**      operation has completed, or if an error occurs, the app will be notified with
-**      NFA_I93_CMD_CPLT_EVT.
+**      Data is returned to the application using the NFA_DATA_EVT. When the
+**      read operation has completed, or if an error occurs, the app will be
+**      notified with NFA_I93_CMD_CPLT_EVT.
 **
 ** Returns:
 **      NFA_STATUS_OK if successfully initiated
@@ -1463,11 +1467,12 @@ tNFA_STATUS NFA_RwI93GetSysInfo (uint8_t *p_uid)
 ** Function         NFA_RwI93GetMultiBlockSecurityStatus
 **
 ** Description:
-**      Send Get Multiple block security status command to the activated ISO 15693 tag.
+**      Send Get Multiple block security status command to the activated ISO
+**      15693 tag.
 **
-**      Data is returned to the application using the NFA_DATA_EVT. When the read
-**      operation has completed, or if an error occurs, the app will be notified with
-**      NFA_I93_CMD_CPLT_EVT.
+**      Data is returned to the application using the NFA_DATA_EVT. When the
+**      read operation has completed, or if an error occurs, the app will be
+**      notified with NFA_I93_CMD_CPLT_EVT.
 **
 ** Returns:
 **      NFA_STATUS_OK if successfully initiated

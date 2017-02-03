@@ -308,7 +308,8 @@ void nfc_set_state (tNFC_STATE nfc_state)
 **
 ** Function         nfc_gen_cleanup
 **
-** Description      Clean up for both going into low power mode and disabling NFC
+** Description      Clean up for both going into low power mode and disabling
+**                  NFC
 **
 *******************************************************************************/
 void nfc_gen_cleanup (void)
@@ -390,8 +391,8 @@ void nfc_main_handle_hal_evt (tNFC_HAL_EVT_MSG *p_msg)
         if (nfc_cb.p_nci_init_rsp)
         {
             /*
-            ** if NFC_Disable() is called before receiving HAL_NFC_POST_INIT_CPLT_EVT,
-            ** then wait for HAL_NFC_CLOSE_CPLT_EVT.
+            ** if NFC_Disable() is called before receiving
+            ** HAL_NFC_POST_INIT_CPLT_EVT, then wait for HAL_NFC_CLOSE_CPLT_EVT.
             */
             if (nfc_cb.nfc_state == NFC_STATE_W4_POST_INIT_CPLT)
             {
@@ -649,13 +650,16 @@ static void nfc_main_hal_data_cback(uint16_t data_len, uint8_t *p_data)
 ** Function         NFC_Enable
 **
 ** Description      This function enables NFC. Prior to calling NFC_Enable:
-**                  - the NFCC must be powered up, and ready to receive commands.
+**                  - the NFCC must be powered up, and ready to receive
+**                    commands.
 **                  - GKI must be enabled
 **                  - NFC_TASK must be started
-**                  - NCIT_TASK must be started (if using dedicated NCI transport)
+**                  - NCIT_TASK must be started (if using dedicated NCI
+**                    transport)
 **
 **                  This function opens the NCI transport (if applicable),
-**                  resets the NFC controller, and initializes the NFC subsystems.
+**                  resets the NFC controller, and initializes the NFC
+**                  subsystems.
 **
 **                  When the NFC startup procedure is completed, an
 **                  NFC_ENABLE_REVT is returned to the application using the
@@ -799,9 +803,9 @@ tNFC_STATUS NFC_SetConfig (uint8_t   tlv_size,
 **
 ** Function         NFC_GetConfig
 **
-** Description      This function is called to retrieve the parameter TLV from NFCC.
-**                  The response from NFCC is reported by tNFC_RESPONSE_CBACK
-**                  as NFC_GET_CONFIG_REVT.
+** Description      This function is called to retrieve the parameter TLV from
+**                  NFCC. The response from NFCC is reported by
+**                  tNFC_RESPONSE_CBACK as NFC_GET_CONFIG_REVT.
 **
 ** Parameters       num_ids - the number of parameter IDs
 **                  p_param_ids - the parameter ID list.
@@ -819,9 +823,9 @@ tNFC_STATUS NFC_GetConfig (uint8_t   num_ids,
 **
 ** Function         NFC_DiscoveryMap
 **
-** Description      This function is called to set the discovery interface mapping.
-**                  The response from NFCC is reported by tNFC_DISCOVER_CBACK as.
-**                  NFC_MAP_DEVT.
+** Description      This function is called to set the discovery interface
+**                  mapping. The response from NFCC is reported by
+**                  tNFC_DISCOVER_CBACK as NFC_MAP_DEVT.
 **
 ** Parameters       num - the number of items in p_params.
 **                  p_maps - the discovery interface mappings
@@ -884,7 +888,7 @@ tNFC_STATUS NFC_DiscoveryMap (uint8_t num, tNFC_DISCOVER_MAPS *p_maps,
 ** Function         NFC_DiscoveryStart
 **
 ** Description      This function is called to start Polling and/or Listening.
-**                  The response from NFCC is reported by tNFC_DISCOVER_CBACK as.
+**                  The response from NFCC is reported by tNFC_DISCOVER_CBACK as
 **                  NFC_START_DEVT. The notification from NFCC is reported by
 **                  tNFC_DISCOVER_CBACK as NFC_RESULT_DEVT.
 **
@@ -1066,8 +1070,8 @@ void NFC_SetStaticRfCback (tNFC_CONN_CBACK    *p_cback)
 **
 ** Description      This function is called to set if nfc will reassemble
 **                  nci packet as much as its buffer can hold or it should not
-**                  reassemble but forward the fragmented nci packet to layer above.
-**                  If nci data pkt is fragmented, nfc may send multiple
+**                  reassemble but forward the fragmented nci packet to layer
+**                  above. If nci data pkt is fragmented, nfc may send multiple
 **                  NFC_DATA_CEVT with status NFC_STATUS_CONTINUE before sending
 **                  NFC_DATA_CEVT with status NFC_STATUS_OK based on reassembly
 **                  configuration and reassembly buffer size
@@ -1091,8 +1095,10 @@ void NFC_SetReassemblyFlag (bool       reassembly)
 **
 ** Parameters       conn_id - the connection id.
 **                  p_data - the data packet.
-**                  p_data->offset must be >= NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE
-**                  The data payload starts at ((uint8_t *) (p_data + 1) + p_data->offset)
+**                  p_data->offset must be >= NCI_MSG_OFFSET_SIZE +
+**                  NCI_DATA_HDR_SIZE
+**                  The data payload starts at
+**                  ((uint8_t *) (p_data + 1) + p_data->offset)
 **
 ** Returns          tNFC_STATUS
 **
@@ -1147,14 +1153,16 @@ tNFC_STATUS NFC_FlushData (uint8_t     conn_id)
 ** Function         NFC_Deactivate
 **
 ** Description      This function is called to stop the discovery process or
-**                  put the listen device in sleep mode or terminate the NFC link.
+**                  put the listen device in sleep mode or terminate the NFC
+**                  link.
 **
 **                  The response from NFCC is reported by tNFC_DISCOVER_CBACK
 **                  as NFC_DEACTIVATE_DEVT.
 **
 ** Parameters       deactivate_type - NFC_DEACTIVATE_TYPE_IDLE, to IDLE mode.
 **                                    NFC_DEACTIVATE_TYPE_SLEEP to SLEEP mode.
-**                                    NFC_DEACTIVATE_TYPE_SLEEP_AF to SLEEP_AF mode.
+**                                    NFC_DEACTIVATE_TYPE_SLEEP_AF to SLEEP_AF
+**                                    mode.
 **
 ** Returns          tNFC_STATUS
 **
@@ -1206,8 +1214,8 @@ tNFC_STATUS NFC_Deactivate (tNFC_DEACT_TYPE deactivate_type)
 **
 ** Function         NFC_UpdateRFCommParams
 **
-** Description      This function is called to update RF Communication parameters
-**                  once the Frame RF Interface has been activated.
+** Description      This function is called to update RF Communication
+**                  parameters once the Frame RF Interface has been activated.
 **
 **                  The response from NFCC is reported by tNFC_RESPONSE_CBACK
 **                  as NFC_RF_COMM_PARAMS_UPDATE_REVT.

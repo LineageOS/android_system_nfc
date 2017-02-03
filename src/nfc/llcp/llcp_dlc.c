@@ -46,7 +46,8 @@ static char *llcp_dlsm_get_event_name (tLLCP_DLC_EVENT event);
 **
 ** Function         llcp_dlsm_execute
 **
-** Description      This function executes the state machine for data link connection.
+** Description      This function executes the state machine for data link
+**                  connection.
 **
 ** Returns          tLLCP_STATUS
 **
@@ -178,7 +179,8 @@ static tLLCP_STATUS llcp_dlsm_idle (tLLCP_DLCB *p_dlcb, tLLCP_DLC_EVENT event, v
 **
 ** Function         llcp_dlsm_w4_remote_resp
 **
-** Description      data link connection is waiting for connection confirm from peer
+** Description      data link connection is waiting for connection confirm from
+**                  peer
 **
 ** Returns          tLLCP_STATUS
 **
@@ -269,7 +271,8 @@ static tLLCP_STATUS llcp_dlsm_w4_remote_resp (tLLCP_DLCB *p_dlcb, tLLCP_DLC_EVEN
 **
 ** Function         llcp_dlsm_w4_local_resp
 **
-** Description      data link connection is waiting for connection confirm from application
+** Description      data link connection is waiting for connection confirm from
+**                  application
 **
 ** Returns          tLLCP_STATUS
 **
@@ -488,7 +491,8 @@ static tLLCP_STATUS llcp_dlsm_connected (tLLCP_DLCB *p_dlcb, tLLCP_DLC_EVENT eve
 **
 ** Function         llcp_dlsm_w4_remote_dm
 **
-** Description      data link connection is waiting for disconnection confirm from peer
+** Description      data link connection is waiting for disconnection confirm
+**                  from peer
 **
 ** Returns          tLLCP_STATUS
 **
@@ -549,8 +553,8 @@ static tLLCP_STATUS llcp_dlsm_w4_remote_dm (tLLCP_DLCB *p_dlcb, tLLCP_DLC_EVENT 
 ** Function         llcp_dlc_find_dlcb_by_local_sap
 **
 ** Description      Find tLLCP_DLCB by local SAP and remote SAP
-**                  if remote_sap is LLCP_INVALID_SAP, it will return a DLCB which
-**                  is waiting for CC from peer.
+**                  if remote_sap is LLCP_INVALID_SAP, it will return a DLCB
+**                  which is waiting for CC from peer.
 **
 ** Returns          tLLCP_DLCB *
 **
@@ -1264,12 +1268,13 @@ void llcp_dlc_check_to_send_rr_rnr (void)
     LLCP_TRACE_DEBUG0 ("llcp_dlc_check_to_send_rr_rnr ()");
 
     /*
-    ** DLC doesn't send RR PDU for each received I PDU because multiple I PDUs can be aggregated
-    ** in a received AGF PDU. In this case, this is post processing of AGF PDU to send single RR
-    ** or RNR after processing all I PDUs in received AGF if there was no I-PDU to carry N(R).
+    ** DLC doesn't send RR PDU for each received I PDU because multiple I PDUs
+    ** can be aggregated in a received AGF PDU. In this case, this is post
+    ** processing of AGF PDU to send single RR or RNR after processing all I
+    ** PDUs in received AGF if there was no I-PDU to carry N(R).
     **
-    ** Send RR or RNR if any change of local busy condition or rx congestion status, or V(RA) is not
-    ** V(R).
+    ** Send RR or RNR if any change of local busy condition or rx congestion
+    ** status, or V(RA) is not V(R).
     */
     for (idx = 0; idx < LLCP_MAX_DATA_LINK; idx++)
     {

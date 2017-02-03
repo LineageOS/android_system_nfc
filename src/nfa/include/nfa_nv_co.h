@@ -83,9 +83,9 @@ typedef uint8_t tNFA_NV_CO_STATUS;
 **                  Note: Upon completion of the request, nfa_nv_ci_read () is
 **                        called with the buffer of data, along with the number
 **                        of bytes read into the buffer, and a status.  The
-**                        call-in function should only be called when ALL requested
-**                        bytes have been read, the end of file has been detected,
-**                        or an error has occurred.
+**                        call-in function should only be called when ALL
+**                        requested bytes have been read, the end of file has
+**                        been detected, or an error has occurred.
 **
 *******************************************************************************/
 extern void nfa_nv_co_read (uint8_t *p_buf, uint16_t nbytes, uint8_t block);
@@ -104,8 +104,9 @@ extern void nfa_nv_co_read (uint8_t *p_buf, uint16_t nbytes, uint8_t block);
 **
 **                  Note: Upon completion of the request, nfa_nv_ci_write () is
 **                        called with the file descriptor and the status.  The
-**                        call-in function should only be called when ALL requested
-**                        bytes have been written, or an error has been detected,
+**                        call-in function should only be called when ALL
+**                        requested bytes have been written, or an error has
+**                        been detected,
 **
 *******************************************************************************/
 extern void nfa_nv_co_write (const uint8_t *p_buf, uint16_t nbytes, uint8_t block);

@@ -310,7 +310,8 @@ extern tNFC_STATUS RW_T1tWriteErase (uint8_t block, uint8_t byte, uint8_t new_by
 **
 ** Function         RW_T1tWriteNoErase
 **
-** Description      This function send a WRITE-NE command for Reader/Writer mode.
+** Description      This function send a WRITE-NE command for Reader/Writer
+**                  mode.
 **
 ** Returns          tNFC_STATUS
 **
@@ -343,7 +344,8 @@ extern tNFC_STATUS RW_T1tRead8 (uint8_t block);
 **
 ** Function         RW_T1tWriteErase8
 **
-** Description      This function send a WRITE-E8 command for Reader/Writer mode.
+** Description      This function send a WRITE-E8 command for Reader/Writer
+**                  mode.
 **
 ** Returns          tNFC_STATUS
 **
@@ -354,7 +356,8 @@ extern tNFC_STATUS RW_T1tWriteErase8 (uint8_t block, uint8_t *p_new_dat);
 **
 ** Function         RW_T1tWriteNoErase8
 **
-** Description      This function send a WRITE-NE8 command for Reader/Writer mode.
+** Description      This function send a WRITE-NE8 command for Reader/Writer
+**                  mode.
 **
 ** Returns          tNFC_STATUS
 **
@@ -369,7 +372,8 @@ extern tNFC_STATUS RW_T1tWriteNoErase8 (uint8_t block, uint8_t *p_new_dat);
 **
 ** Parameters:      void
 **
-** Returns          NCI_STATUS_OK, if detection was started. Otherwise, error status.
+** Returns          NCI_STATUS_OK, if detection was started. Otherwise, error
+**                  status.
 **
 *******************************************************************************/
 extern tNFC_STATUS RW_T1tLocateTlv (uint8_t tlv_type);
@@ -383,7 +387,8 @@ extern tNFC_STATUS RW_T1tLocateTlv (uint8_t tlv_type);
 **
 ** Parameters:      void
 **
-** Returns          NCI_STATUS_OK, if detection was started. Otherwise, error status.
+** Returns          NCI_STATUS_OK, if detection was started. Otherwise, error
+**                  status.
 **
 *******************************************************************************/
 extern tNFC_STATUS RW_T1tDetectNDef (void);
@@ -392,7 +397,8 @@ extern tNFC_STATUS RW_T1tDetectNDef (void);
 **
 ** Function         RW_T1tReadNDef
 **
-** Description      This function can be called to read the NDEF message on the tag.
+** Description      This function can be called to read the NDEF message on the
+**                  tag.
 **
 ** Parameters:      p_buffer:   The buffer into which to read the NDEF message
 **                  buf_len:    The length of the buffer
@@ -406,12 +412,14 @@ extern tNFC_STATUS RW_T1tReadNDef (uint8_t *p_buffer, uint16_t buf_len);
 **
 ** Function         RW_T1tWriteNDef
 **
-** Description      This function can be called to write an NDEF message to the tag.
+** Description      This function can be called to write an NDEF message to the
+**                  tag.
 **
 ** Parameters:      msg_len:    The length of the buffer
 **                  p_msg:      The NDEF message to write
 **
-** Returns          NCI_STATUS_OK, if write was started. Otherwise, error status.
+** Returns          NCI_STATUS_OK, if write was started. Otherwise, error
+**                  status.
 **
 *******************************************************************************/
 extern tNFC_STATUS RW_T1tWriteNDef (uint16_t msg_len, uint8_t *p_msg);
@@ -508,12 +516,13 @@ extern tNFC_STATUS RW_T2tWrite (uint16_t block, uint8_t *p_write_data);
 ** Function         RW_T2tSectorSelect
 **
 ** Description      This function issues the Type 2 Tag SECTOR-SELECT command
-**                  packet 1. If a NACK is received as the response, the callback
-**                  function will be called with a RW_T2T_SECTOR_SELECT_EVT. If
-**                  an ACK is received as the response, the command packet 2 with
-**                  the given sector number is sent to the peer device. When the
-**                  response for packet 2 is received, the callback function will
-**                  be called with a RW_T2T_SECTOR_SELECT_EVT.
+**                  packet 1. If a NACK is received as the response, the
+**                  callback function will be called with a
+**                  RW_T2T_SECTOR_SELECT_EVT. If an ACK is received as the
+**                  response, the command packet 2 with the given sector number
+**                  is sent to the peer device. When the response for packet 2
+**                  is received, the callback function will be called with a
+**                  RW_T2T_SECTOR_SELECT_EVT.
 **
 **                  A sector is 256 contiguous blocks (1024 bytes).
 **
@@ -537,7 +546,8 @@ extern tNFC_STATUS RW_T2tDetectNDef (bool    skip_dyn_locks);
 **
 ** Function         RW_T2tReadNDef
 **
-** Description      This function can be called to read the NDEF message on the tag.
+** Description      This function can be called to read the NDEF message on the
+**                  tag.
 **
 ** Parameters:      p_buffer:   The buffer into which to read the NDEF message
 **                  buf_len:    The length of the buffer
@@ -551,12 +561,14 @@ extern tNFC_STATUS RW_T2tReadNDef (uint8_t *p_buffer, uint16_t buf_len);
 **
 ** Function         RW_T2tWriteNDef
 **
-** Description      This function can be called to write an NDEF message to the tag.
+** Description      This function can be called to write an NDEF message to the
+**                  tag.
 **
 ** Parameters:      msg_len:    The length of the buffer
 **                  p_msg:      The NDEF message to write
 **
-** Returns          NCI_STATUS_OK, if write was started. Otherwise, error status.
+** Returns          NCI_STATUS_OK, if write was started. Otherwise, error
+**                  status.
 **
 *******************************************************************************/
 extern tNFC_STATUS RW_T2tWriteNDef (uint16_t msg_len, uint8_t *p_msg );
@@ -672,8 +684,8 @@ extern tNFC_STATUS RW_T3tSetReadOnly (bool    b_hard_lock);
 **      Retrieve NDEF contents from a Type3 tag.
 **
 **      The RW_T3T_CHECK_EVT event is used to notify the application for each
-**      segment of NDEF data received. The RW_T3T_CHECK_CPLT_EVT event is used to
-**      notify the application all segments have been received.
+**      segment of NDEF data received. The RW_T3T_CHECK_CPLT_EVT event is used
+**      to notify the application all segments have been received.
 **
 **      Before using this API, the RW_T3tDetectNDef function must be called to
 **      verify that the tag contains NDEF data, and to retrieve the NDEF
@@ -880,7 +892,8 @@ extern tNFC_STATUS RW_T4tDetectNDef (void);
 **
 **                  The following event will be returned
 **                      RW_T4T_NDEF_READ_EVT for each segmented NDEF message
-**                      RW_T4T_NDEF_READ_CPLT_EVT for the last segment or complete NDEF
+**                      RW_T4T_NDEF_READ_CPLT_EVT for the last segment or
+**                      complete NDEF
 **                      RW_T4T_NDEF_READ_FAIL_EVT for failure
 **
 ** Returns          NFC_STATUS_OK if success
@@ -895,7 +908,8 @@ extern tNFC_STATUS RW_T4tReadNDef (void);
 **
 ** Description      This function performs NDEF update procedure
 **                  Note: RW_T4tDetectNDef() must be called before using this
-**                        Updating data must not be removed until returning event
+**                        Updating data must not be removed until returning
+**                        event
 **
 **                  The following event will be returned
 **                      RW_T4T_NDEF_UPDATE_CPLT_EVT for complete
@@ -916,7 +930,9 @@ extern tNFC_STATUS RW_T4tUpdateNDef (uint16_t length, uint8_t *p_data);
 **
 **      The RW_T4T_PRESENCE_CHECK_EVT w/ status is used to indicate presence
 **      or non-presence.
-**      option is RW_T4T_CHK_EMPTY_I_BLOCK, use empty I block for presence check.
+**
+**      option is RW_T4T_CHK_EMPTY_I_BLOCK, use empty I block for presence
+**      check.
 **
 ** Returns
 **      NFC_STATUS_OK, if raw data frame sent
@@ -994,7 +1010,8 @@ extern tNFC_STATUS RW_I93ReadSingleBlock (uint16_t block_number);
 ** Function         RW_I93WriteSingleBlock
 **
 ** Description      This function send Write Single Block command
-**                  Application must get block size first by calling RW_I93GetSysInfo().
+**                  Application must get block size first by calling
+**                  RW_I93GetSysInfo().
 **
 **                  RW_I93_CMD_CMPL_EVT will be returned
 **
@@ -1179,7 +1196,8 @@ extern tNFC_STATUS RW_I93GetSysInfo (uint8_t *p_uid);
 **
 ** Function         RW_I93GetMultiBlockSecurityStatus
 **
-** Description      This function send Get Multiple Block Security Status command
+** Description      This function send Get Multiple Block Security Status
+**                  command
 **
 **                  RW_I93_RESPONSE_EVT will be returned
 **
@@ -1215,7 +1233,8 @@ extern tNFC_STATUS RW_I93DetectNDef (void);
 **
 **                  The following event will be returned
 **                      RW_I93_NDEF_READ_EVT for each segmented NDEF message
-**                      RW_I93_NDEF_READ_CPLT_EVT for the last segment or complete NDEF
+**                      RW_I93_NDEF_READ_CPLT_EVT for the last segment or
+**                      complete NDEF
 **                      RW_I93_NDEF_READ_FAIL_EVT for failure
 **
 ** Returns          NFC_STATUS_OK if success
@@ -1230,7 +1249,8 @@ extern tNFC_STATUS RW_I93ReadNDef (void);
 **
 ** Description      This function performs NDEF update procedure
 **                  Note: RW_I93DetectNDef() must be called before using this
-**                        Updating data must not be removed until returning event
+**                        Updating data must not be removed until returning
+**                        event
 **
 **                  The following event will be returned
 **                      RW_I93_NDEF_UPDATE_CPLT_EVT for complete
@@ -1262,7 +1282,8 @@ extern tNFC_STATUS RW_I93FormatNDef (void);
 **
 ** Description      This function performs NDEF read-only procedure
 **                  Note: RW_I93DetectNDef() must be called before using this
-**                        Updating data must not be removed until returning event
+**                        Updating data must not be removed until returning
+**                        event
 **
 **                  The RW_I93_SET_TAG_RO_EVT event will be returned.
 **
@@ -1282,7 +1303,8 @@ extern tNFC_STATUS RW_I93SetTagReadOnly (void);
 **                  presence or non-presence.
 **
 ** Returns          NFC_STATUS_OK, if raw data frame sent
-**                  NFC_STATUS_NO_BUFFERS: unable to allocate a buffer for this operation
+**                  NFC_STATUS_NO_BUFFERS: unable to allocate a buffer for this
+**                  operation
 **                  NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/

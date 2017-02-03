@@ -75,8 +75,8 @@ void phTmlNfc_i2c_close(void *pDevHandle)
 **                  pLinkHandle - device handle
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_SUCCESS            - open_and_configure operation success
-**                  NFCSTATUS_INVALID_DEVICE     - device open operation failure
+**                  NFCSTATUS_SUCCESS - open_and_configure operation success
+**                  NFCSTATUS_INVALID_DEVICE - device open operation failure
 **
 *******************************************************************************/
 NFCSTATUS phTmlNfc_i2c_open_and_configure(pphTmlNfc_Config_t pConfig, void ** pLinkHandle)
@@ -108,7 +108,8 @@ NFCSTATUS phTmlNfc_i2c_open_and_configure(pphTmlNfc_Config_t pConfig, void ** pL
 **
 ** Function         phTmlNfc_i2c_read
 **
-** Description      Reads requested number of bytes from PN54X device into given buffer
+** Description      Reads requested number of bytes from PN54X device into given
+**                  buffer
 **
 ** Parameters       pDevHandle       - valid device handle
 **                  pBuffer          - buffer for read data
@@ -245,7 +246,8 @@ int phTmlNfc_i2c_read(void *pDevHandle, uint8_t * pBuffer, int nNbBytesToRead)
 **
 ** Function         phTmlNfc_i2c_write
 **
-** Description      Writes requested number of bytes from given buffer into PN54X device
+** Description      Writes requested number of bytes from given buffer into
+**                  PN54X device
 **
 ** Parameters       pDevHandle       - valid device handle
 **                  pBuffer          - buffer for read data

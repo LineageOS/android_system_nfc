@@ -53,12 +53,12 @@ extern uint32_t ScrProtocolTraceFlag;
 **                  overrides .conf variable.
 **
 ** Returns:         Global log level:
-**                  BT_TRACE_LEVEL_NONE    0        * No trace messages to be generated
-**                  BT_TRACE_LEVEL_ERROR   1        * Error condition trace messages
-**                  BT_TRACE_LEVEL_WARNING 2        * Warning condition trace messages
-**                  BT_TRACE_LEVEL_API     3        * API traces
-**                  BT_TRACE_LEVEL_EVENT   4        * Debug messages for events
-**                  BT_TRACE_LEVEL_DEBUG   5        * Debug messages (general)
+**                  BT_TRACE_LEVEL_NONE    0 * No trace messages to be generated
+**                  BT_TRACE_LEVEL_ERROR   1 * Error condition trace messages
+**                  BT_TRACE_LEVEL_WARNING 2 * Warning condition trace messages
+**                  BT_TRACE_LEVEL_API     3 * API traces
+**                  BT_TRACE_LEVEL_EVENT   4 * Debug messages for events
+**                  BT_TRACE_LEVEL_DEBUG   5 * Debug messages (general)
 **
 *******************************************************************************/
 unsigned char initializeGlobalAppLogLevel ();

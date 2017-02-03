@@ -106,8 +106,8 @@
 
 
 /************************************************************************
-**  Macro to determine the pool buffer size based on the GKI POOL ID at compile time.
-**  Pool IDs index from 0 to GKI_NUM_FIXED_BUF_POOLS - 1
+**  Macro to determine the pool buffer size based on the GKI POOL ID at compile
+**  time. Pool IDs index from 0 to GKI_NUM_FIXED_BUF_POOLS - 1
 */
 
 #if (GKI_NUM_FIXED_BUF_POOLS < 1)

@@ -363,7 +363,8 @@ void nfa_p2p_llcp_link_cback (uint8_t event, uint8_t reason)
             else if ((nfa_p2p_cb.is_active_mode) && (reason == LLCP_LINK_TIMEOUT))
             {
                 /*
-                ** target needs to trun off RF in case of receiving invalid frame from initiator
+                ** target needs to trun off RF in case of receiving invalid
+                ** frame from initiator
                 */
                 P2P_TRACE_DEBUG0 ("Got LLCP_LINK_TIMEOUT in active mode on target");
                 nfa_dm_rf_deactivate (NFA_DEACTIVATE_TYPE_DISCOVERY);
@@ -612,8 +613,8 @@ void nfa_p2p_enable_listening (tNFA_SYS_ID sys_id, bool    update_wks)
 ** Function         nfa_p2p_disable_listening
 **
 ** Description      Remove listen technologies and protocols for LLCP and
-**                  deregister callback from NFA DM discovery if all of P2P/CHO/SNEP
-**                  doesn't listen LLCP any more.
+**                  deregister callback from NFA DM discovery if all of
+**                  P2P/CHO/SNEP doesn't listen LLCP any more.
 **                  If LLCP WKS is changed then ATR_RES will be updated.
 **
 ** Returns          void

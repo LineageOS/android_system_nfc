@@ -126,10 +126,12 @@ void HAL_NfcPreInitDone (tHAL_NFC_STATUS status);
 **
 ** Function         HAL_NfcReInit
 **
-** Description      This function is called to restart initialization after REG_PU
-**                  toggled because of failure to detect NVM type or download patchram.
+** Description      This function is called to restart initialization after
+**                  REG_PU toggled because of failure to detect NVM type or
+**                  download patchram.
 **
-** Note             This function should be called only during the HAL init process
+** Note             This function should be called only during the HAL init
+**                  process
 **
 ** Returns          HAL_NFC_STATUS_OK if successfully initiated
 **                  HAL_NFC_STATUS_FAILED otherwise
@@ -152,7 +154,8 @@ tHAL_NFC_STATUS HAL_NfcReInit (void);
 **
 **                  nfc_wake_active_mode/dh_wake_active_mode
 **                      NFC_HAL_LP_ACTIVE_LOW - high to low voltage is asserting
-**                      NFC_HAL_LP_ACTIVE_HIGH - low to high voltage is asserting
+**                      NFC_HAL_LP_ACTIVE_HIGH - low to high voltage is
+**                                               asserting
 **
 **                  p_snooze_cback
 **                      Notify status of operation
@@ -175,21 +178,24 @@ tHAL_NFC_STATUS HAL_NfcSetSnoozeMode (uint8_t snooze_mode,
 **
 ** Input Params
 **                  format_type     patch format type
-**                                  (NFC_HAL_PRM_FORMAT_BIN, NFC_HAL_PRM_FORMAT_HCD, or
+**                                  (NFC_HAL_PRM_FORMAT_BIN,
+**                                   NFC_HAL_PRM_FORMAT_HCD, or
 **                                   NFC_HAL_PRM_FORMAT_NCD)
 **
-**                  dest_address    destination adderess (needed for BIN format only)
+**                  dest_address    destination adderess (needed for BIN format
+**                                  only)
 **
-**                  p_patchram_buf  pointer to patchram buffer. If NULL,
-**                                  then app must call HAL_NfcPrmDownloadContinue when
-**                                  NFC_HAL_PRM_CONTINUE_EVT is received, to send the next
-**                                  segment of patchram
+**                  p_patchram_buf  pointer to patchram buffer. If NULL, then
+**                                  app must call HAL_NfcPrmDownloadContinue
+**                                  when NFC_HAL_PRM_CONTINUE_EVT is received,
+**                                  to send the next segment of patchram
 **
 **                  patchram_len    size of p_patchram_buf (if non-NULL)
 **
 **                  patchram_delay  The delay after each patch.
-**                                  If the given value is less than the size of the patchram,
-**                                  the size of patchram is used instead.
+**                                  If the given value is less than the size of
+**                                  the patchram, the size of patchram is used
+**                                  instead.
 **
 **                  p_cback         callback for download status
 **
@@ -235,7 +241,8 @@ bool    HAL_NfcPrmDownloadContinue (uint8_t *p_patch_data,
 ** Input Params     p_i2c_patchfile_buf: pointer to patch for i2c fix
 **                  i2c_patchfile_len: length of patch
 **                  prei2c_delay: the delay before downloading main patch
-**                                if 0 is given, NFC_HAL_PRM_POST_I2C_FIX_DELAY is used instead.
+**                                if 0 is given, NFC_HAL_PRM_POST_I2C_FIX_DELAY
+**                                is used instead.
 **
 ** Returns          Nothing
 **
@@ -250,14 +257,15 @@ void HAL_NfcPrmSetI2cPatch (uint8_t *p_i2c_patchfile_buf,
 **
 ** Description      Set Host-to-NFCC NCI message size for secure patch download
 **
-**                  This API must be called before calling HAL_NfcPrmDownloadStart.
-**                  If the API is not called, then PRM will use the default
-**                  message size.
+**                  This API must be called before calling
+**                  HAL_NfcPrmDownloadStart. If the API is not called, then PRM
+**                  will use the default message size.
 **
 **                  Typically, this API is only called for platforms that have
 **                  message-size limitations in the transport/driver.
 **
-**                  Valid message size range: NFC_HAL_PRM_MIN_NCI_CMD_PAYLOAD_SIZE to 255.
+**                  Valid message size range:
+**                  NFC_HAL_PRM_MIN_NCI_CMD_PAYLOAD_SIZE to 255.
 **
 ** Returns          HAL_NFC_STATUS_OK if successful
 **                  HAL_NFC_STATUS_FAILED otherwise

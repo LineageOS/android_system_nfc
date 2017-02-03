@@ -82,12 +82,12 @@ void NFA_Init(tHAL_NFC_ENTRY *p_hal_entry_tbl)
 **                  transport, resets the NFC controller, downloads patches to
 **                  the NFCC (if necessary), and initializes the NFC subsystems.
 **
-**                  This function should only be called once - typically when NFC
-**                  is enabled during boot-up, or when NFC is enabled from a
+**                  This function should only be called once - typically when
+**                  NFC is enabled during boot-up, or when NFC is enabled from a
 **                  settings UI. Subsequent calls to NFA_Enable while NFA is
 **                  enabling or enabled will be ignored. When the NFC startup
-**                  procedure is completed, an NFA_DM_ENABLE_EVT is returned to the
-**                  application using the tNFA_DM_CBACK.
+**                  procedure is completed, an NFA_DM_ENABLE_EVT is returned to
+**                  the application using the tNFA_DM_CBACK.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -133,9 +133,9 @@ tNFA_STATUS NFA_Enable (tNFA_DM_CBACK        *p_dm_cback,
 **                  returned to the application using the tNFA_DM_CBACK.
 **
 **                  The platform should wait until the NFC_DISABLE_REVT is
-**                  received before powering down the NFC chip and NCI transport.
-**                  This is required to so that NFA can gracefully shut down any
-**                  open connections.
+**                  received before powering down the NFC chip and NCI
+**                  transport. This is required to so that NFA can gracefully
+**                  shut down any open connections.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -168,8 +168,9 @@ tNFA_STATUS NFA_Disable (bool    graceful)
 **                  reported with an NFA_DM_SET_CONFIG_EVT in the tNFA_DM_CBACK
 **                  callback.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function. Most Configuration
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function. Most Configuration
 **                  parameters are related to RF discovery.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
@@ -258,8 +259,8 @@ tNFA_STATUS NFA_GetConfig (uint8_t num_ids,
 **                  NFA_ACTIVATED_EVT and NFA_DEACTIVATED_EVT indicates link
 **                  activation/deactivation.
 **
-**                  NFA_SendRawFrame is used to send data to the peer. NFA_DATA_EVT
-**                  indicates data from the peer.
+**                  NFA_SendRawFrame is used to send data to the peer.
+**                  NFA_DATA_EVT indicates data from the peer.
 **
 **                  If a tag is activated, then the NFA_RW APIs may be used to
 **                  send commands to the tag. Incoming NDEF messages are sent to
@@ -269,8 +270,9 @@ tNFA_STATUS NFA_GetConfig (uint8_t num_ids,
 **                  LLCP internally. The application has exclusive control of
 **                  the link.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -357,19 +359,24 @@ tNFA_STATUS NFA_ReleaseExclusiveRfControl (void)
 **
 **                  - NFA_POLL_ENABLED_EVT indicates whether or not polling
 **                    successfully enabled.
-**                  - NFA_DISC_RESULT_EVT indicates there are more than one devices,
-**                    so application must select one of tags by calling NFA_Select().
-**                  - NFA_SELECT_RESULT_EVT indicates whether previous selection was
-**                    successful or not. If it was failed then application must select
-**                    again or deactivate by calling NFA_Deactivate().
-**                  - NFA_ACTIVATED_EVT is generated when an NFC link is activated.
+**                  - NFA_DISC_RESULT_EVT indicates there are more than one
+**                    devices, so application must select one of tags by calling
+**                    NFA_Select().
+**                  - NFA_SELECT_RESULT_EVT indicates whether previous selection
+**                    was successful or not. If it was failed then application
+**                    must select again or deactivate by calling
+**                    NFA_Deactivate().
+**                  - NFA_ACTIVATED_EVT is generated when an NFC link is
+**                    activated.
 **                  - NFA_NDEF_DETECT_EVT is generated if tag is activated
-**                  - NFA_LLCP_ACTIVATED_EVT/NFA_LLCP_DEACTIVATED_EVT is generated
-**                    if NFC-DEP is activated
-**                  - NFA_DEACTIVATED_EVT will be returned after deactivating NFC link.
+**                  - NFA_LLCP_ACTIVATED_EVT/NFA_LLCP_DEACTIVATED_EVT is
+**                    generated if NFC-DEP is activated
+**                  - NFA_DEACTIVATED_EVT will be returned after deactivating
+**                    NFC link.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -399,10 +406,12 @@ tNFA_STATUS NFA_EnablePolling (tNFA_TECHNOLOGY_MASK poll_mask)
 ** Function         NFA_DisablePolling
 **
 ** Description      Disable polling
-**                  NFA_POLL_DISABLED_EVT will be returned after stopping polling.
+**                  NFA_POLL_DISABLED_EVT will be returned after stopping
+**                  polling.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -431,17 +440,19 @@ tNFA_STATUS NFA_DisablePolling (void)
 ** Function         NFA_EnableListening
 **
 ** Description      Enable listening.
-**                  NFA_LISTEN_ENABLED_EVT will be returned after listening is allowed.
+**                  NFA_LISTEN_ENABLED_EVT will be returned after listening is
+**                  allowed.
 **
 **                  The actual listening technologies are specified by other NFA
 **                  API functions. Such functions include (but not limited to)
 **                  NFA_CeConfigureUiccListenTech.
-**                  If NFA_DisableListening () is called to ignore the listening technologies,
-**                  NFA_EnableListening () is called to restore the listening technologies
-**                  set by these functions.
+**                  If NFA_DisableListening () is called to ignore the listening
+**                  technologies, NFA_EnableListening () is called to restore
+**                  the listening technologies set by these functions.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -470,11 +481,13 @@ tNFA_STATUS NFA_EnableListening (void)
 ** Function         NFA_DisableListening
 **
 ** Description      Disable listening
-**                  NFA_LISTEN_DISABLED_EVT will be returned after stopping listening.
-**                  This function is called to exclude listen at RF discovery.
+**                  NFA_LISTEN_DISABLED_EVT will be returned after stopping
+**                  listening. This function is called to exclude listen at RF
+**                  discovery.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -510,8 +523,9 @@ tNFA_STATUS NFA_DisableListening (void)
 **                  available. NFA_ResumeP2p() is called to resume the P2P
 **                  services.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -543,8 +557,9 @@ tNFA_STATUS NFA_PauseP2p (void)
 **                  NFA_P2P_RESUMED_EVT will be returned after P2P services are.
 **                  enables again.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -572,16 +587,17 @@ tNFA_STATUS NFA_ResumeP2p (void)
 **
 ** Function         NFA_SetP2pListenTech
 **
-** Description      This function is called to set listen technology for NFC-DEP.
-**                  This funtion may be called before or after starting any server
-**                  on NFA P2P/CHO/SNEP.
+** Description      This function is called to set listen technology for
+**                  NFC-DEP. This funtion may be called before or after starting
+**                  any server on NFA P2P/CHO/SNEP.
 **                  If there is no technology for NFC-DEP, P2P listening will be
 **                  stopped.
 **
 **                  NFA_SET_P2P_LISTEN_TECH_EVT without data will be returned.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -613,7 +629,8 @@ tNFA_STATUS NFA_SetP2pListenTech (tNFA_TECHNOLOGY_MASK tech_mask)
 ** Description      Start RF discovery
 **                  RF discovery parameters shall be set by other APIs.
 **
-**                  An NFA_RF_DISCOVERY_STARTED_EVT indicates whether starting was successful or not.
+**                  An NFA_RF_DISCOVERY_STARTED_EVT indicates whether starting
+**                  was successful or not.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -643,7 +660,8 @@ tNFA_STATUS NFA_StartRfDiscovery (void)
 **
 ** Description      Stop RF discovery
 **
-**                  An NFA_RF_DISCOVERY_STOPPED_EVT indicates whether stopping was successful or not.
+**                  An NFA_RF_DISCOVERY_STOPPED_EVT indicates whether stopping
+**                  was successful or not.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -680,8 +698,9 @@ tNFA_STATUS NFA_StopRfDiscovery (void)
 **                  NFA_StartRfDiscovery afterwards to restart discovery using
 **                  the new duration.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
 ** Returns:
 **                  NFA_STATUS_OK, if command accepted
@@ -718,11 +737,13 @@ tNFA_STATUS NFA_SetRfDiscoveryDuration (uint16_t discovery_period_ms)
 **                  (from NFA_DISC_RESULT_EVTs). The application should wait for
 **                  the final NFA_DISC_RESULT_EVT before selecting.
 **
-**                  An NFA_SELECT_RESULT_EVT indicates whether selection was successful or not.
-**                  If failed then application must select again or deactivate by NFA_Deactivate().
+**                  An NFA_SELECT_RESULT_EVT indicates whether selection was
+**                  successful or not. If failed then application must select
+**                  again or deactivate by NFA_Deactivate().
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
-**                  NFA_STATUS_INVALID_PARAM if RF interface is not matched protocol
+**                  NFA_STATUS_INVALID_PARAM if RF interface is not matched
+**                  protocol
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
@@ -761,8 +782,8 @@ tNFA_STATUS NFA_Select (uint8_t           rf_disc_id,
 **
 ** Function         NFA_UpdateRFCommParams
 **
-** Description      This function is called to update RF Communication parameters
-**                  once the Frame RF Interface has been activated.
+** Description      This function is called to update RF Communication
+**                  parameters once the Frame RF Interface has been activated.
 **
 **                  An NFA_UPDATE_RF_PARAM_RESULT_EVT indicates whether updating
 **                  was successful or not.
@@ -796,21 +817,25 @@ tNFA_STATUS NFA_UpdateRFCommParams (tNFA_RF_COMM_PARAMS *p_params)
 **
 ** Description
 **                  If sleep_mode=TRUE:
-**                      Deselect the activated device by deactivating into sleep mode.
+**                      Deselect the activated device by deactivating into sleep
+**                      mode.
 **
-**                      An NFA_DEACTIVATE_FAIL_EVT indicates that selection was not successful.
-**                      Application can select another discovered device or deactivate by NFA_Deactivate ()
+**                      An NFA_DEACTIVATE_FAIL_EVT indicates that selection was
+**                      not successful. Application can select another
+**                      discovered device or deactivate by NFA_Deactivate()
 **                      after receiving NFA_DEACTIVATED_EVT.
 **
-**                      Deactivating to sleep mode is not allowed when NFCC is in wait-for-host-select
-**                      mode, or in listen-sleep states; NFA will deactivate to idle or discovery state
-**                      for these cases respectively.
+**                      Deactivating to sleep mode is not allowed when NFCC is
+**                      in wait-for-host-select mode, or in listen-sleep states;
+**                      NFA will deactivate to idle or discovery state for these
+**                      cases respectively.
 **
 **
 **                  If sleep_mode=FALSE:
-**                      Deactivate the connection (e.g. as a result of presence check failure)
-**                      NFA_DEACTIVATED_EVT will indicate that link is deactivated.
-**                      Polling/listening will resume (unless the nfcc is in wait_for-all-discoveries state)
+**                      Deactivate the connection (e.g. as a result of presence
+**                      check failure) NFA_DEACTIVATED_EVT will indicate that
+**                      link is deactivated. Polling/listening will resume
+**                      (unless the nfcc is in wait_for-all-discoveries state)
 **
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
@@ -841,13 +866,15 @@ extern tNFA_STATUS NFA_Deactivate (bool    sleep_mode)
 ** Function         NFA_SendRawFrame
 **
 ** Description      Send a raw frame over the activated interface with the NFCC.
-**                  This function can only be called after NFC link is activated.
+**                  This function can only be called after NFC link is
+**                  activated.
 **
-**                  If the activated interface is a tag and auto-presence check is
-**                  enabled then presence_check_start_delay can be used to indicate
-**                  the delay in msec after which the next auto presence check
-**                  command can be sent. NFA_DM_DEFAULT_PRESENCE_CHECK_START_DELAY
-**                  can be used as the default value for the delay.
+**                  If the activated interface is a tag and auto-presence check
+**                  is enabled then presence_check_start_delay can be used to
+**                  indicate the delay in msec after which the next auto
+**                  presence check command can be sent.
+**                  NFA_DM_DEFAULT_PRESENCE_CHECK_START_DELAY can be used as the
+**                  default value for the delay.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -955,17 +982,18 @@ tNFA_STATUS NFA_RegisterNDefTypeHandler (bool            handle_whole_message,
 ** Function         NFA_RegisterNDefUriHandler
 **
 ** Description      This API is a special-case of NFA_RegisterNDefTypeHandler
-**                  with TNF=NFA_TNF_WKT, and type_name='U' (URI record); and allows
-**                  registering for specific URI types (e.g. 'tel:' or 'mailto:').
+**                  with TNF=NFA_TNF_WKT, and type_name='U' (URI record); and
+**                  allows registering for specific URI types (e.g. 'tel:' or
+**                  'mailto:').
 **
 **                  An NFA_NDEF_REGISTER_EVT will be sent to the tNFA_NDEF_CBACK
 **                  to indicate that registration was successful, and provide a
 **                  handle for this registration.
 **
-**                  If uri_id=NFA_NDEF_URI_ID_ABSOLUTE, then p_abs_uri contains the
-**                  unabridged URI. For all other uri_id values, the p_abs_uri
-**                  parameter is ignored (i.e the URI prefix is implied by uri_id).
-**                  See [NFC RTD URI] for more information.
+**                  If uri_id=NFA_NDEF_URI_ID_ABSOLUTE, then p_abs_uri contains
+**                  the unabridged URI. For all other uri_id values,
+**                  the p_abs_uri parameter is ignored (i.e the URI prefix is
+**                  implied by uri_id). See [NFC RTD URI] for more information.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -1054,8 +1082,9 @@ extern tNFA_STATUS NFA_DeregisterNDefTypeHandler (tNFA_HANDLE ndef_type_handle)
 **
 ** Function         NFA_PowerOffSleepMode
 **
-** Description      This function is called to enter or leave NFCC Power Off Sleep mode
-**                  NFA_DM_PWR_MODE_CHANGE_EVT will be sent to indicate status.
+** Description      This function is called to enter or leave NFCC Power Off
+**                  Sleep mode NFA_DM_PWR_MODE_CHANGE_EVT will be sent to
+**                  indicate status.
 **
 **                  start_stop : TRUE if entering Power Off Sleep mode
 **                               FALSE if leaving Power Off Sleep mode
@@ -1097,10 +1126,10 @@ tNFA_STATUS NFA_PowerOffSleepMode (bool    start_stop)
 **
 ** Function         NFA_RegVSCback
 **
-** Description      This function is called to register or de-register a callback
-**                  function to receive Proprietary NCI response and notification
-**                  events.
-**                  The maximum number of callback functions allowed is NFC_NUM_VS_CBACKS
+** Description      This function is called to register or de-register a
+**                  callback function to receive Proprietary NCI response and
+**                  notification events. The maximum number of callback
+**                  functions allowed is NFC_NUM_VS_CBACKS
 **
 ** Returns          tNFC_STATUS
 **
@@ -1142,8 +1171,8 @@ tNFC_STATUS NFA_RegVSCback (bool             is_register,
 **                  oid             - The opcode of the VS command.
 **                  cmd_params_len  - The command parameter len
 **                  p_cmd_params    - The command parameter
-**                  p_cback         - The callback function to receive the command
-**                                    status
+**                  p_cback         - The callback function to receive the
+**                                    command status
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
