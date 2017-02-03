@@ -16,26 +16,25 @@
  *
  ******************************************************************************/
 #pragma once
-#include <string.h>
 #include <memory.h>
 #include <stdio.h>
+#include <string.h>
 #include "data_types.h"
 
+#define BTE_APPL_MAX_USERIAL_DEV_NAME (256)
 
-#define BTE_APPL_MAX_USERIAL_DEV_NAME           (256)
-
-#ifdef	__cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
-
-extern uint8_t *scru_dump_hex (uint8_t *p, char *p_title, uint32_t len, uint32_t trace_layer, uint32_t trace_type);
-void DispNci (uint8_t *p, uint16_t len, bool    is_recv);
-void ProtoDispAdapterDisplayNciPacket (uint8_t* nciPacket, uint16_t nciPacketLen, bool    is_recv);
-#define DISP_NCI    ProtoDispAdapterDisplayNciPacket
+extern uint8_t* scru_dump_hex(uint8_t* p, char* p_title, uint32_t len,
+                              uint32_t trace_layer, uint32_t trace_type);
+void DispNci(uint8_t* p, uint16_t len, bool is_recv);
+void ProtoDispAdapterDisplayNciPacket(uint8_t* nciPacket, uint16_t nciPacketLen,
+                                      bool is_recv);
+#define DISP_NCI ProtoDispAdapterDisplayNciPacket
 #define LOGMSG_TAG_NAME "NfcNciHal"
 
-
-#ifdef	__cplusplus
+#ifdef __cplusplus
 };
 #endif

@@ -16,7 +16,6 @@
  *
  ******************************************************************************/
 
-
 /******************************************************************************
  *
  *  This is the main implementation file for the NFA system manager.
@@ -24,18 +23,20 @@
  ******************************************************************************/
 #include <string.h>
 #include "nfa_api.h"
+#include "nfa_dm_int.h"
 #include "nfa_sys.h"
 #include "nfa_sys_int.h"
 #include "nfa_sys_ptim.h"
-#include "nfa_dm_int.h"
 
 /* protocol timer update period, in milliseconds */
 #ifndef NFA_SYS_TIMER_PERIOD
-#define NFA_SYS_TIMER_PERIOD            10
+#define NFA_SYS_TIMER_PERIOD 10
 #endif
 
 /* system manager control block definition */
-tNFA_SYS_CB nfa_sys_cb = {0, };   /* nfa_sys control block. statically initialize 'flags' field to 0 */
+tNFA_SYS_CB nfa_sys_cb = {
+    0,
+}; /* nfa_sys control block. statically initialize 'flags' field to 0 */
 
 /*******************************************************************************
 **
@@ -47,16 +48,13 @@ tNFA_SYS_CB nfa_sys_cb = {0, };   /* nfa_sys control block. statically initializ
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_init (void)
-{
-    memset (&nfa_sys_cb, 0, sizeof (tNFA_SYS_CB));
-    nfa_sys_cb.flags |= NFA_SYS_FL_INITIALIZED;
-    nfa_sys_ptim_init (&nfa_sys_cb.ptim_cb, NFA_SYS_TIMER_PERIOD, p_nfa_sys_cfg->timer);
-    nfa_sys_cb.trace_level = p_nfa_sys_cfg->trace_level;
+void nfa_sys_init(void) {
+  memset(&nfa_sys_cb, 0, sizeof(tNFA_SYS_CB));
+  nfa_sys_cb.flags |= NFA_SYS_FL_INITIALIZED;
+  nfa_sys_ptim_init(&nfa_sys_cb.ptim_cb, NFA_SYS_TIMER_PERIOD,
+                    p_nfa_sys_cfg->timer);
+  nfa_sys_cb.trace_level = p_nfa_sys_cfg->trace_level;
 }
-
-
-
 
 /*******************************************************************************
 **
@@ -68,30 +66,25 @@ void nfa_sys_init (void)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_event (NFC_HDR *p_msg)
-{
-    uint8_t     id;
-    bool        freebuf = true;
+void nfa_sys_event(NFC_HDR* p_msg) {
+  uint8_t id;
+  bool freebuf = true;
 
-    NFA_TRACE_EVENT1 ("NFA got event 0x%04X", p_msg->event);
+  NFA_TRACE_EVENT1("NFA got event 0x%04X", p_msg->event);
 
-    /* get subsystem id from event */
-    id = (uint8_t) (p_msg->event >> 8);
+  /* get subsystem id from event */
+  id = (uint8_t)(p_msg->event >> 8);
 
-    /* verify id and call subsystem event handler */
-    if ((id < NFA_ID_MAX) && (nfa_sys_cb.is_reg[id]))
-    {
-        freebuf = (*nfa_sys_cb.reg[id]->evt_hdlr) (p_msg);
-    }
-    else
-    {
-        NFA_TRACE_WARNING1 ("NFA got unregistered event id %d", id);
-    }
+  /* verify id and call subsystem event handler */
+  if ((id < NFA_ID_MAX) && (nfa_sys_cb.is_reg[id])) {
+    freebuf = (*nfa_sys_cb.reg[id]->evt_hdlr)(p_msg);
+  } else {
+    NFA_TRACE_WARNING1("NFA got unregistered event id %d", id);
+  }
 
-    if (freebuf)
-    {
-        GKI_freebuf (p_msg);
-    }
+  if (freebuf) {
+    GKI_freebuf(p_msg);
+  }
 }
 
 /*******************************************************************************
@@ -103,12 +96,10 @@ void nfa_sys_event (NFC_HDR *p_msg)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_timer_update (void)
-{
-    if (!nfa_sys_cb.timers_disabled)
-    {
-        nfa_sys_ptim_timer_update (&nfa_sys_cb.ptim_cb);
-    }
+void nfa_sys_timer_update(void) {
+  if (!nfa_sys_cb.timers_disabled) {
+    nfa_sys_ptim_timer_update(&nfa_sys_cb.ptim_cb);
+  }
 }
 
 /*******************************************************************************
@@ -122,24 +113,21 @@ void nfa_sys_timer_update (void)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_register (uint8_t id, const tNFA_SYS_REG *p_reg)
-{
-    nfa_sys_cb.reg[id] = (tNFA_SYS_REG *) p_reg;
-    nfa_sys_cb.is_reg[id] = true;
+void nfa_sys_register(uint8_t id, const tNFA_SYS_REG* p_reg) {
+  nfa_sys_cb.reg[id] = (tNFA_SYS_REG*)p_reg;
+  nfa_sys_cb.is_reg[id] = true;
 
-    if ((id != NFA_ID_DM) && (id != NFA_ID_SYS))
-        nfa_sys_cb.enable_cplt_mask |= (0x0001 << id);
+  if ((id != NFA_ID_DM) && (id != NFA_ID_SYS))
+    nfa_sys_cb.enable_cplt_mask |= (0x0001 << id);
 
-    if (id != NFA_ID_SYS)
-    {
-        if (p_reg->proc_nfcc_pwr_mode)
-            nfa_sys_cb.proc_nfcc_pwr_mode_cplt_mask |= (0x0001 << id);
-    }
+  if (id != NFA_ID_SYS) {
+    if (p_reg->proc_nfcc_pwr_mode)
+      nfa_sys_cb.proc_nfcc_pwr_mode_cplt_mask |= (0x0001 << id);
+  }
 
-    NFA_TRACE_DEBUG2 ("nfa_sys_register () id=%i, enable_cplt_mask=0x%x",
-                       id, nfa_sys_cb.enable_cplt_mask);
+  NFA_TRACE_DEBUG2("nfa_sys_register () id=%i, enable_cplt_mask=0x%x", id,
+                   nfa_sys_cb.enable_cplt_mask);
 }
-
 
 /*******************************************************************************
 **
@@ -151,29 +139,24 @@ void nfa_sys_register (uint8_t id, const tNFA_SYS_REG *p_reg)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_check_disabled (void)
-{
-    uint8_t id;
-    uint8_t done = true;
+void nfa_sys_check_disabled(void) {
+  uint8_t id;
+  uint8_t done = true;
 
-    /* Check if all subsystems above DM have been disabled. */
-    for (id = (NFA_ID_DM+1); id < NFA_ID_MAX; id++)
-    {
-        if (nfa_sys_cb.is_reg[id])
-        {
-            /* as long as one subsystem is not done */
-            done = false;
-            break;
-        }
+  /* Check if all subsystems above DM have been disabled. */
+  for (id = (NFA_ID_DM + 1); id < NFA_ID_MAX; id++) {
+    if (nfa_sys_cb.is_reg[id]) {
+      /* as long as one subsystem is not done */
+      done = false;
+      break;
     }
+  }
 
-    /* All subsystems disabled. disable DM */
-    if ((done) && (nfa_sys_cb.is_reg[NFA_ID_DM]))
-    {
-        (*nfa_sys_cb.reg[NFA_ID_DM]->disable) ();
-    }
+  /* All subsystems disabled. disable DM */
+  if ((done) && (nfa_sys_cb.is_reg[NFA_ID_DM])) {
+    (*nfa_sys_cb.reg[NFA_ID_DM]->disable)();
+  }
 }
-
 
 /*******************************************************************************
 **
@@ -186,24 +169,24 @@ void nfa_sys_check_disabled (void)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_deregister (uint8_t id)
-{
-    NFA_TRACE_DEBUG1 ("nfa_sys: deregistering subsystem %i", id);
+void nfa_sys_deregister(uint8_t id) {
+  NFA_TRACE_DEBUG1("nfa_sys: deregistering subsystem %i", id);
 
-    nfa_sys_cb.is_reg[id] = false;
+  nfa_sys_cb.is_reg[id] = false;
 
-    /* If not deregistering DM, then check if any other subsystems above DM are still  */
-    /* registered.                                                                  */
-    if (id != NFA_ID_DM)
-    {
-        /* If all subsystems above NFA_DM have been disabled, then okay to disable DM */
-        nfa_sys_check_disabled ();
-    }
-    else
-    {
-        /* DM (the final sub-system) is deregistering. Clear pending timer events in nfa_sys. */
-        nfa_sys_ptim_init (&nfa_sys_cb.ptim_cb, NFA_SYS_TIMER_PERIOD, p_nfa_sys_cfg->timer);
-    }
+  /* If not deregistering DM, then check if any other subsystems above DM are
+   * still  */
+  /* registered. */
+  if (id != NFA_ID_DM) {
+    /* If all subsystems above NFA_DM have been disabled, then okay to disable
+     * DM */
+    nfa_sys_check_disabled();
+  } else {
+    /* DM (the final sub-system) is deregistering. Clear pending timer events in
+     * nfa_sys. */
+    nfa_sys_ptim_init(&nfa_sys_cb.ptim_cb, NFA_SYS_TIMER_PERIOD,
+                      p_nfa_sys_cfg->timer);
+  }
 }
 
 /*******************************************************************************
@@ -217,10 +200,7 @@ void nfa_sys_deregister (uint8_t id)
 ** Returns          void
 **
 *******************************************************************************/
-bool    nfa_sys_is_register (uint8_t id)
-{
-    return nfa_sys_cb.is_reg[id];
-}
+bool nfa_sys_is_register(uint8_t id) { return nfa_sys_cb.is_reg[id]; }
 
 /*******************************************************************************
 **
@@ -233,10 +213,7 @@ bool    nfa_sys_is_register (uint8_t id)
 ** Returns          void
 **
 *******************************************************************************/
-bool    nfa_sys_is_graceful_disable (void)
-{
-    return nfa_sys_cb.graceful_disable;
-}
+bool nfa_sys_is_graceful_disable(void) { return nfa_sys_cb.graceful_disable; }
 
 /*******************************************************************************
 **
@@ -247,29 +224,24 @@ bool    nfa_sys_is_graceful_disable (void)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_enable_subsystems (void)
-{
-    uint8_t id;
+void nfa_sys_enable_subsystems(void) {
+  uint8_t id;
 
-    NFA_TRACE_DEBUG0 ("nfa_sys: enabling subsystems");
+  NFA_TRACE_DEBUG0("nfa_sys: enabling subsystems");
 
-    /* Enable all subsystems except SYS */
-    for (id = NFA_ID_DM; id < NFA_ID_MAX; id++)
-    {
-        if (nfa_sys_cb.is_reg[id])
-        {
-            if (nfa_sys_cb.reg[id]->enable != NULL)
-            {
-                /* Subsytem has a Disable funciton. Call it now */
-                (*nfa_sys_cb.reg[id]->enable) ();
-            }
-            else
-            {
-                /* Subsytem does not have a Enable function. Report Enable on behalf of subsystem */
-                nfa_sys_cback_notify_enable_complete (id);
-            }
-        }
+  /* Enable all subsystems except SYS */
+  for (id = NFA_ID_DM; id < NFA_ID_MAX; id++) {
+    if (nfa_sys_cb.is_reg[id]) {
+      if (nfa_sys_cb.reg[id]->enable != NULL) {
+        /* Subsytem has a Disable funciton. Call it now */
+        (*nfa_sys_cb.reg[id]->enable)();
+      } else {
+        /* Subsytem does not have a Enable function. Report Enable on behalf of
+         * subsystem */
+        nfa_sys_cback_notify_enable_complete(id);
+      }
     }
+  }
 }
 
 /*******************************************************************************
@@ -281,38 +253,33 @@ void nfa_sys_enable_subsystems (void)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_disable_subsystems (bool    graceful)
-{
-    uint8_t id;
-    bool    done = true;
+void nfa_sys_disable_subsystems(bool graceful) {
+  uint8_t id;
+  bool done = true;
 
-    NFA_TRACE_DEBUG1 ("nfa_sys: disabling subsystems:%d", graceful);
-    nfa_sys_cb.graceful_disable = graceful;
+  NFA_TRACE_DEBUG1("nfa_sys: disabling subsystems:%d", graceful);
+  nfa_sys_cb.graceful_disable = graceful;
 
-    /* Disable all subsystems above NFA_DM. (NFA_DM and NFA_SYS will be disabled last) */
-    for (id = (NFA_ID_DM+1); id < NFA_ID_MAX; id++)
-    {
-        if (nfa_sys_cb.is_reg[id])
-        {
-            done = false;
-            if (nfa_sys_cb.reg[id]->disable != NULL)
-            {
-                /* Subsytem has a Disable funciton. Call it now */
-                (*nfa_sys_cb.reg[id]->disable) ();
-            }
-            else
-            {
-                /* Subsytem does not have a Disable function. Deregister on behalf of subsystem */
-                nfa_sys_deregister (id);
-            }
-        }
+  /* Disable all subsystems above NFA_DM. (NFA_DM and NFA_SYS will be disabled
+   * last) */
+  for (id = (NFA_ID_DM + 1); id < NFA_ID_MAX; id++) {
+    if (nfa_sys_cb.is_reg[id]) {
+      done = false;
+      if (nfa_sys_cb.reg[id]->disable != NULL) {
+        /* Subsytem has a Disable funciton. Call it now */
+        (*nfa_sys_cb.reg[id]->disable)();
+      } else {
+        /* Subsytem does not have a Disable function. Deregister on behalf of
+         * subsystem */
+        nfa_sys_deregister(id);
+      }
     }
+  }
 
-    /* If All subsystems disabled. disable DM */
-    if ((done) && (nfa_sys_cb.is_reg[NFA_ID_DM]))
-    {
-        (*nfa_sys_cb.reg[NFA_ID_DM]->disable) ();
-    }
+  /* If All subsystems disabled. disable DM */
+  if ((done) && (nfa_sys_cb.is_reg[NFA_ID_DM])) {
+    (*nfa_sys_cb.reg[NFA_ID_DM]->disable)();
+  }
 }
 
 /*******************************************************************************
@@ -324,21 +291,19 @@ void nfa_sys_disable_subsystems (bool    graceful)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_notify_nfcc_power_mode (uint8_t nfcc_power_mode)
-{
-    uint8_t id;
+void nfa_sys_notify_nfcc_power_mode(uint8_t nfcc_power_mode) {
+  uint8_t id;
 
-    NFA_TRACE_DEBUG1 ("nfa_sys: notify NFCC power mode(%d) to subsystems", nfcc_power_mode);
+  NFA_TRACE_DEBUG1("nfa_sys: notify NFCC power mode(%d) to subsystems",
+                   nfcc_power_mode);
 
-    /* Notify NFCC power state to all subsystems except NFA_SYS */
-    for (id = NFA_ID_DM; id < NFA_ID_MAX; id++)
-    {
-        if ((nfa_sys_cb.is_reg[id]) && (nfa_sys_cb.reg[id]->proc_nfcc_pwr_mode))
-        {
-            /* Subsytem has a funciton for processing NFCC power mode. Call it now */
-            (*nfa_sys_cb.reg[id]->proc_nfcc_pwr_mode) (nfcc_power_mode);
-        }
+  /* Notify NFCC power state to all subsystems except NFA_SYS */
+  for (id = NFA_ID_DM; id < NFA_ID_MAX; id++) {
+    if ((nfa_sys_cb.is_reg[id]) && (nfa_sys_cb.reg[id]->proc_nfcc_pwr_mode)) {
+      /* Subsytem has a funciton for processing NFCC power mode. Call it now */
+      (*nfa_sys_cb.reg[id]->proc_nfcc_pwr_mode)(nfcc_power_mode);
     }
+  }
 }
 
 /*******************************************************************************
@@ -353,9 +318,8 @@ void nfa_sys_notify_nfcc_power_mode (uint8_t nfcc_power_mode)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_sendmsg (void *p_msg)
-{
-    GKI_send_msg (NFC_TASK, p_nfa_sys_cfg->mbox, p_msg);
+void nfa_sys_sendmsg(void* p_msg) {
+  GKI_send_msg(NFC_TASK, p_nfa_sys_cfg->mbox, p_msg);
 }
 
 /*******************************************************************************
@@ -368,9 +332,9 @@ void nfa_sys_sendmsg (void *p_msg)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_start_timer (TIMER_LIST_ENT *p_tle, uint16_t type, int32_t timeout)
-{
-    nfa_sys_ptim_start_timer (&nfa_sys_cb.ptim_cb, p_tle, type, timeout);
+void nfa_sys_start_timer(TIMER_LIST_ENT* p_tle, uint16_t type,
+                         int32_t timeout) {
+  nfa_sys_ptim_start_timer(&nfa_sys_cb.ptim_cb, p_tle, type, timeout);
 }
 
 /*******************************************************************************
@@ -382,11 +346,9 @@ void nfa_sys_start_timer (TIMER_LIST_ENT *p_tle, uint16_t type, int32_t timeout)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_stop_timer (TIMER_LIST_ENT *p_tle)
-{
-    nfa_sys_ptim_stop_timer (&nfa_sys_cb.ptim_cb, p_tle);
+void nfa_sys_stop_timer(TIMER_LIST_ENT* p_tle) {
+  nfa_sys_ptim_stop_timer(&nfa_sys_cb.ptim_cb, p_tle);
 }
-
 
 /*******************************************************************************
 **
@@ -397,10 +359,7 @@ void nfa_sys_stop_timer (TIMER_LIST_ENT *p_tle)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_disable_timers (void)
-{
-    nfa_sys_cb.timers_disabled = true;
-}
+void nfa_sys_disable_timers(void) { nfa_sys_cb.timers_disabled = true; }
 
 /*******************************************************************************
 **
@@ -411,7 +370,4 @@ void nfa_sys_disable_timers (void)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_set_trace_level (uint8_t level)
-{
-    nfa_sys_cb.trace_level = level;
-}
+void nfa_sys_set_trace_level(uint8_t level) { nfa_sys_cb.trace_level = level; }

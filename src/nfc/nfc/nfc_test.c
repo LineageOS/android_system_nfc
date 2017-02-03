@@ -16,7 +16,6 @@
  *
  ******************************************************************************/
 
-
 /******************************************************************************
  *
  *  This file contains functions that interface with the NFC NCI transport.
@@ -25,13 +24,13 @@
  *
  ******************************************************************************/
 #include <string.h>
+#include "bt_types.h"
 #include "gki.h"
 #include "nfc_target.h"
-#include "bt_types.h"
 
 #if (NFC_INCLUDED == TRUE)
-#include "nfc_int.h"
 #include "nci_hmsgs.h"
+#include "nfc_int.h"
 
 /****************************************************************************
 ** Declarations
@@ -51,23 +50,18 @@
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_TestLoopback (NFC_HDR *p_data)
-{
-    tNFC_STATUS     status  = NFC_STATUS_FAILED;
-    tNFC_CONN_CB    *p_cb   = nfc_find_conn_cb_by_handle (NCI_TEST_ID);
+tNFC_STATUS NFC_TestLoopback(NFC_HDR* p_data) {
+  tNFC_STATUS status = NFC_STATUS_FAILED;
+  tNFC_CONN_CB* p_cb = nfc_find_conn_cb_by_handle(NCI_TEST_ID);
 
-    if (p_data && p_cb && (p_data->offset >= (NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE)))
-    {
-        status = nfc_ncif_send_data (p_cb, p_data);
-    }
+  if (p_data && p_cb &&
+      (p_data->offset >= (NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE))) {
+    status = nfc_ncif_send_data(p_cb, p_data);
+  }
 
-    if (status != NFC_STATUS_OK)
-        GKI_freebuf (p_data);
+  if (status != NFC_STATUS_OK) GKI_freebuf(p_data);
 
-    return status;
+  return status;
 }
-
-
-
 
 #endif /* NFC_INCLUDED == TRUE */

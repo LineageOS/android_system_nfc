@@ -15,7 +15,8 @@
  */
 
 /*
- *  OSAL header files related to memory, debug, random, semaphore and mutex functions.
+ *  OSAL header files related to memory, debug, random, semaphore and mutex
+ * functions.
  */
 
 #ifndef PHNFCCOMMON_H
@@ -25,50 +26,52 @@
 ************************* Include Files ****************************************
 */
 
-#include <phNfcStatus.h>
-#include <semaphore.h>
-#include <phOsalNfc_Timer.h>
-#include <pthread.h>
 #include <phDal4Nfc_messageQueueLib.h>
 #include <phNfcCompId.h>
-
+#include <phNfcStatus.h>
+#include <phOsalNfc_Timer.h>
+#include <pthread.h>
+#include <semaphore.h>
 
 #define FW_DLL_ROOT_DIR "/system/vendor/firmware/"
 #define FW_DLL_EXTENSION ".so"
 
-#if(NFC_NXP_CHIP_TYPE == PN548C2)
+#if (NFC_NXP_CHIP_TYPE == PN548C2)
 
 /* Actual FW library name*/
-#define FW_LIB_PATH       FW_DLL_ROOT_DIR "libpn548ad_fw"          FW_DLL_EXTENSION
+#define FW_LIB_PATH FW_DLL_ROOT_DIR "libpn548ad_fw" FW_DLL_EXTENSION
 /* Restore Corrupted PLL Setttings/etc */
-#define PLATFORM_LIB_PATH FW_DLL_ROOT_DIR "libpn548ad_fw_platform" FW_DLL_EXTENSION
+#define PLATFORM_LIB_PATH \
+  FW_DLL_ROOT_DIR "libpn548ad_fw_platform" FW_DLL_EXTENSION
 /* Upgrade the public Key */
-#define PKU_LIB_PATH      FW_DLL_ROOT_DIR "libpn548ad_fw_pku"      FW_DLL_EXTENSION
-#elif(NFC_NXP_CHIP_TYPE == PN551)
+#define PKU_LIB_PATH FW_DLL_ROOT_DIR "libpn548ad_fw_pku" FW_DLL_EXTENSION
+#elif (NFC_NXP_CHIP_TYPE == PN551)
 /* Actual FW library name*/
-#define FW_LIB_PATH       FLASH_CONF_ROOT_DIR "libpn551_fw"      FW_DLL_EXTENSION
+#define FW_LIB_PATH FLASH_CONF_ROOT_DIR "libpn551_fw" FW_DLL_EXTENSION
 /* Restore Corrupted PLL Settings/etc */
-#define PLATFORM_LIB_PATH FW_DLL_ROOT_DIR "libpn551_fw_platform" FW_DLL_EXTENSION
+#define PLATFORM_LIB_PATH \
+  FW_DLL_ROOT_DIR "libpn551_fw_platform" FW_DLL_EXTENSION
 /* Upgrade the public Key */
-#define PKU_LIB_PATH      FW_DLL_ROOT_DIR "libpn551_fw_pku"      FW_DLL_EXTENSION
+#define PKU_LIB_PATH FW_DLL_ROOT_DIR "libpn551_fw_pku" FW_DLL_EXTENSION
 #else
 /* Actual FW library name*/
-#define FW_LIB_PATH       FW_DLL_ROOT_DIR "libpn547_fw"          FW_DLL_EXTENSION
+#define FW_LIB_PATH FW_DLL_ROOT_DIR "libpn547_fw" FW_DLL_EXTENSION
 /* Restore Corrupted PLL Settings/etc */
-#define PLATFORM_LIB_PATH FW_DLL_ROOT_DIR "libpn547_fw_platform" FW_DLL_EXTENSION
+#define PLATFORM_LIB_PATH \
+  FW_DLL_ROOT_DIR "libpn547_fw_platform" FW_DLL_EXTENSION
 /* Upgrade the public Key */
-#define PKU_LIB_PATH      FW_DLL_ROOT_DIR "libpn547_fw_pku"      FW_DLL_EXTENSION
+#define PKU_LIB_PATH FW_DLL_ROOT_DIR "libpn547_fw_pku" FW_DLL_EXTENSION
 #endif
 
-#if(NFC_NXP_CHIP_TYPE == PN548C2)
+#if (NFC_NXP_CHIP_TYPE == PN548C2)
 #define COMPILATION_MW "PN548C2"
 #else
 #define COMPILATION_MW "PN547C2"
 #endif
 
 /* HAL Version number (Updated as per release) */
-#define NXP_MW_VERSION_MAJ  (3U)
-#define NXP_MW_VERSION_MIN  (5U)
+#define NXP_MW_VERSION_MAJ (3U)
+#define NXP_MW_VERSION_MIN (5U)
 
 /*
  *****************************************************************
@@ -76,10 +79,10 @@
  *****************************************************************
  */
 
-#define CLK_SRC_UNDEF      0
-#define CLK_SRC_XTAL       1
-#define CLK_SRC_PLL        2
-#define CLK_SRC_PADDIRECT  3
+#define CLK_SRC_UNDEF 0
+#define CLK_SRC_XTAL 1
+#define CLK_SRC_PLL 2
+#define CLK_SRC_PADDIRECT 3
 
 /*Extern crystal clock source*/
 /* Use one of CLK_SRC_<value> */
@@ -92,73 +95,66 @@
  * If Clk_Src is set to PLL, make sure to set the Clk_Freq also*
  *****************************************************************
  */
-#define CLK_FREQ_UNDEF         0
-#define CLK_FREQ_13MHZ         1
-#define CLK_FREQ_19_2MHZ       2
-#define CLK_FREQ_24MHZ         3
-#define CLK_FREQ_26MHZ         4
-#define CLK_FREQ_38_4MHZ       5
-#define CLK_FREQ_52MHZ         6
+#define CLK_FREQ_UNDEF 0
+#define CLK_FREQ_13MHZ 1
+#define CLK_FREQ_19_2MHZ 2
+#define CLK_FREQ_24MHZ 3
+#define CLK_FREQ_26MHZ 4
+#define CLK_FREQ_38_4MHZ 5
+#define CLK_FREQ_52MHZ 6
 
 /* Set to one of CLK_FREQ_<value> */
 #define NXP_SYS_CLK_FREQ_SEL CLK_FREQ_19_2MHZ
 
-#define CLK_TO_CFG_DEF         1
-#define CLK_TO_CFG_MAX         6
+#define CLK_TO_CFG_DEF 1
+#define CLK_TO_CFG_MAX 6
 /*
  *  information to configure OSAL
  */
-typedef struct phOsalNfc_Config
-{
-    uint8_t *pLogFile; /* Log File Name*/
-    uintptr_t dwCallbackThreadId; /* Client ID to which message is posted */
-}phOsalNfc_Config_t, *pphOsalNfc_Config_t /* Pointer to #phOsalNfc_Config_t */;
-
+typedef struct phOsalNfc_Config {
+  uint8_t* pLogFile;            /* Log File Name*/
+  uintptr_t dwCallbackThreadId; /* Client ID to which message is posted */
+} phOsalNfc_Config_t, *pphOsalNfc_Config_t /* Pointer to #phOsalNfc_Config_t */;
 
 /*
  * Deferred call declaration.
  * This type of API is called from ClientApplication (main thread) to notify
  * specific callback.
  */
-typedef  void (*pphOsalNfc_DeferFuncPointer_t) (void*);
-
+typedef void (*pphOsalNfc_DeferFuncPointer_t)(void*);
 
 /*
  * Deferred message specific info declaration.
  */
-typedef struct phOsalNfc_DeferedCallInfo
-{
-        pphOsalNfc_DeferFuncPointer_t   pDeferedCall;/* pointer to Deferred callback */
-        void                            *pParam;    /* contains timer message specific details*/
-}phOsalNfc_DeferedCallInfo_t;
-
+typedef struct phOsalNfc_DeferedCallInfo {
+  pphOsalNfc_DeferFuncPointer_t pDeferedCall; /* pointer to Deferred callback */
+  void* pParam; /* contains timer message specific details*/
+} phOsalNfc_DeferedCallInfo_t;
 
 /*
  * States in which a OSAL timer exist.
  */
-typedef enum
-{
-    eTimerIdle = 0,         /* Indicates Initial state of timer */
-    eTimerRunning = 1,      /* Indicate timer state when started */
-    eTimerStopped = 2       /* Indicates timer state when stopped */
-}phOsalNfc_TimerStates_t;   /* Variable representing State of timer */
+typedef enum {
+  eTimerIdle = 0,          /* Indicates Initial state of timer */
+  eTimerRunning = 1,       /* Indicate timer state when started */
+  eTimerStopped = 2        /* Indicates timer state when stopped */
+} phOsalNfc_TimerStates_t; /* Variable representing State of timer */
 
 /*
  **Timer Handle structure containing details of a timer.
  */
-typedef struct phOsalNfc_TimerHandle
-{
-    uint32_t TimerId;                                   /* ID of the timer */
-    timer_t hTimerHandle;                               /* Handle of the timer */
-    /* Timer callback function to be invoked */
-    pphOsalNfc_TimerCallbck_t   Application_callback;
-    void *pContext;                                     /* Parameter to be passed to the callback function */
-    phOsalNfc_TimerStates_t eState;                     /* Timer states */
-    /* Osal Timer message posted on User Thread */
-    phLibNfc_Message_t tOsalMessage;
-    /* Deferred Call structure to Invoke Callback function */
-    phOsalNfc_DeferedCallInfo_t tDeferedCallInfo;
-/* Variables for Structure Instance and Structure Ptr */
-}phOsalNfc_TimerHandle_t,*pphOsalNfc_TimerHandle_t;
+typedef struct phOsalNfc_TimerHandle {
+  uint32_t TimerId;     /* ID of the timer */
+  timer_t hTimerHandle; /* Handle of the timer */
+  /* Timer callback function to be invoked */
+  pphOsalNfc_TimerCallbck_t Application_callback;
+  void* pContext; /* Parameter to be passed to the callback function */
+  phOsalNfc_TimerStates_t eState; /* Timer states */
+  /* Osal Timer message posted on User Thread */
+  phLibNfc_Message_t tOsalMessage;
+  /* Deferred Call structure to Invoke Callback function */
+  phOsalNfc_DeferedCallInfo_t tDeferedCallInfo;
+  /* Variables for Structure Instance and Structure Ptr */
+} phOsalNfc_TimerHandle_t, *pphOsalNfc_TimerHandle_t;
 
 #endif /*  PHOSALNFC_H  */
