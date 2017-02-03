@@ -31,15 +31,19 @@
 /*****************************************************************************
 **  Constants
 *****************************************************************************/
-#define LLCP_STATUS_SUCCESS         0       /* Successfully done                */
-#define LLCP_STATUS_FAIL            1       /* Failed without specific reason   */
-#define LLCP_STATUS_CONGESTED       2       /* Data link is congested           */
+/* Successfully done                */
+#define LLCP_STATUS_SUCCESS 0
+/* Failed without specific reason   */
+#define LLCP_STATUS_FAIL 1
+/* Data link is congested           */
+#define LLCP_STATUS_CONGESTED 2
 
 typedef uint8_t tLLCP_STATUS;
 
 #define LLCP_MIN_OFFSET             (NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE + LLCP_PDU_HEADER_SIZE + LLCP_SEQUENCE_SIZE)
 
-#define LLCP_INVALID_SAP            0xFF    /* indication of failure to allocate data link resource */
+/* indication of failure to allocate data link resource */
+#define LLCP_INVALID_SAP 0xFF
 
 /*****************************************************************************
 **  Type Definitions
@@ -66,22 +70,35 @@ typedef struct
 
 /* Link Management Callback Events */
 
-#define LLCP_LINK_ACTIVATION_FAILED_EVT     0x00    /* Fail to activate link    */
-#define LLCP_LINK_ACTIVATION_COMPLETE_EVT   0x01    /* LLCP Link is activated   */
-#define LLCP_LINK_DEACTIVATED_EVT           0x02    /* LLCP Link is deactivated */
-#define LLCP_LINK_FIRST_PACKET_RECEIVED_EVT 0x03    /* First LLCP packet received from remote */
+/* Fail to activate link    */
+#define LLCP_LINK_ACTIVATION_FAILED_EVT 0x00
+/* LLCP Link is activated   */
+#define LLCP_LINK_ACTIVATION_COMPLETE_EVT 0x01
+/* LLCP Link is deactivated */
+#define LLCP_LINK_DEACTIVATED_EVT 0x02
+/* First LLCP packet received from remote */
+#define LLCP_LINK_FIRST_PACKET_RECEIVED_EVT 0x03
 
 /* Link Management Callback Reasons */
 
-#define LLCP_LINK_SUCCESS                   0x00    /* Success                                  */
-#define LLCP_LINK_VERSION_FAILED            0x01    /* Failed to agree version                  */
-#define LLCP_LINK_BAD_GEN_BYTES             0x02    /* Failed to parse received general bytes   */
-#define LLCP_LINK_INTERNAL_ERROR            0x03    /* internal error                           */
-#define LLCP_LINK_LOCAL_INITIATED           0x04    /* Link has been deactivated by local       */
-#define LLCP_LINK_REMOTE_INITIATED          0x05    /* Link has been deactivated by remote      */
-#define LLCP_LINK_TIMEOUT                   0x06    /* Link has been deactivated by timeout     */
-#define LLCP_LINK_FRAME_ERROR               0x07    /* Link has been deactivated by frame error */
-#define LLCP_LINK_RF_LINK_LOSS_NO_RX_LLC    0x08    /* RF link loss without any rx LLC PDU      */
+/* Success                                  */
+#define LLCP_LINK_SUCCESS 0x00
+/* Failed to agree version                  */
+#define LLCP_LINK_VERSION_FAILED 0x01
+/* Failed to parse received general bytes   */
+#define LLCP_LINK_BAD_GEN_BYTES 0x02
+/* internal error                           */
+#define LLCP_LINK_INTERNAL_ERROR 0x03
+/* Link has been deactivated by local       */
+#define LLCP_LINK_LOCAL_INITIATED 0x04
+/* Link has been deactivated by remote      */
+#define LLCP_LINK_REMOTE_INITIATED 0x05
+/* Link has been deactivated by timeout     */
+#define LLCP_LINK_TIMEOUT 0x06
+/* Link has been deactivated by frame error */
+#define LLCP_LINK_FRAME_ERROR 0x07
+/* RF link loss without any rx LLC PDU      */
+#define LLCP_LINK_RF_LINK_LOSS_NO_RX_LLC 0x08
 #define LLCP_LINK_RF_TRANSMISSION_ERR       NFC_STATUS_RF_TRANSMISSION_ERR
 #define LLCP_LINK_RF_PROTOCOL_ERR           NFC_STATUS_RF_PROTOCOL_ERR
 #define LLCP_LINK_RF_TIMEOUT                NFC_STATUS_TIMEOUT
@@ -95,14 +112,22 @@ typedef void (tLLCP_LINK_CBACK) (uint8_t event, uint8_t reason);
 
 /* Service Access Point (SAP) Callback Events */
 
-#define LLCP_SAP_EVT_DATA_IND               0x00    /* Received data on SAP         */
-#define LLCP_SAP_EVT_CONNECT_IND            0x01    /* Connection request from peer */
-#define LLCP_SAP_EVT_CONNECT_RESP           0x02    /* Connection accepted by peer  */
-#define LLCP_SAP_EVT_DISCONNECT_IND         0x03    /* Received disconnect request  */
-#define LLCP_SAP_EVT_DISCONNECT_RESP        0x04    /* Received disconnect response */
-#define LLCP_SAP_EVT_CONGEST                0x05    /* congested status is changed  */
-#define LLCP_SAP_EVT_LINK_STATUS            0x06    /* Change of LLCP Link status   */
-#define LLCP_SAP_EVT_TX_COMPLETE            0x07    /* tx queue is empty and all PDU is acked   */
+/* Received data on SAP         */
+#define LLCP_SAP_EVT_DATA_IND 0x00
+/* Connection request from peer */
+#define LLCP_SAP_EVT_CONNECT_IND 0x01
+/* Connection accepted by peer  */
+#define LLCP_SAP_EVT_CONNECT_RESP 0x02
+/* Received disconnect request  */
+#define LLCP_SAP_EVT_DISCONNECT_IND 0x03
+/* Received disconnect response */
+#define LLCP_SAP_EVT_DISCONNECT_RESP 0x04
+/* congested status is changed  */
+#define LLCP_SAP_EVT_CONGEST 0x05
+/* Change of LLCP Link status   */
+#define LLCP_SAP_EVT_LINK_STATUS 0x06
+/* tx queue is empty and all PDU is acked   */
+#define LLCP_SAP_EVT_TX_COMPLETE 0x07
 
 #define LLCP_LINK_TYPE_LOGICAL_DATA_LINK      0x01
 #define LLCP_LINK_TYPE_DATA_LINK_CONNECTION   0x02

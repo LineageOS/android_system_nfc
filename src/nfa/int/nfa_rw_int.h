@@ -42,9 +42,12 @@
 
 /* TLV detection status */
 #define NFA_RW_TLV_DETECT_ST_OP_NOT_STARTED         0x00 /* No Tlv detected */
-#define NFA_RW_TLV_DETECT_ST_LOCK_TLV_OP_COMPLETE   0x01 /* Lock control tlv detected */
-#define NFA_RW_TLV_DETECT_ST_MEM_TLV_OP_COMPLETE    0x02 /* Memory control tlv detected */
-#define NFA_RW_TLV_DETECT_ST_COMPLETE               0x03 /* Both Lock and Memory control Tlvs are detected */
+/* Lock control tlv detected */
+#define NFA_RW_TLV_DETECT_ST_LOCK_TLV_OP_COMPLETE 0x01
+/* Memory control tlv detected */
+#define NFA_RW_TLV_DETECT_ST_MEM_TLV_OP_COMPLETE 0x02
+/* Both Lock and Memory control Tlvs are detected */
+#define NFA_RW_TLV_DETECT_ST_COMPLETE 0x03
 
 typedef uint8_t tNFA_RW_TLV_ST;
 
@@ -271,13 +274,20 @@ enum
 typedef uint8_t tNFA_RW_NDEF_ST;
 
 /* flags for RW control block */
-#define NFA_RW_FL_NOT_EXCL_RF_MODE              0x01    /* Activation while not in exclusive RF mode                                */
-#define NFA_RW_FL_AUTO_PRESENCE_CHECK_BUSY      0x02    /* Waiting for response from tag for auto-presence check                    */
-#define NFA_RW_FL_TAG_IS_READONLY               0x04    /* Read only tag                                                            */
-#define NFA_RW_FL_ACTIVATION_NTF_PENDING        0x08    /* Busy retrieving additional tag information                               */
-#define NFA_RW_FL_API_BUSY                      0x10    /* Tag operation is in progress                                             */
-#define NFA_RW_FL_ACTIVATED                     0x20    /* Tag is been activated                                                    */
-#define NFA_RW_FL_NDEF_OK                       0x40    /* NDEF DETECTed OK                                                         */
+/* Activation while not in exclusive RF mode                                */
+#define NFA_RW_FL_NOT_EXCL_RF_MODE 0x01
+/* Waiting for response from tag for auto-presence check                    */
+#define NFA_RW_FL_AUTO_PRESENCE_CHECK_BUSY 0x02
+/* Read only tag                                                            */
+#define NFA_RW_FL_TAG_IS_READONLY 0x04
+/* Busy retrieving additional tag information                               */
+#define NFA_RW_FL_ACTIVATION_NTF_PENDING 0x08
+/* Tag operation is in progress                                             */
+#define NFA_RW_FL_API_BUSY 0x10
+/* Tag is been activated                                                    */
+#define NFA_RW_FL_ACTIVATED 0x20
+/* NDEF DETECTed OK                                                         */
+#define NFA_RW_FL_NDEF_OK 0x40
 
 /* NFA RW control block */
 typedef struct

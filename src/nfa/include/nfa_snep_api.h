@@ -33,41 +33,65 @@
 *****************************************************************************/
 #define NFA_SNEP_VERSION                0x10    /* SNEP Version 1.0          */
 
-#define NFA_SNEP_REQ_CODE_CONTINUE      0x00    /* send remaining fragments         */
-#define NFA_SNEP_REQ_CODE_GET           0x01    /* return an NDEF message           */
-#define NFA_SNEP_REQ_CODE_PUT           0x02    /* accept an NDEF message           */
-#define NFA_SNEP_REQ_CODE_REJECT        0x7F    /* do not send remaining fragments  */
+/* send remaining fragments         */
+#define NFA_SNEP_REQ_CODE_CONTINUE 0x00
+/* return an NDEF message           */
+#define NFA_SNEP_REQ_CODE_GET 0x01
+/* accept an NDEF message           */
+#define NFA_SNEP_REQ_CODE_PUT 0x02
+/* do not send remaining fragments  */
+#define NFA_SNEP_REQ_CODE_REJECT 0x7F
 
 #define tNFA_SNEP_REQ_CODE  uint8_t
 
-#define NFA_SNEP_RESP_CODE_CONTINUE     0x80    /* continue send remaining fragments    */
-#define NFA_SNEP_RESP_CODE_SUCCESS      0x81    /* the operation succeeded              */
-#define NFA_SNEP_RESP_CODE_NOT_FOUND    0xC0    /* resource not found                   */
-#define NFA_SNEP_RESP_CODE_EXCESS_DATA  0xC1    /* resource exceeds data size limit     */
-#define NFA_SNEP_RESP_CODE_BAD_REQ      0xC2    /* malformed request not understood     */
-#define NFA_SNEP_RESP_CODE_NOT_IMPLM    0xE0    /* unsupported functionality requested  */
-#define NFA_SNEP_RESP_CODE_UNSUPP_VER   0xE1    /* unsupported protocol version         */
-#define NFA_SNEP_RESP_CODE_REJECT       0xFF    /* do not send remaining fragments      */
+/* continue send remaining fragments    */
+#define NFA_SNEP_RESP_CODE_CONTINUE 0x80
+/* the operation succeeded              */
+#define NFA_SNEP_RESP_CODE_SUCCESS 0x81
+/* resource not found                   */
+#define NFA_SNEP_RESP_CODE_NOT_FOUND 0xC0
+/* resource exceeds data size limit     */
+#define NFA_SNEP_RESP_CODE_EXCESS_DATA 0xC1
+/* malformed request not understood     */
+#define NFA_SNEP_RESP_CODE_BAD_REQ 0xC2
+/* unsupported functionality requested  */
+#define NFA_SNEP_RESP_CODE_NOT_IMPLM 0xE0
+/* unsupported protocol version         */
+#define NFA_SNEP_RESP_CODE_UNSUPP_VER 0xE1
+/* do not send remaining fragments      */
+#define NFA_SNEP_RESP_CODE_REJECT 0xFF
 
 #define tNFA_SNEP_RESP_CODE uint8_t
 
 /* NFA SNEP callback events */
-#define NFA_SNEP_REG_EVT                    0x00    /* Server/client Registeration Status   */
-#define NFA_SNEP_ACTIVATED_EVT              0x01    /* LLCP link has been activated, client only   */
-#define NFA_SNEP_DEACTIVATED_EVT            0x02    /* LLCP link has been deactivated, client only */
-#define NFA_SNEP_CONNECTED_EVT              0x03    /* Data link has been created           */
-#define NFA_SNEP_GET_REQ_EVT                0x04    /* GET request from client              */
-#define NFA_SNEP_PUT_REQ_EVT                0x05    /* PUT request from client              */
-#define NFA_SNEP_GET_RESP_EVT               0x06    /* GET response from server             */
-#define NFA_SNEP_PUT_RESP_EVT               0x07    /* PUT response from server             */
-#define NFA_SNEP_DISC_EVT                   0x08    /* Failed to connect or disconnected    */
+/* Server/client Registeration Status   */
+#define NFA_SNEP_REG_EVT 0x00
+/* LLCP link has been activated, client only   */
+#define NFA_SNEP_ACTIVATED_EVT 0x01
+/* LLCP link has been deactivated, client only */
+#define NFA_SNEP_DEACTIVATED_EVT 0x02
+/* Data link has been created           */
+#define NFA_SNEP_CONNECTED_EVT 0x03
+/* GET request from client              */
+#define NFA_SNEP_GET_REQ_EVT 0x04
+/* PUT request from client              */
+#define NFA_SNEP_PUT_REQ_EVT 0x05
+/* GET response from server             */
+#define NFA_SNEP_GET_RESP_EVT 0x06
+/* PUT response from server             */
+#define NFA_SNEP_PUT_RESP_EVT 0x07
+/* Failed to connect or disconnected    */
+#define NFA_SNEP_DISC_EVT 0x08
 
 #define NFA_SNEP_ALLOC_BUFF_EVT	            0x09    /* Request to allocate a buffer for NDEF*/
 #define NFA_SNEP_FREE_BUFF_EVT	            0x0A    /* Request to deallocate buffer for NDEF*/
-#define NFA_SNEP_GET_RESP_CMPL_EVT          0x0B    /* GET response sent to client          */
+/* GET response sent to client          */
+#define NFA_SNEP_GET_RESP_CMPL_EVT 0x0B
 
-#define NFA_SNEP_DEFAULT_SERVER_STARTED_EVT 0x0C    /* SNEP default server is started       */
-#define NFA_SNEP_DEFAULT_SERVER_STOPPED_EVT 0x0D    /* SNEP default server is stopped       */
+/* SNEP default server is started       */
+#define NFA_SNEP_DEFAULT_SERVER_STARTED_EVT 0x0C
+/* SNEP default server is stopped       */
+#define NFA_SNEP_DEFAULT_SERVER_STOPPED_EVT 0x0D
 
 typedef uint8_t tNFA_SNEP_EVT;
 

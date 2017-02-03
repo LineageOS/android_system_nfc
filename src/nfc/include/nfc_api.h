@@ -35,44 +35,79 @@
 #include "vendor_cfg.h"
 
 /* NFC application return status codes */
-#define NFC_STATUS_OK                   NCI_STATUS_OK                   /* Command succeeded    */
-#define NFC_STATUS_REJECTED             NCI_STATUS_REJECTED             /* Command is rejected. */
-#define NFC_STATUS_MSG_CORRUPTED        NCI_STATUS_MESSAGE_CORRUPTED    /* Message is corrupted */
-#define NFC_STATUS_BUFFER_FULL          NCI_STATUS_BUFFER_FULL          /* buffer full          */
-#define NFC_STATUS_FAILED               NCI_STATUS_FAILED               /* failed               */
-#define NFC_STATUS_NOT_INITIALIZED      NCI_STATUS_NOT_INITIALIZED      /* not initialized      */
-#define NFC_STATUS_SYNTAX_ERROR         NCI_STATUS_SYNTAX_ERROR         /* Syntax error         */
-#define NFC_STATUS_SEMANTIC_ERROR       NCI_STATUS_SEMANTIC_ERROR       /* Semantic error       */
-#define NFC_STATUS_UNKNOWN_GID          NCI_STATUS_UNKNOWN_GID          /* Unknown NCI Group ID */
-#define NFC_STATUS_UNKNOWN_OID          NCI_STATUS_UNKNOWN_OID          /* Unknown NCI Opcode   */
-#define NFC_STATUS_INVALID_PARAM        NCI_STATUS_INVALID_PARAM        /* Invalid Parameter    */
-#define NFC_STATUS_MSG_SIZE_TOO_BIG     NCI_STATUS_MSG_SIZE_TOO_BIG     /* Message size too big */
-#define NFC_STATUS_ALREADY_STARTED      NCI_STATUS_ALREADY_STARTED      /* Already started      */
-#define NFC_STATUS_ACTIVATION_FAILED    NCI_STATUS_ACTIVATION_FAILED    /* Activation Failed    */
-#define NFC_STATUS_TEAR_DOWN            NCI_STATUS_TEAR_DOWN            /* Tear Down Error      */
-#define NFC_STATUS_RF_TRANSMISSION_ERR  NCI_STATUS_RF_TRANSMISSION_ERR  /* RF transmission error*/
-#define NFC_STATUS_RF_PROTOCOL_ERR      NCI_STATUS_RF_PROTOCOL_ERR      /* RF protocol error    */
-#define NFC_STATUS_TIMEOUT              NCI_STATUS_TIMEOUT              /* RF Timeout           */
-#define NFC_STATUS_EE_INTF_ACTIVE_FAIL  NCI_STATUS_EE_INTF_ACTIVE_FAIL  /* EE Intf activate err */
-#define NFC_STATUS_EE_TRANSMISSION_ERR  NCI_STATUS_EE_TRANSMISSION_ERR  /* EE transmission error*/
-#define NFC_STATUS_EE_PROTOCOL_ERR      NCI_STATUS_EE_PROTOCOL_ERR      /* EE protocol error    */
-#define NFC_STATUS_EE_TIMEOUT           NCI_STATUS_EE_TIMEOUT           /* EE Timeout           */
+/* Command succeeded    */
+#define NFC_STATUS_OK NCI_STATUS_OK
+/* Command is rejected. */
+#define NFC_STATUS_REJECTED NCI_STATUS_REJECTED
+/* Message is corrupted */
+#define NFC_STATUS_MSG_CORRUPTED NCI_STATUS_MESSAGE_CORRUPTED
+/* buffer full          */
+#define NFC_STATUS_BUFFER_FULL NCI_STATUS_BUFFER_FULL
+/* failed               */
+#define NFC_STATUS_FAILED NCI_STATUS_FAILED
+/* not initialized      */
+#define NFC_STATUS_NOT_INITIALIZED NCI_STATUS_NOT_INITIALIZED
+/* Syntax error         */
+#define NFC_STATUS_SYNTAX_ERROR NCI_STATUS_SYNTAX_ERROR
+/* Semantic error       */
+#define NFC_STATUS_SEMANTIC_ERROR NCI_STATUS_SEMANTIC_ERROR
+/* Unknown NCI Group ID */
+#define NFC_STATUS_UNKNOWN_GID NCI_STATUS_UNKNOWN_GID
+/* Unknown NCI Opcode   */
+#define NFC_STATUS_UNKNOWN_OID NCI_STATUS_UNKNOWN_OID
+/* Invalid Parameter    */
+#define NFC_STATUS_INVALID_PARAM NCI_STATUS_INVALID_PARAM
+/* Message size too big */
+#define NFC_STATUS_MSG_SIZE_TOO_BIG NCI_STATUS_MSG_SIZE_TOO_BIG
+/* Already started      */
+#define NFC_STATUS_ALREADY_STARTED NCI_STATUS_ALREADY_STARTED
+/* Activation Failed    */
+#define NFC_STATUS_ACTIVATION_FAILED NCI_STATUS_ACTIVATION_FAILED
+/* Tear Down Error      */
+#define NFC_STATUS_TEAR_DOWN NCI_STATUS_TEAR_DOWN
+/* RF transmission error*/
+#define NFC_STATUS_RF_TRANSMISSION_ERR NCI_STATUS_RF_TRANSMISSION_ERR
+/* RF protocol error    */
+#define NFC_STATUS_RF_PROTOCOL_ERR NCI_STATUS_RF_PROTOCOL_ERR
+/* RF Timeout           */
+#define NFC_STATUS_TIMEOUT NCI_STATUS_TIMEOUT
+/* EE Intf activate err */
+#define NFC_STATUS_EE_INTF_ACTIVE_FAIL NCI_STATUS_EE_INTF_ACTIVE_FAIL
+/* EE transmission error*/
+#define NFC_STATUS_EE_TRANSMISSION_ERR NCI_STATUS_EE_TRANSMISSION_ERR
+/* EE protocol error    */
+#define NFC_STATUS_EE_PROTOCOL_ERR NCI_STATUS_EE_PROTOCOL_ERR
+/* EE Timeout           */
+#define NFC_STATUS_EE_TIMEOUT NCI_STATUS_EE_TIMEOUT
 
 /* 0xE0 ~0xFF are proprietary status codes */
-#define NFC_STATUS_CMD_STARTED          0xE3/* Command started successfully                     */
-#define NFC_STATUS_HW_TIMEOUT           0xE4/* NFCC Timeout in responding to an NCI command     */
-#define NFC_STATUS_CONTINUE             0xE5/* More (same) event to follow                      */
-#define NFC_STATUS_REFUSED              0xE6/* API is called to perform illegal function        */
-#define NFC_STATUS_BAD_RESP             0xE7/* Wrong format of R-APDU, CC file or NDEF file     */
-#define NFC_STATUS_CMD_NOT_CMPLTD       0xE8/* 7816 Status Word is not command complete(0x9000) */
-#define NFC_STATUS_NO_BUFFERS           0xE9/* Out of GKI buffers                               */
-#define NFC_STATUS_WRONG_PROTOCOL       0xEA/* Protocol mismatch between API and activated one  */
-#define NFC_STATUS_BUSY                 0xEB/* Another Tag command is already in progress       */
+/* Command started successfully                     */
+#define NFC_STATUS_CMD_STARTED 0xE3
+/* NFCC Timeout in responding to an NCI command     */
+#define NFC_STATUS_HW_TIMEOUT 0xE4
+/* More (same) event to follow                      */
+#define NFC_STATUS_CONTINUE 0xE5
+/* API is called to perform illegal function        */
+#define NFC_STATUS_REFUSED 0xE6
+/* Wrong format of R-APDU, CC file or NDEF file     */
+#define NFC_STATUS_BAD_RESP 0xE7
+/* 7816 Status Word is not command complete(0x9000) */
+#define NFC_STATUS_CMD_NOT_CMPLTD 0xE8
+/* Out of GKI buffers                               */
+#define NFC_STATUS_NO_BUFFERS 0xE9
+/* Protocol mismatch between API and activated one  */
+#define NFC_STATUS_WRONG_PROTOCOL 0xEA
+/* Another Tag command is already in progress       */
+#define NFC_STATUS_BUSY 0xEB
 
-#define NFC_STATUS_LINK_LOSS            0xFC                      /* Link Loss                  */
-#define NFC_STATUS_BAD_LENGTH           0xFD                      /* data len exceeds MIU       */
-#define NFC_STATUS_BAD_HANDLE           0xFE                      /* invalid handle             */
-#define NFC_STATUS_CONGESTED            0xFF                      /* congested                  */
+/* Link Loss                  */
+#define NFC_STATUS_LINK_LOSS 0xFC
+/* data len exceeds MIU       */
+#define NFC_STATUS_BAD_LENGTH 0xFD
+/* invalid handle             */
+#define NFC_STATUS_BAD_HANDLE 0xFE
+/* congested                  */
+#define NFC_STATUS_CONGESTED 0xFF
 typedef uint8_t tNFC_STATUS;
 
 
@@ -136,15 +171,19 @@ typedef uint8_t tNFC_STATUS;
 #define NFC_PARAM_ID_RF_EE_ACTION   NCI_PARAM_ID_RF_EE_ACTION
 #define NFC_PARAM_ID_ISO_DEP_OP     NCI_PARAM_ID_ISO_DEP_OP
 
-#define NFC_ROUTE_TAG_TECH           NCI_ROUTE_TAG_TECH      /* Technology based routing  */
-#define NFC_ROUTE_TAG_PROTO          NCI_ROUTE_TAG_PROTO     /* Protocol based routing  */
+/* Technology based routing  */
+#define NFC_ROUTE_TAG_TECH NCI_ROUTE_TAG_TECH
+/* Protocol based routing  */
+#define NFC_ROUTE_TAG_PROTO NCI_ROUTE_TAG_PROTO
 #define NFC_ROUTE_TAG_AID            NCI_ROUTE_TAG_AID       /* AID routing */
-#define NFC_ROUTE_TLV_ENTRY_SIZE     4 /* tag, len, 2 byte value for technology/protocol based routing */
+/* tag, len, 2 byte value for technology/protocol based routing */
+#define NFC_ROUTE_TLV_ENTRY_SIZE 4
 
 /* For routing */
 #define NFC_DH_ID                NCI_DH_ID   /* for DH */
 /* To identify the loopback test */
-#define NFC_TEST_ID              NCI_TEST_ID            /* use a proprietary range */
+/* use a proprietary range */
+#define NFC_TEST_ID NCI_TEST_ID
 
 typedef uint8_t tNFC_PMID;
 #define NFC_TL_SIZE                     2
@@ -263,9 +302,12 @@ typedef struct
     uint8_t                 info[NFC_MAX_EE_INFO];
 } tNFC_NFCEE_TLV;
 
-#define NFC_NFCEE_STATUS_INACTIVE       NCI_NFCEE_STS_CONN_INACTIVE/* NFCEE connected and inactive */
-#define NFC_NFCEE_STATUS_ACTIVE         NCI_NFCEE_STS_CONN_ACTIVE  /* NFCEE connected and active   */
-#define NFC_NFCEE_STATUS_REMOVED        NCI_NFCEE_STS_REMOVED      /* NFCEE removed                */
+/* NFCEE connected and inactive */
+#define NFC_NFCEE_STATUS_INACTIVE NCI_NFCEE_STS_CONN_INACTIVE
+/* NFCEE connected and active   */
+#define NFC_NFCEE_STATUS_ACTIVE NCI_NFCEE_STS_CONN_ACTIVE
+/* NFCEE removed                */
+#define NFC_NFCEE_STATUS_REMOVED NCI_NFCEE_STS_REMOVED
 /* the data type associated with NFC_NFCEE_INFO_REVT */
 typedef struct
 {
@@ -326,8 +368,10 @@ typedef struct
 } tNFC_DATA_CEVT;
 
 /* RF Field Status */
-#define NFC_RF_STS_NO_REMOTE    NCI_RF_STS_NO_REMOTE    /* No field generated by remote device  */
-#define NFC_RF_STS_REMOTE       NCI_RF_STS_REMOTE       /* field generated by remote device     */
+/* No field generated by remote device  */
+#define NFC_RF_STS_NO_REMOTE NCI_RF_STS_NO_REMOTE
+/* field generated by remote device     */
+#define NFC_RF_STS_REMOTE NCI_RF_STS_REMOTE
 typedef uint8_t tNFC_RF_STS;
 
 /* RF Field Technologies */
@@ -340,11 +384,16 @@ typedef uint8_t tNFC_RF_TECH;
 
 /* Supported Protocols */
 #define NFC_PROTOCOL_UNKNOWN    NCI_PROTOCOL_UNKNOWN  /* Unknown */
-#define NFC_PROTOCOL_T1T        NCI_PROTOCOL_T1T      /* Type1Tag    - NFC-A            */
-#define NFC_PROTOCOL_T2T        NCI_PROTOCOL_T2T      /* Type2Tag    - NFC-A            */
-#define NFC_PROTOCOL_T3T        NCI_PROTOCOL_T3T      /* Type3Tag    - NFC-F            */
-#define NFC_PROTOCOL_ISO_DEP    NCI_PROTOCOL_ISO_DEP  /* Type 4A,4B  - NFC-A or NFC-B   */
-#define NFC_PROTOCOL_NFC_DEP    NCI_PROTOCOL_NFC_DEP  /* NFCDEP/LLCP - NFC-A or NFC-F       */
+/* Type1Tag    - NFC-A            */
+#define NFC_PROTOCOL_T1T NCI_PROTOCOL_T1T
+/* Type2Tag    - NFC-A            */
+#define NFC_PROTOCOL_T2T NCI_PROTOCOL_T2T
+/* Type3Tag    - NFC-F            */
+#define NFC_PROTOCOL_T3T NCI_PROTOCOL_T3T
+/* Type 4A,4B  - NFC-A or NFC-B   */
+#define NFC_PROTOCOL_ISO_DEP NCI_PROTOCOL_ISO_DEP
+/* NFCDEP/LLCP - NFC-A or NFC-F       */
+#define NFC_PROTOCOL_NFC_DEP NCI_PROTOCOL_NFC_DEP
 #define NFC_PROTOCOL_MIFARE     NCI_PROTOCOL_MIFARE
 #define NFC_PROTOCOL_B_PRIME    NCI_PROTOCOL_B_PRIME
 #define NFC_PROTOCOL_15693      NCI_PROTOCOL_15693
@@ -437,10 +486,14 @@ typedef struct
     uint8_t                 data[NFC_MAX_APP_DATA_LEN];  /* application data    */
 } tNFC_APP_INIT;
 
-#define NFC_EE_TRIG_SELECT              NCI_EE_TRIG_7816_SELECT  /* ISO 7816-4 SELECT command */
-#define NFC_EE_TRIG_RF_PROTOCOL         NCI_EE_TRIG_RF_PROTOCOL  /* RF Protocol changed       */
-#define NFC_EE_TRIG_RF_TECHNOLOGY       NCI_EE_TRIG_RF_TECHNOLOGY/* RF Technology changed     */
-#define NFC_EE_TRIG_APP_INIT            NCI_EE_TRIG_APP_INIT     /* Application initiation    */
+/* ISO 7816-4 SELECT command */
+#define NFC_EE_TRIG_SELECT NCI_EE_TRIG_7816_SELECT
+/* RF Protocol changed       */
+#define NFC_EE_TRIG_RF_PROTOCOL NCI_EE_TRIG_RF_PROTOCOL
+/* RF Technology changed     */
+#define NFC_EE_TRIG_RF_TECHNOLOGY NCI_EE_TRIG_RF_TECHNOLOGY
+/* Application initiation    */
+#define NFC_EE_TRIG_APP_INIT NCI_EE_TRIG_APP_INIT
 typedef uint8_t tNFC_EE_TRIGGER;
 typedef struct
 {
@@ -476,7 +529,8 @@ typedef struct
 #ifndef NFC_MAX_EE_DISC_ENTRIES
 #define NFC_MAX_EE_DISC_ENTRIES     6
 #endif
-#define NFC_EE_DISCOVER_ENTRY_LEN   5 /* T, L, V(NFCEE ID, TechnMode, Protocol) */
+/* T, L, V(NFCEE ID, TechnMode, Protocol) */
+#define NFC_EE_DISCOVER_ENTRY_LEN 5
 #define NFC_EE_DISCOVER_INFO_LEN    3 /* NFCEE ID, TechnMode, Protocol */
 /* the data type associated with NFC_EE_DISCOVER_REQ_REVT */
 typedef struct
@@ -820,7 +874,8 @@ typedef union
 typedef void (tNFC_CONN_CBACK) (uint8_t conn_id, tNFC_CONN_EVT event, tNFC_CONN *p_data);
 #define NFC_MAX_CONN_ID                15
 #define NFC_ILLEGAL_CONN_ID            0xFF
-#define NFC_RF_CONN_ID                 0    /* the static connection ID for RF traffic */
+/* the static connection ID for RF traffic */
+#define NFC_RF_CONN_ID 0
 
 
 

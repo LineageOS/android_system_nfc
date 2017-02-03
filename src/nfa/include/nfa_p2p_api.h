@@ -44,16 +44,25 @@
 #define NFA_P2P_DISC_REASON_NO_INFORMATION	    0x80    /* Without information             */
 
 /* NFA P2P callback events */
-#define NFA_P2P_REG_SERVER_EVT      0x00    /* Server is registered                         */
-#define NFA_P2P_REG_CLIENT_EVT      0x01    /* Client is registered                         */
-#define NFA_P2P_ACTIVATED_EVT       0x02    /* LLCP Link has been activated                 */
+/* Server is registered                         */
+#define NFA_P2P_REG_SERVER_EVT 0x00
+/* Client is registered                         */
+#define NFA_P2P_REG_CLIENT_EVT 0x01
+/* LLCP Link has been activated                 */
+#define NFA_P2P_ACTIVATED_EVT 0x02
 #define NFA_P2P_DEACTIVATED_EVT	    0x03    /* LLCP Link has been deactivated               */
-#define NFA_P2P_CONN_REQ_EVT        0x04    /* Data link connection request from peer       */
-#define NFA_P2P_CONNECTED_EVT       0x05    /* Data link connection has been established    */
-#define NFA_P2P_DISC_EVT            0x06    /* Data link connection has been disconnected   */
-#define NFA_P2P_DATA_EVT            0x07    /* Data received from peer                      */
-#define NFA_P2P_CONGEST_EVT         0x08    /* Status indication of outgoing data           */
-#define NFA_P2P_LINK_INFO_EVT       0x09    /* link MIU and Well-Known Service list         */
+/* Data link connection request from peer       */
+#define NFA_P2P_CONN_REQ_EVT 0x04
+/* Data link connection has been established    */
+#define NFA_P2P_CONNECTED_EVT 0x05
+/* Data link connection has been disconnected   */
+#define NFA_P2P_DISC_EVT 0x06
+/* Data received from peer                      */
+#define NFA_P2P_DATA_EVT 0x07
+/* Status indication of outgoing data           */
+#define NFA_P2P_CONGEST_EVT 0x08
+/* link MIU and Well-Known Service list         */
+#define NFA_P2P_LINK_INFO_EVT 0x09
 #define NFA_P2P_SDP_EVT	            0x0A    /* Remote SAP of SDP result                     */
 
 typedef uint8_t tNFA_P2P_EVT;

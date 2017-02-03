@@ -295,7 +295,8 @@ typedef uint8_t tNFA_DM_RF_DISC_EVT;
 #define NFA_DM_DISC_MASK_P_KOVIO                0x00000400
 #define NFA_DM_DISC_MASK_PAA_NFC_DEP            0x00000800
 #define NFA_DM_DISC_MASK_PFA_NFC_DEP            0x00001000
-#define NFA_DM_DISC_MASK_P_LEGACY               0x00002000  /* Legacy/proprietary/non-NFC Forum protocol (e.g Shanghai transit card) */
+/* Legacy/proprietary/non-NFC Forum protocol (e.g Shanghai transit card) */
+#define NFA_DM_DISC_MASK_P_LEGACY 0x00002000
 #define NFA_DM_DISC_MASK_POLL                   0x0000FFFF
 
 #define NFA_DM_DISC_MASK_LA_T1T                 0x00010000
@@ -326,13 +327,20 @@ typedef uint8_t tNFA_DM_DISC_HOST_ID;
 typedef void (tNFA_DISCOVER_CBACK) (tNFA_DM_RF_DISC_EVT event, tNFC_DISCOVER *p_data);
 
 /* DM RF discovery action flags */
-#define NFA_DM_DISC_FLAGS_ENABLED        0x0001    /* RF discovery process has been started        */
-#define NFA_DM_DISC_FLAGS_STOPPING       0x0002    /* Stop RF discovery is pending                 */
-#define NFA_DM_DISC_FLAGS_DISABLING      0x0004    /* Disable NFA is pending                       */
-#define NFA_DM_DISC_FLAGS_CHECKING       0x0008    /* Sleep wakeup in progress                     */
-#define NFA_DM_DISC_FLAGS_NOTIFY         0x0010    /* Notify sub-module that discovery is starting */
-#define NFA_DM_DISC_FLAGS_W4_RSP         0x0020    /* command has been sent to NFCC in the state   */
-#define NFA_DM_DISC_FLAGS_W4_NTF         0x0040    /* wait for NTF before changing discovery state */
+/* RF discovery process has been started        */
+#define NFA_DM_DISC_FLAGS_ENABLED 0x0001
+/* Stop RF discovery is pending                 */
+#define NFA_DM_DISC_FLAGS_STOPPING 0x0002
+/* Disable NFA is pending                       */
+#define NFA_DM_DISC_FLAGS_DISABLING 0x0004
+/* Sleep wakeup in progress                     */
+#define NFA_DM_DISC_FLAGS_CHECKING 0x0008
+/* Notify sub-module that discovery is starting */
+#define NFA_DM_DISC_FLAGS_NOTIFY 0x0010
+/* command has been sent to NFCC in the state   */
+#define NFA_DM_DISC_FLAGS_W4_RSP 0x0020
+/* wait for NTF before changing discovery state */
+#define NFA_DM_DISC_FLAGS_W4_NTF 0x0040
 
 typedef uint16_t tNFA_DM_DISC_FLAGS;
 
@@ -348,9 +356,11 @@ typedef struct
     tNFA_DM_DISC_TECH_PROTO_MASK    selected_disc_mask; /* technology and protocol waiting for activation */
 } tNFA_DM_DISC_ENTRY;
 
-#define NFA_DM_DISC_NUM_ENTRIES  8              /* polling, raw listen, P2P listen, NDEF CE, 2xVSE, 2xUICC */
+/* polling, raw listen, P2P listen, NDEF CE, 2xVSE, 2xUICC */
+#define NFA_DM_DISC_NUM_ENTRIES 8
 
-#define NFA_DM_MAX_DISC_PARAMS   16             /* max discovery technology parameters */
+/* max discovery technology parameters */
+#define NFA_DM_MAX_DISC_PARAMS 16
 
 /* index of listen mode routing table for technologies */
 enum {
@@ -362,7 +372,8 @@ enum {
 
 /* SLP_REQ (HLTA) command */
 #define SLP_REQ_CMD     0x5000
-#define NFA_DM_MAX_TECH_ROUTE   4 /* NFA_EE_MAX_TECH_ROUTE. only A, B, F, Bprime are supported by UICC now */
+/* NFA_EE_MAX_TECH_ROUTE. only A, B, F, Bprime are supported by UICC now */
+#define NFA_DM_MAX_TECH_ROUTE 4
 
 /* timeout for waiting deactivation NTF,
 ** possible delay to send deactivate CMD if all credit wasn't returned
@@ -401,7 +412,8 @@ typedef struct
 } tNFA_DM_DISC_CB;
 
 /* NDEF Type Handler Definitions */
-#define NFA_NDEF_DEFAULT_HANDLER_IDX    0           /* Default handler entry in ndef_handler table      */
+/* Default handler entry in ndef_handler table      */
+#define NFA_NDEF_DEFAULT_HANDLER_IDX 0
 
 #define NFA_PARAM_ID_INVALID            0xFF
 
@@ -409,20 +421,34 @@ typedef struct
 #define NFA_DM_SETCONFIG_PENDING_MAX            32
 
 /* NFA_DM flags */
-#define NFA_DM_FLAGS_DM_IS_ACTIVE               0x00000001  /* DM is enabled                                                        */
-#define NFA_DM_FLAGS_EXCL_RF_ACTIVE             0x00000002  /* Exclusive RF mode is active                                          */
-#define NFA_DM_FLAGS_POLLING_ENABLED            0x00000004  /* Polling is enabled (while not in exclusive RF mode                   */
-#define NFA_DM_FLAGS_SEND_POLL_STOP_EVT         0x00000008  /* send poll stop event                                                 */
-#define NFA_DM_FLAGS_AUTO_READING_NDEF          0x00000010  /* auto reading of NDEF in progress                                     */
-#define NFA_DM_FLAGS_ENABLE_EVT_PEND            0x00000020  /* NFA_DM_ENABLE_EVT is not reported yet                                */
-#define NFA_DM_FLAGS_SEND_DEACTIVATED_EVT       0x00000040  /* Send NFA_DEACTIVATED_EVT when deactivated                            */
-#define NFA_DM_FLAGS_NFCC_IS_RESTORING          0x00000100  /* NFCC is restoring after back to full power mode                      */
-#define NFA_DM_FLAGS_SETTING_PWR_MODE           0x00000200  /* NFCC power mode is updating                                          */
-#define NFA_DM_FLAGS_DM_DISABLING_NFC           0x00000400  /* NFA DM is disabling NFC                                              */
-#define NFA_DM_FLAGS_RAW_FRAME                  0x00000800  /* NFA_SendRawFrame() is called since RF activation                     */
-#define NFA_DM_FLAGS_LISTEN_DISABLED            0x00001000  /* NFA_DisableListening() is called and engaged                         */
-#define NFA_DM_FLAGS_P2P_PAUSED                 0x00002000  /* NFA_PauseP2p() is called and engaged                         */
-#define NFA_DM_FLAGS_POWER_OFF_SLEEP            0x00008000  /* Power Off Sleep                                                      */
+/* DM is enabled                                                        */
+#define NFA_DM_FLAGS_DM_IS_ACTIVE 0x00000001
+/* Exclusive RF mode is active                                          */
+#define NFA_DM_FLAGS_EXCL_RF_ACTIVE 0x00000002
+/* Polling is enabled (while not in exclusive RF mode                   */
+#define NFA_DM_FLAGS_POLLING_ENABLED 0x00000004
+/* send poll stop event                                                 */
+#define NFA_DM_FLAGS_SEND_POLL_STOP_EVT 0x00000008
+/* auto reading of NDEF in progress                                     */
+#define NFA_DM_FLAGS_AUTO_READING_NDEF 0x00000010
+/* NFA_DM_ENABLE_EVT is not reported yet                                */
+#define NFA_DM_FLAGS_ENABLE_EVT_PEND 0x00000020
+/* Send NFA_DEACTIVATED_EVT when deactivated                            */
+#define NFA_DM_FLAGS_SEND_DEACTIVATED_EVT 0x00000040
+/* NFCC is restoring after back to full power mode                      */
+#define NFA_DM_FLAGS_NFCC_IS_RESTORING 0x00000100
+/* NFCC power mode is updating                                          */
+#define NFA_DM_FLAGS_SETTING_PWR_MODE 0x00000200
+/* NFA DM is disabling NFC                                              */
+#define NFA_DM_FLAGS_DM_DISABLING_NFC 0x00000400
+/* NFA_SendRawFrame() is called since RF activation                     */
+#define NFA_DM_FLAGS_RAW_FRAME 0x00000800
+/* NFA_DisableListening() is called and engaged                         */
+#define NFA_DM_FLAGS_LISTEN_DISABLED 0x00001000
+/* NFA_PauseP2p() is called and engaged                         */
+#define NFA_DM_FLAGS_P2P_PAUSED 0x00002000
+/* Power Off Sleep                                                      */
+#define NFA_DM_FLAGS_POWER_OFF_SLEEP 0x00008000
 /* stored parameters */
 typedef struct
 {
