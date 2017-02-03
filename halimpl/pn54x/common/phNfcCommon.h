@@ -82,7 +82,8 @@
 #define CLK_SRC_PADDIRECT  3
 
 /*Extern crystal clock source*/
-#define NXP_SYS_CLK_SRC_SEL         CLK_SRC_PLL  /* Use one of CLK_SRC_<value> */
+/* Use one of CLK_SRC_<value> */
+#define NXP_SYS_CLK_SRC_SEL CLK_SRC_PLL
 /*Direct clock*/
 
 /*
@@ -99,7 +100,8 @@
 #define CLK_FREQ_38_4MHZ       5
 #define CLK_FREQ_52MHZ         6
 
-#define NXP_SYS_CLK_FREQ_SEL  CLK_FREQ_19_2MHZ /* Set to one of CLK_FREQ_<value> */
+/* Set to one of CLK_FREQ_<value> */
+#define NXP_SYS_CLK_FREQ_SEL CLK_FREQ_19_2MHZ
 
 #define CLK_TO_CFG_DEF         1
 #define CLK_TO_CFG_MAX         6

@@ -30,19 +30,23 @@
 #define TRACE_LAYER_HCI             0x00070000
 #define TRACE_LAYER_GKI             0x001a0000
 #define TRACE_LAYER_NFC             0x00270000
-#define TRACE_LAYER_NCI             0x00280000 /*it's overwritten in nfc_types.h*/
+/*it's overwritten in nfc_types.h*/
+#define TRACE_LAYER_NCI 0x00280000
 #define TRACE_LAYER_LLCP            0x00290000
 #define TRACE_LAYER_NDEF            0x002a0000
 #define TRACE_LAYER_RW              0x002b0000
 #define TRACE_LAYER_CE              0x002c0000
 #define TRACE_LAYER_P2P             0x002d0000
 #define TRACE_LAYER_NFA             0x00300000
-#define TRACE_LAYER_HAL             0x00310000 /*it's overwritten in nfc_types.h*/
+/*it's overwritten in nfc_types.h*/
+#define TRACE_LAYER_HAL 0x00310000
 #define TRACE_LAYER_MAX_NUM         0x0032
 
-#define BT_EVT_TO_NFC_NCI           0x4000      /* NCI Command, Notification or Data*/
+/* NCI Command, Notification or Data*/
+#define BT_EVT_TO_NFC_NCI 0x4000
 #define BT_EVT_TO_NFC_NCI_VS        0x4200      /* Vendor specific message */
-#define BT_EVT_TO_NFC_MSGS          0x4300      /* messages between NFC and NCI task */
+/* messages between NFC and NCI task */
+#define BT_EVT_TO_NFC_MSGS 0x4300
 
 /* start timer */
 #define BT_EVT_TO_START_TIMER       0x3c00

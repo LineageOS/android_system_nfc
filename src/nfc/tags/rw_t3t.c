@@ -38,11 +38,14 @@
 
 /* Definitions for constructing t3t command messages */
 #define RW_T3T_FL_PADDING   0x01        /* Padding needed for last NDEF block */
-#define RW_T3T_MAX_NDEF_BLOCKS_PER_UPDATE_1_BYTE_FORMAT (13)    /* Maximum number of NDEF blocks updates that can fit into one command (when all block-numbers are < 256) */
-#define RW_T3T_MAX_NDEF_BLOCKS_PER_UPDATE_2_BYTE_FORMAT (12)    /* Maximum number of NDEF blocks updates that can fit into one command (when all block-numbers are >= 256) */
+/* Maximum number of NDEF blocks updates that can fit into one command (when all block-numbers are < 256) */
+#define RW_T3T_MAX_NDEF_BLOCKS_PER_UPDATE_1_BYTE_FORMAT (13)
+/* Maximum number of NDEF blocks updates that can fit into one command (when all block-numbers are >= 256) */
+#define RW_T3T_MAX_NDEF_BLOCKS_PER_UPDATE_2_BYTE_FORMAT (12)
 
 /* Definitions for SENSF_RES */
-#define RW_T3T_SENSF_RES_RD_OFFSET      17  /* Offset of RD in SENSF_RES from NCI_POLL NTF (includes 1 byte SENSF_RES length) */
+/* Offset of RD in SENSF_RES from NCI_POLL NTF (includes 1 byte SENSF_RES length) */
+#define RW_T3T_SENSF_RES_RD_OFFSET 17
 #define RW_T3T_SENSF_RES_RD_LEN         2   /* Size of RD in SENSF_RES   */
 
 /* Timeout definitions for commands */
@@ -128,8 +131,10 @@ static void rw_t3t_handle_sro_poll_rsp (tRW_T3T_CB *p_cb, uint8_t nci_status, ui
 
 
 /* Default NDEF attribute information block (used when formatting Felica-Lite tags) */
-#define RW_T3T_DEFAULT_FELICALITE_NBR       4   /* NBr (max block reads per cmd)*/
-#define RW_T3T_DEFAULT_FELICALITE_NBW       1   /* NBw (max block write per cmd)*/
+/* NBr (max block reads per cmd)*/
+#define RW_T3T_DEFAULT_FELICALITE_NBR 4
+/* NBw (max block write per cmd)*/
+#define RW_T3T_DEFAULT_FELICALITE_NBW 1
 #define RW_T3T_DEFAULT_FELICALITE_NMAXB     (T3T_FELICALITE_NMAXB)
 #define RW_T3T_DEFAULT_FELICALITE_ATTRIB_INFO_CHECKSUM  ((T3T_MSG_NDEF_VERSION +                    \
                                                             RW_T3T_DEFAULT_FELICALITE_NBR +         \

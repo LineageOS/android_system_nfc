@@ -50,16 +50,21 @@
 
 #define NFA_DTA_DISCOVER_PARAMS_MAX     6
 
-#define NDEF_WKT_TEXT_HDR_LEN   7               /* Header length for long NDEF text message */
-#define NFA_DTA_T3T_WRITE_NDEF_SIZE     192     /* Size of NDEF message for T3T write-tests ([DTA] $5.5.6) */
-#define NFA_DTA_T3T_LISTEN_SYSTEMCODE   0xBABE  /* System code to use for T3T Listen mode tests */
+/* Header length for long NDEF text message */
+#define NDEF_WKT_TEXT_HDR_LEN 7
+/* Size of NDEF message for T3T write-tests ([DTA] $5.5.6) */
+#define NFA_DTA_T3T_WRITE_NDEF_SIZE 192
+/* System code to use for T3T Listen mode tests */
+#define NFA_DTA_T3T_LISTEN_SYSTEMCODE 0xBABE
 
-#define NFA_PROTOCOL_RANK_INVALID       0xFF    /* Maximum protocol preference rank */
+/* Maximum protocol preference rank */
+#define NFA_PROTOCOL_RANK_INVALID 0xFF
 
 #define NFA_DTA_SCRATCH_BUF_SIZE        T3T_MSG_BLOCKSIZE
 
 #ifndef NFA_DTA_DEFAULT_CO_OUT_DSAP
-#define NFA_DTA_DEFAULT_CO_OUT_DSAP     0x12    /* Default SAP[LT,CO-OUT-DEST] if SDP was not performed to get SAP from the LT */
+/* Default SAP[LT,CO-OUT-DEST] if SDP was not performed to get SAP from the LT */
+#define NFA_DTA_DEFAULT_CO_OUT_DSAP 0x12
 #endif
 
 /*****************************************************************************
@@ -239,10 +244,14 @@ typedef tNFC_STATUS (*tNFA_DTA_CMD_FCN) (void *);
 
 /* dta control block flags */
 #define NFA_DTA_FL_ENABLED                      0x00000001  /* DTA is enabled */
-#define NFA_DTA_FL_AUTOSTART                    0x00000002  /* Automatically start discovery when NFC is enabled */
-#define NFA_DTA_FL_STOPPING                     0x00000004  /* DTA is stopping (NFA_DtaStop called) */
-#define NFA_DTA_FL_DISABLING                    0x00000008  /* DTA is being disabled (NFA_DtaDisable called) */
-#define NFA_DTA_FL_T4T_DESELECT_DEACT           0x00000010  /* T4T/NFCDEP is deactivating to IDLE (need to DESELECT first) */
+/* Automatically start discovery when NFC is enabled */
+#define NFA_DTA_FL_AUTOSTART 0x00000002
+/* DTA is stopping (NFA_DtaStop called) */
+#define NFA_DTA_FL_STOPPING 0x00000004
+/* DTA is being disabled (NFA_DtaDisable called) */
+#define NFA_DTA_FL_DISABLING 0x00000008
+/* T4T/NFCDEP is deactivating to IDLE (need to DESELECT first) */
+#define NFA_DTA_FL_T4T_DESELECT_DEACT 0x00000010
 
 /* DTA control block */
 typedef struct {
@@ -299,8 +308,10 @@ typedef struct {
     uint16_t                llcp_co_out_remote_miu; /* MIU of LT-CO-OUT-DEST */
     uint8_t                 llcp_co_out_remote_rw;  /* RW of LT-CO-OUT-DEST  */
 
-#define NFA_DTA_LLCP_FLAGS_CO_OUT_CONNECTING    0x01    /* establishing outbound on connection-oriented */
-#define NFA_DTA_LLCP_FLAGS_CO_OUT_CONNECTED     0x02    /* established outbound on connection-oriented  */
+/* establishing outbound on connection-oriented */
+#define NFA_DTA_LLCP_FLAGS_CO_OUT_CONNECTING 0x01
+/* established outbound on connection-oriented  */
+#define NFA_DTA_LLCP_FLAGS_CO_OUT_CONNECTED 0x02
 
     uint8_t                 llcp_flags;             /* internal flags for LLCP echo test */
     uint8_t                 llcp_sdp_tid_cl;        /* SDP transaction ID for outbound connectionless */

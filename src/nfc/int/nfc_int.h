@@ -61,8 +61,10 @@ extern "C" {
 #define NFC_TTYPE_RW_T4T_RESPONSE           107
 #define NFC_TTYPE_RW_I93_RESPONSE           108
 #define NFC_TTYPE_CE_T4T_UPDATE             109
-#define NFC_TTYPE_P2P_PRIO_RESPONSE         110  /* added for p2p prio logic timer */
-#define NFC_TTYPE_P2P_PRIO_LOGIC_CLEANUP    111  /* added for p2p prio logic clenaup */
+/* added for p2p prio logic timer */
+#define NFC_TTYPE_P2P_PRIO_RESPONSE 110
+/* added for p2p prio logic clenaup */
+#define NFC_TTYPE_P2P_PRIO_LOGIC_CLEANUP 111
 #define NFC_TTYPE_VS_BASE                   200
 
 
@@ -90,19 +92,28 @@ enum
 };
 
 /* NFC control block flags */
-#define NFC_FL_DEACTIVATING             0x0001  /* NFC_Deactivate () is called and the NCI cmd is not sent   */
-#define NFC_FL_RESTARTING               0x0002  /* restarting NFCC after PowerOffSleep          */
-#define NFC_FL_POWER_OFF_SLEEP          0x0004  /* enterning power off sleep mode               */
-#define NFC_FL_POWER_CYCLE_NFCC         0x0008  /* Power cycle NFCC                             */
-#define NFC_FL_CONTROL_REQUESTED        0x0010  /* HAL requested control on NCI command window  */
-#define NFC_FL_CONTROL_GRANTED          0x0020  /* NCI command window is on the HAL side        */
-#define NFC_FL_DISCOVER_PENDING         0x0040  /* NCI command window is on the HAL side        */
-#define NFC_FL_HAL_REQUESTED            0x0080  /* NFC_FL_CONTROL_REQUESTED on HAL request      */
+/* NFC_Deactivate () is called and the NCI cmd is not sent   */
+#define NFC_FL_DEACTIVATING 0x0001
+/* restarting NFCC after PowerOffSleep          */
+#define NFC_FL_RESTARTING 0x0002
+/* enterning power off sleep mode               */
+#define NFC_FL_POWER_OFF_SLEEP 0x0004
+/* Power cycle NFCC                             */
+#define NFC_FL_POWER_CYCLE_NFCC 0x0008
+/* HAL requested control on NCI command window  */
+#define NFC_FL_CONTROL_REQUESTED 0x0010
+/* NCI command window is on the HAL side        */
+#define NFC_FL_CONTROL_GRANTED 0x0020
+/* NCI command window is on the HAL side        */
+#define NFC_FL_DISCOVER_PENDING 0x0040
+/* NFC_FL_CONTROL_REQUESTED on HAL request      */
+#define NFC_FL_HAL_REQUESTED 0x0080
 
 #define NFC_PEND_CONN_ID               0xFE
 #define NFC_CONN_ID_INT_MASK           0xF0
 #define NFC_CONN_ID_ID_MASK            NCI_CID_MASK
-#define NFC_CONN_NO_FC                 0xFF /* set num_buff to this for no flow control */
+/* set num_buff to this for no flow control */
+#define NFC_CONN_NO_FC 0xFF
 #define NFC_NCI_CONN_NO_FC             0xFF
 
 #if (NFC_RW_ONLY == FALSE)
@@ -140,7 +151,8 @@ typedef struct
     uint8_t         status;     /* tHAL_NFC_STATUS */
 } tNFC_HAL_EVT_MSG;
 
-#define NFC_RECEIVE_MSGS_OFFSET     (10) /* callback function pointer(8; use 8 to be safe + NFC_SAVED_CMD_SIZE(2) */
+/* callback function pointer(8; use 8 to be safe + NFC_SAVED_CMD_SIZE(2) */
+#define NFC_RECEIVE_MSGS_OFFSET (10)
 
 /* NFCC power state change pending callback */
 typedef void (tNFC_PWR_ST_CBACK) (void);

@@ -50,7 +50,8 @@ typedef uint8_t tLLCP_LINK_STATE;
 /*
 ** LLCP internal flags
 */
-#define LLCP_LINK_FLAGS_RX_ANY_LLC_PDU      0x01    /* Received any LLC PDU in activated state */
+/* Received any LLC PDU in activated state */
+#define LLCP_LINK_FLAGS_RX_ANY_LLC_PDU 0x01
 
 /*
 ** LLCP link control block
@@ -160,9 +161,12 @@ typedef uint8_t tLLCP_DLC_EVENT;
 ** LLCP data link connection control block
 */
 
-#define LLCP_DATA_LINK_FLAG_PENDING_DISC     0x01 /* send DISC when tx queue is empty       */
-#define LLCP_DATA_LINK_FLAG_PENDING_RR_RNR   0x02 /* send RR/RNR with valid sequence        */
-#define LLCP_DATA_LINK_FLAG_NOTIFY_TX_DONE   0x04 /* notify upper later when tx complete    */
+/* send DISC when tx queue is empty       */
+#define LLCP_DATA_LINK_FLAG_PENDING_DISC 0x01
+/* send RR/RNR with valid sequence        */
+#define LLCP_DATA_LINK_FLAG_PENDING_RR_RNR 0x02
+/* notify upper later when tx complete    */
+#define LLCP_DATA_LINK_FLAG_NOTIFY_TX_DONE 0x04
 
 
 typedef struct

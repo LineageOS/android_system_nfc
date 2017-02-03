@@ -38,26 +38,43 @@
 #include "gki.h"
 
 /* main state */
-#define RW_T4T_STATE_NOT_ACTIVATED              0x00    /* T4T is not activated                 */
-#define RW_T4T_STATE_IDLE                       0x01    /* waiting for upper layer API          */
-#define RW_T4T_STATE_DETECT_NDEF                0x02    /* performing NDEF detection precedure  */
-#define RW_T4T_STATE_READ_NDEF                  0x03    /* performing read NDEF procedure       */
-#define RW_T4T_STATE_UPDATE_NDEF                0x04    /* performing update NDEF procedure     */
-#define RW_T4T_STATE_PRESENCE_CHECK             0x05    /* checking presence of tag             */
-#define RW_T4T_STATE_SET_READ_ONLY              0x06    /* convert tag to read only             */
+/* T4T is not activated                 */
+#define RW_T4T_STATE_NOT_ACTIVATED 0x00
+/* waiting for upper layer API          */
+#define RW_T4T_STATE_IDLE 0x01
+/* performing NDEF detection precedure  */
+#define RW_T4T_STATE_DETECT_NDEF 0x02
+/* performing read NDEF procedure       */
+#define RW_T4T_STATE_READ_NDEF 0x03
+/* performing update NDEF procedure     */
+#define RW_T4T_STATE_UPDATE_NDEF 0x04
+/* checking presence of tag             */
+#define RW_T4T_STATE_PRESENCE_CHECK 0x05
+/* convert tag to read only             */
+#define RW_T4T_STATE_SET_READ_ONLY 0x06
 
-#define RW_T4T_STATE_NDEF_FORMAT                0x07    /* performing NDEF format               */
+/* performing NDEF format               */
+#define RW_T4T_STATE_NDEF_FORMAT 0x07
 
 /* sub state */
-#define RW_T4T_SUBSTATE_WAIT_SELECT_APP         0x00    /* waiting for response of selecting AID    */
-#define RW_T4T_SUBSTATE_WAIT_SELECT_CC          0x01    /* waiting for response of selecting CC     */
-#define RW_T4T_SUBSTATE_WAIT_CC_FILE            0x02    /* waiting for response of reading CC       */
-#define RW_T4T_SUBSTATE_WAIT_SELECT_NDEF_FILE   0x03    /* waiting for response of selecting NDEF   */
-#define RW_T4T_SUBSTATE_WAIT_READ_NLEN          0x04    /* waiting for response of reading NLEN     */
-#define RW_T4T_SUBSTATE_WAIT_READ_RESP          0x05    /* waiting for response of reading file     */
-#define RW_T4T_SUBSTATE_WAIT_UPDATE_RESP        0x06    /* waiting for response of updating file    */
-#define RW_T4T_SUBSTATE_WAIT_UPDATE_NLEN        0x07    /* waiting for response of updating NLEN    */
-#define RW_T4T_SUBSTATE_WAIT_UPDATE_CC          0x08    /* waiting for response of updating CC      */
+/* waiting for response of selecting AID    */
+#define RW_T4T_SUBSTATE_WAIT_SELECT_APP 0x00
+/* waiting for response of selecting CC     */
+#define RW_T4T_SUBSTATE_WAIT_SELECT_CC 0x01
+/* waiting for response of reading CC       */
+#define RW_T4T_SUBSTATE_WAIT_CC_FILE 0x02
+/* waiting for response of selecting NDEF   */
+#define RW_T4T_SUBSTATE_WAIT_SELECT_NDEF_FILE 0x03
+/* waiting for response of reading NLEN     */
+#define RW_T4T_SUBSTATE_WAIT_READ_NLEN 0x04
+/* waiting for response of reading file     */
+#define RW_T4T_SUBSTATE_WAIT_READ_RESP 0x05
+/* waiting for response of updating file    */
+#define RW_T4T_SUBSTATE_WAIT_UPDATE_RESP 0x06
+/* waiting for response of updating NLEN    */
+#define RW_T4T_SUBSTATE_WAIT_UPDATE_NLEN 0x07
+/* waiting for response of updating CC      */
+#define RW_T4T_SUBSTATE_WAIT_UPDATE_CC 0x08
 
 #define RW_T4T_SUBSTATE_WAIT_GET_HW_VERSION     0x09
 #define RW_T4T_SUBSTATE_WAIT_GET_SW_VERSION     0x0A

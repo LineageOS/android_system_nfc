@@ -22,7 +22,8 @@
 #include <phNxpLog.h>
 #include <phNxpConfig.h>
 
-#define HAL_EXTNS_WRITE_RSP_TIMEOUT   (1000)                /* Timeout value to wait for response from PN548AD */
+/* Timeout value to wait for response from PN548AD */
+#define HAL_EXTNS_WRITE_RSP_TIMEOUT (1000)
 
 #undef P2P_PRIO_LOGIC_HAL_IMP
 
