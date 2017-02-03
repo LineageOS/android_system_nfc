@@ -23,7 +23,8 @@
 #include <phOsalNfc_Timer.h>
 #include <phNxpConfig.h>
 
-#define HAL_WRITE_RSP_TIMEOUT   (2000)   /* Timeout value to wait for response from PN54X */
+/* Timeout value to wait for response from PN54X */
+#define HAL_WRITE_RSP_TIMEOUT (2000)
 #define HAL_WRITE_MAX_RETRY     (10)
 
 /******************* Structures and definitions *******************************/

@@ -108,9 +108,12 @@
 /* Another Tag command is already in progress */
 #define NFA_STATUS_BUSY                 NFC_STATUS_BUSY
 
-#define NFA_STATUS_BAD_LENGTH           NFC_STATUS_BAD_LENGTH     /* data len exceeds MIU                             */
-#define NFA_STATUS_BAD_HANDLE           NFC_STATUS_BAD_HANDLE     /* invalid handle                                   */
-#define NFA_STATUS_CONGESTED            NFC_STATUS_CONGESTED      /* congested                                        */
+/* data len exceeds MIU                             */
+#define NFA_STATUS_BAD_LENGTH NFC_STATUS_BAD_LENGTH
+/* invalid handle                                   */
+#define NFA_STATUS_BAD_HANDLE NFC_STATUS_BAD_HANDLE
+/* congested                                        */
+#define NFA_STATUS_CONGESTED NFC_STATUS_CONGESTED
 typedef uint8_t tNFA_STATUS;
 
 /* Handle for NFA registrations and connections */
@@ -119,14 +122,22 @@ typedef uint16_t tNFA_HANDLE;
 /* NFA Handle definitions */
 
 /* The upper byte of NFA_HANDLE signifies the handle group */
-#define NFA_HANDLE_GROUP_CONNECTION     0x0100      /* Connection handles           */
-#define NFA_HANDLE_GROUP_NDEF_HANDLER   0x0200      /* NDEF Type Handler handles    */
-#define NFA_HANDLE_GROUP_CE             0x0300      /* DH Card Emulation handles    */
-#define NFA_HANDLE_GROUP_EE             0x0400      /* Handles to identify NFCEE    */
-#define NFA_HANDLE_GROUP_P2P            0x0500      /* P2P handles                  */
-#define NFA_HANDLE_GROUP_SNEP           0x0700      /* SNEP handles                 */
-#define NFA_HANDLE_GROUP_HCI            0x0800      /* HCI handles                  */
-#define NFA_HANDLE_GROUP_LOCAL_NDEF     0x0900      /* Local NDEF message handle    */
+/* Connection handles           */
+#define NFA_HANDLE_GROUP_CONNECTION 0x0100
+/* NDEF Type Handler handles    */
+#define NFA_HANDLE_GROUP_NDEF_HANDLER 0x0200
+/* DH Card Emulation handles    */
+#define NFA_HANDLE_GROUP_CE 0x0300
+/* Handles to identify NFCEE    */
+#define NFA_HANDLE_GROUP_EE 0x0400
+/* P2P handles                  */
+#define NFA_HANDLE_GROUP_P2P 0x0500
+/* SNEP handles                 */
+#define NFA_HANDLE_GROUP_SNEP 0x0700
+/* HCI handles                  */
+#define NFA_HANDLE_GROUP_HCI 0x0800
+/* Local NDEF message handle    */
+#define NFA_HANDLE_GROUP_LOCAL_NDEF 0x0900
 #define NFA_HANDLE_GROUP_MASK           0xFF00
 #define NFA_HANDLE_MASK                 0x00FF
 
@@ -140,9 +151,12 @@ typedef uint8_t tNFA_PMID;
 #define NFA_TECHNOLOGY_MASK_ISO15693	0x08    /* Proprietary Technology       */
 #define NFA_TECHNOLOGY_MASK_B_PRIME	    0x10    /* Proprietary Technology       */
 #define NFA_TECHNOLOGY_MASK_KOVIO	    0x20    /* Proprietary Technology       */
-#define NFA_TECHNOLOGY_MASK_A_ACTIVE    0x40    /* NFC Technology A active mode */
-#define NFA_TECHNOLOGY_MASK_F_ACTIVE    0x80    /* NFC Technology F active mode */
-#define NFA_TECHNOLOGY_MASK_ALL         0xFF    /* All supported technologies   */
+/* NFC Technology A active mode */
+#define NFA_TECHNOLOGY_MASK_A_ACTIVE 0x40
+/* NFC Technology F active mode */
+#define NFA_TECHNOLOGY_MASK_F_ACTIVE 0x80
+/* All supported technologies   */
+#define NFA_TECHNOLOGY_MASK_ALL 0xFF
 typedef uint8_t tNFA_TECHNOLOGY_MASK;
 
 /* Definitions for NFC protocol for RW, CE and P2P APIs */
@@ -174,20 +188,32 @@ typedef uint8_t tNFA_PROTOCOL_MASK;
 
 
 /* NFA_DM callback events */
-#define NFA_DM_ENABLE_EVT               0   /* Result of NFA_Enable             */
-#define NFA_DM_DISABLE_EVT              1   /* Result of NFA_Disable            */
-#define NFA_DM_SET_CONFIG_EVT           2   /* Result of NFA_SetConfig          */
-#define NFA_DM_GET_CONFIG_EVT           3   /* Result of NFA_GetConfig          */
-#define NFA_DM_PWR_MODE_CHANGE_EVT      4   /* Result of NFA_PowerOffSleepMode  */
+/* Result of NFA_Enable             */
+#define NFA_DM_ENABLE_EVT 0
+/* Result of NFA_Disable            */
+#define NFA_DM_DISABLE_EVT 1
+/* Result of NFA_SetConfig          */
+#define NFA_DM_SET_CONFIG_EVT 2
+/* Result of NFA_GetConfig          */
+#define NFA_DM_GET_CONFIG_EVT 3
+/* Result of NFA_PowerOffSleepMode  */
+#define NFA_DM_PWR_MODE_CHANGE_EVT 4
 #define NFA_DM_RF_FIELD_EVT	            5   /* Status of RF Field               */
-#define NFA_DM_NFCC_TIMEOUT_EVT         6   /* NFCC is not responding           */
-#define NFA_DM_NFCC_TRANSPORT_ERR_EVT   7   /* NCI Tranport error               */
+/* NFCC is not responding           */
+#define NFA_DM_NFCC_TIMEOUT_EVT 6
+/* NCI Tranport error               */
+#define NFA_DM_NFCC_TRANSPORT_ERR_EVT 7
 
-#define NFA_T1T_HR_LEN              T1T_HR_LEN      /* T1T HR length            */
-#define NFA_MAX_UID_LEN             TAG_MAX_UID_LEN /* Max UID length of T1/T2  */
-#define NFA_T1T_UID_LEN             T1T_UID_LEN     /* T1T UID length           */
-#define NFA_T1T_CMD_UID_LEN         T1T_CMD_UID_LEN /* UID len for T1T cmds     */
-#define NFA_T2T_UID_LEN             T2T_UID_LEN     /* T2T UID length           */
+/* T1T HR length            */
+#define NFA_T1T_HR_LEN T1T_HR_LEN
+/* Max UID length of T1/T2  */
+#define NFA_MAX_UID_LEN TAG_MAX_UID_LEN
+/* T1T UID length           */
+#define NFA_T1T_UID_LEN T1T_UID_LEN
+/* UID len for T1T cmds     */
+#define NFA_T1T_CMD_UID_LEN T1T_CMD_UID_LEN
+/* T2T UID length           */
+#define NFA_T2T_UID_LEN T2T_UID_LEN
 
 /* Tag is read only */
 #define NFA_RW_NDEF_FL_READ_ONLY        RW_NDEF_FL_READ_ONLY
@@ -271,19 +297,26 @@ typedef void (tNFA_DM_CBACK) (uint8_t event, tNFA_DM_CBACK_DATA *p_data);
 /* NFC link/protocol discovery select response */
 #define NFA_SELECT_RESULT_EVT                   3
 #define NFA_DEACTIVATE_FAIL_EVT                 4   /* NFA_Deactivate failure */
-#define NFA_ACTIVATED_EVT                       5   /* NFC link/protocol activated */
-#define NFA_DEACTIVATED_EVT                     6   /* NFC link/protocol deactivated */
+/* NFC link/protocol activated */
+#define NFA_ACTIVATED_EVT 5
+/* NFC link/protocol deactivated */
+#define NFA_DEACTIVATED_EVT 6
 #define NFA_TLV_DETECT_EVT                      7   /* TLV Detection complete */
-#define NFA_NDEF_DETECT_EVT                     8   /* NDEF Detection complete */
+/* NDEF Detection complete */
+#define NFA_NDEF_DETECT_EVT 8
 #define NFA_DATA_EVT                            9   /* Data message received */
 #define NFA_SELECT_CPLT_EVT                     10  /* Select completed */
 #define NFA_READ_CPLT_EVT                       11  /* Read completed */
 #define NFA_WRITE_CPLT_EVT                      12  /* Write completed */
 #define NFA_LLCP_ACTIVATED_EVT                  13  /* LLCP link is activated */
-#define NFA_LLCP_DEACTIVATED_EVT                14  /* LLCP link is deactivated */
-#define NFA_PRESENCE_CHECK_EVT                  15  /* Response to NFA_RwPresenceCheck */
-#define NFA_FORMAT_CPLT_EVT                     16  /* Tag Formating completed */
-#define NFA_I93_CMD_CPLT_EVT                    17  /* ISO 15693 command completed */
+/* LLCP link is deactivated */
+#define NFA_LLCP_DEACTIVATED_EVT 14
+/* Response to NFA_RwPresenceCheck */
+#define NFA_PRESENCE_CHECK_EVT 15
+/* Tag Formating completed */
+#define NFA_FORMAT_CPLT_EVT 16
+/* ISO 15693 command completed */
+#define NFA_I93_CMD_CPLT_EVT 17
 #define NFA_SET_TAG_RO_EVT                      18  /* Tag set as Read only */
 /* Result for NFA_RequestExclusiveRfControl */
 #define NFA_EXCLUSIVE_RF_CONTROL_STARTED_EVT    19
@@ -293,9 +326,12 @@ typedef void (tNFA_DM_CBACK) (uint8_t event, tNFA_DM_CBACK_DATA *p_data);
 #define NFA_CE_REGISTERED_EVT                   21
 /* DH Card emulation: AID or System code dereg'd */
 #define NFA_CE_DEREGISTERED_EVT                 22
-#define NFA_CE_DATA_EVT                         23  /* DH Card emulation: data received event */
-#define NFA_CE_ACTIVATED_EVT                    24  /* DH Card emulation: activation event */
-#define NFA_CE_DEACTIVATED_EVT                  25  /* DH Card emulation: deactivation event */
+/* DH Card emulation: data received event */
+#define NFA_CE_DATA_EVT 23
+/* DH Card emulation: activation event */
+#define NFA_CE_ACTIVATED_EVT 24
+/* DH Card emulation: deactivation event */
+#define NFA_CE_DEACTIVATED_EVT 25
 /* DH Card emulation: local NDEF configured */
 #define NFA_CE_LOCAL_TAG_CONFIGURED_EVT         26
 /* DH Card emulation: NDEF write started */
@@ -303,19 +339,26 @@ typedef void (tNFA_DM_CBACK) (uint8_t event, tNFA_DM_CBACK_DATA *p_data);
 /* DH Card emulation: NDEF write completed */
 #define NFA_CE_NDEF_WRITE_CPLT_EVT              28
 #define NFA_CE_UICC_LISTEN_CONFIGURED_EVT       29  /* UICC Listen configured */
-#define NFA_RF_DISCOVERY_STARTED_EVT            30  /* RF Discovery started event */
-#define NFA_RF_DISCOVERY_STOPPED_EVT            31  /* RF Discovery stopped event */
+/* RF Discovery started event */
+#define NFA_RF_DISCOVERY_STARTED_EVT 30
+/* RF Discovery stopped event */
+#define NFA_RF_DISCOVERY_STOPPED_EVT 31
 /* status of updating RF communication paramters */
 #define NFA_UPDATE_RF_PARAM_RESULT_EVT          32
-#define NFA_RW_INTF_ERROR_EVT                   34  /* RF Interface error event */
+/* RF Interface error event */
+#define NFA_RW_INTF_ERROR_EVT 34
 /* status of setting P2P listen technologies */
 #define NFA_SET_P2P_LISTEN_TECH_EVT             33
 /* First packet received over LLCP link */
 #define NFA_LLCP_FIRST_PACKET_RECEIVED_EVT      35
-#define NFA_LISTEN_ENABLED_EVT                  36  /* Listening enabled event */
-#define NFA_LISTEN_DISABLED_EVT                 37  /* Listening disabled event */
-#define NFA_P2P_PAUSED_EVT                      38  /* P2P services paused event */
-#define NFA_P2P_RESUMED_EVT                     39  /* P2P services resumed event */
+/* Listening enabled event */
+#define NFA_LISTEN_ENABLED_EVT 36
+/* Listening disabled event */
+#define NFA_LISTEN_DISABLED_EVT 37
+/* P2P services paused event */
+#define NFA_P2P_PAUSED_EVT 38
+/* P2P services resumed event */
+#define NFA_P2P_RESUMED_EVT 39
 
 /* NFC deactivation type */
 #define NFA_DEACTIVATE_TYPE_IDLE        NFC_DEACTIVATE_TYPE_IDLE

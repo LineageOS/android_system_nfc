@@ -36,27 +36,40 @@ extern bool    HCI_LOOPBACK_DEBUG;
 
 
 #define NFA_HCI_HOST_ID_UICC0           0x02        /* Host ID for UICC 0 */
-#define NFA_HCI_LAST_HOST_SPECIFIC_GATE 0xEF        /* Lost host specific gate */
+/* Lost host specific gate */
+#define NFA_HCI_LAST_HOST_SPECIFIC_GATE 0xEF
 
 #define NFA_HCI_SESSION_ID_LEN          8           /* HCI Session ID length */
-#define NFA_MAX_PIPES_IN_GENERIC_GATE   0x0F        /* Maximum pipes that can be created on a generic pipe  */
+/* Maximum pipes that can be created on a generic pipe  */
+#define NFA_MAX_PIPES_IN_GENERIC_GATE 0x0F
 
-#define NFA_HCI_VERSION_SW              0x090000    /* HCI SW Version number                       */
-#define NFA_HCI_VERSION_HW              0x000000    /* HCI HW Version number                       */
+/* HCI SW Version number                       */
+#define NFA_HCI_VERSION_SW 0x090000
+/* HCI HW Version number                       */
+#define NFA_HCI_VERSION_HW 0x000000
 #define NFA_HCI_VENDOR_NAME             "HCI"       /* Vendor Name                                 */
-#define NFA_HCI_MODEL_ID                00          /* Model ID                                    */
-#define NFA_HCI_VERSION                 90          /* HCI Version                                 */
+/* Model ID                                    */
+#define NFA_HCI_MODEL_ID 00
+/* HCI Version                                 */
+#define NFA_HCI_VERSION 90
 
 /* NFA HCI states */
 #define NFA_HCI_STATE_DISABLED              0x00     /* HCI is disabled  */
-#define NFA_HCI_STATE_STARTUP               0x01     /* HCI performing Initialization sequence */
-#define NFA_HCI_STATE_WAIT_NETWK_ENABLE     0x02     /* HCI is waiting for initialization of other host in the network */
-#define NFA_HCI_STATE_IDLE                  0x03     /* HCI is waiting to handle api commands  */
-#define NFA_HCI_STATE_WAIT_RSP              0x04     /* HCI is waiting for response to command sent */
-#define NFA_HCI_STATE_REMOVE_GATE           0x05     /* Removing all pipes prior to removing the gate */
-#define NFA_HCI_STATE_APP_DEREGISTER        0x06     /* Removing all pipes and gates prior to deregistering the app */
+/* HCI performing Initialization sequence */
+#define NFA_HCI_STATE_STARTUP 0x01
+/* HCI is waiting for initialization of other host in the network */
+#define NFA_HCI_STATE_WAIT_NETWK_ENABLE 0x02
+/* HCI is waiting to handle api commands  */
+#define NFA_HCI_STATE_IDLE 0x03
+/* HCI is waiting for response to command sent */
+#define NFA_HCI_STATE_WAIT_RSP 0x04
+/* Removing all pipes prior to removing the gate */
+#define NFA_HCI_STATE_REMOVE_GATE 0x05
+/* Removing all pipes and gates prior to deregistering the app */
+#define NFA_HCI_STATE_APP_DEREGISTER 0x06
 #define NFA_HCI_STATE_RESTORE               0x07     /* HCI restore */
-#define NFA_HCI_STATE_RESTORE_NETWK_ENABLE  0x08     /* HCI is waiting for initialization of other host in the network after restore */
+/* HCI is waiting for initialization of other host in the network after restore */
+#define NFA_HCI_STATE_RESTORE_NETWK_ENABLE 0x08
 
 typedef uint8_t tNFA_HCI_STATE;
 
@@ -360,7 +373,8 @@ typedef struct
 } tNFA_ID_MGMT_GATE_INFO;
 
 /* Internal flags */
-#define NFA_HCI_FL_DISABLING        0x01                /* sub system is being disabled */
+/* sub system is being disabled */
+#define NFA_HCI_FL_DISABLING 0x01
 #define NFA_HCI_FL_NV_CHANGED       0x02                /* NV Ram changed */
 
 

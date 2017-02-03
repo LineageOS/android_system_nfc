@@ -67,7 +67,8 @@
 #define NCI_MSG_UICC_READER_ACTION      0x0A
 #define NCI_MSG_SET_PPSE_RESPONSE       0x0B
 #define NCI_MSG_PRBS_SET                0x0C
-#define NCI_MSG_RESET_ALL_UICC_CFG      0x0D    /* reset HCI network/close all pipes (S,D) register */
+/* reset HCI network/close all pipes (S,D) register */
+#define NCI_MSG_RESET_ALL_UICC_CFG 0x0D
 #define NCI_MSG_GET_NFCEE_INFO          0x0E
 #define NCI_MSG_DISABLE_INIT_CHECK      0x0F
 #define NCI_MSG_ANTENNA_SELF_TEST       0x10
@@ -147,12 +148,15 @@
 #define NCI_GET_PATCH_VERSION_NVM_OFFSET    37
 
 
-#define NCI_NFCC_PIPE_INFO_NV_SIZE      24  /* Static and dynamic pipe id and status for each pipe to uicc0 and uicc1. */
+/* Static and dynamic pipe id and status for each pipe to uicc0 and uicc1. */
+#define NCI_NFCC_PIPE_INFO_NV_SIZE 24
 #define NCI_PERSONALITY_SLOT_SIZE       19
 #define NCI_DYNAMIC_PIPE_SIZE           8
 
-#define NCI_SWP_INTERFACE_TYPE          0xFF    /* Type of TLV in NCI_MSG_HCI_NETWK */
-#define NCI_HCI_GATE_TYPE               0xFE    /* Type of TLV in NCI_MSG_HCI_NETWK */
+/* Type of TLV in NCI_MSG_HCI_NETWK */
+#define NCI_SWP_INTERFACE_TYPE 0xFF
+/* Type of TLV in NCI_MSG_HCI_NETWK */
+#define NCI_HCI_GATE_TYPE 0xFE
 
 /* Secure Patch Download definitions (patch type definitions) */
 #define NCI_SPD_TYPE_HEADER             0x00
@@ -184,7 +188,8 @@
 #define NCI_INTERFACE_VS_MIFARE         0x80
 #define NCI_INTERFACE_VS_CALYPSO_CE     0x81
 #define NCI_INTERFACE_VS_T2T_CE         0x82    /* for Card Emulation side */
-#define NCI_INTERFACE_VS_15693          0x83    /* for both Reader/Writer and Card Emulation side */
+/* for both Reader/Writer and Card Emulation side */
+#define NCI_INTERFACE_VS_15693 0x83
 #define NCI_INTERFACE_VS_T1T_CE         0x84    /* for Card Emulation side */
 
 /**********************************************
@@ -223,7 +228,8 @@
 #define NCI_PARAM_ID_UICC_RDR_PRIORITY  0xBD
 #define NCI_PARAM_ID_GUARD_TIME         0xBE
 #define NCI_PARAM_ID_STDCONFIG          0xBF /* dont not use this config item */
-#define NCI_PARAM_ID_PROPCFG            0xC0 /* dont not use this config item  */
+/* dont not use this config item  */
+#define NCI_PARAM_ID_PROPCFG 0xC0
 #define NCI_PARAM_ID_MAXTRY2ACTIVATE    0xC1
 #define NCI_PARAM_ID_SWPCFG             0xC2
 #define NCI_PARAM_ID_CLF_LPM_CFG        0xC3

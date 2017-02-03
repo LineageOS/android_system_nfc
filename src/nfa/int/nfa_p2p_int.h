@@ -204,12 +204,16 @@ typedef union
 /*****************************************************************************
 **  control block
 *****************************************************************************/
-#define NFA_P2P_HANDLE_FLAG_CONN             0x80   /* Bit flag for connection handle           */
+/* Bit flag for connection handle           */
+#define NFA_P2P_HANDLE_FLAG_CONN 0x80
 
 /* NFA P2P Connection block */
-#define NFA_P2P_CONN_FLAG_IN_USE             0x01   /* Connection control block is used         */
-#define NFA_P2P_CONN_FLAG_REMOTE_RW_ZERO     0x02   /* Remote set RW to 0 (flow off)            */
-#define NFA_P2P_CONN_FLAG_CONGESTED          0x04   /* data link connection is congested        */
+/* Connection control block is used         */
+#define NFA_P2P_CONN_FLAG_IN_USE 0x01
+/* Remote set RW to 0 (flow off)            */
+#define NFA_P2P_CONN_FLAG_REMOTE_RW_ZERO 0x02
+/* data link connection is congested        */
+#define NFA_P2P_CONN_FLAG_CONGESTED 0x04
 
 typedef struct
 {
@@ -221,9 +225,12 @@ typedef struct
 } tNFA_P2P_CONN_CB;
 
 /* NFA P2P SAP control block */
-#define NFA_P2P_SAP_FLAG_SERVER             0x01    /* registered server                        */
-#define NFA_P2P_SAP_FLAG_CLIENT             0x02    /* registered client                        */
-#define NFA_P2P_SAP_FLAG_LLINK_CONGESTED    0x04    /* logical link connection is congested     */
+/* registered server                        */
+#define NFA_P2P_SAP_FLAG_SERVER 0x01
+/* registered client                        */
+#define NFA_P2P_SAP_FLAG_CLIENT 0x02
+/* logical link connection is congested     */
+#define NFA_P2P_SAP_FLAG_LLINK_CONGESTED 0x04
 
 typedef struct
 {

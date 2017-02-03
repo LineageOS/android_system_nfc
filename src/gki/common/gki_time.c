@@ -27,8 +27,10 @@
 #endif
 
 
-#define GKI_NO_NEW_TMRS_STARTED (0x7fffffffL)   /* Largest signed positive timer count */
-#define GKI_UNUSED_LIST_ENTRY   (0x80000000L)   /* Marks an unused timer list entry (initial value) */
+/* Largest signed positive timer count */
+#define GKI_NO_NEW_TMRS_STARTED (0x7fffffffL)
+/* Marks an unused timer list entry (initial value) */
+#define GKI_UNUSED_LIST_ENTRY (0x80000000L)
 #define GKI_MAX_INT32           (0x7fffffffL)
 
 /*******************************************************************************

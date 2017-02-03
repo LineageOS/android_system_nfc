@@ -32,7 +32,8 @@
 /*****************************************************************************
 **  Constants and data types
 *****************************************************************************/
-#define NFA_MAX_AID_LEN             NFC_MAX_AID_LEN /* 16 per ISO 7816 specification    */
+/* 16 per ISO 7816 specification    */
+#define NFA_MAX_AID_LEN NFC_MAX_AID_LEN
 #define NFA_EE_HANDLE_DH            (NFA_HANDLE_GROUP_EE|NFC_DH_ID)
 
 /* NFA EE callback events */
@@ -61,17 +62,26 @@ enum
 typedef uint8_t tNFA_EE_EVT;
 
 /* tNFA_NFCEE_INTERFACE values */
-#define NFA_EE_INTERFACE_APDU         NFC_NFCEE_INTERFACE_APDU          /* APDU Interface       */
-#define NFA_EE_INTERFACE_HCI_ACCESS   NFC_NFCEE_INTERFACE_HCI_ACCESS    /* HCI Access Interface*/
-#define NFA_EE_INTERFACE_T3T          NFC_NFCEE_INTERFACE_T3T           /* T3T Command Interface*/
-#define NFA_EE_INTERFACE_TRANSPARENT  NFC_NFCEE_INTERFACE_TRANSPARENT   /* Transparent Interface*/
-#define NFA_EE_INTERFACE_PROPRIETARY  NFC_NFCEE_INTERFACE_PROPRIETARY   /* Proprietary          */
+/* APDU Interface       */
+#define NFA_EE_INTERFACE_APDU NFC_NFCEE_INTERFACE_APDU
+/* HCI Access Interface*/
+#define NFA_EE_INTERFACE_HCI_ACCESS NFC_NFCEE_INTERFACE_HCI_ACCESS
+/* T3T Command Interface*/
+#define NFA_EE_INTERFACE_T3T NFC_NFCEE_INTERFACE_T3T
+/* Transparent Interface*/
+#define NFA_EE_INTERFACE_TRANSPARENT NFC_NFCEE_INTERFACE_TRANSPARENT
+/* Proprietary          */
+#define NFA_EE_INTERFACE_PROPRIETARY NFC_NFCEE_INTERFACE_PROPRIETARY
 typedef uint8_t tNFA_EE_INTERFACE;
 
-#define NFA_EE_TAG_HW_ID             NFC_NFCEE_TAG_HW_ID                /* HW/Registration ID   */
-#define NFA_EE_TAG_ATR_BYTES         NFC_NFCEE_TAG_ATR_BYTES            /* ATR Bytes            */
-#define NFA_EE_TAG_T3T_INFO          NFC_NFCEE_TAG_T3T_INFO             /* T3T Supplement. Info */
-#define NFA_EE_TAG_HCI_HOST_ID       NFC_NFCEE_TAG_HCI_HOST_ID          /* Broadcom Proprietary */
+/* HW/Registration ID   */
+#define NFA_EE_TAG_HW_ID NFC_NFCEE_TAG_HW_ID
+/* ATR Bytes            */
+#define NFA_EE_TAG_ATR_BYTES NFC_NFCEE_TAG_ATR_BYTES
+/* T3T Supplement. Info */
+#define NFA_EE_TAG_T3T_INFO NFC_NFCEE_TAG_T3T_INFO
+/* Broadcom Proprietary */
+#define NFA_EE_TAG_HCI_HOST_ID NFC_NFCEE_TAG_HCI_HOST_ID
 typedef uint8_t tNFA_EE_TAG;
 
 /* for NFA_EeModeSet () */
@@ -79,17 +89,25 @@ typedef uint8_t tNFA_EE_TAG;
 #define NFA_EE_MD_DEACTIVATE        NFC_MODE_DEACTIVATE
 typedef uint8_t tNFA_EE_MD;
 
-#define NFA_EE_PWR_STATE_ON         0x01    /* The device is on                 */
-#define NFA_EE_PWR_STATE_SWITCH_OFF 0x02    /* The device is switched off       */
-#define NFA_EE_PWR_STATE_BATT_OFF   0x04    /* The device's battery is removed  */
-#define NFA_EE_PWR_STATE_NONE       0       /* used to remove a particular technology or protocol based routing cfg of a handle from the routing table. */
+/* The device is on                 */
+#define NFA_EE_PWR_STATE_ON 0x01
+/* The device is switched off       */
+#define NFA_EE_PWR_STATE_SWITCH_OFF 0x02
+/* The device's battery is removed  */
+#define NFA_EE_PWR_STATE_BATT_OFF 0x04
+/* used to remove a particular technology or protocol based routing cfg of a handle from the routing table. */
+#define NFA_EE_PWR_STATE_NONE 0
 typedef uint8_t tNFA_EE_PWR_STATE;
 
 
-#define NFA_EE_STATUS_INACTIVE          NFC_NFCEE_STATUS_INACTIVE /* NFCEE connected and inactive */
-#define NFA_EE_STATUS_ACTIVE            NFC_NFCEE_STATUS_ACTIVE   /* NFCEE connected and active   */
-#define NFA_EE_STATUS_REMOVED           NFC_NFCEE_STATUS_REMOVED  /* NFCEE removed                */
-#define NFA_EE_STATUS_PENDING           0x10                      /* waiting for response from NFCC */
+/* NFCEE connected and inactive */
+#define NFA_EE_STATUS_INACTIVE NFC_NFCEE_STATUS_INACTIVE
+/* NFCEE connected and active   */
+#define NFA_EE_STATUS_ACTIVE NFC_NFCEE_STATUS_ACTIVE
+/* NFCEE removed                */
+#define NFA_EE_STATUS_REMOVED NFC_NFCEE_STATUS_REMOVED
+/* waiting for response from NFCC */
+#define NFA_EE_STATUS_PENDING 0x10
 #define NFA_EE_STATUS_ACTIVATING        (NFA_EE_STATUS_PENDING+NFC_NFCEE_STATUS_ACTIVE)
 #define NFA_EE_STATUS_DEACTIVATING      (NFA_EE_STATUS_PENDING+NFC_NFCEE_STATUS_INACTIVE)
 typedef uint8_t tNFA_EE_STATUS;
@@ -130,10 +148,14 @@ typedef struct
     tNFA_EE_INTERFACE   ee_interface;   /* NFCEE interface associated with this connection  */
 } tNFA_EE_CONNECT;
 
-#define NFA_EE_TRGR_SELECT              NFC_EE_TRIG_SELECT       /* ISO 7816-4 SELECT command */
-#define NFA_EE_TRGR_RF_PROTOCOL         NFC_EE_TRIG_RF_PROTOCOL  /* RF Protocol changed       */
-#define NFA_EE_TRGR_RF_TECHNOLOGY       NFC_EE_TRIG_RF_TECHNOLOGY/* RF Technology changed     */
-#define NFA_EE_TRGR_APP_INIT            NFC_EE_TRIG_APP_INIT     /* Application initiation    */
+/* ISO 7816-4 SELECT command */
+#define NFA_EE_TRGR_SELECT NFC_EE_TRIG_SELECT
+/* RF Protocol changed       */
+#define NFA_EE_TRGR_RF_PROTOCOL NFC_EE_TRIG_RF_PROTOCOL
+/* RF Technology changed     */
+#define NFA_EE_TRGR_RF_TECHNOLOGY NFC_EE_TRIG_RF_TECHNOLOGY
+/* Application initiation    */
+#define NFA_EE_TRGR_APP_INIT NFC_EE_TRIG_APP_INIT
 typedef tNFC_EE_TRIGGER tNFA_EE_TRIGGER;
 
 /* Union of NFCEE action parameter depending on the associated trigger */

@@ -128,14 +128,22 @@ enum
 
 typedef uint8_t tRW_EVENT;
 
-#define RW_NDEF_FL_READ_ONLY                    0x01    /* Tag is read only              */
-#define RW_NDEF_FL_FORMATED                     0x02    /* Tag formated for NDEF         */
-#define RW_NDEF_FL_SUPPORTED                    0x04    /* NDEF supported by the tag     */
-#define RW_NDEF_FL_UNKNOWN                      0x08    /* Unable to find if tag is ndef capable/formated/read only */
-#define RW_NDEF_FL_FORMATABLE                   0x10    /* Tag supports format operation */
-#define RW_NDEF_FL_SOFT_LOCKABLE                0x20    /* Tag can be soft locked */
-#define RW_NDEF_FL_HARD_LOCKABLE                0x40    /* Tag can be hard locked */
-#define RW_NDEF_FL_OTP                          0x80    /* Tag is one time programmable */
+/* Tag is read only              */
+#define RW_NDEF_FL_READ_ONLY 0x01
+/* Tag formated for NDEF         */
+#define RW_NDEF_FL_FORMATED 0x02
+/* NDEF supported by the tag     */
+#define RW_NDEF_FL_SUPPORTED 0x04
+/* Unable to find if tag is ndef capable/formated/read only */
+#define RW_NDEF_FL_UNKNOWN 0x08
+/* Tag supports format operation */
+#define RW_NDEF_FL_FORMATABLE 0x10
+/* Tag can be soft locked */
+#define RW_NDEF_FL_SOFT_LOCKABLE 0x20
+/* Tag can be hard locked */
+#define RW_NDEF_FL_HARD_LOCKABLE 0x40
+/* Tag is one time programmable */
+#define RW_NDEF_FL_OTP 0x80
 
 typedef uint8_t tRW_NDEF_FLAG;
 
