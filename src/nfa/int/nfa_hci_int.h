@@ -26,6 +26,7 @@
 #define NFA_HCI_INT_H
 
 #include "nfa_hci_api.h"
+#include "nfa_sys.h"
 
 extern bool    HCI_LOOPBACK_DEBUG;
 
