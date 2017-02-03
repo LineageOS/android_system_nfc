@@ -249,8 +249,8 @@ typedef struct
     uint8_t         dl_tx_uncongest_ntf_start_idx;  /* next start of data link connection           */
 
     /*
-    ** when overall rx link congestion starts, RNR is sent to remote end point of data link connection
-    ** while rx link is congested, UI PDU is discarded.
+    ** when overall rx link congestion starts, RNR is sent to remote end point
+    ** of data link connection while rx link is congested, UI PDU is discarded.
     */
     uint8_t         num_rx_buff;                    /* reserved number of rx UI/I PDU in queue      */
     uint8_t         overall_rx_congest_start;       /* threshold of overall rx congestion start     */
@@ -258,8 +258,9 @@ typedef struct
     uint8_t         max_num_ll_rx_buff;             /* max number of rx UI PDU in queue             */
 
     /*
-    ** threshold (number of rx UI PDU) is dynamically adjusted based on number of logical links
-    ** when number of rx UI PDU is more than ll_rx_congest_start, the oldest UI PDU is discarded
+    ** threshold (number of rx UI PDU) is dynamically adjusted based on number
+    ** of logical links when number of rx UI PDU is more than
+    ** ll_rx_congest_start, the oldest UI PDU is discarded
     */
     uint8_t         ll_rx_congest_start;            /* rx congest start threshold for each logical link */
 

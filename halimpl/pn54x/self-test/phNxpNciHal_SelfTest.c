@@ -711,7 +711,8 @@ static uint8_t st_validator_testSWP1_vltg(nci_data_t *exp, phTmlNfc_TransactInfo
 **
 ** Function         st_validator_testAntenna_Txldo
 **
-** Description      Validator function to validate Antenna TxLDO current measurement.
+** Description      Validator function to validate Antenna TxLDO current
+**                  measurement.
 **
 ** Returns          One if successful otherwise Zero.
 **
@@ -791,7 +792,8 @@ static uint8_t st_validator_testAntenna_Txldo(nci_data_t *exp, phTmlNfc_Transact
 **
 ** Function         st_validator_testAntenna_AgcVal
 **
-** Description      Validator function reads AGC value of antenna and print the info
+** Description      Validator function reads AGC value of antenna and print the
+**                  info
 **
 ** Returns          One if successful otherwise Zero.
 **
@@ -1383,7 +1385,7 @@ clean_and_return:
  **
  ** Returns          NFCSTATUS_SUCCESS if successful,otherwise NFCSTATUS_FAILED.
  **
- *******************************************************************************/
+ ******************************************************************************/
 NFCSTATUS phNxpNciHal_TestMode_open (void)
 {
     /* Thread */
@@ -1494,7 +1496,7 @@ clean_and_return:
  **
  ** Returns          None.
  **
- *******************************************************************************/
+ ******************************************************************************/
 
 void phNxpNciHal_TestMode_close ()
 {
@@ -1539,7 +1541,7 @@ void phNxpNciHal_TestMode_close ()
  **
  ** Returns          NFCSTATUS_SUCCESS if successful,otherwise NFCSTATUS_FAILED.
  **
- *******************************************************************************/
+ ******************************************************************************/
 
 NFCSTATUS phNxpNciHal_SwpTest(uint8_t swp_line)
 {
@@ -1609,7 +1611,7 @@ NFCSTATUS phNxpNciHal_SwpTest(uint8_t swp_line)
  ** Returns          NFCSTATUS_SUCCESS if RF generation successful,
  **                  otherwise NFCSTATUS_FAILED.
  **
- *******************************************************************************/
+ ******************************************************************************/
 
 #if(NFC_NXP_CHIP_TYPE != PN547C2)
 NFCSTATUS phNxpNciHal_PrbsTestStart (phNxpNfc_PrbsType_t prbs_type, phNxpNfc_PrbsHwType_t hw_prbs_type,
@@ -1699,7 +1701,7 @@ NFCSTATUS phNxpNciHal_PrbsTestStart (phNxpNfc_Tech_t tech, phNxpNfc_Bitrate_t bi
  ** Returns          NFCSTATUS_SUCCESS if operation successful,
  **                  otherwise NFCSTATUS_FAILED.
  **
- *******************************************************************************/
+ ******************************************************************************/
 
 NFCSTATUS phNxpNciHal_PrbsTestStop ()
 {
@@ -1903,7 +1905,7 @@ NFCSTATUS phNxpNciHal_RfFieldTest (uint8_t on)
  **
  ** Returns
  **
- *******************************************************************************/
+ ******************************************************************************/
 NFCSTATUS phNxpNciHal_AntennaTest ()
 {
     NFCSTATUS status = NFCSTATUS_FAILED;

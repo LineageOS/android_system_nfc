@@ -692,7 +692,8 @@ void nfa_ee_api_add_aid(tNFA_EE_MSG *p_data)
         }
         else if (p_cb->aid_entries < NFA_EE_MAX_AID_ENTRIES)
         {
-            new_size = nfa_ee_total_lmrt_size() + 4 + p_add->aid_len; /* 4 = 1 (tag) + 1 (len) + 1(nfcee_id) + 1(power cfg) */
+            /* 4 = 1 (tag) + 1 (len) + 1(nfcee_id) + 1(power cfg) */
+            new_size = nfa_ee_total_lmrt_size() + 4 + p_add->aid_len;
             if (new_size > NFC_GetLmrtSize())
             {
                 NFA_TRACE_ERROR1 ("Exceed LMRT size:%d", new_size);
@@ -1827,8 +1828,8 @@ bool    nfa_ee_is_active (tNFA_HANDLE nfcee_id)
 **
 ** Function         nfa_ee_get_tech_route
 **
-** Description      Given a power state, find the technology routing destination.
-**                  The result is filled in the given p_handles
+** Description      Given a power state, find the technology routing
+**                  destination. The result is filled in the given p_handles
 **                  in the order of A, B, F, Bprime
 **
 ** Returns          None
@@ -1882,7 +1883,8 @@ void nfa_ee_get_tech_route (uint8_t power_state, uint8_t *p_handles)
 ** Function         nfa_ee_check_set_routing
 **
 ** Description      If the new size exceeds the capacity of next block,
-**                  send the routing command now and reset the related parameters
+**                  send the routing command now and reset the related
+**                  parameters.
 **
 ** Returns          void
 **
@@ -2009,7 +2011,8 @@ tNFA_STATUS nfa_ee_route_add_one_ecb(tNFA_EE_ECB *p_cb, int *p_max_len, bool    
         start_offset = 0;
         for (xx = 0; xx < p_cb->aid_entries; xx++)
         {
-            p_start     = pp; /* rememebr the beginning of this AID routing entry, just in case we need to put it in next command */
+            /* rememebr the beginning of this AID routing entry, just in case we need to put it in next command */
+            p_start     = pp;
             /* add one AID entry */
             if (p_cb->aid_rt_info[xx] & NFA_EE_AE_ROUTE)
             {
@@ -2106,23 +2109,25 @@ tNFA_STATUS nfa_ee_route_add_one_ecb(tNFA_EE_ECB *p_cb, int *p_max_len, bool    
 ** Description      Check if any API function to configure the routing table or
 **                  VS is called since last update
 **
-**                  The algorithm for the NFCEE configuration handling is as follows:
+**                  The algorithm for the NFCEE configuration handling is as
+**                  follows:
 **
 **                  Each NFCEE_ID/DH has its own control block - tNFA_EE_ECB
 **                  Each control block uses ecb_flags to keep track if an API
-**                  that changes routing/VS is invoked.
-**                  This ecb_flags is cleared at the end of nfa_ee_update_rout().
+**                  that changes routing/VS is invoked. This ecb_flags is
+**                  cleared at the end of nfa_ee_update_rout().
 **
 **                  nfa_ee_cb.ee_cfged is the bitmask of the control blocks with
 **                  routing/VS configuration and NFA_EE_CFGED_UPDATE_NOW.
-**                  nfa_ee_cb.ee_cfged is cleared and re-calculated at the end of
-**                  nfa_ee_update_rout().
+**                  nfa_ee_cb.ee_cfged is cleared and re-calculated at the end
+**                  of nfa_ee_update_rout().
 **
-**                  nfa_ee_cb.ee_cfg_sts is used to check is any status is changed
-**                  and the associated command is issued to NFCC.
-**                  nfa_ee_cb.ee_cfg_sts is AND with NFA_EE_STS_PREV at the end of
-**                  nfa_ee_update_rout() to clear the NFA_EE_STS_CHANGED bits
-**                  (except NFA_EE_STS_CHANGED_CANNED_VS is cleared in nfa_ee_vs_cback)
+**                  nfa_ee_cb.ee_cfg_sts is used to check is any status is
+**                  changed and the associated command is issued to NFCC.
+**                  nfa_ee_cb.ee_cfg_sts is AND with NFA_EE_STS_PREV at the end
+**                  of nfa_ee_update_rout() to clear the NFA_EE_STS_CHANGED bits
+**                  (except NFA_EE_STS_CHANGED_CANNED_VS is cleared in
+**                  nfa_ee_vs_cback)
 **
 ** Returns          TRUE if any configuration is changed
 **

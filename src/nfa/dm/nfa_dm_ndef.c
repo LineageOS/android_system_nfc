@@ -182,7 +182,8 @@ bool    nfa_dm_ndef_reg_hdlr (tNFA_DM_MSG *p_data)
         NFA_TRACE_DEBUG1 ("NDEF handler successfully registered. Handle=0x%08x", p_reg_info->ndef_type_handle);
         (*(p_reg_info->p_ndef_cback)) (NFA_NDEF_REGISTER_EVT, (tNFA_NDEF_EVT_DATA *) &ndef_register);
 
-        return false;       /* indicate that we will free message buffer when type_handler is deregistered */
+        /* indicate that we will free message buffer when type_handler is deregistered */
+        return false;
     }
     else
     {
@@ -385,7 +386,8 @@ void nfa_dm_ndef_handle_message (tNFA_STATUS status, uint8_t *p_msg_buf, uint32_
     /* If in exclusive RF mode is activer, then route NDEF message callback registered with NFA_StartExclusiveRfControl */
     if ((p_cb->flags & NFA_DM_FLAGS_EXCL_RF_ACTIVE) && (p_cb->p_excl_ndef_cback))
     {
-        ndef_data.ndef_type_handle = 0;     /* No ndef-handler handle, since this callback is not from RegisterNDefHandler */
+        /* No ndef-handler handle, since this callback is not from RegisterNDefHandler */
+        ndef_data.ndef_type_handle = 0;
         ndef_data.p_data = p_msg_buf;
         ndef_data.len = len;
         (*p_cb->p_excl_ndef_cback) (NFA_NDEF_DATA_EVT, (tNFA_NDEF_EVT_DATA *) &ndef_data);

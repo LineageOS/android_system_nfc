@@ -35,8 +35,8 @@
 **
 ** Function         gki_timers_init
 **
-** Description      This internal function is called once at startup to initialize
-**                  all the timer structures.
+** Description      This internal function is called once at startup to
+**                  initialize all the timer structures.
 **
 ** Returns          void
 **
@@ -91,10 +91,12 @@ void gki_timers_init(void)
 **
 ** Function         gki_timers_is_timer_running
 **
-** Description      This internal function is called to test if any gki timer are running
+** Description      This internal function is called to test if any gki timer
+**                  are running
 **
 **
-** Returns          TRUE if at least one time is running in the system, FALSE else.
+** Returns          TRUE if at least one time is running in the system, FALSE
+**                  else.
 **
 *******************************************************************************/
 bool    gki_timers_is_timer_running(void)
@@ -163,9 +165,9 @@ uint32_t  GKI_get_tick_count(void)
 ** Parameters:      None
 **
 ** Returns          Number of ticks til the next timer expires
-**                  Note: the value is a signed  value.  This value should be
-**                      compared to x > 0, to avoid misinterpreting negative tick
-**                      values.
+**                  Note: The value is a signed  value.  This value should be
+**                      compared to x > 0, to avoid misinterpreting negative
+**                      tick values.
 **
 *******************************************************************************/
 int32_t  GKI_ready_to_sleep (void)
@@ -183,12 +185,14 @@ int32_t  GKI_ready_to_sleep (void)
 **                  can be 1-shot or continuous. If a timer is already running,
 **                  it will be reset to the new parameters.
 **
-** Parameters       tnum            - (input) timer number to be started (TIMER_0,
-**                                              TIMER_1, TIMER_2, or TIMER_3)
+** Parameters       tnum            - (input) timer number to be started
+**                                            (TIMER_0, TIMER_1, TIMER_2, or
+**                                            TIMER_3)
 **                  ticks           - (input) the number of system ticks til the
-**                                              timer expires.
-**                  is_continuous   - (input) TRUE if timer restarts automatically,
-**                                              else FALSE if it is a 'one-shot'.
+**                                            timer expires.
+**                  is_continuous   - (input) TRUE if timer restarts
+**                                            automatically, else FALSE if it is
+**                                            a 'one-shot'.
 **
 ** Returns          void
 **
@@ -299,8 +303,8 @@ void GKI_start_timer (uint8_t tnum, int32_t ticks, bool    is_continuous)
 **                  it's four general purpose timers. There is no harm in
 **                  stopping a timer that is already stopped.
 **
-** Parameters       tnum            - (input) timer number to be started (TIMER_0,
-**                                              TIMER_1, TIMER_2, or TIMER_3)
+** Parameters       tnum - (input) timer number to be started (TIMER_0,
+**                                 TIMER_1, TIMER_2, or TIMER_3)
 ** Returns          void
 **
 *******************************************************************************/
@@ -374,12 +378,14 @@ void GKI_stop_timer (uint8_t tnum)
 **                  It is typically called at every system tick to
 **                  update the timers for all tasks, and check for timeouts.
 **
-**                  Note: It has been designed to also allow for variable tick updates
-**                      so that systems with strict power savings requirements can
-**                      have the update occur at variable intervals.
+**                  Note: It has been designed to also allow for variable tick
+**                        updates so that systems with strict power savings
+**                        requirements can have the update occur at variable
+**                        intervals.
 **
-** Parameters:      ticks_since_last_update - (input) This is the number of TICKS that have
-**                          occurred since the last time GKI_timer_update was called.
+** Parameters:      ticks_since_last_update - (input) This is the number of
+**                  TICKS that have occurred since the last time
+**                  GKI_timer_update was called.
 **
 ** Returns          void
 **
@@ -576,8 +582,8 @@ void GKI_timer_update (int32_t ticks_since_last_update)
 **
 ** Function         GKI_timer_queue_empty
 **
-** Description      This function is called by applications to see whether the timer
-**                  queue is empty
+** Description      This function is called by applications to see whether the
+**                  timer queue is empty
 **
 ** Parameters
 **
@@ -601,8 +607,8 @@ bool    GKI_timer_queue_empty (void)
 **
 ** Function         GKI_timer_queue_register_callback
 **
-** Description      This function is called by applications to register system tick
-**                  start/stop callback for time queues
+** Description      This function is called by applications to register system
+**                  tick start/stop callback for time queues
 **
 **
 ** Parameters       p_callback - (input) pointer to the system tick callback
@@ -624,7 +630,8 @@ void GKI_timer_queue_register_callback (SYSTEM_TICK_CBACK *p_callback)
 ** Description      This function is called by applications when they
 **                  want to initialize a timer list.
 **
-** Parameters       p_timer_listq   - (input) pointer to the timer list queue object
+** Parameters       p_timer_listq - (input) pointer to the timer list queue
+**                                          object
 **
 ** Returns          void
 **
@@ -646,7 +653,7 @@ void GKI_init_timer_list (TIMER_LIST_Q *p_timer_listq)
 **                  want to initialize a timer list entry. This must be
 **                  done prior to first use of the entry.
 **
-** Parameters       p_tle           - (input) pointer to a timer list queue entry
+** Parameters       p_tle - (input) pointer to a timer list queue entry
 **
 ** Returns          void
 **
@@ -666,14 +673,17 @@ void GKI_init_timer_list_entry (TIMER_LIST_ENT  *p_tle)
 **
 ** Description      This function is called by the applications when they
 **                  want to update a timer list. This should be at every
-**                  timer list unit tick, e.g. once per sec, once per minute etc.
+**                  timer list unit tick, e.g. once per sec, once per minute
+**                  etc.
 **
-** Parameters       p_timer_listq   - (input) pointer to the timer list queue object
-**                  num_units_since_last_update - (input) number of units since the last update
-**                                  (allows for variable unit update)
+** Parameters       p_timer_listq - (input) pointer to the timer list queue
+**                  object
+**                  num_units_since_last_update - (input) number of units since
+**                  the last update (allows for variable unit update)
 **
-**      NOTE: The following timer list update routines should not be used for exact time
-**            critical purposes.  The timer tasks should be used when exact timing is needed.
+** NOTE: The following timer list update routines should not be used for exact
+**       time critical purposes.  The timer tasks should be used when exact
+**       timing is needed.
 **
 ** Returns          the number of timers that have expired
 **
@@ -739,8 +749,9 @@ uint16_t GKI_update_timer_list (TIMER_LIST_Q *p_timer_listq, int32_t num_units_s
 ** Description      This function is called by an application to get remaining
 **                  ticks to expire
 **
-** Parameters       p_timer_listq   - (input) pointer to the timer list queue object
-**                  p_target_tle    - (input) pointer to a timer list queue entry
+** Parameters       p_timer_listq - (input) pointer to the timer list queue
+**                                          object
+**                  p_target_tle - (input) pointer to a timer list queue entry
 **
 ** Returns          0 if timer is not used or timer is not in the list
 **                  remaining ticks if success
@@ -788,11 +799,13 @@ uint32_t GKI_get_remaining_ticks (TIMER_LIST_Q *p_timer_listq, TIMER_LIST_ENT  *
 ** Description      This function is called by an application to add a timer
 **                  entry to a timer list.
 **
-**                  Note: A timer value of '0' will effectively insert an already
-**                      expired event.  Negative tick values will be ignored.
+**                  Note: A timer value of '0' will effectively insert an
+**                        already expired event.  Negative tick values will be
+**                        ignored.
 **
-** Parameters       p_timer_listq   - (input) pointer to the timer list queue object
-**                  p_tle           - (input) pointer to a timer list queue entry
+** Parameters       p_timer_listq - (input) pointer to the timer list queue
+**                                          object
+**                  p_tle - (input) pointer to a timer list queue entry
 **
 ** Returns          void
 **
@@ -894,8 +907,9 @@ void GKI_add_to_timer_list (TIMER_LIST_Q *p_timer_listq, TIMER_LIST_ENT  *p_tle)
 ** Description      This function is called by an application to remove a timer
 **                  entry from a timer list.
 **
-** Parameters       p_timer_listq   - (input) pointer to the timer list queue object
-**                  p_tle           - (input) pointer to a timer list queue entry
+** Parameters       p_timer_listq  - (input) pointer to the timer list queue
+**                                            object
+**                  p_tle - (input) pointer to a timer list queue entry
 **
 ** Returns          void
 **
@@ -988,15 +1002,18 @@ void GKI_remove_from_timer_list (TIMER_LIST_Q *p_timer_listq, TIMER_LIST_ENT  *p
 **
 ** Function         gki_adjust_timer_count
 **
-** Description      This function is called whenever a new timer or GKI_wait occurs
-**                  to adjust (if necessary) the current time til the first expiration.
-**                  This only needs to make an adjustment if the new timer (in ticks) is
-**                  less than the number of ticks remaining on the current timer.
+** Description      This function is called whenever a new timer or GKI_wait
+**                  occurs to adjust (if necessary) the current time til the
+**                  first expiration. This only needs to make an adjustment if
+**                  the new timer (in ticks) is less than the number of ticks
+**                  remaining on the current timer.
 **
-** Parameters:      ticks - (input) number of system ticks of the new timer entry
+** Parameters:      ticks - (input) number of system ticks of the new timer
+**                                  entry
 **
-**                  NOTE:  This routine MUST be called while interrupts are disabled to
-**                          avoid updates while adjusting the timer variables.
+**                  NOTE:  This routine MUST be called while interrupts are
+**                         disabled to avoid updates while adjusting the timer
+**                         variables.
 **
 ** Returns          void
 **

@@ -305,7 +305,8 @@ void nfc_ce_t3t_set_listen_params (void)
             /* Set tag's system code and NFCID2 */
             UINT8_TO_STREAM (p_params, NFC_PMID_LF_T3T_ID1+t3t_idx);                 /* type */
             UINT8_TO_STREAM (p_params, NCI_PARAM_LEN_LF_T3T_ID);                     /* length */
-            UINT16_TO_BE_STREAM (p_params, p_cb->listen_info[i].t3t_system_code);    /* System Code */
+            /* System Code */
+            UINT16_TO_BE_STREAM (p_params, p_cb->listen_info[i].t3t_system_code);
             ARRAY_TO_BE_STREAM (p_params,  p_cb->listen_info[i].t3t_nfcid2, NCI_RF_F_UID_LEN);
 
             /* Set mask for this ID */
@@ -319,7 +320,8 @@ void nfc_ce_t3t_set_listen_params (void)
 
     UINT8_TO_STREAM (p_params, NFC_PMID_LF_T3T_FLAGS2);      /* type */
     UINT8_TO_STREAM (p_params, NCI_PARAM_LEN_LF_T3T_FLAGS2); /* length */
-    UINT16_TO_STREAM (p_params, t3t_flags2_mask);            /* Mask of IDs to disable listening */
+    /* Mask of IDs to disable listening */
+    UINT16_TO_STREAM (p_params, t3t_flags2_mask);
 
     tlv_size = (uint8_t) (p_params-tlv);
     nfa_dm_check_set_config (tlv_size, (uint8_t *)tlv, false);
@@ -488,7 +490,8 @@ tNFA_STATUS nfa_ce_start_listening (void)
 **
 ** Function         nfa_ce_restart_listen_check
 **
-** Description      Called on deactivation. Check if any active listen_info entries to listen for
+** Description      Called on deactivation. Check if any active listen_info
+**                  entries to listen for
 **
 ** Returns          TRUE if listening is restarted.
 **                  FALSE if listening not restarted
@@ -525,7 +528,8 @@ bool    nfa_ce_restart_listen_check (void)
 **
 ** Function         nfa_ce_remove_listen_info_entry
 **
-** Description      Remove entry from listen_info table. (when API deregister is called or listen_start failed)
+** Description      Remove entry from listen_info table. (when API deregister is
+**                  called or listen_start failed)
 **
 **
 ** Returns          Nothing
@@ -910,11 +914,11 @@ bool    nfa_ce_activate_ntf (tNFA_CE_MSG *p_ce_msg)
 **
 ** Description      Action when deactivate occurs. (NFA_CE_DEACTIVATE_NTF_EVT)
 **
-**                  - If deactivate due to API deregister, then remove its entry from
-**                      listen_info table
+**                  - If deactivate due to API deregister, then remove its entry
+**                    from listen_info table
 **
 **                  - If NDEF was modified while activated, then restore
-**                      original NDEF contents
+**                    original NDEF contents
 **
 **                  - Restart listening (if any active entries in listen table)
 **
@@ -1404,8 +1408,8 @@ bool    nfa_ce_api_dereg_listen (tNFA_CE_MSG *p_ce_msg)
 **
 ** Function         nfa_ce_api_cfg_isodep_tech
 **
-** Description      Configure the technologies (NFC-A and/or NFC-B) to listen for
-**                  ISO-DEP
+** Description      Configure the technologies (NFC-A and/or NFC-B) to listen
+**                  for ISO-DEP
 **
 ** Returns          TRUE (message buffer to be freed by caller)
 **

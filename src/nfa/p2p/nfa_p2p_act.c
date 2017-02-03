@@ -424,7 +424,8 @@ void nfa_p2p_proc_llcp_disconnect_ind (tLLCP_SAP_CBACK_DATA  *p_data)
         {
             /*
             ** LLCP link has been deactivated before receiving CC or DM.
-            ** Return NFA_P2P_DISC_EVT to indicate failure of creating connection
+            ** Return NFA_P2P_DISC_EVT to indicate failure of creating
+            ** connection
             */
 
             evt_data.disc.handle = (NFA_HANDLE_GROUP_P2P | local_sap);
@@ -783,8 +784,9 @@ bool    nfa_p2p_reg_client (tNFA_P2P_MSG *p_msg)
 **
 ** Function         nfa_p2p_dereg
 **
-** Description      Deallocate a service as server or client and deregister to LLCP
-**                  LLCP will deallocate data link connection created by this server
+** Description      Deallocate a service as server or client and deregister to
+**                  LLCP. LLCP will deallocate data link connection created by
+**                  this server
 **
 ** Returns          TRUE to deallocate buffer
 **

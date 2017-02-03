@@ -120,7 +120,7 @@ static void llcp_link_stop_inactivity_timer (void)
 **
 ** Function         llcp_link_start_link_timer
 **
-** Description      This function starts LLCP link timer (LTO or delay response).
+** Description      This function starts LLCP link timer (LTO or delay response)
 **
 ** Returns          void
 **
@@ -193,8 +193,8 @@ tLLCP_STATUS llcp_link_activate (tLLCP_ACTIVATE_CONFIG *p_config)
     }
 
     /*
-    ** For the Target device, the scaled value of RWT MUST be less than or equal to the
-    ** scaled value of the LLC Link Timeout (LTO).
+    ** For the Target device, the scaled value of RWT MUST be less than or equal
+    ** to the scaled value of the LLC Link Timeout (LTO).
     */
     if ((p_config->is_initiator) && (llcp_link_rwt[p_config->waiting_time] > llcp_cb.lcb.peer_lto))
     {
@@ -236,8 +236,8 @@ tLLCP_STATUS llcp_link_activate (tLLCP_ACTIVATE_CONFIG *p_config)
         llcp_cb.lcb.effective_miu = llcp_cb.lcb.local_link_miu;
 
     /*
-    ** When entering the normal operation phase, LLCP shall initialize the symmetry
-    ** procedure.
+    ** When entering the normal operation phase, LLCP shall initialize the
+    ** symmetry procedure.
     */
     if (llcp_cb.lcb.is_initiator)
     {
@@ -269,8 +269,8 @@ tLLCP_STATUS llcp_link_activate (tLLCP_ACTIVATE_CONFIG *p_config)
 
 
     /*
-    ** Set state to LLCP_LINK_STATE_ACTIVATED and notify activation before set data callback
-    ** because LLCP PDU could be in NCI queue.
+    ** Set state to LLCP_LINK_STATE_ACTIVATED and notify activation before set
+    ** data callback because LLCP PDU could be in NCI queue.
     */
     llcp_cb.lcb.link_state = LLCP_LINK_STATE_ACTIVATED;
 
@@ -896,11 +896,11 @@ void llcp_link_check_send_data (void)
 
         /*
         ** For data link connection,
-        ** V(RA) was updated and N(R) was set to V(RA), if I PDU was added in this transmission.
-        ** If there was no I PDU to carry V(RA) and V(RA) is not V(R) and it's not congested,
-        ** then RR PDU will be sent.
-        ** If there was no I PDU to carry V(RA) and V(RA) is not V(R) and it's congested,
-        ** then RNR PDU will be sent.
+        ** V(RA) was updated and N(R) was set to V(RA), if I PDU was added in
+        ** this transmission. If there was no I PDU to carry V(RA) and V(RA) is
+        ** not V(R) and it's not congested, then RR PDU will be sent.
+        ** If there was no I PDU to carry V(RA) and V(RA) is not V(R) and it's
+        ** congested, then RNR PDU will be sent.
         ** If local busy state has been changed then RR or RNR PDU may be sent.
         */
         llcp_dlc_check_to_send_rr_rnr ();

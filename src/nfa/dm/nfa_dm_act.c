@@ -153,8 +153,8 @@ static void nfa_dm_set_init_nci_params (void)
     }
 
     /* LF_T3T_FLAGS:
-    ** DH needs to set this configuration, even if default value (not listening) is used,
-    ** to let NFCC know of intention (not listening) of DH.
+    ** DH needs to set this configuration, even if default value (not listening)
+    ** is used, to let NFCC know of intention (not listening) of DH.
     */
 
     /* FWI */
@@ -295,7 +295,8 @@ static void nfa_dm_nfc_response_cback (tNFC_RESPONSE_EVT event, tNFC_RESPONSE *p
 
     case NFC_SET_CONFIG_REVT:                    /* 2  Set Config Response */
         /* If this setconfig was due to NFA_SetConfig, then notify the app */
-        if (nfa_dm_cb.setcfg_pending_mask & 1)      /* lsb=whether last NCI_SET_CONFIG was due to NFA_SetConfig */
+        /* lsb=whether last NCI_SET_CONFIG was due to NFA_SetConfig */
+        if (nfa_dm_cb.setcfg_pending_mask & 1)
         {
             dm_cback_data.set_config.status         = p_data->set_config.status;
             dm_cback_data.set_config.num_param_id   = p_data->set_config.num_param_id;
@@ -746,8 +747,10 @@ bool    nfa_dm_act_deactivate (tNFA_DM_MSG *p_data)
 
     NFA_TRACE_DEBUG0 ("nfa_dm_act_deactivate ()");
 
-    if (  (p_data->deactivate.sleep_mode == false)                 /* Always allow deactivate to IDLE */
-        ||(  (nfa_dm_cb.disc_cb.activated_protocol != NFA_PROTOCOL_T1T)      /* Do not allow deactivate to SLEEP for T1T,NFCDEP, ISO15693 */
+    /* Always allow deactivate to IDLE */
+    /* Do not allow deactivate to SLEEP for T1T,NFCDEP, ISO15693 */
+    if (  (p_data->deactivate.sleep_mode == false)
+        ||(  (nfa_dm_cb.disc_cb.activated_protocol != NFA_PROTOCOL_T1T)
            &&(nfa_dm_cb.disc_cb.activated_protocol != NFA_PROTOCOL_NFC_DEP)
            &&(nfa_dm_cb.disc_cb.activated_protocol != NFA_PROTOCOL_ISO15693)
            &&(nfa_dm_cb.disc_cb.activated_protocol != NFC_PROTOCOL_KOVIO)  )  )
@@ -848,7 +851,8 @@ bool    nfa_dm_act_reg_vsc(tNFA_DM_MSG *p_data)
 **
 ** Function         nfa_dm_act_send_vsc
 **
-** Description      Send the NCI Vendor Specific command to the NCI command queue
+** Description      Send the NCI Vendor Specific command to the NCI command
+**                  queue
 **
 ** Returns          FALSE (message buffer is NOT freed by caller)
 **
@@ -1840,8 +1844,9 @@ void nfa_dm_notify_activation_status (tNFA_STATUS status, tNFA_TAG_PARAMS *p_par
         else if (!(nfa_dm_cb.flags & NFA_DM_FLAGS_EXCL_RF_ACTIVE))
         {
             /*
-            ** if the same tag is activated then do not perform auto NDEF detection.
-            ** Application may put a tag into sleep mode and reactivate the same tag.
+            ** if the same tag is activated then do not perform auto NDEF
+            ** detection. Application may put a tag into sleep mode and
+            ** reactivate the same tag.
             */
 
             if (  (p_tech_params->mode != nfa_dm_cb.activated_tech_mode)

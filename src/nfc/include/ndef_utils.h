@@ -112,8 +112,8 @@ extern int32_t NDEF_MsgGetNumRecs (uint8_t *p_msg);
 **
 ** Function         NDEF_MsgGetRecLength
 **
-** Description      This function returns length of the current record in the given
-**                  NDEF message.
+** Description      This function returns length of the current record in the
+**                  given NDEF message.
 **
 ** Returns          Length of record
 **
@@ -151,7 +151,8 @@ extern uint8_t *NDEF_MsgGetRecByIndex (uint8_t *p_msg, int32_t index);
 ** Description      This function gets a pointer to the last record in the
 **                  given NDEF message.
 **
-** Returns          Pointer to the start of the last record, or NULL if some problem
+** Returns          Pointer to the start of the last record, or NULL if some
+**                  problem
 **
 *******************************************************************************/
 extern uint8_t *NDEF_MsgGetLastRecInMsg (uint8_t *p_msg);
@@ -160,8 +161,8 @@ extern uint8_t *NDEF_MsgGetLastRecInMsg (uint8_t *p_msg);
 **
 ** Function         NDEF_MsgGetFirstRecByType
 **
-** Description      This function gets a pointer to the first record with the given
-**                  record type in the given NDEF message.
+** Description      This function gets a pointer to the first record with the
+**                  given record type in the given NDEF message.
 **
 ** Returns          Pointer to the start of the record, or NULL
 **
@@ -172,8 +173,8 @@ extern uint8_t *NDEF_MsgGetFirstRecByType (uint8_t *p_msg, uint8_t tnf, uint8_t 
 **
 ** Function         NDEF_MsgGetNextRecByType
 **
-** Description      This function gets a pointer to the next record with the given
-**                  record type in the given NDEF message.
+** Description      This function gets a pointer to the next record with the
+**                  given record type in the given NDEF message.
 **
 ** Returns          Pointer to the start of the record, or NULL
 **
@@ -184,8 +185,8 @@ extern uint8_t *NDEF_MsgGetNextRecByType (uint8_t *p_cur_rec, uint8_t tnf, uint8
 **
 ** Function         NDEF_MsgGetFirstRecById
 **
-** Description      This function gets a pointer to the first record with the given
-**                  record id in the given NDEF message.
+** Description      This function gets a pointer to the first record with the
+**                  given record id in the given NDEF message.
 **
 ** Returns          Pointer to the start of the record, or NULL
 **
@@ -196,8 +197,8 @@ extern uint8_t *NDEF_MsgGetFirstRecById (uint8_t *p_msg, uint8_t *p_id, uint8_t 
 **
 ** Function         NDEF_MsgGetNextRecById
 **
-** Description      This function gets a pointer to the next record with the given
-**                  record id in the given NDEF message.
+** Description      This function gets a pointer to the next record with the
+**                  given record id in the given NDEF message.
 **
 ** Returns          Pointer to the start of the record, or NULL
 **
@@ -208,7 +209,8 @@ extern uint8_t *NDEF_MsgGetNextRecById (uint8_t *p_cur_rec, uint8_t *p_id, uint8
 **
 ** Function         NDEF_RecGetType
 **
-** Description      This function gets a pointer to the record type for the given NDEF record.
+** Description      This function gets a pointer to the record type for the
+**                  given NDEF record.
 **
 ** Returns          Pointer to Type (NULL if none). TNF and len are filled in.
 **
@@ -219,7 +221,8 @@ extern uint8_t *NDEF_RecGetType (uint8_t *p_rec, uint8_t *p_tnf, uint8_t *p_type
 **
 ** Function         NDEF_RecGetId
 **
-** Description      This function gets a pointer to the record id for the given NDEF record.
+** Description      This function gets a pointer to the record id for the given
+**                  NDEF record.
 **
 ** Returns          Pointer to Id (NULL if none). ID Len is filled in.
 **
@@ -230,9 +233,11 @@ extern uint8_t *NDEF_RecGetId (uint8_t *p_rec, uint8_t *p_id_len);
 **
 ** Function         NDEF_RecGetPayload
 **
-** Description      This function gets a pointer to the payload for the given NDEF record.
+** Description      This function gets a pointer to the payload for the given
+**                  NDEF record.
 **
-** Returns          a pointer to the payload (NULL if none). Payload len filled in.
+** Returns          a pointer to the payload (NULL if none). Payload len filled
+**                  in.
 **
 *******************************************************************************/
 extern uint8_t *NDEF_RecGetPayload (uint8_t *p_rec, uint32_t *p_payload_len);
@@ -256,7 +261,8 @@ extern void NDEF_MsgInit (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_siz
 **
 ** Function         NDEF_MsgAddRec
 **
-** Description      This function adds an NDEF record to the end of an NDEF message.
+** Description      This function adds an NDEF record to the end of an NDEF
+**                  message.
 **
 ** Returns          OK, or error if the record did not fit
 **                  *p_cur_size is updated
@@ -287,7 +293,8 @@ extern tNDEF_STATUS  NDEF_MsgInsertRec (uint8_t *p_msg, uint32_t max_size, uint3
 **
 ** Function         NDEF_MsgAppendRec
 **
-** Description      This function adds NDEF records to the end of an NDEF message.
+** Description      This function adds NDEF records to the end of an NDEF
+**                  message.
 **
 ** Returns          OK, or error if the record did not fit
 **                  *p_cur_size is updated
@@ -300,8 +307,8 @@ extern tNDEF_STATUS  NDEF_MsgAppendRec (uint8_t *p_msg, uint32_t max_size, uint3
 **
 ** Function         NDEF_MsgAppendPayload
 **
-** Description      This function appends extra payload to a specific record in the
-**                  given NDEF message
+** Description      This function appends extra payload to a specific record in
+**                  the given NDEF message
 **
 ** Returns          OK, or error if the extra payload did not fit
 **                  *p_cur_size is updated
@@ -314,8 +321,8 @@ extern tNDEF_STATUS NDEF_MsgAppendPayload (uint8_t *p_msg, uint32_t max_size, ui
 **
 ** Function         NDEF_MsgReplacePayload
 **
-** Description      This function replaces the payload of a specific record in the
-**                  given NDEF message
+** Description      This function replaces the payload of a specific record in
+**                  the given NDEF message
 **
 ** Returns          OK, or error if the new payload did not fit
 **                  *p_cur_size is updated
@@ -328,8 +335,8 @@ extern tNDEF_STATUS NDEF_MsgReplacePayload (uint8_t *p_msg, uint32_t max_size, u
 **
 ** Function         NDEF_MsgReplaceType
 **
-** Description      This function replaces the type field of a specific record in the
-**                  given NDEF message
+** Description      This function replaces the type field of a specific record
+**                  in the given NDEF message
 **
 ** Returns          OK, or error if the new type field did not fit
 **                  *p_cur_size is updated
@@ -342,8 +349,8 @@ extern tNDEF_STATUS NDEF_MsgReplaceType (uint8_t *p_msg, uint32_t max_size, uint
 **
 ** Function         NDEF_MsgReplaceId
 **
-** Description      This function replaces the ID field of a specific record in the
-**                  given NDEF message
+** Description      This function replaces the ID field of a specific record in
+**                  the given NDEF message
 **
 ** Returns          OK, or error if the new ID field did not fit
 **                  *p_cur_size is updated

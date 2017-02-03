@@ -119,7 +119,8 @@ tRW_EVENT rw_t1t_handle_rsp (const tT1T_CMD_RSP_INFO * p_info, bool    *p_notify
 **
 ** Function         rw_t1t_info_to_event
 **
-** Description      This function returns RW event code based on the current state
+** Description      This function returns RW event code based on the current
+**                  state
 **
 ** Returns          RW event code
 **
@@ -172,7 +173,8 @@ tRW_EVENT rw_t1t_info_to_event (const tT1T_CMD_RSP_INFO * p_info)
 ** Description      This function will extract lock bytes if any present in the
 **                  response data
 **
-** Parameters       p_data: Data bytes in the response of RSEG/READ8/RALL command
+** Parameters       p_data: Data bytes in the response of RSEG/READ8/RALL
+**                          command
 **
 ** Returns          None
 **
@@ -596,8 +598,8 @@ static tNFC_STATUS rw_t1t_handle_write_rsp (bool    *p_notify, uint8_t *p_data)
 **
 ** Function         rw_t1t_handle_read_rsp
 **
-** Description      This function handle the data bytes excluding ADD(S)/ADD8 field
-**                  received as part of RSEG, RALL, READ8 command response
+** Description      This function handle the data bytes excluding ADD(S)/ADD8
+**                  field received as part of RSEG, RALL, READ8 command response
 **
 ** Returns          status of the current NDEF/TLV Operation
 **
@@ -2404,7 +2406,8 @@ tNFC_STATUS RW_T1tFormatNDef (void)
 **
 ** Parameters:      tlv_type, Type of TLV to find
 **
-** Returns          NCI_STATUS_OK, if detection was started. Otherwise, error status.
+** Returns          NCI_STATUS_OK, if detection was started. Otherwise, error
+**                  status.
 **
 *******************************************************************************/
 tNFC_STATUS RW_T1tLocateTlv (uint8_t tlv_type)
@@ -2490,7 +2493,8 @@ tNFC_STATUS RW_T1tDetectNDef (void)
 **
 ** Function         RW_T1tReadNDef
 **
-** Description      This function can be called to read the NDEF message on the tag.
+** Description      This function can be called to read the NDEF message on the
+**                  tag.
 **
 ** Parameters:      p_buffer:   The buffer into which to read the NDEF message
 **                  buf_len:    The length of the buffer
@@ -2587,12 +2591,14 @@ tNFC_STATUS RW_T1tReadNDef (uint8_t *p_buffer, uint16_t buf_len)
 **
 ** Function         RW_T1tWriteNDef
 **
-** Description      This function can be called to write an NDEF message to the tag.
+** Description      This function can be called to write an NDEF message to the
+**                  tag.
 **
 ** Parameters:      msg_len:    The length of the buffer
 **                  p_msg:      The NDEF message to write
 **
-** Returns          NCI_STATUS_OK, if write was started. Otherwise, error status.
+** Returns          NCI_STATUS_OK, if write was started. Otherwise, error
+**                  status.
 **
 *******************************************************************************/
 tNFC_STATUS RW_T1tWriteNDef (uint16_t msg_len, uint8_t *p_msg)

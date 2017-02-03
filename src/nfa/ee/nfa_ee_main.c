@@ -368,7 +368,8 @@ void nfa_ee_proc_evt (tNFC_RESPONSE_EVT event, void *p_data)
 **
 ** Function         nfa_ee_ecb_to_mask
 **
-** Description      Given a ecb, return the bit mask to be used in nfa_ee_cb.ee_cfged
+** Description      Given a ecb, return the bit mask to be used in
+**                  nfa_ee_cb.ee_cfged
 **
 ** Returns          the bitmask for the given ecb.
 **

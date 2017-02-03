@@ -273,14 +273,17 @@ extern void LLCP_GetConfig (uint16_t *p_link_miu,
 ** Function         LLCP_GetDiscoveryConfig
 **
 ** Description      Returns discovery config for LLCP MAC link activation
-**                  This function is called to get general bytes for NFC_PMID_ATR_REQ_GEN_BYTES
-**                  or NFC_PMID_ATR_RES_GEN_BYTES before starting discovery.
+**                  This function is called to get general bytes for
+**                  NFC_PMID_ATR_REQ_GEN_BYTES or NFC_PMID_ATR_RES_GEN_BYTES
+**                  before starting discovery.
 **
 **                  wt:Waiting time 0 - 8, only for listen
-**                  p_gen_bytes: pointer to store LLCP magic number and paramters
+**                  p_gen_bytes: pointer to store LLCP magic number and
+**                               paramters
 **                  p_gen_bytes_len: length of buffer for gen bytes as input
-**                                   (NOTE:it must be bigger than LLCP_MIN_GEN_BYTES)
-**                                   actual gen bytes size as output
+**                                   (NOTE:it must be bigger than
+**                                   LLCP_MIN_GEN_BYTES) actual gen bytes
+**                                   size as output
 **
 **                  Restrictions on the use of ISO 18092
 **                  1. The DID features shall not be used.
@@ -298,8 +301,8 @@ extern void LLCP_GetDiscoveryConfig (uint8_t *p_wt,
 **
 ** Function         LLCP_ActivateLink
 **
-** Description      This function will activate LLCP link with LR, WT and Gen Bytes
-**                  in activation NTF from NFCC.
+** Description      This function will activate LLCP link with LR, WT and Gen
+**                  Bytes in activation NTF from NFCC.
 **
 **                  LLCP_LINK_ACTIVATION_COMPLETE_EVT will be returned through
 **                  callback function if successful.
@@ -318,7 +321,8 @@ extern tLLCP_STATUS LLCP_ActivateLink (tLLCP_ACTIVATE_CONFIG config,
 ** Description      Deactivate LLCP link
 **
 **                  LLCP_LINK_DEACTIVATED_EVT will be returned through callback
-**                  when LLCP link is deactivated. Then NFC link may be deactivated.
+**                  when LLCP link is deactivated. Then NFC link may be
+**                  deactivated.
 **
 ** Returns          LLCP_STATUS_SUCCESS if success
 **
@@ -333,10 +337,12 @@ extern tLLCP_STATUS LLCP_DeactivateLink (void);
 **
 **                  reg_sap : Well-Known SAP except LM and SDP (0x02 - 0x0F)
 **                            Advertized by SDP (0x10 - 0x1F)
-**                            LLCP_INVALID_SAP, LLCP will allocate between 0x10 and 0x1F
+**                            LLCP_INVALID_SAP, LLCP will allocate between 0x10
+**                            and 0x1F
 **                  link_type : LLCP_LINK_TYPE_LOGICAL_DATA_LINK
 **                              and/or LLCP_LINK_TYPE_DATA_LINK_CONNECTION
-**                  p_service_name : Null-terminated string up to LLCP_MAX_SN_LEN
+**                  p_service_name : Null-terminated string up to
+**                                   LLCP_MAX_SN_LEN
 **
 ** Returns          SAP between 0x02 and 0x1F, if success
 **                  LLCP_INVALID_SAP, otherwise
@@ -411,7 +417,8 @@ extern tLLCP_STATUS LLCP_SendUI (uint8_t ssap, uint8_t dsap, NFC_HDR *p_buf);
 ** Description      Read information of UI PDU for local SAP
 **
 **                  - Remote SAP who sent UI PDU is returned.
-**                  - Information of UI PDU up to max_data_len is copied into p_data.
+**                  - Information of UI PDU up to max_data_len is copied into
+**                    p_data.
 **                  - Information of next UI PDU is not concatenated.
 **                  - Recommended max_data_len is link MIU of local device
 **
@@ -523,10 +530,11 @@ extern tLLCP_STATUS LLCP_SendData (uint8_t  local_sap,
 **
 ** Description      Read information of I PDU for data link connection
 **
-**                  - Information of I PDU up to max_data_len is copied into p_data.
+**                  - Information of I PDU up to max_data_len is copied into
+**                    p_data.
 **                  - Information of next I PDU is not concatenated.
-**                  - Recommended max_data_len is data link connection MIU of local
-**                    end point
+**                  - Recommended max_data_len is data link connection MIU of
+**                    local end point
 **
 ** Returns          TRUE if more data in queue
 **
@@ -570,8 +578,8 @@ extern tLLCP_STATUS LLCP_DisconnectReq (uint8_t local_sap,
 **
 ** Description      This function is called to get LLCP_SAP_EVT_TX_COMPLETE
 **                  when Tx queue is empty and all PDU is acked.
-**                  This is one time event, so upper layer shall call this function
-**                  again to get next LLCP_SAP_EVT_TX_COMPLETE.
+**                  This is one time event, so upper layer shall call this
+**                  function again to get next LLCP_SAP_EVT_TX_COMPLETE.
 **
 ** Returns          LLCP_STATUS_SUCCESS if success
 **
@@ -645,8 +653,8 @@ extern void LLCP_GetLinkMIU (uint16_t *p_local_link_miu, uint16_t *p_remote_link
 **
 ** Function         LLCP_DiscoverService
 **
-** Description      Return SAP of service name in connected device through callback
-**
+** Description      Return SAP of service name in connected device through
+**                  callback
 **
 ** Returns          LLCP_STATUS_SUCCESS if success
 **
@@ -673,7 +681,6 @@ extern uint8_t LLCP_SetTraceLevel (uint8_t new_level);
 ** Function         LLCP_SetTestParams
 **
 ** Description      Set test parameters for LLCP
-**
 **
 ** Returns          void
 **

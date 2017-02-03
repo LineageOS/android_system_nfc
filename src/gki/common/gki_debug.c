@@ -102,7 +102,8 @@ void GKI_PrintBuffer(void)
 **                  stack used by looking non magic num. Magic num is consider
 **                  the first byte in the stack.
 **
-** Returns          the number of unused byte on the stack. 4 in case of stack overrun
+** Returns          the number of unused byte on the stack. 4 in case of stack
+**                  overrun
 **
 *******************************************************************************/
 uint16_t gki_calc_stack (uint8_t task)
@@ -159,7 +160,8 @@ void GKI_print_task(void)
 **
 ** Function         gki_print_buffer_statistics
 **
-** Description      Called internally by OSS to print the buffer pools statistics
+** Description      Called internally by OSS to print the buffer pools
+**                  statistics
 **
 ** Returns          void
 **
