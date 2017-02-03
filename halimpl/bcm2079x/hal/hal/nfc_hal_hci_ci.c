@@ -16,7 +16,6 @@
  *
  ******************************************************************************/
 
-
 /******************************************************************************
  *
  *  This file contains the call-in functions for NFC HAL HCI
@@ -40,29 +39,28 @@
 ** Returns          none
 **
 *******************************************************************************/
-void nfc_hal_nv_ci_read (uint16_t num_bytes_read, tNFC_HAL_NV_CO_STATUS status, uint8_t block)
-{
-    tNFC_HAL_HCI_EVENT_DATA *p_msg;
+void nfc_hal_nv_ci_read(uint16_t num_bytes_read, tNFC_HAL_NV_CO_STATUS status,
+                        uint8_t block) {
+  tNFC_HAL_HCI_EVENT_DATA* p_msg;
 
-    /* Send message to NCIT task */
-    if ((p_msg = (tNFC_HAL_HCI_EVENT_DATA *) GKI_getbuf (sizeof (tNFC_HAL_HCI_EVENT_DATA))) != NULL)
-    {
-        p_msg->nv_read.hdr.event  = NFC_HAL_HCI_RSP_NV_READ_EVT;
-        p_msg->hdr.offset         = 0;
-        p_msg->hdr.len            = sizeof (tNFC_HAL_HCI_RSP_NV_READ_EVT);
-        p_msg->hdr.layer_specific = 0;
+  /* Send message to NCIT task */
+  if ((p_msg = (tNFC_HAL_HCI_EVENT_DATA*)GKI_getbuf(
+           sizeof(tNFC_HAL_HCI_EVENT_DATA))) != NULL) {
+    p_msg->nv_read.hdr.event = NFC_HAL_HCI_RSP_NV_READ_EVT;
+    p_msg->hdr.offset = 0;
+    p_msg->hdr.len = sizeof(tNFC_HAL_HCI_RSP_NV_READ_EVT);
+    p_msg->hdr.layer_specific = 0;
 
-        if (  (status == NFC_HAL_NV_CO_OK)
-            &&(num_bytes_read != 0) )
-            p_msg->nv_read.status = HAL_NFC_STATUS_OK;
-        else
-            p_msg->nv_read.status = HAL_NFC_STATUS_FAILED;
+    if ((status == NFC_HAL_NV_CO_OK) && (num_bytes_read != 0))
+      p_msg->nv_read.status = HAL_NFC_STATUS_OK;
+    else
+      p_msg->nv_read.status = HAL_NFC_STATUS_FAILED;
 
-        p_msg->nv_read.size  = num_bytes_read;
-        p_msg->nv_read.block = block;
+    p_msg->nv_read.size = num_bytes_read;
+    p_msg->nv_read.block = block;
 
-        GKI_send_msg (NFC_HAL_TASK, NFC_HAL_TASK_MBOX, p_msg);
-    }
+    GKI_send_msg(NFC_HAL_TASK, NFC_HAL_TASK_MBOX, p_msg);
+  }
 }
 
 /*******************************************************************************
@@ -74,20 +72,19 @@ void nfc_hal_nv_ci_read (uint16_t num_bytes_read, tNFC_HAL_NV_CO_STATUS status, 
 ** Returns          none
 **
 *******************************************************************************/
-void nfc_hal_nv_ci_write (tNFC_HAL_NV_CO_STATUS status)
-{
-    tNFC_HAL_HCI_EVENT_DATA *p_msg;
+void nfc_hal_nv_ci_write(tNFC_HAL_NV_CO_STATUS status) {
+  tNFC_HAL_HCI_EVENT_DATA* p_msg;
 
-    if ((p_msg = (tNFC_HAL_HCI_EVENT_DATA *) GKI_getbuf (sizeof (tNFC_HAL_HCI_EVENT_DATA))) != NULL)
-    {
-        p_msg->nv_write.hdr.event          = NFC_HAL_HCI_RSP_NV_WRITE_EVT;
-        p_msg->nv_write.hdr.offset         = 0;
-        p_msg->nv_write.hdr.len            = sizeof (tNFC_HAL_HCI_RSP_NV_READ_EVT);
-        p_msg->nv_write.hdr.layer_specific = 0;
-        p_msg->nv_write.status             = HAL_NFC_STATUS_OK;
+  if ((p_msg = (tNFC_HAL_HCI_EVENT_DATA*)GKI_getbuf(
+           sizeof(tNFC_HAL_HCI_EVENT_DATA))) != NULL) {
+    p_msg->nv_write.hdr.event = NFC_HAL_HCI_RSP_NV_WRITE_EVT;
+    p_msg->nv_write.hdr.offset = 0;
+    p_msg->nv_write.hdr.len = sizeof(tNFC_HAL_HCI_RSP_NV_READ_EVT);
+    p_msg->nv_write.hdr.layer_specific = 0;
+    p_msg->nv_write.status = HAL_NFC_STATUS_OK;
 
-        GKI_send_msg (NFC_HAL_TASK, NFC_HAL_TASK_MBOX, p_msg);
-    }
+    GKI_send_msg(NFC_HAL_TASK, NFC_HAL_TASK_MBOX, p_msg);
+  }
 }
 
 #endif

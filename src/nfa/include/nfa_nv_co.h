@@ -16,7 +16,6 @@
  *
  ******************************************************************************/
 
-
 /******************************************************************************
  *
  *  This is the interface file for the synchronization server call-out
@@ -34,33 +33,31 @@
 **  Constants and Data Types
 *****************************************************************************/
 
-
 /**************************
 **  Common Definitions
 ***************************/
 
-/* Status codes returned by call-out functions, or in call-in functions as status */
-#define NFA_NV_CO_OK            0x00
-#define NFA_NV_CO_FAIL          0x01 /* Used to pass all other errors */
-#define NFA_NV_CO_EACCES        0x02
-#define NFA_NV_CO_ENOTEMPTY     0x03
-#define NFA_NV_CO_EOF           0x04
-#define NFA_NV_CO_EODIR         0x05
-#define NFA_NV_CO_ENOSPACE      0x06 /* Returned in nfa_nv_ci_open if no room */
-#define NFA_NV_CO_EIS_DIR       0x07
-#define NFA_NV_CO_RESUME        0x08 /* used in nfa_nv_ci_open, on resume */
+/* Status codes returned by call-out functions, or in call-in functions as
+ * status */
+#define NFA_NV_CO_OK 0x00
+#define NFA_NV_CO_FAIL 0x01 /* Used to pass all other errors */
+#define NFA_NV_CO_EACCES 0x02
+#define NFA_NV_CO_ENOTEMPTY 0x03
+#define NFA_NV_CO_EOF 0x04
+#define NFA_NV_CO_EODIR 0x05
+#define NFA_NV_CO_ENOSPACE 0x06 /* Returned in nfa_nv_ci_open if no room */
+#define NFA_NV_CO_EIS_DIR 0x07
+#define NFA_NV_CO_RESUME 0x08 /* used in nfa_nv_ci_open, on resume */
 /* used in nfa_nv_ci_open, on resume (no file to resume) */
 #define NFA_NV_CO_NONE 0x09
 
 typedef uint8_t tNFA_NV_CO_STATUS;
 
-
-#define  DH_NV_BLOCK            0x01
-#define  HC_F3_NV_BLOCK         0x02
-#define  HC_F4_NV_BLOCK         0x03
-#define  HC_DH_NV_BLOCK         0x04
-#define  HC_F5_NV_BLOCK         0x05
-
+#define DH_NV_BLOCK 0x01
+#define HC_F3_NV_BLOCK 0x02
+#define HC_F4_NV_BLOCK 0x03
+#define HC_DH_NV_BLOCK 0x04
+#define HC_F5_NV_BLOCK 0x05
 
 /*****************************************************************************
 **  Function Declarations
@@ -89,7 +86,7 @@ typedef uint8_t tNFA_NV_CO_STATUS;
 **                        been detected, or an error has occurred.
 **
 *******************************************************************************/
-extern void nfa_nv_co_read (uint8_t *p_buf, uint16_t nbytes, uint8_t block);
+extern void nfa_nv_co_read(uint8_t* p_buf, uint16_t nbytes, uint8_t block);
 
 /*******************************************************************************
 **
@@ -110,7 +107,7 @@ extern void nfa_nv_co_read (uint8_t *p_buf, uint16_t nbytes, uint8_t block);
 **                        been detected,
 **
 *******************************************************************************/
-extern void nfa_nv_co_write (const uint8_t *p_buf, uint16_t nbytes, uint8_t block);
-
+extern void nfa_nv_co_write(const uint8_t* p_buf, uint16_t nbytes,
+                            uint8_t block);
 
 #endif /* NFA_NV_CO_H */

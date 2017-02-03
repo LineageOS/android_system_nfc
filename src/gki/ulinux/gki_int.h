@@ -18,8 +18,8 @@
 #ifndef GKI_INT_H
 #define GKI_INT_H
 
-#include "gki_common.h"
 #include <pthread.h>
+#include "gki_common.h"
 
 /**********************************************************************
 ** OS specific definitions
@@ -28,20 +28,19 @@
 #include <sys/times.h>
 #endif
 
-typedef struct
-{
-    pthread_mutex_t     GKI_mutex;
-    pthread_t           thread_id[GKI_MAX_TASKS];
-    pthread_mutex_t     thread_evt_mutex[GKI_MAX_TASKS];
-    pthread_cond_t      thread_evt_cond[GKI_MAX_TASKS];
-    pthread_mutex_t     thread_timeout_mutex[GKI_MAX_TASKS];
-    pthread_cond_t      thread_timeout_cond[GKI_MAX_TASKS];
-    int                 no_timer_suspend;   /* 1: no suspend, 0 stop calling GKI_timer_update() */
-    pthread_mutex_t     gki_timer_mutex;
-    pthread_cond_t      gki_timer_cond;
-    int                 gki_timer_wake_lock_on;
+typedef struct {
+  pthread_mutex_t GKI_mutex;
+  pthread_t thread_id[GKI_MAX_TASKS];
+  pthread_mutex_t thread_evt_mutex[GKI_MAX_TASKS];
+  pthread_cond_t thread_evt_cond[GKI_MAX_TASKS];
+  pthread_mutex_t thread_timeout_mutex[GKI_MAX_TASKS];
+  pthread_cond_t thread_timeout_cond[GKI_MAX_TASKS];
+  int no_timer_suspend; /* 1: no suspend, 0 stop calling GKI_timer_update() */
+  pthread_mutex_t gki_timer_mutex;
+  pthread_cond_t gki_timer_cond;
+  int gki_timer_wake_lock_on;
 #if (GKI_DEBUG == TRUE)
-    pthread_mutex_t     GKI_trace_mutex;
+  pthread_mutex_t GKI_trace_mutex;
 #endif
 } tGKI_OS;
 
@@ -50,25 +49,22 @@ typedef struct
 #define GKI_TIMER_TICK_STOP_COND 0
 #define GKI_TIMER_TICK_EXIT_COND 2
 
-extern void gki_system_tick_start_stop_cback(bool    start);
+extern void gki_system_tick_start_stop_cback(bool start);
 
 /* Contains common control block as well as OS specific variables */
-typedef struct
-{
-    tGKI_OS     os;
-    tGKI_COM_CB com;
+typedef struct {
+  tGKI_OS os;
+  tGKI_COM_CB com;
 } tGKI_CB;
-
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-extern tGKI_CB  gki_cb;
+extern tGKI_CB gki_cb;
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
-

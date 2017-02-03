@@ -16,7 +16,6 @@
  *
  ******************************************************************************/
 
-
 /******************************************************************************
  *
  *  This file contains the Near Field Communication (NFC) Reader/Writer mode
@@ -28,103 +27,104 @@
 #define RW_API_H
 #include "tags_defs.h"
 
-#define RW_T1T_BLD_ADD(a, k, y)   a = ((k & 0xF) << 3) | (y&0x7);
-#define RW_T1T_BLD_ADDS(a, s)     a = ((s & 0xF) << 4);
+#define RW_T1T_BLD_ADD(a, k, y) a = ((k & 0xF) << 3) | (y & 0x7);
+#define RW_T1T_BLD_ADDS(a, s) a = ((s & 0xF) << 4);
 
-#define RW_T1T_FIRST_EVT    0x20
-#define RW_T2T_FIRST_EVT    0x40
-#define RW_T3T_FIRST_EVT    0x60
-#define RW_T4T_FIRST_EVT    0x80
-#define RW_I93_FIRST_EVT    0xA0
+#define RW_T1T_FIRST_EVT 0x20
+#define RW_T2T_FIRST_EVT 0x40
+#define RW_T3T_FIRST_EVT 0x60
+#define RW_T4T_FIRST_EVT 0x80
+#define RW_I93_FIRST_EVT 0xA0
 
-enum
-{
-    /* Note: the order of these events can not be changed */
-    /* Type 1 tag events for tRW_CBACK */
-    RW_T1T_RID_EVT = RW_T1T_FIRST_EVT,          /* Read ID command completd              */
-    RW_T1T_RALL_CPLT_EVT,                       /* Read All command completed            */
-    RW_T1T_READ_CPLT_EVT,                       /* Read byte completed                   */
-    RW_T1T_WRITE_E_CPLT_EVT,                    /* Write byte after erase completed      */
-    RW_T1T_WRITE_NE_CPLT_EVT,                   /* Write byte with no erase completed    */
-    RW_T1T_RSEG_CPLT_EVT,                       /* Read segment completed                */
-    RW_T1T_READ8_CPLT_EVT,                      /* Read block completed                  */
-    RW_T1T_WRITE_E8_CPLT_EVT,                   /* Write block after erase completed     */
-    RW_T1T_WRITE_NE8_CPLT_EVT,                  /* Write block with no erase completed   */
-    RW_T1T_TLV_DETECT_EVT,                      /* Lock/Mem/Prop tlv detection complete  */
-    RW_T1T_NDEF_DETECT_EVT,                     /* NDEF detection complete               */
-    RW_T1T_NDEF_READ_EVT,                       /* NDEF read completed                   */
-    RW_T1T_NDEF_WRITE_EVT,                      /* NDEF write complete                   */
-    RW_T1T_SET_TAG_RO_EVT,                      /* Tag is set as read only               */
-    RW_T1T_RAW_FRAME_EVT,                       /* Response of raw frame sent            */
-    RW_T1T_PRESENCE_CHECK_EVT,                  /* Response to RW_T1tPresenceCheck       */
-    RW_T1T_FORMAT_CPLT_EVT,                     /* Tag Formated                          */
-    RW_T1T_INTF_ERROR_EVT,                      /* RF Interface error event              */
-    RW_T1T_MAX_EVT,
+enum {
+  /* Note: the order of these events can not be changed */
+  /* Type 1 tag events for tRW_CBACK */
+  RW_T1T_RID_EVT = RW_T1T_FIRST_EVT, /* Read ID command completd              */
+  RW_T1T_RALL_CPLT_EVT,              /* Read All command completed            */
+  RW_T1T_READ_CPLT_EVT,              /* Read byte completed                   */
+  RW_T1T_WRITE_E_CPLT_EVT,           /* Write byte after erase completed      */
+  RW_T1T_WRITE_NE_CPLT_EVT,          /* Write byte with no erase completed    */
+  RW_T1T_RSEG_CPLT_EVT,              /* Read segment completed                */
+  RW_T1T_READ8_CPLT_EVT,             /* Read block completed                  */
+  RW_T1T_WRITE_E8_CPLT_EVT,          /* Write block after erase completed     */
+  RW_T1T_WRITE_NE8_CPLT_EVT,         /* Write block with no erase completed   */
+  RW_T1T_TLV_DETECT_EVT,             /* Lock/Mem/Prop tlv detection complete  */
+  RW_T1T_NDEF_DETECT_EVT,            /* NDEF detection complete               */
+  RW_T1T_NDEF_READ_EVT,              /* NDEF read completed                   */
+  RW_T1T_NDEF_WRITE_EVT,             /* NDEF write complete                   */
+  RW_T1T_SET_TAG_RO_EVT,             /* Tag is set as read only               */
+  RW_T1T_RAW_FRAME_EVT,              /* Response of raw frame sent            */
+  RW_T1T_PRESENCE_CHECK_EVT,         /* Response to RW_T1tPresenceCheck       */
+  RW_T1T_FORMAT_CPLT_EVT,            /* Tag Formated                          */
+  RW_T1T_INTF_ERROR_EVT,             /* RF Interface error event              */
+  RW_T1T_MAX_EVT,
 
-    /* Type 2 tag events */
-    RW_T2T_READ_CPLT_EVT = RW_T2T_FIRST_EVT,    /* Read completed                        */
-    RW_T2T_WRITE_CPLT_EVT,                      /* Write completed                       */
-    RW_T2T_SELECT_CPLT_EVT,                     /* Sector select completed               */
-    RW_T2T_NDEF_DETECT_EVT,                     /* NDEF detection complete               */
-    RW_T2T_TLV_DETECT_EVT,                      /* Lock/Mem/Prop tlv detection complete  */
-    RW_T2T_NDEF_READ_EVT,                       /* NDEF read completed                   */
-    RW_T2T_NDEF_WRITE_EVT,                      /* NDEF write complete                   */
-    RW_T2T_SET_TAG_RO_EVT,                      /* Tag is set as read only               */
-    RW_T2T_RAW_FRAME_EVT,                       /* Response of raw frame sent            */
-    RW_T2T_PRESENCE_CHECK_EVT,                  /* Response to RW_T2tPresenceCheck       */
-    RW_T2T_FORMAT_CPLT_EVT,                     /* Tag Formated                          */
-    RW_T2T_INTF_ERROR_EVT,                      /* RF Interface error event              */
-    RW_T2T_MAX_EVT,
+  /* Type 2 tag events */
+  RW_T2T_READ_CPLT_EVT = RW_T2T_FIRST_EVT, /* Read completed */
+  RW_T2T_WRITE_CPLT_EVT,     /* Write completed                       */
+  RW_T2T_SELECT_CPLT_EVT,    /* Sector select completed               */
+  RW_T2T_NDEF_DETECT_EVT,    /* NDEF detection complete               */
+  RW_T2T_TLV_DETECT_EVT,     /* Lock/Mem/Prop tlv detection complete  */
+  RW_T2T_NDEF_READ_EVT,      /* NDEF read completed                   */
+  RW_T2T_NDEF_WRITE_EVT,     /* NDEF write complete                   */
+  RW_T2T_SET_TAG_RO_EVT,     /* Tag is set as read only               */
+  RW_T2T_RAW_FRAME_EVT,      /* Response of raw frame sent            */
+  RW_T2T_PRESENCE_CHECK_EVT, /* Response to RW_T2tPresenceCheck       */
+  RW_T2T_FORMAT_CPLT_EVT,    /* Tag Formated                          */
+  RW_T2T_INTF_ERROR_EVT,     /* RF Interface error event              */
+  RW_T2T_MAX_EVT,
 
-    /* Type 3 tag events for tRW_CBACK */
-    RW_T3T_CHECK_CPLT_EVT = RW_T3T_FIRST_EVT,   /* Read completed                           */
-    RW_T3T_UPDATE_CPLT_EVT,                     /* Write completed                          */
-    RW_T3T_CHECK_EVT,                           /* Segment of data received from type 3 tag */
-    RW_T3T_RAW_FRAME_EVT,                       /* SendRawFrame response                    */
-    RW_T3T_NDEF_DETECT_EVT,                     /* NDEF detection complete                  */
-    RW_T3T_PRESENCE_CHECK_EVT,                  /* Response to RW_T3tPresenceCheck          */
-    RW_T3T_POLL_EVT,                            /* Response to RW_T3tPoll                   */
-    RW_T3T_GET_SYSTEM_CODES_EVT,                /* Response to RW_T3tGetSystemCodes         */
-    RW_T3T_FORMAT_CPLT_EVT,                     /* Tag Formated (Felica-Lite only)          */
-    RW_T3T_SET_READ_ONLY_CPLT_EVT,              /* Tag is set as Read only                  */
-    RW_T3T_INTF_ERROR_EVT,                      /* RF Interface error event                 */
-    RW_T3T_MAX_EVT,
+  /* Type 3 tag events for tRW_CBACK */
+  RW_T3T_CHECK_CPLT_EVT = RW_T3T_FIRST_EVT, /* Read completed */
+  RW_T3T_UPDATE_CPLT_EVT,        /* Write completed                          */
+  RW_T3T_CHECK_EVT,              /* Segment of data received from type 3 tag */
+  RW_T3T_RAW_FRAME_EVT,          /* SendRawFrame response                    */
+  RW_T3T_NDEF_DETECT_EVT,        /* NDEF detection complete                  */
+  RW_T3T_PRESENCE_CHECK_EVT,     /* Response to RW_T3tPresenceCheck          */
+  RW_T3T_POLL_EVT,               /* Response to RW_T3tPoll                   */
+  RW_T3T_GET_SYSTEM_CODES_EVT,   /* Response to RW_T3tGetSystemCodes         */
+  RW_T3T_FORMAT_CPLT_EVT,        /* Tag Formated (Felica-Lite only)          */
+  RW_T3T_SET_READ_ONLY_CPLT_EVT, /* Tag is set as Read only                  */
+  RW_T3T_INTF_ERROR_EVT,         /* RF Interface error event                 */
+  RW_T3T_MAX_EVT,
 
-    /* Type 4 tag events for tRW_CBACK */
-    RW_T4T_NDEF_DETECT_EVT = RW_T4T_FIRST_EVT,  /* Result of NDEF detection procedure       */
-                                                /* Mandatory NDEF file is selected          */
-    RW_T4T_NDEF_READ_EVT,                       /* Segment of data received from type 4 tag */
-    RW_T4T_NDEF_READ_CPLT_EVT,                  /* Read operation completed                 */
-    RW_T4T_NDEF_READ_FAIL_EVT,                  /* Read operation failed                    */
-    RW_T4T_NDEF_UPDATE_CPLT_EVT,                /* Update operation completed               */
-    RW_T4T_NDEF_UPDATE_FAIL_EVT,                /* Update operation failed                  */
-    RW_T4T_SET_TO_RO_EVT,                       /* Tag is set as read only                  */
-    RW_T4T_PRESENCE_CHECK_EVT,                  /* Response to RW_T4tPresenceCheck          */
-    RW_T4T_RAW_FRAME_EVT,                       /* Response of raw frame sent               */
-    RW_T4T_INTF_ERROR_EVT,                      /* RF Interface error event                 */
-    RW_T4T_NDEF_FORMAT_CPLT_EVT,                /* Format operation completed               */
-    RW_T4T_MAX_EVT,
+  /* Type 4 tag events for tRW_CBACK */
+  RW_T4T_NDEF_DETECT_EVT =
+      RW_T4T_FIRST_EVT,        /* Result of NDEF detection procedure       */
+                               /* Mandatory NDEF file is selected          */
+  RW_T4T_NDEF_READ_EVT,        /* Segment of data received from type 4 tag */
+  RW_T4T_NDEF_READ_CPLT_EVT,   /* Read operation completed                 */
+  RW_T4T_NDEF_READ_FAIL_EVT,   /* Read operation failed                    */
+  RW_T4T_NDEF_UPDATE_CPLT_EVT, /* Update operation completed               */
+  RW_T4T_NDEF_UPDATE_FAIL_EVT, /* Update operation failed                  */
+  RW_T4T_SET_TO_RO_EVT,        /* Tag is set as read only                  */
+  RW_T4T_PRESENCE_CHECK_EVT,   /* Response to RW_T4tPresenceCheck          */
+  RW_T4T_RAW_FRAME_EVT,        /* Response of raw frame sent               */
+  RW_T4T_INTF_ERROR_EVT,       /* RF Interface error event                 */
+  RW_T4T_NDEF_FORMAT_CPLT_EVT, /* Format operation completed               */
+  RW_T4T_MAX_EVT,
 
-    /* ISO 15693 tag events for tRW_CBACK */
-    RW_I93_NDEF_DETECT_EVT = RW_I93_FIRST_EVT,  /* Result of NDEF detection procedure */
-    RW_I93_NDEF_READ_EVT,                       /* Segment of data received from tag  */
-    RW_I93_NDEF_READ_CPLT_EVT,                  /* Read operation completed           */
-    RW_I93_NDEF_READ_FAIL_EVT,                  /* Read operation failed              */
-    RW_I93_NDEF_UPDATE_CPLT_EVT,                /* Update operation completed         */
-    RW_I93_NDEF_UPDATE_FAIL_EVT,                /* Update operation failed            */
-    RW_I93_FORMAT_CPLT_EVT,                     /* Format procedure complete          */
-    RW_I93_SET_TAG_RO_EVT,                      /* Set read-only procedure complete   */
-    RW_I93_INVENTORY_EVT,                       /* Response of Inventory              */
-    RW_I93_DATA_EVT,                            /* Response of Read, Get Multi Security */
-    RW_I93_SYS_INFO_EVT,                        /* Response of System Information     */
-    RW_I93_CMD_CMPL_EVT,                        /* Command complete                   */
-    RW_I93_PRESENCE_CHECK_EVT,                  /* Response to RW_I93PresenceCheck    */
-    RW_I93_RAW_FRAME_EVT,                       /* Response of raw frame sent         */
-    RW_I93_INTF_ERROR_EVT,                      /* RF Interface error event           */
-    RW_I93_MAX_EVT
+  /* ISO 15693 tag events for tRW_CBACK */
+  RW_I93_NDEF_DETECT_EVT =
+      RW_I93_FIRST_EVT,        /* Result of NDEF detection procedure */
+  RW_I93_NDEF_READ_EVT,        /* Segment of data received from tag  */
+  RW_I93_NDEF_READ_CPLT_EVT,   /* Read operation completed           */
+  RW_I93_NDEF_READ_FAIL_EVT,   /* Read operation failed              */
+  RW_I93_NDEF_UPDATE_CPLT_EVT, /* Update operation completed         */
+  RW_I93_NDEF_UPDATE_FAIL_EVT, /* Update operation failed            */
+  RW_I93_FORMAT_CPLT_EVT,      /* Format procedure complete          */
+  RW_I93_SET_TAG_RO_EVT,       /* Set read-only procedure complete   */
+  RW_I93_INVENTORY_EVT,        /* Response of Inventory              */
+  RW_I93_DATA_EVT,             /* Response of Read, Get Multi Security */
+  RW_I93_SYS_INFO_EVT,         /* Response of System Information     */
+  RW_I93_CMD_CMPL_EVT,         /* Command complete                   */
+  RW_I93_PRESENCE_CHECK_EVT,   /* Response to RW_I93PresenceCheck    */
+  RW_I93_RAW_FRAME_EVT,        /* Response of raw frame sent         */
+  RW_I93_INTF_ERROR_EVT,       /* RF Interface error event           */
+  RW_I93_MAX_EVT
 };
 
-#define RW_RAW_FRAME_EVT     0xFF
+#define RW_RAW_FRAME_EVT 0xFF
 
 typedef uint8_t tRW_EVENT;
 
@@ -148,127 +148,120 @@ typedef uint8_t tRW_EVENT;
 typedef uint8_t tRW_NDEF_FLAG;
 
 /* options for RW_T4tPresenceCheck  */
-#define RW_T4T_CHK_READ_BINARY_CH0      0
-#define RW_T4T_CHK_READ_BINARY_CH1      1
-#define RW_T4T_CHK_READ_BINARY_CH2      2
-#define RW_T4T_CHK_READ_BINARY_CH3      3
-#define RW_T4T_CHK_EMPTY_I_BLOCK        4
+#define RW_T4T_CHK_READ_BINARY_CH0 0
+#define RW_T4T_CHK_READ_BINARY_CH1 1
+#define RW_T4T_CHK_READ_BINARY_CH2 2
+#define RW_T4T_CHK_READ_BINARY_CH3 3
+#define RW_T4T_CHK_EMPTY_I_BLOCK 4
 
-typedef struct
-{
-    tNFC_STATUS     status;
-    uint8_t         hr[T1T_HR_LEN];
-    uint8_t         uid[T1T_CMD_UID_LEN];
+typedef struct {
+  tNFC_STATUS status;
+  uint8_t hr[T1T_HR_LEN];
+  uint8_t uid[T1T_CMD_UID_LEN];
 } tRW_T1T_RID_EVT;
 
-typedef struct
-{
-    tNFC_STATUS     status;
-    uint16_t        msg_len;            /* Length of the NDEF message */
+typedef struct {
+  tNFC_STATUS status;
+  uint16_t msg_len; /* Length of the NDEF message */
 } tRW_T2T_DETECT;
 
-typedef struct
-{
-    tNFC_STATUS     status;             /* Status of the POLL request */
-    uint8_t         rc;                 /* RC (request code) used in the POLL request */
-    uint8_t         response_num;       /* Number of SENSF_RES responses */
-    uint8_t         response_bufsize;   /* Size of SENSF_RES responses */
-    uint8_t         *response_buf;      /* Buffer of responses (length + SENSF_RES) see $8.1.2.2 of NCI specs */
+typedef struct {
+  tNFC_STATUS status;       /* Status of the POLL request */
+  uint8_t rc;               /* RC (request code) used in the POLL request */
+  uint8_t response_num;     /* Number of SENSF_RES responses */
+  uint8_t response_bufsize; /* Size of SENSF_RES responses */
+  uint8_t* response_buf;    /* Buffer of responses (length + SENSF_RES) see
+                               $8.1.2.2 of NCI specs */
 } tRW_T3T_POLL;
 
-typedef struct
-{
-    tNFC_STATUS     status;             /* Status of the Get System Codes request */
-    uint8_t         num_system_codes;   /* Number of system codes */
-    uint16_t        *p_system_codes;    /* Table of system codes */
+typedef struct {
+  tNFC_STATUS status;       /* Status of the Get System Codes request */
+  uint8_t num_system_codes; /* Number of system codes */
+  uint16_t* p_system_codes; /* Table of system codes */
 } tRW_T3T_SYSTEM_CODES;
 
-typedef struct
-{
-    tNFC_STATUS     status;             /* status of NDEF detection */
-    tNFC_PROTOCOL   protocol;           /* protocol used to detect NDEF */
-    uint32_t        max_size;           /* max number of bytes available for NDEF data */
-    uint32_t        cur_size;           /* current size of stored NDEF data (in bytes) */
-    tRW_NDEF_FLAG   flags;              /* Flags to indicate NDEF capability,formated,formatable and read only */
+typedef struct {
+  tNFC_STATUS status;     /* status of NDEF detection */
+  tNFC_PROTOCOL protocol; /* protocol used to detect NDEF */
+  uint32_t max_size;      /* max number of bytes available for NDEF data */
+  uint32_t cur_size;      /* current size of stored NDEF data (in bytes) */
+  tRW_NDEF_FLAG
+      flags; /* Flags to indicate NDEF capability,formated,formatable and read
+                only */
 } tRW_DETECT_NDEF_DATA;
 
-typedef struct
-{
-    tNFC_STATUS     status;             /* status of NDEF detection */
-    tNFC_PROTOCOL   protocol;           /* protocol used to detect TLV */
-    uint8_t         num_bytes;          /* number of reserved/lock bytes based on the type of tlv */
+typedef struct {
+  tNFC_STATUS status;     /* status of NDEF detection */
+  tNFC_PROTOCOL protocol; /* protocol used to detect TLV */
+  uint8_t
+      num_bytes; /* number of reserved/lock bytes based on the type of tlv */
 } tRW_DETECT_TLV_DATA;
 
-typedef struct
-{
-    tNFC_STATUS     status;
-    NFC_HDR         *p_data;
+typedef struct {
+  tNFC_STATUS status;
+  NFC_HDR* p_data;
 } tRW_READ_DATA;
 
-typedef struct
-{
-    tNFC_STATUS     status;
-    uint8_t         sw1;
-    uint8_t         sw2;
+typedef struct {
+  tNFC_STATUS status;
+  uint8_t sw1;
+  uint8_t sw2;
 } tRW_T4T_SW;
 
-typedef struct                              /* RW_I93_INVENTORY_EVT        */
+typedef struct /* RW_I93_INVENTORY_EVT        */
 {
-    tNFC_STATUS     status;                 /* status of Inventory command */
-    uint8_t         dsfid;                  /* DSFID                       */
-    uint8_t         uid[I93_UID_BYTE_LEN];  /* UID[0]:MSB, ... UID[7]:LSB  */
+  tNFC_STATUS status;            /* status of Inventory command */
+  uint8_t dsfid;                 /* DSFID                       */
+  uint8_t uid[I93_UID_BYTE_LEN]; /* UID[0]:MSB, ... UID[7]:LSB  */
 } tRW_I93_INVENTORY;
 
-typedef struct                              /* RW_I93_DATA_EVT               */
+typedef struct /* RW_I93_DATA_EVT               */
 {
-    tNFC_STATUS     status;                 /* status of Read/Get security status command */
-    uint8_t         command;                /* sent command                  */
-    NFC_HDR         *p_data;                 /* block data of security status */
+  tNFC_STATUS status; /* status of Read/Get security status command */
+  uint8_t command;    /* sent command                  */
+  NFC_HDR* p_data;    /* block data of security status */
 } tRW_I93_DATA;
 
-typedef struct                              /* RW_I93_SYS_INFO_EVT             */
+typedef struct /* RW_I93_SYS_INFO_EVT             */
 {
-    tNFC_STATUS     status;                 /* status of Get Sys Info command  */
-    uint8_t         info_flags;             /* information flags               */
-    uint8_t         uid[I93_UID_BYTE_LEN];  /* UID[0]:MSB, ... UID[7]:LSB      */
-    uint8_t         dsfid;                  /* DSFID if I93_INFO_FLAG_DSFID    */
-    uint8_t         afi;                    /* AFI if I93_INFO_FLAG_AFI        */
-    uint16_t        num_block;              /* number of blocks if I93_INFO_FLAG_MEM_SIZE   */
-    uint8_t         block_size;             /* block size in byte if I93_INFO_FLAG_MEM_SIZE */
-    uint8_t         IC_reference;           /* IC Reference if I93_INFO_FLAG_IC_REF         */
+  tNFC_STATUS status;            /* status of Get Sys Info command  */
+  uint8_t info_flags;            /* information flags               */
+  uint8_t uid[I93_UID_BYTE_LEN]; /* UID[0]:MSB, ... UID[7]:LSB      */
+  uint8_t dsfid;                 /* DSFID if I93_INFO_FLAG_DSFID    */
+  uint8_t afi;                   /* AFI if I93_INFO_FLAG_AFI        */
+  uint16_t num_block;   /* number of blocks if I93_INFO_FLAG_MEM_SIZE   */
+  uint8_t block_size;   /* block size in byte if I93_INFO_FLAG_MEM_SIZE */
+  uint8_t IC_reference; /* IC Reference if I93_INFO_FLAG_IC_REF         */
 } tRW_I93_SYS_INFO;
 
-typedef struct                              /* RW_I93_CMD_CMPL_EVT             */
+typedef struct /* RW_I93_CMD_CMPL_EVT             */
 {
-    tNFC_STATUS     status;                 /* status of sent command          */
-    uint8_t         command;                /* sent command                    */
-    uint8_t         error_code;             /* error code; I93_ERROR_CODE_XXX  */
+  tNFC_STATUS status; /* status of sent command          */
+  uint8_t command;    /* sent command                    */
+  uint8_t error_code; /* error code; I93_ERROR_CODE_XXX  */
 } tRW_I93_CMD_CMPL;
 
-typedef struct
-{
-    tNFC_STATUS     status;
-    NFC_HDR         *p_data;
+typedef struct {
+  tNFC_STATUS status;
+  NFC_HDR* p_data;
 } tRW_RAW_FRAME;
 
-typedef union
-{
-    tNFC_STATUS             status;
-    tRW_T3T_POLL            t3t_poll;   /* Response to t3t poll command          */
-    tRW_T3T_SYSTEM_CODES    t3t_sc;     /* Received system codes from t3 tag     */
-    tRW_DETECT_TLV_DATA     tlv;        /* The information of detected TLV data  */
-    tRW_DETECT_NDEF_DATA    ndef;       /* The information of detected NDEF data */
-    tRW_READ_DATA           data;       /* The received data from a tag          */
-    tRW_RAW_FRAME           raw_frame;  /* Response of raw frame sent            */
-    tRW_T4T_SW              t4t_sw;     /* Received status words from a tag      */
-    tRW_I93_INVENTORY       i93_inventory;  /* ISO 15693 Inventory response      */
-    tRW_I93_DATA            i93_data;       /* ISO 15693 Data response           */
-    tRW_I93_SYS_INFO        i93_sys_info;   /* ISO 15693 System Information      */
-    tRW_I93_CMD_CMPL        i93_cmd_cmpl;   /* ISO 15693 Command complete        */
+typedef union {
+  tNFC_STATUS status;
+  tRW_T3T_POLL t3t_poll;           /* Response to t3t poll command          */
+  tRW_T3T_SYSTEM_CODES t3t_sc;     /* Received system codes from t3 tag     */
+  tRW_DETECT_TLV_DATA tlv;         /* The information of detected TLV data  */
+  tRW_DETECT_NDEF_DATA ndef;       /* The information of detected NDEF data */
+  tRW_READ_DATA data;              /* The received data from a tag          */
+  tRW_RAW_FRAME raw_frame;         /* Response of raw frame sent            */
+  tRW_T4T_SW t4t_sw;               /* Received status words from a tag      */
+  tRW_I93_INVENTORY i93_inventory; /* ISO 15693 Inventory response      */
+  tRW_I93_DATA i93_data;           /* ISO 15693 Data response           */
+  tRW_I93_SYS_INFO i93_sys_info;   /* ISO 15693 System Information      */
+  tRW_I93_CMD_CMPL i93_cmd_cmpl;   /* ISO 15693 Command complete        */
 } tRW_DATA;
 
-
-typedef void (tRW_CBACK) (tRW_EVENT event, tRW_DATA *p_data);
+typedef void(tRW_CBACK)(tRW_EVENT event, tRW_DATA* p_data);
 
 /*******************************************************************************
 **
@@ -279,7 +272,7 @@ typedef void (tRW_CBACK) (tRW_EVENT event, tRW_DATA *p_data);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T1tRid (void);
+extern tNFC_STATUS RW_T1tRid(void);
 
 /*******************************************************************************
 **
@@ -290,7 +283,7 @@ extern tNFC_STATUS RW_T1tRid (void);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T1tReadAll (void);
+extern tNFC_STATUS RW_T1tReadAll(void);
 
 /*******************************************************************************
 **
@@ -301,7 +294,7 @@ extern tNFC_STATUS RW_T1tReadAll (void);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T1tRead (uint8_t block, uint8_t byte);
+extern tNFC_STATUS RW_T1tRead(uint8_t block, uint8_t byte);
 
 /*******************************************************************************
 **
@@ -312,7 +305,8 @@ extern tNFC_STATUS RW_T1tRead (uint8_t block, uint8_t byte);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T1tWriteErase (uint8_t block, uint8_t byte, uint8_t new_byte);
+extern tNFC_STATUS RW_T1tWriteErase(uint8_t block, uint8_t byte,
+                                    uint8_t new_byte);
 
 /*******************************************************************************
 **
@@ -324,7 +318,8 @@ extern tNFC_STATUS RW_T1tWriteErase (uint8_t block, uint8_t byte, uint8_t new_by
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T1tWriteNoErase (uint8_t block, uint8_t byte, uint8_t new_byte);
+extern tNFC_STATUS RW_T1tWriteNoErase(uint8_t block, uint8_t byte,
+                                      uint8_t new_byte);
 
 /*******************************************************************************
 **
@@ -335,7 +330,7 @@ extern tNFC_STATUS RW_T1tWriteNoErase (uint8_t block, uint8_t byte, uint8_t new_
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T1tReadSeg (uint8_t segment);
+extern tNFC_STATUS RW_T1tReadSeg(uint8_t segment);
 
 /*******************************************************************************
 **
@@ -346,7 +341,7 @@ extern tNFC_STATUS RW_T1tReadSeg (uint8_t segment);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T1tRead8 (uint8_t block);
+extern tNFC_STATUS RW_T1tRead8(uint8_t block);
 
 /*******************************************************************************
 **
@@ -358,7 +353,7 @@ extern tNFC_STATUS RW_T1tRead8 (uint8_t block);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T1tWriteErase8 (uint8_t block, uint8_t *p_new_dat);
+extern tNFC_STATUS RW_T1tWriteErase8(uint8_t block, uint8_t* p_new_dat);
 
 /*******************************************************************************
 **
@@ -370,7 +365,7 @@ extern tNFC_STATUS RW_T1tWriteErase8 (uint8_t block, uint8_t *p_new_dat);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T1tWriteNoErase8 (uint8_t block, uint8_t *p_new_dat);
+extern tNFC_STATUS RW_T1tWriteNoErase8(uint8_t block, uint8_t* p_new_dat);
 
 /*******************************************************************************
 **
@@ -384,7 +379,7 @@ extern tNFC_STATUS RW_T1tWriteNoErase8 (uint8_t block, uint8_t *p_new_dat);
 **                  status.
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T1tLocateTlv (uint8_t tlv_type);
+extern tNFC_STATUS RW_T1tLocateTlv(uint8_t tlv_type);
 
 /*******************************************************************************
 **
@@ -399,7 +394,7 @@ extern tNFC_STATUS RW_T1tLocateTlv (uint8_t tlv_type);
 **                  status.
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T1tDetectNDef (void);
+extern tNFC_STATUS RW_T1tDetectNDef(void);
 
 /*******************************************************************************
 **
@@ -414,7 +409,7 @@ extern tNFC_STATUS RW_T1tDetectNDef (void);
 ** Returns          NCI_STATUS_OK, if read was started. Otherwise, error status.
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T1tReadNDef (uint8_t *p_buffer, uint16_t buf_len);
+extern tNFC_STATUS RW_T1tReadNDef(uint8_t* p_buffer, uint16_t buf_len);
 
 /*******************************************************************************
 **
@@ -430,7 +425,7 @@ extern tNFC_STATUS RW_T1tReadNDef (uint8_t *p_buffer, uint16_t buf_len);
 **                  status.
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T1tWriteNDef (uint16_t msg_len, uint8_t *p_msg);
+extern tNFC_STATUS RW_T1tWriteNDef(uint16_t msg_len, uint8_t* p_msg);
 
 /*******************************************************************************
 **
@@ -445,7 +440,7 @@ extern tNFC_STATUS RW_T1tWriteNDef (uint16_t msg_len, uint8_t *p_msg);
 **                                 Otherwise, error status.
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T1tSetTagReadOnly (bool    b_hard_lock);
+extern tNFC_STATUS RW_T1tSetTagReadOnly(bool b_hard_lock);
 
 /*****************************************************************************
 **
@@ -463,7 +458,7 @@ extern tNFC_STATUS RW_T1tSetTagReadOnly (bool    b_hard_lock);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-extern tNFC_STATUS RW_T1tPresenceCheck (void);
+extern tNFC_STATUS RW_T1tPresenceCheck(void);
 
 /*****************************************************************************
 **
@@ -478,7 +473,7 @@ extern tNFC_STATUS RW_T1tPresenceCheck (void);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-tNFC_STATUS RW_T1tFormatNDef (void);
+tNFC_STATUS RW_T1tFormatNDef(void);
 
 /*******************************************************************************
 **
@@ -502,7 +497,7 @@ extern tNFC_STATUS RW_T2tLocateTlv(uint8_t tlv_type);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T2tRead (uint16_t block);
+extern tNFC_STATUS RW_T2tRead(uint16_t block);
 
 /*******************************************************************************
 **
@@ -517,7 +512,7 @@ extern tNFC_STATUS RW_T2tRead (uint16_t block);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T2tWrite (uint16_t block, uint8_t *p_write_data);
+extern tNFC_STATUS RW_T2tWrite(uint16_t block, uint8_t* p_write_data);
 
 /*******************************************************************************
 **
@@ -537,7 +532,7 @@ extern tNFC_STATUS RW_T2tWrite (uint16_t block, uint8_t *p_write_data);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T2tSectorSelect (uint8_t sector);
+extern tNFC_STATUS RW_T2tSectorSelect(uint8_t sector);
 
 /*******************************************************************************
 **
@@ -548,7 +543,7 @@ extern tNFC_STATUS RW_T2tSectorSelect (uint8_t sector);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T2tDetectNDef (bool    skip_dyn_locks);
+extern tNFC_STATUS RW_T2tDetectNDef(bool skip_dyn_locks);
 
 /*******************************************************************************
 **
@@ -563,7 +558,7 @@ extern tNFC_STATUS RW_T2tDetectNDef (bool    skip_dyn_locks);
 ** Returns          NCI_STATUS_OK, if read was started. Otherwise, error status.
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T2tReadNDef (uint8_t *p_buffer, uint16_t buf_len);
+extern tNFC_STATUS RW_T2tReadNDef(uint8_t* p_buffer, uint16_t buf_len);
 
 /*******************************************************************************
 **
@@ -579,7 +574,7 @@ extern tNFC_STATUS RW_T2tReadNDef (uint8_t *p_buffer, uint16_t buf_len);
 **                  status.
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T2tWriteNDef (uint16_t msg_len, uint8_t *p_msg );
+extern tNFC_STATUS RW_T2tWriteNDef(uint16_t msg_len, uint8_t* p_msg);
 
 /*******************************************************************************
 **
@@ -594,7 +589,7 @@ extern tNFC_STATUS RW_T2tWriteNDef (uint16_t msg_len, uint8_t *p_msg );
 **                                 Otherwise, error status.
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T2tSetTagReadOnly (bool    b_hard_lock);
+extern tNFC_STATUS RW_T2tSetTagReadOnly(bool b_hard_lock);
 
 /*****************************************************************************
 **
@@ -612,7 +607,7 @@ extern tNFC_STATUS RW_T2tSetTagReadOnly (bool    b_hard_lock);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-extern tNFC_STATUS RW_T2tPresenceCheck (void);
+extern tNFC_STATUS RW_T2tPresenceCheck(void);
 
 /*****************************************************************************
 **
@@ -626,7 +621,7 @@ extern tNFC_STATUS RW_T2tPresenceCheck (void);
 **      NFC_STATUS_FAILED: otherwise
 **
 *****************************************************************************/
-tNFC_STATUS RW_T2tFormatNDef (void);
+tNFC_STATUS RW_T2tFormatNDef(void);
 
 /*****************************************************************************
 **
@@ -646,7 +641,7 @@ tNFC_STATUS RW_T2tFormatNDef (void);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-extern tNFC_STATUS RW_T3tDetectNDef (void);
+extern tNFC_STATUS RW_T3tDetectNDef(void);
 
 /*****************************************************************************
 **
@@ -664,7 +659,7 @@ extern tNFC_STATUS RW_T3tDetectNDef (void);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-extern tNFC_STATUS RW_T3tFormatNDef (void);
+extern tNFC_STATUS RW_T3tFormatNDef(void);
 
 /*****************************************************************************
 **
@@ -682,7 +677,7 @@ extern tNFC_STATUS RW_T3tFormatNDef (void);
 **      NFC_STATUS_FAILED if T3T is busy or other error
 **
 *****************************************************************************/
-extern tNFC_STATUS RW_T3tSetReadOnly (bool    b_hard_lock);
+extern tNFC_STATUS RW_T3tSetReadOnly(bool b_hard_lock);
 
 /*****************************************************************************
 **
@@ -709,7 +704,7 @@ extern tNFC_STATUS RW_T3tSetReadOnly (bool    b_hard_lock);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-extern tNFC_STATUS RW_T3tCheckNDef (void);
+extern tNFC_STATUS RW_T3tCheckNDef(void);
 
 /*****************************************************************************
 **
@@ -737,7 +732,7 @@ extern tNFC_STATUS RW_T3tCheckNDef (void);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-extern tNFC_STATUS RW_T3tUpdateNDef (uint32_t len, uint8_t *p_data);
+extern tNFC_STATUS RW_T3tUpdateNDef(uint32_t len, uint8_t* p_data);
 
 /*****************************************************************************
 **
@@ -760,7 +755,7 @@ extern tNFC_STATUS RW_T3tUpdateNDef (uint32_t len, uint8_t *p_data);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-extern tNFC_STATUS RW_T3tCheck (uint8_t num_blocks, tT3T_BLOCK_DESC *t3t_blocks);
+extern tNFC_STATUS RW_T3tCheck(uint8_t num_blocks, tT3T_BLOCK_DESC* t3t_blocks);
 
 /*****************************************************************************
 **
@@ -782,7 +777,8 @@ extern tNFC_STATUS RW_T3tCheck (uint8_t num_blocks, tT3T_BLOCK_DESC *t3t_blocks)
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-extern tNFC_STATUS RW_T3tUpdate (uint8_t num_blocks, tT3T_BLOCK_DESC *t3t_blocks, uint8_t *p_data);
+extern tNFC_STATUS RW_T3tUpdate(uint8_t num_blocks, tT3T_BLOCK_DESC* t3t_blocks,
+                                uint8_t* p_data);
 
 /*****************************************************************************
 **
@@ -804,7 +800,7 @@ extern tNFC_STATUS RW_T3tUpdate (uint8_t num_blocks, tT3T_BLOCK_DESC *t3t_blocks
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-extern tNFC_STATUS RW_T3tSendRawFrame (uint16_t len, uint8_t *p_data);
+extern tNFC_STATUS RW_T3tSendRawFrame(uint16_t len, uint8_t* p_data);
 
 /*****************************************************************************
 **
@@ -819,7 +815,8 @@ extern tNFC_STATUS RW_T3tSendRawFrame (uint16_t len, uint8_t *p_data);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-extern tNFC_STATUS RW_T3tPoll (uint16_t system_code, tT3T_POLL_RC rc, uint8_t tsn);
+extern tNFC_STATUS RW_T3tPoll(uint16_t system_code, tT3T_POLL_RC rc,
+                              uint8_t tsn);
 
 /*****************************************************************************
 **
@@ -837,7 +834,7 @@ extern tNFC_STATUS RW_T3tPoll (uint16_t system_code, tT3T_POLL_RC rc, uint8_t ts
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-extern tNFC_STATUS RW_T3tPresenceCheck (void);
+extern tNFC_STATUS RW_T3tPresenceCheck(void);
 
 /*****************************************************************************
 **
@@ -859,7 +856,7 @@ extern tNFC_STATUS RW_T3tPresenceCheck (void);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-extern tNFC_STATUS RW_T3tGetSystemCodes (void);
+extern tNFC_STATUS RW_T3tGetSystemCodes(void);
 
 /*****************************************************************************
 **
@@ -875,7 +872,7 @@ extern tNFC_STATUS RW_T3tGetSystemCodes (void);
 **      NFC_STATUS_OK: if success
 **      NFC_STATUS_FAILED: other error
 *****************************************************************************/
-extern tNFC_STATUS RW_T4tFormatNDef (void);
+extern tNFC_STATUS RW_T4tFormatNDef(void);
 
 /*******************************************************************************
 **
@@ -889,7 +886,7 @@ extern tNFC_STATUS RW_T4tFormatNDef (void);
 **                  NFC_STATUS_FAILED if T4T is busy or other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T4tDetectNDef (void);
+extern tNFC_STATUS RW_T4tDetectNDef(void);
 
 /*******************************************************************************
 **
@@ -908,7 +905,7 @@ extern tNFC_STATUS RW_T4tDetectNDef (void);
 **                  NFC_STATUS_FAILED if T4T is busy or other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T4tReadNDef (void);
+extern tNFC_STATUS RW_T4tReadNDef(void);
 
 /*******************************************************************************
 **
@@ -927,7 +924,7 @@ extern tNFC_STATUS RW_T4tReadNDef (void);
 **                  NFC_STATUS_FAILED if T4T is busy or other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_T4tUpdateNDef (uint16_t length, uint8_t *p_data);
+extern tNFC_STATUS RW_T4tUpdateNDef(uint16_t length, uint8_t* p_data);
 
 /*****************************************************************************
 **
@@ -948,7 +945,7 @@ extern tNFC_STATUS RW_T4tUpdateNDef (uint16_t length, uint8_t *p_data);
 **      NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-extern tNFC_STATUS RW_T4tPresenceCheck (uint8_t option);
+extern tNFC_STATUS RW_T4tPresenceCheck(uint8_t option);
 
 /*****************************************************************************
 **
@@ -963,7 +960,7 @@ extern tNFC_STATUS RW_T4tPresenceCheck (uint8_t option);
 **                  NFC_STATUS_FAILED if T4T is busy or other error
 **
 *****************************************************************************/
-extern tNFC_STATUS RW_T4tSetNDefReadOnly (void);
+extern tNFC_STATUS RW_T4tSetNDefReadOnly(void);
 
 /*******************************************************************************
 **
@@ -979,7 +976,8 @@ extern tNFC_STATUS RW_T4tSetNDefReadOnly (void);
 **                  NFC_STATUS_FAILED if T4T is busy or other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_I93Inventory (bool    including_afi, uint8_t afi, uint8_t *p_uid);
+extern tNFC_STATUS RW_I93Inventory(bool including_afi, uint8_t afi,
+                                   uint8_t* p_uid);
 
 /*******************************************************************************
 **
@@ -995,7 +993,7 @@ extern tNFC_STATUS RW_I93Inventory (bool    including_afi, uint8_t afi, uint8_t 
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_I93StayQuiet (void);
+extern tNFC_STATUS RW_I93StayQuiet(void);
 
 /*******************************************************************************
 **
@@ -1011,7 +1009,7 @@ extern tNFC_STATUS RW_I93StayQuiet (void);
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_I93ReadSingleBlock (uint16_t block_number);
+extern tNFC_STATUS RW_I93ReadSingleBlock(uint16_t block_number);
 
 /*******************************************************************************
 **
@@ -1029,7 +1027,8 @@ extern tNFC_STATUS RW_I93ReadSingleBlock (uint16_t block_number);
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_I93WriteSingleBlock (uint16_t block_number, uint8_t  *p_data);
+extern tNFC_STATUS RW_I93WriteSingleBlock(uint16_t block_number,
+                                          uint8_t* p_data);
 
 /*******************************************************************************
 **
@@ -1045,7 +1044,7 @@ extern tNFC_STATUS RW_I93WriteSingleBlock (uint16_t block_number, uint8_t  *p_da
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_I93LockBlock (uint8_t block_number);
+extern tNFC_STATUS RW_I93LockBlock(uint8_t block_number);
 
 /*******************************************************************************
 **
@@ -1061,8 +1060,8 @@ extern tNFC_STATUS RW_I93LockBlock (uint8_t block_number);
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_I93ReadMultipleBlocks (uint16_t first_block_number,
-                                             uint16_t number_blocks);
+extern tNFC_STATUS RW_I93ReadMultipleBlocks(uint16_t first_block_number,
+                                            uint16_t number_blocks);
 
 /*******************************************************************************
 **
@@ -1078,9 +1077,9 @@ extern tNFC_STATUS RW_I93ReadMultipleBlocks (uint16_t first_block_number,
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_I93WriteMultipleBlocks (uint8_t  first_block_number,
-                                              uint16_t number_blocks,
-                                              uint8_t *p_data);
+extern tNFC_STATUS RW_I93WriteMultipleBlocks(uint8_t first_block_number,
+                                             uint16_t number_blocks,
+                                             uint8_t* p_data);
 
 /*******************************************************************************
 **
@@ -1101,7 +1100,7 @@ extern tNFC_STATUS RW_I93WriteMultipleBlocks (uint8_t  first_block_number,
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_I93Select (uint8_t *p_uid);
+extern tNFC_STATUS RW_I93Select(uint8_t* p_uid);
 
 /*******************************************************************************
 **
@@ -1117,7 +1116,7 @@ extern tNFC_STATUS RW_I93Select (uint8_t *p_uid);
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_I93ResetToReady (void);
+extern tNFC_STATUS RW_I93ResetToReady(void);
 
 /*******************************************************************************
 **
@@ -1133,7 +1132,7 @@ extern tNFC_STATUS RW_I93ResetToReady (void);
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_I93WriteAFI (uint8_t afi);
+extern tNFC_STATUS RW_I93WriteAFI(uint8_t afi);
 
 /*******************************************************************************
 **
@@ -1149,7 +1148,7 @@ extern tNFC_STATUS RW_I93WriteAFI (uint8_t afi);
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_I93LockAFI (void);
+extern tNFC_STATUS RW_I93LockAFI(void);
 
 /*******************************************************************************
 **
@@ -1165,7 +1164,7 @@ extern tNFC_STATUS RW_I93LockAFI (void);
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_I93WriteDSFID (uint8_t dsfid);
+extern tNFC_STATUS RW_I93WriteDSFID(uint8_t dsfid);
 
 /*******************************************************************************
 **
@@ -1181,7 +1180,7 @@ extern tNFC_STATUS RW_I93WriteDSFID (uint8_t dsfid);
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_I93LockDSFID (void);
+extern tNFC_STATUS RW_I93LockDSFID(void);
 
 /*******************************************************************************
 **
@@ -1198,7 +1197,7 @@ extern tNFC_STATUS RW_I93LockDSFID (void);
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_I93GetSysInfo (uint8_t *p_uid);
+extern tNFC_STATUS RW_I93GetSysInfo(uint8_t* p_uid);
 
 /*******************************************************************************
 **
@@ -1215,8 +1214,8 @@ extern tNFC_STATUS RW_I93GetSysInfo (uint8_t *p_uid);
 **                  NFC_STATUS_FAILED if other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_I93GetMultiBlockSecurityStatus (uint16_t first_block_number,
-                                                      uint16_t number_blocks);
+extern tNFC_STATUS RW_I93GetMultiBlockSecurityStatus(
+    uint16_t first_block_number, uint16_t number_blocks);
 
 /*******************************************************************************
 **
@@ -1230,7 +1229,7 @@ extern tNFC_STATUS RW_I93GetMultiBlockSecurityStatus (uint16_t first_block_numbe
 **                  NFC_STATUS_FAILED if busy or other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_I93DetectNDef (void);
+extern tNFC_STATUS RW_I93DetectNDef(void);
 
 /*******************************************************************************
 **
@@ -1249,7 +1248,7 @@ extern tNFC_STATUS RW_I93DetectNDef (void);
 **                  NFC_STATUS_FAILED if I93 is busy or other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_I93ReadNDef (void);
+extern tNFC_STATUS RW_I93ReadNDef(void);
 
 /*******************************************************************************
 **
@@ -1268,7 +1267,7 @@ extern tNFC_STATUS RW_I93ReadNDef (void);
 **                  NFC_STATUS_FAILED if I93 is busy or other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_I93UpdateNDef (uint16_t length, uint8_t *p_data);
+extern tNFC_STATUS RW_I93UpdateNDef(uint16_t length, uint8_t* p_data);
 
 /*******************************************************************************
 **
@@ -1282,7 +1281,7 @@ extern tNFC_STATUS RW_I93UpdateNDef (uint16_t length, uint8_t *p_data);
 **                  NFC_STATUS_FAILED if busy or other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_I93FormatNDef (void);
+extern tNFC_STATUS RW_I93FormatNDef(void);
 
 /*******************************************************************************
 **
@@ -1299,7 +1298,7 @@ extern tNFC_STATUS RW_I93FormatNDef (void);
 **                  NFC_STATUS_FAILED if I93 is busy or other error
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_I93SetTagReadOnly (void);
+extern tNFC_STATUS RW_I93SetTagReadOnly(void);
 
 /*****************************************************************************
 **
@@ -1316,7 +1315,7 @@ extern tNFC_STATUS RW_I93SetTagReadOnly (void);
 **                  NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/
-extern tNFC_STATUS RW_I93PresenceCheck (void);
+extern tNFC_STATUS RW_I93PresenceCheck(void);
 
 /*******************************************************************************
 **
@@ -1327,7 +1326,7 @@ extern tNFC_STATUS RW_I93PresenceCheck (void);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_SendRawFrame (uint8_t *p_raw_data, uint16_t data_len);
+extern tNFC_STATUS RW_SendRawFrame(uint8_t* p_raw_data, uint16_t data_len);
 
 /*******************************************************************************
 **
@@ -1338,7 +1337,8 @@ extern tNFC_STATUS RW_SendRawFrame (uint8_t *p_raw_data, uint16_t data_len);
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-extern tNFC_STATUS RW_SetActivatedTagType (tNFC_ACTIVATE_DEVT *p_activate_params, tRW_CBACK *p_cback);
+extern tNFC_STATUS RW_SetActivatedTagType(tNFC_ACTIVATE_DEVT* p_activate_params,
+                                          tRW_CBACK* p_cback);
 
 /*******************************************************************************
 **
@@ -1351,6 +1351,6 @@ extern tNFC_STATUS RW_SetActivatedTagType (tNFC_ACTIVATE_DEVT *p_activate_params
 ** Returns          The new or current trace level
 **
 *******************************************************************************/
-extern uint8_t RW_SetTraceLevel (uint8_t new_level);
+extern uint8_t RW_SetTraceLevel(uint8_t new_level);
 
 #endif /* RW_API_H */
