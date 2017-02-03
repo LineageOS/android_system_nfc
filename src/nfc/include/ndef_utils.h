@@ -35,8 +35,10 @@
 #define NDEF_SR_MASK            0x10    /* Short Record */
 #define NDEF_IL_MASK            0x08    /* ID Length */
 #define NDEF_TNF_MASK           0x07    /* Type Name Format */
-#define NDEF_RTD_VALID_START    0x20    /* First valid ASCII as per RTD specification */
-#define NDEF_RTD_VALID_END      0x7E    /* Last valid ASCII as per RTD specification */
+/* First valid ASCII as per RTD specification */
+#define NDEF_RTD_VALID_START 0x20
+/* Last valid ASCII as per RTD specification */
+#define NDEF_RTD_VALID_END 0x7E
 
 /* NDEF Type Name Format */
 #define NDEF_TNF_EMPTY          0   /* Empty (type/id/payload len =0) */

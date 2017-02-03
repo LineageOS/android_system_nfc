@@ -40,8 +40,10 @@
 
 /* NFA HCI callback events */
 #define NFA_HCI_REGISTER_EVT	                0x00    /* Application registered                       */
-#define NFA_HCI_DEREGISTER_EVT                  0x01    /* Application deregistered                     */
-#define NFA_HCI_GET_GATE_PIPE_LIST_EVT          0x02    /* Retrieved gates,pipes assoc. to application  */
+/* Application deregistered                     */
+#define NFA_HCI_DEREGISTER_EVT 0x01
+/* Retrieved gates,pipes assoc. to application  */
+#define NFA_HCI_GET_GATE_PIPE_LIST_EVT 0x02
 #define NFA_HCI_ALLOCATE_GATE_EVT	            0x03    /* A generic gate allocated to the application  */
 #define NFA_HCI_DEALLOCATE_GATE_EVT	            0x04    /* A generic gate is released                   */
 #define NFA_HCI_CREATE_PIPE_EVT         	    0x05    /* Pipe is created                              */
@@ -49,27 +51,45 @@
 #define NFA_HCI_CLOSE_PIPE_EVT         	        0x07    /* Pipe is closed / could not close             */
 #define NFA_HCI_DELETE_PIPE_EVT         	    0x08    /* Pipe is deleted                              */
 #define NFA_HCI_HOST_LIST_EVT       	        0x09    /* Received list of Host from Host controller   */
-#define NFA_HCI_INIT_EVT                        0x0A    /* HCI subsytem initialized                     */
-#define NFA_HCI_EXIT_EVT                        0x0B    /* HCI subsytem exited                          */
-#define NFA_HCI_RSP_RCVD_EVT                    0x0C    /* Response recvd to cmd sent on app owned pipe */
-#define NFA_HCI_RSP_SENT_EVT                    0x0D    /* Response sent on app owned pipe              */
-#define NFA_HCI_CMD_SENT_EVT                    0x0E    /* Command sent on app owned pipe               */
-#define NFA_HCI_EVENT_SENT_EVT                  0x0F    /* Event sent on app owned pipe                 */
-#define NFA_HCI_CMD_RCVD_EVT                    0x10    /* Command received on app owned pipe           */
-#define NFA_HCI_EVENT_RCVD_EVT                  0x11    /* Event received on app owned pipe             */
-#define NFA_HCI_GET_REG_CMD_EVT                 0x12    /* Registry read command sent                   */
-#define NFA_HCI_SET_REG_CMD_EVT                 0x13    /* Registry write command sent                  */
-#define NFA_HCI_GET_REG_RSP_EVT                 0x14    /* Received response to read registry command   */
-#define NFA_HCI_SET_REG_RSP_EVT                 0x15    /* Received response to write registry command  */
-#define NFA_HCI_ADD_STATIC_PIPE_EVT             0x16    /* A static pipe is added                       */
+/* HCI subsytem initialized                     */
+#define NFA_HCI_INIT_EVT 0x0A
+/* HCI subsytem exited                          */
+#define NFA_HCI_EXIT_EVT 0x0B
+/* Response recvd to cmd sent on app owned pipe */
+#define NFA_HCI_RSP_RCVD_EVT 0x0C
+/* Response sent on app owned pipe              */
+#define NFA_HCI_RSP_SENT_EVT 0x0D
+/* Command sent on app owned pipe               */
+#define NFA_HCI_CMD_SENT_EVT 0x0E
+/* Event sent on app owned pipe                 */
+#define NFA_HCI_EVENT_SENT_EVT 0x0F
+/* Command received on app owned pipe           */
+#define NFA_HCI_CMD_RCVD_EVT 0x10
+/* Event received on app owned pipe             */
+#define NFA_HCI_EVENT_RCVD_EVT 0x11
+/* Registry read command sent                   */
+#define NFA_HCI_GET_REG_CMD_EVT 0x12
+/* Registry write command sent                  */
+#define NFA_HCI_SET_REG_CMD_EVT 0x13
+/* Received response to read registry command   */
+#define NFA_HCI_GET_REG_RSP_EVT 0x14
+/* Received response to write registry command  */
+#define NFA_HCI_SET_REG_RSP_EVT 0x15
+/* A static pipe is added                       */
+#define NFA_HCI_ADD_STATIC_PIPE_EVT 0x16
 
 typedef uint8_t tNFA_HCI_EVT;
 
-#define NFA_MAX_HCI_APP_NAME_LEN                0x10    /* Max application name length */
-#define NFA_MAX_HCI_CMD_LEN                     255     /* Max HCI command length */
-#define NFA_MAX_HCI_RSP_LEN                     255     /* Max HCI event length */
-#define NFA_MAX_HCI_EVENT_LEN                   260     /* Max HCI event length */
-#define NFA_MAX_HCI_DATA_LEN                    260     /* Max HCI data length */
+/* Max application name length */
+#define NFA_MAX_HCI_APP_NAME_LEN 0x10
+/* Max HCI command length */
+#define NFA_MAX_HCI_CMD_LEN 255
+/* Max HCI event length */
+#define NFA_MAX_HCI_RSP_LEN 255
+/* Max HCI event length */
+#define NFA_MAX_HCI_EVENT_LEN 260
+/* Max HCI data length */
+#define NFA_MAX_HCI_DATA_LEN 260
 
 /* NFA HCI PIPE states */
 #define NFA_HCI_PIPE_CLOSED                     0x00    /* Pipe is closed */

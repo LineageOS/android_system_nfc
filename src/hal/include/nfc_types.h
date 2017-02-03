@@ -41,12 +41,18 @@ typedef struct
 *****************************************************************************/
 
 /* NFC_HAL_TASK event messages */
-#define NFC_HAL_EVT_TO_NFC_NCI             0x0100   /* NCI message for sending to NFCC          */
-#define NFC_HAL_EVT_POST_CORE_RESET        0x0200   /* Request to start NCIT quick timer        */
-#define NFC_HAL_EVT_TO_START_QUICK_TIMER   0x0300   /* Request to start chip-specific config    */
-#define NFC_HAL_EVT_HCI                    0x0400   /* NCI message for hci persistency data     */
-#define NFC_HAL_EVT_PRE_DISCOVER           0x0500   /* NCI message to issue prediscover config  */
-#define NFC_HAL_EVT_CONTROL_GRANTED        0x0600   /* permission to send commands queued in HAL*/
+/* NCI message for sending to NFCC          */
+#define NFC_HAL_EVT_TO_NFC_NCI 0x0100
+/* Request to start NCIT quick timer        */
+#define NFC_HAL_EVT_POST_CORE_RESET 0x0200
+/* Request to start chip-specific config    */
+#define NFC_HAL_EVT_TO_START_QUICK_TIMER 0x0300
+/* NCI message for hci persistency data     */
+#define NFC_HAL_EVT_HCI 0x0400
+/* NCI message to issue prediscover config  */
+#define NFC_HAL_EVT_PRE_DISCOVER 0x0500
+/* permission to send commands queued in HAL*/
+#define NFC_HAL_EVT_CONTROL_GRANTED 0x0600
 
 /* NFC_HAL_TASK sub event messages */
 #define NFC_HAL_HCI_RSP_NV_READ_EVT        (0x01 | NFC_HAL_EVT_HCI)
@@ -55,9 +61,12 @@ typedef struct
 
 
 /* Event masks for NFC_TASK messages */
-#define NFC_EVT_TO_NFC_NCI              0x4000      /* NCI message for sending to host stack    */
-#define NFC_EVT_TO_NFC_ERR              0x4100      /* Error notification to NFC Task           */
-#define NFC_EVT_TO_NFC_MSGS             0x4200      /* Messages between NFC and NCI task        */
+/* NCI message for sending to host stack    */
+#define NFC_EVT_TO_NFC_NCI 0x4000
+/* Error notification to NFC Task           */
+#define NFC_EVT_TO_NFC_ERR 0x4100
+/* Messages between NFC and NCI task        */
+#define NFC_EVT_TO_NFC_MSGS 0x4200
 
 /*****************************************************************************
 ** Macros to get and put bytes to and from a stream (Little Endian format).
@@ -132,12 +141,18 @@ typedef struct
 ** Define trace levels
 *****************************************************************************/
 
-#define BT_TRACE_LEVEL_NONE    0          /* No trace messages to be generated    */
-#define BT_TRACE_LEVEL_ERROR   1          /* Error condition trace messages       */
-#define BT_TRACE_LEVEL_WARNING 2          /* Warning condition trace messages     */
-#define BT_TRACE_LEVEL_API     3          /* API traces                           */
-#define BT_TRACE_LEVEL_EVENT   4          /* Debug messages for events            */
-#define BT_TRACE_LEVEL_DEBUG   5          /* Full debug messages                  */
+/* No trace messages to be generated    */
+#define BT_TRACE_LEVEL_NONE 0
+/* Error condition trace messages       */
+#define BT_TRACE_LEVEL_ERROR 1
+/* Warning condition trace messages     */
+#define BT_TRACE_LEVEL_WARNING 2
+/* API traces                           */
+#define BT_TRACE_LEVEL_API 3
+/* Debug messages for events            */
+#define BT_TRACE_LEVEL_EVENT 4
+/* Full debug messages                  */
+#define BT_TRACE_LEVEL_DEBUG 5
 
 
 #define TRACE_CTRL_GENERAL          0x00000000

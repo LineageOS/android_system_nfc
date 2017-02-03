@@ -36,7 +36,8 @@ typedef uint16_t        NFCSTATUS;        /* Return values */
 #define STATIC static
 
 #define PHNFC_MAX_UID_LENGTH            0x0AU  /* Maximum UID length expected */
-#define PHNFC_MAX_ATR_LENGTH            0x30U  /* Maximum ATR_RES (General Bytes) length expected */
+/* Maximum ATR_RES (General Bytes) length expected */
+#define PHNFC_MAX_ATR_LENGTH 0x30U
 #define PHNFC_NFCID_LENGTH              0x0AU  /* Maximum length of NFCID 1.3*/
 #define PHNFC_ATQA_LENGTH               0x02U  /* ATQA length */
 

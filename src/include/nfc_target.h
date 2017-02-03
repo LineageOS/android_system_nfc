@@ -266,7 +266,8 @@
 
 /* RW Type 2 Tag timeout for each API call, in ms */
 #ifndef RW_T2T_TOUT_RESP
-#define RW_T2T_TOUT_RESP            150 /* Android requires 150 instead of 100 for presence-check*/
+/* Android requires 150 instead of 100 for presence-check*/
+#define RW_T2T_TOUT_RESP 150
 #endif
 
 /* RW Type 2 Tag timeout for each API call, in ms */
@@ -276,7 +277,8 @@
 
 /* RW Type 3 Tag timeout for each API call, in ms */
 #ifndef RW_T3T_TOUT_RESP
-#define RW_T3T_TOUT_RESP            100         /* NFC-Android will use 100 instead of 75 for T3t presence-check */
+/* NFC-Android will use 100 instead of 75 for T3t presence-check */
+#define RW_T3T_TOUT_RESP 100
 #endif
 
 /* CE Type 3 Tag maximum response timeout index (for check and update, used in SENSF_RES) */
@@ -368,7 +370,8 @@
 
 /* Link Timeout, LTO */
 #ifndef LLCP_LTO_VALUE
-#define LLCP_LTO_VALUE              1000    /* Default is 100ms. It should be sufficiently larger than RWT */
+/* Default is 100ms. It should be sufficiently larger than RWT */
+#define LLCP_LTO_VALUE 1000
 #endif
 
 /*
@@ -421,7 +424,8 @@
 
 /* Response Waiting Time */
 #ifndef LLCP_WAITING_TIME
-#define LLCP_WAITING_TIME           7       /* its scaled value should be less than LTO */
+/* its scaled value should be less than LTO */
+#define LLCP_WAITING_TIME 7
 #endif
 
 /* Options Parameters */
@@ -559,7 +563,8 @@
 
 /* Presence check option: 0x01: use sleep/wake for none-NDEF ISO-DEP tags */
 #ifndef NFA_DM_PRESENCE_CHECK_OPTION
-#define NFA_DM_PRESENCE_CHECK_OPTION                0x03  /* !!!!! Android needs value 3 */
+/* !!!!! Android needs value 3 */
+#define NFA_DM_PRESENCE_CHECK_OPTION 0x03
 #endif
 
 /* Maximum time to wait for presence check response */
@@ -589,7 +594,8 @@
 #endif
 
 #ifndef NFA_SNEP_INCLUDED
-#define NFA_SNEP_INCLUDED               FALSE /* Android must use FALSE to exclude SNEP */
+/* Android must use FALSE to exclude SNEP */
+#define NFA_SNEP_INCLUDED FALSE
 #endif
 
 /* Max acceptable length */
@@ -619,7 +625,8 @@
 
 /* Max number of NFCEE supported */
 #ifndef NFA_EE_MAX_EE_SUPPORTED
-#define NFA_EE_MAX_EE_SUPPORTED         4           /* Modified for NFC-A until we add dynamic support */
+/* Modified for NFC-A until we add dynamic support */
+#define NFA_EE_MAX_EE_SUPPORTED 4
 #endif
 
 /* Maximum number of AID entries per target_handle  */

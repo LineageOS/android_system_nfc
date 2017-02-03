@@ -31,17 +31,24 @@
 #define PHDNLDNFC_CMDRESP_MAX_BUFF_SIZE   (PHNFC_I2C_FRAGMENT_SIZE)
 #endif
 
-#define PHDNLDNFC_WRITERSP_BUFF_SIZE  (0x08U)   /* DL Host Short Frame Buffer Size for pipelined WRITE RSP */
+/* DL Host Short Frame Buffer Size for pipelined WRITE RSP */
+#define PHDNLDNFC_WRITERSP_BUFF_SIZE (0x08U)
 
-#define PHDNLDNFC_FRAME_HDR_LEN  (0x02U)   /* DL Host Frame Buffer Header Length */
-#define PHDNLDNFC_FRAME_CRC_LEN  (PHDNLDNFC_FRAME_HDR_LEN)   /* DL Host Frame Buffer CRC Length */
+/* DL Host Frame Buffer Header Length */
+#define PHDNLDNFC_FRAME_HDR_LEN (0x02U)
+/* DL Host Frame Buffer CRC Length */
+#define PHDNLDNFC_FRAME_CRC_LEN (PHDNLDNFC_FRAME_HDR_LEN)
 #define PHDNLDNFC_FRAME_ID_LEN   (0x01U)    /* Length of Cmd Id */
 
-#define PHDNLDNFC_EEFL_ADDR_SIZE          (0x03U)      /* size of EEPROM/Flash address */
-#define PHDNLDNFC_DATA_SIZE               (PHDNLDNFC_FRAME_HDR_LEN)      /* 2 Byte size of data */
+/* size of EEPROM/Flash address */
+#define PHDNLDNFC_EEFL_ADDR_SIZE (0x03U)
+/* 2 Byte size of data */
+#define PHDNLDNFC_DATA_SIZE (PHDNLDNFC_FRAME_HDR_LEN)
 
-#define PHDNLDNFC_EEPROM_LOG_START_ADDR   (0x201F80U)   /* Start of EEPROM address for log */
-#define PHDNLDNFC_EEPROM_LOG_END_ADDR     (0x201FBFU)   /* End of EEPROM address for log */
+/* Start of EEPROM address for log */
+#define PHDNLDNFC_EEPROM_LOG_START_ADDR (0x201F80U)
+/* End of EEPROM address for log */
+#define PHDNLDNFC_EEPROM_LOG_END_ADDR (0x201FBFU)
 
 #define PHDNLDNFC_MAX_LOG_SIZE        ((PHDNLDNFC_EEPROM_LOG_END_ADDR - PHDNLDNFC_EEPROM_LOG_START_ADDR) + 1)
 

@@ -69,12 +69,17 @@ typedef struct
 **  Low Power Mode definitions
 *****************************************************************************/
 
-#define NFC_HAL_LP_SNOOZE_MODE_NONE      NFC_SNOOZE_MODE_NONE       /* Snooze mode disabled    */
-#define NFC_HAL_LP_SNOOZE_MODE_UART      NFC_SNOOZE_MODE_UART       /* Snooze mode for UART    */
-#define NFC_HAL_LP_SNOOZE_MODE_SPI_I2C   NFC_SNOOZE_MODE_SPI_I2C    /* Snooze mode for SPI/I2C */
+/* Snooze mode disabled    */
+#define NFC_HAL_LP_SNOOZE_MODE_NONE NFC_SNOOZE_MODE_NONE
+/* Snooze mode for UART    */
+#define NFC_HAL_LP_SNOOZE_MODE_UART NFC_SNOOZE_MODE_UART
+/* Snooze mode for SPI/I2C */
+#define NFC_HAL_LP_SNOOZE_MODE_SPI_I2C NFC_SNOOZE_MODE_SPI_I2C
 
-#define NFC_HAL_LP_ACTIVE_LOW            NFC_SNOOZE_ACTIVE_LOW      /* high to low voltage is asserting */
-#define NFC_HAL_LP_ACTIVE_HIGH           NFC_SNOOZE_ACTIVE_HIGH     /* low to high voltage is asserting */
+/* high to low voltage is asserting */
+#define NFC_HAL_LP_ACTIVE_LOW NFC_SNOOZE_ACTIVE_LOW
+/* low to high voltage is asserting */
+#define NFC_HAL_LP_ACTIVE_HIGH NFC_SNOOZE_ACTIVE_HIGH
 
 /*****************************************************************************
 **  Patch RAM Constants

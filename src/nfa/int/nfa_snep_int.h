@@ -34,7 +34,8 @@
 *****************************************************************************/
 #define NFA_SNEP_DEFAULT_SERVER_SAP     0x04    /* SNEP default server SAP   */
 #define NFA_SNEP_HEADER_SIZE            6       /* SNEP header size          */
-#define NFA_SNEP_ACCEPT_LEN_SIZE        4       /* SNEP Acceptable Length size */
+/* SNEP Acceptable Length size */
+#define NFA_SNEP_ACCEPT_LEN_SIZE 4
 #define NFA_SNEP_CLIENT_TIMEOUT         1000    /* ms, waiting for response  */
 
 /* NFA SNEP events */
@@ -167,13 +168,18 @@ typedef union
 *****************************************************************************/
 
 /* NFA SNEP service control block */
-#define NFA_SNEP_FLAG_ANY               0x00   /* ignore flags while searching   */
+/* ignore flags while searching   */
+#define NFA_SNEP_FLAG_ANY 0x00
 #define NFA_SNEP_FLAG_SERVER            0x01   /* server */
 #define NFA_SNEP_FLAG_CLIENT            0x02   /* client */
-#define NFA_SNEP_FLAG_CONNECTING        0x04   /* waiting for connection confirm */
-#define NFA_SNEP_FLAG_CONNECTED         0x08   /* data link connected            */
-#define NFA_SNEP_FLAG_W4_RESP_CONTINUE  0x10   /* Waiting for continue response  */
-#define NFA_SNEP_FLAG_W4_REQ_CONTINUE   0x20   /* Waiting for continue request   */
+/* waiting for connection confirm */
+#define NFA_SNEP_FLAG_CONNECTING 0x04
+/* data link connected            */
+#define NFA_SNEP_FLAG_CONNECTED 0x08
+/* Waiting for continue response  */
+#define NFA_SNEP_FLAG_W4_RESP_CONTINUE 0x10
+/* Waiting for continue request   */
+#define NFA_SNEP_FLAG_W4_REQ_CONTINUE 0x20
 
 typedef struct
 {

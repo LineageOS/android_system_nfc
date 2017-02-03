@@ -55,7 +55,8 @@ static uint8_t nfc_hal_dm_set_fw_fsm_cmd[NCI_MSG_HDR_SIZE + 1] =
 };
 #define NCI_SET_FWFSM_OFFSET_ENABLE      3
 
-#define NCI_PROP_PARAM_SIZE_XTAL_INDEX      3       /* length of parameters in XTAL_INDEX CMD */
+/* length of parameters in XTAL_INDEX CMD */
+#define NCI_PROP_PARAM_SIZE_XTAL_INDEX 3
 #ifndef NCI_PROP_PARAM_MAX_SIZE_XTAL_INDEX
 #define NCI_PROP_PARAM_MAX_SIZE_XTAL_INDEX      20
 #endif
@@ -74,7 +75,8 @@ const uint8_t nfc_hal_dm_get_patch_version_cmd [NCI_MSG_HDR_SIZE] =
     NCI_MSG_GET_PATCH_VERSION,
     0x00
 };
-#define NCI_PATCH_INFO_VERSION_LEN  16  /* Length of patch version string in PATCH_INFO */
+/* Length of patch version string in PATCH_INFO */
+#define NCI_PATCH_INFO_VERSION_LEN 16
 
 /*****************************************************************************
 ** Extern function prototypes

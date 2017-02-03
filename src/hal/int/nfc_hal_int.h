@@ -66,10 +66,14 @@ extern "C" {
 #define NFC_HAL_TTYPE_NFCC_ENABLE               2
 
 /* NFC HAL Task Wait Response flag */
-#define NFC_HAL_WAIT_RSP_CMD                    0x10    /* wait response on an NCI command                  */
-#define NFC_HAL_WAIT_RSP_VSC                    0x20    /* wait response on an NCI vendor specific command  */
-#define NFC_HAL_WAIT_RSP_PROP                   0x40    /* wait response on a proprietary command           */
-#define NFC_HAL_WAIT_RSP_NONE                   0x00    /* not waiting for anything                         */
+/* wait response on an NCI command                  */
+#define NFC_HAL_WAIT_RSP_CMD 0x10
+/* wait response on an NCI vendor specific command  */
+#define NFC_HAL_WAIT_RSP_VSC 0x20
+/* wait response on a proprietary command           */
+#define NFC_HAL_WAIT_RSP_PROP 0x40
+/* not waiting for anything                         */
+#define NFC_HAL_WAIT_RSP_NONE 0x00
 
 typedef uint8_t tNFC_HAL_WAIT_RSP;
 
@@ -87,9 +91,12 @@ typedef uint16_t tNFC_HAL_HCI_EVT;
 #define NFC_HAL_HCI_WHITELIST_INDEX             0x03
 
 #define NFC_HAL_HCI_ADMIN_PIPE                  0x01
-#define NFC_HAL_HCI_HOST_ID_UICC0               0x02        /* Host ID for UICC 0 */
-#define NFC_HAL_HCI_HOST_ID_UICC1               0x03        /* Host ID for UICC 1 */
-#define NFC_HAL_HCI_HOST_ID_UICC2               0x04        /* Host ID for UICC 2 */
+/* Host ID for UICC 0 */
+#define NFC_HAL_HCI_HOST_ID_UICC0 0x02
+/* Host ID for UICC 1 */
+#define NFC_HAL_HCI_HOST_ID_UICC1 0x03
+/* Host ID for UICC 2 */
+#define NFC_HAL_HCI_HOST_ID_UICC2 0x04
 #define NFC_HAL_HCI_COMMAND_TYPE                0x00
 #define NFC_HAL_HCI_RESPONSE_TYPE               0x02
 
@@ -99,10 +106,14 @@ typedef uint16_t tNFC_HAL_HCI_EVT;
 #endif
 
 /* Flag defintions for tNFC_HAL_NVM */
-#define NFC_HAL_NVM_FLAGS_NO_NVM                0x01    /* No NVM available                     */
-#define NFC_HAL_NVM_FLAGS_LPM_BAD               0x02    /* FPM patch in NVM failed CRC check    */
-#define NFC_HAL_NVM_FLAGS_FPM_BAD               0x04    /* LPM patch in NVM failed CRC check    */
-#define NFC_HAL_NVM_FLAGS_PATCH_PRESENT         0x08    /* Patch is present in NVM              */
+/* No NVM available                     */
+#define NFC_HAL_NVM_FLAGS_NO_NVM 0x01
+/* FPM patch in NVM failed CRC check    */
+#define NFC_HAL_NVM_FLAGS_LPM_BAD 0x02
+/* LPM patch in NVM failed CRC check    */
+#define NFC_HAL_NVM_FLAGS_FPM_BAD 0x04
+/* Patch is present in NVM              */
+#define NFC_HAL_NVM_FLAGS_PATCH_PRESENT 0x08
 
 /* NFC HAL transport configuration */
 typedef struct
@@ -113,9 +124,11 @@ typedef struct
 } tNFC_HAL_TRANS_CFG;
 
 #ifdef TESTER
-#define NFC_HAL_TRANS_CFG_QUALIFIER               /* For Insight, ncit_cfg is runtime-configurable */
+/* For Insight, ncit_cfg is runtime-configurable */
+#define NFC_HAL_TRANS_CFG_QUALIFIER 
 #else
-#define NFC_HAL_TRANS_CFG_QUALIFIER   const       /* For all other platforms, ncit_cfg is constant */
+/* For all other platforms, ncit_cfg is constant */
+#define NFC_HAL_TRANS_CFG_QUALIFIER const
 #endif
 extern NFC_HAL_TRANS_CFG_QUALIFIER tNFC_HAL_TRANS_CFG nfc_hal_trans_cfg;
 

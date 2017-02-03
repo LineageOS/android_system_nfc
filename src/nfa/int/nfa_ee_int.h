@@ -32,13 +32,17 @@
 **  Constants and data types
 *****************************************************************************/
 #define NFA_EE_DEBUG            BT_TRACE_VERBOSE
-#define NFA_EE_NUM_ECBS         (NFA_EE_MAX_EE_SUPPORTED+1) /* the number of tNFA_EE_ECBs (for NFCEEs and DH) */
-#define NFA_EE_CB_4_DH          NFA_EE_MAX_EE_SUPPORTED     /* The index for DH in nfa_ee_cb.ee_cb[] */
+/* the number of tNFA_EE_ECBs (for NFCEEs and DH) */
+#define NFA_EE_NUM_ECBS (NFA_EE_MAX_EE_SUPPORTED+1)
+/* The index for DH in nfa_ee_cb.ee_cb[] */
+#define NFA_EE_CB_4_DH NFA_EE_MAX_EE_SUPPORTED
 #define NFA_EE_INVALID          0xFF
-#define NFA_EE_MAX_TECH_ROUTE   4 /* only A, B, F, Bprime are supported by UICC now */
+/* only A, B, F, Bprime are supported by UICC now */
+#define NFA_EE_MAX_TECH_ROUTE 4
 
 #ifndef NFA_EE_AID_CFG_TAG_NAME
-#define NFA_EE_AID_CFG_TAG_NAME         0x4F /* AID                             */
+/* AID                             */
+#define NFA_EE_AID_CFG_TAG_NAME 0x4F
 #endif
 
 /* NFA EE events */
@@ -76,7 +80,8 @@ enum
 
 
 typedef uint16_t tNFA_EE_INT_EVT;
-#define NFA_EE_AE_ROUTE             0x80        /* for listen mode routing table*/
+/* for listen mode routing table*/
+#define NFA_EE_AE_ROUTE 0x80
 #define NFA_EE_AE_VS                0x40
 
 
@@ -110,19 +115,29 @@ typedef uint8_t tNFA_EE_CONN_ST;
 /* NFA EE control block flags:
  * use to indicate an API function has changed the configuration of the associated NFCEE
  * The flags are cleared when the routing table/VS is updated */
-#define NFA_EE_ECB_FLAGS_TECH       0x02      /* technology routing changed         */
-#define NFA_EE_ECB_FLAGS_PROTO      0x04      /* protocol routing changed           */
-#define NFA_EE_ECB_FLAGS_AID        0x08      /* AID routing changed                */
-#define NFA_EE_ECB_FLAGS_VS         0x10      /* VS changed                         */
-#define NFA_EE_ECB_FLAGS_RESTORE    0x20      /* Restore related                    */
-#define NFA_EE_ECB_FLAGS_ROUTING    0x0E      /* routing flags changed              */
-#define NFA_EE_ECB_FLAGS_DISC_REQ   0x40      /* NFCEE Discover Request NTF is set  */
-#define NFA_EE_ECB_FLAGS_ORDER      0x80      /* DISC_REQ N reported before DISC N  */
+/* technology routing changed         */
+#define NFA_EE_ECB_FLAGS_TECH 0x02
+/* protocol routing changed           */
+#define NFA_EE_ECB_FLAGS_PROTO 0x04
+/* AID routing changed                */
+#define NFA_EE_ECB_FLAGS_AID 0x08
+/* VS changed                         */
+#define NFA_EE_ECB_FLAGS_VS 0x10
+/* Restore related                    */
+#define NFA_EE_ECB_FLAGS_RESTORE 0x20
+/* routing flags changed              */
+#define NFA_EE_ECB_FLAGS_ROUTING 0x0E
+/* NFCEE Discover Request NTF is set  */
+#define NFA_EE_ECB_FLAGS_DISC_REQ 0x40
+/* DISC_REQ N reported before DISC N  */
+#define NFA_EE_ECB_FLAGS_ORDER 0x80
 typedef uint8_t tNFA_EE_ECB_FLAGS;
 
 /* part of tNFA_EE_STATUS; for internal use only  */
-#define NFA_EE_STATUS_RESTORING 0x20      /* waiting for restore to full power mode to complete */
-#define NFA_EE_STATUS_INT_MASK  0x20      /* this bit is in ee_status for internal use only */
+/* waiting for restore to full power mode to complete */
+#define NFA_EE_STATUS_RESTORING 0x20
+/* this bit is in ee_status for internal use only */
+#define NFA_EE_STATUS_INT_MASK 0x20
 
 /* NFA-EE information for a particular NFCEE Entity (including DH) */
 typedef struct
@@ -373,7 +388,8 @@ typedef void (*tNFA_EE_SM_ACT)(tNFA_EE_MSG *p_data);
 **  control block
 *****************************************************************************/
 #define NFA_EE_CFGED_UPDATE_NOW         0x80
-#define NFA_EE_CFGED_OFF_ROUTING        0x40    /* either switch off or battery off is configured */
+/* either switch off or battery off is configured */
+#define NFA_EE_CFGED_OFF_ROUTING 0x40
 
 /* the following status are the definition used in ee_cfg_sts */
 #define NFA_EE_STS_CHANGED_ROUTING      0x01
@@ -383,21 +399,29 @@ typedef void (*tNFA_EE_SM_ACT)(tNFA_EE_MSG *p_data);
 #define NFA_EE_STS_PREV                 0xf0
 
 
-#define NFA_EE_WAIT_UPDATE              0x10    /* need to report NFA_EE_UPDATED_EVT */
-#define NFA_EE_WAIT_UPDATE_RSP          0x20    /* waiting for the rsp of set routing commands */
+/* need to report NFA_EE_UPDATED_EVT */
+#define NFA_EE_WAIT_UPDATE 0x10
+/* waiting for the rsp of set routing commands */
+#define NFA_EE_WAIT_UPDATE_RSP 0x20
 #define NFA_EE_WAIT_UPDATE_ALL          0xF0
 
 typedef uint8_t tNFA_EE_WAIT;
 
-#define NFA_EE_FLAG_WAIT_HCI            0x01    /* set this bit when waiting for HCI to finish the initialization process in NFA_EE_EM_STATE_RESTORING */
-#define NFA_EE_FLAG_NOTIFY_HCI          0x02    /* set this bit when EE needs to notify the p_enable_cback at the end of NFCEE discover process in NFA_EE_EM_STATE_RESTORING */
-#define NFA_EE_FLAG_WAIT_DISCONN        0x04    /* set this bit when gracefully disable with outstanding NCI connections */
+/* set this bit when waiting for HCI to finish the initialization process in NFA_EE_EM_STATE_RESTORING */
+#define NFA_EE_FLAG_WAIT_HCI 0x01
+/* set this bit when EE needs to notify the p_enable_cback at the end of NFCEE discover process in NFA_EE_EM_STATE_RESTORING */
+#define NFA_EE_FLAG_NOTIFY_HCI 0x02
+/* set this bit when gracefully disable with outstanding NCI connections */
+#define NFA_EE_FLAG_WAIT_DISCONN 0x04
 typedef uint8_t tNFA_EE_FLAGS;
 
 
-#define NFA_EE_DISC_STS_ON              0x00    /* NFCEE DISCOVER in progress       */
-#define NFA_EE_DISC_STS_OFF             0x01    /* disable NFCEE DISCOVER           */
-#define NFA_EE_DISC_STS_REQ             0x02    /* received NFCEE DISCOVER REQ NTF  */
+/* NFCEE DISCOVER in progress       */
+#define NFA_EE_DISC_STS_ON 0x00
+/* disable NFCEE DISCOVER           */
+#define NFA_EE_DISC_STS_OFF 0x01
+/* received NFCEE DISCOVER REQ NTF  */
+#define NFA_EE_DISC_STS_REQ 0x02
 typedef uint8_t tNFA_EE_DISC_STS;
 
 typedef void (tNFA_EE_ENABLE_DONE_CBACK)(tNFA_EE_DISC_STS status);

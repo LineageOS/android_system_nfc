@@ -25,15 +25,19 @@
 *****************************************************************************/
 
 /* Internal flags */
-#define NFC_HAL_PRM_FLAGS_USE_PATCHRAM_BUF  0x01    /* Application provided patchram in a single buffer */
-#define NFC_HAL_PRM_FLAGS_RFU               0x02    /* Reserved for future use */
+/* Application provided patchram in a single buffer */
+#define NFC_HAL_PRM_FLAGS_USE_PATCHRAM_BUF 0x01
+/* Reserved for future use */
+#define NFC_HAL_PRM_FLAGS_RFU 0x02
 #define NFC_HAL_PRM_FLAGS_SIGNATURE_SENT    0x04    /* Signature sent to NFCC */
 #define NFC_HAL_PRM_FLAGS_I2C_FIX_REQUIRED  0x08    /* PreI2C patch required */
-#define NFC_HAL_PRM_FLAGS_BCM20791B3        0x10    /* B3 Patch (no RESET_NTF after patch download) */
+/* B3 Patch (no RESET_NTF after patch download) */
+#define NFC_HAL_PRM_FLAGS_BCM20791B3 0x10
 #define NFC_HAL_PRM_FLAGS_RM_RF             0x20    /* Erase Personality data */
 
 /* Secure patch download definitions */
-#define NFC_HAL_PRM_NCD_PATCHFILE_HDR_LEN  7       /* PRJID + MAJORVER + MINORVER + COUNT */
+/* PRJID + MAJORVER + MINORVER + COUNT */
+#define NFC_HAL_PRM_NCD_PATCHFILE_HDR_LEN 7
 
 /* Enumeration of power modes IDs */
 #define NFC_HAL_PRM_SPD_POWER_MODE_LPM     0
@@ -43,8 +47,10 @@
 const uint8_t NFC_HAL_PRM_BCM20791B3_STR[]   = "20791B3";
 #define NFC_HAL_PRM_BCM20791B3_STR_LEN     (sizeof (NFC_HAL_PRM_BCM20791B3_STR)-1)
 
-#define NFC_HAL_PRM_SPD_TOUT                   (6000)  /* timeout for SPD events (in ms)   */
-#define NFC_HAL_PRM_END_DELAY                  (250)   /* delay before sending any new command (ms)*/
+/* timeout for SPD events (in ms)   */
+#define NFC_HAL_PRM_SPD_TOUT (6000)
+/* delay before sending any new command (ms)*/
+#define NFC_HAL_PRM_END_DELAY (250)
 
 #if (NFC_HAL_PRM_DEBUG == TRUE)
 #define NFC_HAL_PRM_STATE(str)  HAL_TRACE_DEBUG2 ("%s st: %d", str, nfc_hal_cb.prm.state)
