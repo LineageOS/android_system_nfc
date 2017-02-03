@@ -24,7 +24,7 @@
  *  /system/core/include/cutils/log.h
  *
  ******************************************************************************/
-#include "OverrideLog.h"
+#include "_OverrideLog.h"
 #include <cutils/properties.h>
 #include <string.h>
 #include "config.h"

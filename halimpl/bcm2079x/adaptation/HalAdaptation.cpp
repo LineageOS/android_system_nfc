@@ -24,7 +24,7 @@
  *
  ******************************************************************************/
 #define LOG_TAG "NfcNciHal"
-#include "OverrideLog.h"
+#include "_OverrideLog.h"
 #include "HalAdaptation.h"
 #include "SyncEvent.h"
 #include "config.h"
