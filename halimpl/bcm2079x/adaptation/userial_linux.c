@@ -18,7 +18,7 @@
 
 #define LOG_TAG "USERIAL_LINUX"
 
-#include "OverrideLog.h"
+#include "_OverrideLog.h"
 #include <string.h>
 #include "gki.h"
 #include "nfc_hal_api.h"
