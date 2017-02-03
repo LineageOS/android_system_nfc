@@ -26,6 +26,8 @@
 #ifndef NFC_NCI_DEFS_H
 #define NFC_NCI_DEFS_H
 
+#include <stdint.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

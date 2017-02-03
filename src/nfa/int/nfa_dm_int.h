@@ -27,7 +27,7 @@
 
 #include "nfc_api.h"
 #include "nfa_api.h"
-
+#include "nfa_sys.h"
 
 /*****************************************************************************
 **  Constants and data types

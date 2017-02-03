@@ -26,6 +26,7 @@
 #define NFC_HAL_API_H
 #include <hardware/nfc.h>
 #include "data_types.h"
+#include "nfc_hal_target.h"
 
 /*******************************************************************************
 ** tHAL_HCI_NETWK_CMD Definitions
