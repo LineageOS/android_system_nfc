@@ -32,7 +32,8 @@
 **
 ** Function         nfa_sys_cback_reg_enable_complete
 **
-** Description      Called to register an initialization complete callback function
+** Description      Called to register an initialization complete callback
+**                  function
 **
 ** Returns          void
 **
@@ -72,8 +73,8 @@ void nfa_sys_cback_notify_enable_complete (uint8_t id)
 **
 ** Function         nfa_sys_cback_reg_nfcc_power_mode_proc_complete
 **
-** Description      Called to register a callback function for complete of processing
-**                  NFCC power mode change from NFA sub-systems
+** Description      Called to register a callback function for complete of
+**                  processing NFCC power mode change from NFA sub-systems
 **
 ** Returns          void
 **
@@ -88,8 +89,8 @@ void nfa_sys_cback_reg_nfcc_power_mode_proc_complete (tNFA_SYS_PROC_NFCC_PWR_MOD
 **
 ** Function         nfa_sys_cback_notify_nfcc_power_mode_proc_complete
 **
-** Description      Called by other NFA subsystems to notify processing NFCC power
-**                  mode is complete
+** Description      Called by other NFA subsystems to notify processing NFCC
+**                  power mode is complete
 **
 ** Returns          void
 **
@@ -102,7 +103,8 @@ void nfa_sys_cback_notify_nfcc_power_mode_proc_complete (uint8_t id)
                        nfa_sys_cb.proc_nfcc_pwr_mode_cplt_flags,
                        nfa_sys_cb.proc_nfcc_pwr_mode_cplt_mask);
 
-    if (  (nfa_sys_cb.proc_nfcc_pwr_mode_cplt_flags == nfa_sys_cb.proc_nfcc_pwr_mode_cplt_mask) /* except SYS */
+    /* except SYS */
+    if (  (nfa_sys_cb.proc_nfcc_pwr_mode_cplt_flags == nfa_sys_cb.proc_nfcc_pwr_mode_cplt_mask)
         &&(nfa_sys_cb.p_proc_nfcc_pwr_mode_cmpl_cback)  )
     {
         nfa_sys_cb.p_proc_nfcc_pwr_mode_cmpl_cback ();

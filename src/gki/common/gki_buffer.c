@@ -491,7 +491,8 @@ void *GKI_getbuf (uint16_t size)
 **                  a specific buffer pool.
 **
 **                  Note: If there are no more buffers available from the pool,
-**                        the public buffers are searched for an available buffer.
+**                        the public buffers are searched for an available
+**                        buffer.
 **
 ** Parameters       pool_id - (input) pool ID to get a buffer out of.
 **
@@ -576,7 +577,8 @@ void *GKI_getpoolbuf (uint8_t pool_id)
 **
 ** Function         GKI_freebuf
 **
-** Description      Called by an application to return a buffer to the free pool.
+** Description      Called by an application to return a buffer to the free
+**                  pool.
 **
 ** Parameters       p_buf - (input) address of the beginning of a buffer.
 **
@@ -1046,9 +1048,11 @@ void *GKI_getlast (BUFFER_Q *p_q)
 **
 ** Description      Return a pointer to the next buffer in a queue
 **
-** Parameters:      p_buf  - (input) pointer to the buffer to find the next one from.
+** Parameters:      p_buf - (input) pointer to the buffer to find the next one
+**                                  from.
 **
-** Returns          NULL if no more buffers in the queue, else next buffer address
+** Returns          NULL if no more buffers in the queue, else next buffer
+**                  address
 **
 *******************************************************************************/
 void *GKI_getnext (void *p_buf)
@@ -1092,8 +1096,8 @@ bool    GKI_queue_is_empty(BUFFER_Q *p_q)
 **
 ** Parameters:      p_user_area - (input) address of anywhere in a GKI buffer.
 **
-** Returns          void * - Address of the beginning of the specified buffer if successful,
-**                          otherwise NULL if unsuccessful
+** Returns          void * - Address of the beginning of the specified buffer if
+**                           successful, otherwise NULL if unsuccessful
 **
 *******************************************************************************/
 void *GKI_find_buf_start (void *p_user_area)
@@ -1140,8 +1144,8 @@ void *GKI_find_buf_start (void *p_user_area)
 ** Description      This function is called to set or change the permissions for
 **                  the specified pool ID.
 **
-** Parameters       pool_id -       (input) pool ID to be set or changed
-**                  permission -    (input) GKI_PUBLIC_POOL or GKI_RESTRICTED_POOL
+** Parameters       pool_id - (input) pool ID to be set or changed
+**                  permission - (input) GKI_PUBLIC_POOL or GKI_RESTRICTED_POOL
 **
 ** Returns          GKI_SUCCESS if successful
 **                  GKI_INVALID_POOL if unsuccessful
@@ -1204,7 +1208,8 @@ static void gki_add_to_pool_list(uint8_t pool_id)
 **
 ** Function         gki_remove_from_pool_list
 **
-** Description      Removes pool from the pool list. Called when a pool is deleted
+** Description      Removes pool from the pool list. Called when a pool is
+**                  deleted
 **
 ** Returns          void
 **
@@ -1233,8 +1238,8 @@ static void gki_remove_from_pool_list(uint8_t pool_id)
 **
 ** Function         GKI_igetpoolbuf
 **
-** Description      Called by an interrupt service routine to get a free buffer from
-**                  a specific buffer pool.
+** Description      Called by an interrupt service routine to get a free buffer
+**                  from a specific buffer pool.
 **
 ** Parameters       pool_id - (input) pool ID to get a buffer out of.
 **
@@ -1409,11 +1414,12 @@ void GKI_isend_msg (uint8_t task_id, uint8_t mbox, void *msg)
 **
 ** Description      Called by applications to create a buffer pool.
 **
-** Parameters:      size        - (input) length (in bytes) of each buffer in the pool
-**                  count       - (input) number of buffers to allocate for the pool
-**                  permission  - (input) restricted or public access?
-**                                        (GKI_PUBLIC_POOL or GKI_RESTRICTED_POOL)
-**                  p_mem_pool  - (input) pointer to an OS memory pool, NULL if not provided
+** Parameters:      size - (input) length (in bytes) of each buffer in the pool
+**                  count - (input) number of buffers to allocate for the pool
+**                  permission - (input) restricted or public access?
+**                                      (GKI_PUBLIC_POOL or GKI_RESTRICTED_POOL)
+**                  p_mem_pool - (input) pointer to an OS memory pool, NULL if
+**                                       not provided
 **
 ** Returns          the buffer pool ID, which should be used in calls to
 **                  GKI_getpoolbuf(). If a pool could not be created, this
@@ -1467,9 +1473,10 @@ uint8_t GKI_create_pool (uint16_t size, uint16_t count, uint8_t permission, void
 **
 ** Function         GKI_delete_pool
 **
-** Description      Called by applications to delete a buffer pool.  The function
-**                  calls the operating specific function to free the actual memory.
-**                  An exception is generated if an error is detected.
+** Description      Called by applications to delete a buffer pool.  The
+**                  function calls the operating specific function to free the
+**                  actual memory. An exception is generated if an error is
+**                  detected.
 **
 ** Parameters:      pool_id - (input) Id of the poll being deleted.
 **
@@ -1519,7 +1526,8 @@ void GKI_delete_pool (uint8_t pool_id)
 **
 ** Function         GKI_get_pool_bufsize
 **
-** Description      Called by an application to get the size of buffers in a pool
+** Description      Called by an application to get the size of buffers in a
+**                  pool
 **
 ** Parameters       Pool ID.
 **

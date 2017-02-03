@@ -157,9 +157,9 @@ void HAL_NfcClose (void);
 ** Function         HAL_NfcCoreInitialized
 **
 ** Description      Called after the CORE_INIT_RSP is received from the NFCC.
-**                  At this time, the HAL can do any chip-specific configuration,
-**                  and when finished signal the libnfc-nci with event
-**                  HAL_POST_INIT_CPLT_EVT.
+**                  At this time, the HAL can do any chip-specific
+**                  configuration, and when finished signal the libnfc-nci with
+**                  event HAL_POST_INIT_CPLT_EVT.
 **
 ** Returns          void
 **
@@ -184,13 +184,14 @@ void HAL_NfcWrite (uint16_t data_len, uint8_t *p_data);
 **
 ** Function         HAL_NfcPreDiscover
 **
-** Description      Perform any vendor-specific pre-discovery actions (if needed)
-**                  If any actions were performed TRUE will be returned, and
-**                  HAL_PRE_DISCOVER_CPLT_EVT will notify when actions are
-**                  completed.
+** Description      Perform any vendor-specific pre-discovery actions (if
+**                  needed). If any actions were performed TRUE will be
+**                  returned, and HAL_PRE_DISCOVER_CPLT_EVT will notify when
+**                  actions are completed.
 **
 ** Returns          TRUE if vendor-specific pre-discovery actions initialized
-**                  FALSE if no vendor-specific pre-discovery actions are needed.
+**                  FALSE if no vendor-specific pre-discovery actions are
+**                  needed.
 **
 *******************************************************************************/
 bool    HAL_NfcPreDiscover (void);

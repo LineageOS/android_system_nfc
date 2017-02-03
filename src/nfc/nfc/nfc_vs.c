@@ -41,10 +41,10 @@
 **
 ** Function         NFC_RegVSCback
 **
-** Description      This function is called to register or de-register a callback
-**                  function to receive Proprietary NCI response and notification
-**                  events.
-**                  The maximum number of callback functions allowed is NFC_NUM_VS_CBACKS
+** Description      This function is called to register or de-register a
+**                  callback function to receive Proprietary NCI response and
+**                  notification events. The maximum number of callback
+**                  functions allowed is NFC_NUM_VS_CBACKS
 **
 ** Returns          tNFC_STATUS
 **

@@ -2543,8 +2543,8 @@ tNFC_STATUS RW_T3tDetectNDef (void)
 **      Retrieve NDEF contents from a Type3 tag.
 **
 **      The RW_T3T_CHECK_EVT event is used to notify the application for each
-**      segment of NDEF data received. The RW_T3T_CHECK_CPLT_EVT event is used to
-**      notify the application all segments have been received.
+**      segment of NDEF data received. The RW_T3T_CHECK_CPLT_EVT event is used
+**      to notify the application all segments have been received.
 **
 **      Before using this API, the RW_T3tDetectNDef function must be called to
 **      verify that the tag contains NDEF data, and to retrieve the NDEF

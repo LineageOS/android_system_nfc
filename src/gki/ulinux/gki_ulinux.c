@@ -179,7 +179,8 @@ void GKI_init(void)
 **
 ** Function         GKI_get_os_tick_count
 **
-** Description      This function is called to retrieve the native OS system tick.
+** Description      This function is called to retrieve the native OS system
+**                  tick.
 **
 ** Returns          Tick count of native OS.
 **
@@ -198,11 +199,14 @@ uint32_t GKI_get_os_tick_count(void)
 **
 ** Description      This function is called to create a new OSS task.
 **
-** Parameters:      task_entry  - (input) pointer to the entry function of the task
+** Parameters:      task_entry  - (input) pointer to the entry function of the
+**                                        task
 **                  task_id     - (input) Task id is mapped to priority
 **                  taskname    - (input) name given to the task
-**                  stack       - (input) pointer to the top of the stack (highest memory location)
-**                  stacksize   - (input) size of the stack allocated for the task
+**                  stack       - (input) pointer to the top of the stack
+**                                        (highest memory location)
+**                  stacksize   - (input) size of the stack allocated for the
+**                                        task
 **
 ** Returns          GKI_SUCCESS if all OK, GKI_FAILURE if any problem
 **
@@ -303,10 +307,10 @@ uint8_t GKI_create_task (TASKPTR task_entry, uint8_t task_id, int8_t *taskname, 
 **
 ** Function         GKI_shutdown
 **
-** Description      shutdowns the GKI tasks/threads in from max task id to 0 and frees
-**                  pthread resources!
-**                  IMPORTANT: in case of join method, GKI_shutdown must be called outside
-**                  a GKI thread context!
+** Description      shutdowns the GKI tasks/threads in from max task id to 0 and
+**                  frees pthread resources!
+**                  IMPORTANT: in case of join method, GKI_shutdown must be
+**                  called outside a GKI thread context!
 **
 ** Returns          void
 **
@@ -396,7 +400,7 @@ void GKI_shutdown(void)
  **
  ** Returns         void
  **
- *********************************************************************************/
+ ******************************************************************************/
 void gki_system_tick_start_stop_cback(bool    start)
 {
     tGKI_OS         *p_os = &gki_cb.os;
@@ -443,7 +447,7 @@ void gki_system_tick_start_stop_cback(bool    start)
 **
 ** Returns          void
 **
-*********************************************************************************/
+*******************************************************************************/
 #ifdef NO_GKI_RUN_RETURN
 void timer_thread(signed long id)
 {
@@ -485,7 +489,7 @@ void timer_thread(signed long id)
 **                  starting a task is a 2-step process. Most OS's do it in
 **                  one step, If your OS does it in one step, this function
 **                  should be empty.
-*********************************************************************************/
+*******************************************************************************/
 void GKI_run (void *p_task_id)
 {
     GKI_TRACE_1("%s enter", __func__);
@@ -739,7 +743,8 @@ uint16_t GKI_wait (uint16_t flag, uint32_t timeout)
 ** Function         GKI_delay
 **
 ** Description      This function is called by tasks to sleep unconditionally
-**                  for a specified amount of time. The duration is in milliseconds
+**                  for a specified amount of time. The duration is in
+**                  milliseconds
 **
 ** Parameters:      timeout -    (input) the duration in milliseconds
 **
@@ -785,8 +790,8 @@ void GKI_delay (uint32_t timeout)
 ** Description      This function is called by tasks to send events to other
 **                  tasks. Tasks can also send events to themselves.
 **
-** Parameters:      task_id -  (input) The id of the task to which the event has to
-**                  be sent
+** Parameters:      task_id -  (input) The id of the task to which the event has
+**                                     to be sent
 **                  event   -  (input) The event that has to be sent
 **
 **
@@ -822,8 +827,9 @@ uint8_t GKI_send_event (uint8_t task_id, uint16_t event)
 ** Function         GKI_isend_event
 **
 ** Description      This function is called from ISRs to send events to other
-**                  tasks. The only difference between this function and GKI_send_event
-**                  is that this function assumes interrupts are already disabled.
+**                  tasks. The only difference between this function and
+**                  GKI_send_event is that this function assumes interrupts are
+**                  already disabled.
 **
 ** Parameters:      task_id -  (input) The destination task Id for the event.
 **                  event   -  (input) The event flag
@@ -853,10 +859,10 @@ uint8_t GKI_isend_event (uint8_t task_id, uint16_t event)
 **
 ** Returns          task ID
 **
-** NOTE             The Widcomm upper stack and profiles may run as a single task.
-**                  If you only have one GKI task, then you can hard-code this
-**                  function to return a '1'. Otherwise, you should have some
-**                  OS-specific method to determine the current task.
+** NOTE             The Widcomm upper stack and profiles may run as a single
+**                  task. If you only have one GKI task, then you can hard-code
+**                  this function to return a '1'. Otherwise, you should have
+**                  some OS-specific method to determine the current task.
 **
 *******************************************************************************/
 uint8_t GKI_get_taskid (void)
@@ -880,9 +886,9 @@ uint8_t GKI_get_taskid (void)
 **
 ** Function         GKI_map_taskname
 **
-** Description      This function gets the task name of the taskid passed as arg.
-**                  If GKI_MAX_TASKS is passed as arg the currently running task
-**                  name is returned
+** Description      This function gets the task name of the taskid passed as
+**                  arg. If GKI_MAX_TASKS is passed as arg the currently running
+**                  task name is returned
 **
 ** Parameters:      task_id -  (input) The id of the task whose name is being
 **                  sought. GKI_MAX_TASKS is passed to get the name of the
@@ -1139,8 +1145,8 @@ void GKI_os_free (void *p_mem)
 ** Returns          GKI_SUCCESS if all OK, else GKI_FAILURE
 **
 ** NOTE             This function is NOT called by the Widcomm stack and
-**                  profiles. If you want to implement task suspension capability,
-**                  put specific code here.
+**                  profiles. If you want to implement task suspension
+**                  capability, put specific code here.
 **
 *******************************************************************************/
 uint8_t GKI_suspend_task (uint8_t task_id)
@@ -1165,8 +1171,8 @@ uint8_t GKI_suspend_task (uint8_t task_id)
 ** Returns          GKI_SUCCESS if all OK
 **
 ** NOTE             This function is NOT called by the Widcomm stack and
-**                  profiles. If you want to implement task suspension capability,
-**                  put specific code here.
+**                  profiles. If you want to implement task suspension
+**                  capability, put specific code here.
 **
 *******************************************************************************/
 uint8_t GKI_resume_task (uint8_t task_id)
@@ -1241,7 +1247,8 @@ void GKI_sched_lock(void)
 **
 ** Function         GKI_sched_unlock
 **
-** Description      This function is called by tasks to enable scheduler switching.
+** Description      This function is called by tasks to enable scheduler
+**                  switching.
 **
 ** Returns          void
 **

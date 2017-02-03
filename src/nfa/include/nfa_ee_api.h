@@ -281,10 +281,11 @@ extern tNFA_STATUS NFA_EeDeregister (tNFA_EE_CBACK *p_cback);
 **
 ** Function         NFA_EeModeSet
 **
-** Description      This function is called to activate (mode = NFA_EE_MD_ACTIVATE)
-**                  or deactivate (mode = NFA_EE_MD_DEACTIVATE) the NFCEE
-**                  identified by the given ee_handle. The result of this
-**                  operation is reported with the NFA_EE_MODE_SET_EVT.
+** Description      This function is called to activate
+**                  (mode = NFA_EE_MD_ACTIVATE) or deactivate
+**                  (mode = NFA_EE_MD_DEACTIVATE) the NFCEE identified by the
+**                  given ee_handle. The result of this operation is reported
+**                  with the NFA_EE_MODE_SET_EVT.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -304,11 +305,12 @@ extern tNFA_STATUS NFA_EeModeSet (tNFA_HANDLE    ee_handle,
 **                  routing table for the given ee_handle. The status of this
 **                  operation is reported as the NFA_EE_SET_TECH_CFG_EVT.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
-** Note:            NFA_EeUpdateNow() should be called after last NFA-EE function
-**                  to change the listen mode routing is called.
+** Note:            NFA_EeUpdateNow() should be called after last NFA-EE
+**                  function to change the listen mode routing is called.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -329,11 +331,12 @@ extern tNFA_STATUS NFA_EeSetDefaultTechRouting (tNFA_HANDLE          ee_handle,
 **                  table for the given ee_handle. The status of this
 **                  operation is reported as the NFA_EE_SET_PROTO_CFG_EVT.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
-** Note:            NFA_EeUpdateNow() should be called after last NFA-EE function
-**                  to change the listen mode routing is called.
+** Note:            NFA_EeUpdateNow() should be called after last NFA-EE
+**                  function to change the listen mode routing is called.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -353,11 +356,12 @@ extern tNFA_STATUS NFA_EeSetDefaultProtoRouting (tNFA_HANDLE         ee_handle,
 **                  listen mode routing table in NFCC. The status of this
 **                  operation is reported as the NFA_EE_ADD_AID_EVT.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
-** Note:            NFA_EeUpdateNow() should be called after last NFA-EE function
-**                  to change the listen mode routing is called.
+** Note:            NFA_EeUpdateNow() should be called after last NFA-EE
+**                  function to change the listen mode routing is called.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -373,16 +377,17 @@ extern tNFA_STATUS NFA_EeAddAidRouting (tNFA_HANDLE          ee_handle,
 **
 ** Function         NFA_EeRemoveAidRouting
 **
-** Description      This function is called to remove the given AID entry from the
-**                  listen mode routing table. If the entry configures VS,
+** Description      This function is called to remove the given AID entry from
+**                  the listen mode routing table. If the entry configures VS,
 **                  it is also removed. The status of this operation is reported
 **                  as the NFA_EE_REMOVE_AID_EVT.
 **
-** Note:            If RF discovery is started, NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT
-**                  should happen before calling this function
+** Note:            If RF discovery is started,
+**                  NFA_StopRfDiscovery()/NFA_RF_DISCOVERY_STOPPED_EVT should
+**                  happen before calling this function
 **
-** Note:            NFA_EeUpdateNow() should be called after last NFA-EE function
-**                  to change the listen mode routing is called.
+** Note:            NFA_EeUpdateNow() should be called after last NFA-EE
+**                  function to change the listen mode routing is called.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise
@@ -411,8 +416,8 @@ extern tNFA_STATUS NFA_EeGetLmrtRemainingSize (void);
 ** Function         NFA_EeUpdateNow
 **
 ** Description      This function is called to send the current listen mode
-**                  routing table and VS configuration to the NFCC (without waiting
-**                  for NFA_EE_ROUT_TIMEOUT_VAL).
+**                  routing table and VS configuration to the NFCC (without
+**                  waiting for NFA_EE_ROUT_TIMEOUT_VAL).
 **
 **                  The status of this operation is
 **                  reported with the NFA_EE_UPDATED_EVT.
@@ -447,8 +452,9 @@ extern tNFA_STATUS NFA_EeConnect (tNFA_HANDLE    ee_handle,
 ** Function         NFA_EeSendData
 **
 ** Description      Send data to the given NFCEE.
-**                  This function shall be called after NFA_EE_CONNECT_EVT is reported
-**                  and before NFA_EeDisconnect is called on the given ee_handle.
+**                  This function shall be called after NFA_EE_CONNECT_EVT is
+**                  reported and before NFA_EeDisconnect is called on the given
+**                  ee_handle.
 **
 ** Returns          NFA_STATUS_OK if successfully initiated
 **                  NFA_STATUS_FAILED otherwise

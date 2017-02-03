@@ -328,7 +328,8 @@ uint8_t nci_snd_nfcee_mode_set (uint8_t nfcee_id, uint8_t nfcee_mode)
 **
 ** Function         nci_snd_discover_cmd
 **
-** Description      compose and send RF Management DISCOVER command to command queue
+** Description      compose and send RF Management DISCOVER command to command
+**                  queue
 **
 ** Returns          status
 **
@@ -576,8 +577,8 @@ uint8_t nci_snd_parameter_update_cmd (uint8_t *p_param_tlvs, uint8_t tlv_size)
 **
 ** Function         nci_snd_set_routing_cmd
 **
-** Description      compose and send RF Management SET_LISTEN_MODE_ROUTING command
-**                  to command queue
+** Description      compose and send RF Management SET_LISTEN_MODE_ROUTING
+**                  command to command queue
 **
 ** Returns          status
 **
@@ -626,8 +627,8 @@ uint8_t nci_snd_set_routing_cmd (bool    more, uint8_t num_tlv, uint8_t tlv_size
 **
 ** Function         nci_snd_get_routing_cmd
 **
-** Description      compose and send RF Management GET_LISTEN_MODE_ROUTING command
-**                  to command queue
+** Description      compose and send RF Management GET_LISTEN_MODE_ROUTING
+**                  command to command queue
 **
 ** Returns          status
 **

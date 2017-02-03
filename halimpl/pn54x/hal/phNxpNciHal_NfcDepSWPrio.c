@@ -46,7 +46,7 @@ static uint8_t *p_iso_ntf_buff = NULL; /* buffer to store second notification */
 static uint8_t bIgnoreIsoDep = 0;
 static uint32_t custom_poll_timer;
 
-/************** NFC-DEP SW PRIO functions ***************************************/
+/************** NFC-DEP SW PRIO functions *************************************/
 
 static NFCSTATUS phNxpNciHal_start_polling_loop(void);
 static NFCSTATUS phNxpNciHal_stop_polling_loop(void);
@@ -203,14 +203,14 @@ NFCSTATUS phNxpNciHal_start_polling_loop()
 **                  IF ISO-DEP detected first time,set the ISO-DEP detected flag
 **                  and resume polling loop with 60ms timeout value.
 **                      a) if than NFC-DEP detected than send the response to
-**                       libnfc-nci stack and stop the timer.
-**                      b) if NFC-DEP not detected with in 60ms, than restart the
-**                          polling loop to give early chance to ISO-DEP with a
-**                          cleanup timer.
+**                         libnfc-nci stack and stop the timer.
+**                      b) if NFC-DEP not detected with in 60ms, than restart
+**                         the polling loop to give early chance to ISO-DEP with
+**                         a cleanup timer.
 **                      c) if ISO-DEP detected second time send the response to
-**                          libnfc-nci stack and stop the cleanup timer.
+**                         libnfc-nci stack and stop the cleanup timer.
 **                      d) if ISO-DEP not detected with in cleanup timeout, than
-**                          clear the ISO-DEP detection flag.
+**                         clear the ISO-DEP detection flag.
 **
 ** Returns          NFCSTATUS_SUCCESS if successful,otherwise NFCSTATUS_FAILED
 **
