@@ -23,9 +23,10 @@
 #include <phTmlNfc.h>
 
 /* Function declarations */
-void phTmlNfc_i2c_close(void *pDevHandle);
-NFCSTATUS phTmlNfc_i2c_open_and_configure(pphTmlNfc_Config_t pConfig, void ** pLinkHandle);
-int phTmlNfc_i2c_read(void *pDevHandle, uint8_t * pBuffer, int nNbBytesToRead);
-int phTmlNfc_i2c_write(void *pDevHandle,uint8_t * pBuffer, int nNbBytesToWrite);
-int phTmlNfc_i2c_reset(void *pDevHandle,long level);
+void phTmlNfc_i2c_close(void* pDevHandle);
+NFCSTATUS phTmlNfc_i2c_open_and_configure(pphTmlNfc_Config_t pConfig,
+                                          void** pLinkHandle);
+int phTmlNfc_i2c_read(void* pDevHandle, uint8_t* pBuffer, int nNbBytesToRead);
+int phTmlNfc_i2c_write(void* pDevHandle, uint8_t* pBuffer, int nNbBytesToWrite);
+int phTmlNfc_i2c_reset(void* pDevHandle, long level);
 bool_t getDownloadFlag(void);

@@ -15,17 +15,18 @@
  *  limitations under the License.
  *
  ******************************************************************************/
-//override any HAL-specific macros
+// override any HAL-specific macros
 #pragma once
 
 #include "bt_types.h"
 
-//NFC_HAL_TASK=0 is already defined in gki_hal_target.h; it executes the Broadcom HAL
-#define USERIAL_HAL_TASK  1  //execute userial's read thread
-#define GKI_RUNNER_HAL_TASK 2  //execute GKI_run(), which runs forever
-#define GKI_MAX_TASKS  3 //total of 3 tasks
+// NFC_HAL_TASK=0 is already defined in gki_hal_target.h; it executes the
+// Broadcom HAL
+#define USERIAL_HAL_TASK 1     // execute userial's read thread
+#define GKI_RUNNER_HAL_TASK 2  // execute GKI_run(), which runs forever
+#define GKI_MAX_TASKS 3        // total of 3 tasks
 
-#define GKI_BUF0_MAX                16
-#define GKI_BUF1_MAX                16
+#define GKI_BUF0_MAX 16
+#define GKI_BUF1_MAX 16
 
 #define NFC_HAL_PRM_POST_I2C_FIX_DELAY (500)

@@ -16,7 +16,6 @@
  *
  ******************************************************************************/
 
-
 /******************************************************************************
  *
  *  NFA card emulation API functions
@@ -25,8 +24,8 @@
 #ifndef NFA_CE_API_H
 #define NFA_CE_API_H
 
-#include "nfc_target.h"
 #include "nfa_api.h"
+#include "nfc_target.h"
 
 /*****************************************************************************
 **  Constants and data types
@@ -36,8 +35,7 @@
 **  External Function Declarations
 *****************************************************************************/
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 /*******************************************************************************
@@ -80,13 +78,12 @@ extern "C"
 **                  NFA_STATUS_FAILED:        otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_CeConfigureLocalTag (tNFA_PROTOCOL_MASK protocol_mask,
-                                            uint8_t   *p_ndef_data,
-                                            uint16_t  ndef_cur_size,
-                                            uint16_t  ndef_max_size,
-                                            bool      read_only,
-                                            uint8_t   uid_len,
-                                            uint8_t   *p_uid);
+extern tNFA_STATUS NFA_CeConfigureLocalTag(tNFA_PROTOCOL_MASK protocol_mask,
+                                           uint8_t* p_ndef_data,
+                                           uint16_t ndef_cur_size,
+                                           uint16_t ndef_max_size,
+                                           bool read_only, uint8_t uid_len,
+                                           uint8_t* p_uid);
 
 /*******************************************************************************
 **
@@ -113,8 +110,8 @@ extern tNFA_STATUS NFA_CeConfigureLocalTag (tNFA_PROTOCOL_MASK protocol_mask,
 **                  NFA_STATUS_FAILED: otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_CeConfigureUiccListenTech (tNFA_HANDLE          ee_handle,
-                                                  tNFA_TECHNOLOGY_MASK tech_mask);
+extern tNFA_STATUS NFA_CeConfigureUiccListenTech(
+    tNFA_HANDLE ee_handle, tNFA_TECHNOLOGY_MASK tech_mask);
 
 /*******************************************************************************
 **
@@ -134,9 +131,9 @@ extern tNFA_STATUS NFA_CeConfigureUiccListenTech (tNFA_HANDLE          ee_handle
 **                  NFA_STATUS_FAILED: otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_CeRegisterFelicaSystemCodeOnDH (uint16_t         system_code,
-                                                       uint8_t          nfcid2[NCI_RF_F_UID_LEN],
-                                                       tNFA_CONN_CBACK  *p_conn_cback);
+extern tNFA_STATUS NFA_CeRegisterFelicaSystemCodeOnDH(
+    uint16_t system_code, uint8_t nfcid2[NCI_RF_F_UID_LEN],
+    tNFA_CONN_CBACK* p_conn_cback);
 
 /*******************************************************************************
 **
@@ -158,7 +155,7 @@ extern tNFA_STATUS NFA_CeRegisterFelicaSystemCodeOnDH (uint16_t         system_c
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_CeDeregisterFelicaSystemCodeOnDH (tNFA_HANDLE handle);
+extern tNFA_STATUS NFA_CeDeregisterFelicaSystemCodeOnDH(tNFA_HANDLE handle);
 
 /*******************************************************************************
 **
@@ -182,9 +179,9 @@ extern tNFA_STATUS NFA_CeDeregisterFelicaSystemCodeOnDH (tNFA_HANDLE handle);
 **                  NFA_STATUS_FAILED: otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_CeRegisterAidOnDH (uint8_t         aid[NFC_MAX_AID_LEN],
-                                          uint8_t         aid_len,
-                                          tNFA_CONN_CBACK *p_conn_cback);
+extern tNFA_STATUS NFA_CeRegisterAidOnDH(uint8_t aid[NFC_MAX_AID_LEN],
+                                         uint8_t aid_len,
+                                         tNFA_CONN_CBACK* p_conn_cback);
 
 /*******************************************************************************
 **
@@ -205,7 +202,7 @@ extern tNFA_STATUS NFA_CeRegisterAidOnDH (uint8_t         aid[NFC_MAX_AID_LEN],
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_CeDeregisterAidOnDH (tNFA_HANDLE handle);
+extern tNFA_STATUS NFA_CeDeregisterAidOnDH(tNFA_HANDLE handle);
 
 /*******************************************************************************
 **
@@ -233,7 +230,7 @@ extern tNFA_STATUS NFA_CeDeregisterAidOnDH (tNFA_HANDLE handle);
 **                  NFA_STATUS_FAILED: otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_CeSetIsoDepListenTech (tNFA_TECHNOLOGY_MASK tech_mask);
+extern tNFA_STATUS NFA_CeSetIsoDepListenTech(tNFA_TECHNOLOGY_MASK tech_mask);
 
 #ifdef __cplusplus
 }

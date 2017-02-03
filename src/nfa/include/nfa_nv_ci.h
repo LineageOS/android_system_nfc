@@ -16,7 +16,6 @@
  *
  ******************************************************************************/
 
-
 /******************************************************************************
  *
  *  This is the interface file for non valtile memory call-in functions.
@@ -32,28 +31,25 @@
 *****************************************************************************/
 
 /* Read Ready Event */
-typedef struct
-{
-    NFC_HDR            hdr;
-    tNFA_NV_CO_STATUS status;
-    int               fd;
-    uint16_t          num_read;
+typedef struct {
+  NFC_HDR hdr;
+  tNFA_NV_CO_STATUS status;
+  int fd;
+  uint16_t num_read;
 } tNFA_NV_CI_READ_EVT;
 
 /* Write Ready Event */
-typedef struct
-{
-    NFC_HDR            hdr;
-    tNFA_NV_CO_STATUS status;
-    int               fd;
+typedef struct {
+  NFC_HDR hdr;
+  tNFA_NV_CO_STATUS status;
+  int fd;
 } tNFA_NV_CI_WRITE_EVT;
 
 /*****************************************************************************
 **  Function Declarations
 *****************************************************************************/
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 /*******************************************************************************
@@ -74,7 +70,7 @@ extern "C"
 ** Returns          void
 **
 *******************************************************************************/
-extern void nfa_nv_ci_write (tNFA_NV_CO_STATUS status);
+extern void nfa_nv_ci_write(tNFA_NV_CO_STATUS status);
 
 /*******************************************************************************
 **
@@ -96,14 +92,11 @@ extern void nfa_nv_ci_write (tNFA_NV_CO_STATUS status);
 ** Returns          void
 **
 *******************************************************************************/
-extern void nfa_nv_ci_read (uint16_t          num_bytes_read,
-                            tNFA_NV_CO_STATUS status,
-                            uint8_t           block);
-
+extern void nfa_nv_ci_read(uint16_t num_bytes_read, tNFA_NV_CO_STATUS status,
+                           uint8_t block);
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* BTA_FS_CI_H */
-

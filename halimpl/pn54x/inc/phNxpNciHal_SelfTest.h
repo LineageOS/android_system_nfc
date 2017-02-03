@@ -23,55 +23,49 @@
 #include <phTmlNfc.h>
 
 /* PRBS Generation type  */
-typedef enum
-{
-    NFC_FW_PRBS, /* FW software would generate the PRBS */
-    NFC_HW_PRBS /* Hardware would generate the PRBS */
+typedef enum {
+  NFC_FW_PRBS, /* FW software would generate the PRBS */
+  NFC_HW_PRBS  /* Hardware would generate the PRBS */
 } phNxpNfc_PrbsType_t;
 
 /* Different HW PRBS types */
-typedef enum
-{
-    NFC_HW_PRBS9,
-    NFC_HW_PRBS15
-} phNxpNfc_PrbsHwType_t;
+typedef enum { NFC_HW_PRBS9, NFC_HW_PRBS15 } phNxpNfc_PrbsHwType_t;
 /* RF Technology */
-typedef enum
-{
-    NFC_RF_TECHNOLOGY_A,
-    NFC_RF_TECHNOLOGY_B,
-    NFC_RF_TECHNOLOGY_F,
+typedef enum {
+  NFC_RF_TECHNOLOGY_A,
+  NFC_RF_TECHNOLOGY_B,
+  NFC_RF_TECHNOLOGY_F,
 } phNxpNfc_Tech_t;
 
 /* Bit rates */
-typedef enum
-{
-    NFC_BIT_RATE_106,
-    NFC_BIT_RATE_212,
-    NFC_BIT_RATE_424,
-    NFC_BIT_RATE_848,
+typedef enum {
+  NFC_BIT_RATE_106,
+  NFC_BIT_RATE_212,
+  NFC_BIT_RATE_424,
+  NFC_BIT_RATE_848,
 } phNxpNfc_Bitrate_t;
 
-typedef struct phAntenna_St_Resp
-{
-     /* Txdo Raw Value*/
-    uint16_t            wTxdoRawValue;
-    uint16_t            wTxdoMeasuredRangeMin;    /*Txdo Measured Range Max */
-    uint16_t            wTxdoMeasuredRangeMax;    /*Txdo Measured Range Min */
-    uint16_t            wTxdoMeasuredTolerance;    /*Txdo Measured Range Tolerance */
-     /* Agc Values */
-    uint16_t            wAgcValue;    /*Agc Min Value*/
-    uint16_t            wAgcValueTolerance;    /*Txdo Measured Range*/
-     /* Agc value with NFCLD */
-    uint16_t            wAgcValuewithfixedNFCLD;    /*Agc Value with Fixed NFCLD Max */
-    uint16_t            wAgcValuewithfixedNFCLDTolerance;    /*Agc Value with Fixed NFCLD Tolerance */
-     /* Agc Differential Values With Open/Short RM */
-    uint16_t            wAgcDifferentialWithOpen1;    /*Agc Differential With Open 1*/
-    uint16_t            wAgcDifferentialWithOpenTolerance1;    /*Agc Differential With Open Tolerance 1*/
-    uint16_t            wAgcDifferentialWithOpen2;    /*Agc Differential With Open 2*/
-    uint16_t            wAgcDifferentialWithOpenTolerance2;    /*Agc Differential With Open Tolerance 2*/
-}phAntenna_St_Resp_t;           /* Instance of Transaction structure */
-
+typedef struct phAntenna_St_Resp {
+  /* Txdo Raw Value*/
+  uint16_t wTxdoRawValue;
+  uint16_t wTxdoMeasuredRangeMin;            /*Txdo Measured Range Max */
+  uint16_t wTxdoMeasuredRangeMax;            /*Txdo Measured Range Min */
+  uint16_t wTxdoMeasuredTolerance;           /*Txdo Measured Range Tolerance */
+                                             /* Agc Values */
+  uint16_t wAgcValue;                        /*Agc Min Value*/
+  uint16_t wAgcValueTolerance;               /*Txdo Measured Range*/
+                                             /* Agc value with NFCLD */
+  uint16_t wAgcValuewithfixedNFCLD;          /*Agc Value with Fixed NFCLD Max */
+  uint16_t wAgcValuewithfixedNFCLDTolerance; /*Agc Value with Fixed NFCLD
+                                                Tolerance */
+  /* Agc Differential Values With Open/Short RM */
+  uint16_t wAgcDifferentialWithOpen1;          /*Agc Differential With Open 1*/
+  uint16_t wAgcDifferentialWithOpenTolerance1; /*Agc Differential With Open
+                                                  Tolerance 1*/
+  uint16_t wAgcDifferentialWithOpen2;          /*Agc Differential With Open 2*/
+  uint16_t wAgcDifferentialWithOpenTolerance2; /*Agc Differential With Open
+                                                  Tolerance 2*/
+} phAntenna_St_Resp_t; /* Instance of Transaction structure */
 
 /*******************************************************************************
  **
@@ -84,7 +78,7 @@ typedef struct phAntenna_St_Resp
  **
  ******************************************************************************/
 
-NFCSTATUS phNxpNciHal_TestMode_open (void);
+NFCSTATUS phNxpNciHal_TestMode_open(void);
 
 /*******************************************************************************
  **
@@ -97,7 +91,7 @@ NFCSTATUS phNxpNciHal_TestMode_open (void);
  **
  ******************************************************************************/
 
-void phNxpNciHal_TestMode_close (void);
+void phNxpNciHal_TestMode_close(void);
 
 /*******************************************************************************
  **
@@ -110,7 +104,7 @@ void phNxpNciHal_TestMode_close (void);
  **
  ******************************************************************************/
 
-NFCSTATUS phNxpNciHal_SwpTest (uint8_t swp_line);
+NFCSTATUS phNxpNciHal_SwpTest(uint8_t swp_line);
 
 /*******************************************************************************
  **
@@ -124,11 +118,14 @@ NFCSTATUS phNxpNciHal_SwpTest (uint8_t swp_line);
  **                  otherwise NFCSTATUS_FAILED.
  **
  ******************************************************************************/
-#if(NFC_NXP_CHIP_TYPE != PN547C2)
-NFCSTATUS phNxpNciHal_PrbsTestStart (phNxpNfc_PrbsType_t prbs_type, phNxpNfc_PrbsHwType_t hw_prbs_type,
-        phNxpNfc_Tech_t tech, phNxpNfc_Bitrate_t bitrate);
+#if (NFC_NXP_CHIP_TYPE != PN547C2)
+NFCSTATUS phNxpNciHal_PrbsTestStart(phNxpNfc_PrbsType_t prbs_type,
+                                    phNxpNfc_PrbsHwType_t hw_prbs_type,
+                                    phNxpNfc_Tech_t tech,
+                                    phNxpNfc_Bitrate_t bitrate);
 #else
-NFCSTATUS phNxpNciHal_PrbsTestStart (phNxpNfc_Tech_t tech, phNxpNfc_Bitrate_t bitrate);
+NFCSTATUS phNxpNciHal_PrbsTestStart(phNxpNfc_Tech_t tech,
+                                    phNxpNfc_Bitrate_t bitrate);
 #endif
 /*******************************************************************************
  **
@@ -142,7 +139,7 @@ NFCSTATUS phNxpNciHal_PrbsTestStart (phNxpNfc_Tech_t tech, phNxpNfc_Bitrate_t bi
  **
  ******************************************************************************/
 
-NFCSTATUS phNxpNciHal_PrbsTestStop ();
+NFCSTATUS phNxpNciHal_PrbsTestStop();
 
 /*******************************************************************************
 **
@@ -155,7 +152,7 @@ NFCSTATUS phNxpNciHal_PrbsTestStop ();
 **
 *******************************************************************************/
 
-NFCSTATUS phNxpNciHal_AntennaSelfTest(phAntenna_St_Resp_t * phAntenna_St_Resp );
+NFCSTATUS phNxpNciHal_AntennaSelfTest(phAntenna_St_Resp_t* phAntenna_St_Resp);
 
 /*******************************************************************************
 **
@@ -167,7 +164,7 @@ NFCSTATUS phNxpNciHal_AntennaSelfTest(phAntenna_St_Resp_t * phAntenna_St_Resp );
 **
 *******************************************************************************/
 
-NFCSTATUS phNxpNciHal_RfFieldTest (uint8_t on);
+NFCSTATUS phNxpNciHal_RfFieldTest(uint8_t on);
 
 /*******************************************************************************
  **
@@ -179,7 +176,7 @@ NFCSTATUS phNxpNciHal_RfFieldTest (uint8_t on);
  **
  ******************************************************************************/
 
-NFCSTATUS phNxpNciHal_DownloadPinTest (void);
+NFCSTATUS phNxpNciHal_DownloadPinTest(void);
 
 #endif /* _NXP_HW_SELF_TEST_H_ */
 #endif /* _PHNXPNCIHAL_SELFTEST_H_ */
