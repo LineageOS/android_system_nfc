@@ -2163,7 +2163,8 @@ tNFC_STATUS RW_T4tDetectNDef (void)
 **
 **                  The following event will be returned
 **                      RW_T4T_NDEF_READ_EVT for each segmented NDEF message
-**                      RW_T4T_NDEF_READ_CPLT_EVT for the last segment or complete NDEF
+**                      RW_T4T_NDEF_READ_CPLT_EVT for the last segment or
+**                      complete NDEF
 **                      RW_T4T_NDEF_READ_FAIL_EVT for failure
 **
 ** Returns          NFC_STATUS_OK if success
@@ -2208,7 +2209,8 @@ tNFC_STATUS RW_T4tReadNDef (void)
 **
 ** Description      This function performs NDEF update procedure
 **                  Note: RW_T4tDetectNDef () must be called before using this
-**                        Updating data must not be removed until returning event
+**                        Updating data must not be removed until returning
+**                        event
 **
 **                  The following event will be returned
 **                      RW_T4T_NDEF_UPDATE_CPLT_EVT for complete
@@ -2280,7 +2282,8 @@ tNFC_STATUS RW_T4tUpdateNDef (uint16_t length, uint8_t *p_data)
 **
 **      The RW_T4T_PRESENCE_CHECK_EVT w/ status is used to indicate presence
 **      or non-presence.
-**      option is RW_T4T_CHK_EMPTY_I_BLOCK, use empty I block for presence check.
+**
+**      option is RW_T4T_CHK_EMPTY_I_BLOCK, use empty I block for presence check
 **
 ** Returns
 **      NFC_STATUS_OK, if raw data frame sent

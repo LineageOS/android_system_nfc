@@ -114,7 +114,8 @@ void phDal4Nfc_msgrelease(intptr_t msqid)
 ** Description      Destroys message queue
 **
 ** Parameters       msqid - message queue handle
-**                  cmd, buf - ignored, included only for Linux queue API compatibility
+**                  cmd, buf - ignored, included only for Linux queue API
+**                  compatibility
 **
 ** Returns          0,  if successful
 **                  -1, if invalid handle is passed
@@ -158,8 +159,8 @@ int phDal4Nfc_msgctl(intptr_t msqid, int cmd, void *buf)
 **
 ** Function         phDal4Nfc_msgsnd
 **
-** Description      Sends a message to the queue. The message will be added at the end of
-**                  the queue as appropriate for FIFO policy
+** Description      Sends a message to the queue. The message will be added at
+**                  the end of the queue as appropriate for FIFO policy
 **
 ** Parameters       msqid  - message queue handle
 **                  msgp   - message to be sent
@@ -215,7 +216,7 @@ intptr_t phDal4Nfc_msgsnd(intptr_t msqid, phLibNfc_Message_t * msg, int msgflg)
 **
 ** Description      Gets the oldest message from the queue.
 **                  If the queue is empty the function waits (blocks on a mutex)
-**                  until a message is posted to the queue with phDal4Nfc_msgsnd.
+**                  until a message is posted to the queue with phDal4Nfc_msgsnd
 **
 ** Parameters       msqid  - message queue handle
 **                  msgp   - message to be received

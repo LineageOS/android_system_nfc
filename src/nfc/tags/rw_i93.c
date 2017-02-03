@@ -275,9 +275,10 @@ bool    rw_i93_process_sys_info (uint8_t* p_data)
                     ||(p_i93->product_version == RW_I93_STM_M24LR64E_R)  )
                 {
                     /*
-                    ** M24LR16E-R or M24LR64E-R returns system information without memory size,
-                    ** if option flag is not set.
-                    ** LRIS64K and M24LR64-R return error if option flag is not set.
+                    ** M24LR16E-R or M24LR64E-R returns system information
+                    ** without memory size, if option flag is not set.
+                    ** LRIS64K and M24LR64-R return error if option flag is not
+                    ** set.
                     */
                     if (!(p_i93->intl_flags & RW_I93_FLAG_16BIT_NUM_BLOCK))
                     {
@@ -310,7 +311,8 @@ bool    rw_i93_process_sys_info (uint8_t* p_data)
 **
 ** Function         rw_i93_check_sys_info_prot_ext
 **
-** Description      Check if need to set protocol extension flag to get system info
+** Description      Check if need to set protocol extension flag to get system
+**                  info
 **
 ** Returns          TRUE if sent Get System Info with protocol extension flag
 **
@@ -1388,7 +1390,8 @@ tNFC_STATUS rw_i93_send_cmd_get_multi_block_sec (uint16_t first_block_number,
 **
 ** Function         rw_i93_get_next_blocks
 **
-** Description      Read as many blocks as possible (up to RW_I93_READ_MULTI_BLOCK_SIZE)
+** Description      Read as many blocks as possible (up to
+**                  RW_I93_READ_MULTI_BLOCK_SIZE)
 **
 ** Returns          tNFC_STATUS
 **
@@ -1415,8 +1418,9 @@ tNFC_STATUS rw_i93_get_next_blocks (uint16_t offset)
         if (p_i93->uid[1] == I93_UID_IC_MFG_CODE_STM)
         {
             /* LRIS64K, M24LR64-R, M24LR04E-R, M24LR16E-R, M24LR64E-R requires
-            **      The max number of blocks is 32 and they are all located in the same sector.
-            **      The sector is 32 blocks of 4 bytes.
+            ** - The max number of blocks is 32 and they are all located in the
+            **   same sector.
+            ** - The sector is 32 blocks of 4 bytes.
             */
             if (  (p_i93->product_version == RW_I93_STM_LRIS64K)
                 ||(p_i93->product_version == RW_I93_STM_M24LR64_R)
@@ -1447,8 +1451,8 @@ tNFC_STATUS rw_i93_get_next_blocks (uint16_t offset)
 **
 ** Function         rw_i93_get_next_block_sec
 **
-** Description      Get as many security of blocks as possible from p_i93->rw_offset
-**                  (up to RW_I93_GET_MULTI_BLOCK_SEC_SIZE)
+** Description      Get as many security of blocks as possible from
+**                  p_i93->rw_offset (up to RW_I93_GET_MULTI_BLOCK_SEC_SIZE)
 **
 ** Returns          tNFC_STATUS
 **
@@ -1485,7 +1489,8 @@ tNFC_STATUS rw_i93_get_next_block_sec (void)
 **                  2. Get System Info if not having yet
 **                  3. Read first block for CC
 **                  4. Search NDEF Type and length
-**                  5. Get block status to get max NDEF size and read-only status
+**                  5. Get block status to get max NDEF size and read-only
+**                     status
 **
 ** Returns          void
 **
@@ -1596,9 +1601,12 @@ void rw_i93_sm_detect_ndef (NFC_HDR *p_resp)
         ** CC[0] : magic number (0xE1)
         ** CC[1] : Bit 7-6:Major version number
         **       : Bit 5-4:Minor version number
-        **       : Bit 3-2:Read access condition    (00b: read access granted without any security)
-        **       : Bit 1-0:Write access condition   (00b: write access granted without any security)
-        ** CC[2] : Memory size in 8 bytes (Ex. 0x04 is 32 bytes) [STM, set to 0xFF if more than 2040bytes]
+        **       : Bit 3-2:Read access condition (00b: read access granted
+        **         without any security)
+        **       : Bit 1-0:Write access condition (00b: write access granted
+        **         without any security)
+        ** CC[2] : Memory size in 8 bytes (Ex. 0x04 is 32 bytes) [STM, set to
+        **         0xFF if more than 2040bytes]
         ** CC[3] : Bit 0:Read multiple blocks is supported [NXP, STM]
         **       : Bit 1:Inventory page read is supported [NXP]
         **       : Bit 2:More than 2040 bytes are supported [STM]
@@ -3354,7 +3362,8 @@ tNFC_STATUS RW_I93ReadSingleBlock (uint16_t block_number)
 ** Function         RW_I93WriteSingleBlock
 **
 ** Description      This function send Write Single Block command
-**                  Application must get block size first by calling RW_I93GetSysInfo().
+**                  Application must get block size first by calling
+**                  RW_I93GetSysInfo().
 **
 **                  RW_I93_CMD_CMPL_EVT will be returned
 **
@@ -3787,7 +3796,8 @@ tNFC_STATUS RW_I93GetSysInfo (uint8_t *p_uid)
 **
 ** Function         RW_I93GetMultiBlockSecurityStatus
 **
-** Description      This function send Get Multiple Block Security Status command
+** Description      This function send Get Multiple Block Security Status
+**                  command
 **
 **                  RW_I93_RESPONSE_EVT will be returned
 **
@@ -3888,7 +3898,8 @@ tNFC_STATUS RW_I93DetectNDef (void)
 **
 **                  The following event will be returned
 **                      RW_I93_NDEF_READ_EVT for each segmented NDEF message
-**                      RW_I93_NDEF_READ_CPLT_EVT for the last segment or complete NDEF
+**                      RW_I93_NDEF_READ_CPLT_EVT for the last segment or
+**                      complete NDEF
 **                      RW_I93_NDEF_READ_FAIL_EVT for failure
 **
 ** Returns          NFC_STATUS_OK if success
@@ -3936,7 +3947,8 @@ tNFC_STATUS RW_I93ReadNDef (void)
 **
 ** Description      This function performs NDEF update procedure
 **                  Note: RW_I93DetectNDef () must be called before using this
-**                        Updating data must not be removed until returning event
+**                        Updating data must not be removed until returning
+**                        event
 **
 **                  The following event will be returned
 **                      RW_I93_NDEF_UPDATE_CPLT_EVT for complete
@@ -4059,7 +4071,8 @@ tNFC_STATUS RW_I93FormatNDef (void)
 **
 ** Description      This function performs NDEF read-only procedure
 **                  Note: RW_I93DetectNDef () must be called before using this
-**                        Updating data must not be removed until returning event
+**                        Updating data must not be removed until returning
+**                        event
 **
 **                  The RW_I93_SET_TAG_RO_EVT event will be returned.
 **
@@ -4116,7 +4129,8 @@ tNFC_STATUS RW_I93SetTagReadOnly (void)
 **                  presence or non-presence.
 **
 ** Returns          NFC_STATUS_OK, if raw data frame sent
-**                  NFC_STATUS_NO_BUFFERS: unable to allocate a buffer for this operation
+**                  NFC_STATUS_NO_BUFFERS: unable to allocate a buffer for this
+**                  operation
 **                  NFC_STATUS_FAILED: other error
 **
 *****************************************************************************/

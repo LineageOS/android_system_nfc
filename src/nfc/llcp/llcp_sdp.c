@@ -53,7 +53,8 @@ void llcp_sdp_proc_data (tLLCP_SAP_CBACK_DATA *p_data)
 **
 ** Function         llcp_sdp_check_send_snl
 **
-** Description      Enqueue Service Name Lookup PDU into sig_xmit_q for transmitting
+** Description      Enqueue Service Name Lookup PDU into sig_xmit_q for
+**                  transmitting
 **
 **
 ** Returns          void
@@ -350,7 +351,8 @@ static void llcp_sdp_return_sap (uint8_t tid, uint8_t sap)
 **
 ** Function         llcp_sdp_proc_deactivation
 **
-** Description      Report SDP failure for any pending request because of deactivation
+** Description      Report SDP failure for any pending request because of
+**                  deactivation
 **
 **
 ** Returns          void

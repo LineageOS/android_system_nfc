@@ -262,9 +262,10 @@ of order */
 #endif
 
 /* The size of the buffers in pool 5
-** Special pool used by l2cap retransmissions only.  This size based on segment
+** Special pool used by l2cap retransmissions only. This size based on segment
 ** that will fit into both DH5 and 2-DH3 packet types after accounting for GKI
-** header.  13 bytes of max headers allows us a 339 payload max. (in btui_app.txt)
+** header. 13 bytes of max headers allows us a 339 payload max.
+** (in btui_app.txt)
 ** Note: 748 used for insight scriptwrapper with CAT-2 scripts.
 */
 #ifndef GKI_BUF5_SIZE

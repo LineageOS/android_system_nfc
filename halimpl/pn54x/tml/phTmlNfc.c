@@ -61,16 +61,20 @@ static NFCSTATUS phTmlNfc_InitiateTimer(void);
 ** Function         phTmlNfc_Init
 **
 ** Description      Provides initialization of TML layer and hardware interface
-**                  Configures given hardware interface and sends handle to the caller
+**                  Configures given hardware interface and sends handle to the
+**                  caller
 **
-** Parameters       pConfig     - TML configuration details as provided by the upper layer
+** Parameters       pConfig - TML configuration details as provided by the upper
+**                            layer
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_SUCCESS            - initialization successful
-**                  NFCSTATUS_INVALID_PARAMETER  - at least one parameter is invalid
-**                  NFCSTATUS_FAILED             - initialization failed
-**                                                 (for example, unable to open hardware interface)
-**                  NFCSTATUS_INVALID_DEVICE     - device has not been opened or has been disconnected
+**                  NFCSTATUS_SUCCESS - initialization successful
+**                  NFCSTATUS_INVALID_PARAMETER - at least one parameter is
+**                                                invalid
+**                  NFCSTATUS_FAILED - initialization failed (for example,
+**                                     unable to open hardware interface)
+**                  NFCSTATUS_INVALID_DEVICE - device has not been opened or has
+**                                             been disconnected
 **
 *******************************************************************************/
 NFCSTATUS phTmlNfc_Init(pphTmlNfc_Config_t pConfig)
@@ -151,7 +155,7 @@ NFCSTATUS phTmlNfc_Init(pphTmlNfc_Config_t pConfig)
                             gpphTmlNfc_Context->dwCallbackThreadId = pConfig->dwGetMsgThreadId;
                             /* Enable retransmission of Nci packet & set retry count to default */
                             gpphTmlNfc_Context->eConfig = phTmlNfc_e_DisableRetrans;
-                            /** Retry Count = Standby Recovery time of NFCC / Retransmission time + 1 */
+                            /* Retry Count = Standby Recovery time of NFCC / Retransmission time + 1 */
                             gpphTmlNfc_Context->bRetryCount = (2000 / PHTMLNFC_MAXTIME_RETRANSMIT) + 1;
                             gpphTmlNfc_Context->bWriteCbInvoked = false;
                         }
@@ -179,11 +183,13 @@ NFCSTATUS phTmlNfc_Init(pphTmlNfc_Config_t pConfig)
 ** Function         phTmlNfc_ConfigNciPktReTx
 **
 ** Description      Provides Enable/Disable Retransmission of NCI packets
-**                  Needed in case of Timeout between Transmission and Reception of NCI packets
-**                  Retransmission can be enabled only if standby mode is enabled
+**                  Needed in case of Timeout between Transmission and Reception
+**                  of NCI packets. Retransmission can be enabled only if
+**                  standby mode is enabled
 **
-** Parameters       eConfig     - values from phTmlNfc_ConfigRetrans_t
-**                  bRetryCount - Number of times Nci packets shall be retransmitted (default = 3)
+** Parameters       eConfig - values from phTmlNfc_ConfigRetrans_t
+**                  bRetryCount - Number of times Nci packets shall be
+**                                retransmitted (default = 3)
 **
 ** Returns          None
 **
@@ -203,7 +209,7 @@ void phTmlNfc_ConfigNciPktReTx(phTmlNfc_ConfigRetrans_t eConfiguration, uint8_t 
         /* Set retry counter to its default value */
         else
         {
-            /** Retry Count = Standby Recovery time of NFCC / Retransmission time + 1 */
+            /* Retry Count = Standby Recovery time of NFCC / Retransmission time + 1 */
             gpphTmlNfc_Context->bRetryCount = (2000 / PHTMLNFC_MAXTIME_RETRANSMIT) + 1;
         }
     }
@@ -220,8 +226,8 @@ void phTmlNfc_ConfigNciPktReTx(phTmlNfc_ConfigRetrans_t eConfiguration, uint8_t 
 ** Parameters       None
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_SUCCESS    - threads initialized successfully
-**                  NFCSTATUS_FAILED     - initialization failed due to system error
+**                  NFCSTATUS_SUCCESS - threads initialized successfully
+**                  NFCSTATUS_FAILED - initialization failed due to system error
 **
 *******************************************************************************/
 static NFCSTATUS phTmlNfc_StartThread(void)
@@ -630,9 +636,11 @@ static void phTmlNfc_CleanUp(void)
 ** Parameters       None
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_SUCCESS            - TML configuration released successfully
-**                  NFCSTATUS_INVALID_PARAMETER  - at least one parameter is invalid
-**                  NFCSTATUS_FAILED             - un-initialization failed (example: unable to close interface)
+**                  NFCSTATUS_SUCCESS - TML configuration released successfully
+**                  NFCSTATUS_INVALID_PARAMETER - at least one parameter is
+**                                                invalid
+**                  NFCSTATUS_FAILED - un-initialization failed (example: unable
+**                                     to close interface)
 **
 *******************************************************************************/
 NFCSTATUS phTmlNfc_Shutdown(void)
@@ -678,25 +686,31 @@ NFCSTATUS phTmlNfc_Shutdown(void)
 **
 ** Function         phTmlNfc_Write
 **
-** Description      Asynchronously writes given data block to hardware interface/driver
-**                  Enables writer thread if there are no write requests pending
-**                  Returns successfully once writer thread completes write operation
-**                  Notifies upper layer using callback mechanism
-**                  NOTE:
-**                  * it is important to post a message with id PH_TMLNFC_WRITE_MESSAGE
-**                    to IntegrationThread after data has been written to PN54X
-**                  * if CRC needs to be computed, then input buffer should be capable to store
-**                    two more bytes apart from length of packet
+** Description      Asynchronously writes given data block to hardware
+**                  interface/driver. Enables writer thread if there are no
+**                  write requests pending. Returns successfully once writer
+**                  thread completes write operation. Notifies upper layer using
+**                  callback mechanism.
 **
-** Parameters       pBuffer              - data to be sent
-**                  wLength              - length of data buffer
-**                  pTmlWriteComplete    - pointer to the function to be invoked upon completion
-**                  pContext             - context provided by upper layer
+**                  NOTE:
+**                  * it is important to post a message with id
+**                    PH_TMLNFC_WRITE_MESSAGE to IntegrationThread after data
+**                    has been written to PN54X
+**                  * if CRC needs to be computed, then input buffer should be
+**                    capable to store two more bytes apart from length of
+**                    packet
+**
+** Parameters       pBuffer - data to be sent
+**                  wLength - length of data buffer
+**                  pTmlWriteComplete - pointer to the function to be invoked
+**                                      upon completion
+**                  pContext - context provided by upper layer
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_PENDING             - command is yet to be processed
-**                  NFCSTATUS_INVALID_PARAMETER   - at least one parameter is invalid
-**                  NFCSTATUS_BUSY                - write request is already in progress
+**                  NFCSTATUS_PENDING - command is yet to be processed
+**                  NFCSTATUS_INVALID_PARAMETER - at least one parameter is
+**                                                invalid
+**                  NFCSTATUS_BUSY - write request is already in progress
 **
 *******************************************************************************/
 NFCSTATUS phTmlNfc_Write(uint8_t *pBuffer, uint16_t wLength, pphTmlNfc_TransactCompletionCb_t pTmlWriteComplete, void *pContext)
@@ -759,20 +773,24 @@ NFCSTATUS phTmlNfc_Write(uint8_t *pBuffer, uint16_t wLength, pphTmlNfc_TransactC
 ** Function         phTmlNfc_Read
 **
 ** Description      Asynchronously reads data from the driver
-**                  Number of bytes to be read and buffer are passed by upper layer
+**                  Number of bytes to be read and buffer are passed by upper
+**                  layer.
 **                  Enables reader thread if there are no read requests pending
 **                  Returns successfully once read operation is completed
 **                  Notifies upper layer using callback mechanism
 **
-** Parameters       pBuffer              - location to send read data to the upper layer via callback
-**                  wLength              - length of read data buffer passed by upper layer
-**                  pTmlReadComplete     - pointer to the function to be invoked upon completion of read operation
-**                  pContext             - context provided by upper layer
+** Parameters       pBuffer - location to send read data to the upper layer via
+**                            callback
+**                  wLength - length of read data buffer passed by upper layer
+**                  pTmlReadComplete - pointer to the function to be invoked
+**                                     upon completion of read operation
+**                  pContext - context provided by upper layer
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_PENDING             - command is yet to be processed
-**                  NFCSTATUS_INVALID_PARAMETER   - at least one parameter is invalid
-**                  NFCSTATUS_BUSY                - read request is already in progress
+**                  NFCSTATUS_PENDING - command is yet to be processed
+**                  NFCSTATUS_INVALID_PARAMETER - at least one parameter is
+**                                                invalid
+**                  NFCSTATUS_BUSY - read request is already in progress
 **
 *******************************************************************************/
 NFCSTATUS phTmlNfc_Read(uint8_t *pBuffer, uint16_t wLength, pphTmlNfc_TransactCompletionCb_t pTmlReadComplete, void *pContext)
@@ -828,10 +846,12 @@ NFCSTATUS phTmlNfc_Read(uint8_t *pBuffer, uint16_t wLength, pphTmlNfc_TransactCo
 ** Parameters       None
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_SUCCESS                    - ongoing read operation aborted
-**                  NFCSTATUS_INVALID_PARAMETER          - at least one parameter is invalid
-**                  NFCSTATUS_NOT_INITIALIZED            - TML layer is not initialized
-**                  NFCSTATUS_BOARD_COMMUNICATION_ERROR  - unable to cancel read operation
+**                  NFCSTATUS_SUCCESS - ongoing read operation aborted
+**                  NFCSTATUS_INVALID_PARAMETER - at least one parameter is
+**                                                invalid
+**                  NFCSTATUS_NOT_INITIALIZED - TML layer is not initialized
+**                  NFCSTATUS_BOARD_COMMUNICATION_ERROR - unable to cancel read
+**                                                        operation
 **
 *******************************************************************************/
 NFCSTATUS phTmlNfc_ReadAbort(void)
@@ -855,10 +875,12 @@ NFCSTATUS phTmlNfc_ReadAbort(void)
 ** Parameters       None
 **
 ** Returns          NFC status:
-**                  NFCSTATUS_SUCCESS                    - ongoing write operation aborted
-**                  NFCSTATUS_INVALID_PARAMETER          - at least one parameter is invalid
-**                  NFCSTATUS_NOT_INITIALIZED            - TML layer is not initialized
-**                  NFCSTATUS_BOARD_COMMUNICATION_ERROR  - unable to cancel write operation
+**                  NFCSTATUS_SUCCESS - ongoing write operation aborted
+**                  NFCSTATUS_INVALID_PARAMETER - at least one parameter is
+**                                                invalid
+**                  NFCSTATUS_NOT_INITIALIZED - TML layer is not initialized
+**                  NFCSTATUS_BOARD_COMMUNICATION_ERROR - unable to cancel write
+**                                                        operation
 **
 *******************************************************************************/
 NFCSTATUS phTmlNfc_WriteAbort(void)
@@ -881,7 +903,8 @@ NFCSTATUS phTmlNfc_WriteAbort(void)
 ** Function         phTmlNfc_IoCtl
 **
 ** Description      Resets device when insisted by upper layer
-**                  Number of bytes to be read and buffer are passed by upper layer
+**                  Number of bytes to be read and buffer are passed by upper
+**                  layer
 **                  Enables reader thread if there are no read requests pending
 **                  Returns successfully once read operation is completed
 **                  Notifies upper layer using callback mechanism

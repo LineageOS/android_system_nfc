@@ -82,7 +82,7 @@ typedef struct phAntenna_St_Resp
  **
  ** Returns          NFCSTATUS_SUCCESS if successful,otherwise NFCSTATUS_FAILED.
  **
- *******************************************************************************/
+ ******************************************************************************/
 
 NFCSTATUS phNxpNciHal_TestMode_open (void);
 
@@ -95,7 +95,7 @@ NFCSTATUS phNxpNciHal_TestMode_open (void);
  **
  ** Returns          None.
  **
- *******************************************************************************/
+ ******************************************************************************/
 
 void phNxpNciHal_TestMode_close (void);
 
@@ -108,7 +108,7 @@ void phNxpNciHal_TestMode_close (void);
  **
  ** Returns          NFCSTATUS_SUCCESS if successful,otherwise NFCSTATUS_FAILED.
  **
- *******************************************************************************/
+ ******************************************************************************/
 
 NFCSTATUS phNxpNciHal_SwpTest (uint8_t swp_line);
 
@@ -123,7 +123,7 @@ NFCSTATUS phNxpNciHal_SwpTest (uint8_t swp_line);
  ** Returns          NFCSTATUS_SUCCESS if RF generation successful,
  **                  otherwise NFCSTATUS_FAILED.
  **
- *******************************************************************************/
+ ******************************************************************************/
 #if(NFC_NXP_CHIP_TYPE != PN547C2)
 NFCSTATUS phNxpNciHal_PrbsTestStart (phNxpNfc_PrbsType_t prbs_type, phNxpNfc_PrbsHwType_t hw_prbs_type,
         phNxpNfc_Tech_t tech, phNxpNfc_Bitrate_t bitrate);
@@ -140,7 +140,7 @@ NFCSTATUS phNxpNciHal_PrbsTestStart (phNxpNfc_Tech_t tech, phNxpNfc_Bitrate_t bi
  ** Returns          NFCSTATUS_SUCCESS if operation successful,
  **                  otherwise NFCSTATUS_FAILED.
  **
- *******************************************************************************/
+ ******************************************************************************/
 
 NFCSTATUS phNxpNciHal_PrbsTestStop ();
 
@@ -177,7 +177,7 @@ NFCSTATUS phNxpNciHal_RfFieldTest (uint8_t on);
  **
  ** Returns          NFCSTATUS_SUCCESS if successful,otherwise NFCSTATUS_FAILED.
  **
- *******************************************************************************/
+ ******************************************************************************/
 
 NFCSTATUS phNxpNciHal_DownloadPinTest (void);
 

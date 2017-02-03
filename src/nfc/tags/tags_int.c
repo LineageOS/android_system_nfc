@@ -226,7 +226,8 @@ const tT2T_CMD_RSP_INFO * t2t_cmd_to_rsp_info (uint8_t opcode)
 **
 ** Function         t1t_info_to_evt
 **
-** Description      This function maps the given tT1T_CMD_RSP_INFO to RW/CE event code
+** Description      This function maps the given tT1T_CMD_RSP_INFO to RW/CE
+**                  event code
 **
 ** Returns          RW/CE event code
 **
@@ -240,7 +241,8 @@ uint8_t t1t_info_to_evt (const tT1T_CMD_RSP_INFO * p_info)
 **
 ** Function         t2t_info_to_evt
 **
-** Description      This function maps the given tT2T_CMD_RSP_INFO to RW/CE event code
+** Description      This function maps the given tT2T_CMD_RSP_INFO to RW/CE
+**                  event code
 **
 ** Returns          RW/CE event code
 **
@@ -255,7 +257,8 @@ uint8_t t2t_info_to_evt (const tT2T_CMD_RSP_INFO * p_info)
 **
 ** Function         t1t_info_to_str
 **
-** Description      This function maps the given tT1T_CMD_RSP_INFO to T1T cmd str
+** Description      This function maps the given tT1T_CMD_RSP_INFO to T1T cmd
+**                  str
 **
 ** Returns          T1T cmd str
 **
@@ -273,7 +276,8 @@ const char * t1t_info_to_str (const tT1T_CMD_RSP_INFO * p_info)
 **
 ** Function         t2t_info_to_str
 **
-** Description      This function maps the given tT2T_CMD_RSP_INFO to T2T cmd str
+** Description      This function maps the given tT2T_CMD_RSP_INFO to T2T cmd
+**                  str
 **
 ** Returns          T2T cmd str
 **

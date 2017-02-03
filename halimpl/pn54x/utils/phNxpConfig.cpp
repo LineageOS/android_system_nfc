@@ -892,13 +892,14 @@ extern "C" int GetNxpStrValue(const char* name, char* pValue, unsigned long len)
 ** Description: Read byte array value from the config file.
 **
 ** Parameters:
-**              name    - name of the config param to read.
+**              name - name of the config param to read.
 **              pValue  - pointer to input buffer.
 **              bufflen - input buffer length.
-**              len     - out parameter to return the number of bytes read from config file,
-**                        return -1 in case bufflen is not enough.
+**              len - out parameter to return the number of bytes read from
+**                    config file, return -1 in case bufflen is not enough.
 **
-** Returns:     TRUE[1] if config param name is found in the config file, else FALSE[0]
+** Returns:     TRUE[1] if config param name is found in the config file, else
+**              FALSE[0]
 **
 *******************************************************************************/
 extern "C" int GetNxpByteArrayValue(const char* name, char* pValue,long bufflen, long *len)

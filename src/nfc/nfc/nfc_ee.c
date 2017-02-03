@@ -37,11 +37,11 @@
 **
 ** Function         NFC_NfceeDiscover
 **
-** Description      This function is called to enable or disable NFCEE Discovery.
-**                  The response from NFCC is reported by tNFC_RESPONSE_CBACK
-**                  as NFC_NFCEE_DISCOVER_REVT.
-**                  The notification from NFCC is reported by tNFC_RESPONSE_CBACK
-**                  as NFC_NFCEE_INFO_REVT.
+** Description      This function is called to enable or disable NFCEE
+**                  Discovery. The response from NFCC is reported by
+**                  tNFC_RESPONSE_CBACK as NFC_NFCEE_DISCOVER_REVT.
+**                  The notification from NFCC is reported by
+**                  tNFC_RESPONSE_CBACK as NFC_NFCEE_INFO_REVT.
 **
 ** Parameters       discover - 1 to enable discover, 0 to disable.
 **
@@ -109,9 +109,9 @@ tNFC_STATUS NFC_SetRouting (bool    more,
 **
 ** Function         NFC_GetRouting
 **
-** Description      This function is called to retrieve the CE routing table from
-**                  NFCC. The response from NFCC is reported by tNFC_RESPONSE_CBACK
-**                  as NFC_GET_ROUTING_REVT.
+** Description      This function is called to retrieve the CE routing table
+**                  from NFCC. The response from NFCC is reported by
+**                  tNFC_RESPONSE_CBACK as NFC_GET_ROUTING_REVT.
 **
 ** Returns          tNFC_STATUS
 **

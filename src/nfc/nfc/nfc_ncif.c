@@ -57,7 +57,7 @@ static const uint8_t nfc_mpl_code_to_size[] =
 **
 ** Returns          void
 **
-*********************************************************************************/
+*******************************************************************************/
 void nfc_ncif_update_window (void)
 {
     /* Sanity check - see if we were expecting a update_window */
@@ -358,8 +358,8 @@ void nfc_ncif_send_cmd (NFC_HDR *p_buf)
 **
 ** Function         nfc_ncif_process_event
 **
-** Description      This function is called to process the data/response/notification
-**                  from NFCC
+** Description      This function is called to process the
+**                  data/response/notification from NFCC
 **
 ** Returns          TRUE if need to free buffer
 **
@@ -524,7 +524,8 @@ void nfc_ncif_event_status (tNFC_RESPONSE_EVT event, uint8_t status)
 **
 ** Function         nfc_ncif_error_status
 **
-** Description      This function is called to report an error event to data cback
+** Description      This function is called to report an error event to data
+**                  cback
 **
 ** Returns          void
 **
@@ -1258,7 +1259,8 @@ void nfc_ncif_report_conn_close_evt (uint8_t conn_id, tNFC_STATUS status)
 **
 ** Function         nfc_ncif_proc_reset_rsp
 **
-** Description      This function is called to process reset response/notification
+** Description      This function is called to process reset
+**                  response/notification
 **
 ** Returns          void
 **
