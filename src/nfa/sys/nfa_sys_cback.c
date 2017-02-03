@@ -16,7 +16,6 @@
  *
  ******************************************************************************/
 
-
 /******************************************************************************
  *
  *  Registration/deregistration functions for inter-module callbacks
@@ -24,9 +23,6 @@
  ******************************************************************************/
 #include "nfa_sys.h"
 #include "nfa_sys_int.h"
-
-
-
 
 /*******************************************************************************
 **
@@ -38,10 +34,9 @@
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_cback_reg_enable_complete (tNFA_SYS_ENABLE_CBACK *p_cback)
-{
-    nfa_sys_cb.p_enable_cback = p_cback;
-    nfa_sys_cb.enable_cplt_flags = 0;
+void nfa_sys_cback_reg_enable_complete(tNFA_SYS_ENABLE_CBACK* p_cback) {
+  nfa_sys_cb.p_enable_cback = p_cback;
+  nfa_sys_cb.enable_cplt_flags = 0;
 }
 
 /*******************************************************************************
@@ -54,19 +49,19 @@ void nfa_sys_cback_reg_enable_complete (tNFA_SYS_ENABLE_CBACK *p_cback)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_cback_notify_enable_complete (uint8_t id)
-{
-    nfa_sys_cb.enable_cplt_flags |= (0x0001 << id);
+void nfa_sys_cback_notify_enable_complete(uint8_t id) {
+  nfa_sys_cb.enable_cplt_flags |= (0x0001 << id);
 
-    NFA_TRACE_DEBUG2 ("nfa_sys_cback_notify_enable_complete () enable_cplt_flags=0x%x, enable_cplt_mask=0x%x",
-                       nfa_sys_cb.enable_cplt_flags, nfa_sys_cb.enable_cplt_mask);
+  NFA_TRACE_DEBUG2(
+      "nfa_sys_cback_notify_enable_complete () enable_cplt_flags=0x%x, "
+      "enable_cplt_mask=0x%x",
+      nfa_sys_cb.enable_cplt_flags, nfa_sys_cb.enable_cplt_mask);
 
-    if (  (nfa_sys_cb.enable_cplt_flags == nfa_sys_cb.enable_cplt_mask)
-        &&(nfa_sys_cb.p_enable_cback)  )
-    {
-        nfa_sys_cb.p_enable_cback ();
-        nfa_sys_cb.p_enable_cback = NULL;
-    }
+  if ((nfa_sys_cb.enable_cplt_flags == nfa_sys_cb.enable_cplt_mask) &&
+      (nfa_sys_cb.p_enable_cback)) {
+    nfa_sys_cb.p_enable_cback();
+    nfa_sys_cb.p_enable_cback = NULL;
+  }
 }
 
 /*******************************************************************************
@@ -79,10 +74,10 @@ void nfa_sys_cback_notify_enable_complete (uint8_t id)
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_cback_reg_nfcc_power_mode_proc_complete (tNFA_SYS_PROC_NFCC_PWR_MODE_CMPL *p_cback)
-{
-    nfa_sys_cb.p_proc_nfcc_pwr_mode_cmpl_cback = p_cback;
-    nfa_sys_cb.proc_nfcc_pwr_mode_cplt_flags   = 0;
+void nfa_sys_cback_reg_nfcc_power_mode_proc_complete(
+    tNFA_SYS_PROC_NFCC_PWR_MODE_CMPL* p_cback) {
+  nfa_sys_cb.p_proc_nfcc_pwr_mode_cmpl_cback = p_cback;
+  nfa_sys_cb.proc_nfcc_pwr_mode_cplt_flags = 0;
 }
 
 /*******************************************************************************
@@ -95,19 +90,20 @@ void nfa_sys_cback_reg_nfcc_power_mode_proc_complete (tNFA_SYS_PROC_NFCC_PWR_MOD
 ** Returns          void
 **
 *******************************************************************************/
-void nfa_sys_cback_notify_nfcc_power_mode_proc_complete (uint8_t id)
-{
-    nfa_sys_cb.proc_nfcc_pwr_mode_cplt_flags |= (0x0001 << id);
+void nfa_sys_cback_notify_nfcc_power_mode_proc_complete(uint8_t id) {
+  nfa_sys_cb.proc_nfcc_pwr_mode_cplt_flags |= (0x0001 << id);
 
-    NFA_TRACE_DEBUG2 ("nfa_sys_cback_notify_nfcc_power_mode_proc_complete () flags=0x%x, mask=0x%x",
-                       nfa_sys_cb.proc_nfcc_pwr_mode_cplt_flags,
-                       nfa_sys_cb.proc_nfcc_pwr_mode_cplt_mask);
+  NFA_TRACE_DEBUG2(
+      "nfa_sys_cback_notify_nfcc_power_mode_proc_complete () flags=0x%x, "
+      "mask=0x%x",
+      nfa_sys_cb.proc_nfcc_pwr_mode_cplt_flags,
+      nfa_sys_cb.proc_nfcc_pwr_mode_cplt_mask);
 
-    /* except SYS */
-    if (  (nfa_sys_cb.proc_nfcc_pwr_mode_cplt_flags == nfa_sys_cb.proc_nfcc_pwr_mode_cplt_mask)
-        &&(nfa_sys_cb.p_proc_nfcc_pwr_mode_cmpl_cback)  )
-    {
-        nfa_sys_cb.p_proc_nfcc_pwr_mode_cmpl_cback ();
-        nfa_sys_cb.p_proc_nfcc_pwr_mode_cmpl_cback = NULL;
-    }
+  /* except SYS */
+  if ((nfa_sys_cb.proc_nfcc_pwr_mode_cplt_flags ==
+       nfa_sys_cb.proc_nfcc_pwr_mode_cplt_mask) &&
+      (nfa_sys_cb.p_proc_nfcc_pwr_mode_cmpl_cback)) {
+    nfa_sys_cb.p_proc_nfcc_pwr_mode_cmpl_cback();
+    nfa_sys_cb.p_proc_nfcc_pwr_mode_cmpl_cback = NULL;
+  }
 }

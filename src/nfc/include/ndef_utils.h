@@ -16,7 +16,6 @@
  *
  ******************************************************************************/
 
-
 /******************************************************************************
  *
  *  This file contains definitions for some utility functions to help parse
@@ -29,57 +28,54 @@
 
 #include "bt_types.h"
 
-#define NDEF_MB_MASK            0x80    /* Message Begin */
-#define NDEF_ME_MASK            0x40    /* Message End */
-#define NDEF_CF_MASK            0x20    /* Chunk Flag */
-#define NDEF_SR_MASK            0x10    /* Short Record */
-#define NDEF_IL_MASK            0x08    /* ID Length */
-#define NDEF_TNF_MASK           0x07    /* Type Name Format */
+#define NDEF_MB_MASK 0x80  /* Message Begin */
+#define NDEF_ME_MASK 0x40  /* Message End */
+#define NDEF_CF_MASK 0x20  /* Chunk Flag */
+#define NDEF_SR_MASK 0x10  /* Short Record */
+#define NDEF_IL_MASK 0x08  /* ID Length */
+#define NDEF_TNF_MASK 0x07 /* Type Name Format */
 /* First valid ASCII as per RTD specification */
 #define NDEF_RTD_VALID_START 0x20
 /* Last valid ASCII as per RTD specification */
 #define NDEF_RTD_VALID_END 0x7E
 
 /* NDEF Type Name Format */
-#define NDEF_TNF_EMPTY          0   /* Empty (type/id/payload len =0) */
-#define NDEF_TNF_WKT            1   /* NFC Forum well-known type/RTD */
-#define NDEF_TNF_MEDIA          2   /* Media-type as defined in RFC 2046 */
-#define NDEF_TNF_URI            3   /* Absolute URI as defined in RFC 3986 */
-#define NDEF_TNF_EXT            4   /* NFC Forum external type/RTD */
-#define NDEF_TNF_UNKNOWN        5   /* Unknown (type len =0) */
-#define NDEF_TNF_UNCHANGED      6   /* Unchanged (type len =0) */
-#define NDEF_TNF_RESERVED       7   /* Reserved */
+#define NDEF_TNF_EMPTY 0     /* Empty (type/id/payload len =0) */
+#define NDEF_TNF_WKT 1       /* NFC Forum well-known type/RTD */
+#define NDEF_TNF_MEDIA 2     /* Media-type as defined in RFC 2046 */
+#define NDEF_TNF_URI 3       /* Absolute URI as defined in RFC 3986 */
+#define NDEF_TNF_EXT 4       /* NFC Forum external type/RTD */
+#define NDEF_TNF_UNKNOWN 5   /* Unknown (type len =0) */
+#define NDEF_TNF_UNCHANGED 6 /* Unchanged (type len =0) */
+#define NDEF_TNF_RESERVED 7  /* Reserved */
 
 /* Define the status code returned from the Validate, Parse or Build functions
 */
-enum
-{
-    NDEF_OK,                            /* 0 - OK                                   */
+enum {
+  NDEF_OK, /* 0 - OK                                   */
 
-    NDEF_REC_NOT_FOUND,                 /* 1 - No record matching the find criteria */
-    NDEF_MSG_TOO_SHORT,                 /* 2 - Message was too short (< 3 bytes)    */
-    NDEF_MSG_NO_MSG_BEGIN,              /* 3 - No 'begin' flag at start of message  */
-    NDEF_MSG_NO_MSG_END,                /* 4 - No 'end' flag at end of message      */
-    NDEF_MSG_EXTRA_MSG_BEGIN,           /* 5 - 'begin' flag after start of message  */
-    NDEF_MSG_UNEXPECTED_CHUNK,          /* 6 - Unexpected chunk found               */
-    NDEF_MSG_INVALID_EMPTY_REC,         /* 7 - Empty record with non-zero contents  */
-    NDEF_MSG_INVALID_CHUNK,             /* 8 - Invalid chunk found                  */
-    NDEF_MSG_LENGTH_MISMATCH,           /* 9 - Overall message length doesn't match */
-    NDEF_MSG_INSUFFICIENT_MEM,          /* 10 - Insuffiecient memory to add record  */
-    NDEF_MSG_INVALID_TYPE               /* 11 - TYPE field contains invalid characters  */
+  NDEF_REC_NOT_FOUND,         /* 1 - No record matching the find criteria */
+  NDEF_MSG_TOO_SHORT,         /* 2 - Message was too short (< 3 bytes)    */
+  NDEF_MSG_NO_MSG_BEGIN,      /* 3 - No 'begin' flag at start of message  */
+  NDEF_MSG_NO_MSG_END,        /* 4 - No 'end' flag at end of message      */
+  NDEF_MSG_EXTRA_MSG_BEGIN,   /* 5 - 'begin' flag after start of message  */
+  NDEF_MSG_UNEXPECTED_CHUNK,  /* 6 - Unexpected chunk found               */
+  NDEF_MSG_INVALID_EMPTY_REC, /* 7 - Empty record with non-zero contents  */
+  NDEF_MSG_INVALID_CHUNK,     /* 8 - Invalid chunk found                  */
+  NDEF_MSG_LENGTH_MISMATCH,   /* 9 - Overall message length doesn't match */
+  NDEF_MSG_INSUFFICIENT_MEM,  /* 10 - Insuffiecient memory to add record  */
+  NDEF_MSG_INVALID_TYPE       /* 11 - TYPE field contains invalid characters  */
 };
 typedef uint8_t tNDEF_STATUS;
 
-
-#define HR_REC_TYPE_LEN     2       /* Handover Request Record Type     */
-#define HS_REC_TYPE_LEN     2       /* Handover Select Record Type      */
-#define HC_REC_TYPE_LEN     2       /* Handover Carrier recrod Type     */
-#define CR_REC_TYPE_LEN     2       /* Collision Resolution Record Type */
-#define AC_REC_TYPE_LEN     2       /* Alternative Carrier Record Type  */
-#define ERR_REC_TYPE_LEN    3       /* Error Record Type                */
-#define BT_OOB_REC_TYPE_LEN 32      /* Bluetooth OOB Data Type          */
-#define WIFI_WSC_REC_TYPE_LEN 23    /* Wifi WSC Data Type               */
-
+#define HR_REC_TYPE_LEN 2        /* Handover Request Record Type     */
+#define HS_REC_TYPE_LEN 2        /* Handover Select Record Type      */
+#define HC_REC_TYPE_LEN 2        /* Handover Carrier recrod Type     */
+#define CR_REC_TYPE_LEN 2        /* Collision Resolution Record Type */
+#define AC_REC_TYPE_LEN 2        /* Alternative Carrier Record Type  */
+#define ERR_REC_TYPE_LEN 3       /* Error Record Type                */
+#define BT_OOB_REC_TYPE_LEN 32   /* Bluetooth OOB Data Type          */
+#define WIFI_WSC_REC_TYPE_LEN 23 /* Wifi WSC Data Type               */
 
 #ifdef __cplusplus
 extern "C" {
@@ -96,7 +92,8 @@ extern "C" {
 ** Returns          TRUE if all OK, or FALSE if the message is invalid.
 **
 *******************************************************************************/
-extern tNDEF_STATUS NDEF_MsgValidate (uint8_t *p_msg, uint32_t msg_len, bool    b_allow_chunks);
+extern tNDEF_STATUS NDEF_MsgValidate(uint8_t* p_msg, uint32_t msg_len,
+                                     bool b_allow_chunks);
 
 /*******************************************************************************
 **
@@ -108,7 +105,7 @@ extern tNDEF_STATUS NDEF_MsgValidate (uint8_t *p_msg, uint32_t msg_len, bool    
 ** Returns          The record count, or 0 if the message is invalid.
 **
 *******************************************************************************/
-extern int32_t NDEF_MsgGetNumRecs (uint8_t *p_msg);
+extern int32_t NDEF_MsgGetNumRecs(uint8_t* p_msg);
 
 /*******************************************************************************
 **
@@ -120,7 +117,7 @@ extern int32_t NDEF_MsgGetNumRecs (uint8_t *p_msg);
 ** Returns          Length of record
 **
 *******************************************************************************/
-extern uint32_t NDEF_MsgGetRecLength (uint8_t *p_cur_rec);
+extern uint32_t NDEF_MsgGetRecLength(uint8_t* p_cur_rec);
 
 /*******************************************************************************
 **
@@ -132,7 +129,7 @@ extern uint32_t NDEF_MsgGetRecLength (uint8_t *p_cur_rec);
 ** Returns          Pointer to the start of the record, or NULL if no more
 **
 *******************************************************************************/
-extern uint8_t *NDEF_MsgGetNextRec (uint8_t *p_cur_rec);
+extern uint8_t* NDEF_MsgGetNextRec(uint8_t* p_cur_rec);
 
 /*******************************************************************************
 **
@@ -144,7 +141,7 @@ extern uint8_t *NDEF_MsgGetNextRec (uint8_t *p_cur_rec);
 ** Returns          Pointer to the start of the record, or NULL
 **
 *******************************************************************************/
-extern uint8_t *NDEF_MsgGetRecByIndex (uint8_t *p_msg, int32_t index);
+extern uint8_t* NDEF_MsgGetRecByIndex(uint8_t* p_msg, int32_t index);
 
 /*******************************************************************************
 **
@@ -157,7 +154,7 @@ extern uint8_t *NDEF_MsgGetRecByIndex (uint8_t *p_msg, int32_t index);
 **                  problem
 **
 *******************************************************************************/
-extern uint8_t *NDEF_MsgGetLastRecInMsg (uint8_t *p_msg);
+extern uint8_t* NDEF_MsgGetLastRecInMsg(uint8_t* p_msg);
 
 /*******************************************************************************
 **
@@ -169,7 +166,8 @@ extern uint8_t *NDEF_MsgGetLastRecInMsg (uint8_t *p_msg);
 ** Returns          Pointer to the start of the record, or NULL
 **
 *******************************************************************************/
-extern uint8_t *NDEF_MsgGetFirstRecByType (uint8_t *p_msg, uint8_t tnf, uint8_t *p_type, uint8_t tlen);
+extern uint8_t* NDEF_MsgGetFirstRecByType(uint8_t* p_msg, uint8_t tnf,
+                                          uint8_t* p_type, uint8_t tlen);
 
 /*******************************************************************************
 **
@@ -181,7 +179,8 @@ extern uint8_t *NDEF_MsgGetFirstRecByType (uint8_t *p_msg, uint8_t tnf, uint8_t 
 ** Returns          Pointer to the start of the record, or NULL
 **
 *******************************************************************************/
-extern uint8_t *NDEF_MsgGetNextRecByType (uint8_t *p_cur_rec, uint8_t tnf, uint8_t *p_type, uint8_t tlen);
+extern uint8_t* NDEF_MsgGetNextRecByType(uint8_t* p_cur_rec, uint8_t tnf,
+                                         uint8_t* p_type, uint8_t tlen);
 
 /*******************************************************************************
 **
@@ -193,7 +192,8 @@ extern uint8_t *NDEF_MsgGetNextRecByType (uint8_t *p_cur_rec, uint8_t tnf, uint8
 ** Returns          Pointer to the start of the record, or NULL
 **
 *******************************************************************************/
-extern uint8_t *NDEF_MsgGetFirstRecById (uint8_t *p_msg, uint8_t *p_id, uint8_t ilen);
+extern uint8_t* NDEF_MsgGetFirstRecById(uint8_t* p_msg, uint8_t* p_id,
+                                        uint8_t ilen);
 
 /*******************************************************************************
 **
@@ -205,7 +205,8 @@ extern uint8_t *NDEF_MsgGetFirstRecById (uint8_t *p_msg, uint8_t *p_id, uint8_t 
 ** Returns          Pointer to the start of the record, or NULL
 **
 *******************************************************************************/
-extern uint8_t *NDEF_MsgGetNextRecById (uint8_t *p_cur_rec, uint8_t *p_id, uint8_t ilen);
+extern uint8_t* NDEF_MsgGetNextRecById(uint8_t* p_cur_rec, uint8_t* p_id,
+                                       uint8_t ilen);
 
 /*******************************************************************************
 **
@@ -217,7 +218,8 @@ extern uint8_t *NDEF_MsgGetNextRecById (uint8_t *p_cur_rec, uint8_t *p_id, uint8
 ** Returns          Pointer to Type (NULL if none). TNF and len are filled in.
 **
 *******************************************************************************/
-extern uint8_t *NDEF_RecGetType (uint8_t *p_rec, uint8_t *p_tnf, uint8_t *p_type_len);
+extern uint8_t* NDEF_RecGetType(uint8_t* p_rec, uint8_t* p_tnf,
+                                uint8_t* p_type_len);
 
 /*******************************************************************************
 **
@@ -229,7 +231,7 @@ extern uint8_t *NDEF_RecGetType (uint8_t *p_rec, uint8_t *p_tnf, uint8_t *p_type
 ** Returns          Pointer to Id (NULL if none). ID Len is filled in.
 **
 *******************************************************************************/
-extern uint8_t *NDEF_RecGetId (uint8_t *p_rec, uint8_t *p_id_len);
+extern uint8_t* NDEF_RecGetId(uint8_t* p_rec, uint8_t* p_id_len);
 
 /*******************************************************************************
 **
@@ -242,8 +244,7 @@ extern uint8_t *NDEF_RecGetId (uint8_t *p_rec, uint8_t *p_id_len);
 **                  in.
 **
 *******************************************************************************/
-extern uint8_t *NDEF_RecGetPayload (uint8_t *p_rec, uint32_t *p_payload_len);
-
+extern uint8_t* NDEF_RecGetPayload(uint8_t* p_rec, uint32_t* p_payload_len);
 
 /* Functions to build an NDEF Message
 */
@@ -257,7 +258,8 @@ extern uint8_t *NDEF_RecGetPayload (uint8_t *p_rec, uint32_t *p_payload_len);
 **                  *p_cur_size is initialized to 0
 **
 *******************************************************************************/
-extern void NDEF_MsgInit (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size);
+extern void NDEF_MsgInit(uint8_t* p_msg, uint32_t max_size,
+                         uint32_t* p_cur_size);
 
 /*******************************************************************************
 **
@@ -270,10 +272,11 @@ extern void NDEF_MsgInit (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_siz
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-extern tNDEF_STATUS  NDEF_MsgAddRec (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
-                                     uint8_t tnf, uint8_t *p_type, uint8_t type_len,
-                                     uint8_t *p_id, uint8_t  id_len,
-                                     uint8_t *p_payload, uint32_t payload_len);
+extern tNDEF_STATUS NDEF_MsgAddRec(uint8_t* p_msg, uint32_t max_size,
+                                   uint32_t* p_cur_size, uint8_t tnf,
+                                   uint8_t* p_type, uint8_t type_len,
+                                   uint8_t* p_id, uint8_t id_len,
+                                   uint8_t* p_payload, uint32_t payload_len);
 
 /*******************************************************************************
 **
@@ -286,10 +289,12 @@ extern tNDEF_STATUS  NDEF_MsgAddRec (uint8_t *p_msg, uint32_t max_size, uint32_t
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-extern tNDEF_STATUS  NDEF_MsgInsertRec (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size, int32_t index,
-                                        uint8_t tnf, uint8_t *p_type, uint8_t type_len,
-                                        uint8_t *p_id, uint8_t  id_len,
-                                        uint8_t *p_payload, uint32_t payload_len);
+extern tNDEF_STATUS NDEF_MsgInsertRec(uint8_t* p_msg, uint32_t max_size,
+                                      uint32_t* p_cur_size, int32_t index,
+                                      uint8_t tnf, uint8_t* p_type,
+                                      uint8_t type_len, uint8_t* p_id,
+                                      uint8_t id_len, uint8_t* p_payload,
+                                      uint32_t payload_len);
 
 /*******************************************************************************
 **
@@ -302,8 +307,9 @@ extern tNDEF_STATUS  NDEF_MsgInsertRec (uint8_t *p_msg, uint32_t max_size, uint3
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-extern tNDEF_STATUS  NDEF_MsgAppendRec (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
-                                        uint8_t *p_new_rec, uint32_t new_rec_len);
+extern tNDEF_STATUS NDEF_MsgAppendRec(uint8_t* p_msg, uint32_t max_size,
+                                      uint32_t* p_cur_size, uint8_t* p_new_rec,
+                                      uint32_t new_rec_len);
 
 /*******************************************************************************
 **
@@ -316,8 +322,10 @@ extern tNDEF_STATUS  NDEF_MsgAppendRec (uint8_t *p_msg, uint32_t max_size, uint3
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-extern tNDEF_STATUS NDEF_MsgAppendPayload (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
-                                           uint8_t *p_rec, uint8_t *p_add_pl, uint32_t add_pl_len);
+extern tNDEF_STATUS NDEF_MsgAppendPayload(uint8_t* p_msg, uint32_t max_size,
+                                          uint32_t* p_cur_size, uint8_t* p_rec,
+                                          uint8_t* p_add_pl,
+                                          uint32_t add_pl_len);
 
 /*******************************************************************************
 **
@@ -330,8 +338,10 @@ extern tNDEF_STATUS NDEF_MsgAppendPayload (uint8_t *p_msg, uint32_t max_size, ui
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-extern tNDEF_STATUS NDEF_MsgReplacePayload (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
-                                            uint8_t *p_rec, uint8_t *p_new_pl, uint32_t new_pl_len);
+extern tNDEF_STATUS NDEF_MsgReplacePayload(uint8_t* p_msg, uint32_t max_size,
+                                           uint32_t* p_cur_size, uint8_t* p_rec,
+                                           uint8_t* p_new_pl,
+                                           uint32_t new_pl_len);
 
 /*******************************************************************************
 **
@@ -344,8 +354,10 @@ extern tNDEF_STATUS NDEF_MsgReplacePayload (uint8_t *p_msg, uint32_t max_size, u
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-extern tNDEF_STATUS NDEF_MsgReplaceType (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
-                                         uint8_t *p_rec, uint8_t *p_new_type, uint8_t new_type_len);
+extern tNDEF_STATUS NDEF_MsgReplaceType(uint8_t* p_msg, uint32_t max_size,
+                                        uint32_t* p_cur_size, uint8_t* p_rec,
+                                        uint8_t* p_new_type,
+                                        uint8_t new_type_len);
 
 /*******************************************************************************
 **
@@ -358,8 +370,9 @@ extern tNDEF_STATUS NDEF_MsgReplaceType (uint8_t *p_msg, uint32_t max_size, uint
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-extern tNDEF_STATUS NDEF_MsgReplaceId (uint8_t *p_msg, uint32_t max_size, uint32_t *p_cur_size,
-                                       uint8_t *p_rec, uint8_t *p_new_id, uint8_t new_id_len);
+extern tNDEF_STATUS NDEF_MsgReplaceId(uint8_t* p_msg, uint32_t max_size,
+                                      uint32_t* p_cur_size, uint8_t* p_rec,
+                                      uint8_t* p_new_id, uint8_t new_id_len);
 
 /*******************************************************************************
 **
@@ -372,7 +385,8 @@ extern tNDEF_STATUS NDEF_MsgReplaceId (uint8_t *p_msg, uint32_t max_size, uint32
 **                  *p_cur_size is updated
 **
 *******************************************************************************/
-extern tNDEF_STATUS NDEF_MsgRemoveRec (uint8_t *p_msg, uint32_t *p_cur_size, int32_t index);
+extern tNDEF_STATUS NDEF_MsgRemoveRec(uint8_t* p_msg, uint32_t* p_cur_size,
+                                      int32_t index);
 
 /*******************************************************************************
 **
@@ -386,7 +400,9 @@ extern tNDEF_STATUS NDEF_MsgRemoveRec (uint8_t *p_msg, uint32_t *p_cur_size, int
 ** Returns          The output byte count
 **
 *******************************************************************************/
-extern tNDEF_STATUS NDEF_MsgCopyAndDechunk (uint8_t *p_src, uint32_t src_len, uint8_t *p_dest, uint32_t *p_out_len);
+extern tNDEF_STATUS NDEF_MsgCopyAndDechunk(uint8_t* p_src, uint32_t src_len,
+                                           uint8_t* p_dest,
+                                           uint32_t* p_out_len);
 
 #ifdef __cplusplus
 }

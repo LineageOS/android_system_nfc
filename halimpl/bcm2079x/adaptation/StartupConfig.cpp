@@ -22,12 +22,10 @@
  ******************************************************************************/
 
 #define LOG_TAG "NfcNciHal"
-#include "_OverrideLog.h"
 #include "StartupConfig.h"
-
+#include "_OverrideLog.h"
 
 const uint8_t StartupConfig::mMaxLength = 255;
-
 
 /*******************************************************************************
 **
@@ -38,12 +36,10 @@ const uint8_t StartupConfig::mMaxLength = 255;
 ** Returns:         None
 **
 *******************************************************************************/
-StartupConfig::StartupConfig ()
-{
-    //set first byte to 0, which is length of payload
-    mBuffer.append ((uint8_string::size_type) 1, (uint8_string::value_type) 0);
+StartupConfig::StartupConfig() {
+  // set first byte to 0, which is length of payload
+  mBuffer.append((uint8_string::size_type)1, (uint8_string::value_type)0);
 }
-
 
 /*******************************************************************************
 **
@@ -54,13 +50,11 @@ StartupConfig::StartupConfig ()
 ** Returns:         None
 **
 *******************************************************************************/
-void StartupConfig::initialize ()
-{
-    mBuffer.clear ();
-    //set first byte to 0, which is length of payload
-    mBuffer.append ((uint8_string::size_type) 1, (uint8_string::value_type) 0);
+void StartupConfig::initialize() {
+  mBuffer.clear();
+  // set first byte to 0, which is length of payload
+  mBuffer.append((uint8_string::size_type)1, (uint8_string::value_type)0);
 }
-
 
 /*******************************************************************************
 **
@@ -72,11 +66,7 @@ void StartupConfig::initialize ()
 ** Returns:         Pointer to buffer.
 **
 *******************************************************************************/
-const uint8_t* StartupConfig::getInternalBuffer ()
-{
-    return mBuffer.data ();
-}
-
+const uint8_t* StartupConfig::getInternalBuffer() { return mBuffer.data(); }
 
 /*******************************************************************************
 **
@@ -90,30 +80,29 @@ const uint8_t* StartupConfig::getInternalBuffer ()
 ** Returns:         True if ok.
 **
 *******************************************************************************/
-bool StartupConfig::append (const uint8_t* newContent, uint8_t newContentLen)
-{
-    static const char fn [] = "StartupConfig::append";
-    if ((newContentLen+mBuffer.size()) > mMaxLength)
-    {
-        ALOGE ("%s: exceed max length", fn);
-        return false;
-    }
+bool StartupConfig::append(const uint8_t* newContent, uint8_t newContentLen) {
+  static const char fn[] = "StartupConfig::append";
+  if ((newContentLen + mBuffer.size()) > mMaxLength) {
+    ALOGE("%s: exceed max length", fn);
+    return false;
+  }
 
-    ALOGD ("%s: try append %u bytes", fn, (uint8_string::size_type) (newContentLen));
-    //append new payload into private buffer
-    mBuffer.append (newContent+1, (uint8_string::size_type) (newContentLen-1));
-    //increase size counter of payload in private buffer
-    mBuffer[0] = mBuffer[0] + newContentLen-1;
-    ALOGD ("%s: new size %u bytes", fn, mBuffer[0]);
-    return true;
+  ALOGD("%s: try append %u bytes", fn,
+        (uint8_string::size_type)(newContentLen));
+  // append new payload into private buffer
+  mBuffer.append(newContent + 1, (uint8_string::size_type)(newContentLen - 1));
+  // increase size counter of payload in private buffer
+  mBuffer[0] = mBuffer[0] + newContentLen - 1;
+  ALOGD("%s: new size %u bytes", fn, mBuffer[0]);
+  return true;
 };
-
 
 /*******************************************************************************
 **
 ** Function:        disableSecureElement
 **
-** Description:     Adjust a TLV to disable secure element(s).  The TLV's type is 0xC2.
+** Description:     Adjust a TLV to disable secure element(s).  The TLV's type
+*is 0xC2.
 **                  bitmask: 0xC0 = do not detect any secure element.
 **                           0x40 = do not detect secure element in slot 0.
 **                           0x80 = do not detect secure element in slot 1.
@@ -121,35 +110,30 @@ bool StartupConfig::append (const uint8_t* newContent, uint8_t newContentLen)
 ** Returns:         True if ok.
 **
 *******************************************************************************/
-bool StartupConfig::disableSecureElement (uint8_t bitmask)
-{
-    const uint8_t maxLen = mBuffer[0];
-    uint8_t index = 1, tlvType = 0, tlvLen = 0;
-    bool found0xC2 = false;
+bool StartupConfig::disableSecureElement(uint8_t bitmask) {
+  const uint8_t maxLen = mBuffer[0];
+  uint8_t index = 1, tlvType = 0, tlvLen = 0;
+  bool found0xC2 = false;
 
-    while (true)
+  while (true) {
+    if (index > maxLen) break;
+    tlvType = mBuffer[index];
+    index++;
+    tlvLen = mBuffer[index];
+    index++;
+    if (tlvType == 0xC2)  // this TLV controls secure elements
     {
-        if (index > maxLen)
-            break;
-        tlvType = mBuffer [index];
-        index++;
-        tlvLen = mBuffer [index];
-        index++;
-        if (tlvType == 0xC2) //this TLV controls secure elements
-        {
-            index++; //index of second byte in TLV's value
-            mBuffer [index] = mBuffer [index] | bitmask; //turn on certain bits
-            found0xC2 = true;
-        }
-        else
-            index += tlvLen;
-    }
+      index++;  // index of second byte in TLV's value
+      mBuffer[index] = mBuffer[index] | bitmask;  // turn on certain bits
+      found0xC2 = true;
+    } else
+      index += tlvLen;
+  }
 
-    if (found0xC2 == false)
-    {
-        uint8_t tlv [] = {0x04, 0xC2, 0x02, 0x61, 0x00};
-        tlv [4] = tlv [4] | bitmask;
-        found0xC2 = append (tlv, 5);
-    }
-    return found0xC2;
+  if (found0xC2 == false) {
+    uint8_t tlv[] = {0x04, 0xC2, 0x02, 0x61, 0x00};
+    tlv[4] = tlv[4] | bitmask;
+    found0xC2 = append(tlv, 5);
+  }
+  return found0xC2;
 }

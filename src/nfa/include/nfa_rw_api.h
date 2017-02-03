@@ -16,7 +16,6 @@
  *
  ******************************************************************************/
 
-
 /******************************************************************************
  *
  *  NFA reader/writer API functions
@@ -25,19 +24,18 @@
 #ifndef NFA_RW_API_H
 #define NFA_RW_API_H
 
-#include "nfc_target.h"
 #include "nfa_api.h"
+#include "nfc_target.h"
 
 /*****************************************************************************
 **  Constants and data types
 *****************************************************************************/
-enum
-{
-    NFA_RW_PRES_CHK_DEFAULT,    /* The default behavior             */
-    NFA_RW_PRES_CHK_I_BLOCK,    /* Empty I Block                    */
-    NFA_RW_PRES_CHK_RESET,      /* Deactivate to Sleep; Re-activate */
-    NFA_RW_PRES_CHK_RB_CH0,     /* ReadBinary on Channel 0          */
-    NFA_RW_PRES_CHK_RB_CH3      /* ReadBinary on Channel 3          */
+enum {
+  NFA_RW_PRES_CHK_DEFAULT, /* The default behavior             */
+  NFA_RW_PRES_CHK_I_BLOCK, /* Empty I Block                    */
+  NFA_RW_PRES_CHK_RESET,   /* Deactivate to Sleep; Re-activate */
+  NFA_RW_PRES_CHK_RB_CH0,  /* ReadBinary on Channel 0          */
+  NFA_RW_PRES_CHK_RB_CH3   /* ReadBinary on Channel 3          */
 };
 typedef uint8_t tNFA_RW_PRES_CHK_OPTION;
 
@@ -46,20 +44,16 @@ typedef uint8_t tNFA_RW_PRES_CHK_OPTION;
 *****************************************************************************/
 
 /* Block descriptor. (For non-NDEF read/write */
-typedef struct
-{
-    uint16_t  service_code;       /* Service code for the block   */
-    uint16_t  block_number;       /* Block number.                */
+typedef struct {
+  uint16_t service_code; /* Service code for the block   */
+  uint16_t block_number; /* Block number.                */
 } tNFA_T3T_BLOCK_DESC;
-
-
 
 /*****************************************************************************
 **  External Function Declarations
 *****************************************************************************/
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 /*******************************************************************************
@@ -85,7 +79,7 @@ extern "C"
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwDetectNDef (void);
+extern tNFA_STATUS NFA_RwDetectNDef(void);
 
 /*******************************************************************************
 **
@@ -115,7 +109,7 @@ extern tNFA_STATUS NFA_RwDetectNDef (void);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwReadNDef (void);
+extern tNFA_STATUS NFA_RwReadNDef(void);
 
 /*******************************************************************************
 **
@@ -138,8 +132,7 @@ extern tNFA_STATUS NFA_RwReadNDef (void);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwWriteNDef (uint8_t *p_data, uint32_t len);
-
+extern tNFA_STATUS NFA_RwWriteNDef(uint8_t* p_data, uint32_t len);
 
 /*****************************************************************************
 **
@@ -157,7 +150,7 @@ extern tNFA_STATUS NFA_RwWriteNDef (uint8_t *p_data, uint32_t len);
 **                  NFA_STATUS_FAILED otherwise
 **
 *****************************************************************************/
-extern tNFA_STATUS NFA_RwPresenceCheck (tNFA_RW_PRES_CHK_OPTION option);
+extern tNFA_STATUS NFA_RwPresenceCheck(tNFA_RW_PRES_CHK_OPTION option);
 
 /*****************************************************************************
 **
@@ -174,12 +167,11 @@ extern tNFA_STATUS NFA_RwPresenceCheck (tNFA_RW_PRES_CHK_OPTION option);
 **                  NFA_STATUS_FAILED otherwise
 **
 *****************************************************************************/
-extern tNFA_STATUS NFA_RwFormatTag (void);
+extern tNFA_STATUS NFA_RwFormatTag(void);
 
 /*******************************************************************************
 ** LEGACY / PROPRIETARY TAG READ AND WRITE APIs
 *******************************************************************************/
-
 
 /*******************************************************************************
 **
@@ -216,7 +208,7 @@ extern tNFA_STATUS NFA_RwFormatTag (void);
 **                  NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwLocateTlv (uint8_t tlv_type);
+extern tNFA_STATUS NFA_RwLocateTlv(uint8_t tlv_type);
 
 /*******************************************************************************
 **
@@ -235,7 +227,7 @@ extern tNFA_STATUS NFA_RwLocateTlv (uint8_t tlv_type);
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwSetTagReadOnly (bool    b_hard_lock);
+extern tNFA_STATUS NFA_RwSetTagReadOnly(bool b_hard_lock);
 
 /*******************************************************************************
 **
@@ -254,7 +246,7 @@ extern tNFA_STATUS NFA_RwSetTagReadOnly (bool    b_hard_lock);
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwT1tRid (void);
+extern tNFA_STATUS NFA_RwT1tRid(void);
 
 /*******************************************************************************
 **
@@ -273,7 +265,7 @@ extern tNFA_STATUS NFA_RwT1tRid (void);
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwT1tReadAll (void);
+extern tNFA_STATUS NFA_RwT1tReadAll(void);
 
 /*******************************************************************************
 **
@@ -292,7 +284,7 @@ extern tNFA_STATUS NFA_RwT1tReadAll (void);
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwT1tRead (uint8_t block_number, uint8_t index);
+extern tNFA_STATUS NFA_RwT1tRead(uint8_t block_number, uint8_t index);
 
 /*******************************************************************************
 **
@@ -311,10 +303,8 @@ extern tNFA_STATUS NFA_RwT1tRead (uint8_t block_number, uint8_t index);
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwT1tWrite (uint8_t  block_number,
-                                   uint8_t  index,
-                                   uint8_t  data,
-                                   bool     b_erase);
+extern tNFA_STATUS NFA_RwT1tWrite(uint8_t block_number, uint8_t index,
+                                  uint8_t data, bool b_erase);
 
 /*******************************************************************************
 **
@@ -333,7 +323,7 @@ extern tNFA_STATUS NFA_RwT1tWrite (uint8_t  block_number,
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwT1tReadSeg (uint8_t segment_number);
+extern tNFA_STATUS NFA_RwT1tReadSeg(uint8_t segment_number);
 
 /*******************************************************************************
 **
@@ -352,7 +342,7 @@ extern tNFA_STATUS NFA_RwT1tReadSeg (uint8_t segment_number);
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwT1tRead8 (uint8_t block_number);
+extern tNFA_STATUS NFA_RwT1tRead8(uint8_t block_number);
 
 /*******************************************************************************
 **
@@ -371,9 +361,8 @@ extern tNFA_STATUS NFA_RwT1tRead8 (uint8_t block_number);
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwT1tWrite8 (uint8_t block_number,
-                                    uint8_t  *p_data,
-                                    bool    b_erase);
+extern tNFA_STATUS NFA_RwT1tWrite8(uint8_t block_number, uint8_t* p_data,
+                                   bool b_erase);
 
 /*******************************************************************************
 **
@@ -392,7 +381,7 @@ extern tNFA_STATUS NFA_RwT1tWrite8 (uint8_t block_number,
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwT2tRead (uint8_t block_number);
+extern tNFA_STATUS NFA_RwT2tRead(uint8_t block_number);
 
 /*******************************************************************************
 **
@@ -410,7 +399,7 @@ extern tNFA_STATUS NFA_RwT2tRead (uint8_t block_number);
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwT2tWrite (uint8_t block_number,  uint8_t *p_data);
+extern tNFA_STATUS NFA_RwT2tWrite(uint8_t block_number, uint8_t* p_data);
 
 /*******************************************************************************
 **
@@ -428,7 +417,7 @@ extern tNFA_STATUS NFA_RwT2tWrite (uint8_t block_number,  uint8_t *p_data);
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwT2tSectorSelect (uint8_t sector_number);
+extern tNFA_STATUS NFA_RwT2tSectorSelect(uint8_t sector_number);
 
 /*******************************************************************************
 **
@@ -447,8 +436,8 @@ extern tNFA_STATUS NFA_RwT2tSectorSelect (uint8_t sector_number);
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwT3tRead (uint8_t              num_blocks,
-                                  tNFA_T3T_BLOCK_DESC *t3t_blocks);
+extern tNFA_STATUS NFA_RwT3tRead(uint8_t num_blocks,
+                                 tNFA_T3T_BLOCK_DESC* t3t_blocks);
 
 /*******************************************************************************
 **
@@ -466,9 +455,9 @@ extern tNFA_STATUS NFA_RwT3tRead (uint8_t              num_blocks,
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwT3tWrite (uint8_t              num_blocks,
-                                   tNFA_T3T_BLOCK_DESC *t3t_blocks,
-                                   uint8_t             *p_data);
+extern tNFA_STATUS NFA_RwT3tWrite(uint8_t num_blocks,
+                                  tNFA_T3T_BLOCK_DESC* t3t_blocks,
+                                  uint8_t* p_data);
 
 /*******************************************************************************
 **
@@ -487,7 +476,8 @@ extern tNFA_STATUS NFA_RwT3tWrite (uint8_t              num_blocks,
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwI93Inventory (bool    afi_present, uint8_t afi, uint8_t *p_uid);
+extern tNFA_STATUS NFA_RwI93Inventory(bool afi_present, uint8_t afi,
+                                      uint8_t* p_uid);
 
 /*******************************************************************************
 **
@@ -505,7 +495,7 @@ extern tNFA_STATUS NFA_RwI93Inventory (bool    afi_present, uint8_t afi, uint8_t
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwI93StayQuiet (void);
+extern tNFA_STATUS NFA_RwI93StayQuiet(void);
 
 /*******************************************************************************
 **
@@ -524,7 +514,7 @@ extern tNFA_STATUS NFA_RwI93StayQuiet (void);
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwI93ReadSingleBlock (uint8_t block_number);
+extern tNFA_STATUS NFA_RwI93ReadSingleBlock(uint8_t block_number);
 
 /*******************************************************************************
 **
@@ -542,8 +532,8 @@ extern tNFA_STATUS NFA_RwI93ReadSingleBlock (uint8_t block_number);
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwI93WriteSingleBlock (uint8_t block_number,
-                                              uint8_t *p_data);
+extern tNFA_STATUS NFA_RwI93WriteSingleBlock(uint8_t block_number,
+                                             uint8_t* p_data);
 
 /*******************************************************************************
 **
@@ -561,7 +551,7 @@ extern tNFA_STATUS NFA_RwI93WriteSingleBlock (uint8_t block_number,
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwI93LockBlock (uint8_t block_number);
+extern tNFA_STATUS NFA_RwI93LockBlock(uint8_t block_number);
 
 /*******************************************************************************
 **
@@ -580,8 +570,8 @@ extern tNFA_STATUS NFA_RwI93LockBlock (uint8_t block_number);
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwI93ReadMultipleBlocks (uint8_t  first_block_number,
-                                                uint16_t number_blocks);
+extern tNFA_STATUS NFA_RwI93ReadMultipleBlocks(uint8_t first_block_number,
+                                               uint16_t number_blocks);
 
 /*******************************************************************************
 **
@@ -599,9 +589,9 @@ extern tNFA_STATUS NFA_RwI93ReadMultipleBlocks (uint8_t  first_block_number,
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwI93WriteMultipleBlocks (uint8_t  first_block_number,
-                                                 uint16_t number_blocks,
-                                                 uint8_t  *p_data);
+extern tNFA_STATUS NFA_RwI93WriteMultipleBlocks(uint8_t first_block_number,
+                                                uint16_t number_blocks,
+                                                uint8_t* p_data);
 
 /*******************************************************************************
 **
@@ -624,7 +614,7 @@ extern tNFA_STATUS NFA_RwI93WriteMultipleBlocks (uint8_t  first_block_number,
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwI93Select (uint8_t *p_uid);
+extern tNFA_STATUS NFA_RwI93Select(uint8_t* p_uid);
 
 /*******************************************************************************
 **
@@ -642,7 +632,7 @@ extern tNFA_STATUS NFA_RwI93Select (uint8_t *p_uid);
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwI93ResetToReady (void);
+extern tNFA_STATUS NFA_RwI93ResetToReady(void);
 
 /*******************************************************************************
 **
@@ -660,7 +650,7 @@ extern tNFA_STATUS NFA_RwI93ResetToReady (void);
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwI93WriteAFI (uint8_t afi);
+extern tNFA_STATUS NFA_RwI93WriteAFI(uint8_t afi);
 
 /*******************************************************************************
 **
@@ -678,7 +668,7 @@ extern tNFA_STATUS NFA_RwI93WriteAFI (uint8_t afi);
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwI93LockAFI (void);
+extern tNFA_STATUS NFA_RwI93LockAFI(void);
 
 /*******************************************************************************
 **
@@ -696,7 +686,7 @@ extern tNFA_STATUS NFA_RwI93LockAFI (void);
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwI93WriteDSFID (uint8_t dsfid);
+extern tNFA_STATUS NFA_RwI93WriteDSFID(uint8_t dsfid);
 
 /*******************************************************************************
 **
@@ -714,7 +704,7 @@ extern tNFA_STATUS NFA_RwI93WriteDSFID (uint8_t dsfid);
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwI93LockDSFID (void);
+extern tNFA_STATUS NFA_RwI93LockDSFID(void);
 
 /*******************************************************************************
 **
@@ -733,7 +723,7 @@ extern tNFA_STATUS NFA_RwI93LockDSFID (void);
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwI93GetSysInfo (uint8_t *p_uid);
+extern tNFA_STATUS NFA_RwI93GetSysInfo(uint8_t* p_uid);
 
 /*******************************************************************************
 **
@@ -753,8 +743,8 @@ extern tNFA_STATUS NFA_RwI93GetSysInfo (uint8_t *p_uid);
 **      NFA_STATUS_FAILED otherwise
 **
 *******************************************************************************/
-extern tNFA_STATUS NFA_RwI93GetMultiBlockSecurityStatus (uint8_t  first_block_number,
-                                                         uint16_t number_blocks);
+extern tNFA_STATUS NFA_RwI93GetMultiBlockSecurityStatus(
+    uint8_t first_block_number, uint16_t number_blocks);
 
 #ifdef __cplusplus
 }

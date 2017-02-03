@@ -16,7 +16,6 @@
  *
  ******************************************************************************/
 
-
 /******************************************************************************
  *
  *  This file contains functions that NCI vendor specific interface with the
@@ -35,8 +34,6 @@
 ** Declarations
 ****************************************************************************/
 
-
-
 /*******************************************************************************
 **
 ** Function         NFC_RegVSCback
@@ -49,41 +46,31 @@
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_RegVSCback (bool             is_register,
-                            tNFC_VS_CBACK   *p_cback)
-{
-    tNFC_STATUS status = NFC_STATUS_FAILED;
-    int i;
+tNFC_STATUS NFC_RegVSCback(bool is_register, tNFC_VS_CBACK* p_cback) {
+  tNFC_STATUS status = NFC_STATUS_FAILED;
+  int i;
 
-    if (is_register)
-    {
-        for (i = 0; i < NFC_NUM_VS_CBACKS; i++)
-        {
-            /* find an empty spot to hold the callback function */
-            if (nfc_cb.p_vs_cb[i] == NULL)
-            {
-                nfc_cb.p_vs_cb[i]  = p_cback;
-                status             = NFC_STATUS_OK;
-                break;
-            }
-        }
+  if (is_register) {
+    for (i = 0; i < NFC_NUM_VS_CBACKS; i++) {
+      /* find an empty spot to hold the callback function */
+      if (nfc_cb.p_vs_cb[i] == NULL) {
+        nfc_cb.p_vs_cb[i] = p_cback;
+        status = NFC_STATUS_OK;
+        break;
+      }
     }
-    else
-    {
-        for (i = 0; i < NFC_NUM_VS_CBACKS; i++)
-        {
-            /* find the callback to de-register */
-            if (nfc_cb.p_vs_cb[i] == p_cback)
-            {
-                nfc_cb.p_vs_cb[i]  = NULL;
-                status             = NFC_STATUS_OK;
-                break;
-            }
-        }
+  } else {
+    for (i = 0; i < NFC_NUM_VS_CBACKS; i++) {
+      /* find the callback to de-register */
+      if (nfc_cb.p_vs_cb[i] == p_cback) {
+        nfc_cb.p_vs_cb[i] = NULL;
+        status = NFC_STATUS_OK;
+        break;
+      }
     }
-    return status;
+  }
+  return status;
 }
-
 
 /*******************************************************************************
 **
@@ -99,49 +86,41 @@ tNFC_STATUS NFC_RegVSCback (bool             is_register,
 ** Returns          tNFC_STATUS
 **
 *******************************************************************************/
-tNFC_STATUS NFC_SendVsCommand (uint8_t        oid,
-                               NFC_HDR        *p_data,
-                               tNFC_VS_CBACK *p_cback)
-{
-    tNFC_STATUS     status = NFC_STATUS_OK;
-    uint8_t         *pp;
+tNFC_STATUS NFC_SendVsCommand(uint8_t oid, NFC_HDR* p_data,
+                              tNFC_VS_CBACK* p_cback) {
+  tNFC_STATUS status = NFC_STATUS_OK;
+  uint8_t* pp;
 
-    /* Allow VSC with 0-length payload */
-    if (p_data == NULL)
-    {
-        p_data = NCI_GET_CMD_BUF (0);
-        if (p_data)
-        {
-            p_data->offset  = NCI_VSC_MSG_HDR_SIZE;
-            p_data->len     = 0;
-        }
+  /* Allow VSC with 0-length payload */
+  if (p_data == NULL) {
+    p_data = NCI_GET_CMD_BUF(0);
+    if (p_data) {
+      p_data->offset = NCI_VSC_MSG_HDR_SIZE;
+      p_data->len = 0;
     }
+  }
 
-    /* Validate parameters */
-    if ((p_data == NULL) || (p_data->offset < NCI_VSC_MSG_HDR_SIZE) || (p_data->len > NCI_MAX_VSC_SIZE))
-    {
-        NFC_TRACE_ERROR1 ("buffer offset must be >= %d", NCI_VSC_MSG_HDR_SIZE);
-        if (p_data)
-            GKI_freebuf (p_data);
-        return NFC_STATUS_INVALID_PARAM;
-    }
+  /* Validate parameters */
+  if ((p_data == NULL) || (p_data->offset < NCI_VSC_MSG_HDR_SIZE) ||
+      (p_data->len > NCI_MAX_VSC_SIZE)) {
+    NFC_TRACE_ERROR1("buffer offset must be >= %d", NCI_VSC_MSG_HDR_SIZE);
+    if (p_data) GKI_freebuf(p_data);
+    return NFC_STATUS_INVALID_PARAM;
+  }
 
-    p_data->event           = BT_EVT_TO_NFC_NCI;
-    p_data->layer_specific  = NFC_WAIT_RSP_VSC;
-    /* save the callback function in the NFC_HDR, to receive the response */
-    ((tNFC_NCI_VS_MSG *) p_data)->p_cback = p_cback;
+  p_data->event = BT_EVT_TO_NFC_NCI;
+  p_data->layer_specific = NFC_WAIT_RSP_VSC;
+  /* save the callback function in the NFC_HDR, to receive the response */
+  ((tNFC_NCI_VS_MSG*)p_data)->p_cback = p_cback;
 
-    p_data->offset -= NCI_MSG_HDR_SIZE;
-    pp              = (uint8_t *) (p_data + 1) + p_data->offset;
-    NCI_MSG_BLD_HDR0 (pp, NCI_MT_CMD, NCI_GID_PROP);
-    NCI_MSG_BLD_HDR1 (pp, oid);
-    *pp             = (uint8_t) p_data->len;
-    p_data->len    += NCI_MSG_HDR_SIZE;
-    nfc_ncif_check_cmd_queue (p_data);
-    return status;
+  p_data->offset -= NCI_MSG_HDR_SIZE;
+  pp = (uint8_t*)(p_data + 1) + p_data->offset;
+  NCI_MSG_BLD_HDR0(pp, NCI_MT_CMD, NCI_GID_PROP);
+  NCI_MSG_BLD_HDR1(pp, oid);
+  *pp = (uint8_t)p_data->len;
+  p_data->len += NCI_MSG_HDR_SIZE;
+  nfc_ncif_check_cmd_queue(p_data);
+  return status;
 }
-
-
-
 
 #endif /* NFC_INCLUDED == TRUE */

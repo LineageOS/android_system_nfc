@@ -30,6 +30,7 @@
  **
  ******************************************************************************/
 
-NFCSTATUS phNxpNciHal_get_version (uint32_t *hw_ver, uint32_t *fw_ver, uint32_t *sw_ver);
+NFCSTATUS phNxpNciHal_get_version(uint32_t* hw_ver, uint32_t* fw_ver,
+                                  uint32_t* sw_ver);
 
 #endif /* _PHNXPNCIHAL_API_H_ */

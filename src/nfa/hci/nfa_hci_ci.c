@@ -16,18 +16,16 @@
  *
  ******************************************************************************/
 
-
 /******************************************************************************
  *
  *  This file contains the call-in functions for NFA HCI
  *
  ******************************************************************************/
 #include <string.h>
-#include "nfa_sys.h"
 #include "nfa_hci_api.h"
 #include "nfa_hci_int.h"
 #include "nfa_nv_co.h"
-
+#include "nfa_sys.h"
 
 /*******************************************************************************
 **
@@ -38,24 +36,23 @@
 ** Returns          none
 **
 *******************************************************************************/
-void nfa_nv_ci_read (uint16_t num_bytes_read, tNFA_NV_CO_STATUS status, uint8_t block)
-{
-    tNFA_HCI_EVENT_DATA *p_msg;
+void nfa_nv_ci_read(uint16_t num_bytes_read, tNFA_NV_CO_STATUS status,
+                    uint8_t block) {
+  tNFA_HCI_EVENT_DATA* p_msg;
 
-    if ((p_msg = (tNFA_HCI_EVENT_DATA *) GKI_getbuf (sizeof (tNFA_HCI_EVENT_DATA))) != NULL)
-    {
-        p_msg->nv_read.hdr.event = NFA_HCI_RSP_NV_READ_EVT;
+  if ((p_msg = (tNFA_HCI_EVENT_DATA*)GKI_getbuf(sizeof(tNFA_HCI_EVENT_DATA))) !=
+      NULL) {
+    p_msg->nv_read.hdr.event = NFA_HCI_RSP_NV_READ_EVT;
 
-        if (  (status == NFA_STATUS_OK)
-            &&(num_bytes_read != 0) )
-            p_msg->nv_read.status = NFA_STATUS_OK;
-        else
-            p_msg->nv_read.status = NFA_STATUS_FAILED;
+    if ((status == NFA_STATUS_OK) && (num_bytes_read != 0))
+      p_msg->nv_read.status = NFA_STATUS_OK;
+    else
+      p_msg->nv_read.status = NFA_STATUS_FAILED;
 
-        p_msg->nv_read.size  = num_bytes_read;
-        p_msg->nv_read.block = block;
-        nfa_sys_sendmsg (p_msg);
-    }
+    p_msg->nv_read.size = num_bytes_read;
+    p_msg->nv_read.block = block;
+    nfa_sys_sendmsg(p_msg);
+  }
 }
 
 /*******************************************************************************
@@ -67,15 +64,13 @@ void nfa_nv_ci_read (uint16_t num_bytes_read, tNFA_NV_CO_STATUS status, uint8_t 
 ** Returns          none
 **
 *******************************************************************************/
-void nfa_nv_ci_write (tNFA_NV_CO_STATUS status)
-{
-    tNFA_HCI_EVENT_DATA *p_msg;
+void nfa_nv_ci_write(tNFA_NV_CO_STATUS status) {
+  tNFA_HCI_EVENT_DATA* p_msg;
 
-    if ((p_msg = (tNFA_HCI_EVENT_DATA *) GKI_getbuf (sizeof (tNFA_HCI_EVENT_DATA))) != NULL)
-    {
-        p_msg->nv_write.hdr.event = NFA_HCI_RSP_NV_WRITE_EVT;
-        p_msg->nv_write.status = 0;
-        nfa_sys_sendmsg (p_msg);
-    }
+  if ((p_msg = (tNFA_HCI_EVENT_DATA*)GKI_getbuf(sizeof(tNFA_HCI_EVENT_DATA))) !=
+      NULL) {
+    p_msg->nv_write.hdr.event = NFA_HCI_RSP_NV_WRITE_EVT;
+    p_msg->nv_write.status = 0;
+    nfa_sys_sendmsg(p_msg);
+  }
 }
-

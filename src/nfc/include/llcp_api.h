@@ -16,7 +16,6 @@
  *
  ******************************************************************************/
 
-
 /******************************************************************************
  *
  *  This file contains the LLCP API definitions
@@ -25,8 +24,8 @@
 #ifndef LLCP_API_H
 #define LLCP_API_H
 
-#include "nfc_target.h"
 #include "llcp_defs.h"
+#include "nfc_target.h"
 
 /*****************************************************************************
 **  Constants
@@ -40,7 +39,9 @@
 
 typedef uint8_t tLLCP_STATUS;
 
-#define LLCP_MIN_OFFSET             (NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE + LLCP_PDU_HEADER_SIZE + LLCP_SEQUENCE_SIZE)
+#define LLCP_MIN_OFFSET                                             \
+  (NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE + LLCP_PDU_HEADER_SIZE + \
+   LLCP_SEQUENCE_SIZE)
 
 /* indication of failure to allocate data link resource */
 #define LLCP_INVALID_SAP 0xFF
@@ -48,20 +49,18 @@ typedef uint8_t tLLCP_STATUS;
 /*****************************************************************************
 **  Type Definitions
 *****************************************************************************/
-typedef struct
-{
-    bool    is_initiator;       /* TRUE if we are POLL mode */
-    uint8_t max_payload_size;   /* 64, 128, 192 or 254 */
-    uint8_t waiting_time;
-    uint8_t  *p_gen_bytes;
-    uint8_t gen_bytes_len;
+typedef struct {
+  bool is_initiator;        /* TRUE if we are POLL mode */
+  uint8_t max_payload_size; /* 64, 128, 192 or 254 */
+  uint8_t waiting_time;
+  uint8_t* p_gen_bytes;
+  uint8_t gen_bytes_len;
 } tLLCP_ACTIVATE_CONFIG;
 
-typedef struct
-{
-    uint16_t  miu;                        /* Local receiving MIU      */
-    uint8_t rw;                         /* Local receiving window   */
-    char    sn[LLCP_MAX_SN_LEN + 1];    /* Service name to connect  */
+typedef struct {
+  uint16_t miu;                 /* Local receiving MIU      */
+  uint8_t rw;                   /* Local receiving window   */
+  char sn[LLCP_MAX_SN_LEN + 1]; /* Service name to connect  */
 } tLLCP_CONNECTION_PARAMS;
 
 /*********************************
@@ -99,16 +98,16 @@ typedef struct
 #define LLCP_LINK_FRAME_ERROR 0x07
 /* RF link loss without any rx LLC PDU      */
 #define LLCP_LINK_RF_LINK_LOSS_NO_RX_LLC 0x08
-#define LLCP_LINK_RF_TRANSMISSION_ERR       NFC_STATUS_RF_TRANSMISSION_ERR
-#define LLCP_LINK_RF_PROTOCOL_ERR           NFC_STATUS_RF_PROTOCOL_ERR
-#define LLCP_LINK_RF_TIMEOUT                NFC_STATUS_TIMEOUT
-#define LLCP_LINK_RF_LINK_LOSS_ERR          NFC_STATUS_LINK_LOSS
+#define LLCP_LINK_RF_TRANSMISSION_ERR NFC_STATUS_RF_TRANSMISSION_ERR
+#define LLCP_LINK_RF_PROTOCOL_ERR NFC_STATUS_RF_PROTOCOL_ERR
+#define LLCP_LINK_RF_TIMEOUT NFC_STATUS_TIMEOUT
+#define LLCP_LINK_RF_LINK_LOSS_ERR NFC_STATUS_LINK_LOSS
 
-typedef void (tLLCP_LINK_CBACK) (uint8_t event, uint8_t reason);
+typedef void(tLLCP_LINK_CBACK)(uint8_t event, uint8_t reason);
 
 /* Minimum length of Gen Bytes for LLCP */
 /* In CE4 low power mode, NFCC can store up to 21 bytes */
-#define LLCP_MIN_GEN_BYTES                  20
+#define LLCP_MIN_GEN_BYTES 20
 
 /* Service Access Point (SAP) Callback Events */
 
@@ -129,112 +128,102 @@ typedef void (tLLCP_LINK_CBACK) (uint8_t event, uint8_t reason);
 /* tx queue is empty and all PDU is acked   */
 #define LLCP_SAP_EVT_TX_COMPLETE 0x07
 
-#define LLCP_LINK_TYPE_LOGICAL_DATA_LINK      0x01
-#define LLCP_LINK_TYPE_DATA_LINK_CONNECTION   0x02
+#define LLCP_LINK_TYPE_LOGICAL_DATA_LINK 0x01
+#define LLCP_LINK_TYPE_DATA_LINK_CONNECTION 0x02
 
-typedef struct
-{
-    uint8_t event;              /* LLCP_SAP_EVT_DATA_IND        */
-    uint8_t local_sap;          /* SAP of local device          */
-    uint8_t remote_sap;         /* SAP of remote device         */
-    uint8_t link_type;          /* link type                    */
+typedef struct {
+  uint8_t event;      /* LLCP_SAP_EVT_DATA_IND        */
+  uint8_t local_sap;  /* SAP of local device          */
+  uint8_t remote_sap; /* SAP of remote device         */
+  uint8_t link_type;  /* link type                    */
 } tLLCP_SAP_DATA_IND;
 
-typedef struct
-{
-    uint8_t event;              /* LLCP_SAP_EVT_CONNECT_IND     */
-    uint8_t server_sap;         /* SAP of local server          */
-    uint8_t local_sap;          /* SAP of local device          */
-    uint8_t remote_sap;         /* SAP of remote device         */
-    uint16_t  miu;                /* MIU of peer device           */
-    uint8_t rw;                 /* RW of peer device            */
-    char   *p_service_name;     /* Service name (only for SDP)  */
+typedef struct {
+  uint8_t event;        /* LLCP_SAP_EVT_CONNECT_IND     */
+  uint8_t server_sap;   /* SAP of local server          */
+  uint8_t local_sap;    /* SAP of local device          */
+  uint8_t remote_sap;   /* SAP of remote device         */
+  uint16_t miu;         /* MIU of peer device           */
+  uint8_t rw;           /* RW of peer device            */
+  char* p_service_name; /* Service name (only for SDP)  */
 } tLLCP_SAP_CONNECT_IND;
 
-typedef struct
-{
-    uint8_t event;              /* LLCP_SAP_EVT_CONNECT_RESP    */
-    uint8_t local_sap;          /* SAP of local device          */
-    uint8_t remote_sap;         /* SAP of remote device         */
-    uint16_t  miu;                /* MIU of peer device           */
-    uint8_t rw;                 /* RW of peer device            */
+typedef struct {
+  uint8_t event;      /* LLCP_SAP_EVT_CONNECT_RESP    */
+  uint8_t local_sap;  /* SAP of local device          */
+  uint8_t remote_sap; /* SAP of remote device         */
+  uint16_t miu;       /* MIU of peer device           */
+  uint8_t rw;         /* RW of peer device            */
 } tLLCP_SAP_CONNECT_RESP;
 
-#define LLCP_SAP_DISCONNECT_REASON_TIMEOUT  0x80
-typedef struct
-{
-    uint8_t event;              /* LLCP_SAP_EVT_DISCONNECT_IND  */
-    uint8_t local_sap;          /* SAP of local device          */
-    uint8_t remote_sap;         /* SAP of remote device         */
+#define LLCP_SAP_DISCONNECT_REASON_TIMEOUT 0x80
+typedef struct {
+  uint8_t event;      /* LLCP_SAP_EVT_DISCONNECT_IND  */
+  uint8_t local_sap;  /* SAP of local device          */
+  uint8_t remote_sap; /* SAP of remote device         */
 } tLLCP_SAP_DISCONNECT_IND;
 
-typedef struct
-{
-    uint8_t event;              /* LLCP_SAP_EVT_DISCONNECT_RESP */
-    uint8_t local_sap;          /* SAP of local device          */
-    uint8_t remote_sap;         /* SAP of remote device         */
-    uint8_t reason;             /* Reason of DM PDU if not timeout */
+typedef struct {
+  uint8_t event;      /* LLCP_SAP_EVT_DISCONNECT_RESP */
+  uint8_t local_sap;  /* SAP of local device          */
+  uint8_t remote_sap; /* SAP of remote device         */
+  uint8_t reason;     /* Reason of DM PDU if not timeout */
 } tLLCP_SAP_DISCONNECT_RESP;
 
-typedef struct
-{
-    uint8_t event;              /* LLCP_SAP_EVT_CONGEST         */
-    uint8_t local_sap;          /* SAP of local device          */
-    uint8_t remote_sap;         /* SAP of remote device         */
-    bool    is_congested;       /* TRUE if congested            */
-    uint8_t link_type;          /* congested link type          */
+typedef struct {
+  uint8_t event;      /* LLCP_SAP_EVT_CONGEST         */
+  uint8_t local_sap;  /* SAP of local device          */
+  uint8_t remote_sap; /* SAP of remote device         */
+  bool is_congested;  /* TRUE if congested            */
+  uint8_t link_type;  /* congested link type          */
 } tLLCP_SAP_CONGEST;
 
-typedef struct
-{
-    uint8_t event;              /* LLCP_SAP_EVT_LINK_STATUS     */
-    uint8_t local_sap;          /* SAP of local device          */
-    bool    is_activated;       /* TRUE if LLCP link is activated  */
-    bool    is_initiator;       /* TRUE if local LLCP is initiator */
+typedef struct {
+  uint8_t event;     /* LLCP_SAP_EVT_LINK_STATUS     */
+  uint8_t local_sap; /* SAP of local device          */
+  bool is_activated; /* TRUE if LLCP link is activated  */
+  bool is_initiator; /* TRUE if local LLCP is initiator */
 } tLLCP_SAP_LINK_STATUS;
 
-typedef struct
-{
-    uint8_t event;              /* LLCP_SAP_EVT_TX_COMPLETE     */
-    uint8_t local_sap;          /* SAP of local device          */
-    uint8_t remote_sap;         /* SAP of remote device         */
+typedef struct {
+  uint8_t event;      /* LLCP_SAP_EVT_TX_COMPLETE     */
+  uint8_t local_sap;  /* SAP of local device          */
+  uint8_t remote_sap; /* SAP of remote device         */
 } tLLCP_SAP_TX_COMPLETE;
 
-typedef struct
-{
-    uint8_t event;              /* event                        */
-    uint8_t local_sap;          /* SAP of local device          */
+typedef struct {
+  uint8_t event;     /* event                        */
+  uint8_t local_sap; /* SAP of local device          */
 } tLLCP_SAP_HEADER;
 
-typedef union
-{
-    tLLCP_SAP_HEADER            hdr;                /* common header                */
-    tLLCP_SAP_DATA_IND          data_ind;           /* LLCP_SAP_EVT_DATA_IND        */
-    tLLCP_SAP_CONNECT_IND       connect_ind;        /* LLCP_SAP_EVT_CONNECT_IND     */
-    tLLCP_SAP_CONNECT_RESP      connect_resp;       /* LLCP_SAP_EVT_CONNECT_RESP    */
-    tLLCP_SAP_DISCONNECT_IND    disconnect_ind;     /* LLCP_SAP_EVT_DISCONNECT_IND  */
-    tLLCP_SAP_DISCONNECT_RESP   disconnect_resp;    /* LLCP_SAP_EVT_DISCONNECT_RESP */
-    tLLCP_SAP_CONGEST           congest;            /* LLCP_SAP_EVT_CONGEST         */
-    tLLCP_SAP_LINK_STATUS       link_status;        /* LLCP_SAP_EVT_LINK_STATUS     */
-    tLLCP_SAP_TX_COMPLETE       tx_complete;        /* LLCP_SAP_EVT_TX_COMPLETE     */
+typedef union {
+  tLLCP_SAP_HEADER hdr;                      /* common header                */
+  tLLCP_SAP_DATA_IND data_ind;               /* LLCP_SAP_EVT_DATA_IND        */
+  tLLCP_SAP_CONNECT_IND connect_ind;         /* LLCP_SAP_EVT_CONNECT_IND     */
+  tLLCP_SAP_CONNECT_RESP connect_resp;       /* LLCP_SAP_EVT_CONNECT_RESP    */
+  tLLCP_SAP_DISCONNECT_IND disconnect_ind;   /* LLCP_SAP_EVT_DISCONNECT_IND  */
+  tLLCP_SAP_DISCONNECT_RESP disconnect_resp; /* LLCP_SAP_EVT_DISCONNECT_RESP */
+  tLLCP_SAP_CONGEST congest;                 /* LLCP_SAP_EVT_CONGEST         */
+  tLLCP_SAP_LINK_STATUS link_status;         /* LLCP_SAP_EVT_LINK_STATUS     */
+  tLLCP_SAP_TX_COMPLETE tx_complete;         /* LLCP_SAP_EVT_TX_COMPLETE     */
 } tLLCP_SAP_CBACK_DATA;
 
-typedef void (tLLCP_APP_CBACK) (tLLCP_SAP_CBACK_DATA *p_data);
+typedef void(tLLCP_APP_CBACK)(tLLCP_SAP_CBACK_DATA* p_data);
 
 /* Service Discovery Callback */
 
-typedef void (tLLCP_SDP_CBACK) (uint8_t tid, uint8_t remote_sap);
+typedef void(tLLCP_SDP_CBACK)(uint8_t tid, uint8_t remote_sap);
 
-/* LLCP DTA Callback - notify DTA responded SNL for connectionless echo service */
+/* LLCP DTA Callback - notify DTA responded SNL for connectionless echo service
+ */
 
-typedef void (tLLCP_DTA_CBACK) (void);
+typedef void(tLLCP_DTA_CBACK)(void);
 
 /*****************************************************************************
 **  External Function Declarations
 *****************************************************************************/
 #ifdef __cplusplus
-extern "C"
-{
+extern "C" {
 #endif
 
 /*******************************************************************************
@@ -255,15 +244,11 @@ extern "C"
 ** Returns          void
 **
 *******************************************************************************/
-extern void LLCP_SetConfig (uint16_t link_miu,
-                            uint8_t  opt,
-                            uint8_t  wt,
-                            uint16_t link_timeout,
-                            uint16_t inact_timeout_init,
-                            uint16_t inact_timeout_target,
-                            uint16_t symm_delay,
-                            uint16_t data_link_timeout,
-                            uint16_t delay_first_pdu_timeout);
+extern void LLCP_SetConfig(uint16_t link_miu, uint8_t opt, uint8_t wt,
+                           uint16_t link_timeout, uint16_t inact_timeout_init,
+                           uint16_t inact_timeout_target, uint16_t symm_delay,
+                           uint16_t data_link_timeout,
+                           uint16_t delay_first_pdu_timeout);
 
 /*******************************************************************************
 **
@@ -283,15 +268,13 @@ extern void LLCP_SetConfig (uint16_t link_miu,
 ** Returns          void
 **
 *******************************************************************************/
-extern void LLCP_GetConfig (uint16_t *p_link_miu,
-                            uint8_t  *p_opt,
-                            uint8_t  *p_wt,
-                            uint16_t *p_link_timeout,
-                            uint16_t *p_inact_timeout_init,
-                            uint16_t *p_inact_timeout_target,
-                            uint16_t *p_symm_delay,
-                            uint16_t *p_data_link_timeout,
-                            uint16_t *p_delay_first_pdu_timeout);
+extern void LLCP_GetConfig(uint16_t* p_link_miu, uint8_t* p_opt, uint8_t* p_wt,
+                           uint16_t* p_link_timeout,
+                           uint16_t* p_inact_timeout_init,
+                           uint16_t* p_inact_timeout_target,
+                           uint16_t* p_symm_delay,
+                           uint16_t* p_data_link_timeout,
+                           uint16_t* p_delay_first_pdu_timeout);
 
 /*******************************************************************************
 **
@@ -318,9 +301,8 @@ extern void LLCP_GetConfig (uint16_t *p_link_miu,
 ** Returns          None
 **
 *******************************************************************************/
-extern void LLCP_GetDiscoveryConfig (uint8_t *p_wt,
-                                     uint8_t *p_gen_bytes,
-                                     uint8_t *p_gen_bytes_len);
+extern void LLCP_GetDiscoveryConfig(uint8_t* p_wt, uint8_t* p_gen_bytes,
+                                    uint8_t* p_gen_bytes_len);
 
 /*******************************************************************************
 **
@@ -336,8 +318,8 @@ extern void LLCP_GetDiscoveryConfig (uint8_t *p_wt,
 ** Returns          LLCP_STATUS_SUCCESS if success
 **
 *******************************************************************************/
-extern tLLCP_STATUS LLCP_ActivateLink (tLLCP_ACTIVATE_CONFIG config,
-                                       tLLCP_LINK_CBACK     *p_link_cback);
+extern tLLCP_STATUS LLCP_ActivateLink(tLLCP_ACTIVATE_CONFIG config,
+                                      tLLCP_LINK_CBACK* p_link_cback);
 
 /*******************************************************************************
 **
@@ -352,7 +334,7 @@ extern tLLCP_STATUS LLCP_ActivateLink (tLLCP_ACTIVATE_CONFIG config,
 ** Returns          LLCP_STATUS_SUCCESS if success
 **
 *******************************************************************************/
-extern tLLCP_STATUS LLCP_DeactivateLink (void);
+extern tLLCP_STATUS LLCP_DeactivateLink(void);
 
 /*******************************************************************************
 **
@@ -373,10 +355,9 @@ extern tLLCP_STATUS LLCP_DeactivateLink (void);
 **                  LLCP_INVALID_SAP, otherwise
 **
 *******************************************************************************/
-extern uint8_t LLCP_RegisterServer (uint8_t         reg_sap,
-                                    uint8_t         link_type,
-                                    char            *p_service_name,
-                                    tLLCP_APP_CBACK *p_sap_cback);
+extern uint8_t LLCP_RegisterServer(uint8_t reg_sap, uint8_t link_type,
+                                   char* p_service_name,
+                                   tLLCP_APP_CBACK* p_sap_cback);
 
 /*******************************************************************************
 **
@@ -391,8 +372,8 @@ extern uint8_t LLCP_RegisterServer (uint8_t         reg_sap,
 **                  LLCP_INVALID_SAP, otherwise
 **
 *******************************************************************************/
-extern uint8_t LLCP_RegisterClient (uint8_t         link_type,
-                                    tLLCP_APP_CBACK *p_sap_cback);
+extern uint8_t LLCP_RegisterClient(uint8_t link_type,
+                                   tLLCP_APP_CBACK* p_sap_cback);
 
 /*******************************************************************************
 **
@@ -404,7 +385,7 @@ extern uint8_t LLCP_RegisterClient (uint8_t         link_type,
 ** Returns          LLCP_STATUS_SUCCESS if success
 **
 *******************************************************************************/
-extern tLLCP_STATUS LLCP_Deregister (uint8_t sap);
+extern tLLCP_STATUS LLCP_Deregister(uint8_t sap);
 
 /*******************************************************************************
 **
@@ -416,10 +397,10 @@ extern tLLCP_STATUS LLCP_Deregister (uint8_t sap);
 ** Returns          TRUE if congested
 **
 *******************************************************************************/
-extern bool    LLCP_IsLogicalLinkCongested (uint8_t local_sap,
-                                            uint8_t num_pending_ui_pdu,
-                                            uint8_t total_pending_ui_pdu,
-                                            uint8_t total_pending_i_pdu);
+extern bool LLCP_IsLogicalLinkCongested(uint8_t local_sap,
+                                        uint8_t num_pending_ui_pdu,
+                                        uint8_t total_pending_ui_pdu,
+                                        uint8_t total_pending_i_pdu);
 
 /*******************************************************************************
 **
@@ -433,7 +414,7 @@ extern bool    LLCP_IsLogicalLinkCongested (uint8_t local_sap,
 **                  LLCP_STATUS_FAIL, otherwise
 **
 *******************************************************************************/
-extern tLLCP_STATUS LLCP_SendUI (uint8_t ssap, uint8_t dsap, NFC_HDR *p_buf);
+extern tLLCP_STATUS LLCP_SendUI(uint8_t ssap, uint8_t dsap, NFC_HDR* p_buf);
 
 /*******************************************************************************
 **
@@ -450,11 +431,9 @@ extern tLLCP_STATUS LLCP_SendUI (uint8_t ssap, uint8_t dsap, NFC_HDR *p_buf);
 ** Returns          TRUE if more information of UI PDU or more UI PDU in queue
 **
 *******************************************************************************/
-extern bool    LLCP_ReadLogicalLinkData (uint8_t  local_sap,
-                                         uint32_t max_data_len,
-                                         uint8_t  *p_remote_sap,
-                                         uint32_t *p_data_len,
-                                         uint8_t  *p_data);
+extern bool LLCP_ReadLogicalLinkData(uint8_t local_sap, uint32_t max_data_len,
+                                     uint8_t* p_remote_sap,
+                                     uint32_t* p_data_len, uint8_t* p_data);
 
 /*******************************************************************************
 **
@@ -466,7 +445,7 @@ extern bool    LLCP_ReadLogicalLinkData (uint8_t  local_sap,
 ** Returns          length of data flushed
 **
 *******************************************************************************/
-extern uint32_t LLCP_FlushLogicalLinkRxData (uint8_t local_sap);
+extern uint32_t LLCP_FlushLogicalLinkRxData(uint8_t local_sap);
 
 /*******************************************************************************
 **
@@ -480,8 +459,8 @@ extern uint32_t LLCP_FlushLogicalLinkRxData (uint8_t local_sap);
 **                  LLCP_STATUS_FAIL, otherwise
 **
 *******************************************************************************/
-extern tLLCP_STATUS LLCP_ConnectReq (uint8_t reg_sap, uint8_t dsap,
-                                     tLLCP_CONNECTION_PARAMS *p_params);
+extern tLLCP_STATUS LLCP_ConnectReq(uint8_t reg_sap, uint8_t dsap,
+                                    tLLCP_CONNECTION_PARAMS* p_params);
 
 /*******************************************************************************
 **
@@ -494,9 +473,8 @@ extern tLLCP_STATUS LLCP_ConnectReq (uint8_t reg_sap, uint8_t dsap,
 **                  LLCP_STATUS_FAIL, otherwise
 **
 *******************************************************************************/
-extern tLLCP_STATUS LLCP_ConnectCfm (uint8_t local_sap,
-                                     uint8_t remote_sap,
-                                     tLLCP_CONNECTION_PARAMS *p_params);
+extern tLLCP_STATUS LLCP_ConnectCfm(uint8_t local_sap, uint8_t remote_sap,
+                                    tLLCP_CONNECTION_PARAMS* p_params);
 
 /*******************************************************************************
 **
@@ -514,9 +492,8 @@ extern tLLCP_STATUS LLCP_ConnectCfm (uint8_t local_sap,
 **                  LLCP_STATUS_FAIL, otherwise
 **
 *******************************************************************************/
-extern tLLCP_STATUS LLCP_ConnectReject (uint8_t local_sap,
-                                        uint8_t remote_sap,
-                                        uint8_t reason);
+extern tLLCP_STATUS LLCP_ConnectReject(uint8_t local_sap, uint8_t remote_sap,
+                                       uint8_t reason);
 
 /*******************************************************************************
 **
@@ -528,11 +505,10 @@ extern tLLCP_STATUS LLCP_ConnectReject (uint8_t local_sap,
 ** Returns          TRUE if congested
 **
 *******************************************************************************/
-extern bool    LLCP_IsDataLinkCongested (uint8_t local_sap,
-                                         uint8_t remote_sap,
-                                         uint8_t num_pending_i_pdu,
-                                         uint8_t total_pending_ui_pdu,
-                                         uint8_t total_pending_i_pdu);
+extern bool LLCP_IsDataLinkCongested(uint8_t local_sap, uint8_t remote_sap,
+                                     uint8_t num_pending_i_pdu,
+                                     uint8_t total_pending_ui_pdu,
+                                     uint8_t total_pending_i_pdu);
 
 /*******************************************************************************
 **
@@ -545,9 +521,8 @@ extern bool    LLCP_IsDataLinkCongested (uint8_t local_sap,
 **                  LLCP_STATUS_CONGESTED if data link is congested
 **
 *******************************************************************************/
-extern tLLCP_STATUS LLCP_SendData (uint8_t  local_sap,
-                                   uint8_t  remote_sap,
-                                   NFC_HDR *p_buf);
+extern tLLCP_STATUS LLCP_SendData(uint8_t local_sap, uint8_t remote_sap,
+                                  NFC_HDR* p_buf);
 
 /*******************************************************************************
 **
@@ -564,11 +539,9 @@ extern tLLCP_STATUS LLCP_SendData (uint8_t  local_sap,
 ** Returns          TRUE if more data in queue
 **
 *******************************************************************************/
-extern bool    LLCP_ReadDataLinkData (uint8_t  local_sap,
-                                      uint8_t  remote_sap,
-                                      uint32_t max_data_len,
-                                      uint32_t *p_data_len,
-                                      uint8_t  *p_data);
+extern bool LLCP_ReadDataLinkData(uint8_t local_sap, uint8_t remote_sap,
+                                  uint32_t max_data_len, uint32_t* p_data_len,
+                                  uint8_t* p_data);
 
 /*******************************************************************************
 **
@@ -580,8 +553,7 @@ extern bool    LLCP_ReadDataLinkData (uint8_t  local_sap,
 ** Returns          length of rx data flushed
 **
 *******************************************************************************/
-extern uint32_t LLCP_FlushDataLinkRxData (uint8_t  local_sap,
-                                          uint8_t  remote_sap);
+extern uint32_t LLCP_FlushDataLinkRxData(uint8_t local_sap, uint8_t remote_sap);
 
 /*******************************************************************************
 **
@@ -593,9 +565,8 @@ extern uint32_t LLCP_FlushDataLinkRxData (uint8_t  local_sap,
 ** Returns          LLCP_STATUS_SUCCESS if success
 **
 *******************************************************************************/
-extern tLLCP_STATUS LLCP_DisconnectReq (uint8_t local_sap,
-                                        uint8_t remote_sap,
-                                        bool    flush);
+extern tLLCP_STATUS LLCP_DisconnectReq(uint8_t local_sap, uint8_t remote_sap,
+                                       bool flush);
 
 /*******************************************************************************
 **
@@ -609,8 +580,8 @@ extern tLLCP_STATUS LLCP_DisconnectReq (uint8_t local_sap,
 ** Returns          LLCP_STATUS_SUCCESS if success
 **
 *******************************************************************************/
-extern tLLCP_STATUS LLCP_SetTxCompleteNtf (uint8_t local_sap,
-                                           uint8_t remote_sap);
+extern tLLCP_STATUS LLCP_SetTxCompleteNtf(uint8_t local_sap,
+                                          uint8_t remote_sap);
 
 /*******************************************************************************
 **
@@ -622,9 +593,8 @@ extern tLLCP_STATUS LLCP_SetTxCompleteNtf (uint8_t local_sap,
 ** Returns          LLCP_STATUS_SUCCESS if success
 **
 *******************************************************************************/
-extern tLLCP_STATUS LLCP_SetLocalBusyStatus (uint8_t local_sap,
-                                             uint8_t remote_sap,
-                                             bool    is_busy);
+extern tLLCP_STATUS LLCP_SetLocalBusyStatus(uint8_t local_sap,
+                                            uint8_t remote_sap, bool is_busy);
 
 /*******************************************************************************
 **
@@ -636,7 +606,7 @@ extern tLLCP_STATUS LLCP_SetLocalBusyStatus (uint8_t local_sap,
 ** Returns          WKS bitmap if success
 **
 *******************************************************************************/
-extern uint16_t LLCP_GetRemoteWKS (void);
+extern uint16_t LLCP_GetRemoteWKS(void);
 
 /*******************************************************************************
 **
@@ -648,7 +618,7 @@ extern uint16_t LLCP_GetRemoteWKS (void);
 ** Returns          link service class
 **
 *******************************************************************************/
-extern uint8_t LLCP_GetRemoteLSC (void);
+extern uint8_t LLCP_GetRemoteLSC(void);
 
 /*******************************************************************************
 **
@@ -660,7 +630,7 @@ extern uint8_t LLCP_GetRemoteLSC (void);
 ** Returns          LLCP version
 **
 *******************************************************************************/
-extern uint8_t LLCP_GetRemoteVersion (void);
+extern uint8_t LLCP_GetRemoteVersion(void);
 
 /*******************************************************************************
 **
@@ -672,7 +642,8 @@ extern uint8_t LLCP_GetRemoteVersion (void);
 ** Returns          None
 **
 *******************************************************************************/
-extern void LLCP_GetLinkMIU (uint16_t *p_local_link_miu, uint16_t *p_remote_link_miu);
+extern void LLCP_GetLinkMIU(uint16_t* p_local_link_miu,
+                            uint16_t* p_remote_link_miu);
 
 /*******************************************************************************
 **
@@ -684,9 +655,8 @@ extern void LLCP_GetLinkMIU (uint16_t *p_local_link_miu, uint16_t *p_remote_link
 ** Returns          LLCP_STATUS_SUCCESS if success
 **
 *******************************************************************************/
-extern tLLCP_STATUS LLCP_DiscoverService (char            *p_name,
-                                          tLLCP_SDP_CBACK *p_cback,
-                                          uint8_t         *p_tid);
+extern tLLCP_STATUS LLCP_DiscoverService(char* p_name, tLLCP_SDP_CBACK* p_cback,
+                                         uint8_t* p_tid);
 
 /*******************************************************************************
 **
@@ -698,7 +668,7 @@ extern tLLCP_STATUS LLCP_DiscoverService (char            *p_name,
 ** Returns          The new or current trace level
 **
 *******************************************************************************/
-extern uint8_t LLCP_SetTraceLevel (uint8_t new_level);
+extern uint8_t LLCP_SetTraceLevel(uint8_t new_level);
 
 #if (LLCP_TEST_INCLUDED == TRUE)
 /*******************************************************************************
@@ -710,12 +680,11 @@ extern uint8_t LLCP_SetTraceLevel (uint8_t new_level);
 ** Returns          void
 **
 *******************************************************************************/
-extern void LLCP_SetTestParams (uint8_t version, uint16_t wks);
+extern void LLCP_SetTestParams(uint8_t version, uint16_t wks);
 #endif
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  /* LLCP_API_H */
-
+#endif /* LLCP_API_H */

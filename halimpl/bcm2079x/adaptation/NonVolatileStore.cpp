@@ -20,27 +20,24 @@
 
 #include "_OverrideLog.h"
 #include "gki.h"
-extern "C"
-{
-    #include "nfc_hal_target.h"
-    #include "nfc_hal_nv_ci.h"
+extern "C" {
+#include "nfc_hal_nv_ci.h"
+#include "nfc_hal_target.h"
 }
-#include "config.h"
-#include "CrcChecksum.h"
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 #include <errno.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <string>
+#include "CrcChecksum.h"
+#include "config.h"
 
-
-//directory of HAL's non-volatile storage
+// directory of HAL's non-volatile storage
 static const char* default_location = "/data/nfc";
 static const char* filename_prefix = "/halStorage.bin";
-static const std::string get_storage_location ();
-void delete_hal_non_volatile_store (bool forceDelete);
-void verify_hal_non_volatile_store ();
-
+static const std::string get_storage_location();
+void delete_hal_non_volatile_store(bool forceDelete);
+void verify_hal_non_volatile_store();
 
 /*******************************************************************************
 **
@@ -54,53 +51,47 @@ void verify_hal_non_volatile_store ();
 **
 ** Returns          void
 **
-**                  Note: Upon completion of the request, nfc_hal_nv_ci_read () is
+**                  Note: Upon completion of the request, nfc_hal_nv_ci_read ()
+*is
 **                        called with the buffer of data, along with the number
 **                        of bytes read into the buffer, and a status.  The
-**                        call-in function should only be called when ALL requested
-**                        bytes have been read, the end of file has been detected,
+**                        call-in function should only be called when ALL
+*requested
+**                        bytes have been read, the end of file has been
+*detected,
 **                        or an error has occurred.
 **
 *******************************************************************************/
-void nfc_hal_nv_co_read (uint8_t *p_buf, uint16_t nbytes, uint8_t block)
-{
-    std::string fn = get_storage_location();
-    char filename[256];
+void nfc_hal_nv_co_read(uint8_t* p_buf, uint16_t nbytes, uint8_t block) {
+  std::string fn = get_storage_location();
+  char filename[256];
 
-    fn.append (filename_prefix);
-    if (fn.length() > 200)
-    {
-        ALOGE ("%s: filename too long", __func__);
-        return;
-    }
-    snprintf (filename, sizeof(filename), "%s%u", fn.c_str(), block);
+  fn.append(filename_prefix);
+  if (fn.length() > 200) {
+    ALOGE("%s: filename too long", __func__);
+    return;
+  }
+  snprintf(filename, sizeof(filename), "%s%u", fn.c_str(), block);
 
-    ALOGD ("%s: buffer len=%u; file=%s", __func__, nbytes, filename);
-    int fileStream = open (filename, O_RDONLY);
-    if (fileStream >= 0)
-    {
-        unsigned short checksum = 0;
-        size_t actualReadCrc = read (fileStream, &checksum, sizeof(checksum));
-        size_t actualReadData = read (fileStream, p_buf, nbytes);
-        close (fileStream);
-        if (actualReadData > 0)
-        {
-            ALOGD ("%s: data size=%u", __func__, actualReadData);
-            nfc_hal_nv_ci_read (actualReadData, NFC_HAL_NV_CO_OK, block);
-        }
-        else
-        {
-            ALOGE ("%s: fail to read", __func__);
-            nfc_hal_nv_ci_read (0, NFC_HAL_NV_CO_FAIL, block);
-        }
+  ALOGD("%s: buffer len=%u; file=%s", __func__, nbytes, filename);
+  int fileStream = open(filename, O_RDONLY);
+  if (fileStream >= 0) {
+    unsigned short checksum = 0;
+    size_t actualReadCrc = read(fileStream, &checksum, sizeof(checksum));
+    size_t actualReadData = read(fileStream, p_buf, nbytes);
+    close(fileStream);
+    if (actualReadData > 0) {
+      ALOGD("%s: data size=%u", __func__, actualReadData);
+      nfc_hal_nv_ci_read(actualReadData, NFC_HAL_NV_CO_OK, block);
+    } else {
+      ALOGE("%s: fail to read", __func__);
+      nfc_hal_nv_ci_read(0, NFC_HAL_NV_CO_FAIL, block);
     }
-    else
-    {
-        ALOGD ("%s: fail to open", __func__);
-        nfc_hal_nv_ci_read (0, NFC_HAL_NV_CO_FAIL, block);
-    }
+  } else {
+    ALOGD("%s: fail to open", __func__);
+    nfc_hal_nv_ci_read(0, NFC_HAL_NV_CO_FAIL, block);
+  }
 }
-
 
 /*******************************************************************************
 **
@@ -114,74 +105,68 @@ void nfc_hal_nv_co_read (uint8_t *p_buf, uint16_t nbytes, uint8_t block)
 **
 ** Returns          void
 **
-**                  Note: Upon completion of the request, nfc_hal_nv_ci_write () is
+**                  Note: Upon completion of the request, nfc_hal_nv_ci_write ()
+*is
 **                        called with the file descriptor and the status.  The
-**                        call-in function should only be called when ALL requested
-**                        bytes have been written, or an error has been detected,
+**                        call-in function should only be called when ALL
+*requested
+**                        bytes have been written, or an error has been
+*detected,
 **
 *******************************************************************************/
-void nfc_hal_nv_co_write (const uint8_t *p_buf, uint16_t nbytes, uint8_t block)
-{
-    std::string fn = get_storage_location();
-    char filename[256];
-    int fileStream = 0;
+void nfc_hal_nv_co_write(const uint8_t* p_buf, uint16_t nbytes, uint8_t block) {
+  std::string fn = get_storage_location();
+  char filename[256];
+  int fileStream = 0;
 
-    fn.append (filename_prefix);
-    if (fn.length() > 200)
-    {
-        ALOGE ("%s: filename too long", __func__);
-        return;
-    }
-    snprintf (filename, sizeof(filename), "%s%u", fn.c_str(), block);
-    ALOGD ("%s: bytes=%u; file=%s", __func__, nbytes, filename);
+  fn.append(filename_prefix);
+  if (fn.length() > 200) {
+    ALOGE("%s: filename too long", __func__);
+    return;
+  }
+  snprintf(filename, sizeof(filename), "%s%u", fn.c_str(), block);
+  ALOGD("%s: bytes=%u; file=%s", __func__, nbytes, filename);
 
-    fileStream = open (filename, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
-    if (fileStream >= 0)
-    {
-        unsigned short checksum = crcChecksumCompute (p_buf, nbytes);
-        size_t actualWrittenCrc = write (fileStream, &checksum, sizeof(checksum));
-        size_t actualWrittenData = write (fileStream, p_buf, nbytes);
-        ALOGD ("%s: %d bytes written", __func__, actualWrittenData);
-        if ((actualWrittenData == nbytes) && (actualWrittenCrc == sizeof(checksum)))
-        {
-            nfc_hal_nv_ci_write (NFC_HAL_NV_CO_OK);
-        }
-        else
-        {
-            ALOGE ("%s: fail to write", __func__);
-            nfc_hal_nv_ci_write (NFC_HAL_NV_CO_FAIL);
-        }
-        close (fileStream);
+  fileStream = open(filename, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+  if (fileStream >= 0) {
+    unsigned short checksum = crcChecksumCompute(p_buf, nbytes);
+    size_t actualWrittenCrc = write(fileStream, &checksum, sizeof(checksum));
+    size_t actualWrittenData = write(fileStream, p_buf, nbytes);
+    ALOGD("%s: %d bytes written", __func__, actualWrittenData);
+    if ((actualWrittenData == nbytes) &&
+        (actualWrittenCrc == sizeof(checksum))) {
+      nfc_hal_nv_ci_write(NFC_HAL_NV_CO_OK);
+    } else {
+      ALOGE("%s: fail to write", __func__);
+      nfc_hal_nv_ci_write(NFC_HAL_NV_CO_FAIL);
     }
-    else
-    {
-        ALOGE ("%s: fail to open, error = %d", __func__, errno);
-        nfc_hal_nv_ci_write (NFC_HAL_NV_CO_FAIL);
-    }
+    close(fileStream);
+  } else {
+    ALOGE("%s: fail to open, error = %d", __func__, errno);
+    nfc_hal_nv_ci_write(NFC_HAL_NV_CO_FAIL);
+  }
 }
-
 
 /*******************************************************************************
 **
 ** Function         get_storage_location
 **
-** Description      Get the absolute directory path of the HAL's storage location.
+** Description      Get the absolute directory path of the HAL's storage
+*location.
 **
 ** Parameters       none
 **
 ** Returns          Absolute path.
 **
 *******************************************************************************/
-const std::string get_storage_location ()
-{
-    char buffer [100];
-    memset (buffer, 0, sizeof(buffer));
-    if (!GetStrValue (NAME_NFA_STORAGE, buffer, sizeof(buffer)))
-        return default_location;
-    else
-        return std::string (buffer);
+const std::string get_storage_location() {
+  char buffer[100];
+  memset(buffer, 0, sizeof(buffer));
+  if (!GetStrValue(NAME_NFA_STORAGE, buffer, sizeof(buffer)))
+    return default_location;
+  else
+    return std::string(buffer);
 }
-
 
 /*******************************************************************************
 **
@@ -194,38 +179,34 @@ const std::string get_storage_location ()
 ** Returns          none
 **
 *******************************************************************************/
-void delete_hal_non_volatile_store (bool forceDelete)
-{
-    static bool firstTime = true;
-    std::string fn = get_storage_location();
-    char filename[256];
-    int stat = 0;
+void delete_hal_non_volatile_store(bool forceDelete) {
+  static bool firstTime = true;
+  std::string fn = get_storage_location();
+  char filename[256];
+  int stat = 0;
 
-    if ((firstTime == false) && (forceDelete == false))
-        return;
-    firstTime = false;
+  if ((firstTime == false) && (forceDelete == false)) return;
+  firstTime = false;
 
-    ALOGD ("%s", __func__);
+  ALOGD("%s", __func__);
 
-    fn.append (filename_prefix);
-    if (fn.length() > 200)
-    {
-        ALOGE ("%s: filename too long", __func__);
-        return;
-    }
+  fn.append(filename_prefix);
+  if (fn.length() > 200) {
+    ALOGE("%s: filename too long", __func__);
+    return;
+  }
 
-    snprintf (filename, sizeof(filename), "%s%u", fn.c_str(), DH_NV_BLOCK);
-    remove (filename);
-    snprintf (filename, sizeof(filename), "%s%u", fn.c_str(), HC_F3_NV_BLOCK);
-    remove (filename);
-    snprintf (filename, sizeof(filename), "%s%u", fn.c_str(), HC_F4_NV_BLOCK);
-    remove (filename);
-    snprintf (filename, sizeof(filename), "%s%u", fn.c_str(), HC_F2_NV_BLOCK);
-    remove (filename);
-    snprintf (filename, sizeof(filename), "%s%u", fn.c_str(), HC_F5_NV_BLOCK);
-    remove (filename);
+  snprintf(filename, sizeof(filename), "%s%u", fn.c_str(), DH_NV_BLOCK);
+  remove(filename);
+  snprintf(filename, sizeof(filename), "%s%u", fn.c_str(), HC_F3_NV_BLOCK);
+  remove(filename);
+  snprintf(filename, sizeof(filename), "%s%u", fn.c_str(), HC_F4_NV_BLOCK);
+  remove(filename);
+  snprintf(filename, sizeof(filename), "%s%u", fn.c_str(), HC_F2_NV_BLOCK);
+  remove(filename);
+  snprintf(filename, sizeof(filename), "%s%u", fn.c_str(), HC_F5_NV_BLOCK);
+  remove(filename);
 }
-
 
 /*******************************************************************************
 **
@@ -238,40 +219,34 @@ void delete_hal_non_volatile_store (bool forceDelete)
 ** Returns          none
 **
 *******************************************************************************/
-void verify_hal_non_volatile_store ()
-{
-    ALOGD ("%s", __func__);
-    std::string fn = get_storage_location();
-    char filename[256];
-    bool isValid = false;
+void verify_hal_non_volatile_store() {
+  ALOGD("%s", __func__);
+  std::string fn = get_storage_location();
+  char filename[256];
+  bool isValid = false;
 
-    fn.append (filename_prefix);
-    if (fn.length() > 200)
-    {
-        ALOGE ("%s: filename too long", __func__);
-        return;
-    }
+  fn.append(filename_prefix);
+  if (fn.length() > 200) {
+    ALOGE("%s: filename too long", __func__);
+    return;
+  }
 
-    snprintf (filename, sizeof(filename), "%s%u", fn.c_str(), DH_NV_BLOCK);
-    if (crcChecksumVerifyIntegrity (filename))
-    {
-        snprintf (filename, sizeof(filename), "%s%u", fn.c_str(), HC_F3_NV_BLOCK);
-        if (crcChecksumVerifyIntegrity (filename))
-        {
-            snprintf (filename, sizeof(filename), "%s%u", fn.c_str(), HC_F4_NV_BLOCK);
-            if (crcChecksumVerifyIntegrity (filename))
-            {
-                snprintf (filename, sizeof(filename), "%s%u", fn.c_str(), HC_F2_NV_BLOCK);
-                if (crcChecksumVerifyIntegrity (filename))
-                {
-                    snprintf (filename, sizeof(filename), "%s%u", fn.c_str(), HC_F5_NV_BLOCK);
-                    if (crcChecksumVerifyIntegrity (filename))
-                        isValid = true;
-                }
-            }
+  snprintf(filename, sizeof(filename), "%s%u", fn.c_str(), DH_NV_BLOCK);
+  if (crcChecksumVerifyIntegrity(filename)) {
+    snprintf(filename, sizeof(filename), "%s%u", fn.c_str(), HC_F3_NV_BLOCK);
+    if (crcChecksumVerifyIntegrity(filename)) {
+      snprintf(filename, sizeof(filename), "%s%u", fn.c_str(), HC_F4_NV_BLOCK);
+      if (crcChecksumVerifyIntegrity(filename)) {
+        snprintf(filename, sizeof(filename), "%s%u", fn.c_str(),
+                 HC_F2_NV_BLOCK);
+        if (crcChecksumVerifyIntegrity(filename)) {
+          snprintf(filename, sizeof(filename), "%s%u", fn.c_str(),
+                   HC_F5_NV_BLOCK);
+          if (crcChecksumVerifyIntegrity(filename)) isValid = true;
         }
+      }
     }
+  }
 
-    if (isValid == false)
-        delete_hal_non_volatile_store (true);
+  if (isValid == false) delete_hal_non_volatile_store(true);
 }
