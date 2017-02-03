@@ -29,8 +29,10 @@
 extern "C" {
 #endif
 
+#include "nfc_types.h"
 #include "nci_defs.h"
 
+#include <stdbool.h>
 
 bool    nci_proc_core_rsp (NFC_HDR *p_msg);
 void nci_proc_rf_management_rsp (NFC_HDR *p_msg);
