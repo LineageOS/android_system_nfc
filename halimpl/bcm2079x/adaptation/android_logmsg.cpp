@@ -15,7 +15,7 @@
  *  limitations under the License.
  *
  ******************************************************************************/
-#include "OverrideLog.h"
+#include "_OverrideLog.h"
 #include "android_logmsg.h"
 #include "nfc_target.h"
 #include "buildcfg.h"

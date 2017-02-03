@@ -18,7 +18,7 @@
 
 #define LOG_TAG "NfcNciHal"
 
-#include "OverrideLog.h"
+#include "_OverrideLog.h"
 #include "config.h"
 #include "nfc_hal_int.h"
 #include "userial.h"

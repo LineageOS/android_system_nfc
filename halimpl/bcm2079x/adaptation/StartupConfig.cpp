@@ -22,7 +22,7 @@
  ******************************************************************************/
 
 #define LOG_TAG "NfcNciHal"
-#include "OverrideLog.h"
+#include "_OverrideLog.h"
 #include "StartupConfig.h"
 
 
