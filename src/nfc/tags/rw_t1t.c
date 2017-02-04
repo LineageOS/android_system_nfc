@@ -25,7 +25,6 @@
 #include <string.h>
 #include "nfc_target.h"
 
-#if (NFC_INCLUDED == TRUE)
 #include "gki.h"
 #include "nci_hmsgs.h"
 #include "nfc_api.h"
@@ -1117,5 +1116,3 @@ static char* rw_t1t_get_state_name(uint8_t state) {
 }
 
 #endif /* (BT_TRACE_VERBOSE == TRUE) */
-
-#endif /* (NFC_INCLUDED == TRUE) */
