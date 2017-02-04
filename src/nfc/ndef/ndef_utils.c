@@ -105,8 +105,10 @@ tNDEF_STATUS NDEF_MsgValidate(uint8_t* p_msg, uint32_t msg_len,
     /* Type field length */
     type_len = *p_rec++;
 
-    /* If the record is chunked, first record must contain the type */
-    if ((rec_hdr & NDEF_CF_MASK) && (rec_hdr & NDEF_MB_MASK) && type_len == 0)
+    /* If the record is chunked, first record must contain the type unless
+     * it's Type Name Format is Unknown */
+    if ((rec_hdr & NDEF_CF_MASK) && (rec_hdr & NDEF_MB_MASK) && type_len == 0 &&
+        (rec_hdr & NDEF_TNF_MASK) != NDEF_TNF_UNKNOWN)
       return (NDEF_MSG_INVALID_CHUNK);
 
     /* Payload length - can be 1 or 4 bytes */
