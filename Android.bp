@@ -1,6 +1,7 @@
 subdirs = ["src"]
 cc_library_shared {
     name: "nfc_nci.bcm2079x.default",
+    proprietary: true,
     relative_install_path: "hw",
     srcs: [
         "halimpl/bcm2079x/gki/common/*.c",
