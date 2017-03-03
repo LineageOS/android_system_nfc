@@ -1,18 +1,17 @@
 subdirs = ["src"]
 cc_library_shared {
-    name: "nfc_nci.pn54x.default",
+    name: "nfc_nci.bcm2079x.default",
     proprietary: true,
     relative_install_path: "hw",
     srcs: [
-         "halimpl/pn54x/common/*.c",
-         "halimpl/pn54x/dnld/*.c",
-         "halimpl/pn54x/hal/*.c",
-         "halimpl/pn54x/log/*.c",
-         "halimpl/pn54x/self-test/*.c",
-         "halimpl/pn54x/tml/*.c",
-         "halimpl/pn54x/utils/*.c",
-         "halimpl/pn54x/utils/*.cpp",
-         "halimpl/pn54x/nfc_nci.c"
+        "halimpl/bcm2079x/gki/common/*.c",
+        "halimpl/bcm2079x/gki/ulinux/*.c",
+        "halimpl/bcm2079x/hal/hal/*.c",
+        "halimpl/bcm2079x/adaptation/*.cpp",
+        "halimpl/bcm2079x/adaptation/*.c",
+        "halimpl/bcm2079x/nfc_nci.c",
+        "src/adaptation/CrcChecksum.cpp",
+        "src/nfca_version.c",
     ],
     shared_libs: [
         "liblog",
@@ -23,14 +22,10 @@ cc_library_shared {
         "libpower",
     ],
     local_include_dirs: [
-        "halimpl/pn54x/inc",
-        "halimpl/pn54x/common",
-        "halimpl/pn54x/dnld",
-        "halimpl/pn54x/hal",
-        "halimpl/pn54x/log",
-        "halimpl/pn54x/self-test",
-        "halimpl/pn54x/tml",
-        "halimpl/pn54x/utils",
+        "halimpl/bcm2079x/include",
+        "halimpl/bcm2079x/gki/ulinux",
+        "halimpl/bcm2079x/gki/common",
+        "halimpl/bcm2079x/adaptation",
         "src/hal/include",
         "src/hal/int",
         "src/nfc/include",
@@ -45,7 +40,5 @@ cc_library_shared {
         "-Wno-missing-field-initializers",
         "-DNFC_HAL_TARGET=TRUE",
         "-DNFC_RW_ONLY=TRUE",
-        "-DPN553=4",
-        "-DNFC_NXP_CHIP_TYPE=4"
     ],
 }
