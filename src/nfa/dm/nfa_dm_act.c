@@ -300,9 +300,9 @@ static void nfa_dm_nfc_response_cback(tNFC_RESPONSE_EVT event,
 
     case NFC_GET_CONFIG_REVT: /* 3  Get Config Response */
       if (p_data->get_config.status == NFC_STATUS_OK) {
-        if ((p_nfa_get_confg = (tNFA_GET_CONFIG*)GKI_getbuf((uint16_t)(
-                 sizeof(tNFA_GET_CONFIG) + p_data->get_config.tlv_size))) !=
-            NULL) {
+        p_nfa_get_confg = (tNFA_GET_CONFIG*)GKI_getbuf(
+            (uint16_t)(sizeof(tNFA_GET_CONFIG) + p_data->get_config.tlv_size));
+        if (p_nfa_get_confg != NULL) {
           p_nfa_get_confg->status = NFA_STATUS_OK;
           p_nfa_get_confg->tlv_size = p_data->get_config.tlv_size;
           memcpy(p_nfa_get_confg->param_tlvs, p_data->get_config.p_param_tlvs,

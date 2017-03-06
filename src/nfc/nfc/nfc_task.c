@@ -63,7 +63,8 @@ void nfc_start_timer(TIMER_LIST_ENT* p_tle, uint16_t type, uint32_t timeout) {
     /* if timer starts on other than NFC task (scritp wrapper) */
     if (GKI_get_taskid() != NFC_TASK) {
       /* post event to start timer in NFC task */
-      if ((p_msg = (NFC_HDR*)GKI_getbuf(NFC_HDR_SIZE)) != NULL) {
+      p_msg = (NFC_HDR*)GKI_getbuf(NFC_HDR_SIZE);
+      if (p_msg != NULL) {
         p_msg->event = BT_EVT_TO_START_TIMER;
         GKI_send_msg(NFC_TASK, NFC_MBOX_ID, p_msg);
       }
@@ -176,7 +177,8 @@ void nfc_start_quick_timer(TIMER_LIST_ENT* p_tle, uint16_t type,
     /* if timer starts on other than NFC task (scritp wrapper) */
     if (GKI_get_taskid() != NFC_TASK) {
       /* post event to start timer in NFC task */
-      if ((p_msg = (NFC_HDR*)GKI_getbuf(NFC_HDR_SIZE)) != NULL) {
+      p_msg = (NFC_HDR*)GKI_getbuf(NFC_HDR_SIZE);
+      if (p_msg != NULL) {
         p_msg->event = BT_EVT_TO_START_QUICK_TIMER;
         GKI_send_msg(NFC_TASK, NFC_MBOX_ID, p_msg);
       }
