@@ -44,8 +44,8 @@ void nfc_hal_nv_ci_read(uint16_t num_bytes_read, tNFC_HAL_NV_CO_STATUS status,
   tNFC_HAL_HCI_EVENT_DATA* p_msg;
 
   /* Send message to NCIT task */
-  if ((p_msg = (tNFC_HAL_HCI_EVENT_DATA*)GKI_getbuf(
-           sizeof(tNFC_HAL_HCI_EVENT_DATA))) != NULL) {
+  p_msg = (tNFC_HAL_HCI_EVENT_DATA*)GKI_getbuf(sizeof(tNFC_HAL_HCI_EVENT_DATA));
+  if (p_msg != NULL) {
     p_msg->nv_read.hdr.event = NFC_HAL_HCI_RSP_NV_READ_EVT;
     p_msg->hdr.offset = 0;
     p_msg->hdr.len = sizeof(tNFC_HAL_HCI_RSP_NV_READ_EVT);
@@ -75,8 +75,8 @@ void nfc_hal_nv_ci_read(uint16_t num_bytes_read, tNFC_HAL_NV_CO_STATUS status,
 void nfc_hal_nv_ci_write(tNFC_HAL_NV_CO_STATUS status) {
   tNFC_HAL_HCI_EVENT_DATA* p_msg;
 
-  if ((p_msg = (tNFC_HAL_HCI_EVENT_DATA*)GKI_getbuf(
-           sizeof(tNFC_HAL_HCI_EVENT_DATA))) != NULL) {
+  p_msg = (tNFC_HAL_HCI_EVENT_DATA*)GKI_getbuf(sizeof(tNFC_HAL_HCI_EVENT_DATA));
+  if (p_msg != NULL) {
     p_msg->nv_write.hdr.event = NFC_HAL_HCI_RSP_NV_WRITE_EVT;
     p_msg->nv_write.hdr.offset = 0;
     p_msg->nv_write.hdr.len = sizeof(tNFC_HAL_HCI_RSP_NV_READ_EVT);

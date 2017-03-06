@@ -372,7 +372,8 @@ void nfc_hal_main_start_quick_timer(TIMER_LIST_ENT* p_tle, uint16_t type,
     /* if timer starts on other than NCIT task (script wrapper) */
     if (GKI_get_taskid() != NFC_HAL_TASK) {
       /* post event to start timer in NCIT task */
-      if ((p_msg = (NFC_HDR*)GKI_getbuf(NFC_HDR_SIZE)) != NULL) {
+      p_msg = (NFC_HDR*)GKI_getbuf(NFC_HDR_SIZE);
+      if (p_msg != NULL) {
         p_msg->event = NFC_HAL_EVT_TO_START_QUICK_TIMER;
         GKI_send_msg(NFC_HAL_TASK, NFC_HAL_TASK_MBOX, p_msg);
       }
@@ -476,7 +477,8 @@ static void nfc_hal_send_credit_ntf_for_cid(uint8_t cid) {
   uint8_t *p, *ps;
 
   /* Start of new message. Allocate a buffer for message */
-  if ((p_msg = (NFC_HDR*)GKI_getpoolbuf(NFC_HAL_NCI_POOL_ID)) != NULL) {
+  p_msg = (NFC_HDR*)GKI_getpoolbuf(NFC_HAL_NCI_POOL_ID);
+  if (p_msg != NULL) {
     /* Initialize NFC_HDR */
     p_msg->len = NCI_DATA_HDR_SIZE + 0x03;
     p_msg->event = 0;

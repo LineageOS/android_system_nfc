@@ -98,8 +98,8 @@ tHAL_NFC_STATUS nfc_hal_dm_set_config(uint8_t tlv_size, uint8_t* p_param_tlvs,
     return status;
   }
 
-  if ((p_buff = (uint8_t*)GKI_getbuf(
-           (uint16_t)(NCI_MSG_HDR_SIZE + tlv_size))) != NULL) {
+  p_buff = (uint8_t*)GKI_getbuf((uint16_t)(NCI_MSG_HDR_SIZE + tlv_size));
+  if (p_buff != NULL) {
     p = p_buff;
 
     NCI_MSG_BLD_HDR0(p, NCI_MT_CMD, NCI_GID_CORE);
@@ -843,7 +843,8 @@ void nfc_hal_dm_send_nci_cmd(const uint8_t* p_data, uint16_t len,
     return;
   }
 
-  if ((p_buf = (NFC_HDR*)GKI_getpoolbuf(NFC_HAL_NCI_POOL_ID)) != NULL) {
+  p_buf = (NFC_HDR*)GKI_getpoolbuf(NFC_HAL_NCI_POOL_ID);
+  if (p_buf != NULL) {
     nfc_hal_cb.ncit_cb.nci_wait_rsp = NFC_HAL_WAIT_RSP_VSC;
 
     p_buf->offset = NFC_HAL_NCI_MSG_OFFSET_SIZE;
@@ -954,7 +955,8 @@ void nfc_hal_dm_send_bt_cmd(const uint8_t* p_data, uint16_t len,
     return;
   }
 
-  if ((p_buf = (NFC_HDR*)GKI_getpoolbuf(NFC_HAL_NCI_POOL_ID)) != NULL) {
+  p_buf = (NFC_HDR*)GKI_getpoolbuf(NFC_HAL_NCI_POOL_ID);
+  if (p_buf != NULL) {
     nfc_hal_cb.ncit_cb.nci_wait_rsp = NFC_HAL_WAIT_RSP_PROP;
 
     p_buf->offset = NFC_HAL_NCI_MSG_OFFSET_SIZE;

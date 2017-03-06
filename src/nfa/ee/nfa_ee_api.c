@@ -57,14 +57,16 @@ tNFA_STATUS NFA_EeDiscover(tNFA_EE_CBACK* p_cback) {
   } else if ((nfa_ee_cb.p_ee_disc_cback != NULL) || (p_cback == NULL)) {
     NFA_TRACE_ERROR0("NFA_EeDiscover() in progress or NULL callback function");
     status = NFA_STATUS_INVALID_PARAM;
-  } else if ((p_msg = (tNFA_EE_API_DISCOVER*)GKI_getbuf(
-                  sizeof(tNFA_EE_API_DISCOVER))) != NULL) {
-    p_msg->hdr.event = NFA_EE_API_DISCOVER_EVT;
-    p_msg->p_cback = p_cback;
+  } else {
+    p_msg = (tNFA_EE_API_DISCOVER*)GKI_getbuf(sizeof(tNFA_EE_API_DISCOVER));
+    if (p_msg != NULL) {
+      p_msg->hdr.event = NFA_EE_API_DISCOVER_EVT;
+      p_msg->p_cback = p_cback;
 
-    nfa_sys_sendmsg(p_msg);
+      nfa_sys_sendmsg(p_msg);
 
-    status = NFA_STATUS_OK;
+      status = NFA_STATUS_OK;
+    }
   }
 
   return status;
@@ -146,14 +148,16 @@ tNFA_STATUS NFA_EeRegister(tNFA_EE_CBACK* p_cback) {
   if (p_cback == NULL) {
     NFA_TRACE_ERROR0("NFA_EeRegister(): with NULL callback function");
     status = NFA_STATUS_INVALID_PARAM;
-  } else if ((p_msg = (tNFA_EE_API_REGISTER*)GKI_getbuf(
-                  sizeof(tNFA_EE_API_REGISTER))) != NULL) {
-    p_msg->hdr.event = NFA_EE_API_REGISTER_EVT;
-    p_msg->p_cback = p_cback;
+  } else {
+    p_msg = (tNFA_EE_API_REGISTER*)GKI_getbuf(sizeof(tNFA_EE_API_REGISTER));
+    if (p_msg != NULL) {
+      p_msg->hdr.event = NFA_EE_API_REGISTER_EVT;
+      p_msg->p_cback = p_cback;
 
-    nfa_sys_sendmsg(p_msg);
+      nfa_sys_sendmsg(p_msg);
 
-    status = NFA_STATUS_OK;
+      status = NFA_STATUS_OK;
+    }
   }
 
   return status;
@@ -234,16 +238,18 @@ tNFA_STATUS NFA_EeModeSet(tNFA_HANDLE ee_handle, tNFA_EE_MD mode) {
   if (p_found == NULL) {
     NFA_TRACE_ERROR1("NFA_EeModeSet() invalid NFCEE:0x%04x", ee_handle);
     status = NFA_STATUS_INVALID_PARAM;
-  } else if ((p_msg = (tNFA_EE_API_MODE_SET*)GKI_getbuf(
-                  sizeof(tNFA_EE_API_MODE_SET))) != NULL) {
-    p_msg->hdr.event = NFA_EE_API_MODE_SET_EVT;
-    p_msg->nfcee_id = nfcee_id;
-    p_msg->mode = mode;
-    p_msg->p_cb = p_found;
+  } else {
+    p_msg = (tNFA_EE_API_MODE_SET*)GKI_getbuf(sizeof(tNFA_EE_API_MODE_SET));
+    if (p_msg != NULL) {
+      p_msg->hdr.event = NFA_EE_API_MODE_SET_EVT;
+      p_msg->nfcee_id = nfcee_id;
+      p_msg->mode = mode;
+      p_msg->p_cb = p_found;
 
-    nfa_sys_sendmsg(p_msg);
+      nfa_sys_sendmsg(p_msg);
 
-    status = NFA_STATUS_OK;
+      status = NFA_STATUS_OK;
+    }
   }
 
   return status;
@@ -289,18 +295,21 @@ tNFA_STATUS NFA_EeSetDefaultTechRouting(
   if (p_cb == NULL) {
     NFA_TRACE_ERROR0("Bad ee_handle");
     status = NFA_STATUS_INVALID_PARAM;
-  } else if ((p_msg = (tNFA_EE_API_SET_TECH_CFG*)GKI_getbuf(
-                  sizeof(tNFA_EE_API_SET_TECH_CFG))) != NULL) {
-    p_msg->hdr.event = NFA_EE_API_SET_TECH_CFG_EVT;
-    p_msg->nfcee_id = nfcee_id;
-    p_msg->p_cb = p_cb;
-    p_msg->technologies_switch_on = technologies_switch_on;
-    p_msg->technologies_switch_off = technologies_switch_off;
-    p_msg->technologies_battery_off = technologies_battery_off;
+  } else {
+    p_msg =
+        (tNFA_EE_API_SET_TECH_CFG*)GKI_getbuf(sizeof(tNFA_EE_API_SET_TECH_CFG));
+    if (p_msg != NULL) {
+      p_msg->hdr.event = NFA_EE_API_SET_TECH_CFG_EVT;
+      p_msg->nfcee_id = nfcee_id;
+      p_msg->p_cb = p_cb;
+      p_msg->technologies_switch_on = technologies_switch_on;
+      p_msg->technologies_switch_off = technologies_switch_off;
+      p_msg->technologies_battery_off = technologies_battery_off;
 
-    nfa_sys_sendmsg(p_msg);
+      nfa_sys_sendmsg(p_msg);
 
-    status = NFA_STATUS_OK;
+      status = NFA_STATUS_OK;
+    }
   }
 
   return status;
@@ -346,18 +355,21 @@ tNFA_STATUS NFA_EeSetDefaultProtoRouting(
   if (p_cb == NULL) {
     NFA_TRACE_ERROR0("Bad ee_handle");
     status = NFA_STATUS_INVALID_PARAM;
-  } else if ((p_msg = (tNFA_EE_API_SET_PROTO_CFG*)GKI_getbuf(
-                  sizeof(tNFA_EE_API_SET_PROTO_CFG))) != NULL) {
-    p_msg->hdr.event = NFA_EE_API_SET_PROTO_CFG_EVT;
-    p_msg->nfcee_id = nfcee_id;
-    p_msg->p_cb = p_cb;
-    p_msg->protocols_switch_on = protocols_switch_on;
-    p_msg->protocols_switch_off = protocols_switch_off;
-    p_msg->protocols_battery_off = protocols_battery_off;
+  } else {
+    p_msg = (tNFA_EE_API_SET_PROTO_CFG*)GKI_getbuf(
+        sizeof(tNFA_EE_API_SET_PROTO_CFG));
+    if (p_msg != NULL) {
+      p_msg->hdr.event = NFA_EE_API_SET_PROTO_CFG_EVT;
+      p_msg->nfcee_id = nfcee_id;
+      p_msg->p_cb = p_cb;
+      p_msg->protocols_switch_on = protocols_switch_on;
+      p_msg->protocols_switch_off = protocols_switch_off;
+      p_msg->protocols_battery_off = protocols_battery_off;
 
-    nfa_sys_sendmsg(p_msg);
+      nfa_sys_sendmsg(p_msg);
 
-    status = NFA_STATUS_OK;
+      status = NFA_STATUS_OK;
+    }
   }
 
   return status;
@@ -399,19 +411,22 @@ tNFA_STATUS NFA_EeAddAidRouting(tNFA_HANDLE ee_handle, uint8_t aid_len,
       (aid_len < NFA_MIN_AID_LEN) || (aid_len > NFA_MAX_AID_LEN)) {
     NFA_TRACE_ERROR1("Bad ee_handle or AID (len=%d)", aid_len);
     status = NFA_STATUS_INVALID_PARAM;
-  } else if ((p_msg = (tNFA_EE_API_ADD_AID*)GKI_getbuf(size)) != NULL) {
-    NFA_TRACE_DEBUG2("aid:<%02x%02x>", p_aid[0], p_aid[1]);
-    p_msg->hdr.event = NFA_EE_API_ADD_AID_EVT;
-    p_msg->nfcee_id = nfcee_id;
-    p_msg->p_cb = p_cb;
-    p_msg->aid_len = aid_len;
-    p_msg->power_state = power_state;
-    p_msg->p_aid = (uint8_t*)(p_msg + 1);
-    memcpy(p_msg->p_aid, p_aid, aid_len);
+  } else {
+    p_msg = (tNFA_EE_API_ADD_AID*)GKI_getbuf(size);
+    if (p_msg != NULL) {
+      NFA_TRACE_DEBUG2("aid:<%02x%02x>", p_aid[0], p_aid[1]);
+      p_msg->hdr.event = NFA_EE_API_ADD_AID_EVT;
+      p_msg->nfcee_id = nfcee_id;
+      p_msg->p_cb = p_cb;
+      p_msg->aid_len = aid_len;
+      p_msg->power_state = power_state;
+      p_msg->p_aid = (uint8_t*)(p_msg + 1);
+      memcpy(p_msg->p_aid, p_aid, aid_len);
 
-    nfa_sys_sendmsg(p_msg);
+      nfa_sys_sendmsg(p_msg);
 
-    status = NFA_STATUS_OK;
+      status = NFA_STATUS_OK;
+    }
   }
 
   return status;
@@ -447,15 +462,18 @@ tNFA_STATUS NFA_EeRemoveAidRouting(uint8_t aid_len, uint8_t* p_aid) {
   if ((aid_len == 0) || (p_aid == NULL) || (aid_len > NFA_MAX_AID_LEN)) {
     NFA_TRACE_ERROR0("Bad AID");
     status = NFA_STATUS_INVALID_PARAM;
-  } else if ((p_msg = (tNFA_EE_API_REMOVE_AID*)GKI_getbuf(size)) != NULL) {
-    p_msg->hdr.event = NFA_EE_API_REMOVE_AID_EVT;
-    p_msg->aid_len = aid_len;
-    p_msg->p_aid = (uint8_t*)(p_msg + 1);
-    memcpy(p_msg->p_aid, p_aid, aid_len);
+  } else {
+    p_msg = (tNFA_EE_API_REMOVE_AID*)GKI_getbuf(size);
+    if (p_msg != NULL) {
+      p_msg->hdr.event = NFA_EE_API_REMOVE_AID_EVT;
+      p_msg->aid_len = aid_len;
+      p_msg->p_aid = (uint8_t*)(p_msg + 1);
+      memcpy(p_msg->p_aid, p_aid, aid_len);
 
-    nfa_sys_sendmsg(p_msg);
+      nfa_sys_sendmsg(p_msg);
 
-    status = NFA_STATUS_OK;
+      status = NFA_STATUS_OK;
+    }
   }
 
   return status;
@@ -478,8 +496,8 @@ tNFA_STATUS NFA_EeGetLmrtRemainingSize(void) {
   tNFA_STATUS status = NFA_STATUS_FAILED;
 
   NFA_TRACE_API0("NFA_EeGetLmrtRemainingSize()");
-  if ((p_msg = (tNFA_EE_API_LMRT_SIZE*)GKI_getbuf(
-           sizeof(tNFA_EE_API_LMRT_SIZE))) != NULL) {
+  p_msg = (tNFA_EE_API_LMRT_SIZE*)GKI_getbuf(sizeof(tNFA_EE_API_LMRT_SIZE));
+  if (p_msg != NULL) {
     p_msg->event = NFA_EE_API_LMRT_SIZE_EVT;
     nfa_sys_sendmsg(p_msg);
     status = NFA_STATUS_OK;
@@ -512,12 +530,15 @@ tNFA_STATUS NFA_EeUpdateNow(void) {
   if (nfa_ee_cb.ee_wait_evt & NFA_EE_WAIT_UPDATE_ALL) {
     NFA_TRACE_ERROR0("update in progress");
     status = NFA_STATUS_SEMANTIC_ERROR;
-  } else if ((p_msg = (NFC_HDR*)GKI_getbuf(NFC_HDR_SIZE)) != NULL) {
-    p_msg->event = NFA_EE_API_UPDATE_NOW_EVT;
+  } else {
+    p_msg = (NFC_HDR*)GKI_getbuf(NFC_HDR_SIZE);
+    if (p_msg != NULL) {
+      p_msg->event = NFA_EE_API_UPDATE_NOW_EVT;
 
-    nfa_sys_sendmsg(p_msg);
+      nfa_sys_sendmsg(p_msg);
 
-    status = NFA_STATUS_OK;
+      status = NFA_STATUS_OK;
+    }
   }
 
   return status;
@@ -551,17 +572,19 @@ tNFA_STATUS NFA_EeConnect(tNFA_HANDLE ee_handle, uint8_t ee_interface,
   if ((p_cb == NULL) || (p_cback == NULL)) {
     NFA_TRACE_ERROR0("Bad ee_handle or NULL callback function");
     status = NFA_STATUS_INVALID_PARAM;
-  } else if ((p_msg = (tNFA_EE_API_CONNECT*)GKI_getbuf(
-                  sizeof(tNFA_EE_API_CONNECT))) != NULL) {
-    p_msg->hdr.event = NFA_EE_API_CONNECT_EVT;
-    p_msg->nfcee_id = nfcee_id;
-    p_msg->p_cb = p_cb;
-    p_msg->ee_interface = ee_interface;
-    p_msg->p_cback = p_cback;
+  } else {
+    p_msg = (tNFA_EE_API_CONNECT*)GKI_getbuf(sizeof(tNFA_EE_API_CONNECT));
+    if (p_msg != NULL) {
+      p_msg->hdr.event = NFA_EE_API_CONNECT_EVT;
+      p_msg->nfcee_id = nfcee_id;
+      p_msg->p_cb = p_cb;
+      p_msg->ee_interface = ee_interface;
+      p_msg->p_cback = p_cback;
 
-    nfa_sys_sendmsg(p_msg);
+      nfa_sys_sendmsg(p_msg);
 
-    status = NFA_STATUS_OK;
+      status = NFA_STATUS_OK;
+    }
   }
 
   return status;
@@ -596,18 +619,21 @@ tNFA_STATUS NFA_EeSendData(tNFA_HANDLE ee_handle, uint16_t data_len,
       (p_data == NULL)) {
     NFA_TRACE_ERROR0("Bad ee_handle or NULL data");
     status = NFA_STATUS_INVALID_PARAM;
-  } else if ((p_msg = (tNFA_EE_API_SEND_DATA*)GKI_getbuf((uint16_t)(
-                  sizeof(tNFA_EE_API_SEND_DATA) + data_len))) != NULL) {
-    p_msg->hdr.event = NFA_EE_API_SEND_DATA_EVT;
-    p_msg->nfcee_id = nfcee_id;
-    p_msg->p_cb = p_cb;
-    p_msg->data_len = data_len;
-    p_msg->p_data = (uint8_t*)(p_msg + 1);
-    memcpy(p_msg->p_data, p_data, data_len);
+  } else {
+    p_msg = (tNFA_EE_API_SEND_DATA*)GKI_getbuf(
+        (uint16_t)(sizeof(tNFA_EE_API_SEND_DATA) + data_len));
+    if (p_msg != NULL) {
+      p_msg->hdr.event = NFA_EE_API_SEND_DATA_EVT;
+      p_msg->nfcee_id = nfcee_id;
+      p_msg->p_cb = p_cb;
+      p_msg->data_len = data_len;
+      p_msg->p_data = (uint8_t*)(p_msg + 1);
+      memcpy(p_msg->p_data, p_data, data_len);
 
-    nfa_sys_sendmsg(p_msg);
+      nfa_sys_sendmsg(p_msg);
 
-    status = NFA_STATUS_OK;
+      status = NFA_STATUS_OK;
+    }
   }
 
   return status;
@@ -638,15 +664,17 @@ tNFA_STATUS NFA_EeDisconnect(tNFA_HANDLE ee_handle) {
   if ((p_cb == NULL) || (p_cb->conn_st != NFA_EE_CONN_ST_CONN)) {
     NFA_TRACE_ERROR0("NFA_EeDisconnect() Bad ee_handle");
     status = NFA_STATUS_INVALID_PARAM;
-  } else if ((p_msg = (tNFA_EE_API_DISCONNECT*)GKI_getbuf(
-                  sizeof(tNFA_EE_API_DISCONNECT))) != NULL) {
-    p_msg->hdr.event = NFA_EE_API_DISCONNECT_EVT;
-    p_msg->nfcee_id = nfcee_id;
-    p_msg->p_cb = p_cb;
+  } else {
+    p_msg = (tNFA_EE_API_DISCONNECT*)GKI_getbuf(sizeof(tNFA_EE_API_DISCONNECT));
+    if (p_msg != NULL) {
+      p_msg->hdr.event = NFA_EE_API_DISCONNECT_EVT;
+      p_msg->nfcee_id = nfcee_id;
+      p_msg->p_cb = p_cb;
 
-    nfa_sys_sendmsg(p_msg);
+      nfa_sys_sendmsg(p_msg);
 
-    status = NFA_STATUS_OK;
+      status = NFA_STATUS_OK;
+    }
   }
 
   return status;

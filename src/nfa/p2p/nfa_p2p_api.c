@@ -520,7 +520,8 @@ tNFA_STATUS NFA_P2pSendUI(tNFA_HANDLE handle, uint8_t dsap, uint16_t length,
     p_msg->handle = handle;
     p_msg->dsap = dsap;
 
-    if ((p_msg->p_msg = (NFC_HDR*)GKI_getpoolbuf(LLCP_POOL_ID)) != NULL) {
+    p_msg->p_msg = (NFC_HDR*)GKI_getpoolbuf(LLCP_POOL_ID);
+    if (p_msg->p_msg != NULL) {
       p_msg->p_msg->len = length;
       p_msg->p_msg->offset = LLCP_MIN_OFFSET;
       memcpy(((uint8_t*)(p_msg->p_msg + 1) + p_msg->p_msg->offset), p_data,
@@ -690,7 +691,8 @@ tNFA_STATUS NFA_P2pSendData(tNFA_HANDLE handle, uint16_t length,
 
     p_msg->conn_handle = handle;
 
-    if ((p_msg->p_msg = (NFC_HDR*)GKI_getpoolbuf(LLCP_POOL_ID)) != NULL) {
+    p_msg->p_msg = (NFC_HDR*)GKI_getpoolbuf(LLCP_POOL_ID);
+    if (p_msg->p_msg != NULL) {
       p_msg->p_msg->len = length;
       p_msg->p_msg->offset = LLCP_MIN_OFFSET;
       memcpy(((uint8_t*)(p_msg->p_msg + 1) + p_msg->p_msg->offset), p_data,

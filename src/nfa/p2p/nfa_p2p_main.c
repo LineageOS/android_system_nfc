@@ -234,7 +234,8 @@ static void nfa_p2p_update_active_listen(void) {
       p2p_listen_mask, NFA_DM_DISC_HOST_ID_DH, nfa_p2p_discovery_cback);
 
   /* restart RF discovery to update RF technologies */
-  if ((p_msg = (NFC_HDR*)GKI_getbuf(sizeof(NFC_HDR))) != NULL) {
+  p_msg = (NFC_HDR*)GKI_getbuf(sizeof(NFC_HDR));
+  if (p_msg != NULL) {
     p_msg->event = NFA_P2P_INT_RESTART_RF_DISC_EVT;
     nfa_sys_sendmsg(p_msg);
   }
