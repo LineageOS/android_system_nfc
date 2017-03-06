@@ -686,7 +686,8 @@ int CNfcConfig::updateTimestamp() {
 
   if (stat(config_timestamp_path, &st) != 0) {
     ALOGD("%s file %s not exist, creat it.\n", __func__, config_timestamp_path);
-    if ((fd = fopen(config_timestamp_path, "w+")) != NULL) {
+    fd = fopen(config_timestamp_path, "w+");
+    if (fd != NULL) {
       fwrite(&m_timeStamp, sizeof(unsigned long), 1, fd);
       fclose(fd);
     }

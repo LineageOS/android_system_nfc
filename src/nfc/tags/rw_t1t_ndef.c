@@ -294,8 +294,8 @@ tNFC_STATUS rw_t1t_read_locks(void) {
       } else if (offset < (p_t1t->mem[T1T_CC_TMS_BYTE] + 1) * T1T_BLOCK_SIZE) {
         /* send READ8 command */
         p_t1t->block_read = (uint8_t)(offset / T1T_BLOCK_SIZE);
-        if ((status = rw_t1t_send_dyn_cmd(T1T_CMD_READ8, p_t1t->block_read,
-                                          NULL)) == NFC_STATUS_OK) {
+        status = rw_t1t_send_dyn_cmd(T1T_CMD_READ8, p_t1t->block_read, NULL);
+        if (status == NFC_STATUS_OK) {
           /* Reading Locks */
           status = NFC_STATUS_CONTINUE;
           p_t1t->substate = RW_T1T_SUBSTATE_WAIT_READ_LOCKS;
@@ -358,20 +358,19 @@ static tNFC_STATUS rw_t1t_handle_write_rsp(bool* p_notify, uint8_t* p_data) {
             /* send WRITE-E command */
             RW_T1T_BLD_ADD((addr), 1, (uint8_t)p_t1t->work_offset);
 
-            if ((status = rw_t1t_send_static_cmd(
-                     T1T_CMD_WRITE_E, addr,
-                     p_t1t->ndef_first_block[(uint8_t)p_t1t->work_offset])) !=
-                NFC_STATUS_OK)
-              *p_notify = true;
+            status = rw_t1t_send_static_cmd(
+                T1T_CMD_WRITE_E, addr,
+                p_t1t->ndef_first_block[(uint8_t)p_t1t->work_offset]);
+            if (status != NFC_STATUS_OK) *p_notify = true;
           } else
             *p_notify = true;
         }
 
       } else {
         /* send WRITE-E8 command */
-        if ((status = rw_t1t_send_dyn_cmd(T1T_CMD_WRITE_E8, 2,
-                                          p_t1t->ndef_final_block)) !=
-            NFC_STATUS_OK)
+        status =
+            rw_t1t_send_dyn_cmd(T1T_CMD_WRITE_E8, 2, p_t1t->ndef_final_block);
+        if (status != NFC_STATUS_OK)
           *p_notify = true;
         else
           p_t1t->substate = RW_T1T_SUBSTATE_WAIT_SET_NULL_NDEF;
@@ -394,16 +393,17 @@ static tNFC_STATUS rw_t1t_handle_write_rsp(bool* p_notify, uint8_t* p_data) {
             write_block[1] = 0xFF;
 
             /* send WRITE-NE8 command */
-            if ((status = rw_t1t_send_dyn_cmd(T1T_CMD_WRITE_NE8, T1T_LOCK_BLOCK,
-                                              write_block)) != NFC_STATUS_OK)
+            status = rw_t1t_send_dyn_cmd(T1T_CMD_WRITE_NE8, T1T_LOCK_BLOCK,
+                                         write_block);
+            if (status != NFC_STATUS_OK)
               *p_notify = true;
             else
               p_t1t->substate = RW_T1T_SUBSTATE_WAIT_SET_DYN_LOCK_BITS;
           } else {
             /* send WRITE-NE command */
             RW_T1T_BLD_ADD((addr), (T1T_LOCK_BLOCK), (0));
-            if ((status = rw_t1t_send_static_cmd(T1T_CMD_WRITE_NE, addr,
-                                                 0xFF)) != NFC_STATUS_OK)
+            status = rw_t1t_send_static_cmd(T1T_CMD_WRITE_NE, addr, 0xFF);
+            if (status != NFC_STATUS_OK)
               *p_notify = true;
             else
               p_t1t->substate = RW_T1T_SUBSTATE_WAIT_SET_ST_LOCK_BITS;
@@ -414,8 +414,8 @@ static tNFC_STATUS rw_t1t_handle_write_rsp(bool* p_notify, uint8_t* p_data) {
 
           /* send WRITE-NE command */
           RW_T1T_BLD_ADD((addr), (T1T_LOCK_BLOCK), (1));
-          if ((status = rw_t1t_send_static_cmd(T1T_CMD_WRITE_NE, addr, 0xFF)) !=
-              NFC_STATUS_OK)
+          status = rw_t1t_send_static_cmd(T1T_CMD_WRITE_NE, addr, 0xFF);
+          if (status != NFC_STATUS_OK)
             *p_notify = true;
           else
             p_t1t->substate = RW_T1T_SUBSTATE_WAIT_SET_DYN_LOCK_BITS;
@@ -478,9 +478,10 @@ static tNFC_STATUS rw_t1t_handle_write_rsp(bool* p_notify, uint8_t* p_data) {
                 }
 
                 /* send WRITE-NE8 command */
-                if ((status = rw_t1t_send_dyn_cmd(
-                         T1T_CMD_WRITE_NE8, (uint8_t)(offset / T1T_BLOCK_SIZE),
-                         write_block)) == NFC_STATUS_OK) {
+                status = rw_t1t_send_dyn_cmd(T1T_CMD_WRITE_NE8,
+                                             (uint8_t)(offset / T1T_BLOCK_SIZE),
+                                             write_block);
+                if (status == NFC_STATUS_OK) {
                   p_t1t->substate = RW_T1T_SUBSTATE_WAIT_SET_DYN_LOCK_BITS;
                   while (lock_count > num_locks) {
                     p_t1t->lockbyte[lock_count - 1].lock_status =
@@ -494,8 +495,8 @@ static tNFC_STATUS rw_t1t_handle_write_rsp(bool* p_notify, uint8_t* p_data) {
                 RW_T1T_BLD_ADD((addr), ((uint8_t)(offset / T1T_BLOCK_SIZE)),
                                ((uint8_t)(offset % T1T_BLOCK_SIZE)));
                 value = (uint8_t)(tags_pow(2, num_bits) - 1);
-                if ((status = rw_t1t_send_static_cmd(T1T_CMD_WRITE_NE, addr,
-                                                     value)) == NFC_STATUS_OK) {
+                status = rw_t1t_send_static_cmd(T1T_CMD_WRITE_NE, addr, value);
+                if (status == NFC_STATUS_OK) {
                   p_t1t->substate = RW_T1T_SUBSTATE_WAIT_SET_DYN_LOCK_BITS;
                   p_t1t->lockbyte[num_locks].lock_status =
                       RW_T1T_LOCK_UPDATE_INITIATED;
@@ -1155,8 +1156,8 @@ static tNFC_STATUS rw_t1t_handle_ndef_rall_rsp(void) {
         p_t1t->segment++;
       }
       if (p_t1t->ndef_msg_len - p_t1t->work_offset <= 8) {
-        if ((status = rw_t1t_send_dyn_cmd(T1T_CMD_READ8, p_t1t->block_read,
-                                          NULL)) == NFC_STATUS_OK) {
+        status = rw_t1t_send_dyn_cmd(T1T_CMD_READ8, p_t1t->block_read, NULL);
+        if (status == NFC_STATUS_OK) {
           p_t1t->tlv_detect = TAG_NDEF_TLV;
           p_t1t->state = RW_T1T_STATE_READ_NDEF;
           status = NFC_STATUS_CONTINUE;
@@ -1164,8 +1165,8 @@ static tNFC_STATUS rw_t1t_handle_ndef_rall_rsp(void) {
       } else {
         /* send RSEG command */
         RW_T1T_BLD_ADDS((adds), (p_t1t->segment));
-        if ((status = rw_t1t_send_dyn_cmd(T1T_CMD_RSEG, adds, NULL)) ==
-            NFC_STATUS_OK) {
+        status = rw_t1t_send_dyn_cmd(T1T_CMD_RSEG, adds, NULL);
+        if (status == NFC_STATUS_OK) {
           p_t1t->state = RW_T1T_STATE_READ_NDEF;
           status = NFC_STATUS_CONTINUE;
         }
@@ -1246,17 +1247,17 @@ static tNFC_STATUS rw_t1t_handle_ndef_read_rsp(uint8_t* p_data) {
     if ((p_t1t->hr[0] & 0x0F) != 1) {
       if ((p_t1t->ndef_msg_len - p_t1t->work_offset) <= T1T_BLOCK_SIZE) {
         p_t1t->block_read++;
-        if ((ndef_status = rw_t1t_send_dyn_cmd(
-                 T1T_CMD_READ8, (uint8_t)(p_t1t->block_read), NULL)) ==
-            NFC_STATUS_OK) {
+        ndef_status = rw_t1t_send_dyn_cmd(T1T_CMD_READ8,
+                                          (uint8_t)(p_t1t->block_read), NULL);
+        if (ndef_status == NFC_STATUS_OK) {
           ndef_status = NFC_STATUS_CONTINUE;
         }
       } else {
         p_t1t->segment++;
         /* send RSEG command */
         RW_T1T_BLD_ADDS((adds), (p_t1t->segment));
-        if ((ndef_status = rw_t1t_send_dyn_cmd(T1T_CMD_RSEG, adds, NULL)) ==
-            NFC_STATUS_OK) {
+        ndef_status = rw_t1t_send_dyn_cmd(T1T_CMD_RSEG, adds, NULL);
+        if (ndef_status == NFC_STATUS_OK) {
           ndef_status = NFC_STATUS_CONTINUE;
         }
       }
@@ -1978,9 +1979,9 @@ static void rw_t1t_update_lock_attributes(void) {
     p_t1t->lock_attr[0x0D] = 0xFF;
   } else {
     /* update lock_attr based on segment and using dynamic lock bytes */
-    if ((total_bits = rw_t1t_get_lock_bits_for_segment(
-             p_t1t->segment, &start_lock_byte, &start_lock_bit,
-             &end_lock_byte)) != 0) {
+    total_bits = rw_t1t_get_lock_bits_for_segment(
+        p_t1t->segment, &start_lock_byte, &start_lock_bit, &end_lock_byte);
+    if (total_bits != 0) {
       xx = start_lock_bit;
       num_dynamic_lock_bytes = start_lock_byte;
       bits_covered = 0;
@@ -2137,7 +2138,8 @@ tNFC_STATUS RW_T1tFormatNDef(void) {
     return (NFC_STATUS_REJECTED);
   }
 
-  if ((p_ret = t1t_tag_init_data(p_t1t->hr[0])) == NULL) {
+  p_ret = t1t_tag_init_data(p_t1t->hr[0]);
+  if (p_ret == NULL) {
     RW_TRACE_WARNING2("RW_T1tFormatNDef - Invalid HR - HR0: %u, HR1: %u",
                       p_t1t->hr[0], p_t1t->hr[1]);
     return (NFC_STATUS_REJECTED);
@@ -2173,8 +2175,8 @@ tNFC_STATUS RW_T1tFormatNDef(void) {
   if (rw_cb.tcb.t1t.hr[0] != T1T_STATIC_HR0 ||
       rw_cb.tcb.t1t.hr[1] >= RW_T1T_HR1_MIN) {
     /* send WRITE-E8 command */
-    if ((status = rw_t1t_send_dyn_cmd(
-             T1T_CMD_WRITE_E8, 1, p_t1t->ndef_first_block)) == NFC_STATUS_OK) {
+    status = rw_t1t_send_dyn_cmd(T1T_CMD_WRITE_E8, 1, p_t1t->ndef_first_block);
+    if (status == NFC_STATUS_OK) {
       p_t1t->state = RW_T1T_STATE_FORMAT_TAG;
       p_t1t->b_update = false;
       p_t1t->b_rseg = false;
@@ -2187,9 +2189,9 @@ tNFC_STATUS RW_T1tFormatNDef(void) {
     /* send WRITE-E command */
     RW_T1T_BLD_ADD((addr), 1, 0);
 
-    if ((status = rw_t1t_send_static_cmd(T1T_CMD_WRITE_E, addr,
-                                         p_t1t->ndef_first_block[0])) ==
-        NFC_STATUS_OK) {
+    status = rw_t1t_send_static_cmd(T1T_CMD_WRITE_E, addr,
+                                    p_t1t->ndef_first_block[0]);
+    if (status == NFC_STATUS_OK) {
       p_t1t->work_offset = 0;
       p_t1t->state = RW_T1T_STATE_FORMAT_TAG;
       p_t1t->substate = RW_T1T_SUBSTATE_WAIT_SET_NULL_NDEF;
@@ -2456,8 +2458,8 @@ tNFC_STATUS RW_T1tWriteNDef(uint16_t msg_len, uint8_t* p_msg) {
     /* Dynamic data structure */
     p_t1t->block_read = (uint8_t)((offset - 1) / T1T_BLOCK_SIZE);
     /* Read NDEF final block before updating */
-    if ((status = rw_t1t_send_dyn_cmd(T1T_CMD_READ8, p_t1t->block_read,
-                                      NULL)) == NFC_STATUS_OK) {
+    status = rw_t1t_send_dyn_cmd(T1T_CMD_READ8, p_t1t->block_read, NULL);
+    if (status == NFC_STATUS_OK) {
       p_t1t->num_ndef_finalblock = p_t1t->block_read;
       p_t1t->state = RW_T1T_STATE_WRITE_NDEF;
       p_t1t->substate = RW_T1T_SUBSTATE_WAIT_READ_NDEF_BLOCK;
@@ -2465,8 +2467,8 @@ tNFC_STATUS RW_T1tWriteNDef(uint16_t msg_len, uint8_t* p_msg) {
   } else {
     /* NDEF detected and Static memory structure so send WRITE-E command */
     RW_T1T_BLD_ADD((addr), (T1T_CC_BLOCK), (T1T_CC_NMN_OFFSET));
-    if ((status = rw_t1t_send_static_cmd(T1T_CMD_WRITE_E, addr, 0)) ==
-        NFC_STATUS_OK) {
+    status = rw_t1t_send_static_cmd(T1T_CMD_WRITE_E, addr, 0);
+    if (status == NFC_STATUS_OK) {
       p_t1t->state = RW_T1T_STATE_WRITE_NDEF;
       p_t1t->substate = RW_T1T_SUBSTATE_WAIT_INVALIDATE_NDEF;
     }
@@ -2509,8 +2511,8 @@ tNFC_STATUS RW_T1tSetTagReadOnly(bool b_hard_lock) {
       (p_t1t->tag_attribute == RW_T1_TAG_ATTRB_INITIALIZED_NDEF)) {
     /* send WRITE-NE command */
     RW_T1T_BLD_ADD((addr), (T1T_CC_BLOCK), (T1T_CC_RWA_OFFSET));
-    if ((status = rw_t1t_send_static_cmd(T1T_CMD_WRITE_NE, addr, 0x0F)) ==
-        NFC_STATUS_OK) {
+    status = rw_t1t_send_static_cmd(T1T_CMD_WRITE_NE, addr, 0x0F);
+    if (status == NFC_STATUS_OK) {
       p_t1t->b_update = false;
       p_t1t->b_rseg = false;
 

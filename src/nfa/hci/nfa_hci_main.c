@@ -544,9 +544,10 @@ void nfa_hci_startup(void) {
         if (ee_info[count].ee_status == NFA_EE_STATUS_INACTIVE) {
           NFC_NfceeModeSet(target_handle, NFC_MODE_ACTIVATE);
         }
-        if ((status = NFC_ConnCreate(NCI_DEST_TYPE_NFCEE, target_handle,
-                                     NFA_EE_INTERFACE_HCI_ACCESS,
-                                     nfa_hci_conn_cback)) == NFA_STATUS_OK)
+        status =
+            NFC_ConnCreate(NCI_DEST_TYPE_NFCEE, target_handle,
+                           NFA_EE_INTERFACE_HCI_ACCESS, nfa_hci_conn_cback);
+        if (status == NFA_STATUS_OK)
           nfa_sys_start_timer(&nfa_hci_cb.timer, NFA_HCI_RSP_TIMEOUT_EVT,
                               NFA_HCI_CON_CREATE_TIMEOUT_VAL);
         else {

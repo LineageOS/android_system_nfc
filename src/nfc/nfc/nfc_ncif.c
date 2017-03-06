@@ -182,7 +182,8 @@ uint8_t nfc_ncif_send_data(tNFC_CONN_CB* p_cb, NFC_HDR* p_data) {
       /* the data packet is too big and need to be fragmented
        * prepare a new GKI buffer
        * (even the last fragment to avoid issues) */
-      if ((p = NCI_GET_CMD_BUF(ulen)) == NULL) return (NCI_STATUS_BUFFER_FULL);
+      p = NCI_GET_CMD_BUF(ulen);
+      if (p == NULL) return (NCI_STATUS_BUFFER_FULL);
       p->len = ulen;
       p->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE + 1;
       if (p->len) {

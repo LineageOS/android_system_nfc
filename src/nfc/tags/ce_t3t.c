@@ -136,7 +136,8 @@ uint8_t ce_t3t_is_valid_opcode(uint8_t cmd_id) {
 NFC_HDR* ce_t3t_get_rsp_buf(void) {
   NFC_HDR* p_cmd_buf;
 
-  if ((p_cmd_buf = (NFC_HDR*)GKI_getpoolbuf(NFC_CE_POOL_ID)) != NULL) {
+  p_cmd_buf = (NFC_HDR*)GKI_getpoolbuf(NFC_CE_POOL_ID);
+  if (p_cmd_buf != NULL) {
     /* Reserve offset for NCI_DATA_HDR and NFC-F Sod (LEN) field */
     p_cmd_buf->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE + 1;
     p_cmd_buf->len = 0;
@@ -165,7 +166,8 @@ void ce_t3t_send_rsp(tCE_CB* p_ce_cb, uint8_t* p_nfcid2, uint8_t opcode,
     p_nfcid2 = p_cb->local_nfcid2;
   }
 
-  if ((p_rsp_msg = ce_t3t_get_rsp_buf()) != NULL) {
+  p_rsp_msg = ce_t3t_get_rsp_buf();
+  if (p_rsp_msg != NULL) {
     p_dst = p_rsp_start = (uint8_t*)(p_rsp_msg + 1) + p_rsp_msg->offset;
 
     /* Response Code */
@@ -373,7 +375,8 @@ void ce_t3t_handle_check_cmd(tCE_CB* p_ce_cb, NFC_HDR* p_cmd_msg) {
   uint32_t ndef_len;
   uint16_t block_number, service_code, checksum;
 
-  if ((p_rsp_msg = ce_t3t_get_rsp_buf()) != NULL) {
+  p_rsp_msg = ce_t3t_get_rsp_buf();
+  if (p_rsp_msg != NULL) {
     p_dst = p_rsp_start = (uint8_t*)(p_rsp_msg + 1) + p_rsp_msg->offset;
 
     /* Response Code */
@@ -520,7 +523,8 @@ void ce_t3t_handle_non_nfc_forum_cmd(tCE_CB* p_mem_cb, uint8_t cmd_id,
   uint8_t rc;
   bool send_response = true;
 
-  if ((p_rsp_msg = ce_t3t_get_rsp_buf()) != NULL) {
+  p_rsp_msg = ce_t3t_get_rsp_buf();
+  if (p_rsp_msg != NULL) {
     p_dst = p_rsp_start = (uint8_t*)(p_rsp_msg + 1) + p_rsp_msg->offset;
 
     switch (cmd_id) {
@@ -935,7 +939,8 @@ tNFC_STATUS CE_T3tSendCheckRsp(uint8_t status1, uint8_t status2,
     return (NFC_STATUS_FAILED);
   }
 
-  if ((p_rsp_msg = ce_t3t_get_rsp_buf()) != NULL) {
+  p_rsp_msg = ce_t3t_get_rsp_buf();
+  if (p_rsp_msg != NULL) {
     p_dst = p_rsp_start = (uint8_t*)(p_rsp_msg + 1) + p_rsp_msg->offset;
 
     /* Response Code */

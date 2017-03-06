@@ -387,8 +387,8 @@ void nfa_dm_ndef_handle_message(tNFA_STATUS status, uint8_t* p_msg_buf,
 
   /* Handle zero length - notify default handler */
   if (len == 0) {
-    if ((p_handler = p_cb->p_ndef_handler[NFA_NDEF_DEFAULT_HANDLER_IDX]) !=
-        NULL) {
+    p_handler = p_cb->p_ndef_handler[NFA_NDEF_DEFAULT_HANDLER_IDX];
+    if (p_handler != NULL) {
       NFA_TRACE_DEBUG0(
           "Notifying default handler of zero-length NDEF message...");
       ndef_data.ndef_type_handle = p_handler->ndef_type_handle;
@@ -401,7 +401,8 @@ void nfa_dm_ndef_handle_message(tNFA_STATUS status, uint8_t* p_msg_buf,
   }
 
   /* Validate the NDEF message */
-  if ((ndef_status = NDEF_MsgValidate(p_msg_buf, len, true)) != NDEF_OK) {
+  ndef_status = NDEF_MsgValidate(p_msg_buf, len, true);
+  if (ndef_status != NDEF_OK) {
     NFA_TRACE_ERROR1("Received invalid NDEF message. NDEF status=0x%x",
                      ndef_status);
     return;
@@ -432,11 +433,12 @@ void nfa_dm_ndef_handle_message(tNFA_STATUS status, uint8_t* p_msg_buf,
     p_payload = NDEF_RecGetPayload(p_rec, &payload_len);
 
     /* Find first handler for this type */
-    if ((p_handler = nfa_dm_ndef_find_next_handler(
-             NULL, tnf, p_type, type_len, p_payload, payload_len)) == NULL) {
+    p_handler = nfa_dm_ndef_find_next_handler(NULL, tnf, p_type, type_len,
+                                              p_payload, payload_len);
+    if (p_handler == NULL) {
       /* Not a registered NDEF type. Use default handler */
-      if ((p_handler = p_cb->p_ndef_handler[NFA_NDEF_DEFAULT_HANDLER_IDX]) !=
-          NULL) {
+      p_handler = p_cb->p_ndef_handler[NFA_NDEF_DEFAULT_HANDLER_IDX];
+      if (p_handler != NULL) {
         NFA_TRACE_DEBUG0("No handler found. Using default handler...");
       }
     }
