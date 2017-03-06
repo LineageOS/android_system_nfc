@@ -152,7 +152,8 @@ void HAL_NfcCoreInitialized(uint16_t data_len,
   size = p_core_init_rsp_params[2] + NCI_MSG_HDR_SIZE;
 
   /* Send message to NFC_HAL_TASK */
-  if ((p_msg = (NFC_HDR*)GKI_getbuf((uint16_t)(size + NFC_HDR_SIZE))) != NULL) {
+  p_msg = (NFC_HDR*)GKI_getbuf((uint16_t)(size + NFC_HDR_SIZE));
+  if (p_msg != NULL) {
     p_msg->event = NFC_HAL_EVT_POST_CORE_RESET;
     p_msg->offset = 0;
     p_msg->len = size;
@@ -187,7 +188,8 @@ void HAL_NfcWrite(uint16_t data_len, uint8_t* p_data) {
   }
 
   /* Send message to NFC_HAL_TASK */
-  if ((p_msg = (NFC_HDR*)GKI_getpoolbuf(NFC_HAL_NCI_POOL_ID)) != NULL) {
+  p_msg = (NFC_HDR*)GKI_getpoolbuf(NFC_HAL_NCI_POOL_ID);
+  if (p_msg != NULL) {
     p_msg->event = NFC_HAL_EVT_TO_NFC_NCI;
     p_msg->offset = NFC_HAL_NCI_MSG_OFFSET_SIZE;
     p_msg->len = data_len;
@@ -227,7 +229,8 @@ bool HAL_NfcPreDiscover(void) {
     if (p_nfc_hal_pre_discover_cfg && *p_nfc_hal_pre_discover_cfg) {
       status = true;
       /* Send message to NFC_HAL_TASK */
-      if ((p_msg = (NFC_HDR*)GKI_getpoolbuf(NFC_HAL_NCI_POOL_ID)) != NULL) {
+      p_msg = (NFC_HDR*)GKI_getpoolbuf(NFC_HAL_NCI_POOL_ID);
+      if (p_msg != NULL) {
         p_msg->event = NFC_HAL_EVT_PRE_DISCOVER;
         GKI_send_msg(NFC_HAL_TASK, NFC_HAL_TASK_MBOX, p_msg);
       }
@@ -260,7 +263,8 @@ void HAL_NfcControlGranted(void) {
   HAL_TRACE_API0("HAL_NfcControlGranted ()");
 
   /* Send message to NFC_HAL_TASK */
-  if ((p_msg = (NFC_HDR*)GKI_getpoolbuf(NFC_HAL_NCI_POOL_ID)) != NULL) {
+  p_msg = (NFC_HDR*)GKI_getpoolbuf(NFC_HAL_NCI_POOL_ID);
+  if (p_msg != NULL) {
     p_msg->event = NFC_HAL_EVT_CONTROL_GRANTED;
     GKI_send_msg(NFC_HAL_TASK, NFC_HAL_TASK_MBOX, p_msg);
   }

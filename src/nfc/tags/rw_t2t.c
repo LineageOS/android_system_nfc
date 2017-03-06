@@ -379,7 +379,8 @@ tNFC_STATUS rw_t2t_send_cmd(uint8_t opcode, uint8_t* p_dat) {
       RW_TRACE_EVENT2("RW SENT [%s]:0x%x CMD", t2t_info_to_str(p_cmd_rsp_info),
                       p_cmd_rsp_info->opcode);
 
-      if ((status = NFC_SendData(NFC_RF_CONN_ID, p_data)) == NFC_STATUS_OK) {
+      status = NFC_SendData(NFC_RF_CONN_ID, p_data);
+      if (status == NFC_STATUS_OK) {
         nfc_start_quick_timer(
             &p_t2t->t2_timer, NFC_TTYPE_RW_T2T_RESPONSE,
             (RW_T2T_TOUT_RESP * QUICK_TIMER_TICKS_PER_SEC) / 1000);
@@ -499,7 +500,8 @@ static void rw_t2t_process_error(void) {
                     RW_MAX_RETRIES);
 
     /* allocate a new buffer for message */
-    if ((p_cmd_buf = (NFC_HDR*)GKI_getpoolbuf(NFC_RW_POOL_ID)) != NULL) {
+    p_cmd_buf = (NFC_HDR*)GKI_getpoolbuf(NFC_RW_POOL_ID);
+    if (p_cmd_buf != NULL) {
       memcpy(p_cmd_buf, p_t2t->p_cur_cmd_buf,
              sizeof(NFC_HDR) + p_t2t->p_cur_cmd_buf->offset +
                  p_t2t->p_cur_cmd_buf->len);
@@ -604,7 +606,8 @@ static void rw_t2t_resume_op(void) {
   p_t2t->p_cmd_rsp_info = (tT2T_CMD_RSP_INFO*)p_cmd_rsp_info;
 
   /* allocate a new buffer for message */
-  if ((p_cmd_buf = (NFC_HDR*)GKI_getpoolbuf(NFC_RW_POOL_ID)) != NULL) {
+  p_cmd_buf = (NFC_HDR*)GKI_getpoolbuf(NFC_RW_POOL_ID);
+  if (p_cmd_buf != NULL) {
     memcpy(p_cmd_buf, p_t2t->p_sec_cmd_buf,
            sizeof(NFC_HDR) + p_t2t->p_sec_cmd_buf->offset +
                p_t2t->p_sec_cmd_buf->len);
@@ -648,7 +651,8 @@ tNFC_STATUS rw_t2t_sector_change(uint8_t sector) {
   uint8_t* p;
   tRW_T2T_CB* p_t2t = &rw_cb.tcb.t2t;
 
-  if ((p_data = (NFC_HDR*)GKI_getpoolbuf(NFC_RW_POOL_ID)) == NULL) {
+  p_data = (NFC_HDR*)GKI_getpoolbuf(NFC_RW_POOL_ID);
+  if (p_data == NULL) {
     RW_TRACE_ERROR0("rw_t2t_sector_change - No buffer");
     return (NFC_STATUS_NO_BUFFERS);
   }
@@ -663,7 +667,8 @@ tNFC_STATUS rw_t2t_sector_change(uint8_t sector) {
 
   p_data->len = 4;
 
-  if ((status = NFC_SendData(NFC_RF_CONN_ID, p_data)) == NFC_STATUS_OK) {
+  status = NFC_SendData(NFC_RF_CONN_ID, p_data);
+  if (status == NFC_STATUS_OK) {
     /* Passive rsp command and suppose not to get response to this command */
     p_t2t->p_cmd_rsp_info = NULL;
     p_t2t->substate = RW_T2T_SUBSTATE_WAIT_SELECT_SECTOR;
@@ -705,8 +710,8 @@ tNFC_STATUS rw_t2t_read(uint16_t block) {
   if (p_t2t->sector != block / T2T_BLOCKS_PER_SECTOR) {
     sector_byte2[0] = 0xFF;
     /* First Move to new sector before sending Read command */
-    if ((status = rw_t2t_send_cmd(T2T_CMD_SEC_SEL, sector_byte2)) ==
-        NFC_STATUS_OK) {
+    status = rw_t2t_send_cmd(T2T_CMD_SEC_SEL, sector_byte2);
+    if (status == NFC_STATUS_OK) {
       /* Prepare command that needs to be sent after sector change op is
        * completed */
       p_t2t->select_sector = (uint8_t)(block / T2T_BLOCKS_PER_SECTOR);
@@ -728,8 +733,8 @@ tNFC_STATUS rw_t2t_read(uint16_t block) {
   }
 
   /* Send Read command as sector change is not needed */
-  if ((status = rw_t2t_send_cmd(T2T_CMD_READ, (uint8_t*)read_cmd)) ==
-      NFC_STATUS_OK) {
+  status = rw_t2t_send_cmd(T2T_CMD_READ, (uint8_t*)read_cmd);
+  if (status == NFC_STATUS_OK) {
     p_t2t->block_read = block;
     RW_TRACE_EVENT1("rw_t2t_read Sent Command for Block: %u", block);
   }
@@ -764,8 +769,8 @@ tNFC_STATUS rw_t2t_write(uint16_t block, uint8_t* p_write_data) {
   if (p_t2t->sector != block / T2T_BLOCKS_PER_SECTOR) {
     sector_byte2[0] = 0xFF;
     /* First Move to new sector before sending Write command */
-    if ((status = rw_t2t_send_cmd(T2T_CMD_SEC_SEL, sector_byte2)) ==
-        NFC_STATUS_OK) {
+    status = rw_t2t_send_cmd(T2T_CMD_SEC_SEL, sector_byte2);
+    if (status == NFC_STATUS_OK) {
       /* Prepare command that needs to be sent after sector change op is
        * completed */
       p_t2t->select_sector = (uint8_t)(block / T2T_BLOCKS_PER_SECTOR);
@@ -786,7 +791,8 @@ tNFC_STATUS rw_t2t_write(uint16_t block, uint8_t* p_write_data) {
   }
 
   /* Send Write command as sector change is not needed */
-  if ((status = rw_t2t_send_cmd(T2T_CMD_WRITE, write_cmd)) == NFC_STATUS_OK) {
+  status = rw_t2t_send_cmd(T2T_CMD_WRITE, write_cmd);
+  if (status == NFC_STATUS_OK) {
     RW_TRACE_EVENT1("rw_t2t_write Sent Command for Block: %u", block);
   }
 
@@ -810,8 +816,8 @@ tNFC_STATUS rw_t2t_select(void) {
 
   /* Alloc cmd buf for retransmissions */
   if (p_t2t->p_cur_cmd_buf == NULL) {
-    if ((p_t2t->p_cur_cmd_buf = (NFC_HDR*)GKI_getpoolbuf(NFC_RW_POOL_ID)) ==
-        NULL) {
+    p_t2t->p_cur_cmd_buf = (NFC_HDR*)GKI_getpoolbuf(NFC_RW_POOL_ID);
+    if (p_t2t->p_cur_cmd_buf == NULL) {
       RW_TRACE_ERROR0(
           "rw_t2t_select: unable to allocate buffer for retransmission");
       return (NFC_STATUS_FAILED);
@@ -819,8 +825,8 @@ tNFC_STATUS rw_t2t_select(void) {
   }
   /* Alloc cmd buf for holding a command untill sector changes */
   if (p_t2t->p_sec_cmd_buf == NULL) {
-    if ((p_t2t->p_sec_cmd_buf = (NFC_HDR*)GKI_getpoolbuf(NFC_RW_POOL_ID)) ==
-        NULL) {
+    p_t2t->p_sec_cmd_buf = (NFC_HDR*)GKI_getpoolbuf(NFC_RW_POOL_ID);
+    if (p_t2t->p_sec_cmd_buf == NULL) {
       RW_TRACE_ERROR0(
           "rw_t2t_select: unable to allocate buffer used during sector change");
       return (NFC_STATUS_FAILED);
@@ -895,8 +901,8 @@ tNFC_STATUS RW_T2tPresenceCheck(void) {
     (*p_rw_cb->p_cback)(RW_T2T_PRESENCE_CHECK_EVT, &evt_data);
   } else {
     /* IDLE state: send a READ command to block 0 of the current sector */
-    if ((retval = rw_t2t_send_cmd(T2T_CMD_READ, &sector_blk)) ==
-        NFC_STATUS_OK) {
+    retval = rw_t2t_send_cmd(T2T_CMD_READ, &sector_blk);
+    if (retval == NFC_STATUS_OK) {
       p_rw_cb->tcb.t2t.state = RW_T2T_STATE_CHECK_PRESENCE;
     }
   }
@@ -925,7 +931,8 @@ tNFC_STATUS RW_T2tRead(uint16_t block) {
     return (NFC_STATUS_FAILED);
   }
 
-  if ((status = rw_t2t_read(block)) == NFC_STATUS_OK) {
+  status = rw_t2t_read(block);
+  if (status == NFC_STATUS_OK) {
     p_t2t->state = RW_T2T_STATE_READ;
     RW_TRACE_EVENT0("RW_T2tRead Sent Read command");
   }
@@ -956,7 +963,8 @@ tNFC_STATUS RW_T2tWrite(uint16_t block, uint8_t* p_write_data) {
     return (NFC_STATUS_FAILED);
   }
 
-  if ((status = rw_t2t_write(block, p_write_data)) == NFC_STATUS_OK) {
+  status = rw_t2t_write(block, p_write_data);
+  if (status == NFC_STATUS_OK) {
     p_t2t->state = RW_T2T_STATE_WRITE;
     if (block < T2T_FIRST_DATA_BLOCK)
       p_t2t->b_read_hdr = false;
@@ -1007,8 +1015,8 @@ tNFC_STATUS RW_T2tSectorSelect(uint8_t sector) {
 
   sector_byte2[0] = 0xFF;
 
-  if ((status = rw_t2t_send_cmd(T2T_CMD_SEC_SEL, sector_byte2)) ==
-      NFC_STATUS_OK) {
+  status = rw_t2t_send_cmd(T2T_CMD_SEC_SEL, sector_byte2);
+  if (status == NFC_STATUS_OK) {
     p_t2t->state = RW_T2T_STATE_SELECT_SECTOR;
     p_t2t->select_sector = sector;
     p_t2t->substate = RW_T2T_SUBSTATE_WAIT_SELECT_SECTOR_SUPPORT;

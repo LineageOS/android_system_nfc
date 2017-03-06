@@ -922,7 +922,8 @@ static void llcp_link_proc_ui_pdu(uint8_t local_sap, uint8_t remote_sap,
 
   p_app_cb = llcp_util_get_app_cb(local_sap);
   /*if UI PDU sent to SAP with data link connection*/
-  if ((p_dlcb = llcp_dlc_find_dlcb_by_sap(local_sap, remote_sap))) {
+  p_dlcb = llcp_dlc_find_dlcb_by_sap(local_sap, remote_sap);
+  if (p_dlcb) {
     llcp_util_send_frmr(p_dlcb, LLCP_FRMR_W_ERROR_FLAG, LLCP_PDU_UI_TYPE, 0);
     llcp_dlsm_execute(p_dlcb, LLCP_DLC_EVENT_FRAME_ERROR, NULL);
     if (p_msg) {

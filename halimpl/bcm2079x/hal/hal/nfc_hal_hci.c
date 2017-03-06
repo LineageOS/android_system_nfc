@@ -157,8 +157,9 @@ void nfc_hal_hci_enable(void) {
        ((!nfc_hal_cb.hci_cb.hci_fw_workaround) ||
         (nfc_hal_cb.nvm_cb.nvm_type == NCI_SPD_NVM_TYPE_EEPROM))) ||
       (p_nfc_hal_cfg->nfc_hal_hci_uicc_support & HAL_NFC_HCI_UICC2_HOST)) {
-    if ((p_hci_netwk_cmd = (uint8_t*)GKI_getbuf(
-             NCI_MSG_HDR_SIZE + NFC_HAL_HCI_NETWK_INFO_SIZE)) == NULL) {
+    p_hci_netwk_cmd =
+        (uint8_t*)GKI_getbuf(NCI_MSG_HDR_SIZE + NFC_HAL_HCI_NETWK_INFO_SIZE);
+    if (p_hci_netwk_cmd == NULL) {
       HAL_TRACE_ERROR0(
           "nfc_hal_hci_enable: unable to allocate buffer for reading hci "
           "network info from nvram");
@@ -312,7 +313,8 @@ void nfc_hal_hci_fake_adm_notify_all_pipe_cleared_to_dh(void) {
       NFC_HAL_HCI_HOST_ID_UICC1);
 
   /* Start of new message. Allocate a buffer for message */
-  if ((p_msg = (NFC_HDR*)GKI_getpoolbuf(NFC_HAL_NCI_POOL_ID)) != NULL) {
+  p_msg = (NFC_HDR*)GKI_getpoolbuf(NFC_HAL_NCI_POOL_ID);
+  if (p_msg != NULL) {
     /* Initialize NFC_HDR */
     p_msg->len = NCI_DATA_HDR_SIZE + 0x03;
     p_msg->event = 0;
@@ -744,8 +746,9 @@ void nfc_hal_hci_set_next_hci_netwk_config(uint8_t block) {
           p_nfc_hal_cfg->nfc_hal_hci_uicc_support, nfc_hal_cb.nvm_cb.nvm_type);
 
     case HC_F5_NV_BLOCK:
-      if ((p_hci_netwk_cmd = (uint8_t*)GKI_getbuf(
-               NCI_MSG_HDR_SIZE + NFC_HAL_HCI_DH_NETWK_INFO_SIZE)) == NULL) {
+      p_hci_netwk_cmd = (uint8_t*)GKI_getbuf(NCI_MSG_HDR_SIZE +
+                                             NFC_HAL_HCI_DH_NETWK_INFO_SIZE);
+      if (p_hci_netwk_cmd == NULL) {
         HAL_TRACE_ERROR0(
             "nfc_hal_hci_set_next_hci_netwk_config: unable to allocate buffer "
             "for reading hci network info from nvram");

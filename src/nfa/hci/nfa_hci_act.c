@@ -711,10 +711,9 @@ static bool nfa_hci_api_get_reg_value(tNFA_HCI_EVENT_DATA* p_evt_data) {
         NFA_TRACE_WARNING1("nfa_hci_api_get_reg_value pipe:%d not open",
                            p_evt_data->get_registry.pipe);
       } else {
-        if ((status = nfa_hciu_send_get_param_cmd(
-                 p_evt_data->get_registry.pipe,
-                 p_evt_data->get_registry.reg_inx)) == NFA_STATUS_OK)
-          return true;
+        status = nfa_hciu_send_get_param_cmd(p_evt_data->get_registry.pipe,
+                                             p_evt_data->get_registry.reg_inx);
+        if (status == NFA_STATUS_OK) return true;
       }
     }
   }
@@ -760,12 +759,10 @@ static bool nfa_hci_api_set_reg_value(tNFA_HCI_EVENT_DATA* p_evt_data) {
         NFA_TRACE_WARNING1("nfa_hci_api_set_reg_value pipe:%d not open",
                            p_evt_data->set_registry.pipe);
       } else {
-        if ((status = nfa_hciu_send_set_param_cmd(
-                 p_evt_data->set_registry.pipe,
-                 p_evt_data->set_registry.reg_inx,
-                 p_evt_data->set_registry.size,
-                 p_evt_data->set_registry.data)) == NFA_STATUS_OK)
-          return true;
+        status = nfa_hciu_send_set_param_cmd(
+            p_evt_data->set_registry.pipe, p_evt_data->set_registry.reg_inx,
+            p_evt_data->set_registry.size, p_evt_data->set_registry.data);
+        if (status == NFA_STATUS_OK) return true;
       }
     }
   }
@@ -875,11 +872,11 @@ static bool nfa_hci_api_send_cmd(tNFA_HCI_EVENT_DATA* p_evt_data) {
 
       if (p_pipe->pipe_state == NFA_HCI_PIPE_OPENED) {
         nfa_hci_cb.pipe_in_use = p_evt_data->send_cmd.pipe;
-        if ((status = nfa_hciu_send_msg(
-                 p_pipe->pipe_id, NFA_HCI_COMMAND_TYPE,
-                 p_evt_data->send_cmd.cmd_code, p_evt_data->send_cmd.cmd_len,
-                 p_evt_data->send_cmd.data)) == NFA_STATUS_OK)
-          return true;
+        status = nfa_hciu_send_msg(p_pipe->pipe_id, NFA_HCI_COMMAND_TYPE,
+                                   p_evt_data->send_cmd.cmd_code,
+                                   p_evt_data->send_cmd.cmd_len,
+                                   p_evt_data->send_cmd.data);
+        if (status == NFA_STATUS_OK) return true;
       } else {
         NFA_TRACE_WARNING1("nfa_hci_api_send_cmd pipe:%d not open",
                            p_pipe->pipe_id);
@@ -925,11 +922,11 @@ static void nfa_hci_api_send_rsp(tNFA_HCI_EVENT_DATA* p_evt_data) {
         ((app_handle == p_evt_data->send_rsp.hci_handle ||
           p_pipe->local_gate == NFA_HCI_CONNECTIVITY_GATE))) {
       if (p_pipe->pipe_state == NFA_HCI_PIPE_OPENED) {
-        if ((status = nfa_hciu_send_msg(
-                 p_pipe->pipe_id, NFA_HCI_RESPONSE_TYPE,
-                 p_evt_data->send_rsp.response, p_evt_data->send_rsp.size,
-                 p_evt_data->send_rsp.data)) == NFA_STATUS_OK)
-          return;
+        status = nfa_hciu_send_msg(p_pipe->pipe_id, NFA_HCI_RESPONSE_TYPE,
+                                   p_evt_data->send_rsp.response,
+                                   p_evt_data->send_rsp.size,
+                                   p_evt_data->send_rsp.data);
+        if (status == NFA_STATUS_OK) return;
       } else {
         NFA_TRACE_WARNING1("nfa_hci_api_send_rsp pipe:%d not open",
                            p_pipe->pipe_id);
@@ -1051,9 +1048,9 @@ static void nfa_hci_api_add_static_pipe(tNFA_HCI_EVENT_DATA* p_evt_data) {
   tNFA_HCI_EVT_DATA evt_data;
 
   /* Allocate a proprietary gate */
-  if ((pg = nfa_hciu_alloc_gate(p_evt_data->add_static_pipe.gate,
-                                p_evt_data->add_static_pipe.hci_handle)) !=
-      NULL) {
+  pg = nfa_hciu_alloc_gate(p_evt_data->add_static_pipe.gate,
+                           p_evt_data->add_static_pipe.hci_handle);
+  if (pg != NULL) {
     /* Assign new owner to the gate */
     pg->gate_owner = p_evt_data->add_static_pipe.hci_handle;
 
@@ -1069,8 +1066,8 @@ static void nfa_hci_api_add_static_pipe(tNFA_HCI_EVENT_DATA* p_evt_data) {
                            p_evt_data->add_static_pipe.hci_handle);
       return;
     }
-    if ((pp = nfa_hciu_find_pipe_by_pid(p_evt_data->add_static_pipe.pipe)) !=
-        NULL) {
+    pp = nfa_hciu_find_pipe_by_pid(p_evt_data->add_static_pipe.pipe);
+    if (pp != NULL) {
       /* This pipe is always opened */
       pp->pipe_state = NFA_HCI_PIPE_OPENED;
       evt_data.pipe_added.status = NFA_STATUS_OK;
@@ -1233,19 +1230,21 @@ void nfa_hci_handle_admin_gate_cmd(uint8_t* p_data) {
             /* Already, there is a pipe between these two gates, so will reject
              */
             response = NFA_HCI_ANY_E_NOK;
-          } else if ((response = nfa_hciu_add_pipe_to_gate(
-                          pipe, dest_gate, source_host, source_gate)) ==
-                     NFA_HCI_ANY_OK) {
-            /* Tell the application a pipe was created with its gate */
+          } else {
+            response = nfa_hciu_add_pipe_to_gate(pipe, dest_gate, source_host,
+                                                 source_gate);
+            if (response == NFA_HCI_ANY_OK) {
+              /* Tell the application a pipe was created with its gate */
 
-            evt_data.created.status = NFA_STATUS_OK;
-            evt_data.created.pipe = pipe;
-            evt_data.created.source_gate = dest_gate;
-            evt_data.created.dest_host = source_host;
-            evt_data.created.dest_gate = source_gate;
+              evt_data.created.status = NFA_STATUS_OK;
+              evt_data.created.pipe = pipe;
+              evt_data.created.source_gate = dest_gate;
+              evt_data.created.dest_host = source_host;
+              evt_data.created.dest_gate = source_gate;
 
-            nfa_hciu_send_to_app(NFA_HCI_CREATE_PIPE_EVT, &evt_data,
-                                 pgate->gate_owner);
+              nfa_hciu_send_to_app(NFA_HCI_CREATE_PIPE_EVT, &evt_data,
+                                   pgate->gate_owner);
+            }
           }
         } else {
           response = NFA_HCI_ANY_E_NOK;
@@ -1647,8 +1646,9 @@ void nfa_hci_handle_admin_gate_evt(uint8_t* p_data) {
     nfa_hciu_send_to_all_apps(NFA_HCI_EVENT_RCVD_EVT, &evt_data);
 
     /* Send Get Host List after receiving any pending response */
-    if ((p_msg = (tNFA_HCI_API_GET_HOST_LIST*)GKI_getbuf(
-             sizeof(tNFA_HCI_API_GET_HOST_LIST))) != NULL) {
+    p_msg = (tNFA_HCI_API_GET_HOST_LIST*)GKI_getbuf(
+        sizeof(tNFA_HCI_API_GET_HOST_LIST));
+    if (p_msg != NULL) {
       p_msg->hdr.event = NFA_HCI_API_GET_HOST_LIST_EVT;
       /* Set Invalid handle to identify this Get Host List command is internal
        */

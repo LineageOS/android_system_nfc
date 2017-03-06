@@ -146,8 +146,8 @@ void nfa_rw_proc_disc_evt(tNFA_DM_RF_DISC_EVT event, tNFC_DISCOVER* p_data,
 tNFA_STATUS nfa_rw_send_raw_frame(NFC_HDR* p_data) {
   tNFA_RW_MSG* p_msg;
 
-  if ((p_msg = (tNFA_RW_MSG*)GKI_getbuf((uint16_t)sizeof(tNFA_RW_MSG))) !=
-      NULL) {
+  p_msg = (tNFA_RW_MSG*)GKI_getbuf((uint16_t)sizeof(tNFA_RW_MSG));
+  if (p_msg != NULL) {
     p_msg->hdr.event = NFA_RW_OP_REQUEST_EVT;
     p_msg->op_req.op = NFA_RW_OP_SEND_RAW_FRAME;
 
@@ -182,7 +182,8 @@ bool nfa_rw_handle_event(NFC_HDR* p_msg) {
 #endif
 
   /* Get NFA_RW sub-event */
-  if ((act_idx = (p_msg->event & 0x00FF)) < (NFA_RW_MAX_EVT & 0xFF)) {
+  act_idx = (p_msg->event & 0x00FF);
+  if (act_idx < (NFA_RW_MAX_EVT & 0xFF)) {
     return (*nfa_rw_action_tbl[act_idx])((tNFA_RW_MSG*)p_msg);
   } else {
     NFA_TRACE_ERROR1("nfa_rw_handle_event: unhandled event 0x%02X",

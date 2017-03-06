@@ -485,8 +485,8 @@ void nfc_main_flush_cmd_queue(void) {
 void nfc_main_post_hal_evt(uint8_t hal_evt, tHAL_NFC_STATUS status) {
   tNFC_HAL_EVT_MSG* p_msg;
 
-  if ((p_msg = (tNFC_HAL_EVT_MSG*)GKI_getbuf(sizeof(tNFC_HAL_EVT_MSG))) !=
-      NULL) {
+  p_msg = (tNFC_HAL_EVT_MSG*)GKI_getbuf(sizeof(tNFC_HAL_EVT_MSG));
+  if (p_msg != NULL) {
     /* Initialize NFC_HDR */
     p_msg->hdr.len = 0;
     p_msg->hdr.event = BT_EVT_TO_NFC_MSGS;
@@ -566,7 +566,8 @@ static void nfc_main_hal_data_cback(uint16_t data_len, uint8_t* p_data) {
   }
 
   if (p_data) {
-    if ((p_msg = (NFC_HDR*)GKI_getpoolbuf(NFC_NCI_POOL_ID)) != NULL) {
+    p_msg = (NFC_HDR*)GKI_getpoolbuf(NFC_NCI_POOL_ID);
+    if (p_msg != NULL) {
       /* Initialize NFC_HDR */
       p_msg->len = data_len;
       p_msg->event = BT_EVT_TO_NFC_NCI;
