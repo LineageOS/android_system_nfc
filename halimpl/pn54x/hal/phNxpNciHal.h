@@ -34,7 +34,7 @@ typedef struct nci_data {
   uint8_t p_data[NCI_MAX_DATA_LEN];
 } nci_data_t;
 
-typedef enum { HAL_STATUS_OPEN = 0, HAL_STATUS_CLOSE } phNxpNci_HalStatus;
+typedef enum { HAL_STATUS_CLOSE = 0, HAL_STATUS_OPEN } phNxpNci_HalStatus;
 
 /* Macros to enable and disable extensions */
 #define HAL_ENABLE_EXT() (nxpncihal_ctrl.hal_ext_enabled = 1)
