@@ -228,6 +228,10 @@ extern tNFC_CB nfc_cb;
 ** Internal nfc functions
 ****************************************************************************/
 
+#define NCI_CALCULATE_ACK(a, v) \
+  { a &= ((1 << v) - 1); }
+#define MAX_NUM_VALID_BITS_FOR_ACK 0x07
+
 extern void nfc_init(void);
 
 /* from nfc_utils.c */
