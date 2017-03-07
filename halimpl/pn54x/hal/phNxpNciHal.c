@@ -427,6 +427,11 @@ int phNxpNciHal_open(nfc_stack_callback_t* p_cback,
   static uint8_t cmd_init_nci[] = {0x20, 0x01, 0x00};
   /*NCI_RESET_CMD*/
   static uint8_t cmd_reset_nci[] = {0x20, 0x00, 0x01, 0x00};
+
+  if (nxpncihal_ctrl.halStatus == HAL_STATUS_OPEN) {
+    NXPLOG_NCIHAL_E("phNxpNciHal_open already open");
+    return NFCSTATUS_SUCCESS;
+  }
   /* reset config cache */
   resetNxpConfig();
 
@@ -445,7 +450,6 @@ int phNxpNciHal_open(nfc_stack_callback_t* p_cback,
   }
 
   CONCURRENCY_LOCK();
-
   memset(&nxpncihal_ctrl, 0x00, sizeof(nxpncihal_ctrl));
   memset(&tOsalConfig, 0x00, sizeof(tOsalConfig));
   memset(&tTmlConfig, 0x00, sizeof(tTmlConfig));
@@ -692,7 +696,9 @@ static void phNxpNciHal_open_complete(NFCSTATUS status) {
 int phNxpNciHal_write(uint16_t data_len, const uint8_t* p_data) {
   NFCSTATUS status = NFCSTATUS_FAILED;
   static phLibNfc_Message_t msg;
-
+  if (nxpncihal_ctrl.halStatus != HAL_STATUS_OPEN) {
+    return NFCSTATUS_FAILED;
+  }
   /* Create local copy of cmd_data */
   memcpy(nxpncihal_ctrl.p_cmd_data, p_data, data_len);
   nxpncihal_ctrl.cmd_len = data_len;
@@ -992,7 +998,9 @@ int phNxpNciHal_core_initialized(uint8_t* p_core_init_rsp_params) {
                                     0x00};  // keep configuration
   /* reset config cache */
   static uint8_t retry_core_init_cnt;
-
+  if (nxpncihal_ctrl.halStatus != HAL_STATUS_OPEN) {
+    return NFCSTATUS_FAILED;
+  }
   if ((*p_core_init_rsp_params > 0) &&
       (*p_core_init_rsp_params < 4))  // initializing for recovery.
   {
@@ -1844,8 +1852,11 @@ int phNxpNciHal_close(void) {
   static uint8_t cmd_ce_disc_nci[] = {0x21, 0x03, 0x07, 0x03, 0x80,
                                       0x01, 0x81, 0x01, 0x82, 0x01};
 
+  if (nxpncihal_ctrl.halStatus == HAL_STATUS_CLOSE) {
+    NXPLOG_NCIHAL_E("phNxpNciHal_close is already closed, ignoring close");
+    return NFCSTATUS_FAILED;
+  }
   CONCURRENCY_LOCK();
-
   status = phNxpNciHal_send_ext_cmd(sizeof(cmd_ce_disc_nci), cmd_ce_disc_nci);
   if (status != NFCSTATUS_SUCCESS) {
     NXPLOG_NCIHAL_E("CMD_CE_DISC_NCI: Failed");
@@ -1998,9 +2009,11 @@ void phNxpNciHal_release_control(void) {
  ******************************************************************************/
 int phNxpNciHal_power_cycle(void) {
   NXPLOG_NCIHAL_D("Power Cycle");
-
   NFCSTATUS status = NFCSTATUS_FAILED;
-
+  if (nxpncihal_ctrl.halStatus != HAL_STATUS_OPEN) {
+    NXPLOG_NCIHAL_D("Power Cycle failed due to hal status not open");
+    return NFCSTATUS_FAILED;
+  }
   status = phTmlNfc_IoCtl(phTmlNfc_e_ResetDevice);
 
   if (NFCSTATUS_SUCCESS == status) {
@@ -2010,7 +2023,6 @@ int phNxpNciHal_power_cycle(void) {
   }
 
   phNxpNciHal_power_cycle_complete(NFCSTATUS_SUCCESS);
-
   return NFCSTATUS_SUCCESS;
 }
 
