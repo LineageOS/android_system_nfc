@@ -1288,7 +1288,7 @@ NFCSTATUS phNxpNciHal_TestMode_open(void) {
   memset(&tTmlConfig, 0x00, sizeof(tTmlConfig));
 
   /* Read the nfc device node name */
-  nfc_dev_node = (char*)malloc(max_len * sizeof(char*));
+  nfc_dev_node = (char*)malloc(max_len * sizeof(char));
   if (nfc_dev_node == NULL) {
     NXPLOG_NCIHAL_E("malloc of nfc_dev_node failed ");
     goto clean_and_return;

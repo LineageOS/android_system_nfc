@@ -542,6 +542,9 @@ static void phTmlNfc_TmlWriterThread(void* pParam) {
 static void phTmlNfc_CleanUp(void) {
   NFCSTATUS wRetval = NFCSTATUS_SUCCESS;
 
+  if (NULL == gpphTmlNfc_Context) {
+    return;
+  }
   if (NULL != gpphTmlNfc_Context->pDevHandle) {
     (void)phTmlNfc_i2c_reset(gpphTmlNfc_Context->pDevHandle, 0);
     gpphTmlNfc_Context->bThreadDone = 0;

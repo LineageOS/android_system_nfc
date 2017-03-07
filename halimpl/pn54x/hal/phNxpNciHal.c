@@ -462,7 +462,7 @@ int phNxpNciHal_open(nfc_stack_callback_t* p_cback,
   nxpncihal_ctrl.p_nfc_stack_data_cback = p_data_cback;
 
   /* Read the nfc device node name */
-  nfc_dev_node = (char*)malloc(max_len * sizeof(char*));
+  nfc_dev_node = (char*)malloc(max_len * sizeof(char));
   if (nfc_dev_node == NULL) {
     NXPLOG_NCIHAL_E("malloc of nfc_dev_node failed ");
     goto clean_and_return;
