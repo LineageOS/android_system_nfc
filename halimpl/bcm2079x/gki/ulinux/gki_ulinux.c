@@ -109,7 +109,7 @@ void gki_task_entry(uintptr_t params) {
   /* Call the actual thread entry point */
   (p_pthread_info->task_entry)(p_pthread_info->params);
 
-  GKI_TRACE_1("gki_task task_id=%i terminating", p_pthread_info->task_id);
+  GKI_TRACE_ERROR_1("gki_task task_id=%i terminating", p_pthread_info->task_id);
   gki_cb.os.thread_id[p_pthread_info->task_id] = 0;
 
   pthread_exit(0); /* GKI tasks have no return value */
@@ -449,7 +449,7 @@ void timer_thread(signed long id) {
 
     GKI_timer_update(1);
   }
-  GKI_TRACE_1("%s exit", __func__);
+  GKI_TRACE_ERROR_1("%s exit", __func__);
   pthread_exit(NULL);
 }
 #endif
@@ -620,6 +620,8 @@ uint16_t GKI_wait(uint16_t flag, uint32_t timeout) {
   rtask = GKI_get_taskid();
   GKI_TRACE_3("GKI_wait %d %x %d", rtask, flag, timeout);
   if (rtask >= GKI_MAX_TASKS) {
+    GKI_TRACE_ERROR_3("%s() Exiting thread; rtask %d >= %d", __func__, rtask,
+                      GKI_MAX_TASKS);
     pthread_exit(NULL);
     return 0;
   }
@@ -707,7 +709,7 @@ uint16_t GKI_wait(uint16_t flag, uint32_t timeout) {
       /* unlock thread_evt_mutex as pthread_cond_wait() does auto lock when cond
        * is met */
       pthread_mutex_unlock(&gki_cb.os.thread_evt_mutex[rtask]);
-      GKI_TRACE_1("GKI TASK_DEAD received. exit thread %d...", rtask);
+      GKI_TRACE_ERROR_1("GKI TASK_DEAD received. exit thread %d...", rtask);
 
       gki_cb.os.thread_id[rtask] = 0;
       pthread_exit(NULL);
