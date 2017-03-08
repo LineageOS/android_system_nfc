@@ -592,6 +592,7 @@ static void phNxpNciHal_fw_dnld_get_version_cb(void* pContext, NFCSTATUS status,
       else if ((FALSE == (gphNxpNciHal_fw_IoctlCtx.bDnldInitiated)) &&
                (bNewVer[1] < bCurrVer[1])) {
         NXPLOG_FWDNLD_E("Version Check Failed - MajorVerNum Mismatch\n");
+        NXPLOG_FWDNLD_E("NewVer %d != CurrVer %d\n", bNewVer[1], bCurrVer[1]);
         wStatus = NFCSTATUS_NOT_ALLOWED;
       }
       /* Minor Version number check - before download.*/
