@@ -52,10 +52,12 @@ const char alternative_config_path[] = "";
 #endif
 
 #if 1
-const char transport_config_path[] = "/etc/";
+const char* transport_config_paths[] = {"/odm/etc/", "/vendor/etc/", "/etc/"};
 #else
-const char transport_config_path[] = "res/";
+const char* transport_config_paths[] = {"res/"};
 #endif
+const int transport_config_path_size =
+    (sizeof(transport_config_paths) / sizeof(transport_config_paths[0]));
 
 #define config_name "libnfc-nxp.conf"
 #define extra_config_base "libnfc-nxp-"
@@ -162,6 +164,30 @@ inline int getDigitValue(char c, int base) {
       return c - 'a' + 10;
   }
   return 0;
+}
+
+/*******************************************************************************
+**
+** Function:    findConfigFilePathFromTransportConfigPaths()
+**
+** Description: find a config file path with a given config name from transport
+**              config paths
+**
+** Returns:     none
+**
+*******************************************************************************/
+void findConfigFilePathFromTransportConfigPaths(const string& configName,
+                                                string& filePath) {
+  for (int i = 0; i < transport_config_path_size - 1; i++) {
+    filePath.assign(transport_config_paths[i]);
+    filePath += configName;
+    struct stat file_stat;
+    if (stat(filePath.c_str(), &file_stat) == 0 && S_ISREG(file_stat.st_mode)) {
+      return;
+    }
+  }
+  filePath.assign(transport_config_paths[transport_config_path_size - 1]);
+  filePath += configName;
 }
 
 /*******************************************************************************
@@ -391,8 +417,7 @@ CNfcConfig& CNfcConfig::GetInstance() {
         return theInstance;
       }
     }
-    strPath.assign(transport_config_path);
-    strPath += config_name;
+    findConfigFilePathFromTransportConfigPaths(config_name, strPath);
     theInstance.readConfig(strPath.c_str(), true);
   }
 
@@ -865,13 +890,17 @@ extern "C" void resetNxpConfig()
 *******************************************************************************/
 void readOptionalConfig(const char* extra) {
   string strPath;
-  strPath.assign(transport_config_path);
-  if (alternative_config_path[0] != '\0')
-    strPath.assign(alternative_config_path);
+  string configName(extra_config_base);
+  configName += extra;
+  configName += extra_config_ext;
 
-  strPath += extra_config_base;
-  strPath += extra;
-  strPath += extra_config_ext;
+  if (alternative_config_path[0] != '\0') {
+    strPath.assign(alternative_config_path);
+    strPath += configName;
+  } else {
+    findConfigFilePathFromTransportConfigPaths(configName, strPath);
+  }
+
   CNfcConfig::GetInstance().readConfig(strPath.c_str(), false);
 }
 
