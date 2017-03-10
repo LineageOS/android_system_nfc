@@ -16,6 +16,7 @@
 PN547C2 := 1
 PN548C2 := 2
 PN551   := 3
+PN553   := 4
 NQ110 := $PN547C2
 NQ120 := $PN547C2
 NQ210 := $PN548C2
@@ -30,16 +31,23 @@ endif
 ifeq ($(PN551),3)
 D_CFLAGS += -DPN551=3
 endif
+ifeq ($(PN553),4)
+D_CFLAGS += -DPN553=4
+endif
 
 #### Select the CHIP ####
+NXP_CHIP_TYPE := $PN553
+
 ifeq ($(NXP_CHIP_TYPE),$(PN547C2))
 D_CFLAGS += -DNFC_NXP_CHIP_TYPE=PN547C2
 else ifeq ($(NXP_CHIP_TYPE),$(PN548C2))
 D_CFLAGS += -DNFC_NXP_CHIP_TYPE=PN548C2
 else ifeq ($(NXP_CHIP_TYPE),$(PN551))
 D_CFLAGS += -DNFC_NXP_CHIP_TYPE=PN551
+else ifeq ($(NXP_CHIP_TYPE),$(PN553))
+D_CFLAGS += -DNFC_NXP_CHIP_TYPE=PN553
 else
-D_CFLAGS += -DNFC_NXP_CHIP_TYPE=PN551
+D_CFLAGS += -DNFC_NXP_CHIP_TYPE=PN553
 endif
 
 LOCAL_PATH := $(call my-dir)
@@ -48,15 +56,15 @@ LOCAL_MODULE := nfc_nci.$(TARGET_DEVICE)
 LOCAL_PROPRIETARY_MODULE := true
 LOCAL_MODULE_RELATIVE_PATH := hw
 LOCAL_SRC_FILES := \
-	$(call all-c-files-under, common) \
-	$(call all-c-files-under, dnld) \
-	$(call all-c-files-under, hal) \
-	$(call all-c-files-under, log) \
-	$(call all-c-files-under, self-test) \
-	$(call all-c-files-under, tml) \
-	$(call all-c-files-under, utils) \
-	$(call all-cpp-files-under, utils) \
-	nfc_nci.c
+    $(call all-c-files-under, common) \
+    $(call all-c-files-under, dnld) \
+    $(call all-c-files-under, hal) \
+    $(call all-c-files-under, log) \
+    $(call all-c-files-under, self-test) \
+    $(call all-c-files-under, tml) \
+    $(call all-c-files-under, utils) \
+    $(call all-cpp-files-under, utils) \
+    nfc_nci.c
 
 LOCAL_SHARED_LIBRARIES := liblog libcutils libhardware_legacy libdl libhardware
 
