@@ -53,6 +53,14 @@
   FW_DLL_ROOT_DIR "libpn551_fw_platform" FW_DLL_EXTENSION
 /* Upgrade the public Key */
 #define PKU_LIB_PATH FW_DLL_ROOT_DIR "libpn551_fw_pku" FW_DLL_EXTENSION
+#elif (NFC_NXP_CHIP_TYPE == PN553)
+/* Actual FW library name*/
+#define FW_LIB_PATH FLASH_CONF_ROOT_DIR "libpn553_fw" FW_DLL_EXTENSION
+/* Restore Corrupted PLL Settings/etc */
+#define PLATFORM_LIB_PATH \
+  FW_DLL_ROOT_DIR "libpn553_fw_platform" FW_DLL_EXTENSION
+/* Upgrade the public Key */
+#define PKU_LIB_PATH FW_DLL_ROOT_DIR "libpn553_fw_pku" FW_DLL_EXTENSION
 #else
 /* Actual FW library name*/
 #define FW_LIB_PATH FW_DLL_ROOT_DIR "libpn547_fw" FW_DLL_EXTENSION

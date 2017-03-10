@@ -255,6 +255,9 @@ NFCSTATUS phDnldNfc_CheckIntegrity(uint8_t bChipVer, pphDnldNfc_Buff_t pCRCData,
           || (PHDNLDNFC_HWVER_PN551_MRA1_0 == bChipVer)
 #elif (NFC_NXP_CHIP_TYPE == PN548C2)
           || (PHDNLDNFC_HWVER_PN548AD_MRA1_0 == bChipVer)
+#elif (NFC_NXP_CHIP_TYPE == PN553)
+          || (PHDNLDNFC_HWVER_PN553_MRA1_0 == bChipVer) ||
+          (PHDNLDNFC_HWVER_PN553_MRA1_0_UPDATED & bChipVer)
 #endif
               ) {
         (gpphDnldContext->FrameInp.Type) = phDnldNfc_ChkIntg;
@@ -970,6 +973,8 @@ NFCSTATUS phDnldNfc_LoadFW(const char* pathName, uint8_t** pImgInfo,
     pathName = "/system/vendor/firmware/libpn548ad_fw.so";
 #elif (NFC_NXP_CHIP_TYPE == PN551)
     pathName = "/system/vendor/firmware/libpn551_fw.so";
+#elif (NFC_NXP_CHIP_TYPE == PN553)
+    pathName = "/system/vendor/firmware/libpn553_fw.so";
 #else
     pathName = "/system/vendor/firmware/libpn547_fw.so";
 #endif
