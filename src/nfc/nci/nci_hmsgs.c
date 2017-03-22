@@ -25,7 +25,6 @@
 #include <string.h>
 #include "nfc_target.h"
 
-#if (NFC_INCLUDED == TRUE)
 #include "nci_defs.h"
 #include "nci_hmsgs.h"
 #include "nfc_api.h"
@@ -627,5 +626,3 @@ uint8_t nci_snd_get_routing_cmd(void) {
 }
 #endif
 #endif
-
-#endif /* NFC_INCLUDED == TRUE*/

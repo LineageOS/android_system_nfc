@@ -26,7 +26,6 @@
 #include "bt_types.h"
 #include "nfc_target.h"
 
-#if (NFC_INCLUDED == TRUE)
 #include "gki.h"
 #include "nci_hmsgs.h"
 #include "nfc_api.h"
@@ -1125,5 +1124,3 @@ static char* rw_t2t_get_substate_name(uint8_t substate) {
 }
 
 #endif /* (BT_TRACE_VERBOSE == TRUE) */
-
-#endif /* NFC_INCLUDED == TRUE*/

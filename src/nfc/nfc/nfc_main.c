@@ -28,7 +28,6 @@
 #include "gki.h"
 #include "nfc_target.h"
 
-#if (NFC_INCLUDED == TRUE)
 #include "ce_int.h"
 #include "nci_hmsgs.h"
 #include "nfc_api.h"
@@ -1331,5 +1330,3 @@ char* NFC_GetStatusName(tNFC_STATUS status) {
   }
 }
 #endif
-
-#endif /* NFC_INCLUDED == TRUE */
