@@ -27,7 +27,6 @@
 #include "nfc_target.h"
 #include "trace_api.h"
 
-#if (NFC_INCLUDED == TRUE)
 #include "ce_api.h"
 #include "ce_int.h"
 #include "gki.h"
@@ -1058,4 +1057,3 @@ tNFC_STATUS CE_T4TTestSetNDEFCtrlTLV(uint8_t type, uint8_t length,
   return NFC_STATUS_FAILED;
 #endif
 }
-#endif /* NFC_INCLUDED == TRUE */
