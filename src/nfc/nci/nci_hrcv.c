@@ -27,7 +27,6 @@
 #include "gki.h"
 #include "nfc_target.h"
 
-#if (NFC_INCLUDED == TRUE)
 #include "nci_defs.h"
 #include "nci_hmsgs.h"
 #include "nfc_api.h"
@@ -465,5 +464,3 @@ void nci_proc_prop_ntf(NFC_HDR* p_msg) {
     }
   }
 }
-
-#endif /* NFC_INCLUDED == TRUE*/

@@ -25,7 +25,6 @@
 #include <string.h>
 #include "nfc_target.h"
 
-#if (NFC_INCLUDED == TRUE)
 #include "gki.h"
 #include "nci_hmsgs.h"
 #include "nfc_api.h"
@@ -2575,5 +2574,3 @@ static char* rw_t1t_get_sub_state_name(uint8_t sub_state) {
 #endif /* (BT_TRACE_VERBOSE == TRUE) */
 
 #endif /* (RW_NDEF_INCLUDED == TRUE) */
-
-#endif /* (NFC_INCLUDED == TRUE) */

@@ -174,9 +174,6 @@
 ** NFC
 **
 ******************************************************************************/
-#ifndef NFC_INCLUDED
-#define NFC_INCLUDED TRUE
-#endif
 
 /* Define to TRUE to include Broadcom Vendor Specific implementation */
 #ifndef NFC_BRCM_VS_INCLUDED
@@ -508,10 +505,6 @@
 ** NFA
 **
 ******************************************************************************/
-
-#ifndef NFA_INCLUDED
-#define NFA_INCLUDED TRUE
-#endif
 
 #ifndef NFA_P2P_INCLUDED
 #define NFA_P2P_INCLUDED TRUE

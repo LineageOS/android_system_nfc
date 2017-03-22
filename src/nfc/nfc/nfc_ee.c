@@ -26,7 +26,6 @@
 #include "gki.h"
 #include "nfc_target.h"
 
-#if (NFC_INCLUDED == TRUE)
 #include "nci_hmsgs.h"
 #include "nfc_api.h"
 #include "nfc_int.h"
@@ -106,5 +105,3 @@ tNFC_STATUS NFC_SetRouting(bool more, uint8_t num_tlv, uint8_t tlv_size,
 **
 *******************************************************************************/
 tNFC_STATUS NFC_GetRouting(void) { return nci_snd_get_routing_cmd(); }
-
-#endif /* NFC_INCLUDED == TRUE */

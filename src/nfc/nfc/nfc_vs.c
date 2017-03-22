@@ -27,7 +27,6 @@
 #include "gki.h"
 #include "nfc_target.h"
 
-#if (NFC_INCLUDED == TRUE)
 #include "nfc_int.h"
 
 /****************************************************************************
@@ -122,5 +121,3 @@ tNFC_STATUS NFC_SendVsCommand(uint8_t oid, NFC_HDR* p_data,
   nfc_ncif_check_cmd_queue(p_data);
   return status;
 }
-
-#endif /* NFC_INCLUDED == TRUE */
