@@ -323,7 +323,7 @@ bool rw_i93_check_sys_info_prot_ext(uint8_t error_code) {
 **
 *******************************************************************************/
 void rw_i93_send_to_upper(NFC_HDR* p_resp) {
-  uint8_t *p = (uint8_t*)(p_resp + 1) + p_resp->offset, *p_uid;
+  uint8_t *p = (uint8_t *)(p_resp + 1) + p_resp->offset, *p_uid;
   uint16_t length = p_resp->len;
   tRW_I93_CB* p_i93 = &rw_cb.tcb.i93;
   tRW_DATA rw_data;
@@ -1377,7 +1377,7 @@ tNFC_STATUS rw_i93_get_next_block_sec(void) {
 **
 *******************************************************************************/
 void rw_i93_sm_detect_ndef(NFC_HDR* p_resp) {
-  uint8_t *p = (uint8_t*)(p_resp + 1) + p_resp->offset, *p_uid;
+  uint8_t *p = (uint8_t *)(p_resp + 1) + p_resp->offset, *p_uid;
   uint8_t flags, u8 = 0, cc[4];
   uint16_t length = p_resp->len, xx, block, first_block, last_block, num_blocks;
   tRW_I93_CB* p_i93 = &rw_cb.tcb.i93;
@@ -2102,7 +2102,7 @@ void rw_i93_sm_update_ndef(NFC_HDR* p_resp) {
 **
 *******************************************************************************/
 void rw_i93_sm_format(NFC_HDR* p_resp) {
-  uint8_t *p = (uint8_t*)(p_resp + 1) + p_resp->offset, *p_uid;
+  uint8_t *p = (uint8_t *)(p_resp + 1) + p_resp->offset, *p_uid;
   uint8_t flags;
   uint16_t length = p_resp->len, xx, block_number;
   tRW_I93_CB* p_i93 = &rw_cb.tcb.i93;
