@@ -1676,6 +1676,7 @@ int phNxpNciHal_core_initialized(uint8_t* p_core_init_rsp_params) {
       NXPLOG_NCIHAL_E("Invoking data callback!!");
       (*nxpncihal_ctrl.p_nfc_stack_data_cback)(nxpncihal_ctrl.rx_data_len,
                                                nxpncihal_ctrl.p_rx_data);
+      return NFCSTATUS_RECOVERY_SUCCESS;
     }
   }
 
