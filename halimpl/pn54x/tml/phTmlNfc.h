@@ -188,8 +188,8 @@ typedef struct phTmlNfc_Config {
  * TML Deferred Callback structure used to invoke Upper layer Callback function.
  */
 typedef struct {
-  pphTmlNfc_DeferFuncPointer_t
-      pDef_call; /*Deferred callback function to be invoked */
+  /* Deferred callback function to be invoked */
+  pphTmlNfc_DeferFuncPointer_t pDef_call;
   /* Source identifier
    *
    * Identifier of the source which posted the message
