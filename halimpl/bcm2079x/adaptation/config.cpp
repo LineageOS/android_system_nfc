@@ -488,8 +488,8 @@ void CNfcConfig::add(const CNfcParam* pParam) {
     m_list.push_back(pParam);
     return;
   }
-  for (list<const CNfcParam*>::iterator it = m_list.begin(),
-                                        itEnd = m_list.end();
+  for (list<const CNfcParam *>::iterator it = m_list.begin(),
+                                         itEnd = m_list.end();
        it != itEnd; ++it) {
     if (**it < pParam->c_str()) continue;
     m_list.insert(it, pParam);
@@ -510,8 +510,8 @@ void CNfcConfig::add(const CNfcParam* pParam) {
 void CNfcConfig::moveFromList() {
   if (m_list.size() == 0) return;
 
-  for (list<const CNfcParam*>::iterator it = m_list.begin(),
-                                        itEnd = m_list.end();
+  for (list<const CNfcParam *>::iterator it = m_list.begin(),
+                                         itEnd = m_list.end();
        it != itEnd; ++it)
     push_back(*it);
   m_list.clear();
