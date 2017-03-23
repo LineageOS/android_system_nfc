@@ -370,13 +370,5 @@
  * Indicates Connection failed
  */
 #define NFCSTATUS_CONNECTION_FAILED (0x0047)
-/*
- * Indicates Recovery Success
- */
-#define NFCSTATUS_RECOVERY_SUCCESS (0x0100)
-/*
- * Indicates Recovery failed
- */
-#define NFCSTATUS_RECOVERY_FAILURE (0x01FF)
 
 #endif /* PHNFCSTATUS_H */
