@@ -683,7 +683,7 @@ void NFC_Init(tHAL_NFC_ENTRY* p_hal_entry_tbl) {
   nfc_cb.trace_level = NFC_INITIAL_TRACE_LEVEL;
   nfc_cb.nci_ctrl_size = NCI_CTRL_INIT_SIZE;
   nfc_cb.reassembly = true;
-
+  nfc_cb.nci_version = NCI_VERSION_UNKNOWN;
   rw_init();
   ce_init();
   llcp_init();
@@ -1240,6 +1240,18 @@ uint8_t NFC_SetTraceLevel(uint8_t new_level) {
 
   return (nfc_cb.trace_level);
 }
+
+/*******************************************************************************
+**
+** Function         NFC_GetNCIVersion
+**
+** Description      Called by higher layer to get the current nci
+**                  version of nfc.
+**
+** Returns          NCI version NCI2.0 / NCI1.0
+**
+*******************************************************************************/
+uint8_t NFC_GetNCIVersion() { return nfc_cb.nci_version; }
 
 #if (BT_TRACE_VERBOSE == TRUE)
 /*******************************************************************************
