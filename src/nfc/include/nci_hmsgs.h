@@ -43,7 +43,7 @@ void nci_proc_prop_rsp(NFC_HDR* p_msg);
 void nci_proc_prop_ntf(NFC_HDR* p_msg);
 
 uint8_t nci_snd_core_reset(uint8_t reset_type);
-uint8_t nci_snd_core_init(void);
+uint8_t nci_snd_core_init(uint8_t nci_version);
 uint8_t nci_snd_core_get_config(uint8_t* param_ids, uint8_t num_ids);
 uint8_t nci_snd_core_set_config(uint8_t* p_param_tlvs, uint8_t tlv_size);
 
