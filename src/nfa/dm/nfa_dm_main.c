@@ -171,12 +171,12 @@ void nfa_dm_sys_disable(void) {
 **
 *******************************************************************************/
 bool nfa_dm_is_protocol_supported(tNFC_PROTOCOL protocol, uint8_t sel_res) {
-  return (
-      (protocol == NFC_PROTOCOL_T1T) ||
-      ((protocol == NFC_PROTOCOL_T2T) &&
-       (sel_res == NFC_SEL_RES_NFC_FORUM_T2T)) ||
-      (protocol == NFC_PROTOCOL_T3T) || (protocol == NFC_PROTOCOL_ISO_DEP) ||
-      (protocol == NFC_PROTOCOL_NFC_DEP) || (protocol == NFC_PROTOCOL_15693));
+  return ((protocol == NFC_PROTOCOL_T1T) ||
+          ((protocol == NFC_PROTOCOL_T2T) &&
+           (sel_res == NFC_SEL_RES_NFC_FORUM_T2T)) ||
+          (protocol == NFC_PROTOCOL_T3T) ||
+          (protocol == NFC_PROTOCOL_ISO_DEP) ||
+          (protocol == NFC_PROTOCOL_NFC_DEP) || (protocol == NFC_PROTOCOL_T5T));
 }
 /*******************************************************************************
 **
