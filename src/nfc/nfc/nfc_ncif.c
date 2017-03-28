@@ -640,7 +640,7 @@ Available after Technology Detection
     if (u8) {
       STREAM_TO_ARRAY(p_lf->nfcid2, p, NCI_NFCID2_LEN);
     }
-  } else if (NCI_DISCOVERY_TYPE_POLL_ISO15693 == p_param->mode) {
+  } else if (NCI_DISCOVERY_TYPE_POLL_V == p_param->mode) {
     p_i93 = &p_param->param.pi93;
     p_i93->flag = *p++;
     p_i93->dsfid = *p++;
@@ -1374,6 +1374,12 @@ void nfc_data_event(tNFC_CONN_CB* p_cb) {
           } else {
             data_cevt.status = *(p + p_evt->offset + p_evt->len);
           }
+        }
+        if ((NFC_GetNCIVersion() == NCI_VERSION_2_0) &&
+            (p_cb->act_protocol == NCI_PROTOCOL_T5T)) {
+          p_evt->len--;
+          p = (uint8_t*)(p_evt + 1);
+          data_cevt.status = *(p + p_evt->offset + p_evt->len);
         }
       }
       (*p_cb->p_cback)(p_cb->conn_id, NFC_DATA_CEVT, (tNFC_CONN*)&data_cevt);
