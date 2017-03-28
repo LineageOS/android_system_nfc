@@ -31,6 +31,11 @@
 #define NCI_VERSION_UNKNOWN 0x00
 typedef void(phNxpNciHal_control_granted_callback_t)();
 
+/*ROM CODE VERSION FW*/
+#define FW_MOBILE_ROM_VERSION_PN551 0x10
+#define FW_MOBILE_ROM_VERSION_PN553 0x11
+#define FW_MOBILE_ROM_VERSION_PN548AD 0x10
+#define FW_MOBILE_ROM_VERSION_PN547C2 0x08
 /* NCI Data */
 
 #define NCI_MT_CMD 0x20
