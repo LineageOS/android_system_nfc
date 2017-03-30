@@ -1470,8 +1470,10 @@ int phNxpNciHal_core_initialized(uint8_t* p_core_init_rsp_params) {
   }
 
   config_access = false;
-  // if length of last command is 0 then only reset the P2P listen mode routing.
-  if (p_core_init_rsp_params[35] == 0) {
+  // if recovery mode and length of last command is 0 then only reset the P2P
+  // listen mode routing.
+  if ((*p_core_init_rsp_params > 0) && (*p_core_init_rsp_params < 4) &&
+      p_core_init_rsp_params[35] == 0) {
     /* P2P listen mode routing */
     status = phNxpNciHal_send_ext_cmd(sizeof(p2p_listen_mode_routing_cmd),
                                       p2p_listen_mode_routing_cmd);
