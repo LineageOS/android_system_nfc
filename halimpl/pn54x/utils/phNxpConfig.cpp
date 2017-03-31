@@ -46,7 +46,7 @@
 #include <phNxpLog.h>
 
 #if GENERIC_TARGET
-const char alternative_config_path[] = "/data/nfc/";
+const char alternative_config_path[] = "/data/vendor/nfc/";
 #else
 const char alternative_config_path[] = "";
 #endif
@@ -64,7 +64,8 @@ const int transport_config_path_size =
 #define extra_config_ext ".conf"
 #define IsStringValue 0x80000000
 
-const char config_timestamp_path[] = "/data/nfc/libnfc-nxpConfigState.bin";
+const char config_timestamp_path[] =
+    "/data/vendor/nfc/libnfc-nxpConfigState.bin";
 
 using namespace ::std;
 
