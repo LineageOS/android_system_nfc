@@ -95,6 +95,6 @@ int updateNxpConfigTimestamp();
 #define NAME_AID_MATCHING_PLATFORM "AID_MATCHING_PLATFORM"
 
 /* default configuration */
-#define default_storage_location "/data/nfc"
+#define default_storage_location "/data/vendor/nfc"
 
 #endif
