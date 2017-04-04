@@ -215,6 +215,9 @@ typedef struct {
   tHAL_NFC_ENTRY* p_hal;
 
   uint8_t nci_version; /* NCI version used for NCI communication*/
+
+  uint8_t deact_reason;
+
 } tNFC_CB;
 
 /*****************************************************************************
