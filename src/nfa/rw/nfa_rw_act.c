@@ -1743,6 +1743,11 @@ void nfa_rw_presence_check(tNFA_RW_MSG* p_data) {
         option = RW_T4T_CHK_READ_BINARY_CH3;
         break;
 
+      case NFA_RW_PRES_CHK_ISO_DEP_NAK:
+        if (NFC_GetNCIVersion() == NCI_VERSION_2_0) {
+          option = RW_T4T_CHK_ISO_DEP_NAK_PRES_CHK;
+        }
+        break;
       default:
         if (nfa_rw_cb.flags & NFA_RW_FL_NDEF_OK) {
           /* read binary on channel 0 */

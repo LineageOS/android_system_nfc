@@ -735,6 +735,20 @@ void nfc_ncif_proc_discover_ntf(uint8_t* p, uint16_t plen) {
 
 /*******************************************************************************
 **
+** Function         nfc_ncif_proc_isodep_nak_presence_check_status
+**
+** Description      This function is called to handle response and notification
+**                  for presence check nak command
+**
+** Returns          void
+**
+*******************************************************************************/
+void nfc_ncif_proc_isodep_nak_presence_check_status(uint8_t status,
+                                                    bool is_ntf) {
+  rw_t4t_handle_isodep_nak_rsp(status, is_ntf);
+}
+/*******************************************************************************
+**
 ** Function         nfc_ncif_proc_activate
 **
 ** Description      This function is called to process de-activate

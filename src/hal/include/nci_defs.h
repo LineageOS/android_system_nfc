@@ -241,6 +241,7 @@ typedef uint8_t tNCI_STATUS;
 #define NCI_MSG_RF_EE_ACTION 9
 #define NCI_MSG_RF_EE_DISCOVERY_REQ 10
 #define NCI_MSG_RF_PARAMETER_UPDATE 11
+#define NCI_MSG_RF_ISO_DEP_NAK_PRESENCE 16
 
 /**********************************************
  * NFCEE MANAGEMENT Group Opcode - 2
