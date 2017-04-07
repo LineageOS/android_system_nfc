@@ -514,6 +514,8 @@ typedef uint8_t tT3T_POLL_RC;
 #define T4T_FC_READ_ACCESS 0x00
 /* write access granted without any security */
 #define T4T_FC_WRITE_ACCESS 0x00
+/* proprietary write access range start */
+#define T4T_FC_WRITE_ACCESS_PROP_START 0x80
 /* no write access granted at all (read-only) */
 #define T4T_FC_NO_WRITE_ACCESS 0xFF
 
