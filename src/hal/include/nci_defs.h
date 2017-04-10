@@ -531,6 +531,10 @@ typedef uint8_t tNCI_DISCOVERY_TYPE;
 #define NCI_PARAM_ID_LF_T3T_MAX 0x52
 #define NCI_PARAM_ID_LF_T3T_FLAGS2 0x53
 #define NCI_PARAM_ID_LF_CON_BITR_F 0x54
+#define NCI_PARAM_ID_LF_CON_ADV_FEAT 0x55
+/*LF_T3T name changed in NCI2.0*/
+#define NCI_PARAM_ID_LF_T3T_RD_ALLOWED 0x55
+
 #define NCI_PARAM_ID_FWI 0x58
 #define NCI_PARAM_ID_LA_HIST_BY 0x59
 #define NCI_PARAM_ID_LB_H_INFO_RSP 0x5A
@@ -587,7 +591,12 @@ typedef uint8_t tNCI_DISCOVERY_TYPE;
 #define NCI_PARAM_LEN_LF_PROTOCOL 1
 #define NCI_PARAM_LEN_LF_T3T_FLAGS2 2
 #define NCI_PARAM_LEN_LF_T3T_PMM 8
-#define NCI_PARAM_LEN_LF_T3T_ID 10
+#define NCI_PARAM_LEN_LF_T3T_ID(X) (((X) == NCI_VERSION_2_0) ? (0x12) : (0x0A))
+#define NCI_PARAM_LEN_LF_CON_ADV_FEAT 1
+
+#define NCI_PARAM_LEN_LF_T3T_RD_ALLOWED 1  // Listen F NCI2.0 Parameter
+#define NCI_PARAM_LEN_LF_T3T_ID_MAX 16     // LF T3T indentifier Max Value 16
+#define NFA_CE_LISTEN_INFO_LF_MAX 16       // LF T3T indentifier Max Value 16
 
 #define NCI_PARAM_LEN_FWI 1
 #define NCI_PARAM_LEN_WT 1

@@ -353,7 +353,7 @@ tNFA_STATUS nfa_dm_check_set_config(uint8_t tlv_list_len, uint8_t* p_tlv_list,
         if ((type >= NFC_PMID_LF_T3T_ID1) &&
             (type < NFC_PMID_LF_T3T_ID1 + NFA_CE_LISTEN_INFO_MAX)) {
           p_stored = nfa_dm_cb.params.lf_t3t_id[type - NFC_PMID_LF_T3T_ID1];
-          max_len = NCI_PARAM_LEN_LF_T3T_ID;
+          max_len = NCI_PARAM_LEN_LF_T3T_ID(NFC_GetNCIVersion());
         } else {
           /* we don't stored this config items */
           update = true;
