@@ -133,17 +133,38 @@ static void nfa_dm_set_init_nci_params(void) {
 
   /* set NCI default value if other than zero */
 
-  /* LF_T3T_IDENTIFIERS_1/2/.../16 */
-  for (xx = 0; xx < NFA_CE_LISTEN_INFO_MAX; xx++) {
-    nfa_dm_cb.params.lf_t3t_id[xx][0] = 0xFF;
-    nfa_dm_cb.params.lf_t3t_id[xx][1] = 0xFF;
-    nfa_dm_cb.params.lf_t3t_id[xx][2] = 0x02;
-    nfa_dm_cb.params.lf_t3t_id[xx][3] = 0xFE;
-  }
+  if (NFC_GetNCIVersion() == NCI_VERSION_2_0) {
+    /* Default Values: For each identifier
+     * Octet 0-1   = OxFF
+     * Octet 2     = Ox02
+     * Octet 3     = 0xFE
+     * Octet 4-9   = 0x00
+     * Octet 10-17 = 0xFF*/
+    for (xx = 0; xx < NFA_CE_LISTEN_INFO_MAX; xx++) {
+      nfa_dm_cb.params.lf_t3t_id[xx][0] = 0xFF;
+      nfa_dm_cb.params.lf_t3t_id[xx][1] = 0xFF;
+      nfa_dm_cb.params.lf_t3t_id[xx][2] = 0x02;
+      nfa_dm_cb.params.lf_t3t_id[xx][3] = 0xFE;
+    }
 
-  /* LF_T3T_PMM */
-  for (xx = 0; xx < NCI_PARAM_LEN_LF_T3T_PMM; xx++) {
-    nfa_dm_cb.params.lf_t3t_pmm[xx] = 0xFF;
+    /* LF_T3T_PMM value is added to LF_T3T_IDENTIFIERS_X in NCI2.0. */
+    for (xx = 0; xx < NFA_CE_LISTEN_INFO_MAX; xx++) {
+      for (uint8_t yy = 10; yy < NCI_PARAM_LEN_LF_T3T_ID(NCI_VERSION_2_0); yy++)
+        nfa_dm_cb.params.lf_t3t_id[xx][yy] = 0xFF;
+    }
+  } else {
+    /* LF_T3T_IDENTIFIERS_1/2/.../16 */
+    for (xx = 0; xx < NFA_CE_LISTEN_INFO_MAX; xx++) {
+      nfa_dm_cb.params.lf_t3t_id[xx][0] = 0xFF;
+      nfa_dm_cb.params.lf_t3t_id[xx][1] = 0xFF;
+      nfa_dm_cb.params.lf_t3t_id[xx][2] = 0x02;
+      nfa_dm_cb.params.lf_t3t_id[xx][3] = 0xFE;
+    }
+
+    /* LF_T3T_PMM */
+    for (xx = 0; xx < NCI_PARAM_LEN_LF_T3T_PMM; xx++) {
+      nfa_dm_cb.params.lf_t3t_pmm[xx] = 0xFF;
+    }
   }
 
   /* LF_T3T_FLAGS:
