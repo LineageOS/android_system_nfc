@@ -365,7 +365,6 @@ void GKI_shutdown(void) {
 #endif
   if (gki_cb.os.gki_timer_wake_lock_on) {
     GKI_TRACE_0("GKI_shutdown :  release_wake_lock(brcm_btld)");
-    release_wake_lock(WAKE_LOCK_ID);
     gki_cb.os.gki_timer_wake_lock_on = 0;
   }
   oldCOnd = *p_run_cond;
@@ -402,11 +401,9 @@ void gki_system_tick_start_stop_cback(bool start) {
                ">>> STOP GKI_timer_update(), wake_lock_count:%d",
                --wake_lock_count);
 #endif
-    release_wake_lock(WAKE_LOCK_ID);
     gki_cb.os.gki_timer_wake_lock_on = 0;
   } else {
     /* restart GKI_timer_update() loop */
-    acquire_wake_lock(PARTIAL_WAKE_LOCK, WAKE_LOCK_ID);
     gki_cb.os.gki_timer_wake_lock_on = 1;
     *p_run_cond = GKI_TIMER_TICK_RUN_COND;
     pthread_mutex_lock(&p_os->gki_timer_mutex);
