@@ -14,11 +14,9 @@ cc_library_shared {
         "src/nfca_version.c",
     ],
     shared_libs: [
-        "liblog",
         "libcutils",
+        "liblog",
         "libhwbinder",
-        "libbase",
-        "libutils",
         "libpower",
     ],
     local_include_dirs: [
