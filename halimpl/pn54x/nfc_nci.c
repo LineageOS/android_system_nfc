@@ -19,10 +19,10 @@
 #include <errno.h>
 #include <hardware/hardware.h>
 #include <hardware/nfc.h>
+#include <log/log.h>
 #include <phNxpNciHal_Adaptation.h>
 #include <stdlib.h>
 #include <string.h>
-#include <utils/Log.h>
 
 /*****************************************************************************
  * NXP NCI HAL Function implementations.
