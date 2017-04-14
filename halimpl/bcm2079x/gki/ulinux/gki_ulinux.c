@@ -112,7 +112,7 @@ void gki_task_entry(uintptr_t params) {
   GKI_TRACE_ERROR_1("gki_task task_id=%i terminating", p_pthread_info->task_id);
   gki_cb.os.thread_id[p_pthread_info->task_id] = 0;
 
-  pthread_exit(0); /* GKI tasks have no return value */
+  return;
 }
 /* end android */
 
@@ -451,11 +451,15 @@ void timer_thread(signed long id) {
   }
 <<<<<<< HEAD
   GKI_TRACE_1("%s exit", __func__);
+<<<<<<< HEAD
   pthread_exit(NULL);
 =======
   GKI_TRACE_ERROR_1("%s exit", __func__);
   return;
 >>>>>>> 3ae29f2... bcm2079x: Log all thread exits and NFC version on mismatch
+=======
+  return;
+>>>>>>> cf3e207... bcm2079x: Replace pthread_exit with return to avoid memory leak
 }
 #endif
 
@@ -627,7 +631,6 @@ uint16_t GKI_wait(uint16_t flag, uint32_t timeout) {
   if (rtask >= GKI_MAX_TASKS) {
     GKI_TRACE_ERROR_3("%s() Exiting thread; rtask %d >= %d", __func__, rtask,
                       GKI_MAX_TASKS);
-    pthread_exit(NULL);
     return 0;
   }
 
@@ -717,7 +720,6 @@ uint16_t GKI_wait(uint16_t flag, uint32_t timeout) {
       GKI_TRACE_ERROR_1("GKI TASK_DEAD received. exit thread %d...", rtask);
 
       gki_cb.os.thread_id[rtask] = 0;
-      pthread_exit(NULL);
       return (EVENT_MASK(GKI_SHUTDOWN_EVT));
     }
   }
