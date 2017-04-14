@@ -276,12 +276,14 @@ NFCSTATUS phNxpNciHal_process_ext_rsp(uint8_t* p_ntf, uint16_t* p_len) {
     if (icode_send_eof == 3) {
       icode_send_eof = 0;
     }
-    if (p_ntf[p_ntf[2] + 2] == 0x00) {
-      NXPLOG_NCIHAL_D("> Going through workaround - data of ISO 15693");
-      p_ntf[2]--;
-      (*p_len)--;
-    } else {
-      p_ntf[p_ntf[2] + 2] |= 0x01;
+    if (nxpncihal_ctrl.nci_info.nci_version != NCI_VERSION_2_0) {
+      if (p_ntf[p_ntf[2] + 2] == 0x00) {
+        NXPLOG_NCIHAL_D("> Going through workaround - data of ISO 15693");
+        p_ntf[2]--;
+        (*p_len)--;
+      } else {
+        p_ntf[p_ntf[2] + 2] |= 0x01;
+      }
     }
   } else if (p_ntf[2] == 0x02 && p_ntf[1] == 0x00 && icode_detected == 1) {
     NXPLOG_NCIHAL_D("> ICODE EOF response do not send to upper layer");
