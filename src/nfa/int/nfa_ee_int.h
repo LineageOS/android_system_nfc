@@ -425,6 +425,7 @@ typedef struct {
   uint8_t ee_cfg_sts;        /* configuration status             */
   tNFA_EE_WAIT ee_wait_evt;  /* Pending event(s) to be reported  */
   tNFA_EE_FLAGS ee_flags;    /* flags                            */
+  uint8_t route_block_control; /* controls route block feature   */
 } tNFA_EE_CB;
 
 /* Order of Routing entries in Routing Table */
