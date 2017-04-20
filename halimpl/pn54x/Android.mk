@@ -66,7 +66,7 @@ LOCAL_SRC_FILES := \
     $(call all-cpp-files-under, utils) \
     nfc_nci.c
 
-LOCAL_SHARED_LIBRARIES := liblog libcutils libhardware_legacy libdl libhardware
+LOCAL_SHARED_LIBRARIES := liblog libcutils libdl libhardware
 
 LOCAL_CFLAGS := $(D_CFLAGS)
 LOCAL_C_INCLUDES += \
