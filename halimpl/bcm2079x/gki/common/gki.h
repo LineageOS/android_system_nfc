@@ -303,6 +303,10 @@
 
 #endif /* GKI_NUM_FIXED_BUF_POOLS < 16 */
 
+#ifndef GKI_SHUTDOWN_EVT
+#define GKI_SHUTDOWN_EVT APPL_EVT_7
+#endif
+
 /* Timer list entry callback type
 */
 typedef void(TIMER_CBACK)(void* p_tle);
