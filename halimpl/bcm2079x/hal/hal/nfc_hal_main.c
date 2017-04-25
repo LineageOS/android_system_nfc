@@ -596,7 +596,9 @@ uint32_t nfc_hal_main_task(uint32_t param) {
   /* Main loop */
   while (true) {
     event = GKI_wait(0xFFFF, 0);
-
+    if (event == EVENT_MASK(GKI_SHUTDOWN_EVT)) {
+      break;
+    }
     /* Handle NFC_HAL_TASK_EVT_INITIALIZE (for initializing NCI transport) */
     if (event & NFC_HAL_TASK_EVT_INITIALIZE) {
       HAL_TRACE_DEBUG0(
