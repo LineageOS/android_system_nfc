@@ -71,12 +71,6 @@ static pthread_cond_t   gki_timer_update_cond;
 static pthread_t timer_thread_id = 0;
 #endif
 
-/* For Android */
-
-#ifndef GKI_SHUTDOWN_EVT
-#define GKI_SHUTDOWN_EVT APPL_EVT_7
-#endif
-
 typedef struct {
   uint8_t task_id;         /* GKI task id */
   TASKPTR task_entry;      /* Task entry function*/
@@ -622,7 +616,7 @@ uint16_t GKI_wait(uint16_t flag, uint32_t timeout) {
   if (rtask >= GKI_MAX_TASKS) {
     GKI_TRACE_ERROR_3("%s() Exiting thread; rtask %d >= %d", __func__, rtask,
                       GKI_MAX_TASKS);
-    return 0;
+    return EVENT_MASK(GKI_SHUTDOWN_EVT);
   }
 
   gki_pthread_info_t* p_pthread_info = &gki_pthread_info[rtask];
