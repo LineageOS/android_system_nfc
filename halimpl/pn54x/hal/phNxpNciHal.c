@@ -40,6 +40,7 @@ static uint8_t cmd_icode_eof[] = {0x00, 0x00, 0x00};
 static uint8_t fw_download_success = 0;
 
 static uint8_t config_access = false;
+static uint8_t config_success = true;
 /* NCI HAL Control structure */
 phNxpNciHal_Control_t nxpncihal_ctrl;
 
@@ -977,7 +978,7 @@ int phNxpNciHal_core_initialized(uint8_t* p_core_init_rsp_params) {
       0x20, 0x02, 0x05, 0x01, 0xA0, 0x91, 0x01, 0x01};
   static uint8_t swp_switch_timeout_cmd[] = {0x20, 0x02, 0x06, 0x01, 0xA0,
                                              0xF3, 0x02, 0x00, 0x00};
-
+  config_success = true;
   uint8_t* buffer = NULL;
   long bufflen = 260;
   long retlen = 0;
@@ -1680,6 +1681,7 @@ int phNxpNciHal_core_initialized(uint8_t* p_core_init_rsp_params) {
     }
   }
 
+  if (config_success == false) return NFCSTATUS_FAILED;
 #ifdef PN547C2_CLOCK_SETTING
   if (isNxpConfigModified()) {
     updateNxpConfigTimestamp();
@@ -2504,8 +2506,8 @@ static void phNxpNciHal_print_res_status(uint8_t* p_rx_data, uint16_t* p_len) {
 
   if (p_rx_data[2] && (config_access == true)) {
     if (p_rx_data[3] != NFCSTATUS_SUCCESS) {
-      NXPLOG_NCIHAL_W("Invalid Data from config file . Aborting..");
-      phNxpNciHal_close();
+      NXPLOG_NCIHAL_W("Invalid Data from config file.");
+      config_success = false;
     }
   }
 }
