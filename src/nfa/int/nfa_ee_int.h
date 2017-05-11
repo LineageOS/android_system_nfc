@@ -182,6 +182,7 @@ typedef struct {
   tNFA_NFC_PROTOCOL lbp_protocol;  /* Listen B' protocol   */
   uint8_t size_mask; /* the size for technology and protocol routing */
   uint16_t size_aid; /* the size for aid routing */
+  uint8_t aid_info[NFA_EE_MAX_AID_ENTRIES]; /* Aid Info Prefix/Suffix/Exact */
 } tNFA_EE_ECB;
 
 /* data type for NFA_EE_API_DISCOVER_EVT */
@@ -238,6 +239,7 @@ typedef struct {
   uint8_t aid_len;
   uint8_t* p_aid;
   tNFA_EE_PWR_STATE power_state;
+  uint8_t aidInfo;
 } tNFA_EE_API_ADD_AID;
 
 /* data type for NFA_EE_API_REMOVE_AID_EVT */
