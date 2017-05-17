@@ -10,6 +10,7 @@ cc_library_shared {
         "liblog",
         "libdl",
         "libhardware",
+        "libmetricslogger",
         "libpower",
 
         // Treble configuration
@@ -50,6 +51,7 @@ cc_library_shared {
         "nfc/nci/*.c",
         "nfc/ndef/*.c",
         "nfc/nfc/*.c",
+        "nfc/nfc/*.cc",
         "nfc/tags/*.c",
         "adaptation/*.c",
         "adaptation/*.cpp",
