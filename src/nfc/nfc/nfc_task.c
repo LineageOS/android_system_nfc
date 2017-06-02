@@ -118,7 +118,9 @@ void nfc_process_timer_evt(void) {
       case NFC_TTYPE_WAIT_2_DEACTIVATE:
         nfc_wait_2_deactivate_timeout();
         break;
-
+      case NFC_TTYPE_WAIT_MODE_SET_NTF:
+        nfc_mode_set_ntf_timeout();
+        break;
       default:
         NFC_TRACE_DEBUG2("nfc_process_timer_evt: timer:0x%x event (0x%04x)",
                          p_tle, p_tle->event);

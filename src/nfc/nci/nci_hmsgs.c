@@ -260,20 +260,22 @@ uint8_t nci_snd_nfcee_discover(uint8_t discover_action) {
   NFC_HDR* p;
   uint8_t* pp;
 
-  p = NCI_GET_CMD_BUF(NCI_PARAM_SIZE_DISCOVER_NFCEE);
+  p = NCI_GET_CMD_BUF(NCI_PARAM_SIZE_DISCOVER_NFCEE(NFC_GetNCIVersion()));
   if (p == NULL) return (NCI_STATUS_FAILED);
 
   p->event = BT_EVT_TO_NFC_NCI;
-  p->len = NCI_MSG_HDR_SIZE + NCI_PARAM_SIZE_DISCOVER_NFCEE;
+  p->len =
+      NCI_MSG_HDR_SIZE + NCI_PARAM_SIZE_DISCOVER_NFCEE(NFC_GetNCIVersion());
   p->offset = NCI_MSG_OFFSET_SIZE;
   p->layer_specific = 0;
   pp = (uint8_t*)(p + 1) + p->offset;
 
   NCI_MSG_BLD_HDR0(pp, NCI_MT_CMD, NCI_GID_EE_MANAGE);
   NCI_MSG_BLD_HDR1(pp, NCI_MSG_NFCEE_DISCOVER);
-  UINT8_TO_STREAM(pp, NCI_PARAM_SIZE_DISCOVER_NFCEE);
-  UINT8_TO_STREAM(pp, discover_action);
-
+  UINT8_TO_STREAM(pp, NCI_PARAM_SIZE_DISCOVER_NFCEE(NFC_GetNCIVersion()));
+  if (NFC_GetNCIVersion() != NCI_VERSION_2_0) {
+    UINT8_TO_STREAM(pp, discover_action);
+  }
   nfc_ncif_send_cmd(p);
   return (NCI_STATUS_OK);
 }
@@ -577,6 +579,37 @@ uint8_t nci_snd_parameter_update_cmd(uint8_t* p_param_tlvs, uint8_t tlv_size) {
   nfc_ncif_send_cmd(p);
 
   return (NCI_STATUS_OK);
+}
+
+/*******************************************************************************
+**
+** Function         nci_snd_nfcee_power_link_control
+**
+** Description      compose and send NFCEE Management NFCEE Power and Link
+**                  Control command to command queue
+**
+** Returns          status
+**
+*******************************************************************************/
+uint8_t nci_snd_nfcee_power_link_control(uint8_t nfcee_id, uint8_t pl_config) {
+  uint8_t* pp;
+  NFC_HDR* p = NCI_GET_CMD_BUF(NCI_CORE_PARAM_SIZE_NFCEE_PL_CTRL);
+  if (p == NULL) return NCI_STATUS_FAILED;
+
+  p->event = NFC_EVT_TO_NFC_NCI;
+  p->len = NCI_MSG_HDR_SIZE + NCI_CORE_PARAM_SIZE_NFCEE_PL_CTRL;
+  p->offset = NCI_MSG_OFFSET_SIZE;
+  p->layer_specific = 0;
+  pp = (uint8_t*)(p + 1) + p->offset;
+
+  NCI_MSG_BLD_HDR0(pp, NCI_MT_CMD, NCI_GID_EE_MANAGE);
+  NCI_MSG_BLD_HDR1(pp, NCI_MSG_NFCEE_POWER_LINK_CTRL);
+  UINT8_TO_STREAM(pp, NCI_CORE_PARAM_SIZE_NFCEE_PL_CTRL);
+  UINT8_TO_STREAM(pp, nfcee_id);
+  UINT8_TO_STREAM(pp, pl_config);
+
+  nfc_ncif_send_cmd(p);
+  return NCI_STATUS_OK;
 }
 
 #if (NFC_NFCEE_INCLUDED == TRUE)
