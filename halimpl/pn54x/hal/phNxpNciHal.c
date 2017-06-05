@@ -315,7 +315,12 @@ static NFCSTATUS phNxpNciHal_CheckValidFwVersion(void) {
                   ufw_current_major_no);
   if ((ufw_current_major_no == FW_MOBILE_MAJOR_NUMBER) ||
       ((ufw_current_major_no == FW_MOBILE_MAJOR_NUMBER_PN81A &&
-        (nxpncihal_ctrl.nci_info.nci_version == NCI_VERSION_2_0))))
+        (nxpncihal_ctrl.nci_info.nci_version == NCI_VERSION_2_0)))
+#if (NFC_NXP_CHIP_TYPE == PN553)
+      || ((rom_version == 0x00) &&
+          (ufw_current_major_no == FW_MOBILE_MAJOR_NUMBER_PN81A))
+#endif
+          )
 
   {
     status = NFCSTATUS_SUCCESS;
