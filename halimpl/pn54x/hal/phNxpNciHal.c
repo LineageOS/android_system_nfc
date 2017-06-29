@@ -30,7 +30,19 @@
 #define PN547C2_CLOCK_SETTING
 #undef PN547C2_FACTORY_RESET_DEBUG
 #define CORE_RES_STATUS_BYTE 3
+/* FW Mobile major number */
+#define FW_MOBILE_MAJOR_NUMBER_PN553 0x01
+#define FW_MOBILE_MAJOR_NUMBER_PN81A 0x02
+#define FW_MOBILE_MAJOR_NUMBER_PN551 0x05
+#define FW_MOBILE_MAJOR_NUMBER_PN48AD 0x01
 
+#if (NFC_NXP_CHIP_TYPE == PN551)
+#define FW_MOBILE_MAJOR_NUMBER FW_MOBILE_MAJOR_NUMBER_PN551
+#elif (NFC_NXP_CHIP_TYPE == PN553)
+#define FW_MOBILE_MAJOR_NUMBER FW_MOBILE_MAJOR_NUMBER_PN553
+#else
+#define FW_MOBILE_MAJOR_NUMBER FW_MOBILE_MAJOR_NUMBER_PN48AD
+#endif
 /* Processing of ISO 15693 EOF */
 extern uint8_t icode_send_eof;
 extern uint8_t icode_detected;
@@ -291,11 +303,6 @@ static NFCSTATUS phNxpNciHal_fw_download(void) {
  ******************************************************************************/
 static NFCSTATUS phNxpNciHal_CheckValidFwVersion(void) {
   NFCSTATUS status = NFCSTATUS_NOT_ALLOWED;
-#if (NFC_NXP_CHIP_TYPE == PN551)
-  const unsigned char sfw_mobile_major_no = 0x05;
-#else
-  const unsigned char sfw_mobile_major_no = 0x01;
-#endif
   const unsigned char sfw_infra_major_no = 0x02;
   unsigned char ufw_current_major_no = 0x00;
   unsigned long num = 0;
@@ -304,36 +311,49 @@ static NFCSTATUS phNxpNciHal_CheckValidFwVersion(void) {
   /* extract the firmware's major no */
   ufw_current_major_no = ((0x00FF) & (wFwVer >> 8U));
 
-  NXPLOG_NCIHAL_D("%s current_major_no = 0x%x", __func__, ufw_current_major_no);
-  if (ufw_current_major_no == sfw_mobile_major_no) {
+  NXPLOG_NCIHAL_D("%s current_major_no = 0x%x", __FUNCTION__,
+                  ufw_current_major_no);
+  if ((ufw_current_major_no == FW_MOBILE_MAJOR_NUMBER) ||
+      ((ufw_current_major_no == FW_MOBILE_MAJOR_NUMBER_PN81A &&
+        (nxpncihal_ctrl.nci_info.nci_version == NCI_VERSION_2_0))))
+
+  {
     status = NFCSTATUS_SUCCESS;
   } else if (ufw_current_major_no == sfw_infra_major_no) {
-    /* Check the nxp config file if still want to go for download */
-    /* By default NAME_NXP_FW_PROTECION_OVERRIDE will not be defined in config
-       file.
-       If user really want to override the Infra firmware over mobile firmware,
-       please
-       put "NXP_FW_PROTECION_OVERRIDE=0x01" in libnfc-nxp.conf file.
-       Please note once Infra firmware downloaded to Mobile device, The device
-       can never be updated to Mobile firmware*/
-    isfound = GetNxpNumValue(NAME_NXP_FW_PROTECION_OVERRIDE, &num, sizeof(num));
-    if (isfound > 0) {
-      if (num == 0x01) {
-        NXPLOG_NCIHAL_D("Override Infra FW over Mobile");
-        status = NFCSTATUS_SUCCESS;
+    if (rom_version == FW_MOBILE_ROM_VERSION_PN553 &&
+        nxpncihal_ctrl.nci_info.nci_version == NCI_VERSION_2_0) {
+      NXPLOG_NCIHAL_D(" PN81A  allow Fw download with major number =  0x%x",
+                      ufw_current_major_no);
+      status = NFCSTATUS_SUCCESS;
+    } else {
+      /* Check the nxp config file if still want to go for download */
+      /* By default NAME_NXP_FW_PROTECION_OVERRIDE will not be defined in config
+         file.
+         If user really want to override the Infra firmware over mobile
+         firmware, please
+         put "NXP_FW_PROTECION_OVERRIDE=0x01" in libnfc-nxp.conf file.
+         Please note once Infra firmware downloaded to Mobile device, The device
+         can never be updated to Mobile firmware*/
+      isfound =
+          GetNxpNumValue(NAME_NXP_FW_PROTECION_OVERRIDE, &num, sizeof(num));
+      if (isfound > 0) {
+        if (num == 0x01) {
+          NXPLOG_NCIHAL_D("Override Infra FW over Mobile");
+          status = NFCSTATUS_SUCCESS;
+        } else {
+          NXPLOG_NCIHAL_D(
+              "Firmware download not allowed (NXP_FW_PROTECION_OVERRIDE "
+              "invalid value)");
+        }
       } else {
         NXPLOG_NCIHAL_D(
-            "Firmware download not allowed (NXP_FW_PROTECION_OVERRIDE invalid "
-            "value)");
+            "Firmware download not allowed (NXP_FW_PROTECION_OVERRIDE not "
+            "defined)");
       }
-    } else {
-      NXPLOG_NCIHAL_D(
-          "Firmware download not allowed (NXP_FW_PROTECION_OVERRIDE not "
-          "defiend)");
     }
   }
 #if (NFC_NXP_CHIP_TYPE != PN547C2)
-  else if (gRecFWDwnld == true) {
+  else if (gRecFWDwnld == TRUE) {
     status = NFCSTATUS_SUCCESS;
   }
 #endif
@@ -658,13 +678,20 @@ clean_and_return:
  ******************************************************************************/
 int phNxpNciHal_fw_mw_ver_check() {
   NFCSTATUS status = NFCSTATUS_FAILED;
-  if (!strcmp(COMPILATION_MW, "PN551") && (rom_version == 0x10) &&
-      (fw_maj_ver == 0x05)) {
+  if (!(strcmp(COMPILATION_MW, "PN553")) &&
+      (rom_version == FW_MOBILE_ROM_VERSION_PN553) &&
+      (fw_maj_ver == 0x01 || fw_maj_ver == 0x02)) {
     status = NFCSTATUS_SUCCESS;
-  } else if (!strcmp(COMPILATION_MW, "PN548C2") && (rom_version == 0x10) &&
+  } else if (!strcmp(COMPILATION_MW, "PN551") &&
+             (rom_version == FW_MOBILE_ROM_VERSION_PN551) &&
+             (fw_maj_ver == 0x05)) {
+    status = NFCSTATUS_SUCCESS;
+  } else if (!strcmp(COMPILATION_MW, "PN548C2") &&
+             (rom_version == FW_MOBILE_ROM_VERSION_PN548AD) &&
              (fw_maj_ver == 0x01)) {
     status = NFCSTATUS_SUCCESS;
-  } else if (!strcmp(COMPILATION_MW, "PN547C2") && (rom_version == 0x08) &&
+  } else if (!strcmp(COMPILATION_MW, "PN547C2") &&
+             (rom_version == FW_MOBILE_ROM_VERSION_PN547C2) &&
              (fw_maj_ver == 0x01)) {
     status = NFCSTATUS_SUCCESS;
   }
@@ -2337,8 +2364,9 @@ int check_config_parameter() {
   NFCSTATUS status = NFCSTATUS_FAILED;
   uint8_t param_clock_src = CLK_SRC_PLL;
   if (nxpprofile_ctrl.bClkSrcVal == CLK_SRC_PLL) {
+#if (NFC_NXP_CHIP_TYPE != PN553)
     param_clock_src = param_clock_src << 3;
-
+#endif
     if (nxpprofile_ctrl.bClkFreqVal == CLK_FREQ_13MHZ) {
       param_clock_src |= 0x00;
     } else if (nxpprofile_ctrl.bClkFreqVal == CLK_FREQ_19_2MHZ) {
