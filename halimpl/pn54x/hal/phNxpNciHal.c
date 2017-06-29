@@ -428,7 +428,8 @@ int phNxpNciHal_open(nfc_stack_callback_t* p_cback,
   static uint8_t cmd_init_nci[] = {0x20, 0x01, 0x00};
   /*NCI_RESET_CMD*/
   static uint8_t cmd_reset_nci[] = {0x20, 0x00, 0x01, 0x00};
-
+  /*NCI2_0_INIT_CMD*/
+  static uint8_t cmd_init_nci2_0[] = {0x20, 0x01, 0x02, 0x00, 0x00};
   if (nxpncihal_ctrl.halStatus == HAL_STATUS_OPEN) {
     NXPLOG_NCIHAL_E("phNxpNciHal_open already open");
     return NFCSTATUS_SUCCESS;
@@ -461,7 +462,8 @@ int phNxpNciHal_open(nfc_stack_callback_t* p_cback,
 
   nxpncihal_ctrl.p_nfc_stack_cback = p_cback;
   nxpncihal_ctrl.p_nfc_stack_data_cback = p_data_cback;
-
+  /*nci version NCI_VERSION_UNKNOWN version by default*/
+  nxpncihal_ctrl.nci_info.nci_version = NCI_VERSION_UNKNOWN;
   /* Read the nfc device node name */
   nfc_dev_node = (char*)malloc(max_len * sizeof(char));
   if (nfc_dev_node == NULL) {
@@ -549,7 +551,21 @@ init_retry:
     goto clean_and_return;
   }
 
-  status = phNxpNciHal_send_ext_cmd(sizeof(cmd_init_nci), cmd_init_nci);
+  status = phNxpNciHal_send_ext_cmd(sizeof(cmd_init_nci2_0), cmd_init_nci2_0);
+  if (status == NFCSTATUS_SUCCESS) {
+    if (nxpncihal_ctrl.nci_info.nci_version != NCI_VERSION_2_0) {
+      NXPLOG_NCIHAL_E("Chip is in NCI1.0 mode reset the chip again");
+      status = phNxpNciHal_send_ext_cmd(sizeof(cmd_reset_nci), cmd_reset_nci);
+      if (status == NFCSTATUS_SUCCESS) {
+        if (nxpncihal_ctrl.nci_info.nci_version == NCI_VERSION_2_0) {
+          status = phNxpNciHal_send_ext_cmd(sizeof(cmd_init_nci2_0),
+                                            cmd_init_nci2_0);
+        } else {
+          status = phNxpNciHal_send_ext_cmd(sizeof(cmd_init_nci), cmd_init_nci);
+        }
+      }
+    }
+  }
   if (status != NFCSTATUS_SUCCESS) {
     NXPLOG_NCIHAL_E("NCI_CORE_INIT : Failed");
     if (init_retry_cnt < 3) {
@@ -907,18 +923,25 @@ static void phNxpNciHal_read_complete(void* pContext,
     phNxpNciHal_print_res_status(nxpncihal_ctrl.p_rx_data,
                                  &nxpncihal_ctrl.rx_data_len);
     /* Check if response should go to hal module only */
-    if (nxpncihal_ctrl.hal_ext_enabled == 1 &&
-        (nxpncihal_ctrl.p_rx_data[0x00] & 0xF0) == 0x40) {
+    if (nxpncihal_ctrl.hal_ext_enabled == TRUE &&
+        (nxpncihal_ctrl.p_rx_data[0x00] & NCI_MT_MASK) == NCI_MT_RSP) {
       if (status == NFCSTATUS_FAILED) {
         NXPLOG_NCIHAL_D("enter into NFCC init recovery");
         nxpncihal_ctrl.ext_cb_data.status = status;
       }
       /* Unlock semaphore only for responses*/
-      if ((nxpncihal_ctrl.p_rx_data[0x00] & 0xF0) == 0x40 ||
+      if ((nxpncihal_ctrl.p_rx_data[0x00] & NCI_MT_MASK) == NCI_MT_RSP ||
           ((icode_detected == true) && (icode_send_eof == 3))) {
         /* Unlock semaphore */
         SEM_POST(&(nxpncihal_ctrl.ext_cb_data));
       }
+    }  // Notification Checking
+    else if ((nxpncihal_ctrl.hal_ext_enabled == TRUE) &&
+             ((nxpncihal_ctrl.p_rx_data[0x00] & NCI_MT_MASK) == NCI_MT_NTF) &&
+             (nxpncihal_ctrl.nci_info.wait_for_ntf == TRUE)) {
+      /* Unlock semaphore waiting for only  ntf*/
+      SEM_POST(&(nxpncihal_ctrl.ext_cb_data));
+      nxpncihal_ctrl.nci_info.wait_for_ntf = FALSE;
     }
     /* Read successful send the event to higher layer */
     else if ((nxpncihal_ctrl.p_nfc_stack_data_cback != NULL) &&
@@ -930,7 +953,9 @@ static void phNxpNciHal_read_complete(void* pContext,
     NXPLOG_NCIHAL_E("read error status = 0x%x", pInfo->wStatus);
   }
 
-  if (nxpncihal_ctrl.halStatus == HAL_STATUS_CLOSE) {
+  if (nxpncihal_ctrl.halStatus == HAL_STATUS_CLOSE &&
+      nxpncihal_ctrl.nci_info.wait_for_ntf == FALSE) {
+    NXPLOG_NCIHAL_E(" Ignoring read , HAL close triggered");
     return;
   }
   /* Read again because read must be pending always.*/
@@ -997,6 +1022,7 @@ int phNxpNciHal_core_initialized(uint8_t* p_core_init_rsp_params) {
   /*NCI_RESET_CMD*/
   static uint8_t cmd_reset_nci[] = {0x20, 0x00, 0x01,
                                     0x00};  // keep configuration
+  static uint8_t cmd_init_nci2_0[] = {0x20, 0x01, 0x02, 0x00, 0x00};
   /* reset config cache */
   static uint8_t retry_core_init_cnt;
   if (nxpncihal_ctrl.halStatus != HAL_STATUS_OPEN) {
@@ -1038,8 +1064,12 @@ int phNxpNciHal_core_initialized(uint8_t* p_core_init_rsp_params) {
       NXPLOG_NCIHAL_E(" Last command is CORE_RESET!!");
       goto invoke_callback;
     }
-
-    status = phNxpNciHal_send_ext_cmd(sizeof(cmd_init_nci), cmd_init_nci);
+    if (nxpncihal_ctrl.nci_info.nci_version == NCI_VERSION_2_0) {
+      status =
+          phNxpNciHal_send_ext_cmd(sizeof(cmd_init_nci2_0), cmd_init_nci2_0);
+    } else {
+      status = phNxpNciHal_send_ext_cmd(sizeof(cmd_init_nci), cmd_init_nci);
+    }
     if (status != NFCSTATUS_SUCCESS) {
       NXPLOG_NCIHAL_E("NCI_CORE_INIT : Failed");
       retry_core_init_cnt++;
@@ -2142,8 +2172,12 @@ retrySetclock:
   if (nxpprofile_ctrl.bClkSrcVal == CLK_SRC_PLL) {
     static uint8_t set_clock_cmd[] = {0x20, 0x02, 0x09, 0x02, 0xA0, 0x03,
                                       0x01, 0x11, 0xA0, 0x04, 0x01, 0x01};
+#if (NFC_NXP_CHIP_TYPE == PN553)
+    uint8_t param_clock_src = 0x00;
+#else
     uint8_t param_clock_src = CLK_SRC_PLL;
     param_clock_src = param_clock_src << 3;
+#endif
 
     if (nxpprofile_ctrl.bClkFreqVal == CLK_FREQ_13MHZ) {
       param_clock_src |= 0x00;
@@ -2159,7 +2193,11 @@ retrySetclock:
       param_clock_src |= 0x05;
     } else {
       NXPLOG_NCIHAL_E("Wrong clock freq, send default PLL@19.2MHz");
+#if (NFC_NXP_CHIP_TYPE == PN553)
+      param_clock_src = 0x01;
+#else
       param_clock_src = 0x11;
+#endif
     }
 
     set_clock_cmd[7] = param_clock_src;
@@ -2345,6 +2383,7 @@ void phNxpNciHal_enable_i2c_fragmentation() {
   static uint8_t cmd_reset_nci[] = {0x20, 0x00, 0x01, 0x00};
   /*NCI_INIT_CMD*/
   static uint8_t cmd_init_nci[] = {0x20, 0x01, 0x00};
+  static uint8_t cmd_init_nci2_0[] = {0x20, 0x01, 0x02, 0x00, 0x00};
   static uint8_t get_i2c_fragmentation_cmd[] = {0x20, 0x03, 0x03,
                                                 0x01, 0xA0, 0x05};
   isfound = (GetNxpNumValue(NAME_NXP_I2C_FRAGMENTATION_ENABLED,
@@ -2386,7 +2425,12 @@ void phNxpNciHal_enable_i2c_fragmentation() {
       if (status != NFCSTATUS_SUCCESS) {
         NXPLOG_NCIHAL_E("NCI_CORE_RESET: Failed");
       }
-      status = phNxpNciHal_send_ext_cmd(sizeof(cmd_init_nci), cmd_init_nci);
+      if (nxpncihal_ctrl.nci_info.nci_version == NCI_VERSION_2_0) {
+        status =
+            phNxpNciHal_send_ext_cmd(sizeof(cmd_init_nci2_0), cmd_init_nci2_0);
+      } else {
+        status = phNxpNciHal_send_ext_cmd(sizeof(cmd_init_nci), cmd_init_nci);
+      }
       if (status != NFCSTATUS_SUCCESS) {
         NXPLOG_NCIHAL_E("NCI_CORE_INIT : Failed");
       } else if (i2c_status == 0x01) {
@@ -2524,7 +2568,7 @@ NFCSTATUS phNxpNciHal_core_reset_recovery() {
   /*NCI_RESET_CMD*/
   static uint8_t cmd_reset_nci[] = {0x20, 0x00, 0x01,
                                     0x00};  // keep configuration
-
+  static uint8_t cmd_init_nci2_0[] = {0x20, 0x01, 0x02, 0x00, 0x00};
   /* reset config cache */
   uint8_t retry_core_init_cnt = 0;
 
@@ -2553,7 +2597,11 @@ retry_core_init:
     retry_core_init_cnt++;
     goto retry_core_init;
   }
-  status = phNxpNciHal_send_ext_cmd(sizeof(cmd_init_nci), cmd_init_nci);
+  if (nxpncihal_ctrl.nci_data.nci_version == NCI_VERSION_2_0) {
+    status = phNxpNciHal_send_ext_cmd(sizeof(cmd_init_nci2_0), cmd_init_nci2_0);
+  } else {
+    status = phNxpNciHal_send_ext_cmd(sizeof(cmd_init_nci), cmd_init_nci);
+  }
   if (status != NFCSTATUS_SUCCESS) {
     NXPLOG_NCIHAL_D("NCI_CORE_INIT : Failed");
     retry_core_init_cnt++;
