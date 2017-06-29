@@ -1322,6 +1322,7 @@ void nfc_ncif_proc_t3t_polling_ntf(uint8_t* p, uint16_t plen) {
 void nfc_data_event(tNFC_CONN_CB* p_cb) {
   NFC_HDR* p_evt;
   tNFC_DATA_CEVT data_cevt;
+  tRW_T2T_CB* p_t2t = &rw_cb.tcb.t2t;
   uint8_t* p;
 
   if (p_cb->p_cback) {
@@ -1361,7 +1362,18 @@ void nfc_data_event(tNFC_CONN_CB* p_cb) {
             (p_cb->act_protocol <= NCI_PROTOCOL_T3T)) {
           p_evt->len--;
           p = (uint8_t*)(p_evt + 1);
-          data_cevt.status = *(p + p_evt->offset + p_evt->len);
+          if ((NFC_GetNCIVersion() == NCI_VERSION_2_0) &&
+              (p_cb->act_protocol == NCI_PROTOCOL_T2T) &&
+              (p_t2t->last_cmd_sent == T2T_CMD_WRITE)) {
+            uint8_t Ack = *(p + p_evt->offset + p_evt->len - 1);
+            uint8_t valid_bits = ((*(p + p_evt->offset + p_evt->len)) &
+                                  MAX_NUM_VALID_BITS_FOR_ACK);
+            NCI_CALCULATE_ACK(Ack, valid_bits);
+            data_cevt.status =
+                (Ack == T2T_RSP_ACK) ? NFC_STATUS_OK : NFC_STATUS_FAILED;
+          } else {
+            data_cevt.status = *(p + p_evt->offset + p_evt->len);
+          }
         }
       }
       (*p_cb->p_cback)(p_cb->conn_id, NFC_DATA_CEVT, (tNFC_CONN*)&data_cevt);
