@@ -214,6 +214,7 @@ typedef struct {
                               HAL_NFC_POST_INIT_CPLT_EVT */
   tHAL_NFC_ENTRY* p_hal;
 
+  uint8_t nci_version; /* NCI version used for NCI communication*/
 } tNFC_CB;
 
 /*****************************************************************************
