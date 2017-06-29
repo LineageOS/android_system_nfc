@@ -420,6 +420,7 @@ typedef struct {
   bool b_read_hdr;         /* Tag header read from tag */
   bool b_read_data;        /* Tag data block read from tag */
   bool b_hard_lock; /* Hard lock the tag as part of config tag to Read only */
+  uint8_t last_cmd_sent;
   bool check_tag_halt; /* Resent command after NACK rsp to find tag is in HALT
                           State   */
 #if (RW_NDEF_INCLUDED == TRUE)
@@ -776,7 +777,7 @@ extern void rw_t4t_process_timeout(TIMER_LIST_ENT* p_tle);
 
 extern tNFC_STATUS rw_i93_select(uint8_t* p_uid);
 extern void rw_i93_process_timeout(TIMER_LIST_ENT* p_tle);
-
+extern void rw_t4t_handle_isodep_nak_rsp(uint8_t status, bool is_ntf);
 #if (RW_STATS_INCLUDED == TRUE)
 /* Internal fcns for statistics (from rw_main.c) */
 void rw_main_reset_stats(void);

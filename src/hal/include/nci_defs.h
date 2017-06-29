@@ -164,6 +164,11 @@ extern "C" {
 
 /* Logical target ID 0x01-0xFE */
 
+/* CORE_RESET_NTF reset trigger type*/
+#define NCI2_0_RESET_TRIGGER_TYPE_ERROR 0x00
+#define NCI2_0_RESET_TRIGGER_TYPE_POWERED_ON 0x01
+#define NCI2_0_RESET_TRIGGER_TYPE_CORE_RESET_CMD_RECEIVED 0x02
+
 /* Status Codes */
 #define NCI_STATUS_OK 0x00
 #define NCI_STATUS_REJECTED 0x01
@@ -197,7 +202,7 @@ typedef uint8_t tNCI_STATUS;
 #define NCI_RF_TECHNOLOGY_A 0x00
 #define NCI_RF_TECHNOLOGY_B 0x01
 #define NCI_RF_TECHNOLOGY_F 0x02
-#define NCI_RF_TECHNOLOGY_15693 0x03
+#define NCI_RF_TECHNOLOGY_V 0x03
 
 /* Bit Rates */
 #define NCI_BIT_RATE_106 0x00  /* 106 kbit/s */
@@ -236,6 +241,7 @@ typedef uint8_t tNCI_STATUS;
 #define NCI_MSG_RF_EE_ACTION 9
 #define NCI_MSG_RF_EE_DISCOVERY_REQ 10
 #define NCI_MSG_RF_PARAMETER_UPDATE 11
+#define NCI_MSG_RF_ISO_DEP_NAK_PRESENCE 16
 
 /**********************************************
  * NFCEE MANAGEMENT Group Opcode - 2
@@ -254,7 +260,9 @@ typedef uint8_t tNCI_STATUS;
 #define NCI_CORE_PARAM_SIZE_RESET_RSP 0x03
 #define NCI_CORE_PARAM_SIZE_RESET_NTF 0x02
 
-#define NCI_CORE_PARAM_SIZE_INIT 0x00 /* no payload */
+#define NCI_CORE_PARAM_SIZE_INIT(X) (((X) == NCI_VERSION_2_0) ? (0x02) : (0x00))
+#define NCI2_0_CORE_INIT_CMD_BYTE_0 0x00
+#define NCI2_0_CORE_INIT_CMD_BYTE_1 0x00
 #define NCI_CORE_PARAM_SIZE_INIT_RSP 0x11
 #define NCI_CORE_INIT_RSP_OFFSET_NUM_INTF 0x05
 
@@ -358,6 +366,8 @@ typedef uint8_t tNCI_STATUS;
 #define NCI_DEACTIVATE_REASON_ENDPOINT_REQ 1 /* Endpoint Request */
 #define NCI_DEACTIVATE_REASON_RF_LINK_LOSS 2 /* RF Link Loss     */
 #define NCI_DEACTIVATE_REASON_NFCB_BAD_AFI 3 /* NFC-B Bad AFI    */
+/* DH Request Failed due to error */
+#define NCI_DEACTIVATE_REASON_DH_REQ_FAILED 4
 
 /**********************************************
 * NCI Interface Mode
@@ -374,6 +384,7 @@ typedef uint8_t tNCI_STATUS;
 #define NCI_INTERFACE_ISO_DEP 2
 #define NCI_INTERFACE_NFC_DEP 3
 #define NCI_INTERFACE_MAX NCI_INTERFACE_NFC_DEP
+#define NCI_INTERFACE_EXTENSION_MAX 1
 #define NCI_INTERFACE_FIRST_VS 0x80
 typedef uint8_t tNCI_INTF_TYPE;
 
@@ -397,6 +408,7 @@ typedef uint8_t tNCI_INTF_TYPE;
 #define NCI_PROTOCOL_T1T 0x01
 #define NCI_PROTOCOL_T2T 0x02
 #define NCI_PROTOCOL_T3T 0x03
+#define NCI_PROTOCOL_T5T 0x06
 #define NCI_PROTOCOL_ISO_DEP 0x04
 #define NCI_PROTOCOL_NFC_DEP 0x05
 
@@ -404,14 +416,18 @@ typedef uint8_t tNCI_INTF_TYPE;
 #define NCI_DISCOVERY_TYPE_POLL_A 0x00
 #define NCI_DISCOVERY_TYPE_POLL_B 0x01
 #define NCI_DISCOVERY_TYPE_POLL_F 0x02
+#define NCI_DISCOVERY_TYPE_POLL_V 0x06
 #define NCI_DISCOVERY_TYPE_POLL_A_ACTIVE 0x03
+/* NCI2.0 standardizes P2P poll active*/
+#define NCI_DISCOVERY_TYPE_POLL_ACTIVE 0x03
 #define NCI_DISCOVERY_TYPE_POLL_F_ACTIVE 0x05
 #define NCI_DISCOVERY_TYPE_LISTEN_A 0x80
 #define NCI_DISCOVERY_TYPE_LISTEN_B 0x81
 #define NCI_DISCOVERY_TYPE_LISTEN_F 0x82
 #define NCI_DISCOVERY_TYPE_LISTEN_A_ACTIVE 0x83
+/* NCI2.0 standardizes P2P listen active*/
+#define NCI_DISCOVERY_TYPE_LISTEN_ACTIVE 0x83
 #define NCI_DISCOVERY_TYPE_LISTEN_F_ACTIVE 0x85
-#define NCI_DISCOVERY_TYPE_POLL_ISO15693 0x06
 #define NCI_DISCOVERY_TYPE_LISTEN_ISO15693 0x86
 #define NCI_DISCOVERY_TYPE_MAX NCI_DISCOVERY_TYPE_LISTEN_ISO15693
 
@@ -460,6 +476,7 @@ typedef uint8_t tNCI_DISCOVERY_TYPE;
 
 #define NCI_PARAM_ID_TOTAL_DURATION 0x00
 #define NCI_PARAM_ID_CON_DEVICES_LIMIT 0x01
+#define NCI_PARAM_ID_CON_DISCOVERY_PARAM 0x02
 #define NCI_PARAM_ID_PA_BAILOUT 0x08
 #define NCI_PARAM_ID_PB_AFI 0x10
 #define NCI_PARAM_ID_PB_BAILOUT 0x11
@@ -544,6 +561,8 @@ typedef uint8_t tNCI_DISCOVERY_TYPE;
  **********************************************/
 #define NCI_PARAM_LEN_TOTAL_DURATION 2
 
+#define NCI_PARAM_LEN_CON_DISCOVERY_PARAM 1
+
 #define NCI_PARAM_LEN_PA_FSDI 1
 
 #define NCI_PARAM_LEN_PF_RC 1
@@ -576,6 +595,15 @@ typedef uint8_t tNCI_DISCOVERY_TYPE;
 /* LF_T3T_FLAGS2 listen bits all-disabled definition */
 #define NCI_LF_T3T_FLAGS2_ALL_DISABLED 0x0000
 #define NCI_LF_T3T_FLAGS2_ID1_ENABLED 0x0001
+
+/* The DH-NFCEE listen is considered as a enable NFCEE */
+#define NCI_LISTEN_DH_NFCEE_ENABLE_MASK 0x00
+/* The DH-NFCEE listen is considered as a disable NFCEE */
+#define NCI_LISTEN_DH_NFCEE_DISABLE_MASK 0x02
+/* The DH polling is considered as a disable NFCEE */
+#define NCI_POLLING_DH_DISABLE_MASK 0x00
+/* The DH polling is considered as a enable NFCEE */
+#define NCI_POLLING_DH_ENABLE_MASK 0x01
 
 typedef struct {
   uint16_t addr;
@@ -744,6 +772,15 @@ typedef struct {
   } intf_param; /* Activation Parameters   0 - n Bytes */
 } tNCI_INTF_PARAMS;
 
+typedef struct {
+  uint8_t atr_res_len;                      /* Length of ATR_RES            */
+  uint8_t atr_res[NCI_MAX_ATS_LEN];         /* ATR_RES (Byte 3 - Byte 17+n) */
+  uint8_t max_payload_size;                 /* 64, 128, 192 or 254          */
+  uint8_t gen_bytes_len;                    /* len of general bytes         */
+  uint8_t gen_bytes[NCI_MAX_GEN_BYTES_LEN]; /* general bytes                */
+  uint8_t waiting_time;                     /* WT -> Response Waiting Time
+                                               RWT = (256 x 16/fC) x 2WT    */
+} tNCI_RF_ACM_P_PARAMS;
 #ifdef __cplusplus
 }
 #endif

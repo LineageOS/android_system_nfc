@@ -200,6 +200,9 @@ void nci_proc_rf_management_rsp(NFC_HDR* p_msg) {
       nfc_ncif_event_status(NFC_RF_COMM_PARAMS_UPDATE_REVT, *pp);
       break;
 
+    case NCI_MSG_RF_ISO_DEP_NAK_PRESENCE:
+      nfc_ncif_proc_isodep_nak_presence_check_status(*pp, false);
+      break;
     default:
       NFC_TRACE_ERROR1("unknown opcode:0x%x", op_code);
       break;
@@ -233,6 +236,9 @@ void nci_proc_rf_management_ntf(NFC_HDR* p_msg) {
     case NCI_MSG_RF_DEACTIVATE:
       if (nfa_dm_p2p_prio_logic(op_code, pp, NFA_DM_P2P_PRIO_NTF) == false) {
         return;
+      }
+      if (NFC_GetNCIVersion() == NCI_VERSION_2_0) {
+        nfc_cb.deact_reason = *(pp + 1);
       }
       nfc_ncif_proc_deactivate(NFC_STATUS_OK, *pp, true);
       break;
@@ -268,7 +274,9 @@ void nci_proc_rf_management_ntf(NFC_HDR* p_msg) {
       break;
 #endif
 #endif
-
+    case NCI_MSG_RF_ISO_DEP_NAK_PRESENCE:
+      nfc_ncif_proc_isodep_nak_presence_check_status(*pp, true);
+      break;
     default:
       NFC_TRACE_ERROR1("unknown opcode:0x%x", op_code);
       break;

@@ -275,10 +275,11 @@ typedef uint8_t tNFA_DM_RF_DISC_EVT;
 #define NFA_DM_DISC_MASK_PB_ISO_DEP 0x00000010
 #define NFA_DM_DISC_MASK_PF_T3T 0x00000020
 #define NFA_DM_DISC_MASK_PF_NFC_DEP 0x00000040
-#define NFA_DM_DISC_MASK_P_ISO15693 0x00000100
+#define NFA_DM_DISC_MASK_P_T5T 0x00000100
 #define NFA_DM_DISC_MASK_P_B_PRIME 0x00000200
 #define NFA_DM_DISC_MASK_P_KOVIO 0x00000400
 #define NFA_DM_DISC_MASK_PAA_NFC_DEP 0x00000800
+#define NFA_DM_DISC_MASK_PACM_NFC_DEP 0x00000800
 #define NFA_DM_DISC_MASK_PFA_NFC_DEP 0x00001000
 /* Legacy/proprietary/non-NFC Forum protocol (e.g Shanghai transit card) */
 #define NFA_DM_DISC_MASK_P_LEGACY 0x00002000
@@ -293,6 +294,7 @@ typedef uint8_t tNFA_DM_RF_DISC_EVT;
 #define NFA_DM_DISC_MASK_LF_NFC_DEP 0x00400000
 #define NFA_DM_DISC_MASK_L_ISO15693 0x01000000
 #define NFA_DM_DISC_MASK_L_B_PRIME 0x02000000
+#define NFA_DM_DISC_MASK_LACM_NFC_DEP 0x04000000
 #define NFA_DM_DISC_MASK_LAA_NFC_DEP 0x04000000
 #define NFA_DM_DISC_MASK_LFA_NFC_DEP 0x08000000
 #define NFA_DM_DISC_MASK_L_LEGACY 0x10000000
@@ -530,6 +532,9 @@ typedef struct {
 
   /* NFCC power mode */
   uint8_t nfcc_pwr_mode; /* NFA_DM_PWR_MODE_FULL or NFA_DM_PWR_MODE_OFF_SLEEP */
+
+  uint8_t deactivate_cmd_retry_count; /*number of times the deactivation cmd
+                                         sent in case of error scenerio */
 } tNFA_DM_CB;
 
 /* Internal function prototypes */
