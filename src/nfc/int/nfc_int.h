@@ -280,7 +280,8 @@ extern void nfc_ncif_proc_data(NFC_HDR* p_msg);
 extern bool nfa_dm_p2p_prio_logic(uint8_t event, uint8_t* p, uint8_t ntf_rsp);
 extern void nfa_dm_p2p_timer_event();
 extern void nfa_dm_p2p_prio_logic_cleanup();
-
+extern void nfc_ncif_proc_isodep_nak_presence_check_status(uint8_t status,
+                                                           bool is_ntf);
 #if (NFC_RW_ONLY == FALSE)
 extern void nfc_ncif_proc_rf_field_ntf(uint8_t rf_status);
 #else

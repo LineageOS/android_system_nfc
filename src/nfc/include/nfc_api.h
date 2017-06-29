@@ -1294,6 +1294,18 @@ extern tNFC_STATUS NFC_TestLoopback(NFC_HDR* p_data);
 *******************************************************************************/
 extern uint8_t NFC_SetTraceLevel(uint8_t new_level);
 
+/*******************************************************************************
+**
+** Function         NFC_ISODEPNakPresCheck
+**
+** Description      This function is called to send the ISO DEP nak presence
+**                  check cmd to check that the remote end point in RF field.
+**
+** Returns          tNFC_STATUS
+**
+*******************************************************************************/
+extern tNFC_STATUS NFC_ISODEPNakPresCheck();
+
 #if (BT_TRACE_VERBOSE == TRUE)
 /*******************************************************************************
 **
