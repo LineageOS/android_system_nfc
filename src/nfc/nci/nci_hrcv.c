@@ -200,6 +200,9 @@ void nci_proc_rf_management_rsp(NFC_HDR* p_msg) {
       nfc_ncif_event_status(NFC_RF_COMM_PARAMS_UPDATE_REVT, *pp);
       break;
 
+    case NCI_MSG_RF_ISO_DEP_NAK_PRESENCE:
+      nfc_ncif_proc_isodep_nak_presence_check_status(*pp, false);
+      break;
     default:
       NFC_TRACE_ERROR1("unknown opcode:0x%x", op_code);
       break;
@@ -271,7 +274,9 @@ void nci_proc_rf_management_ntf(NFC_HDR* p_msg) {
       break;
 #endif
 #endif
-
+    case NCI_MSG_RF_ISO_DEP_NAK_PRESENCE:
+      nfc_ncif_proc_isodep_nak_presence_check_status(*pp, true);
+      break;
     default:
       NFC_TRACE_ERROR1("unknown opcode:0x%x", op_code);
       break;
