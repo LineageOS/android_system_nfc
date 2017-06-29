@@ -185,6 +185,8 @@ typedef struct {
   uint8_t vs_interface
       [NFC_NFCC_MAX_NUM_VS_INTERFACE]; /* the NCI VS interfaces of NFCC    */
   uint16_t nci_interfaces;             /* the NCI interfaces of NFCC       */
+  uint8_t nci_intf_extensions;
+  uint8_t nci_intf_extension_map[NCI_INTERFACE_EXTENSION_MAX];
   uint8_t num_disc_maps; /* number of RF Discovery interface mappings */
   void* p_disc_pending;  /* the parameters associated with pending
                             NFC_DiscoveryStart */
@@ -215,6 +217,12 @@ typedef struct {
   tHAL_NFC_ENTRY* p_hal;
 
   uint8_t nci_version; /* NCI version used for NCI communication*/
+
+  uint8_t hci_packet_size; /* maximum hci payload size*/
+
+  uint8_t hci_conn_credits; /* maximum conn credits for static HCI*/
+
+  uint16_t nci_max_v_size; /*maximum NFC V rf frame size*/
 
   uint8_t deact_reason;
 

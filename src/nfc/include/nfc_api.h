@@ -253,6 +253,9 @@ typedef struct {
   uint8_t nfcc_info[NFC_NFCC_INFO_LEN]; /* the Manufacture Info for NFCC      */
   uint8_t vs_interface
       [NFC_NFCC_MAX_NUM_VS_INTERFACE]; /* the NCI VS interfaces of NFCC    */
+  uint8_t hci_packet_size;             /*HCI payload size*/
+  uint8_t hci_conn_credits;            /*max number of HCI credits*/
+  uint16_t max_nfc_v_size;             /* maximum frame size for NFC-V*/
 } tNFC_ENABLE_REVT;
 
 #define NFC_MAX_NUM_IDS 125
