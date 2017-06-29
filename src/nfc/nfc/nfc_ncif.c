@@ -1165,37 +1165,60 @@ void nfc_ncif_report_conn_close_evt(uint8_t conn_id, tNFC_STATUS status) {
 **
 *******************************************************************************/
 void nfc_ncif_proc_reset_rsp(uint8_t* p, bool is_ntf) {
+  uint8_t* p_len = p - 1;
   uint8_t status = *p++;
-
+  uint8_t wait_for_ntf = FALSE;
   if (is_ntf) {
     NFC_TRACE_ERROR1("reset notification!!:0x%x ", status);
     /* clean up, if the state is OPEN
      * FW does not report reset ntf right now */
+    if (status == NCI2_0_RESET_TRIGGER_TYPE_CORE_RESET_CMD_RECEIVED ||
+        status == NCI2_0_RESET_TRIGGER_TYPE_POWERED_ON) {
+      NFC_TRACE_DEBUG2("CORE_RESET_NTF Received status nfc_state : 0x%x : 0x%x",
+                       status, nfc_cb.nfc_state);
+      nfc_stop_timer(&nfc_cb.nci_wait_rsp_timer);
+      p++;
+      STREAM_TO_UINT8(nfc_cb.nci_version, p);
+      NFC_TRACE_DEBUG1(" CORE_RESET_NTF nci_version%x", nfc_cb.nci_version);
+      status = NCI_STATUS_OK;
+    } else {
+      /* CORE_RESET_NTF received error case , trigger recovery*/
+      NFC_TRACE_DEBUG2("CORE_RESET_NTF Received status nfc_state : 0x%x : 0x%x",
+                       status, nfc_cb.nfc_state);
+      nfc_ncif_cmd_timeout();
+      status = NCI_STATUS_FAILED;
+    }
     if (nfc_cb.nfc_state == NFC_STATE_OPEN) {
       /*if any conn_cb is connected, close it.
         if any pending outgoing packets are dropped.*/
       nfc_reset_all_conn_cbs();
     }
-    status = NCI_STATUS_OK;
+  } else {
+    NFC_TRACE_DEBUG1("CORE_RESET_RSP len :0x%x ", *p_len);
+    if ((*p_len) == NCI_CORE_RESET_RSP_LEN(NCI_VERSION_2_0)) {
+      wait_for_ntf = TRUE;
+    } else if ((*p_len) == NCI_CORE_RESET_RSP_LEN(NCI_VERSION_1_0)) {
+      nfc_cb.nci_version = NCI_VERSION_1_0;
+    }
   }
 
   if (nfc_cb.flags & (NFC_FL_RESTARTING | NFC_FL_POWER_CYCLE_NFCC)) {
     nfc_reset_all_conn_cbs();
   }
 
-  if (!is_ntf && status == NCI_STATUS_OK) {
-    if ((*p) != NCI_VERSION) {
-      NFC_TRACE_ERROR2("NCI version mismatch!!:0x%02x != 0x%02x ", NCI_VERSION,
-                       *p);
-      if ((*p) < NCI_VERSION_0_F) {
-        NFC_TRACE_ERROR0("NFCC version is too old");
-        status = NCI_STATUS_FAILED;
-      }
-    }
-  }
-
   if (status == NCI_STATUS_OK) {
-    nci_snd_core_init();
+    if (wait_for_ntf == TRUE) {
+      /* reset version reported by NFCC is NCI2.0 , start a timer for 2000ms to
+       * wait for NTF*/
+      nfc_start_timer(&nfc_cb.nci_wait_rsp_timer,
+                      (uint16_t)(NFC_TTYPE_NCI_WAIT_RSP),
+                      nfc_cb.nci_wait_rsp_tout);
+    } else {
+      if (nfc_cb.nci_version == NCI_VERSION_1_0)
+        nci_snd_core_init(NCI_VERSION_1_0);
+      else
+        nci_snd_core_init(NCI_VERSION_2_0);
+    }
   } else {
     NFC_TRACE_ERROR0("Failed to reset NFCC");
     nfc_enabled(status, NULL);
@@ -1220,16 +1243,25 @@ void nfc_ncif_proc_init_rsp(NFC_HDR* p_msg) {
   /* handle init params in nfc_enabled */
   status = *(p + NCI_MSG_HDR_SIZE);
   if (status == NCI_STATUS_OK) {
-    p_cb->id = NFC_RF_CONN_ID;
-    p_cb->act_protocol = NCI_PROTOCOL_UNKNOWN;
+    if (nfc_cb.nci_version == NCI_VERSION_UNKNOWN) {
+      nci_snd_core_reset(NCI_RESET_TYPE_RESET_CFG);
+    } else {
+      p_cb->id = NFC_RF_CONN_ID;
+      p_cb->act_protocol = NCI_PROTOCOL_UNKNOWN;
 
-    nfc_set_state(NFC_STATE_W4_POST_INIT_CPLT);
+      nfc_set_state(NFC_STATE_W4_POST_INIT_CPLT);
 
-    nfc_cb.p_nci_init_rsp = p_msg;
-    nfc_cb.p_hal->core_initialized(p_msg->len - p_msg->offset, p);
+      nfc_cb.p_nci_init_rsp = p_msg;
+      nfc_cb.p_hal->core_initialized(p_msg->len - p_msg->offset, p);
+    }
   } else {
-    nfc_enabled(status, NULL);
-    GKI_freebuf(p_msg);
+    if (nfc_cb.nci_version == NCI_VERSION_UNKNOWN) {
+      nfc_cb.nci_version = NCI_VERSION_1_0;
+      nci_snd_core_reset(NCI_RESET_TYPE_RESET_CFG);
+    } else {
+      nfc_enabled(status, NULL);
+      GKI_freebuf(p_msg);
+    }
   }
 }
 

@@ -70,22 +70,26 @@ uint8_t nci_snd_core_reset(uint8_t reset_type) {
 ** Returns          status
 **
 *******************************************************************************/
-uint8_t nci_snd_core_init(void) {
+uint8_t nci_snd_core_init(uint8_t nci_version) {
   NFC_HDR* p;
   uint8_t* pp;
 
-  p = NCI_GET_CMD_BUF(NCI_CORE_PARAM_SIZE_INIT);
-  if (p == NULL) return (NCI_STATUS_FAILED);
+  if ((p = NCI_GET_CMD_BUF(NCI_CORE_PARAM_SIZE_INIT(nci_version))) == NULL)
+    return (NCI_STATUS_FAILED);
 
   p->event = BT_EVT_TO_NFC_NCI;
-  p->len = NCI_MSG_HDR_SIZE + NCI_CORE_PARAM_SIZE_INIT;
+  p->len = NCI_MSG_HDR_SIZE + NCI_CORE_PARAM_SIZE_INIT(nci_version);
   p->offset = NCI_MSG_OFFSET_SIZE;
   p->layer_specific = 0;
   pp = (uint8_t*)(p + 1) + p->offset;
 
   NCI_MSG_BLD_HDR0(pp, NCI_MT_CMD, NCI_GID_CORE);
   NCI_MSG_BLD_HDR1(pp, NCI_MSG_CORE_INIT);
-  UINT8_TO_STREAM(pp, NCI_CORE_PARAM_SIZE_INIT);
+  UINT8_TO_STREAM(pp, NCI_CORE_PARAM_SIZE_INIT(nci_version));
+  if (nfc_cb.nci_version == NCI_VERSION_2_0) {
+    UINT8_TO_STREAM(pp, NCI2_0_CORE_INIT_CMD_BYTE_0);
+    UINT8_TO_STREAM(pp, NCI2_0_CORE_INIT_CMD_BYTE_1);
+  }
 
   nfc_ncif_send_cmd(p);
   return (NCI_STATUS_OK);
