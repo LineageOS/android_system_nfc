@@ -811,8 +811,8 @@ retry:
     if (nxpncihal_ctrl.retry_cnt++ < MAX_RETRY_COUNT) {
       NXPLOG_NCIHAL_E(
           "write_unlocked failed - PN54X Maybe in Standby Mode - Retry");
-      /* 1ms delay to give NFCC wake up delay */
-      usleep(1000);
+      /* 10ms delay to give NFCC wake up delay */
+      usleep(1000 * 10);
       goto retry;
     } else {
       NXPLOG_NCIHAL_E(
