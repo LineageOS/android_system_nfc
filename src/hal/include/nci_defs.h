@@ -605,6 +605,14 @@ typedef uint8_t tNCI_DISCOVERY_TYPE;
 /* The DH polling is considered as a enable NFCEE */
 #define NCI_POLLING_DH_ENABLE_MASK 0x01
 
+#define NCI_ROUTE_QUAL_MASK 0x70
+/* AID matching is allowed when the SELECT AID is longer */
+#define NCI_ROUTE_QUAL_LONG_SELECT 0x10
+/* AID matching is allowed when the SELECT AID is shorter */
+#define NCI_ROUTE_QUAL_SHORT_SELECT 0x20
+/* AID is blocked in unsupported power mode */
+#define NCI_ROUTE_QUAL_BLOCK_ROUTE 0x40
+
 typedef struct {
   uint16_t addr;
   uint8_t len;
