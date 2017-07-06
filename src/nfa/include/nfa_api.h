@@ -204,7 +204,8 @@ typedef uint8_t tNFA_PROTOCOL_MASK;
 #define NFA_DM_NFCC_TIMEOUT_EVT 6
 /* NCI Tranport error               */
 #define NFA_DM_NFCC_TRANSPORT_ERR_EVT 7
-
+/* Result of NFA_SetPowerSubStateForScreenState */
+#define NFA_DM_SET_POWER_SUB_STATE_EVT 11
 /* T1T HR length            */
 #define NFA_T1T_HR_LEN T1T_HR_LEN
 /* Max UID length of T1/T2  */
@@ -249,12 +250,29 @@ typedef struct {
   uint8_t param_tlvs[1]; /* TLV (Parameter ID-Len-Value byte stream) */
 } tNFA_GET_CONFIG;
 
+/* Structure to store screen state */
+typedef enum screen_state {
+  NFA_SCREEN_STATE_UNKNOWN = 0x00,
+  NFA_SCREEN_STATE_OFF_UNLOCKED = 0x01,
+  NFA_SCREEN_STATE_OFF_LOCKED = 0x02,
+  NFA_SCREEN_STATE_ON_LOCKED = 0x04,
+  NFA_SCREEN_STATE_ON_UNLOCKED = 0x08
+} eScreenState_t;
+
+typedef enum power_substate {
+  SCREEN_STATE_ON_UNLOCKED = 0x00,
+  SCREEN_STATE_OFF_UNLOCKED,
+  SCREEN_STATE_ON_LOCKED,
+  SCREEN_STATE_OFF_LOCKED,
+} epower_substate_t;
+
+#define NFA_SCREEN_STATE_MASK 0x0F
+
 /* CONN_DISCOVER_PARAM */
 #define NFA_LISTEN_DH_NFCEE_ENABLE_MASK NCI_LISTEN_DH_NFCEE_ENABLE_MASK
 #define NFA_LISTEN_DH_NFCEE_DISABLE_MASK NCI_LISTEN_DH_NFCEE_DISABLE_MASK
 #define NFA_POLLING_DH_DISABLE_MASK NCI_POLLING_DH_DISABLE_MASK
 #define NFA_POLLING_DH_ENABLE_MASK NCI_POLLING_DH_ENABLE_MASK
-
 #define NFA_DM_PWR_MODE_FULL 0x04
 #define NFA_DM_PWR_MODE_OFF_SLEEP 0x00
 
@@ -277,6 +295,11 @@ typedef struct {
   uint8_t rf_field_status;
 } tNFA_DM_RF_FIELD;
 
+typedef struct {
+  tNFA_STATUS status;  /* NFA_STATUS_OK if successful  */
+  uint8_t power_state; /* current screen/power state */
+} tNFA_DM_POWER_STATE;
+
 /* Union of all DM callback structures */
 typedef union {
   tNFA_STATUS status;                 /* NFA_DM_ENABLE_EVT        */
@@ -285,6 +308,7 @@ typedef union {
   tNFA_DM_PWR_MODE_CHANGE power_mode; /* NFA_DM_PWR_MODE_CHANGE_EVT   */
   tNFA_DM_RF_FIELD rf_field;          /* NFA_DM_RF_FIELD_EVT      */
   void* p_vs_evt_data;                /* Vendor-specific evt data */
+  tNFA_DM_POWER_STATE power_sub_state; /* power sub state */
 } tNFA_DM_CBACK_DATA;
 
 /* NFA_DM callback */
@@ -1370,6 +1394,17 @@ extern tNFA_STATUS NFA_SendVsCommand(uint8_t oid, uint8_t cmd_params_len,
 **
 *******************************************************************************/
 extern uint8_t NFA_SetTraceLevel(uint8_t new_level);
+
+/*******************************************************************************
+**
+** Function:        NFA_SetPowerSubStateForScreenState
+**
+** Description:     This function send the current screen state
+**
+** Returns:        NFA_STATUS_OK if successfully initiated
+**                  NFA_STATUS_FAILED otherwise
+*******************************************************************************/
+extern tNFA_STATUS NFA_SetPowerSubStateForScreenState(uint8_t ScreenState);
 
 #ifdef __cplusplus
 }

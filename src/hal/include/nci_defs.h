@@ -225,6 +225,7 @@ typedef uint8_t tNCI_STATUS;
 #define NCI_MSG_CORE_CONN_CREDITS 6
 #define NCI_MSG_CORE_GEN_ERR_STATUS 7
 #define NCI_MSG_CORE_INTF_ERR_STATUS 8
+#define NCI_MSG_CORE_SET_POWER_SUB_STATE 9
 
 /**********************************************
  * RF MANAGEMENT Group Opcode    - 1
@@ -268,6 +269,7 @@ typedef uint8_t tNCI_STATUS;
 
 /* Status (1 octet) and number of params */
 #define NCI_CORE_PARAM_SIZE_SET_CONFIG_RSP 0x02
+#define NCI_CORE_PARAM_SIZE_SET_POWER_SUB_STATE 0x01
 
 /* octet 0 */
 #define NCI_FEAT_DISCOVERY_FREG 0x00000001
@@ -455,6 +457,12 @@ typedef uint8_t tNCI_DISCOVERY_TYPE;
 #define NCI_ROUTE_PWR_STATE_SWITCH_OFF 0x02
 /* The device's battery is removed */
 #define NCI_ROUTE_PWR_STATE_BATT_OFF 0x04
+/* The device is in screen off Unlock mode */
+#define NCI_ROUTE_PWR_STATE_SCREEN_OFF_UNLOCK 0x08
+/* The device is in screen on lock mode */
+#define NCI_ROUTE_PWR_STATE_SCREEN_ON_LOCK 0x10
+/* The device is in screen off lock mode */
+#define NCI_ROUTE_PWR_STATE_SCREEN_OFF_LOCK 0x20
 
 /* Hardware / Registration Identification  */
 #define NCI_NFCEE_TAG_HW_ID 0x00
@@ -523,6 +531,10 @@ typedef uint8_t tNCI_DISCOVERY_TYPE;
 #define NCI_PARAM_ID_LF_T3T_MAX 0x52
 #define NCI_PARAM_ID_LF_T3T_FLAGS2 0x53
 #define NCI_PARAM_ID_LF_CON_BITR_F 0x54
+#define NCI_PARAM_ID_LF_CON_ADV_FEAT 0x55
+/*LF_T3T name changed in NCI2.0*/
+#define NCI_PARAM_ID_LF_T3T_RD_ALLOWED 0x55
+
 #define NCI_PARAM_ID_FWI 0x58
 #define NCI_PARAM_ID_LA_HIST_BY 0x59
 #define NCI_PARAM_ID_LB_H_INFO_RSP 0x5A
@@ -579,7 +591,12 @@ typedef uint8_t tNCI_DISCOVERY_TYPE;
 #define NCI_PARAM_LEN_LF_PROTOCOL 1
 #define NCI_PARAM_LEN_LF_T3T_FLAGS2 2
 #define NCI_PARAM_LEN_LF_T3T_PMM 8
-#define NCI_PARAM_LEN_LF_T3T_ID 10
+#define NCI_PARAM_LEN_LF_T3T_ID(X) (((X) == NCI_VERSION_2_0) ? (0x12) : (0x0A))
+#define NCI_PARAM_LEN_LF_CON_ADV_FEAT 1
+
+#define NCI_PARAM_LEN_LF_T3T_RD_ALLOWED 1  // Listen F NCI2.0 Parameter
+#define NCI_PARAM_LEN_LF_T3T_ID_MAX 16     // LF T3T indentifier Max Value 16
+#define NFA_CE_LISTEN_INFO_LF_MAX 16       // LF T3T indentifier Max Value 16
 
 #define NCI_PARAM_LEN_FWI 1
 #define NCI_PARAM_LEN_WT 1
@@ -604,6 +621,14 @@ typedef uint8_t tNCI_DISCOVERY_TYPE;
 #define NCI_POLLING_DH_DISABLE_MASK 0x00
 /* The DH polling is considered as a enable NFCEE */
 #define NCI_POLLING_DH_ENABLE_MASK 0x01
+
+#define NCI_ROUTE_QUAL_MASK 0x70
+/* AID matching is allowed when the SELECT AID is longer */
+#define NCI_ROUTE_QUAL_LONG_SELECT 0x10
+/* AID matching is allowed when the SELECT AID is shorter */
+#define NCI_ROUTE_QUAL_SHORT_SELECT 0x20
+/* AID is blocked in unsupported power mode */
+#define NCI_ROUTE_QUAL_BLOCK_ROUTE 0x40
 
 typedef struct {
   uint16_t addr;
