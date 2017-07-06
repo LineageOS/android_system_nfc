@@ -222,8 +222,8 @@ enum {
   NFC_NFCC_TIMEOUT_REVT,            /* 15 NFCC is not responding        */
   NFC_NFCC_TRANSPORT_ERR_REVT,      /* 16 NCI Tranport error            */
   NFC_NFCC_POWER_OFF_REVT,          /* 17 NFCC turned off               */
-
-  NFC_FIRST_VS_REVT /* First vendor-specific rsp event  */
+  NFC_SET_POWER_SUB_STATE_REVT,     /* 18 Set power sub state response  */
+  NFC_FIRST_VS_REVT                 /* First vendor-specific rsp event  */
 };
 typedef uint16_t tNFC_RESPONSE_EVT;
 
@@ -1196,6 +1196,21 @@ extern tNFC_STATUS NFC_UpdateRFCommParams(tNFC_RF_COMM_PARAMS* p_params);
 **
 *******************************************************************************/
 extern tNFC_STATUS NFC_SetPowerOffSleep(bool enable);
+
+/*******************************************************************************
+**
+** Function         NFC_SetPowerSubState
+**
+** Description      This function is called to send the power sub state(screen
+**                  state) to NFCC. The response from NFCC is reported by
+**                  tNFC_RESPONSE_CBACK as NFC_SET_POWER_STATE_REVT.
+**
+** Parameters       scree_state
+**
+** Returns          tNFC_STATUS
+**
+*******************************************************************************/
+extern tNFC_STATUS NFC_SetPowerSubState(uint8_t screen_state);
 
 /*******************************************************************************
 **
