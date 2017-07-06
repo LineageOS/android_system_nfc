@@ -20,10 +20,6 @@
 
 #include "gki.h"
 
-#ifndef GKI_DEBUG
-#define GKI_DEBUG FALSE
-#endif
-
 /* Task States: (For OSRdyTbl) */
 #define TASK_DEAD 0    /* b0000 */
 #define TASK_READY 1   /* b0001 */
@@ -89,16 +85,6 @@ typedef struct _free_queue {
 #define BUF_STATUS_FREE 0
 #define BUF_STATUS_UNLINKED 1
 #define BUF_STATUS_QUEUED 2
-
-/* Exception related structures (Used in debug mode only)
-*/
-#if (GKI_DEBUG == TRUE)
-typedef struct {
-  uint16_t type;
-  uint8_t taskid;
-  uint8_t msg[GKI_MAX_EXCEPTION_MSGLEN];
-} EXCEPTION_T;
-#endif
 
 /* Put all GKI variables into one control block
 */
@@ -356,11 +342,6 @@ typedef struct {
   bool system_tick_running; /* TRUE if system tick is running. Valid only if
                                p_tick_cb is not NULL */
 
-#if (GKI_DEBUG == TRUE)
-  uint16_t ExceptionCnt; /* number of GKI exceptions that have happened */
-  EXCEPTION_T Exception[GKI_MAX_EXCEPTION];
-#endif
-
 } tGKI_COM_CB;
 
 #ifdef __cplusplus
@@ -382,26 +363,6 @@ extern void OSSched(void);
 extern void OSIntEnter(void);
 extern void OSIntExit(void);
 
-/* Debug aids
-*/
-typedef void (*FP_PRINT)(char*, ...);
-
-#if (GKI_DEBUG == TRUE)
-
-typedef void (*PKT_PRINT)(uint8_t*, uint16_t);
-
-extern void gki_print_task(FP_PRINT);
-extern void gki_print_exception(FP_PRINT);
-extern void gki_print_timer(FP_PRINT);
-extern void gki_print_stack(FP_PRINT);
-extern void gki_print_buffer(FP_PRINT);
-extern void gki_print_buffer_statistics(FP_PRINT, int16_t);
-extern void gki_print_used_bufs(FP_PRINT, uint8_t);
-extern void gki_dump(uint8_t*, uint16_t, FP_PRINT);
-extern void gki_dump2(uint16_t*, uint16_t, FP_PRINT);
-extern void gki_dump4(uint32_t*, uint16_t, FP_PRINT);
-
-#endif
 #ifdef __cplusplus
 }
 #endif
