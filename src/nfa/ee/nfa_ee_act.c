@@ -64,10 +64,10 @@ static void add_route_tech_proto_tlv(uint8_t* pp, uint8_t tlv_type,
 }
 
 static void add_route_aid_tlv(uint8_t* pp, uint8_t* pa, uint8_t nfcee_id,
-                              uint8_t pwr_cfg) {
+                              uint8_t pwr_cfg, uint8_t tag) {
   pa++;                /* EMV tag */
   uint8_t len = *pa++; /* aid_len */
-  *pp++ = (uint8_t)(NFC_ROUTE_TAG_AID | nfa_ee_cb.route_block_control);
+  *pp++ = tag;
   *pp++ = len + 2;
   *pp++ = nfcee_id;
   *pp++ = pwr_cfg;
@@ -292,10 +292,7 @@ static void nfa_ee_add_proto_route_to_ecb(tNFA_EE_ECB* p_cb, uint8_t* pp,
                              NCI_ROUTE_PWR_STATE_ON, NFC_PROTOCOL_NFC_DEP);
 
     num_tlv++;
-    NFA_TRACE_DEBUG1(
-        "%s - NFC DEP added for "
-        "DH!!!",
-        __FUNCTION__);
+    NFA_TRACE_DEBUG1("%s - NFC DEP added for DH!!!", __func__);
   }
   /* update the num_tlv and current offset */
   uint8_t entry_size = (uint8_t)(pp - p);
@@ -314,12 +311,30 @@ static void nfa_ee_add_aid_route_to_ecb(tNFA_EE_ECB* p_cb, uint8_t* pp,
     for (int xx = 0; xx < p_cb->aid_entries; xx++) {
       /* remember the beginning of this AID routing entry, just in case we
        * need to put it in next command */
+      uint8_t route_qual = 0;
       uint8_t* p_start = pp;
       /* add one AID entry */
       if (p_cb->aid_rt_info[xx] & NFA_EE_AE_ROUTE) {
         num_tlv++;
         uint8_t* pa = &p_cb->aid_cfg[start_offset];
-        add_route_aid_tlv(pp, pa, p_cb->nfcee_id, p_cb->aid_pwr_cfg[xx]);
+
+        NFA_TRACE_DEBUG2("%s -  p_cb->aid_info%x", __func__,
+                         p_cb->aid_info[xx]);
+        if (p_cb->aid_info[xx] & NCI_ROUTE_QUAL_LONG_SELECT) {
+          NFA_TRACE_DEBUG2("%s - %x", __func__,
+                           p_cb->aid_info[xx] & NCI_ROUTE_QUAL_LONG_SELECT);
+          route_qual |= NCI_ROUTE_QUAL_LONG_SELECT;
+        }
+        if (p_cb->aid_info[xx] & NCI_ROUTE_QUAL_SHORT_SELECT) {
+          NFA_TRACE_DEBUG2("%s - %x", __func__,
+                           p_cb->aid_info[xx] & NCI_ROUTE_QUAL_SHORT_SELECT);
+          route_qual |= NCI_ROUTE_QUAL_SHORT_SELECT;
+        }
+
+        uint8_t tag =
+            NFC_ROUTE_TAG_AID | nfa_ee_cb.route_block_control | route_qual;
+
+        add_route_aid_tlv(pp, pa, p_cb->nfcee_id, p_cb->aid_pwr_cfg[xx], tag);
       }
       start_offset += p_cb->aid_len[xx];
       uint8_t new_size = (uint8_t)(pp - p_start);
@@ -731,6 +746,7 @@ void nfa_ee_api_add_aid(tNFA_EE_MSG* p_data) {
         "nfa_ee_api_add_aid The AID entry is already in the database");
     if (p_chk_cb == p_cb) {
       p_cb->aid_rt_info[entry] |= NFA_EE_AE_ROUTE;
+      p_cb->aid_info[entry] = p_add->aidInfo;
       new_size = nfa_ee_total_lmrt_size();
       if (new_size > NFC_GetLmrtSize()) {
         NFA_TRACE_ERROR1("Exceed LMRT size:%d (add ROUTE)", new_size);
@@ -768,6 +784,7 @@ void nfa_ee_api_add_aid(tNFA_EE_MSG* p_data) {
       } else {
         /* add AID */
         p_cb->aid_pwr_cfg[p_cb->aid_entries] = p_add->power_state;
+        p_cb->aid_info[p_cb->aid_entries] = p_add->aidInfo;
         p_cb->aid_rt_info[p_cb->aid_entries] = NFA_EE_AE_ROUTE;
         p = p_cb->aid_cfg + len;
         p_start = p;
@@ -2058,7 +2075,7 @@ void nfa_ee_route_add_one_ecb_by_route_order(tNFA_EE_ECB* p_cb, int rout_type,
   uint8_t num_tlv = *ps;
   NFA_TRACE_DEBUG6(
       "%s - max_len:%d, cur_offset:%d, more:%d, num_tlv:%d,rout_type:- %d",
-      __FUNCTION__, *p_max_len, *p_cur_offset, more, num_tlv, rout_type);
+      __func__, *p_max_len, *p_cur_offset, more, num_tlv, rout_type);
   uint8_t* pp = ps + 1 + *p_cur_offset;
   uint8_t* p = pp;
   uint16_t tlv_size = (uint8_t)*p_cur_offset;
@@ -2075,7 +2092,7 @@ void nfa_ee_route_add_one_ecb_by_route_order(tNFA_EE_ECB* p_cb, int rout_type,
       nfa_ee_add_aid_route_to_ecb(p_cb, pp, p, ps, p_cur_offset, p_max_len);
     } break;
     default: {
-      NFA_TRACE_DEBUG2("%s -  Route type - NA:- %d", __FUNCTION__, rout_type);
+      NFA_TRACE_DEBUG2("%s -  Route type - NA:- %d", __func__, rout_type);
     }
   }
 
@@ -2100,7 +2117,7 @@ void nfa_ee_route_add_one_ecb_by_route_order(tNFA_EE_ECB* p_cb, int rout_type,
       } else {
         nfa_ee_cb.ee_cfg_sts &= ~NFA_EE_STS_PREV_ROUTING;
       }
-      NFA_TRACE_DEBUG3("%s : set routing num_tlv:%d tlv_size:%d", __FUNCTION__,
+      NFA_TRACE_DEBUG3("%s : set routing num_tlv:%d tlv_size:%d", __func__,
                        num_tlv, tlv_size);
       if (NFC_SetRouting(more, num_tlv, (uint8_t)(*p_cur_offset), ps + 1) ==
           NFA_STATUS_OK) {
