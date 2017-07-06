@@ -61,6 +61,7 @@ enum {
   NFA_DM_API_REG_VSC_EVT,
   NFA_DM_API_SEND_VSC_EVT,
   NFA_DM_TIMEOUT_DISABLE_EVT,
+  NFA_DM_API_SET_POWER_SUB_STATE_EVT,
   NFA_DM_MAX_EVT
 };
 
@@ -182,6 +183,12 @@ typedef struct {
   uint8_t* p_cmd_params;
 } tNFA_DM_API_SEND_VSC;
 
+/* data type for NFA_DM_API_SET_POWER_SUB_STATE_EVT */
+typedef struct {
+  NFC_HDR hdr;
+  uint8_t screen_state;
+} tNFA_DM_API_SET_POWER_SUB_STATE;
+
 /* union of all data types */
 typedef union {
   /* GKI event buffer header */
@@ -211,6 +218,8 @@ typedef union {
   tNFA_DM_API_DEACTIVATE deactivate; /* NFA_DM_API_DEACTIVATE_EVT            */
   tNFA_DM_API_SEND_VSC send_vsc;     /* NFA_DM_API_SEND_VSC_EVT              */
   tNFA_DM_API_REG_VSC reg_vsc;       /* NFA_DM_API_REG_VSC_EVT               */
+  /* NFA_DM_API_SET_POWER_SUB_STATE_EVT */
+  tNFA_DM_API_SET_POWER_SUB_STATE set_power_state;
 } tNFA_DM_MSG;
 
 /* DM RF discovery state */
@@ -535,6 +544,8 @@ typedef struct {
 
   uint8_t deactivate_cmd_retry_count; /*number of times the deactivation cmd
                                          sent in case of error scenerio */
+
+  uint8_t power_state; /* current screen/power  state */
 } tNFA_DM_CB;
 
 /* Internal function prototypes */
@@ -616,6 +627,7 @@ bool nfa_dm_act_send_vsc(tNFA_DM_MSG* p_data);
 uint16_t nfa_dm_act_get_rf_disc_duration();
 bool nfa_dm_act_disable_timeout(tNFA_DM_MSG* p_data);
 bool nfa_dm_act_nfc_cback_data(tNFA_DM_MSG* p_data);
+bool nfa_dm_set_power_sub_state(tNFA_DM_MSG* p_data);
 
 void nfa_dm_proc_nfcc_power_mode(uint8_t nfcc_power_mode);
 

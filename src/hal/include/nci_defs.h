@@ -225,6 +225,7 @@ typedef uint8_t tNCI_STATUS;
 #define NCI_MSG_CORE_CONN_CREDITS 6
 #define NCI_MSG_CORE_GEN_ERR_STATUS 7
 #define NCI_MSG_CORE_INTF_ERR_STATUS 8
+#define NCI_MSG_CORE_SET_POWER_SUB_STATE 9
 
 /**********************************************
  * RF MANAGEMENT Group Opcode    - 1
@@ -268,6 +269,7 @@ typedef uint8_t tNCI_STATUS;
 
 /* Status (1 octet) and number of params */
 #define NCI_CORE_PARAM_SIZE_SET_CONFIG_RSP 0x02
+#define NCI_CORE_PARAM_SIZE_SET_POWER_SUB_STATE 0x01
 
 /* octet 0 */
 #define NCI_FEAT_DISCOVERY_FREG 0x00000001
@@ -455,6 +457,12 @@ typedef uint8_t tNCI_DISCOVERY_TYPE;
 #define NCI_ROUTE_PWR_STATE_SWITCH_OFF 0x02
 /* The device's battery is removed */
 #define NCI_ROUTE_PWR_STATE_BATT_OFF 0x04
+/* The device is in screen off Unlock mode */
+#define NCI_ROUTE_PWR_STATE_SCREEN_OFF_UNLOCK 0x08
+/* The device is in screen on lock mode */
+#define NCI_ROUTE_PWR_STATE_SCREEN_ON_LOCK 0x10
+/* The device is in screen off lock mode */
+#define NCI_ROUTE_PWR_STATE_SCREEN_OFF_LOCK 0x20
 
 /* Hardware / Registration Identification  */
 #define NCI_NFCEE_TAG_HW_ID 0x00
