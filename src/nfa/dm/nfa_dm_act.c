@@ -133,17 +133,38 @@ static void nfa_dm_set_init_nci_params(void) {
 
   /* set NCI default value if other than zero */
 
-  /* LF_T3T_IDENTIFIERS_1/2/.../16 */
-  for (xx = 0; xx < NFA_CE_LISTEN_INFO_MAX; xx++) {
-    nfa_dm_cb.params.lf_t3t_id[xx][0] = 0xFF;
-    nfa_dm_cb.params.lf_t3t_id[xx][1] = 0xFF;
-    nfa_dm_cb.params.lf_t3t_id[xx][2] = 0x02;
-    nfa_dm_cb.params.lf_t3t_id[xx][3] = 0xFE;
-  }
+  if (NFC_GetNCIVersion() == NCI_VERSION_2_0) {
+    /* Default Values: For each identifier
+     * Octet 0-1   = OxFF
+     * Octet 2     = Ox02
+     * Octet 3     = 0xFE
+     * Octet 4-9   = 0x00
+     * Octet 10-17 = 0xFF*/
+    for (xx = 0; xx < NFA_CE_LISTEN_INFO_MAX; xx++) {
+      nfa_dm_cb.params.lf_t3t_id[xx][0] = 0xFF;
+      nfa_dm_cb.params.lf_t3t_id[xx][1] = 0xFF;
+      nfa_dm_cb.params.lf_t3t_id[xx][2] = 0x02;
+      nfa_dm_cb.params.lf_t3t_id[xx][3] = 0xFE;
+    }
 
-  /* LF_T3T_PMM */
-  for (xx = 0; xx < NCI_PARAM_LEN_LF_T3T_PMM; xx++) {
-    nfa_dm_cb.params.lf_t3t_pmm[xx] = 0xFF;
+    /* LF_T3T_PMM value is added to LF_T3T_IDENTIFIERS_X in NCI2.0. */
+    for (xx = 0; xx < NFA_CE_LISTEN_INFO_MAX; xx++) {
+      for (uint8_t yy = 10; yy < NCI_PARAM_LEN_LF_T3T_ID(NCI_VERSION_2_0); yy++)
+        nfa_dm_cb.params.lf_t3t_id[xx][yy] = 0xFF;
+    }
+  } else {
+    /* LF_T3T_IDENTIFIERS_1/2/.../16 */
+    for (xx = 0; xx < NFA_CE_LISTEN_INFO_MAX; xx++) {
+      nfa_dm_cb.params.lf_t3t_id[xx][0] = 0xFF;
+      nfa_dm_cb.params.lf_t3t_id[xx][1] = 0xFF;
+      nfa_dm_cb.params.lf_t3t_id[xx][2] = 0x02;
+      nfa_dm_cb.params.lf_t3t_id[xx][3] = 0xFE;
+    }
+
+    /* LF_T3T_PMM */
+    for (xx = 0; xx < NCI_PARAM_LEN_LF_T3T_PMM; xx++) {
+      nfa_dm_cb.params.lf_t3t_pmm[xx] = 0xFF;
+    }
   }
 
   /* LF_T3T_FLAGS:
@@ -343,6 +364,12 @@ static void nfa_dm_nfc_response_cback(tNFC_RESPONSE_EVT event,
     case NFC_GET_ROUTING_REVT: /* Retrieve Routing response */
       break;
 #endif
+
+    case NFC_SET_POWER_SUB_STATE_REVT:
+      dm_cback_data.power_sub_state.status = p_data->status;
+      dm_cback_data.power_sub_state.power_state = nfa_dm_cb.power_state;
+      (*nfa_dm_cb.p_dm_cback)(NFA_DM_SET_POWER_SUB_STATE_EVT, &dm_cback_data);
+      break;
 
     case NFC_RF_FIELD_REVT: /* RF Field information            */
       dm_cback_data.rf_field.status = NFA_STATUS_OK;
@@ -562,7 +589,39 @@ bool nfa_dm_get_config(tNFA_DM_MSG* p_data) {
 
   return true;
 }
+/*******************************************************************************
+**
+** Function         nfa_dm_set_power_sub_state
+**
+** Description      Process the power sub state command
+**
+** Returns          TRUE (message buffer to be freed by caller)
+**
+*******************************************************************************/
+bool nfa_dm_set_power_sub_state(tNFA_DM_MSG* p_data) {
+  tNFC_STATUS status;
+  tNFA_DM_CBACK_DATA dm_cback_data;
 
+  NFA_TRACE_DEBUG0(" nfa_dm_set_power_sub_state ()");
+
+  nfa_dm_cb.power_state = p_data->set_power_state.screen_state;
+  if (nfa_dm_cb.disc_cb.disc_state == NFA_DM_RFST_LISTEN_ACTIVE) {
+    NFA_TRACE_DEBUG0(
+        "nfa_dm_set_power_sub_state () : NFA_DM_RFST_LISTEN_ACTIVE");
+    /* NFCC will give semantic error for power sub state command in Rf listen
+     * active state */
+    status = NFC_STATUS_SEMANTIC_ERROR;
+  } else {
+    status = NFC_SetPowerSubState(p_data->set_power_state.screen_state);
+  }
+
+  if (status != NFC_STATUS_OK) {
+    dm_cback_data.power_sub_state.status = NFC_STATUS_FAILED;
+    dm_cback_data.power_sub_state.power_state = nfa_dm_cb.power_state;
+    (*nfa_dm_cb.p_dm_cback)(NFA_DM_SET_POWER_SUB_STATE_EVT, &dm_cback_data);
+  }
+  return (true);
+}
 /*******************************************************************************
 **
 ** Function         nfa_dm_conn_cback_event_notify

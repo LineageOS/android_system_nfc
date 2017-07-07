@@ -886,7 +886,7 @@ uint8_t GKI_get_taskid(void) {
 ** NOTE             this function needs no customization
 **
 *******************************************************************************/
-uint8_t* GKI_map_taskname(uint8_t task_id) {
+int8_t* GKI_map_taskname(uint8_t task_id) {
   GKI_TRACE_1("GKI_map_taskname %d", task_id);
 
   if (task_id < GKI_MAX_TASKS) {
@@ -896,7 +896,7 @@ uint8_t* GKI_map_taskname(uint8_t task_id) {
   } else if (task_id == GKI_MAX_TASKS) {
     return (gki_cb.com.OSTName[GKI_get_taskid()]);
   } else {
-    return (uint8_t*)"BAD";
+    return (int8_t*)"BAD";
   }
 }
 
