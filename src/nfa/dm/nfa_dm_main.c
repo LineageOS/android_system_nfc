@@ -72,7 +72,8 @@ const tNFA_DM_ACTION nfa_dm_action[] = {
     nfa_dm_ndef_dereg_hdlr,          /* NFA_DM_API_DEREG_NDEF_HDLR_EVT       */
     nfa_dm_act_reg_vsc,              /* NFA_DM_API_REG_VSC_EVT               */
     nfa_dm_act_send_vsc,             /* NFA_DM_API_SEND_VSC_EVT              */
-    nfa_dm_act_disable_timeout       /* NFA_DM_TIMEOUT_DISABLE_EVT           */
+    nfa_dm_act_disable_timeout,      /* NFA_DM_TIMEOUT_DISABLE_EVT           */
+    nfa_dm_set_power_sub_state       /* NFA_DM_API_SET_POWER_SUB_STATE_EVT  */
 };
 
 /*****************************************************************************
@@ -171,12 +172,12 @@ void nfa_dm_sys_disable(void) {
 **
 *******************************************************************************/
 bool nfa_dm_is_protocol_supported(tNFC_PROTOCOL protocol, uint8_t sel_res) {
-  return (
-      (protocol == NFC_PROTOCOL_T1T) ||
-      ((protocol == NFC_PROTOCOL_T2T) &&
-       (sel_res == NFC_SEL_RES_NFC_FORUM_T2T)) ||
-      (protocol == NFC_PROTOCOL_T3T) || (protocol == NFC_PROTOCOL_ISO_DEP) ||
-      (protocol == NFC_PROTOCOL_NFC_DEP) || (protocol == NFC_PROTOCOL_15693));
+  return ((protocol == NFC_PROTOCOL_T1T) ||
+          ((protocol == NFC_PROTOCOL_T2T) &&
+           (sel_res == NFC_SEL_RES_NFC_FORUM_T2T)) ||
+          (protocol == NFC_PROTOCOL_T3T) ||
+          (protocol == NFC_PROTOCOL_ISO_DEP) ||
+          (protocol == NFC_PROTOCOL_NFC_DEP) || (protocol == NFC_PROTOCOL_T5T));
 }
 /*******************************************************************************
 **
@@ -352,7 +353,7 @@ tNFA_STATUS nfa_dm_check_set_config(uint8_t tlv_list_len, uint8_t* p_tlv_list,
         if ((type >= NFC_PMID_LF_T3T_ID1) &&
             (type < NFC_PMID_LF_T3T_ID1 + NFA_CE_LISTEN_INFO_MAX)) {
           p_stored = nfa_dm_cb.params.lf_t3t_id[type - NFC_PMID_LF_T3T_ID1];
-          max_len = NCI_PARAM_LEN_LF_T3T_ID;
+          max_len = NCI_PARAM_LEN_LF_T3T_ID(NFC_GetNCIVersion());
         } else {
           /* we don't stored this config items */
           update = true;
@@ -507,6 +508,9 @@ static char* nfa_dm_evt_2_str(uint16_t event) {
 
     case NFA_DM_TIMEOUT_DISABLE_EVT:
       return "NFA_DM_TIMEOUT_DISABLE_EVT";
+
+    case NFA_DM_API_SET_POWER_SUB_STATE_EVT:
+      return "NFA_DM_API_SET_POWER_SUB_STATE_EVT";
   }
 
   return "Unknown or Vendor Specific";

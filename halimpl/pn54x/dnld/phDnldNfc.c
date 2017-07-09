@@ -1046,6 +1046,8 @@ NFCSTATUS phDnldNfc_LoadRecoveryFW(const char* pathName, uint8_t** pImgInfo,
     pathName = "/system/vendor/firmware/libpn548ad_fw.so";
 #elif (NFC_NXP_CHIP_TYPE == PN551)
     pathName = "/system/vendor/firmware/libpn551_fw.so";
+#elif (NFC_NXP_CHIP_TYPE == PN553)
+    pathName = "/system/vendor/firmware/libpn553_fw.so";
 #else
     pathName = "/system/vendor/firmware/libpn547_fw.so";
 #endif
