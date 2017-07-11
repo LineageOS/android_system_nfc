@@ -28,6 +28,7 @@ extern "C" {
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <unistd.h>
 #include <string>
 #include "CrcChecksum.h"
 #include "config.h"
