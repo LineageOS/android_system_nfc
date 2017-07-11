@@ -274,6 +274,11 @@ static void nfa_ee_add_proto_route_to_ecb(tNFA_EE_ECB* p_cb, uint8_t* pp,
        * which are not in the routing table can also be blocked */
       if (nfa_ee_proto_mask_list[xx] == NFA_PROTOCOL_MASK_ISO_DEP) {
         proto_tag = NFC_ROUTE_TAG_PROTO | nfa_ee_cb.route_block_control;
+
+        /* Enable screen on lock power state for ISO-DEP protocol to
+           enable HCE screen lock */
+        if (NFC_GetNCIVersion() == NCI_VERSION_2_0)
+          power_cfg |= NCI_ROUTE_PWR_STATE_SCREEN_ON_LOCK;
       } else {
         proto_tag = NFC_ROUTE_TAG_PROTO;
       }
