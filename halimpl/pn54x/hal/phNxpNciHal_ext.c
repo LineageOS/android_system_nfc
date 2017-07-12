@@ -604,26 +604,7 @@ NFCSTATUS phNxpNciHal_write_ext(uint16_t* cmd_len, uint8_t* p_cmd_data,
   if (phNxpDta_IsEnable() == true) {
     status = phNxpNHal_DtaUpdate(cmd_len, p_cmd_data, rsp_len, p_rsp_data);
   }
-  if (nxpncihal_ctrl.nci_info.nci_version == NCI_VERSION_2_0 &&
-      p_cmd_data[0] == 0x21 && p_cmd_data[1] == 0x01) {
-    NXPLOG_NCIHAL_D("Setting up routing table - start");
-    p_cmd_data[2] = 0x0C;
-    p_cmd_data[3] = 0x00;
-    p_cmd_data[4] = 0x02;
-    p_cmd_data[5] = 0x01;
-    p_cmd_data[6] = 0x03;
-    p_cmd_data[7] = 0x00;
-    p_cmd_data[8] = 0x01;
-    p_cmd_data[9] = 0x05;
-    p_cmd_data[10] = 0x01;
-    p_cmd_data[11] = 0x03;
-    p_cmd_data[12] = 0x00;
-    p_cmd_data[13] = 0x01;
-    p_cmd_data[14] = 0x04;
-    *cmd_len = 15;
-    NXPLOG_NCIHAL_D("Setting up routing table - END");
-    status = NFCSTATUS_SUCCESS;
-  }
+
   if (p_cmd_data[0] == PROPRIETARY_CMD_FELICA_READER_MODE &&
       p_cmd_data[1] == PROPRIETARY_CMD_FELICA_READER_MODE &&
       p_cmd_data[2] == PROPRIETARY_CMD_FELICA_READER_MODE) {
