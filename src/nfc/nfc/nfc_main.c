@@ -258,7 +258,7 @@ void nfc_enabled(tNFC_STATUS nfc_status, NFC_HDR* p_init_rsp_msg) {
         interface_type = *p++;
         num_interface_extensions = *p++;
         for (zz = 0; zz < num_interface_extensions; zz++) {
-          if (((*p) <= NCI_INTERFACE_EXTENSION_MAX) &&
+          if (((*p) < NCI_INTERFACE_EXTENSION_MAX) &&
               (interface_type <= NCI_INTERFACE_MAX)) {
             nfc_cb.nci_intf_extensions |= (1 << (*p));
             nfc_cb.nci_intf_extension_map[*p] = (1 << interface_type);
