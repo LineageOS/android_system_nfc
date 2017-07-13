@@ -22,6 +22,9 @@
 #include <hwbinder/ProcessState.h>
 #include <pthread.h>
 #include "NfcAdaptation.h"
+#include "debug_nfcsnoop.h"
+#include "nfc_target.h"
+
 extern "C" {
 #include "gki.h"
 #include "nfa_api.h"
@@ -227,6 +230,7 @@ void NfcAdaptation::Initialize() {
   mHalCallback = NULL;
   memset(&mHalEntryFuncs, 0, sizeof(mHalEntryFuncs));
   InitializeHalDeviceContext();
+  debug_nfcsnoop_init();
   ALOGD("%s: exit", func);
 }
 
@@ -254,6 +258,17 @@ void NfcAdaptation::Finalize() {
   ALOGD("%s: exit", func);
   delete this;
 }
+
+/*******************************************************************************
+**
+** Function:    NfcAdaptation::Dump
+**
+** Description: Native support for dumpsys function.
+**
+** Returns:     None.
+**
+*******************************************************************************/
+void NfcAdaptation::Dump(int fd) { debug_nfcsnoop_dump(fd); }
 
 /*******************************************************************************
 **
