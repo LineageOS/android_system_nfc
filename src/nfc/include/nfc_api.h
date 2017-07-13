@@ -370,7 +370,11 @@ typedef uint8_t tNFC_RF_STS;
 #define NFC_RF_TECHNOLOGY_V NCI_RF_TECHNOLOGY_V
 typedef uint8_t tNFC_RF_TECH;
 
+#ifdef __cplusplus
+extern "C" uint8_t NFC_GetNCIVersion();
+#else
 extern uint8_t NFC_GetNCIVersion();
+#endif
 
 /* Supported Protocols */
 #define NFC_PROTOCOL_UNKNOWN NCI_PROTOCOL_UNKNOWN /* Unknown */
