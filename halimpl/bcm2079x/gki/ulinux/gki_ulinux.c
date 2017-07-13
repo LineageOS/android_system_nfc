@@ -19,6 +19,7 @@
 #include <malloc.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #define GKI_DEBUG FALSE
 
