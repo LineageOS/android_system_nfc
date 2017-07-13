@@ -53,27 +53,27 @@ const uint8_t nfa_ee_tech_list[NFA_EE_NUM_TECH] = {
  * the command for NFCC */
 #define NFA_EE_NUM_PROTO 5
 
-static void add_route_tech_proto_tlv(uint8_t* pp, uint8_t tlv_type,
+static void add_route_tech_proto_tlv(uint8_t** pp, uint8_t tlv_type,
                                      uint8_t nfcee_id, uint8_t pwr_cfg,
                                      uint8_t tech_proto) {
-  *pp++ = tlv_type;
-  *pp++ = 3;
-  *pp++ = nfcee_id;
-  *pp++ = pwr_cfg;
-  *pp++ = tech_proto;
+  *(*pp)++ = tlv_type;
+  *(*pp)++ = 3;
+  *(*pp)++ = nfcee_id;
+  *(*pp)++ = pwr_cfg;
+  *(*pp)++ = tech_proto;
 }
 
-static void add_route_aid_tlv(uint8_t* pp, uint8_t* pa, uint8_t nfcee_id,
+static void add_route_aid_tlv(uint8_t** pp, uint8_t* pa, uint8_t nfcee_id,
                               uint8_t pwr_cfg, uint8_t tag) {
   pa++;                /* EMV tag */
   uint8_t len = *pa++; /* aid_len */
-  *pp++ = tag;
-  *pp++ = len + 2;
-  *pp++ = nfcee_id;
-  *pp++ = pwr_cfg;
+  *(*pp)++ = tag;
+  *(*pp)++ = len + 2;
+  *(*pp)++ = nfcee_id;
+  *(*pp)++ = pwr_cfg;
   /* copy the AID */
-  memcpy(pp, pa, len);
-  pp += len;
+  memcpy(*pp, pa, len);
+  *pp += len;
 }
 
 const uint8_t nfa_ee_proto_mask_list[NFA_EE_NUM_PROTO] = {
@@ -241,7 +241,7 @@ static void nfa_ee_add_tech_route_to_ecb(tNFA_EE_ECB* p_cb, uint8_t* pp,
     if (p_cb->tech_battery_off & nfa_ee_tech_mask_list[xx])
       power_cfg |= NCI_ROUTE_PWR_STATE_BATT_OFF;
     if (power_cfg) {
-      add_route_tech_proto_tlv(pp, NFC_ROUTE_TAG_TECH, p_cb->nfcee_id,
+      add_route_tech_proto_tlv(&pp, NFC_ROUTE_TAG_TECH, p_cb->nfcee_id,
                                power_cfg, nfa_ee_tech_list[xx]);
       num_tlv++;
       if (power_cfg != NCI_ROUTE_PWR_STATE_ON)
@@ -274,11 +274,16 @@ static void nfa_ee_add_proto_route_to_ecb(tNFA_EE_ECB* p_cb, uint8_t* pp,
        * which are not in the routing table can also be blocked */
       if (nfa_ee_proto_mask_list[xx] == NFA_PROTOCOL_MASK_ISO_DEP) {
         proto_tag = NFC_ROUTE_TAG_PROTO | nfa_ee_cb.route_block_control;
+
+        /* Enable screen on lock power state for ISO-DEP protocol to
+           enable HCE screen lock */
+        if (NFC_GetNCIVersion() == NCI_VERSION_2_0)
+          power_cfg |= NCI_ROUTE_PWR_STATE_SCREEN_ON_LOCK;
       } else {
         proto_tag = NFC_ROUTE_TAG_PROTO;
       }
 
-      add_route_tech_proto_tlv(pp, proto_tag, p_cb->nfcee_id, power_cfg,
+      add_route_tech_proto_tlv(&pp, proto_tag, p_cb->nfcee_id, power_cfg,
                                nfa_ee_proto_list[xx]);
       num_tlv++;
       if (power_cfg != NCI_ROUTE_PWR_STATE_ON)
@@ -288,7 +293,7 @@ static void nfa_ee_add_proto_route_to_ecb(tNFA_EE_ECB* p_cb, uint8_t* pp,
 
   /* add NFC-DEP routing to HOST */
   if (p_cb->nfcee_id == NFC_DH_ID) {
-    add_route_tech_proto_tlv(pp, NFC_ROUTE_TAG_PROTO, NFC_DH_ID,
+    add_route_tech_proto_tlv(&pp, NFC_ROUTE_TAG_PROTO, NFC_DH_ID,
                              NCI_ROUTE_PWR_STATE_ON, NFC_PROTOCOL_NFC_DEP);
 
     num_tlv++;
@@ -334,7 +339,7 @@ static void nfa_ee_add_aid_route_to_ecb(tNFA_EE_ECB* p_cb, uint8_t* pp,
         uint8_t tag =
             NFC_ROUTE_TAG_AID | nfa_ee_cb.route_block_control | route_qual;
 
-        add_route_aid_tlv(pp, pa, p_cb->nfcee_id, p_cb->aid_pwr_cfg[xx], tag);
+        add_route_aid_tlv(&pp, pa, p_cb->nfcee_id, p_cb->aid_pwr_cfg[xx], tag);
       }
       start_offset += p_cb->aid_len[xx];
       uint8_t new_size = (uint8_t)(pp - p_start);
