@@ -1,6 +1,5 @@
 /******************************************************************************
  *
- *  Copyright (C) 2010-2014 Broadcom Corporation
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -1316,6 +1315,14 @@ static tNFA_STATUS nfa_dm_disc_notify_activation(tNFC_DISCOVER* p_data) {
   if (xx >= NFA_DM_DISC_NUM_ENTRIES) {
     /* if any ISO-DEP or T3T listening even if host in LRT is not matched */
     xx = iso_dep_t3t__listen;
+  }
+  if (protocol == NFC_PROTOCOL_NFC_DEP &&
+      (tech_n_mode == NFC_DISCOVERY_TYPE_LISTEN_F_ACTIVE ||
+       tech_n_mode == NFC_DISCOVERY_TYPE_LISTEN_A_ACTIVE ||
+       tech_n_mode == NFC_DISCOVERY_TYPE_LISTEN_A)) {
+    if (appl_dta_mode_flag == 1 && tech_n_mode == NFC_DISCOVERY_TYPE_LISTEN_A) {
+      NFA_TRACE_DEBUG0("DTA Mode Enabled : NFC-A Passive Listen Mode");
+    }
   }
 
   if (xx < NFA_DM_DISC_NUM_ENTRIES) {
@@ -2903,7 +2910,10 @@ bool nfa_dm_p2p_prio_logic(uint8_t event, uint8_t* p, uint8_t event_type) {
         "returning from nfa_dm_p2p_prio_logic  Disable p2p_prio_logic");
     return true;
   }
-
+  if (appl_dta_mode_flag == 0x01) {
+    /*Disable the P2P Prio Logic when DTA is running*/
+    return TRUE;
+  }
   if (event == NCI_MSG_RF_DISCOVER &&
       p2p_prio_logic_data.timer_expired == true &&
       event_type == NFA_DM_P2P_PRIO_RSP) {
