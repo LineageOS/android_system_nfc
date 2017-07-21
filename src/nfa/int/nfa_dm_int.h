@@ -62,6 +62,7 @@ enum {
   NFA_DM_API_SEND_VSC_EVT,
   NFA_DM_TIMEOUT_DISABLE_EVT,
   NFA_DM_API_SET_POWER_SUB_STATE_EVT,
+  NFA_DM_API_SEND_RAW_VS_EVT,
   NFA_DM_MAX_EVT
 };
 
@@ -547,6 +548,7 @@ typedef struct {
                                          sent in case of error scenerio */
 
   uint8_t power_state; /* current screen/power  state */
+  uint32_t eDtaMode;   /* To enable the DTA type modes. */
 } tNFA_DM_CB;
 
 /* Internal function prototypes */
@@ -556,6 +558,9 @@ void nfa_dm_ndef_dereg_all(void);
 void nfa_dm_act_conn_cback_notify(uint8_t event, tNFA_CONN_EVT_DATA* p_data);
 void nfa_dm_notify_activation_status(tNFA_STATUS status,
                                      tNFA_TAG_PARAMS* p_params);
+
+bool nfa_dm_act_send_raw_vs(tNFA_DM_MSG* p_data);
+
 void nfa_dm_disable_complete(void);
 
 /* Internal functions from nfa_rw */
@@ -577,6 +582,10 @@ extern uint8_t nfa_ee_max_ee_cfg;
 extern tNCI_DISCOVER_MAPS* p_nfa_dm_interface_mapping;
 extern uint8_t nfa_dm_num_dm_interface_mapping;
 extern bool nfa_poll_bail_out_mode;
+
+void nfa_dm_poll_disc_cback_dta_wrapper(tNFA_DM_RF_DISC_EVT event,
+                                        tNFC_DISCOVER* p_data);
+extern unsigned char appl_dta_mode_flag;
 
 /* NFA device manager control block */
 extern tNFA_DM_CB nfa_dm_cb;
