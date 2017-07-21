@@ -342,6 +342,9 @@ void nfc_ce_t3t_set_listen_params(void) {
     ARRAY_TO_BE_STREAM(p_params, t3tPMM, NCI_T3T_PMM_LEN);
   }
   tlv_size = (uint8_t)(p_params - tlv);
+  if (appl_dta_mode_flag == 0x01) {
+    nfa_dm_cb.eDtaMode |= NFA_DTA_HCEF_MODE;
+  }
   nfa_dm_check_set_config(tlv_size, (uint8_t*)tlv, false);
 }
 
