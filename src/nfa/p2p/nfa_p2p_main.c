@@ -605,7 +605,7 @@ void nfa_p2p_enable_listening(tNFA_SYS_ID sys_id, bool update_wks) {
 
   if (NFC_GetNCIVersion() == NCI_VERSION_2_0) {
     if (nfa_p2p_cb.listen_tech_mask & NFA_TECHNOLOGY_MASK_ACTIVE)
-      p2p_listen_mask |= NFA_DM_DISC_MASK_PACM_NFC_DEP;
+      p2p_listen_mask |= NFA_DM_DISC_MASK_LACM_NFC_DEP;
   } else {
     if (nfa_p2p_cb.listen_tech_mask & NFA_TECHNOLOGY_MASK_A_ACTIVE)
       p2p_listen_mask |= NFA_DM_DISC_MASK_LAA_NFC_DEP;
