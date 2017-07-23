@@ -325,6 +325,14 @@ typedef struct {
   tNFC_NFCEE_MODE mode; /* NFCEE mode       */
 } tNFC_NFCEE_MODE_SET_REVT;
 
+#if (APPL_DTA_MODE == TRUE)
+/* This data type is for FW Version */
+typedef struct {
+  uint8_t rom_code_version; /* ROM code Version  */
+  uint8_t major_version;    /* Major Version */
+  uint8_t minor_version;    /* Minor Version  */
+} tNFC_FW_VERSION;
+#endif
 #define NFC_MAX_AID_LEN NCI_MAX_AID_LEN /* 16 */
 
 /* the data type associated with NFC_CE_GET_ROUTING_REVT */
@@ -1290,6 +1298,22 @@ extern tNFC_STATUS NFC_SendVsCommand(uint8_t oid, NFC_HDR* p_data,
 
 /*******************************************************************************
 **
+** Function         NFC_SendRawVsCommand
+**
+** Description      This function is called to send the given raw command to
+**                  NFCC. The response from NFCC is reported to the given
+**                  tNFC_VS_CBACK.
+**
+** Parameters       p_data - The command buffer
+**
+** Returns          tNFC_STATUS
+**
+*******************************************************************************/
+extern tNFC_STATUS NFC_SendRawVsCommand(NFC_HDR* p_data,
+                                        tNFC_VS_CBACK* p_cback);
+
+/*******************************************************************************
+**
 ** Function         NFC_TestLoopback
 **
 ** Description      This function is called to send the given data packet
@@ -1327,6 +1351,20 @@ extern uint8_t NFC_SetTraceLevel(uint8_t new_level);
 **
 *******************************************************************************/
 extern tNFC_STATUS NFC_ISODEPNakPresCheck();
+
+#if (APPL_DTA_MODE == TRUE)
+/*******************************************************************************
+**
+** Function         nfc_ncif_getFWVersion
+**
+** Description      This function sets the trace level for NFC.  If called with
+**                  a value of 0xFF, it simply returns the current trace level.
+**
+** Returns          The new or current trace level
+**
+*******************************************************************************/
+extern tNFC_FW_VERSION nfc_ncif_getFWVersion();
+#endif
 
 #if (BT_TRACE_VERBOSE == TRUE)
 /*******************************************************************************
