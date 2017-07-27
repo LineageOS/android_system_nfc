@@ -614,8 +614,8 @@ init_retry:
   phNxpNciHal_enable_i2c_fragmentation();
   /*Get FW version from device*/
   status = phDnldNfc_InitImgInfo();
-  NXPLOG_NCIHAL_D("FW version for FW file = 0x%x", wFwVer);
-  NXPLOG_NCIHAL_D("FW version from device = 0x%x", wFwVerRsp);
+  NXPLOG_NCIHAL_E("FW version for FW file = 0x%x", wFwVer);
+  NXPLOG_NCIHAL_E("FW version from device = 0x%x", wFwVerRsp);
   if ((wFwVerRsp & 0x0000FFFF) == wFwVer) {
     NXPLOG_NCIHAL_D("FW uptodate not required");
     phDnldNfc_ReSetHwDevHandle();
