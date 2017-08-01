@@ -91,119 +91,119 @@ typedef struct {
   { *(p)++ = (uint8_t)(u8); }
 #define INT8_TO_STREAM(p, u8) \
   { *(p)++ = (int8_t)(u8); }
-#define ARRAY32_TO_STREAM(p, a)                                   \
+#define ARRAY32_TO_STREAM(p, a)                                     \
+  {                                                                 \
+    register int ijk;                                               \
+    for (ijk = 0; ijk < 32; ijk++) *(p)++ = (uint8_t)(a)[31 - ijk]; \
+  }
+#define ARRAY16_TO_STREAM(p, a)                                     \
+  {                                                                 \
+    register int ijk;                                               \
+    for (ijk = 0; ijk < 16; ijk++) *(p)++ = (uint8_t)(a)[15 - ijk]; \
+  }
+#define ARRAY8_TO_STREAM(p, a)                                    \
   {                                                               \
     register int ijk;                                             \
-    for (ijk = 0; ijk < 32; ijk++) *(p)++ = (uint8_t)a[31 - ijk]; \
+    for (ijk = 0; ijk < 8; ijk++) *(p)++ = (uint8_t)(a)[7 - ijk]; \
   }
-#define ARRAY16_TO_STREAM(p, a)                                   \
-  {                                                               \
-    register int ijk;                                             \
-    for (ijk = 0; ijk < 16; ijk++) *(p)++ = (uint8_t)a[15 - ijk]; \
-  }
-#define ARRAY8_TO_STREAM(p, a)                                  \
-  {                                                             \
-    register int ijk;                                           \
-    for (ijk = 0; ijk < 8; ijk++) *(p)++ = (uint8_t)a[7 - ijk]; \
-  }
-#define BDADDR_TO_STREAM(p, a)                    \
-  {                                               \
-    register int ijk;                             \
-    for (ijk = 0; ijk < BD_ADDR_LEN; ijk++)       \
-      *(p)++ = (uint8_t)a[BD_ADDR_LEN - 1 - ijk]; \
-  }
-#define LAP_TO_STREAM(p, a)                   \
-  {                                           \
-    register int ijk;                         \
-    for (ijk = 0; ijk < LAP_LEN; ijk++)       \
-      *(p)++ = (uint8_t)a[LAP_LEN - 1 - ijk]; \
-  }
-#define DEVCLASS_TO_STREAM(p, a)                    \
+#define BDADDR_TO_STREAM(p, a)                      \
   {                                                 \
     register int ijk;                               \
-    for (ijk = 0; ijk < DEV_CLASS_LEN; ijk++)       \
-      *(p)++ = (uint8_t)a[DEV_CLASS_LEN - 1 - ijk]; \
+    for (ijk = 0; ijk < BD_ADDR_LEN; ijk++)         \
+      *(p)++ = (uint8_t)(a)[BD_ADDR_LEN - 1 - ijk]; \
   }
-#define ARRAY_TO_STREAM(p, a, len)                            \
-  {                                                           \
-    register int ijk;                                         \
-    for (ijk = 0; ijk < len; ijk++) *(p)++ = (uint8_t)a[ijk]; \
+#define LAP_TO_STREAM(p, a)                     \
+  {                                             \
+    register int ijk;                           \
+    for (ijk = 0; ijk < LAP_LEN; ijk++)         \
+      *(p)++ = (uint8_t)(a)[LAP_LEN - 1 - ijk]; \
   }
-#define REVERSE_ARRAY_TO_STREAM(p, a, len)                              \
-  {                                                                     \
-    register int ijk;                                                   \
-    for (ijk = 0; ijk < len; ijk++) *(p)++ = (uint8_t)a[len - 1 - ijk]; \
+#define DEVCLASS_TO_STREAM(p, a)                      \
+  {                                                   \
+    register int ijk;                                 \
+    for (ijk = 0; ijk < DEV_CLASS_LEN; ijk++)         \
+      *(p)++ = (uint8_t)(a)[DEV_CLASS_LEN - 1 - ijk]; \
+  }
+#define ARRAY_TO_STREAM(p, a, len)                                \
+  {                                                               \
+    register int ijk;                                             \
+    for (ijk = 0; ijk < (len); ijk++) *(p)++ = (uint8_t)(a)[ijk]; \
+  }
+#define REVERSE_ARRAY_TO_STREAM(p, a, len)                                    \
+  {                                                                           \
+    register int ijk;                                                         \
+    for (ijk = 0; ijk < (len); ijk++) *(p)++ = (uint8_t)(a)[(len) - 1 - ijk]; \
   }
 
-#define STREAM_TO_UINT8(u8, p) \
-  {                            \
-    u8 = (uint8_t)(*(p));      \
-    (p) += 1;                  \
+#define STREAM_TO_UINT8(u8, p)   \
+  {                              \
+    (u8) = (uint8_t)(*(p));      \
+    (p) += 1;                    \
   }
-#define STREAM_TO_UINT16(u16, p)                                \
-  {                                                             \
-    u16 = ((uint16_t)(*(p)) + (((uint16_t)(*((p) + 1))) << 8)); \
-    (p) += 2;                                                   \
+#define STREAM_TO_UINT16(u16, p)                                  \
+  {                                                               \
+    (u16) = ((uint16_t)(*(p)) + (((uint16_t)(*((p) + 1))) << 8)); \
+    (p) += 2;                                                     \
   }
-#define STREAM_TO_UINT24(u32, p)                                    \
-  {                                                                 \
-    u32 = (((uint32_t)(*(p))) + ((((uint32_t)(*((p) + 1)))) << 8) + \
-           ((((uint32_t)(*((p) + 2)))) << 16));                     \
-    (p) += 3;                                                       \
+#define STREAM_TO_UINT24(u32, p)                                      \
+  {                                                                   \
+    (u32) = (((uint32_t)(*(p))) + ((((uint32_t)(*((p) + 1)))) << 8) + \
+           ((((uint32_t)(*((p) + 2)))) << 16));                       \
+    (p) += 3;                                                         \
   }
-#define STREAM_TO_UINT32(u32, p)                                    \
-  {                                                                 \
-    u32 = (((uint32_t)(*(p))) + ((((uint32_t)(*((p) + 1)))) << 8) + \
-           ((((uint32_t)(*((p) + 2)))) << 16) +                     \
-           ((((uint32_t)(*((p) + 3)))) << 24));                     \
-    (p) += 4;                                                       \
+#define STREAM_TO_UINT32(u32, p)                                      \
+  {                                                                   \
+    (u32) = (((uint32_t)(*(p))) + ((((uint32_t)(*((p) + 1)))) << 8) + \
+           ((((uint32_t)(*((p) + 2)))) << 16) +                       \
+           ((((uint32_t)(*((p) + 3)))) << 24));                       \
+    (p) += 4;                                                         \
   }
-#define STREAM_TO_BDADDR(a, p)                              \
-  {                                                         \
-    register int ijk;                                       \
-    register uint8_t* pbda = (uint8_t*)a + BD_ADDR_LEN - 1; \
-    for (ijk = 0; ijk < BD_ADDR_LEN; ijk++) *pbda-- = *p++; \
+#define STREAM_TO_BDADDR(a, p)                                \
+  {                                                           \
+    register int ijk;                                         \
+    register uint8_t* pbda = (uint8_t*)(a) + BD_ADDR_LEN - 1; \
+    for (ijk = 0; ijk < BD_ADDR_LEN; ijk++) *pbda-- = *(p)++; \
   }
-#define STREAM_TO_ARRAY32(a, p)                   \
-  {                                               \
-    register int ijk;                             \
-    register uint8_t* _pa = (uint8_t*)a + 31;     \
-    for (ijk = 0; ijk < 32; ijk++) *_pa-- = *p++; \
+#define STREAM_TO_ARRAY32(a, p)                     \
+  {                                                 \
+    register int ijk;                               \
+    register uint8_t* _pa = (uint8_t*)(a) + 31;     \
+    for (ijk = 0; ijk < 32; ijk++) *_pa-- = *(p)++; \
   }
-#define STREAM_TO_ARRAY16(a, p)                   \
-  {                                               \
-    register int ijk;                             \
-    register uint8_t* _pa = (uint8_t*)a + 15;     \
-    for (ijk = 0; ijk < 16; ijk++) *_pa-- = *p++; \
+#define STREAM_TO_ARRAY16(a, p)                     \
+  {                                                 \
+    register int ijk;                               \
+    register uint8_t* _pa = (uint8_t*)(a) + 15;     \
+    for (ijk = 0; ijk < 16; ijk++) *_pa-- = *(p)++; \
   }
-#define STREAM_TO_ARRAY8(a, p)                   \
-  {                                              \
-    register int ijk;                            \
-    register uint8_t* _pa = (uint8_t*)a + 7;     \
-    for (ijk = 0; ijk < 8; ijk++) *_pa-- = *p++; \
-  }
-#define STREAM_TO_DEVCLASS(a, p)                             \
-  {                                                          \
-    register int ijk;                                        \
-    register uint8_t* _pa = (uint8_t*)a + DEV_CLASS_LEN - 1; \
-    for (ijk = 0; ijk < DEV_CLASS_LEN; ijk++) *_pa-- = *p++; \
-  }
-#define STREAM_TO_LAP(a, p)                             \
-  {                                                     \
-    register int ijk;                                   \
-    register uint8_t* plap = (uint8_t*)a + LAP_LEN - 1; \
-    for (ijk = 0; ijk < LAP_LEN; ijk++) *plap-- = *p++; \
-  }
-#define STREAM_TO_ARRAY(a, p, len)                             \
-  {                                                            \
-    register int ijk;                                          \
-    for (ijk = 0; ijk < len; ijk++) ((uint8_t*)a)[ijk] = *p++; \
-  }
-#define REVERSE_STREAM_TO_ARRAY(a, p, len)         \
+#define STREAM_TO_ARRAY8(a, p)                     \
   {                                                \
     register int ijk;                              \
-    register uint8_t* _pa = (uint8_t*)a + len - 1; \
-    for (ijk = 0; ijk < len; ijk++) *_pa-- = *p++; \
+    register uint8_t* _pa = (uint8_t*)(a) + 7;     \
+    for (ijk = 0; ijk < 8; ijk++) *_pa-- = *(p)++; \
+  }
+#define STREAM_TO_DEVCLASS(a, p)                               \
+  {                                                            \
+    register int ijk;                                          \
+    register uint8_t* _pa = (uint8_t*)(a) + DEV_CLASS_LEN - 1; \
+    for (ijk = 0; ijk < DEV_CLASS_LEN; ijk++) *_pa-- = *(p)++; \
+  }
+#define STREAM_TO_LAP(a, p)                               \
+  {                                                       \
+    register int ijk;                                     \
+    register uint8_t* plap = (uint8_t*)(a) + LAP_LEN - 1; \
+    for (ijk = 0; ijk < LAP_LEN; ijk++) *plap-- = *(p)++; \
+  }
+#define STREAM_TO_ARRAY(a, p, len)                                   \
+  {                                                                  \
+    register int ijk;                                                \
+    for (ijk = 0; ijk < (len); ijk++) ((uint8_t*)(a))[ijk] = *(p)++; \
+  }
+#define REVERSE_STREAM_TO_ARRAY(a, p, len)             \
+  {                                                    \
+    register int ijk;                                  \
+    register uint8_t* _pa = (uint8_t*)(a) + (len) - 1; \
+    for (ijk = 0; ijk < (len); ijk++) *_pa-- = *(p)++; \
   }
 
 /*****************************************************************************
@@ -256,38 +256,38 @@ typedef struct {
   }
 #define UINT8_TO_BE_STREAM(p, u8) \
   { *(p)++ = (uint8_t)(u8); }
-#define ARRAY_TO_BE_STREAM(p, a, len)                         \
-  {                                                           \
-    register int ijk;                                         \
-    for (ijk = 0; ijk < len; ijk++) *(p)++ = (uint8_t)a[ijk]; \
+#define ARRAY_TO_BE_STREAM(p, a, len)                             \
+  {                                                               \
+    register int ijk;                                             \
+    for (ijk = 0; ijk < (len); ijk++) *(p)++ = (uint8_t)(a)[ijk]; \
   }
 
-#define BE_STREAM_TO_UINT8(u8, p) \
-  {                               \
-    u8 = (uint8_t)(*(p));         \
-    (p) += 1;                     \
+#define BE_STREAM_TO_UINT8(u8, p)   \
+  {                                 \
+    (u8) = (uint8_t)(*(p));         \
+    (p) += 1;                       \
   }
-#define BE_STREAM_TO_UINT16(u16, p)                                     \
+#define BE_STREAM_TO_UINT16(u16, p)                                       \
+  {                                                                       \
+    (u16) = (uint16_t)(((uint16_t)(*(p)) << 8) + (uint16_t)(*((p) + 1))); \
+    (p) += 2;                                                             \
+  }
+#define BE_STREAM_TO_UINT24(u32, p)                                     \
   {                                                                     \
-    u16 = (uint16_t)(((uint16_t)(*(p)) << 8) + (uint16_t)(*((p) + 1))); \
-    (p) += 2;                                                           \
-  }
-#define BE_STREAM_TO_UINT24(u32, p)                                   \
-  {                                                                   \
-    u32 = (((uint32_t)(*((p) + 2))) + ((uint32_t)(*((p) + 1)) << 8) + \
-           ((uint32_t)(*(p)) << 16));                                 \
-    (p) += 3;                                                         \
+    (u32) = (((uint32_t)(*((p) + 2))) + ((uint32_t)(*((p) + 1)) << 8) + \
+           ((uint32_t)(*(p)) << 16));                                   \
+    (p) += 3;                                                           \
   }
 #define BE_STREAM_TO_UINT32(u32, p)                                    \
   {                                                                    \
-    u32 = ((uint32_t)(*((p) + 3)) + ((uint32_t)(*((p) + 2)) << 8) +    \
+    (u32) = ((uint32_t)(*((p) + 3)) + ((uint32_t)(*((p) + 2)) << 8) +  \
            ((uint32_t)(*((p) + 1)) << 16) + ((uint32_t)(*(p)) << 24)); \
     (p) += 4;                                                          \
   }
-#define BE_STREAM_TO_ARRAY(p, a, len)                          \
-  {                                                            \
-    register int ijk;                                          \
-    for (ijk = 0; ijk < len; ijk++) ((uint8_t*)a)[ijk] = *p++; \
+#define BE_STREAM_TO_ARRAY(p, a, len)                                \
+  {                                                                  \
+    register int ijk;                                                \
+    for (ijk = 0; ijk < (len); ijk++) ((uint8_t*)(a))[ijk] = *(p)++; \
   }
 
 /*****************************************************************************
