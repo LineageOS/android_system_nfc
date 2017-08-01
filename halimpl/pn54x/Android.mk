@@ -35,9 +35,6 @@ ifeq ($(PN553),4)
 D_CFLAGS += -DPN553=4
 endif
 
-#### Select the CHIP ####
-NXP_CHIP_TYPE := $PN553
-
 ifeq ($(NXP_CHIP_TYPE),$(PN547C2))
 D_CFLAGS += -DNFC_NXP_CHIP_TYPE=PN547C2
 else ifeq ($(NXP_CHIP_TYPE),$(PN548C2))
