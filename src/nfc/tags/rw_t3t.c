@@ -60,7 +60,7 @@
 #define RW_T3T_MIN_TIMEOUT_TICKS 10
 
 /* Macro to extract major version from NDEF version byte */
-#define T3T_GET_MAJOR_VERSION(ver) (ver >> 4)
+#define T3T_GET_MAJOR_VERSION(ver) ((ver) >> 4)
 
 /* Enumeration of API commands */
 enum {
