@@ -69,6 +69,7 @@ uint8_t nci_snd_nfcee_mode_set(uint8_t nfcee_id, uint8_t nfcee_mode);
 uint8_t nci_snd_set_routing_cmd(bool more, uint8_t num_tlv, uint8_t tlv_size,
                                 uint8_t* p_param_tlvs);
 uint8_t nci_snd_get_routing_cmd(void);
+uint8_t nci_snd_nfcee_power_link_control(uint8_t nfcee_id, uint8_t pl_config);
 #endif
 
 #ifdef __cplusplus

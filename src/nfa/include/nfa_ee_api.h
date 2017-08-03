@@ -132,6 +132,7 @@ typedef struct {
       ee_interface[NFC_MAX_EE_INTERFACE]; /* NFCEE supported interface */
   uint8_t num_tlvs;                       /* number of TLVs           */
   tNFA_EE_TLV ee_tlv[NFC_MAX_EE_TLVS];    /* the TLV                  */
+  uint8_t ee_power_supply_status;         /* The NFCEE Power supply */
 } tNFA_EE_INFO;
 
 typedef struct {

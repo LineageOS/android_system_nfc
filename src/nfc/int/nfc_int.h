@@ -50,6 +50,7 @@ extern "C" {
 #define NFC_TTYPE_NCI_WAIT_RSP 0
 #define NFC_TTYPE_WAIT_2_DEACTIVATE 1
 #define NFC_WAIT_RSP_RAW_VS 0x02
+#define NFC_TTYPE_WAIT_MODE_SET_NTF 2
 
 #define NFC_TTYPE_LLCP_LINK_MANAGER 100
 #define NFC_TTYPE_LLCP_LINK_INACT 101
@@ -66,7 +67,8 @@ extern "C" {
 /* added for p2p prio logic clenaup */
 #define NFC_TTYPE_P2P_PRIO_LOGIC_CLEANUP 111
 #define NFC_TTYPE_VS_BASE 200
-
+/* time out for mode set notification */
+#define NFC_MODE_SET_NTF_TIMEOUT 2
 /* NFC Task event messages */
 
 enum {
@@ -105,6 +107,8 @@ enum {
 #define NFC_FL_DISCOVER_PENDING 0x0040
 /* NFC_FL_CONTROL_REQUESTED on HAL request      */
 #define NFC_FL_HAL_REQUESTED 0x0080
+/* Waiting for NFCEE Mode Set NTF                 */
+#define NFC_FL_WAIT_MODE_SET_NTF 0x0100
 
 #define NFC_PEND_CONN_ID 0xFE
 #define NFC_CONN_ID_INT_MASK 0xF0
@@ -196,7 +200,7 @@ typedef struct {
   /* NFC_TASK timer management */
   TIMER_LIST_Q timer_queue; /* 1-sec timer event queue */
   TIMER_LIST_Q quick_timer_queue;
-
+  TIMER_LIST_ENT mode_set_ntf_timer; /* Timer to wait for deactivation */
   TIMER_LIST_ENT deactivate_timer; /* Timer to wait for deactivation */
 
   tNFC_STATE nfc_state;
@@ -229,6 +233,8 @@ typedef struct {
   uint8_t rawVsCbflag;
   uint8_t deact_reason;
 
+  TIMER_LIST_ENT nci_mode_set_ntf_timer; /*Mode set notification timer*/
+
 } tNFC_CB;
 
 /*****************************************************************************
@@ -243,7 +249,7 @@ extern tNFC_CB nfc_cb;
 ****************************************************************************/
 
 #define NCI_CALCULATE_ACK(a, v) \
-  { a &= ((1 << v) - 1); }
+  { (a) &= ((1 << (v)) - 1); }
 #define MAX_NUM_VALID_BITS_FOR_ACK 0x07
 
 extern void nfc_init(void);
@@ -261,6 +267,7 @@ void nfc_ncif_send(NFC_HDR* p_buf, bool is_cmd);
 extern uint8_t nfc_ncif_send_data(tNFC_CONN_CB* p_cb, NFC_HDR* p_data);
 extern void nfc_ncif_cmd_timeout(void);
 extern void nfc_wait_2_deactivate_timeout(void);
+extern void nfc_mode_set_ntf_timeout(void);
 
 extern bool nfc_ncif_process_event(NFC_HDR* p_msg);
 extern void nfc_ncif_check_cmd_queue(NFC_HDR* p_buf);

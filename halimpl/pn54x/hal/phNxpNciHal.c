@@ -2633,7 +2633,7 @@ retry_core_init:
     retry_core_init_cnt++;
     goto retry_core_init;
   }
-  if (nxpncihal_ctrl.nci_data.nci_version == NCI_VERSION_2_0) {
+  if (nxpncihal_ctrl.nci_info.nci_version == NCI_VERSION_2_0) {
     status = phNxpNciHal_send_ext_cmd(sizeof(cmd_init_nci2_0), cmd_init_nci2_0);
   } else {
     status = phNxpNciHal_send_ext_cmd(sizeof(cmd_init_nci), cmd_init_nci);

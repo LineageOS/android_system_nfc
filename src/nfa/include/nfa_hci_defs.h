@@ -38,6 +38,10 @@
 /* Generic Gates */
 #define NFA_HCI_CONNECTIVITY_GATE 0x41
 
+/* Proprietary Gates */
+#define NFA_HCI_PROP_GATE_FIRST 0xF0
+#define NFA_HCI_PROP_GATE_LAST 0xFF
+
 /* Static pipes */
 #define NFA_HCI_LINK_MANAGEMENT_PIPE 0x00
 #define NFA_HCI_ADMIN_PIPE 0x01
