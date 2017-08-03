@@ -152,6 +152,19 @@ tNFA_STATUS NFA_Disable(bool graceful) {
 
   return (NFA_STATUS_FAILED);
 }
+
+/*******************************************************************************
+**
+** Function         NFA_GetNCIVersion
+**
+** Description      Returns the NCI version of the NFCC to upper layer
+**
+**
+** Returns          NCI version NCI2.0 / NCI1.0
+**
+*******************************************************************************/
+uint8_t NFA_GetNCIVersion() { return NFC_GetNCIVersion(); }
+
 /*******************************************************************************
 **
 ** Function         NFA_SetPowerSubStateForScreenState
