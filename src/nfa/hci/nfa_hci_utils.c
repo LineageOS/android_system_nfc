@@ -35,7 +35,7 @@
 
 static void handle_debug_loopback(NFC_HDR* p_buf, uint8_t pipe, uint8_t type,
                                   uint8_t instruction);
-bool HCI_LOOPBACK_DEBUG = false;
+uint8_t HCI_LOOPBACK_DEBUG = NFA_HCI_DEBUG_OFF;
 
 /*******************************************************************************
 **
@@ -357,7 +357,7 @@ tNFA_STATUS nfa_hciu_send_msg(uint8_t pipe_id, uint8_t type,
               (bool)((p_buf->len - data_len) == 2));
 #endif
 
-      if (HCI_LOOPBACK_DEBUG)
+      if (HCI_LOOPBACK_DEBUG == NFA_HCI_DEBUG_ON)
         handle_debug_loopback(p_buf, pipe_id, type, instruction);
       else
         status = NFC_SendData(nfa_hci_cb.conn_id, p_buf);

@@ -24,11 +24,14 @@
 #ifndef NFA_HCI_INT_H
 #define NFA_HCI_INT_H
 
+#include "nfa_ee_api.h"
 #include "nfa_hci_api.h"
 #include "nfa_sys.h"
+extern uint8_t HCI_LOOPBACK_DEBUG;
 
-extern bool HCI_LOOPBACK_DEBUG;
-
+/* NFA HCI DEBUG states */
+#define NFA_HCI_DEBUG_ON 0x01
+#define NFA_HCI_DEBUG_OFF 0x00
 /*****************************************************************************
 **  Constants and data types
 *****************************************************************************/
@@ -364,6 +367,7 @@ typedef struct {
 typedef struct {
   tNFA_HCI_STATE hci_state;   /* state of the HCI */
   uint8_t num_nfcee;          /* Number of NFCEE ID Discovered */
+  tNFA_EE_INFO ee_info[NFA_HCI_MAX_HOST_IN_NETWORK]; /*NFCEE ID Info*/
   uint8_t num_ee_dis_req_ntf; /* Number of ee discovery request ntf received */
   uint8_t num_hot_plug_evts;  /* Number of Hot plug events received after ee
                                  discovery disable ntf */
@@ -442,6 +446,7 @@ extern void nfa_hci_dh_startup_complete(void);
 extern void nfa_hci_startup_complete(tNFA_STATUS status);
 extern void nfa_hci_startup(void);
 extern void nfa_hci_restore_default_config(uint8_t* p_session_id);
+extern void nfa_hci_enable_one_nfcee(void);
 
 /* Action functions in nfa_hci_act.c
 */
