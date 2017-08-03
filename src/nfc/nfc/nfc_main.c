@@ -236,8 +236,21 @@ void nfc_enabled(tNFC_STATUS nfc_status, NFC_HDR* p_init_rsp_msg) {
     p_cb->init_credits = p_cb->num_buff = 0;
     nfc_set_conn_id(p_cb, NFC_RF_CONN_ID);
     if (nfc_cb.nci_version == NCI_VERSION_2_0) {
-      evt_data.enable.hci_packet_size = *p++;
-      evt_data.enable.hci_conn_credits = *p++;
+      if (evt_data.enable.nci_features & NCI_FEAT_HCI_NETWORK) {
+        p_cb = &nfc_cb.conn_cb[NFC_HCI_CONN_ID];
+        nfc_set_conn_id(p_cb, NFC_HCI_CONN_ID);
+        p_cb->id = NFC_HCI_CONN_ID;
+        STREAM_TO_UINT8(p_cb->buff_size, p);
+        STREAM_TO_UINT8(p_cb->num_buff, p);
+        p_cb->init_credits = p_cb->num_buff;
+        evt_data.enable.hci_packet_size = p_cb->buff_size;
+        evt_data.enable.hci_conn_credits = p_cb->init_credits;
+        NFC_TRACE_DEBUG2("hci num_buf=%d buf_size=%d", p_cb->num_buff,
+                         p_cb->buff_size);
+      } else {
+        /*HCI n/w not enabled skip data buff size and data credit HCI conn */
+        p += 2;
+      }
       STREAM_TO_UINT16(evt_data.enable.max_nfc_v_size, p);
       STREAM_TO_UINT8(num_interfaces, p);
 #if (NFC_RW_ONLY == FALSE)
@@ -1326,6 +1339,34 @@ tNFC_STATUS NFC_ISODEPNakPresCheck() {
   return nci_snd_iso_dep_nak_presence_check_cmd();
 }
 
+/*******************************************************************************
+**
+** Function         NFC_SetStaticHciCback
+**
+** Description      This function is called to update the data callback function
+**                  to receive the data for the static Hci connection id.
+**
+** Parameters       p_cback - the connection callback function
+**
+** Returns          Nothing
+**
+*******************************************************************************/
+void NFC_SetStaticHciCback(tNFC_CONN_CBACK* p_cback) {
+  NFC_TRACE_DEBUG2("%s dest: %d", __func__, NCI_DEST_TYPE_NFCEE);
+  tNFC_CONN_CB* p_cb = &nfc_cb.conn_cb[NFC_HCI_CONN_ID];
+  tNFC_CONN evt_data;
+
+  p_cb->p_cback = p_cback;
+  if (p_cback && p_cb->buff_size && p_cb->num_buff) {
+    NFC_TRACE_DEBUG2("%s dest: %d", __func__, NCI_DEST_TYPE_NFCEE);
+    evt_data.conn_create.status = NFC_STATUS_OK;
+    evt_data.conn_create.dest_type = NCI_DEST_TYPE_NFCEE;
+    evt_data.conn_create.id = p_cb->id;
+    evt_data.conn_create.buff_size = p_cb->buff_size;
+    evt_data.conn_create.num_buffs = p_cb->num_buff;
+    (*p_cback)(NFC_HCI_CONN_ID, NFC_CONN_CREATE_CEVT, &evt_data);
+  }
+}
 #if (BT_TRACE_VERBOSE == TRUE)
 /*******************************************************************************
 **

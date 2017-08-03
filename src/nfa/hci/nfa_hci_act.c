@@ -1359,6 +1359,11 @@ void nfa_hci_handle_admin_gate_rsp(uint8_t* p_data, uint8_t data_len) {
           if ((nfa_hci_cb.hci_state == NFA_HCI_STATE_STARTUP) ||
               (nfa_hci_cb.hci_state == NFA_HCI_STATE_RESTORE))
             nfa_hci_dh_startup_complete();
+          if (NFA_GetNCIVersion() == NCI_VERSION_2_0) {
+            nfa_hci_cb.hci_state = NFA_HCI_STATE_WAIT_NETWK_ENABLE;
+            NFA_EeGetInfo(&nfa_hci_cb.num_nfcee, nfa_hci_cb.ee_info);
+            nfa_hci_enable_one_nfcee();
+          }
         }
         break;
 
