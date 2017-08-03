@@ -674,23 +674,25 @@ NFCSTATUS phNxpNciHal_write_ext(uint16_t* cmd_len, uint8_t* p_cmd_data,
         "Going through extns - Adding Mifare in RF Discovery - END");
   } else if (p_cmd_data[3] == 0x81 && p_cmd_data[4] == 0x01 &&
              p_cmd_data[5] == 0x03) {
-    NXPLOG_NCIHAL_D("> Going through workaround - set host list");
+    if (nxpncihal_ctrl.nci_info.nci_version != NCI_VERSION_2_0) {
+      NXPLOG_NCIHAL_D("> Going through workaround - set host list");
 
 #if (NFC_NXP_CHIP_TYPE != PN547C2)
-    *cmd_len = 8;
+      *cmd_len = 8;
 
-    p_cmd_data[2] = 0x05;
-    p_cmd_data[6] = 0x02;
-    p_cmd_data[7] = 0xC0;
+      p_cmd_data[2] = 0x05;
+      p_cmd_data[6] = 0x02;
+      p_cmd_data[7] = 0xC0;
 #else
-    *cmd_len = 7;
+      *cmd_len = 7;
 
-    p_cmd_data[2] = 0x04;
-    p_cmd_data[6] = 0xC0;
+      p_cmd_data[2] = 0x04;
+      p_cmd_data[6] = 0xC0;
 #endif
 
-    NXPLOG_NCIHAL_D("> Going through workaround - set host list - END");
-    status = NFCSTATUS_SUCCESS;
+      NXPLOG_NCIHAL_D("> Going through workaround - set host list - END");
+      status = NFCSTATUS_SUCCESS;
+    }
   } else if (icode_detected) {
     if ((p_cmd_data[3] & 0x40) == 0x40 &&
         (p_cmd_data[4] == 0x21 || p_cmd_data[4] == 0x22 ||
