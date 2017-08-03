@@ -304,6 +304,7 @@ void nci_proc_ee_management_rsp(NFC_HDR* p_msg) {
   tNFC_NFCEE_DISCOVER_REVT nfcee_discover;
   tNFC_NFCEE_INFO_REVT nfcee_info;
   tNFC_NFCEE_MODE_SET_REVT mode_set;
+  tNFC_NFCEE_PL_CONTROL_REVT pl_control;
   tNFC_RESPONSE* p_evt = (tNFC_RESPONSE*)&nfcee_info;
   tNFC_RESPONSE_EVT event = NFC_NFCEE_INFO_REVT;
   uint8_t* p_old = nfc_cb.last_cmd;
@@ -329,12 +330,24 @@ void nci_proc_ee_management_rsp(NFC_HDR* p_msg) {
     case NCI_MSG_NFCEE_MODE_SET:
       p_evt = (tNFC_RESPONSE*)&mode_set;
       mode_set.status = *pp;
-      mode_set.nfcee_id = 0;
-      event = NFC_NFCEE_MODE_SET_REVT;
       mode_set.nfcee_id = *p_old++;
       mode_set.mode = *p_old++;
+      if (nfc_cb.nci_version != NCI_VERSION_2_0 || *pp != NCI_STATUS_OK) {
+        nfc_cb.flags &= ~NFC_FL_WAIT_MODE_SET_NTF;
+        event = NFC_NFCEE_MODE_SET_REVT;
+      } else {
+        /* else response reports OK status on notification */
+        return;
+      }
       break;
 
+    case NCI_MSG_NFCEE_POWER_LINK_CTRL:
+      p_evt = (tNFC_RESPONSE*)&pl_control;
+      p_evt->pl_control.status = *pp;
+      p_evt->pl_control.nfcee_id = *p_old++;
+      p_evt->pl_control.pl_control = *p_old++;
+      event = NFC_NFCEE_PL_CONTROL_REVT;
+      break;
     default:
       p_cback = NULL;
       NFC_TRACE_ERROR1("unknown opcode:0x%x", op_code);
@@ -360,11 +373,13 @@ void nci_proc_ee_management_ntf(NFC_HDR* p_msg) {
   tNFC_NFCEE_INFO_REVT nfcee_info;
   tNFC_RESPONSE* p_evt = (tNFC_RESPONSE*)&nfcee_info;
   tNFC_RESPONSE_EVT event = NFC_NFCEE_INFO_REVT;
+  uint8_t* p_old = nfc_cb.last_cmd;
   uint8_t xx;
   uint8_t yy;
   uint8_t ee_status;
   tNFC_NFCEE_TLV* p_tlv;
-
+  tNFC_NFCEE_MODE_SET_REVT mode_set;
+  tNFC_NFCEE_STATUS_REVT nfcee_status;
   /* find the start of the NCI message and parse the NCI header */
   p = (uint8_t*)(p_msg + 1) + p_msg->offset;
   pp = p + 1;
@@ -408,6 +423,20 @@ void nci_proc_ee_management_ntf(NFC_HDR* p_msg) {
       STREAM_TO_ARRAY(p_tlv->info, pp, p_tlv->len);
       pp = p += yy;
     }
+  } else if (op_code == NCI_MSG_NFCEE_MODE_SET) {
+    p_evt = (tNFC_RESPONSE*)&mode_set;
+    mode_set.status = *pp;
+    mode_set.nfcee_id = *p_old++;
+    mode_set.mode = *p_old++;
+    event = NFC_NFCEE_MODE_SET_REVT;
+    nfc_cb.flags &= ~NFC_FL_WAIT_MODE_SET_NTF;
+    nfc_stop_timer(&nfc_cb.nci_mode_set_ntf_timer);
+  } else if (op_code == NCI_MSG_NFCEE_STATUS) {
+    p_evt = (tNFC_RESPONSE*)&nfcee_status;
+    event = NFC_NFCEE_STATUS_REVT;
+    nfcee_status.status = NCI_STATUS_OK;
+    nfcee_status.nfcee_id = *pp++;
+    nfcee_status.nfcee_status = *pp;
   } else {
     p_cback = NULL;
     NFC_TRACE_ERROR1("unknown opcode:0x%x", op_code);

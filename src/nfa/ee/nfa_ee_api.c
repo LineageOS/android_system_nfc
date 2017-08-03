@@ -119,6 +119,7 @@ tNFA_STATUS NFA_EeGetInfo(uint8_t* p_num_nfcee, tNFA_EE_INFO* p_info) {
     p_info->num_tlvs = p_cb->num_tlvs;
     memcpy(p_info->ee_interface, p_cb->ee_interface, p_cb->num_interface);
     memcpy(p_info->ee_tlv, p_cb->ee_tlv, p_cb->num_tlvs * sizeof(tNFA_EE_TLV));
+    p_info->ee_power_supply_status = p_cb->ee_power_supply_status;
     p_info++;
     num_ret++;
   }
