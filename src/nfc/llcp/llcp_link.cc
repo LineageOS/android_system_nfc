@@ -81,7 +81,7 @@ extern unsigned char appl_dta_mode_flag;
 
 /* debug functions type */
 #if (BT_TRACE_VERBOSE == TRUE)
-static char* llcp_pdu_type(uint8_t ptype);
+static std::string llcp_pdu_type(uint8_t ptype);
 #endif
 
 /*******************************************************************************
@@ -1146,7 +1146,7 @@ static void llcp_link_proc_agf_pdu(NFC_HDR* p_agf) {
     LLCP_TRACE_DEBUG4(
         "llcp_link_proc_agf_pdu (): Rx DSAP:0x%x, PTYPE:%s (0x%x), SSAP:0x%x "
         "in AGF",
-        dsap, llcp_pdu_type(ptype), ptype, ssap);
+        dsap, llcp_pdu_type(ptype).c_str(), ptype, ssap);
 #endif
 
     if ((ptype == LLCP_PDU_DISC_TYPE) && (dsap == LLCP_SAP_LM) &&
@@ -1312,7 +1312,7 @@ static void llcp_link_proc_rx_data(NFC_HDR* p_msg) {
           LLCP_TRACE_DEBUG4(
               "llcp_link_proc_rx_data (): DSAP:0x%x, PTYPE:%s (0x%x), "
               "SSAP:0x%x",
-              dsap, llcp_pdu_type(ptype), ptype, ssap);
+              dsap, llcp_pdu_type(ptype).c_str(), ptype, ssap);
 #endif
 
           if (ptype == LLCP_PDU_SYMM_TYPE) {
@@ -1654,7 +1654,7 @@ void llcp_link_connection_cback(uint8_t conn_id, tNFC_CONN_EVT event,
 ** Returns          string of PDU type
 **
 *******************************************************************************/
-static char* llcp_pdu_type(uint8_t ptype) {
+static std::string llcp_pdu_type(uint8_t ptype) {
   switch (ptype) {
     case LLCP_PDU_SYMM_TYPE:
       return "SYMM";
@@ -1682,7 +1682,6 @@ static char* llcp_pdu_type(uint8_t ptype) {
       return "RR";
     case LLCP_PDU_RNR_TYPE:
       return "RNR";
-
     default:
       return "RESERVED";
   }

@@ -264,7 +264,7 @@ static void nfa_dm_nfc_response_cback(tNFC_RESPONSE_EVT event,
 
 #if (BT_TRACE_VERBOSE == TRUE)
   NFA_TRACE_DEBUG2("nfa_dm_nfc_response_cback () %s(0x%x)",
-                   nfa_dm_nfc_revt_2_str(event), event);
+                   nfa_dm_nfc_revt_2_str(event).c_str(), event);
 #else
   NFA_TRACE_DEBUG1("nfa_dm_nfc_response_cback () event=0x%x", event);
 #endif
@@ -1823,62 +1823,44 @@ void nfa_dm_notify_activation_status(tNFA_STATUS status,
 ** Description      convert nfc revt to string
 **
 *******************************************************************************/
-char* nfa_dm_nfc_revt_2_str(tNFC_RESPONSE_EVT event) {
+std::string nfa_dm_nfc_revt_2_str(tNFC_RESPONSE_EVT event) {
   switch (event) {
     case NFC_ENABLE_REVT:
       return "NFC_ENABLE_REVT";
-
     case NFC_DISABLE_REVT:
       return "NFC_DISABLE_REVT";
-
     case NFC_SET_CONFIG_REVT:
       return "NFC_SET_CONFIG_REVT";
-
     case NFC_GET_CONFIG_REVT:
       return "NFC_GET_CONFIG_REVT";
-
     case NFC_NFCEE_DISCOVER_REVT:
       return "NFC_NFCEE_DISCOVER_REVT";
-
     case NFC_NFCEE_INFO_REVT:
       return "NFC_NFCEE_INFO_REVT";
-
     case NFC_NFCEE_MODE_SET_REVT:
       return "NFC_NFCEE_MODE_SET_REVT";
-
     case NFC_RF_FIELD_REVT:
       return "NFC_RF_FIELD_REVT";
-
     case NFC_EE_ACTION_REVT:
       return "NFC_EE_ACTION_REVT";
-
     case NFC_EE_DISCOVER_REQ_REVT:
       return "NFC_EE_DISCOVER_REQ_REVT";
-
     case NFC_SET_ROUTING_REVT:
       return "NFC_SET_ROUTING_REVT";
-
     case NFC_GET_ROUTING_REVT:
       return "NFC_GET_ROUTING_REVT";
-
     case NFC_GEN_ERROR_REVT:
       return "NFC_GEN_ERROR_REVT";
-
     case NFC_NFCC_RESTART_REVT:
       return "NFC_NFCC_RESTART_REVT";
-
     case NFC_NFCC_TIMEOUT_REVT:
       return "NFC_NFCC_TIMEOUT_REVT";
-
     case NFC_NFCC_TRANSPORT_ERR_REVT:
       return "NFC_NFCC_TRANSPORT_ERR_REVT";
-
     case NFC_NFCC_POWER_OFF_REVT:
       return "NFC_NFCC_POWER_OFF_REVT";
-
     default:
       return "unknown revt";
-      break;
   }
 }
 #endif /* BT_VERBOSE */

@@ -33,9 +33,6 @@
 /*****************************************************************************
 **  Function Declarations
 *****************************************************************************/
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /*******************************************************************************
 **
@@ -80,10 +77,6 @@ void nfc_hal_nv_ci_write(tNFC_HAL_NV_CO_STATUS status);
 *******************************************************************************/
 void nfc_hal_nv_ci_read(uint16_t num_bytes_read, tNFC_HAL_NV_CO_STATUS status,
                         uint8_t block);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* NFC_HAL_HCI_INCLUDED */
 

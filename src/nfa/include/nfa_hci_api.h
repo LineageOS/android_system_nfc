@@ -291,9 +291,6 @@ typedef void(tNFA_HCI_CBACK)(tNFA_HCI_EVT event, tNFA_HCI_EVT_DATA* p_data);
 /*****************************************************************************
 **  External Function Declarations
 *****************************************************************************/
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /*******************************************************************************
 **
@@ -611,9 +608,5 @@ extern tNFA_STATUS NFA_HciAddStaticPipe(tNFA_HANDLE hci_handle, uint8_t host,
 **
 *******************************************************************************/
 extern void NFA_HciDebug(uint8_t action, uint8_t size, uint8_t* p_data);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* NFA_P2P_API_H */

@@ -50,7 +50,7 @@ const tNFA_RW_ACTION nfa_rw_action_tbl[] = {
 ** Local function prototypes
 *****************************************************************************/
 #if (BT_TRACE_VERBOSE == TRUE)
-static char* nfa_rw_evt_2_str(uint16_t event);
+static std::string nfa_rw_evt_2_str(uint16_t event);
 #endif
 
 /*******************************************************************************
@@ -174,7 +174,7 @@ bool nfa_rw_handle_event(NFC_HDR* p_msg) {
 
 #if (BT_TRACE_VERBOSE == TRUE)
   NFA_TRACE_EVENT3("nfa_rw_handle_event event: %s (0x%02x), flags: %08x",
-                   nfa_rw_evt_2_str(p_msg->event), p_msg->event,
+                   nfa_rw_evt_2_str(p_msg->event).c_str(), p_msg->event,
                    nfa_rw_cb.flags);
 #else
   NFA_TRACE_EVENT2("nfa_rw_handle_event event: 0x%x, flags: %08x", p_msg->event,
@@ -200,23 +200,18 @@ bool nfa_rw_handle_event(NFC_HDR* p_msg) {
 ** Description      convert nfa_rw evt to string
 **
 *******************************************************************************/
-static char* nfa_rw_evt_2_str(uint16_t event) {
+static std::string nfa_rw_evt_2_str(uint16_t event) {
   switch (event) {
     case NFA_RW_OP_REQUEST_EVT:
       return "NFA_RW_OP_REQUEST_EVT";
-
     case NFA_RW_ACTIVATE_NTF_EVT:
       return "NFA_RW_ACTIVATE_NTF_EVT";
-
     case NFA_RW_DEACTIVATE_NTF_EVT:
       return "NFA_RW_DEACTIVATE_NTF_EVT";
-
     case NFA_RW_PRESENCE_CHECK_TICK_EVT:
       return "NFA_RW_PRESENCE_CHECK_TICK_EVT";
-
     case NFA_RW_PRESENCE_CHECK_TIMEOUT_EVT:
       return "NFA_RW_PRESENCE_CHECK_TIMEOUT_EVT";
-
     default:
       return "Unknown";
   }

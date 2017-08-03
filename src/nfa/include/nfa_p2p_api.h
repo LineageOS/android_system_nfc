@@ -188,9 +188,6 @@ typedef void(tNFA_P2P_CBACK)(tNFA_P2P_EVT event, tNFA_P2P_EVT_DATA* p_data);
 /*****************************************************************************
 **  External Function Declarations
 *****************************************************************************/
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /*******************************************************************************
 **
@@ -570,9 +567,5 @@ extern void NFA_P2pGetLLCPConfig(uint16_t* p_link_miu, uint8_t* p_opt,
 **
 *******************************************************************************/
 extern uint8_t NFA_P2pSetTraceLevel(uint8_t new_level);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* NFA_P2P_API_H */

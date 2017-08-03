@@ -81,9 +81,9 @@ enum {
 };
 
 #if (BT_TRACE_VERBOSE == TRUE)
-static char* rw_i93_get_state_name(uint8_t state);
-static char* rw_i93_get_sub_state_name(uint8_t sub_state);
-static char* rw_i93_get_tag_name(uint8_t product_version);
+static std::string rw_i93_get_state_name(uint8_t state);
+static std::string rw_i93_get_sub_state_name(uint8_t sub_state);
+static std::string rw_i93_get_tag_name(uint8_t product_version);
 #endif
 
 static void rw_i93_data_cback(uint8_t conn_id, tNFC_CONN_EVT event,
@@ -171,7 +171,7 @@ void rw_i93_get_product_version(uint8_t* p_uid) {
 
 #if (BT_TRACE_VERBOSE == TRUE)
   RW_TRACE_DEBUG1("product_version = <%s>",
-                  rw_i93_get_tag_name(p_i93->product_version));
+                  rw_i93_get_tag_name(p_i93->product_version).c_str());
 #else
   RW_TRACE_DEBUG1("product_version = %d", p_i93->product_version);
 #endif
@@ -323,7 +323,7 @@ bool rw_i93_check_sys_info_prot_ext(uint8_t error_code) {
 **
 *******************************************************************************/
 void rw_i93_send_to_upper(NFC_HDR* p_resp) {
-  uint8_t *p = (uint8_t *)(p_resp + 1) + p_resp->offset, *p_uid;
+  uint8_t *p = (uint8_t*)(p_resp + 1) + p_resp->offset, *p_uid;
   uint16_t length = p_resp->len;
   tRW_I93_CB* p_i93 = &rw_cb.tcb.i93;
   tRW_DATA rw_data;
@@ -1377,7 +1377,7 @@ tNFC_STATUS rw_i93_get_next_block_sec(void) {
 **
 *******************************************************************************/
 void rw_i93_sm_detect_ndef(NFC_HDR* p_resp) {
-  uint8_t *p = (uint8_t *)(p_resp + 1) + p_resp->offset, *p_uid;
+  uint8_t *p = (uint8_t*)(p_resp + 1) + p_resp->offset, *p_uid;
   uint8_t flags, u8 = 0, cc[4];
   uint16_t length = p_resp->len, xx, block, first_block, last_block, num_blocks;
   tRW_I93_CB* p_i93 = &rw_cb.tcb.i93;
@@ -1386,7 +1386,7 @@ void rw_i93_sm_detect_ndef(NFC_HDR* p_resp) {
 
 #if (BT_TRACE_VERBOSE == TRUE)
   RW_TRACE_DEBUG2("rw_i93_sm_detect_ndef () sub_state:%s (0x%x)",
-                  rw_i93_get_sub_state_name(p_i93->sub_state),
+                  rw_i93_get_sub_state_name(p_i93->sub_state).c_str(),
                   p_i93->sub_state);
 #else
   RW_TRACE_DEBUG1("rw_i93_sm_detect_ndef () sub_state:0x%x", p_i93->sub_state);
@@ -1858,7 +1858,7 @@ void rw_i93_sm_update_ndef(NFC_HDR* p_resp) {
 
 #if (BT_TRACE_VERBOSE == TRUE)
   RW_TRACE_DEBUG2("rw_i93_sm_update_ndef () sub_state:%s (0x%x)",
-                  rw_i93_get_sub_state_name(p_i93->sub_state),
+                  rw_i93_get_sub_state_name(p_i93->sub_state).c_str(),
                   p_i93->sub_state);
 #else
   RW_TRACE_DEBUG1("rw_i93_sm_update_ndef () sub_state:0x%x", p_i93->sub_state);
@@ -2102,7 +2102,7 @@ void rw_i93_sm_update_ndef(NFC_HDR* p_resp) {
 **
 *******************************************************************************/
 void rw_i93_sm_format(NFC_HDR* p_resp) {
-  uint8_t *p = (uint8_t *)(p_resp + 1) + p_resp->offset, *p_uid;
+  uint8_t *p = (uint8_t*)(p_resp + 1) + p_resp->offset, *p_uid;
   uint8_t flags;
   uint16_t length = p_resp->len, xx, block_number;
   tRW_I93_CB* p_i93 = &rw_cb.tcb.i93;
@@ -2111,7 +2111,7 @@ void rw_i93_sm_format(NFC_HDR* p_resp) {
 
 #if (BT_TRACE_VERBOSE == TRUE)
   RW_TRACE_DEBUG2("rw_i93_sm_format () sub_state:%s (0x%x)",
-                  rw_i93_get_sub_state_name(p_i93->sub_state),
+                  rw_i93_get_sub_state_name(p_i93->sub_state).c_str(),
                   p_i93->sub_state);
 #else
   RW_TRACE_DEBUG1("rw_i93_sm_format () sub_state:0x%x", p_i93->sub_state);
@@ -2443,7 +2443,7 @@ void rw_i93_sm_set_read_only(NFC_HDR* p_resp) {
 
 #if (BT_TRACE_VERBOSE == TRUE)
   RW_TRACE_DEBUG2("rw_i93_sm_set_read_only () sub_state:%s (0x%x)",
-                  rw_i93_get_sub_state_name(p_i93->sub_state),
+                  rw_i93_get_sub_state_name(p_i93->sub_state).c_str(),
                   p_i93->sub_state);
 #else
   RW_TRACE_DEBUG1("rw_i93_sm_set_read_only () sub_state:0x%x",
@@ -2753,7 +2753,7 @@ static void rw_i93_data_cback(uint8_t conn_id, tNFC_CONN_EVT event,
 
 #if (BT_TRACE_VERBOSE == TRUE)
   RW_TRACE_DEBUG2("RW I93 state: <%s (%d)>",
-                  rw_i93_get_state_name(p_i93->state), p_i93->state);
+                  rw_i93_get_state_name(p_i93->state).c_str(), p_i93->state);
 #else
   RW_TRACE_DEBUG1("RW I93 state: %d", p_i93->state);
 #endif
@@ -2822,8 +2822,8 @@ static void rw_i93_data_cback(uint8_t conn_id, tNFC_CONN_EVT event,
 #if (BT_TRACE_VERBOSE == TRUE)
   if (begin_state != p_i93->state) {
     RW_TRACE_DEBUG2("RW I93 state changed:<%s> -> <%s>",
-                    rw_i93_get_state_name(begin_state),
-                    rw_i93_get_state_name(p_i93->state));
+                    rw_i93_get_state_name(begin_state).c_str(),
+                    rw_i93_get_state_name(p_i93->state).c_str());
   }
 #endif
 }
@@ -3713,30 +3713,28 @@ tNFC_STATUS RW_I93PresenceCheck(void) {
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-static char* rw_i93_get_state_name(uint8_t state) {
+static std::string rw_i93_get_state_name(uint8_t state) {
   switch (state) {
     case RW_I93_STATE_NOT_ACTIVATED:
-      return ("NOT_ACTIVATED");
+      return "NOT_ACTIVATED";
     case RW_I93_STATE_IDLE:
-      return ("IDLE");
+      return "IDLE";
     case RW_I93_STATE_BUSY:
-      return ("BUSY");
-
+      return "BUSY";
     case RW_I93_STATE_DETECT_NDEF:
-      return ("NDEF_DETECTION");
+      return "NDEF_DETECTION";
     case RW_I93_STATE_READ_NDEF:
-      return ("READ_NDEF");
+      return "READ_NDEF";
     case RW_I93_STATE_UPDATE_NDEF:
-      return ("UPDATE_NDEF");
+      return "UPDATE_NDEF";
     case RW_I93_STATE_FORMAT:
-      return ("FORMAT");
+      return "FORMAT";
     case RW_I93_STATE_SET_READ_ONLY:
-      return ("SET_READ_ONLY");
-
+      return "SET_READ_ONLY";
     case RW_I93_STATE_PRESENCE_CHECK:
-      return ("PRESENCE_CHECK");
+      return "PRESENCE_CHECK";
     default:
-      return ("???? UNKNOWN STATE");
+      return "???? UNKNOWN STATE";
   }
 }
 
@@ -3751,38 +3749,38 @@ static char* rw_i93_get_state_name(uint8_t state) {
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-static char* rw_i93_get_sub_state_name(uint8_t sub_state) {
+static std::string rw_i93_get_sub_state_name(uint8_t sub_state) {
   switch (sub_state) {
     case RW_I93_SUBSTATE_WAIT_UID:
-      return ("WAIT_UID");
+      return "WAIT_UID";
     case RW_I93_SUBSTATE_WAIT_SYS_INFO:
-      return ("WAIT_SYS_INFO");
+      return "WAIT_SYS_INFO";
     case RW_I93_SUBSTATE_WAIT_CC:
-      return ("WAIT_CC");
+      return "WAIT_CC";
     case RW_I93_SUBSTATE_SEARCH_NDEF_TLV:
-      return ("SEARCH_NDEF_TLV");
+      return "SEARCH_NDEF_TLV";
     case RW_I93_SUBSTATE_CHECK_LOCK_STATUS:
-      return ("CHECK_LOCK_STATUS");
+      return "CHECK_LOCK_STATUS";
     case RW_I93_SUBSTATE_RESET_LEN:
-      return ("RESET_LEN");
+      return "RESET_LEN";
     case RW_I93_SUBSTATE_WRITE_NDEF:
-      return ("WRITE_NDEF");
+      return "WRITE_NDEF";
     case RW_I93_SUBSTATE_UPDATE_LEN:
-      return ("UPDATE_LEN");
+      return "UPDATE_LEN";
     case RW_I93_SUBSTATE_WAIT_RESET_DSFID_AFI:
-      return ("WAIT_RESET_DSFID_AFI");
+      return "WAIT_RESET_DSFID_AFI";
     case RW_I93_SUBSTATE_CHECK_READ_ONLY:
-      return ("CHECK_READ_ONLY");
+      return "CHECK_READ_ONLY";
     case RW_I93_SUBSTATE_WRITE_CC_NDEF_TLV:
-      return ("WRITE_CC_NDEF_TLV");
+      return "WRITE_CC_NDEF_TLV";
     case RW_I93_SUBSTATE_WAIT_UPDATE_CC:
-      return ("WAIT_UPDATE_CC");
+      return "WAIT_UPDATE_CC";
     case RW_I93_SUBSTATE_LOCK_NDEF_TLV:
-      return ("LOCK_NDEF_TLV");
+      return "LOCK_NDEF_TLV";
     case RW_I93_SUBSTATE_WAIT_LOCK_CC:
-      return ("WAIT_LOCK_CC");
+      return "WAIT_LOCK_CC";
     default:
-      return ("???? UNKNOWN SUBSTATE");
+      return "???? UNKNOWN SUBSTATE";
   }
 }
 
@@ -3797,41 +3795,41 @@ static char* rw_i93_get_sub_state_name(uint8_t sub_state) {
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-static char* rw_i93_get_tag_name(uint8_t product_version) {
+static std::string rw_i93_get_tag_name(uint8_t product_version) {
   switch (product_version) {
     case RW_I93_ICODE_SLI:
-      return ("SLI/SLIX");
+      return "SLI/SLIX";
     case RW_I93_ICODE_SLI_S:
-      return ("SLI-S/SLIX-S");
+      return "SLI-S/SLIX-S";
     case RW_I93_ICODE_SLI_L:
-      return ("SLI-L/SLIX-L");
+      return "SLI-L/SLIX-L";
     case RW_I93_TAG_IT_HF_I_PLUS_INLAY:
-      return ("Tag-it HF-I Plus Inlay");
+      return "Tag-it HF-I Plus Inlay";
     case RW_I93_TAG_IT_HF_I_PLUS_CHIP:
-      return ("Tag-it HF-I Plus Chip");
+      return "Tag-it HF-I Plus Chip";
     case RW_I93_TAG_IT_HF_I_STD_CHIP_INLAY:
-      return ("Tag-it HF-I Standard Chip/Inlyas");
+      return "Tag-it HF-I Standard Chip/Inlyas";
     case RW_I93_TAG_IT_HF_I_PRO_CHIP_INLAY:
-      return ("Tag-it HF-I Pro Chip/Inlays");
+      return "Tag-it HF-I Pro Chip/Inlays";
     case RW_I93_STM_LRI1K:
-      return ("LRi1K");
+      return "LRi1K";
     case RW_I93_STM_LRI2K:
-      return ("LRi2K");
+      return "LRi2K";
     case RW_I93_STM_LRIS2K:
-      return ("LRiS2K");
+      return "LRiS2K";
     case RW_I93_STM_LRIS64K:
-      return ("LRiS64K");
+      return "LRiS64K";
     case RW_I93_STM_M24LR64_R:
-      return ("M24LR64");
+      return "M24LR64";
     case RW_I93_STM_M24LR04E_R:
-      return ("M24LR04E");
+      return "M24LR04E";
     case RW_I93_STM_M24LR16E_R:
-      return ("M24LR16E");
+      return "M24LR16E";
     case RW_I93_STM_M24LR64E_R:
-      return ("M24LR64E");
+      return "M24LR64E";
     case RW_I93_UNKNOWN_PRODUCT:
     default:
-      return ("UNKNOWN");
+      return "UNKNOWN";
   }
 }
 

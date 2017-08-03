@@ -88,28 +88,28 @@ static const tNCI_DISCOVER_MAPS nfc_interface_mapping[NFC_NUM_INTERFACE_MAP] = {
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-static char* nfc_state_name(uint8_t state) {
+static std::string nfc_state_name(uint8_t state) {
   switch (state) {
     case NFC_STATE_NONE:
-      return ("NONE");
+      return "NONE";
     case NFC_STATE_W4_HAL_OPEN:
-      return ("W4_HAL_OPEN");
+      return "W4_HAL_OPEN";
     case NFC_STATE_CORE_INIT:
-      return ("CORE_INIT");
+      return "CORE_INIT";
     case NFC_STATE_W4_POST_INIT_CPLT:
-      return ("W4_POST_INIT_CPLT");
+      return "W4_POST_INIT_CPLT";
     case NFC_STATE_IDLE:
-      return ("IDLE");
+      return "IDLE";
     case NFC_STATE_OPEN:
-      return ("OPEN");
+      return "OPEN";
     case NFC_STATE_CLOSING:
-      return ("CLOSING");
+      return "CLOSING";
     case NFC_STATE_W4_HAL_CLOSE:
-      return ("W4_HAL_CLOSE");
+      return "W4_HAL_CLOSE";
     case NFC_STATE_NFCC_POWER_OFF_SLEEP:
-      return ("NFCC_POWER_OFF_SLEEP");
+      return "NFCC_POWER_OFF_SLEEP";
     default:
-      return ("???? UNKNOWN STATE");
+      return "???? UNKNOWN STATE";
   }
 }
 
@@ -124,31 +124,24 @@ static char* nfc_state_name(uint8_t state) {
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-static char* nfc_hal_event_name(uint8_t event) {
+static std::string nfc_hal_event_name(uint8_t event) {
   switch (event) {
     case HAL_NFC_OPEN_CPLT_EVT:
-      return ("HAL_NFC_OPEN_CPLT_EVT");
-
+      return "HAL_NFC_OPEN_CPLT_EVT";
     case HAL_NFC_CLOSE_CPLT_EVT:
-      return ("HAL_NFC_CLOSE_CPLT_EVT");
-
+      return "HAL_NFC_CLOSE_CPLT_EVT";
     case HAL_NFC_POST_INIT_CPLT_EVT:
-      return ("HAL_NFC_POST_INIT_CPLT_EVT");
-
+      return "HAL_NFC_POST_INIT_CPLT_EVT";
     case HAL_NFC_PRE_DISCOVER_CPLT_EVT:
-      return ("HAL_NFC_PRE_DISCOVER_CPLT_EVT");
-
+      return "HAL_NFC_PRE_DISCOVER_CPLT_EVT";
     case HAL_NFC_REQUEST_CONTROL_EVT:
-      return ("HAL_NFC_REQUEST_CONTROL_EVT");
-
+      return "HAL_NFC_REQUEST_CONTROL_EVT";
     case HAL_NFC_RELEASE_CONTROL_EVT:
-      return ("HAL_NFC_RELEASE_CONTROL_EVT");
-
+      return "HAL_NFC_RELEASE_CONTROL_EVT";
     case HAL_NFC_ERROR_EVT:
-      return ("HAL_NFC_ERROR_EVT");
-
+      return "HAL_NFC_ERROR_EVT";
     default:
-      return ("???? UNKNOWN EVENT");
+      return "???? UNKNOWN EVENT";
   }
 }
 #endif /* BT_TRACE_VERBOSE == TRUE */
@@ -323,8 +316,8 @@ void nfc_enabled(tNFC_STATUS nfc_status, NFC_HDR* p_init_rsp_msg) {
 void nfc_set_state(tNFC_STATE nfc_state) {
 #if (BT_TRACE_VERBOSE == TRUE)
   NFC_TRACE_DEBUG4("nfc_set_state %d (%s)->%d (%s)", nfc_cb.nfc_state,
-                   nfc_state_name(nfc_cb.nfc_state), nfc_state,
-                   nfc_state_name(nfc_state));
+                   nfc_state_name(nfc_cb.nfc_state).c_str(), nfc_state,
+                   nfc_state_name(nfc_state).c_str());
 #else
   NFC_TRACE_DEBUG2("nfc_set_state %d->%d", nfc_cb.nfc_state, nfc_state);
 #endif
@@ -564,7 +557,7 @@ void nfc_main_post_hal_evt(uint8_t hal_evt, tHAL_NFC_STATUS status) {
 static void nfc_main_hal_cback(uint8_t event, tHAL_NFC_STATUS status) {
 #if (BT_TRACE_VERBOSE == TRUE)
   NFC_TRACE_DEBUG3("nfc_main_hal_cback event: %s(0x%x), status=%d",
-                   nfc_hal_event_name(event), event, status);
+                   nfc_hal_event_name(event).c_str(), event, status);
 #else
   NFC_TRACE_DEBUG2("nfc_main_hal_cback event: 0x%x, status=%d", event, status);
 #endif
@@ -1121,7 +1114,7 @@ tNFC_STATUS NFC_Deactivate(tNFC_DEACT_TYPE deactivate_type) {
 
 #if (BT_TRACE_VERBOSE == TRUE)
   NFC_TRACE_API3("NFC_Deactivate %d (%s) deactivate_type:%d", nfc_cb.nfc_state,
-                 nfc_state_name(nfc_cb.nfc_state), deactivate_type);
+                 nfc_state_name(nfc_cb.nfc_state).c_str(), deactivate_type);
 #else
   NFC_TRACE_API2("NFC_Deactivate %d deactivate_type:%d", nfc_cb.nfc_state,
                  deactivate_type);
@@ -1379,7 +1372,7 @@ void NFC_SetStaticHciCback(tNFC_CONN_CBACK* p_cback) {
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-char* NFC_GetStatusName(tNFC_STATUS status) {
+std::string NFC_GetStatusName(tNFC_STATUS status) {
   switch (status) {
     case NFC_STATUS_OK:
       return "OK";

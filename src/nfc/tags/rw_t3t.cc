@@ -122,8 +122,8 @@ enum {
 };
 
 #if (BT_TRACE_VERBOSE == TRUE)
-static char* rw_t3t_cmd_str(uint8_t cmd_id);
-static char* rw_t3t_state_str(uint8_t state_id);
+static std::string rw_t3t_cmd_str(uint8_t cmd_id);
+static std::string rw_t3t_state_str(uint8_t state_id);
 #endif
 
 /* Local static functions */
@@ -262,9 +262,9 @@ void rw_t3t_process_error(tNFC_STATUS status) {
       /* allocate a new buffer for message */
       p_cmd_buf = rw_t3t_get_cmd_buf();
       if (p_cmd_buf != NULL) {
-        memcpy(p_cmd_buf, p_cb->p_cur_cmd_buf,
-               sizeof(NFC_HDR) + p_cb->p_cur_cmd_buf->offset +
-                   p_cb->p_cur_cmd_buf->len);
+        memcpy(p_cmd_buf, p_cb->p_cur_cmd_buf, sizeof(NFC_HDR) +
+                                                   p_cb->p_cur_cmd_buf->offset +
+                                                   p_cb->p_cur_cmd_buf->len);
 
         if (rw_t3t_send_to_lower(p_cmd_buf) == NFC_STATUS_OK) {
           /* Start timer for waiting for response */
@@ -480,9 +480,9 @@ void rw_t3t_process_timeout(TIMER_LIST_ENT* p_tle) {
 /* UPDATE/CHECK response timeout */
 #if (BT_TRACE_VERBOSE == TRUE)
     RW_TRACE_ERROR3("T3T timeout. state=%s cur_cmd=0x%02X (%s)",
-                    rw_t3t_state_str(rw_cb.tcb.t3t.rw_state),
+                    rw_t3t_state_str(rw_cb.tcb.t3t.rw_state).c_str(),
                     rw_cb.tcb.t3t.cur_cmd,
-                    rw_t3t_cmd_str(rw_cb.tcb.t3t.cur_cmd));
+                    rw_t3t_cmd_str(rw_cb.tcb.t3t.cur_cmd).c_str());
 #else
     RW_TRACE_ERROR2("T3T timeout. state=0x%02X cur_cmd=0x%02X",
                     rw_cb.tcb.t3t.rw_state, rw_cb.tcb.t3t.cur_cmd);
@@ -538,8 +538,9 @@ void rw_t3t_process_timeout(TIMER_LIST_ENT* p_tle) {
 void rw_t3t_process_frame_error(void) {
 #if (BT_TRACE_VERBOSE == TRUE)
   RW_TRACE_ERROR3("T3T frame error. state=%s cur_cmd=0x%02X (%s)",
-                  rw_t3t_state_str(rw_cb.tcb.t3t.rw_state),
-                  rw_cb.tcb.t3t.cur_cmd, rw_t3t_cmd_str(rw_cb.tcb.t3t.cur_cmd));
+                  rw_t3t_state_str(rw_cb.tcb.t3t.rw_state).c_str(),
+                  rw_cb.tcb.t3t.cur_cmd,
+                  rw_t3t_cmd_str(rw_cb.tcb.t3t.cur_cmd).c_str());
 #else
   RW_TRACE_ERROR2("T3T frame error. state=0x%02X cur_cmd=0x%02X",
                   rw_cb.tcb.t3t.rw_state, rw_cb.tcb.t3t.cur_cmd);
@@ -1451,10 +1452,10 @@ void rw_t3t_act_handle_raw_senddata_rsp(tRW_T3T_CB* p_cb,
   NFC_HDR* p_pkt = p_data->p_data;
 
 #if (BT_TRACE_VERBOSE == TRUE)
-  RW_TRACE_DEBUG2("RW T3T Raw Frame: Len [0x%X] Status [%s]", p_pkt->len,
-                  NFC_GetStatusName(p_data->status));
+  RW_TRACE_DEBUG2("RW T3T Raw Frame: Len [0x%X] Status [%s]", &p_pkt->len,
+                  NFC_GetStatusName(p_data->status).c_str());
 #else
-  RW_TRACE_DEBUG2("RW T3T Raw Frame: Len [0x%X] Status [0x%X]", p_pkt->len,
+  RW_TRACE_DEBUG2("RW T3T Raw Frame: Len [0x%X] Status [0x%X]", &p_pkt->len,
                   p_data->status);
 #endif
 
@@ -2396,29 +2397,22 @@ static void rw_t3t_update_ndef_flag(uint8_t* p_flag) {
 ** Returns          command string
 **
 *******************************************************************************/
-static char* rw_t3t_cmd_str(uint8_t cmd_id) {
+static std::string rw_t3t_cmd_str(uint8_t cmd_id) {
   switch (cmd_id) {
     case RW_T3T_CMD_DETECT_NDEF:
       return "RW_T3T_CMD_DETECT_NDEF";
-
     case RW_T3T_CMD_CHECK_NDEF:
       return "RW_T3T_CMD_CHECK_NDEF";
-
     case RW_T3T_CMD_UPDATE_NDEF:
       return "RW_T3T_CMD_UPDATE_NDEF";
-
     case RW_T3T_CMD_CHECK:
       return "RW_T3T_CMD_CHECK";
-
     case RW_T3T_CMD_UPDATE:
       return "RW_T3T_CMD_UPDATE";
-
     case RW_T3T_CMD_SEND_RAW_FRAME:
       return "RW_T3T_CMD_SEND_RAW_FRAME";
-
     case RW_T3T_CMD_GET_SYSTEM_CODES:
       return "RW_T3T_CMD_GET_SYSTEM_CODES";
-
     default:
       return "Unknown";
   }
@@ -2433,17 +2427,14 @@ static char* rw_t3t_cmd_str(uint8_t cmd_id) {
 ** Returns          command string
 **
 *******************************************************************************/
-static char* rw_t3t_state_str(uint8_t state_id) {
+static std::string rw_t3t_state_str(uint8_t state_id) {
   switch (state_id) {
     case RW_T3T_STATE_NOT_ACTIVATED:
       return "RW_T3T_STATE_NOT_ACTIVATED";
-
     case RW_T3T_STATE_IDLE:
       return "RW_T3T_STATE_IDLE";
-
     case RW_T3T_STATE_COMMAND_PENDING:
       return "RW_T3T_STATE_COMMAND_PENDING";
-
     default:
       return "Unknown";
   }
