@@ -174,6 +174,7 @@ typedef struct {
   tNFA_EE_TLV ee_tlv[NFC_MAX_EE_TLVS];    /* the TLV */
   uint8_t num_interface;                  /* number of Target interface */
   uint8_t num_tlvs;                       /* number of TLVs */
+  uint8_t ee_power_supply_status;         /* power supply of NFCEE*/
   tNFA_EE_ECB_FLAGS ecb_flags;            /* the flags of this control block */
   tNFA_EE_INTERFACE use_interface; /* NFCEE interface used for the connection */
   tNFA_NFC_PROTOCOL la_protocol;   /* Listen A protocol    */
@@ -406,6 +407,8 @@ typedef uint8_t tNFA_EE_FLAGS;
 #define NFA_EE_DISC_STS_OFF 0x01
 /* received NFCEE DISCOVER REQ NTF  */
 #define NFA_EE_DISC_STS_REQ 0x02
+/* received NFA_EE_MODE_SET_COMPLETE  */
+#define NFA_EE_MODE_SET_COMPLETE 0x03
 typedef uint8_t tNFA_EE_DISC_STS;
 
 typedef void(tNFA_EE_ENABLE_DONE_CBACK)(tNFA_EE_DISC_STS status);

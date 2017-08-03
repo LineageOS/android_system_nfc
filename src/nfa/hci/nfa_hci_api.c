@@ -981,12 +981,12 @@ void NFA_HciDebug(uint8_t action, uint8_t size, uint8_t* p_data) {
 
     case NFA_HCI_DEBUG_ENABLE_LOOPBACK:
       NFA_TRACE_API0("NFA_HciDebug  HCI_LOOPBACK_DEBUG = TRUE");
-      HCI_LOOPBACK_DEBUG = true;
+      HCI_LOOPBACK_DEBUG = NFA_HCI_DEBUG_ON;
       break;
 
     case NFA_HCI_DEBUG_DISABLE_LOOPBACK:
       NFA_TRACE_API0("NFA_HciDebug  HCI_LOOPBACK_DEBUG = FALSE");
-      HCI_LOOPBACK_DEBUG = false;
+      HCI_LOOPBACK_DEBUG = NFA_HCI_DEBUG_OFF;
       break;
   }
 }
