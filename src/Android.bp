@@ -31,12 +31,8 @@ cc_library_shared {
         "include",
         "gki/ulinux",
         "gki/common",
-        "hal/include",
-        "hal/int",
         "nfa/include",
-        "nfa/int",
         "nfc/include",
-        "nfc/int",
     ],
     srcs: [
         "nfa/ce/*.cc",
