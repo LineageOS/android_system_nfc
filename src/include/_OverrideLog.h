@@ -34,10 +34,6 @@
 #include <cutils/log.h>  //define Android logging macros
 #include "bt_types.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 extern unsigned char appl_trace_level;
 extern uint32_t ScrProtocolTraceFlag;
 /* defined for run time DTA mode selection */
@@ -64,7 +60,3 @@ void initializeGlobalAppDtaMode();
 *******************************************************************************/
 unsigned char initializeGlobalAppLogLevel();
 uint32_t initializeProtocolLogLevel();
-
-#ifdef __cplusplus
-}
-#endif

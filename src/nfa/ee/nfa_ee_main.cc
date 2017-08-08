@@ -21,7 +21,7 @@
  *  This is the main implementation file for the NFA EE.
  *
  ******************************************************************************/
-#include <string.h>
+#include <string>
 #include "config.h"
 #include "nfa_dm_int.h"
 #include "nfa_ee_int.h"
@@ -525,23 +525,18 @@ void nfa_ee_reg_cback_enable_done(tNFA_EE_ENABLE_DONE_CBACK* p_cback) {
 ** Description      convert nfa-ee state to string
 **
 *******************************************************************************/
-static char* nfa_ee_sm_st_2_str(uint8_t state) {
+static std::string nfa_ee_sm_st_2_str(uint8_t state) {
   switch (state) {
     case NFA_EE_EM_STATE_INIT:
       return "INIT";
-
     case NFA_EE_EM_STATE_INIT_DONE:
       return "INIT_DONE";
-
     case NFA_EE_EM_STATE_RESTORING:
       return "RESTORING";
-
     case NFA_EE_EM_STATE_DISABLING:
       return "DISABLING";
-
     case NFA_EE_EM_STATE_DISABLED:
       return "DISABLED";
-
     default:
       return "Unknown";
   }
@@ -554,7 +549,7 @@ static char* nfa_ee_sm_st_2_str(uint8_t state) {
 ** Description      convert nfa-ee evt to string
 **
 *******************************************************************************/
-static char* nfa_ee_sm_evt_2_str(uint16_t event) {
+static std::string nfa_ee_sm_evt_2_str(uint16_t event) {
   switch (event) {
     case NFA_EE_API_DISCOVER_EVT:
       return "API_DISCOVER";
@@ -626,10 +621,10 @@ bool nfa_ee_evt_hdlr(NFC_HDR* p_msg) {
   bool act = false;
 
 #if (BT_TRACE_VERBOSE == TRUE)
-  NFA_TRACE_DEBUG4("nfa_ee_evt_hdlr (): Event %s(0x%02x), State: %s(%d)",
-                   nfa_ee_sm_evt_2_str(p_evt_data->hdr.event),
-                   p_evt_data->hdr.event,
-                   nfa_ee_sm_st_2_str(nfa_ee_cb.em_state), nfa_ee_cb.em_state);
+  NFA_TRACE_DEBUG4(
+      "nfa_ee_evt_hdlr (): Event %s(0x%02x), State: %s(%d)",
+      nfa_ee_sm_evt_2_str(p_evt_data->hdr.event).c_str(), p_evt_data->hdr.event,
+      nfa_ee_sm_st_2_str(nfa_ee_cb.em_state).c_str(), nfa_ee_cb.em_state);
 #else
   NFA_TRACE_DEBUG2("nfa_ee_evt_hdlr (): Event 0x%02x, State: %d",
                    p_evt_data->hdr.event, nfa_ee_cb.em_state);

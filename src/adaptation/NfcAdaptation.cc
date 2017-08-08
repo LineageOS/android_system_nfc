@@ -25,14 +25,14 @@
 #include "debug_nfcsnoop.h"
 #include "nfc_target.h"
 
-extern "C" {
 #include "gki.h"
 #include "nfa_api.h"
 #include "nfc_int.h"
 #include "vendor_cfg.h"
-}
+
 #include "android_logmsg.h"
 #include "config.h"
+#include "nfca_version.h"
 
 #undef LOG_TAG
 #define LOG_TAG "NfcAdaptation"
@@ -48,10 +48,10 @@ using android::hardware::nfc::V1_0::INfc;
 using android::hardware::nfc::V1_0::INfcClientCallback;
 using android::hardware::hidl_vec;
 
-extern "C" void GKI_shutdown();
+extern void GKI_shutdown();
 extern void resetConfig();
-extern "C" void verify_stack_non_volatile_store();
-extern "C" void delete_stack_non_volatile_store(bool forceDelete);
+extern void verify_stack_non_volatile_store();
+extern void delete_stack_non_volatile_store(bool forceDelete);
 
 NfcAdaptation* NfcAdaptation::mpInstance = NULL;
 ThreadMutex NfcAdaptation::sLock;

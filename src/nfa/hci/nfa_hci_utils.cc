@@ -21,7 +21,7 @@
  *  This file contains the utility functions for the NFA HCI.
  *
  ******************************************************************************/
-#include <string.h>
+#include <string>
 #include "nfa_dm_int.h"
 #include "nfa_hci_api.h"
 #include "nfa_hci_defs.h"
@@ -353,8 +353,7 @@ tNFA_STATUS nfa_hciu_send_msg(uint8_t pipe_id, uint8_t type,
       }
 
 #if (BT_TRACE_PROTOCOL == TRUE)
-      DispHcp(((uint8_t*)(p_buf + 1) + p_buf->offset), p_buf->len, false,
-              (bool)((p_buf->len - data_len) == 2));
+      DispHcp(((uint8_t*)(p_buf + 1) + p_buf->offset), p_buf->len, false);
 #endif
 
       if (HCI_LOOPBACK_DEBUG == NFA_HCI_DEBUG_ON)
@@ -1115,34 +1114,34 @@ void nfa_hciu_send_to_apps_handling_connectivity_evts(
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-char* nfa_hciu_get_response_name(uint8_t rsp_code) {
+static std::string nfa_hciu_get_response_name(uint8_t rsp_code) {
   switch (rsp_code) {
     case NFA_HCI_ANY_OK:
-      return ("ANY_OK");
+      return "ANY_OK";
     case NFA_HCI_ANY_E_NOT_CONNECTED:
-      return ("ANY_E_NOT_CONNECTED");
+      return "ANY_E_NOT_CONNECTED";
     case NFA_HCI_ANY_E_CMD_PAR_UNKNOWN:
-      return ("ANY_E_CMD_PAR_UNKNOWN");
+      return "ANY_E_CMD_PAR_UNKNOWN";
     case NFA_HCI_ANY_E_NOK:
-      return ("ANY_E_NOK");
+      return "ANY_E_NOK";
     case NFA_HCI_ADM_E_NO_PIPES_AVAILABLE:
-      return ("ADM_E_NO_PIPES_AVAILABLE");
+      return "ADM_E_NO_PIPES_AVAILABLE";
     case NFA_HCI_ANY_E_REG_PAR_UNKNOWN:
-      return ("ANY_E_REG_PAR_UNKNOWN");
+      return "ANY_E_REG_PAR_UNKNOWN";
     case NFA_HCI_ANY_E_PIPE_NOT_OPENED:
-      return ("ANY_E_PIPE_NOT_OPENED");
+      return "ANY_E_PIPE_NOT_OPENED";
     case NFA_HCI_ANY_E_CMD_NOT_SUPPORTED:
-      return ("ANY_E_CMD_NOT_SUPPORTED");
+      return "ANY_E_CMD_NOT_SUPPORTED";
     case NFA_HCI_ANY_E_INHIBITED:
-      return ("ANY_E_INHIBITED");
+      return "ANY_E_INHIBITED";
     case NFA_HCI_ANY_E_TIMEOUT:
-      return ("ANY_E_TIMEOUT");
+      return "ANY_E_TIMEOUT";
     case NFA_HCI_ANY_E_REG_ACCESS_DENIED:
-      return ("ANY_E_REG_ACCESS_DENIED");
+      return "ANY_E_REG_ACCESS_DENIED";
     case NFA_HCI_ANY_E_PIPE_ACCESS_DENIED:
-      return ("ANY_E_PIPE_ACCESS_DENIED");
+      return "ANY_E_PIPE_ACCESS_DENIED";
     default:
-      return ("UNKNOWN");
+      return "UNKNOWN";
   }
 }
 
@@ -1155,16 +1154,16 @@ char* nfa_hciu_get_response_name(uint8_t rsp_code) {
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-char* nfa_hciu_type_2_str(uint8_t type) {
+static std::string nfa_hciu_type_2_str(uint8_t type) {
   switch (type) {
     case NFA_HCI_COMMAND_TYPE:
-      return ("COMMAND");
+      return "COMMAND";
     case NFA_HCI_EVENT_TYPE:
-      return ("EVENT");
+      return "EVENT";
     case NFA_HCI_RESPONSE_TYPE:
-      return ("RESPONSE");
+      return "RESPONSE";
     default:
-      return ("UNKNOWN");
+      return "UNKNOWN";
   }
 }
 
@@ -1177,30 +1176,30 @@ char* nfa_hciu_type_2_str(uint8_t type) {
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-char* nfa_hciu_instr_2_str(uint8_t instruction) {
+std::string nfa_hciu_instr_2_str(uint8_t instruction) {
   switch (instruction) {
     case NFA_HCI_ANY_SET_PARAMETER:
-      return ("ANY_SET_PARAMETER");
+      return "ANY_SET_PARAMETER";
     case NFA_HCI_ANY_GET_PARAMETER:
-      return ("ANY_GET_PARAMETER");
+      return "ANY_GET_PARAMETER";
     case NFA_HCI_ANY_OPEN_PIPE:
-      return ("ANY_OPEN_PIPE");
+      return "ANY_OPEN_PIPE";
     case NFA_HCI_ANY_CLOSE_PIPE:
-      return ("ANY_CLOSE_PIPE");
+      return "ANY_CLOSE_PIPE";
     case NFA_HCI_ADM_CREATE_PIPE:
-      return ("ADM_CREATE_PIPE");
+      return "ADM_CREATE_PIPE";
     case NFA_HCI_ADM_DELETE_PIPE:
-      return ("ADM_DELETE_PIPE");
+      return "ADM_DELETE_PIPE";
     case NFA_HCI_ADM_NOTIFY_PIPE_CREATED:
-      return ("ADM_NOTIFY_PIPE_CREATED");
+      return "ADM_NOTIFY_PIPE_CREATED";
     case NFA_HCI_ADM_NOTIFY_PIPE_DELETED:
-      return ("ADM_NOTIFY_PIPE_DELETED");
+      return "ADM_NOTIFY_PIPE_DELETED";
     case NFA_HCI_ADM_CLEAR_ALL_PIPE:
-      return ("ADM_CLEAR_ALL_PIPE");
+      return "ADM_CLEAR_ALL_PIPE";
     case NFA_HCI_ADM_NOTIFY_ALL_PIPE_CLEARED:
-      return ("ADM_NOTIFY_ALL_PIPE_CLEARED");
+      return "ADM_NOTIFY_ALL_PIPE_CLEARED";
     default:
-      return ("UNKNOWN");
+      return "UNKNOWN";
   }
 }
 
@@ -1213,49 +1212,48 @@ char* nfa_hciu_instr_2_str(uint8_t instruction) {
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-char* nfa_hciu_get_event_name(uint16_t event) {
+std::string nfa_hciu_get_event_name(uint16_t event) {
   switch (event) {
     case NFA_HCI_API_REGISTER_APP_EVT:
-      return ("API_REGISTER");
+      return "API_REGISTER";
     case NFA_HCI_API_DEREGISTER_APP_EVT:
-      return ("API_DEREGISTER");
+      return "API_DEREGISTER";
     case NFA_HCI_API_GET_APP_GATE_PIPE_EVT:
-      return ("API_GET_GATE_LIST");
+      return "API_GET_GATE_LIST";
     case NFA_HCI_API_ALLOC_GATE_EVT:
-      return ("API_ALLOC_GATE");
+      return "API_ALLOC_GATE";
     case NFA_HCI_API_DEALLOC_GATE_EVT:
-      return ("API_DEALLOC_GATE");
+      return "API_DEALLOC_GATE";
     case NFA_HCI_API_GET_HOST_LIST_EVT:
-      return ("API_GET_HOST_LIST");
+      return "API_GET_HOST_LIST";
     case NFA_HCI_API_GET_REGISTRY_EVT:
-      return ("API_GET_REG_VALUE");
+      return "API_GET_REG_VALUE";
     case NFA_HCI_API_SET_REGISTRY_EVT:
-      return ("API_SET_REG_VALUE");
+      return "API_SET_REG_VALUE";
     case NFA_HCI_API_CREATE_PIPE_EVT:
-      return ("API_CREATE_PIPE");
+      return "API_CREATE_PIPE";
     case NFA_HCI_API_OPEN_PIPE_EVT:
-      return ("API_OPEN_PIPE");
+      return "API_OPEN_PIPE";
     case NFA_HCI_API_CLOSE_PIPE_EVT:
-      return ("API_CLOSE_PIPE");
+      return "API_CLOSE_PIPE";
     case NFA_HCI_API_DELETE_PIPE_EVT:
-      return ("API_DELETE_PIPE");
+      return "API_DELETE_PIPE";
     case NFA_HCI_API_SEND_CMD_EVT:
-      return ("API_SEND_COMMAND_EVT");
+      return "API_SEND_COMMAND_EVT";
     case NFA_HCI_API_SEND_RSP_EVT:
-      return ("API_SEND_RESPONSE_EVT");
+      return "API_SEND_RESPONSE_EVT";
     case NFA_HCI_API_SEND_EVENT_EVT:
-      return ("API_SEND_EVENT_EVT");
+      return "API_SEND_EVENT_EVT";
     case NFA_HCI_RSP_NV_READ_EVT:
-      return ("NV_READ_EVT");
+      return "NV_READ_EVT";
     case NFA_HCI_RSP_NV_WRITE_EVT:
-      return ("NV_WRITE_EVT");
+      return "NV_WRITE_EVT";
     case NFA_HCI_RSP_TIMEOUT_EVT:
-      return ("RESPONSE_TIMEOUT_EVT");
+      return "RESPONSE_TIMEOUT_EVT";
     case NFA_HCI_CHECK_QUEUE_EVT:
-      return ("CHECK_QUEUE");
-
+      return "CHECK_QUEUE";
     default:
-      return ("UNKNOWN");
+      return "UNKNOWN";
   }
 }
 
@@ -1268,29 +1266,28 @@ char* nfa_hciu_get_event_name(uint16_t event) {
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-char* nfa_hciu_get_state_name(uint8_t state) {
+std::string nfa_hciu_get_state_name(uint8_t state) {
   switch (state) {
     case NFA_HCI_STATE_DISABLED:
-      return ("DISABLED");
+      return "DISABLED";
     case NFA_HCI_STATE_STARTUP:
-      return ("STARTUP");
+      return "STARTUP";
     case NFA_HCI_STATE_WAIT_NETWK_ENABLE:
-      return ("WAIT_NETWK_ENABLE");
+      return "WAIT_NETWK_ENABLE";
     case NFA_HCI_STATE_IDLE:
-      return ("IDLE");
+      return "IDLE";
     case NFA_HCI_STATE_WAIT_RSP:
-      return ("WAIT_RSP");
+      return "WAIT_RSP";
     case NFA_HCI_STATE_REMOVE_GATE:
-      return ("REMOVE_GATE");
+      return "REMOVE_GATE";
     case NFA_HCI_STATE_APP_DEREGISTER:
-      return ("APP_DEREGISTER");
+      return "APP_DEREGISTER";
     case NFA_HCI_STATE_RESTORE:
-      return ("RESTORE");
+      return "RESTORE";
     case NFA_HCI_STATE_RESTORE_NETWK_ENABLE:
-      return ("WAIT_NETWK_ENABLE_AFTER_RESTORE");
-
+      return "WAIT_NETWK_ENABLE_AFTER_RESTORE";
     default:
-      return ("UNKNOWN");
+      return "UNKNOWN";
   }
 }
 
@@ -1307,26 +1304,27 @@ char* nfa_hciu_get_type_inst_names(uint8_t pipe, uint8_t type, uint8_t inst,
                                    char* p_buff) {
   int xx;
 
-  xx = sprintf(p_buff, "Type: %s [0x%02x] ", nfa_hciu_type_2_str(type), type);
+  xx = sprintf(p_buff, "Type: %s [0x%02x] ", nfa_hciu_type_2_str(type).c_str(),
+               type);
 
   switch (type) {
     case NFA_HCI_COMMAND_TYPE:
-      sprintf(&p_buff[xx], "Inst: %s [0x%02x] ", nfa_hciu_instr_2_str(inst),
-              inst);
+      sprintf(&p_buff[xx], "Inst: %s [0x%02x] ",
+              nfa_hciu_instr_2_str(inst).c_str(), inst);
       break;
     case NFA_HCI_EVENT_TYPE:
-      sprintf(&p_buff[xx], "Evt: %s [0x%02x] ", nfa_hciu_evt_2_str(pipe, inst),
-              inst);
+      sprintf(&p_buff[xx], "Evt: %s [0x%02x] ",
+              nfa_hciu_evt_2_str(pipe, inst).c_str(), inst);
       break;
     case NFA_HCI_RESPONSE_TYPE:
       sprintf(&p_buff[xx], "Resp: %s [0x%02x] ",
-              nfa_hciu_get_response_name(inst), inst);
+              nfa_hciu_get_response_name(inst).c_str(), inst);
       break;
     default:
       sprintf(&p_buff[xx], "Inst: %u ", inst);
       break;
   }
-  return (p_buff);
+  return p_buff;
 }
 
 /*******************************************************************************
@@ -1338,35 +1336,32 @@ char* nfa_hciu_get_type_inst_names(uint8_t pipe, uint8_t type, uint8_t inst,
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-char* nfa_hciu_evt_2_str(uint8_t pipe_id, uint8_t evt) {
-  tNFA_HCI_DYN_PIPE* p_pipe;
-
-  if ((pipe_id != NFA_HCI_ADMIN_PIPE) &&
-      (pipe_id != NFA_HCI_LINK_MANAGEMENT_PIPE) &&
-      ((p_pipe = nfa_hciu_find_pipe_by_pid(pipe_id)) != NULL)) {
-    if (p_pipe->local_gate == NFA_HCI_CONNECTIVITY_GATE) {
-      switch (evt) {
-        case NFA_HCI_EVT_CONNECTIVITY:
-          return ("EVT_CONNECTIVITY");
-        case NFA_HCI_EVT_TRANSACTION:
-          return ("EVT_TRANSACTION");
-        case NFA_HCI_EVT_OPERATION_ENDED:
-          return ("EVT_OPERATION_ENDED");
-        default:
-          return ("UNKNOWN");
-      }
+std::string nfa_hciu_evt_2_str(uint8_t pipe_id, uint8_t evt) {
+  tNFA_HCI_DYN_PIPE* p_pipe = nfa_hciu_find_pipe_by_pid(pipe_id);
+  if (pipe_id != NFA_HCI_ADMIN_PIPE &&
+      pipe_id != NFA_HCI_LINK_MANAGEMENT_PIPE && p_pipe != NULL &&
+      p_pipe->local_gate == NFA_HCI_CONNECTIVITY_GATE) {
+    switch (evt) {
+      case NFA_HCI_EVT_CONNECTIVITY:
+        return "EVT_CONNECTIVITY";
+      case NFA_HCI_EVT_TRANSACTION:
+        return "EVT_TRANSACTION";
+      case NFA_HCI_EVT_OPERATION_ENDED:
+        return "EVT_OPERATION_ENDED";
+      default:
+        return "UNKNOWN";
     }
   }
 
   switch (evt) {
     case NFA_HCI_EVT_HCI_END_OF_OPERATION:
-      return ("EVT_END_OF_OPERATION");
+      return "EVT_END_OF_OPERATION";
     case NFA_HCI_EVT_POST_DATA:
-      return ("EVT_POST_DATA");
+      return "EVT_POST_DATA";
     case NFA_HCI_EVT_HOT_PLUG:
-      return ("EVT_HOT_PLUG");
+      return "EVT_HOT_PLUG";
     default:
-      return ("UNKNOWN");
+      return "UNKNOWN";
   }
 }
 #endif

@@ -24,6 +24,7 @@
 
 #include "llcp_api.h"
 #include <string.h>
+#include <string>
 #include "bt_types.h"
 #include "gki.h"
 #include "llcp_defs.h"
@@ -357,7 +358,7 @@ tLLCP_STATUS LLCP_DeactivateLink(void) {
 **
 *******************************************************************************/
 uint8_t LLCP_RegisterServer(uint8_t reg_sap, uint8_t link_type,
-                            char* p_service_name,
+                            std::string p_service_name,
                             tLLCP_APP_CBACK* p_app_cback) {
   uint8_t sap;
   uint16_t length;
@@ -367,7 +368,8 @@ uint8_t LLCP_RegisterServer(uint8_t reg_sap, uint8_t link_type,
 
   LLCP_TRACE_API3(
       "LLCP_RegisterServer (): SAP:0x%x, link_type:0x%x, ServiceName:<%s>",
-      reg_sap, link_type, ((p_service_name == NULL) ? "" : p_service_name));
+      reg_sap, link_type,
+      ((p_service_name.empty()) ? "" : p_service_name.c_str()));
 
   if (!p_app_cback) {
     LLCP_TRACE_ERROR0("LLCP_RegisterServer (): Callback must be provided");
@@ -432,8 +434,8 @@ uint8_t LLCP_RegisterServer(uint8_t reg_sap, uint8_t link_type,
 
   memset(p_app_cb, 0x00, sizeof(tLLCP_APP_CB));
 
-  if (p_service_name) {
-    length = (uint8_t)strlen(p_service_name);
+  if (!p_service_name.empty()) {
+    length = p_service_name.length();
     if (length > LLCP_MAX_SN_LEN) {
       LLCP_TRACE_ERROR1(
           "LLCP_RegisterServer (): Service Name (%d bytes) is too long",
@@ -441,13 +443,13 @@ uint8_t LLCP_RegisterServer(uint8_t reg_sap, uint8_t link_type,
       return LLCP_INVALID_SAP;
     }
 
-    p_app_cb->p_service_name = (uint8_t*)GKI_getbuf((uint16_t)(length + 1));
+    p_app_cb->p_service_name = (char*)GKI_getbuf((uint16_t)(length + 1));
     if (p_app_cb->p_service_name == NULL) {
       LLCP_TRACE_ERROR0("LLCP_RegisterServer (): Out of resource");
       return LLCP_INVALID_SAP;
     }
 
-    strncpy((char*)p_app_cb->p_service_name, (char*)p_service_name, length + 1);
+    strncpy(p_app_cb->p_service_name, p_service_name.c_str(), length + 1);
     p_app_cb->p_service_name[length] = 0;
   } else
     p_app_cb->p_service_name = NULL;
