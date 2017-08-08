@@ -94,7 +94,7 @@ static bool gki_alloc_free_queue(uint8_t id) {
   if (Q->p_first == 0) {
     void* p_mem = GKI_os_malloc((Q->size + BUFFER_PADDING_SIZE) * Q->total);
     if (p_mem) {
-// re-initialize the queue with allocated memory
+      // re-initialize the queue with allocated memory
       gki_init_free_queue(id, Q->size, Q->total, p_mem);
       return true;
     }
@@ -248,8 +248,7 @@ void GKI_init_q(BUFFER_Q* p_q) {
 ** Returns          A pointer to the buffer, or NULL if none available
 **
 *******************************************************************************/
-void* GKI_getbuf(uint16_t size)
-{
+void* GKI_getbuf(uint16_t size) {
   uint8_t i;
   FREE_QUEUE_T* Q;
   BUFFER_HDR_T* p_hdr;
@@ -335,8 +334,7 @@ void* GKI_getbuf(uint16_t size)
 ** Returns          A pointer to the buffer, or NULL if none available
 **
 *******************************************************************************/
-void* GKI_getpoolbuf(uint8_t pool_id)
-{
+void* GKI_getpoolbuf(uint8_t pool_id) {
   FREE_QUEUE_T* Q;
   BUFFER_HDR_T* p_hdr;
   tGKI_COM_CB* p_cb = &gki_cb.com;
@@ -454,7 +452,7 @@ uint16_t GKI_get_buf_size(void* p_buf) {
 
   p_hdr = (BUFFER_HDR_T*)((uint8_t*)p_buf - BUFFER_HDR_SIZE);
 
-  if ((uint32_t)p_hdr & 1) return (0);
+  if ((uintptr_t)p_hdr & 1) return (0);
 
   if (p_hdr->q_id < GKI_NUM_TOTAL_BUF_POOLS) {
     return (gki_cb.com.freeq[p_hdr->q_id].size);
@@ -478,7 +476,7 @@ bool gki_chk_buf_damage(void* p_buf) {
   uint32_t* magic;
   magic = (uint32_t*)((uint8_t*)p_buf + GKI_get_buf_size(p_buf));
 
-  if ((uint32_t)magic & 1) return true;
+  if ((uintptr_t)magic & 1) return true;
 
   if (*magic == MAGIC_NO) return false;
 

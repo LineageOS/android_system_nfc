@@ -22,7 +22,7 @@
  *  mode.
  *
  ******************************************************************************/
-#include <string.h>
+#include <string>
 #include "nfc_target.h"
 
 #include "gki.h"
@@ -41,7 +41,7 @@ static void rw_t1t_process_frame_error(void);
 static void rw_t1t_process_error(void);
 static void rw_t1t_handle_presence_check_rsp(tNFC_STATUS status);
 #if (BT_TRACE_VERBOSE == TRUE)
-static char* rw_t1t_get_state_name(uint8_t state);
+static std::string rw_t1t_get_state_name(uint8_t state);
 static char* rw_t1t_get_sub_state_name(uint8_t sub_state);
 static char* rw_t1t_get_event_name(uint8_t event);
 #endif
@@ -76,7 +76,7 @@ static void rw_t1t_data_cback(uint8_t conn_id, tNFC_CONN_EVT event,
 
 #if (BT_TRACE_VERBOSE == TRUE)
   RW_TRACE_DEBUG2("rw_t1t_data_cback (): state:%s (%d)",
-                  rw_t1t_get_state_name(p_t1t->state), p_t1t->state);
+                  rw_t1t_get_state_name(p_t1t->state).c_str(), p_t1t->state);
 #else
   RW_TRACE_DEBUG1("rw_t1t_data_cback (): state=%d", p_t1t->state);
 #endif
@@ -146,7 +146,7 @@ static void rw_t1t_data_cback(uint8_t conn_id, tNFC_CONN_EVT event,
 /* Retrasmit the last sent command if retry-count < max retry */
 #if (BT_TRACE_VERBOSE == TRUE)
       RW_TRACE_ERROR2("T1T Frame error. state=%s command (opcode) = 0x%02x",
-                      rw_t1t_get_state_name(p_t1t->state),
+                      rw_t1t_get_state_name(p_t1t->state).c_str(),
                       p_cmd_rsp_info->opcode);
 #else
       RW_TRACE_ERROR2("T1T Frame error. state=0x%02x command = 0x%02x ",
@@ -210,8 +210,8 @@ static void rw_t1t_data_cback(uint8_t conn_id, tNFC_CONN_EVT event,
 #if (BT_TRACE_VERBOSE == TRUE)
   if (begin_state != p_t1t->state) {
     RW_TRACE_DEBUG2("RW T1T state changed:<%s> -> <%s>",
-                    rw_t1t_get_state_name(begin_state),
-                    rw_t1t_get_state_name(p_t1t->state));
+                    rw_t1t_get_state_name(begin_state).c_str(),
+                    rw_t1t_get_state_name(p_t1t->state).c_str());
   }
 #endif
 }
@@ -531,7 +531,7 @@ void rw_t1t_process_timeout(TIMER_LIST_ENT* p_tle) {
 
 #if (BT_TRACE_VERBOSE == TRUE)
   RW_TRACE_ERROR2("T1T timeout. state=%s command (opcode)=0x%02x ",
-                  rw_t1t_get_state_name(p_t1t->state),
+                  rw_t1t_get_state_name(p_t1t->state).c_str(),
                   (rw_cb.tcb.t1t.p_cmd_rsp_info)->opcode);
 #else
   RW_TRACE_ERROR2("T1T timeout. state=0x%02x command=0x%02x ", p_t1t->state,
@@ -596,9 +596,9 @@ static void rw_t1t_process_error(void) {
     /* allocate a new buffer for message */
     p_cmd_buf = (NFC_HDR*)GKI_getpoolbuf(NFC_RW_POOL_ID);
     if (p_cmd_buf != NULL) {
-      memcpy(p_cmd_buf, p_t1t->p_cur_cmd_buf,
-             sizeof(NFC_HDR) + p_t1t->p_cur_cmd_buf->offset +
-                 p_t1t->p_cur_cmd_buf->len);
+      memcpy(p_cmd_buf, p_t1t->p_cur_cmd_buf, sizeof(NFC_HDR) +
+                                                  p_t1t->p_cur_cmd_buf->offset +
+                                                  p_t1t->p_cur_cmd_buf->len);
 
 #if (RW_STATS_INCLUDED == TRUE)
       /* Update stats */
@@ -1089,30 +1089,30 @@ tNFC_STATUS RW_T1tWriteNoErase8(uint8_t block, uint8_t* p_new_dat) {
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-static char* rw_t1t_get_state_name(uint8_t state) {
+static std::string rw_t1t_get_state_name(uint8_t state) {
   switch (state) {
     case RW_T1T_STATE_IDLE:
-      return ("IDLE");
+      return "IDLE";
     case RW_T1T_STATE_NOT_ACTIVATED:
-      return ("NOT_ACTIVATED");
+      return "NOT_ACTIVATED";
     case RW_T1T_STATE_READ:
-      return ("APP_READ");
+      return "APP_READ";
     case RW_T1T_STATE_WRITE:
-      return ("APP_WRITE");
+      return "APP_WRITE";
     case RW_T1T_STATE_TLV_DETECT:
-      return ("TLV_DETECTION");
+      return "TLV_DETECTION";
     case RW_T1T_STATE_READ_NDEF:
-      return ("READING_NDEF");
+      return "READING_NDEF";
     case RW_T1T_STATE_WRITE_NDEF:
-      return ("WRITING_NDEF");
+      return "WRITING_NDEF";
     case RW_T1T_STATE_SET_TAG_RO:
-      return ("SET_TAG_RO");
+      return "SET_TAG_RO";
     case RW_T1T_STATE_CHECK_PRESENCE:
-      return ("CHECK_PRESENCE");
+      return "CHECK_PRESENCE";
     case RW_T1T_STATE_FORMAT_TAG:
-      return ("FORMAT_TAG");
+      return "FORMAT_TAG";
     default:
-      return ("???? UNKNOWN STATE");
+      return "???? UNKNOWN STATE";
   }
 }
 

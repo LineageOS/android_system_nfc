@@ -82,7 +82,6 @@ static const tNFA_SYS_REG nfa_hci_sys_reg = {
 **
 *******************************************************************************/
 void nfa_hci_ee_info_cback(tNFA_EE_DISC_STS status) {
-
   NFA_TRACE_DEBUG1("nfa_hci_ee_info_cback (): %d", status);
 
   switch (status) {
@@ -720,7 +719,7 @@ static void nfa_hci_conn_cback(uint8_t conn_id, tNFC_CONN_EVT event,
   pkt_len = p_pkt->len;
 
 #if (BT_TRACE_PROTOCOL == TRUE)
-  DispHcp(p, pkt_len, true, (bool)!nfa_hci_cb.assembling);
+  DispHcp(p, pkt_len, true);
 #endif
 
   chaining_bit = ((*p) >> 0x07) & 0x01;
@@ -1108,10 +1107,11 @@ static bool nfa_hci_evt_hdlr(NFC_HDR* p_msg) {
   tNFA_HCI_EVENT_DATA* p_evt_data = (tNFA_HCI_EVENT_DATA*)p_msg;
 
 #if (BT_TRACE_VERBOSE == TRUE)
-  NFA_TRACE_EVENT4(
-      "nfa_hci_evt_hdlr state: %s (%d) event: %s (0x%04x)",
-      nfa_hciu_get_state_name(nfa_hci_cb.hci_state), nfa_hci_cb.hci_state,
-      nfa_hciu_get_event_name(p_evt_data->hdr.event), p_evt_data->hdr.event);
+  NFA_TRACE_EVENT4("nfa_hci_evt_hdlr state: %s (%d) event: %s (0x%04x)",
+                   nfa_hciu_get_state_name(nfa_hci_cb.hci_state).c_str(),
+                   nfa_hci_cb.hci_state,
+                   nfa_hciu_get_event_name(p_evt_data->hdr.event).c_str(),
+                   p_evt_data->hdr.event);
 #else
   NFA_TRACE_EVENT2("nfa_hci_evt_hdlr state: %d event: 0x%04x",
                    nfa_hci_cb.hci_state, p_evt_data->hdr.event);

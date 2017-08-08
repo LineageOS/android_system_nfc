@@ -24,6 +24,7 @@
 #ifndef NFA_DM_INT_H
 #define NFA_DM_INT_H
 
+#include <string>
 #include "nfa_api.h"
 #include "nfa_sys.h"
 #include "nfc_api.h"
@@ -681,7 +682,7 @@ bool nfa_dm_is_p2p_paused(void);
 #endif
 
 #if (BT_TRACE_VERBOSE == TRUE)
-char* nfa_dm_nfc_revt_2_str(tNFC_RESPONSE_EVT event);
+std::string nfa_dm_nfc_revt_2_str(tNFC_RESPONSE_EVT event);
 #endif
 
 #endif /* NFA_DM_INT_H */

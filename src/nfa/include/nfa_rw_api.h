@@ -54,9 +54,6 @@ typedef struct {
 /*****************************************************************************
 **  External Function Declarations
 *****************************************************************************/
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /*******************************************************************************
 **
@@ -747,9 +744,5 @@ extern tNFA_STATUS NFA_RwI93GetSysInfo(uint8_t* p_uid);
 *******************************************************************************/
 extern tNFA_STATUS NFA_RwI93GetMultiBlockSecurityStatus(
     uint8_t first_block_number, uint16_t number_blocks);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* NFA_RW_API_H */
