@@ -366,8 +366,8 @@ typedef struct {
 
 /* NFA HCI control block */
 typedef struct {
-  tNFA_HCI_STATE hci_state;   /* state of the HCI */
-  uint8_t num_nfcee;          /* Number of NFCEE ID Discovered */
+  tNFA_HCI_STATE hci_state; /* state of the HCI */
+  uint8_t num_nfcee;        /* Number of NFCEE ID Discovered */
   tNFA_EE_INFO ee_info[NFA_HCI_MAX_HOST_IN_NETWORK]; /*NFCEE ID Info*/
   uint8_t num_ee_dis_req_ntf; /* Number of ee discovery request ntf received */
   uint8_t num_hot_plug_evts;  /* Number of Hot plug events received after ee
