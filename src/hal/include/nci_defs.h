@@ -27,10 +27,6 @@
 
 #include <stdint.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #define NCI_BRCM_CO_ID 0x2E
 
 /* Define the message header size for all NCI Commands and Notifications.
@@ -839,8 +835,5 @@ typedef struct {
   uint8_t waiting_time;                     /* WT -> Response Waiting Time
                                                RWT = (256 x 16/fC) x 2WT    */
 } tNCI_RF_ACM_P_PARAMS;
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* NFC_NCI_DEFS_H */

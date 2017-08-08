@@ -21,7 +21,7 @@
  *  This is the main implementation file for the NFA P2P.
  *
  ******************************************************************************/
-#include <string.h>
+#include <string>
 #include "llcp_api.h"
 #include "llcp_defs.h"
 #include "nfa_dm_int.h"
@@ -51,7 +51,8 @@ static void nfa_p2p_update_active_listen(void);
 
 /* debug functions type */
 #if (BT_TRACE_VERBOSE == TRUE)
-static char* nfa_p2p_llcp_state_code(tNFA_P2P_LLCP_STATE state_code);
+static std::string nfa_p2p_llcp_state_code(tNFA_P2P_LLCP_STATE state_code);
+static std::string nfa_p2p_evt_code(uint16_t evt_code);
 #endif
 
 /*****************************************************************************
@@ -730,8 +731,8 @@ static bool nfa_p2p_evt_hdlr(NFC_HDR* p_hdr) {
 
 #if (BT_TRACE_VERBOSE == TRUE)
   P2P_TRACE_DEBUG2("nfa_p2p_evt_hdlr (): LLCP State [%s], Event [%s]",
-                   nfa_p2p_llcp_state_code(nfa_p2p_cb.llcp_state),
-                   nfa_p2p_evt_code(p_msg->hdr.event));
+                   nfa_p2p_llcp_state_code(nfa_p2p_cb.llcp_state).c_str(),
+                   nfa_p2p_evt_code(p_msg->hdr.event).c_str());
 #else
   P2P_TRACE_DEBUG2("nfa_p2p_evt_hdlr (): State 0x%02x, Event 0x%02x",
                    nfa_p2p_cb.llcp_state, p_msg->hdr.event);
@@ -759,7 +760,7 @@ static bool nfa_p2p_evt_hdlr(NFC_HDR* p_hdr) {
 ** Returns          string of state
 **
 *******************************************************************************/
-static char* nfa_p2p_llcp_state_code(tNFA_P2P_LLCP_STATE state_code) {
+static std::string nfa_p2p_llcp_state_code(tNFA_P2P_LLCP_STATE state_code) {
   switch (state_code) {
     case NFA_P2P_LLCP_STATE_IDLE:
       return "Link IDLE";
@@ -781,7 +782,7 @@ static char* nfa_p2p_llcp_state_code(tNFA_P2P_LLCP_STATE state_code) {
 ** Returns          string of event
 **
 *******************************************************************************/
-char* nfa_p2p_evt_code(uint16_t evt_code) {
+static std::string nfa_p2p_evt_code(uint16_t evt_code) {
   switch (evt_code) {
     case NFA_P2P_API_REG_SERVER_EVT:
       return "API_REG_SERVER";

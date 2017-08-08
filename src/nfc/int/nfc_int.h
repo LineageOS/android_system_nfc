@@ -31,10 +31,6 @@
 #include "nfc_api.h"
 #include "nfc_target.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /****************************************************************************
 ** Internal NFC constants and definitions
 ****************************************************************************/
@@ -328,9 +324,4 @@ void nfc_start_quick_timer(TIMER_LIST_ENT* p_tle, uint16_t type,
                            uint32_t timeout);
 void nfc_stop_quick_timer(TIMER_LIST_ENT* p_tle);
 void nfc_process_quick_timer_evt(void);
-
-#ifdef __cplusplus
-}
-#endif
-
 #endif /* NFC_INT_H_ */

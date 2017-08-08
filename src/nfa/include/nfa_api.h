@@ -803,9 +803,6 @@ typedef void(tNFA_VSC_CBACK)(uint8_t event, uint16_t param_len,
 /*****************************************************************************
 **  External Function Declarations
 *****************************************************************************/
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /*******************************************************************************
 **
@@ -1459,9 +1456,5 @@ extern uint8_t NFA_GetNCIVersion();
 **                  NFA_STATUS_FAILED otherwise
 *******************************************************************************/
 extern tNFA_STATUS NFA_SetPowerSubStateForScreenState(uint8_t ScreenState);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* NFA_API_H */

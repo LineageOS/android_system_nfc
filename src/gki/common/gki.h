@@ -26,6 +26,8 @@
 #define NFC_STANDALONE FALSE
 #endif
 
+#include <string>
+
 #include "bt_types.h"
 #include "gki_target.h"
 
@@ -348,10 +350,6 @@ typedef void (*TASKPTR)(uint32_t);
 ** Function prototypes
 */
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* Task management
 */
 extern uint8_t GKI_create_task(TASKPTR, uint8_t, int8_t*, uint16_t*, uint16_t,
@@ -454,10 +452,6 @@ extern uint32_t GKI_get_os_tick_count(void);
 
 /* Exception handling
 */
-extern void GKI_exception(uint16_t, char*);
-
-#ifdef __cplusplus
-}
-#endif
+extern void GKI_exception(uint16_t, std::string);
 
 #endif

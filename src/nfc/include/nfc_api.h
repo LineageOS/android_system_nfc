@@ -400,11 +400,7 @@ typedef uint8_t tNFC_RF_STS;
 #define NFC_RF_TECHNOLOGY_V NCI_RF_TECHNOLOGY_V
 typedef uint8_t tNFC_RF_TECH;
 
-#ifdef __cplusplus
-extern "C" uint8_t NFC_GetNCIVersion();
-#else
 extern uint8_t NFC_GetNCIVersion();
-#endif
 
 /* Supported Protocols */
 #define NFC_PROTOCOL_UNKNOWN NCI_PROTOCOL_UNKNOWN /* Unknown */
@@ -898,9 +894,6 @@ typedef void(tNFC_STATUS_CBACK)(tNFC_STATUS status);
 /*****************************************************************************
 **  EXTERNAL FUNCTION DECLARATIONS
 *****************************************************************************/
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /*******************************************************************************
 **
@@ -1443,11 +1436,7 @@ extern void NFC_SetStaticHciCback(tNFC_CONN_CBACK* p_cback);
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-extern char* NFC_GetStatusName(tNFC_STATUS status);
-#endif
-
-#ifdef __cplusplus
-}
+extern std::string NFC_GetStatusName(tNFC_STATUS status);
 #endif
 
 #endif /* NFC_API_H */

@@ -22,7 +22,7 @@
  *
  ******************************************************************************/
 
-#include <string.h>
+#include <string>
 #include "bt_types.h"
 #include "gki.h"
 #include "llcp_defs.h"
@@ -45,8 +45,8 @@ static tLLCP_STATUS llcp_dlsm_w4_remote_dm(tLLCP_DLCB* p_dlcb,
 extern unsigned char appl_dta_mode_flag;
 
 #if (BT_TRACE_VERBOSE == TRUE)
-static char* llcp_dlsm_get_state_name(tLLCP_DLC_STATE state);
-static char* llcp_dlsm_get_event_name(tLLCP_DLC_EVENT event);
+static std::string llcp_dlsm_get_state_name(tLLCP_DLC_STATE state);
+static std::string llcp_dlsm_get_event_name(tLLCP_DLC_EVENT event);
 #endif
 
 /*******************************************************************************
@@ -65,8 +65,8 @@ tLLCP_STATUS llcp_dlsm_execute(tLLCP_DLCB* p_dlcb, tLLCP_DLC_EVENT event,
 
 #if (BT_TRACE_VERBOSE == TRUE)
   LLCP_TRACE_EVENT3("DLC (0x%02X) - state: %s, evt: %s", p_dlcb->local_sap,
-                    llcp_dlsm_get_state_name(p_dlcb->state),
-                    llcp_dlsm_get_event_name(event));
+                    llcp_dlsm_get_state_name(p_dlcb->state).c_str(),
+                    llcp_dlsm_get_event_name(event).c_str());
 #else
   LLCP_TRACE_EVENT3("DLC (0x%02X) - state: %d, evt: %d", p_dlcb->local_sap,
                     p_dlcb->state, event);
@@ -1393,20 +1393,20 @@ uint16_t llcp_dlc_get_next_pdu_length(tLLCP_DLCB* p_dlcb) {
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-static char* llcp_dlsm_get_state_name(tLLCP_DLC_STATE state) {
+static std::string llcp_dlsm_get_state_name(tLLCP_DLC_STATE state) {
   switch (state) {
     case LLCP_DLC_STATE_IDLE:
-      return ("IDLE");
+      return "IDLE";
     case LLCP_DLC_STATE_W4_REMOTE_RESP:
-      return ("W4_REMOTE_RESP");
+      return "W4_REMOTE_RESP";
     case LLCP_DLC_STATE_W4_LOCAL_RESP:
-      return ("W4_LOCAL_RESP");
+      return "W4_LOCAL_RESP";
     case LLCP_DLC_STATE_CONNECTED:
-      return ("CONNECTED");
+      return "CONNECTED";
     case LLCP_DLC_STATE_W4_REMOTE_DM:
-      return ("W4_REMOTE_DM");
+      return "W4_REMOTE_DM";
     default:
-      return ("???? UNKNOWN STATE");
+      return "???? UNKNOWN STATE";
   }
 }
 
@@ -1419,41 +1419,36 @@ static char* llcp_dlsm_get_state_name(tLLCP_DLC_STATE state) {
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-static char* llcp_dlsm_get_event_name(tLLCP_DLC_EVENT event) {
+static std::string llcp_dlsm_get_event_name(tLLCP_DLC_EVENT event) {
   switch (event) {
     case LLCP_DLC_EVENT_API_CONNECT_REQ:
-      return ("API_CONNECT_REQ");
+      return "API_CONNECT_REQ";
     case LLCP_DLC_EVENT_API_CONNECT_CFM:
-      return ("API_CONNECT_CFM");
+      return "API_CONNECT_CFM";
     case LLCP_DLC_EVENT_API_CONNECT_REJECT:
-      return ("API_CONNECT_REJECT");
+      return "API_CONNECT_REJECT";
     case LLCP_DLC_EVENT_PEER_CONNECT_IND:
-      return ("PEER_CONNECT_IND");
+      return "PEER_CONNECT_IND";
     case LLCP_DLC_EVENT_PEER_CONNECT_CFM:
-      return ("PEER_CONNECT_CFM");
-
+      return "PEER_CONNECT_CFM";
     case LLCP_DLC_EVENT_API_DATA_REQ:
-      return ("API_DATA_REQ");
+      return "API_DATA_REQ";
     case LLCP_DLC_EVENT_PEER_DATA_IND:
-      return ("PEER_DATA_IND");
-
+      return "PEER_DATA_IND";
     case LLCP_DLC_EVENT_API_DISCONNECT_REQ:
-      return ("API_DISCONNECT_REQ");
+      return "API_DISCONNECT_REQ";
     case LLCP_DLC_EVENT_PEER_DISCONNECT_IND:
-      return ("PEER_DISCONNECT_IND");
+      return "PEER_DISCONNECT_IND";
     case LLCP_DLC_EVENT_PEER_DISCONNECT_RESP:
-      return ("PEER_DISCONNECT_RESP");
-
+      return "PEER_DISCONNECT_RESP";
     case LLCP_DLC_EVENT_FRAME_ERROR:
-      return ("FRAME_ERROR");
+      return "FRAME_ERROR";
     case LLCP_DLC_EVENT_LINK_ERROR:
-      return ("LINK_ERROR");
-
+      return "LINK_ERROR";
     case LLCP_DLC_EVENT_TIMEOUT:
-      return ("TIMEOUT");
-
+      return "TIMEOUT";
     default:
-      return ("???? UNKNOWN EVENT");
+      return "???? UNKNOWN EVENT";
   }
 }
 #endif /* (BT_TRACE_VERBOSE == TRUE) */
