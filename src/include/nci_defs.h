@@ -129,8 +129,8 @@
   (pbf) = (*(p)&NCI_PBF_MASK) >> NCI_PBF_SHIFT;
 
 /* parse byte1 of NCI Cmd/Ntf */
-#define NCI_MSG_PRS_HDR1(p, oid)   \
-  (oid) = (*(p)&NCI_OID_MASK);     \
+#define NCI_MSG_PRS_HDR1(p, oid) \
+  (oid) = (*(p)&NCI_OID_MASK);   \
   (p)++;
 
 /* NCI Data Format:
@@ -152,11 +152,11 @@
   *(p)++ = 0;                                           \
   *(p)++ = (len);
 
-#define NCI_DATA_PRS_HDR(p, pbf, cid, len)        \
-  (pbf) = (*(p)&NCI_PBF_MASK) >> NCI_PBF_SHIFT;   \
-  (cid) = (*(p)&NCI_CID_MASK);                    \
-  (p)++;                                          \
-  (p)++;                                          \
+#define NCI_DATA_PRS_HDR(p, pbf, cid, len)      \
+  (pbf) = (*(p)&NCI_PBF_MASK) >> NCI_PBF_SHIFT; \
+  (cid) = (*(p)&NCI_CID_MASK);                  \
+  (p)++;                                        \
+  (p)++;                                        \
   (len) = *(p)++;
 
 /* Logical target ID 0x01-0xFE */

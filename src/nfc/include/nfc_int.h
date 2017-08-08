@@ -125,15 +125,15 @@ enum {
 
 typedef struct {
   tNFC_CONN_CBACK* p_cback; /* the callback function to receive the data */
-  BUFFER_Q tx_q;        /* transmit queue                                   */
-  BUFFER_Q rx_q;        /* receive queue                                    */
-  uint8_t id;           /* NFCEE ID or RF Discovery ID or NFC_TEST_ID       */
-  uint8_t act_protocol; /* the active protocol on this logical connection   */
+  BUFFER_Q tx_q;         /* transmit queue                                   */
+  BUFFER_Q rx_q;         /* receive queue                                    */
+  uint8_t id;            /* NFCEE ID or RF Discovery ID or NFC_TEST_ID       */
+  uint8_t act_protocol;  /* the active protocol on this logical connection   */
   uint8_t act_interface; /* the active interface on this logical connection   */
-  uint8_t conn_id;      /* the connection id assigned by NFCC for this conn */
-  uint8_t buff_size;    /* the max buffer size for this connection.     .   */
-  uint8_t num_buff;     /* num of buffers left to send on this connection   */
-  uint8_t init_credits; /* initial num of buffer credits                    */
+  uint8_t conn_id;       /* the connection id assigned by NFCC for this conn */
+  uint8_t buff_size;     /* the max buffer size for this connection.     .   */
+  uint8_t num_buff;      /* num of buffers left to send on this connection   */
+  uint8_t init_credits;  /* initial num of buffer credits                    */
 } tNFC_CONN_CB;
 
 /* This data type is for NFC task to send a NCI VS command to NCIT task */
@@ -197,7 +197,7 @@ typedef struct {
   TIMER_LIST_Q timer_queue; /* 1-sec timer event queue */
   TIMER_LIST_Q quick_timer_queue;
   TIMER_LIST_ENT mode_set_ntf_timer; /* Timer to wait for deactivation */
-  TIMER_LIST_ENT deactivate_timer; /* Timer to wait for deactivation */
+  TIMER_LIST_ENT deactivate_timer;   /* Timer to wait for deactivation */
 
   tNFC_STATE nfc_state;
   bool reassembly; /* Reassemble fragmented data pkt */
