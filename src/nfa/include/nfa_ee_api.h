@@ -232,9 +232,6 @@ typedef void(tNFA_EE_CBACK)(tNFA_EE_EVT event, tNFA_EE_CBACK_DATA* p_data);
 /*****************************************************************************
 **  External Function Declarations
 *****************************************************************************/
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /*******************************************************************************
 **
@@ -492,9 +489,5 @@ extern tNFA_STATUS NFA_EeSendData(tNFA_HANDLE ee_handle, uint16_t data_len,
 **
 *******************************************************************************/
 extern tNFA_STATUS NFA_EeDisconnect(tNFA_HANDLE ee_handle);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* NFA_EE_API_H */

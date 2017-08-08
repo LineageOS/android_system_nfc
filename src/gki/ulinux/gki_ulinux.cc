@@ -86,7 +86,7 @@ gki_pthread_info_t gki_pthread_info[GKI_MAX_TASKS];
 ** Returns          void
 **
 *******************************************************************************/
-void gki_task_entry(uintptr_t params) {
+void* gki_task_entry(void* params) {
   pthread_t thread_id = pthread_self();
   gki_pthread_info_t* p_pthread_info = (gki_pthread_info_t*)params;
   GKI_TRACE_5("gki_task_entry task_id=%i, thread_id=%x/%x, pCond/pMutex=%x/%x",
@@ -101,7 +101,7 @@ void gki_task_entry(uintptr_t params) {
   GKI_TRACE_ERROR_1("gki_task task_id=%i terminating", p_pthread_info->task_id);
   gki_cb.os.thread_id[p_pthread_info->task_id] = 0;
 
-  return;
+  return NULL;
 }
 /* end android */
 
@@ -147,7 +147,7 @@ void GKI_init(void) {
 #endif
   p_os = &gki_cb.os;
   pthread_mutex_init(&p_os->GKI_mutex, &attr);
-/* pthread_mutex_init(&GKI_sched_mutex, NULL); */
+  /* pthread_mutex_init(&GKI_sched_mutex, NULL); */
   /* pthread_mutex_init(&thread_delay_mutex, NULL); */ /* used in GKI_delay */
   /* pthread_cond_init (&thread_delay_cond, NULL); */
 
@@ -250,8 +250,8 @@ uint8_t GKI_create_task(TASKPTR task_entry, uint8_t task_id, int8_t* taskname,
   gki_pthread_info[task_id].pCond = (pthread_cond_t*)pCondVar;
   gki_pthread_info[task_id].pMutex = (pthread_mutex_t*)pMutex;
 
-  ret = pthread_create(&gki_cb.os.thread_id[task_id], &attr1,
-                       (void*)gki_task_entry, &gki_pthread_info[task_id]);
+  ret = pthread_create(&gki_cb.os.thread_id[task_id], &attr1, gki_task_entry,
+                       &gki_pthread_info[task_id]);
 
   if (ret != 0) {
     GKI_TRACE_2("pthread_create failed(%d), %s!", ret, taskname);
@@ -293,8 +293,8 @@ uint8_t GKI_create_task(TASKPTR task_entry, uint8_t task_id, int8_t* taskname,
 *******************************************************************************/
 #define WAKE_LOCK_ID "brcm_nfca"
 #define PARTIAL_WAKE_LOCK 1
-extern int acquire_wake_lock(int lock, const char* id);
-extern int release_wake_lock(const char* id);
+extern "C" int acquire_wake_lock(int lock, const char* id);
+extern "C" int release_wake_lock(const char* id);
 
 void GKI_shutdown(void) {
   uint8_t task_id;
@@ -917,7 +917,7 @@ void GKI_disable(void) {
 **
 *******************************************************************************/
 
-void GKI_exception(uint16_t code, char* msg) {
+void GKI_exception(uint16_t code, std::string msg) {
   uint8_t task_id;
   int i = 0;
 
@@ -929,14 +929,14 @@ void GKI_exception(uint16_t code, char* msg) {
                       gki_cb.com.OSRdyTbl[task_id]);
   }
 
-  GKI_TRACE_ERROR_2("GKI_exception %d %s", code, msg);
+  GKI_TRACE_ERROR_2("GKI_exception %d %s", code, msg.c_str());
   GKI_TRACE_ERROR_0(
       "********************************************************************");
-  GKI_TRACE_ERROR_2("* GKI_exception(): %d %s", code, msg);
+  GKI_TRACE_ERROR_2("* GKI_exception(): %d %s", code, msg.c_str());
   GKI_TRACE_ERROR_0(
       "********************************************************************");
 
-  GKI_TRACE_ERROR_2("GKI_exception %d %s done", code, msg);
+  GKI_TRACE_ERROR_2("GKI_exception %d %s done", code, msg.c_str());
 
   return;
 }

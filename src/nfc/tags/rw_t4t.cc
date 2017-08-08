@@ -83,8 +83,8 @@
 #define RW_T4T_SUBSTATE_WAIT_WRITE_NDEF 0x10
 
 #if (BT_TRACE_VERBOSE == TRUE)
-static char* rw_t4t_get_state_name(uint8_t state);
-static char* rw_t4t_get_sub_state_name(uint8_t sub_state);
+static std::string rw_t4t_get_state_name(uint8_t state);
+static std::string rw_t4t_get_sub_state_name(uint8_t sub_state);
 #endif
 
 static bool rw_t4t_send_to_lower(NFC_HDR* p_c_apdu);
@@ -1073,7 +1073,7 @@ static void rw_t4t_sm_ndef_format(NFC_HDR* p_r_apdu) {
 
 #if (BT_TRACE_VERBOSE == TRUE)
   RW_TRACE_DEBUG2("rw_t4t_sm_ndef_format (): sub_state:%s (%d)",
-                  rw_t4t_get_sub_state_name(p_t4t->sub_state),
+                  rw_t4t_get_sub_state_name(p_t4t->sub_state).c_str(),
                   p_t4t->sub_state);
 #else
   RW_TRACE_DEBUG1("rw_t4t_sm_ndef_format (): sub_state=%d", p_t4t->sub_state);
@@ -1258,7 +1258,7 @@ static void rw_t4t_sm_detect_ndef(NFC_HDR* p_r_apdu) {
 
 #if (BT_TRACE_VERBOSE == TRUE)
   RW_TRACE_DEBUG2("rw_t4t_sm_detect_ndef (): sub_state:%s (%d)",
-                  rw_t4t_get_sub_state_name(p_t4t->sub_state),
+                  rw_t4t_get_sub_state_name(p_t4t->sub_state).c_str(),
                   p_t4t->sub_state);
 #else
   RW_TRACE_DEBUG1("rw_t4t_sm_detect_ndef (): sub_state=%d", p_t4t->sub_state);
@@ -1480,7 +1480,7 @@ static void rw_t4t_sm_read_ndef(NFC_HDR* p_r_apdu) {
 
 #if (BT_TRACE_VERBOSE == TRUE)
   RW_TRACE_DEBUG2("rw_t4t_sm_read_ndef (): sub_state:%s (%d)",
-                  rw_t4t_get_sub_state_name(p_t4t->sub_state),
+                  rw_t4t_get_sub_state_name(p_t4t->sub_state).c_str(),
                   p_t4t->sub_state);
 #else
   RW_TRACE_DEBUG1("rw_t4t_sm_read_ndef (): sub_state=%d", p_t4t->sub_state);
@@ -1568,7 +1568,7 @@ static void rw_t4t_sm_update_ndef(NFC_HDR* p_r_apdu) {
 
 #if (BT_TRACE_VERBOSE == TRUE)
   RW_TRACE_DEBUG2("rw_t4t_sm_update_ndef (): sub_state:%s (%d)",
-                  rw_t4t_get_sub_state_name(p_t4t->sub_state),
+                  rw_t4t_get_sub_state_name(p_t4t->sub_state).c_str(),
                   p_t4t->sub_state);
 #else
   RW_TRACE_DEBUG1("rw_t4t_sm_update_ndef (): sub_state=%d", p_t4t->sub_state);
@@ -1655,7 +1655,7 @@ static void rw_t4t_sm_set_readonly(NFC_HDR* p_r_apdu) {
 
 #if (BT_TRACE_VERBOSE == TRUE)
   RW_TRACE_DEBUG2("rw_t4t_sm_set_readonly (): sub_state:%s (%d)",
-                  rw_t4t_get_sub_state_name(p_t4t->sub_state),
+                  rw_t4t_get_sub_state_name(p_t4t->sub_state).c_str(),
                   p_t4t->sub_state);
 #else
   RW_TRACE_DEBUG1("rw_t4t_sm_set_readonly (): sub_state=%d", p_t4t->sub_state);
@@ -1816,7 +1816,7 @@ static void rw_t4t_data_cback(uint8_t conn_id, tNFC_CONN_EVT event,
 
 #if (BT_TRACE_VERBOSE == TRUE)
   RW_TRACE_DEBUG2("RW T4T state: <%s (%d)>",
-                  rw_t4t_get_state_name(p_t4t->state), p_t4t->state);
+                  rw_t4t_get_state_name(p_t4t->state).c_str(), p_t4t->state);
 #else
   RW_TRACE_DEBUG1("RW T4T state: %d", p_t4t->state);
 #endif
@@ -1826,11 +1826,12 @@ static void rw_t4t_data_cback(uint8_t conn_id, tNFC_CONN_EVT event,
 /* Unexpected R-APDU, it should be raw frame response */
 /* forward to upper layer without parsing */
 #if (BT_TRACE_VERBOSE == TRUE)
-      RW_TRACE_DEBUG2("RW T4T Raw Frame: Len [0x%X] Status [%s]", p_r_apdu->len,
-                      NFC_GetStatusName(p_data->data.status));
+      RW_TRACE_DEBUG2("RW T4T Raw Frame: Len [0x%X] Status [%s]",
+                      &p_r_apdu->len,
+                      NFC_GetStatusName(p_data->data.status).c_str());
 #else
       RW_TRACE_DEBUG2("RW T4T Raw Frame: Len [0x%X] Status [0x%X]",
-                      p_r_apdu->len, p_data->data.status);
+                      &p_r_apdu->len, p_data->data.status);
 #endif
       if (rw_cb.p_cback) {
         rw_data.raw_frame.status = p_data->data.status;
@@ -1877,8 +1878,8 @@ static void rw_t4t_data_cback(uint8_t conn_id, tNFC_CONN_EVT event,
 #if (BT_TRACE_VERBOSE == TRUE)
   if (begin_state != p_t4t->state) {
     RW_TRACE_DEBUG2("RW T4T state changed:<%s> -> <%s>",
-                    rw_t4t_get_state_name(begin_state),
-                    rw_t4t_get_state_name(p_t4t->state));
+                    rw_t4t_get_state_name(begin_state).c_str(),
+                    rw_t4t_get_state_name(p_t4t->state).c_str());
   }
 #endif
 }
@@ -2230,25 +2231,24 @@ tNFC_STATUS RW_T4tSetNDefReadOnly(void) {
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-static char* rw_t4t_get_state_name(uint8_t state) {
+static std::string rw_t4t_get_state_name(uint8_t state) {
   switch (state) {
     case RW_T4T_STATE_NOT_ACTIVATED:
-      return ("NOT_ACTIVATED");
+      return "NOT_ACTIVATED";
     case RW_T4T_STATE_IDLE:
-      return ("IDLE");
+      return "IDLE";
     case RW_T4T_STATE_DETECT_NDEF:
-      return ("NDEF_DETECTION");
+      return "NDEF_DETECTION";
     case RW_T4T_STATE_READ_NDEF:
-      return ("READ_NDEF");
+      return "READ_NDEF";
     case RW_T4T_STATE_UPDATE_NDEF:
-      return ("UPDATE_NDEF");
+      return "UPDATE_NDEF";
     case RW_T4T_STATE_PRESENCE_CHECK:
-      return ("PRESENCE_CHECK");
+      return "PRESENCE_CHECK";
     case RW_T4T_STATE_SET_READ_ONLY:
-      return ("SET_READ_ONLY");
-
+      return "SET_READ_ONLY";
     default:
-      return ("???? UNKNOWN STATE");
+      return "???? UNKNOWN STATE";
   }
 }
 
@@ -2263,43 +2263,42 @@ static char* rw_t4t_get_state_name(uint8_t state) {
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-static char* rw_t4t_get_sub_state_name(uint8_t sub_state) {
+static std::string rw_t4t_get_sub_state_name(uint8_t sub_state) {
   switch (sub_state) {
     case RW_T4T_SUBSTATE_WAIT_SELECT_APP:
-      return ("WAIT_SELECT_APP");
+      return "WAIT_SELECT_APP";
     case RW_T4T_SUBSTATE_WAIT_SELECT_CC:
-      return ("WAIT_SELECT_CC");
+      return "WAIT_SELECT_CC";
     case RW_T4T_SUBSTATE_WAIT_CC_FILE:
-      return ("WAIT_CC_FILE");
+      return "WAIT_CC_FILE";
     case RW_T4T_SUBSTATE_WAIT_SELECT_NDEF_FILE:
-      return ("WAIT_SELECT_NDEF_FILE");
+      return "WAIT_SELECT_NDEF_FILE";
     case RW_T4T_SUBSTATE_WAIT_READ_NLEN:
-      return ("WAIT_READ_NLEN");
-
+      return "WAIT_READ_NLEN";
     case RW_T4T_SUBSTATE_WAIT_READ_RESP:
-      return ("WAIT_READ_RESP");
+      return "WAIT_READ_RESP";
     case RW_T4T_SUBSTATE_WAIT_UPDATE_RESP:
-      return ("WAIT_UPDATE_RESP");
+      return "WAIT_UPDATE_RESP";
     case RW_T4T_SUBSTATE_WAIT_UPDATE_NLEN:
-      return ("WAIT_UPDATE_NLEN");
+      return "WAIT_UPDATE_NLEN";
     case RW_T4T_SUBSTATE_WAIT_GET_HW_VERSION:
-      return ("WAIT_GET_HW_VERSION");
+      return "WAIT_GET_HW_VERSION";
     case RW_T4T_SUBSTATE_WAIT_GET_SW_VERSION:
-      return ("WAIT_GET_SW_VERSION");
+      return "WAIT_GET_SW_VERSION";
     case RW_T4T_SUBSTATE_WAIT_GET_UID:
-      return ("WAIT_GET_UID");
+      return "WAIT_GET_UID";
     case RW_T4T_SUBSTATE_WAIT_CREATE_APP:
-      return ("WAIT_CREATE_APP");
+      return "WAIT_CREATE_APP";
     case RW_T4T_SUBSTATE_WAIT_CREATE_CC:
-      return ("WAIT_CREATE_CC");
+      return "WAIT_CREATE_CC";
     case RW_T4T_SUBSTATE_WAIT_CREATE_NDEF:
-      return ("WAIT_CREATE_NDEF");
+      return "WAIT_CREATE_NDEF";
     case RW_T4T_SUBSTATE_WAIT_WRITE_CC:
-      return ("WAIT_WRITE_CC");
+      return "WAIT_WRITE_CC";
     case RW_T4T_SUBSTATE_WAIT_WRITE_NDEF:
-      return ("WAIT_WRITE_NDEF");
+      return "WAIT_WRITE_NDEF";
     default:
-      return ("???? UNKNOWN SUBSTATE");
+      return "???? UNKNOWN SUBSTATE";
   }
 }
 #endif
