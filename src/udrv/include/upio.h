@@ -226,10 +226,6 @@ typedef uint32_t tUPIO;
 
 typedef void(tUPIO_CBACK)(tUPIO_TYPE type, tUPIO pio, tUPIO_STATE state);
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* API functions for UPIO driver */
 
 /*****************************************************************************
@@ -334,9 +330,5 @@ void UPIO_Config(tUPIO_TYPE type, tUPIO pio, tUPIO_CONFIG config,
 **
 *****************************************************************************/
 bool UPIO_Feature(tUPIO_FEATURE feature);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* ifdef UPIO_H */

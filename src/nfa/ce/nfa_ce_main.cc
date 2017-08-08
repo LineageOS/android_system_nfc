@@ -21,7 +21,7 @@
  *  This is the main implementation file for the NFA_CE
  *
  ******************************************************************************/
-#include <string.h>
+#include <string>
 #include "nfa_ce_api.h"
 #include "nfa_ce_int.h"
 #include "nfa_dm_int.h"
@@ -57,7 +57,7 @@ const tNFA_CE_ACTION nfa_ce_action_tbl[] = {
 ** Local function prototypes
 *****************************************************************************/
 #if (BT_TRACE_VERBOSE == TRUE)
-static char* nfa_ce_evt_2_str(uint16_t event);
+static std::string nfa_ce_evt_2_str(uint16_t event);
 #endif
 
 /*******************************************************************************
@@ -172,7 +172,7 @@ bool nfa_ce_hdl_event(NFC_HDR* p_msg) {
 
 #if (BT_TRACE_VERBOSE == TRUE)
   NFA_TRACE_EVENT3("nfa_ce_handle_event event: %s (0x%02x), flags: %08x",
-                   nfa_ce_evt_2_str(p_msg->event), p_msg->event,
+                   nfa_ce_evt_2_str(p_msg->event).c_str(), p_msg->event,
                    nfa_ce_cb.flags);
 #else
   NFA_TRACE_EVENT2("nfa_ce_handle_event event: 0x%x, flags: %08x", p_msg->event,
@@ -201,26 +201,20 @@ bool nfa_ce_hdl_event(NFC_HDR* p_msg) {
 ** Description      convert nfc evt to string
 **
 *******************************************************************************/
-static char* nfa_ce_evt_2_str(uint16_t event) {
+static std::string nfa_ce_evt_2_str(uint16_t event) {
   switch (event) {
     case NFA_CE_API_CFG_LOCAL_TAG_EVT:
       return "NFA_CE_API_CFG_LOCAL_TAG_EVT";
-
     case NFA_CE_API_REG_LISTEN_EVT:
       return "NFA_CE_API_REG_LISTEN_EVT";
-
     case NFA_CE_API_DEREG_LISTEN_EVT:
       return "NFA_CE_API_DEREG_LISTEN_EVT";
-
     case NFA_CE_API_CFG_ISODEP_TECH_EVT:
       return "NFA_CE_API_CFG_ISODEP_TECH_EVT";
-
     case NFA_CE_ACTIVATE_NTF_EVT:
       return "NFA_CE_ACTIVATE_NTF_EVT";
-
     case NFA_CE_DEACTIVATE_NTF_EVT:
       return "NFA_CE_DEACTIVATE_NTF_EVT";
-
     default:
       return "Unknown";
   }

@@ -275,10 +275,6 @@ typedef struct {
 
 } tGKI_COM_CB;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* Internal GKI function prototypes
 */
 extern bool gki_chk_buf_damage(void*);
@@ -293,9 +289,5 @@ extern void OSIntCtxSw(void);
 extern void OSSched(void);
 extern void OSIntEnter(void);
 extern void OSIntExit(void);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

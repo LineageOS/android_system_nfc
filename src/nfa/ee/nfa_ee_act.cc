@@ -97,7 +97,7 @@ void nfa_ee_check_set_routing(uint16_t new_size, int* p_max_len, uint8_t* p,
 ** Returns          void
 **
 *******************************************************************************/
-static void nfa_ee_trace_aid(char* p_str, uint8_t id, uint8_t aid_len,
+static void nfa_ee_trace_aid(std::string p_str, uint8_t id, uint8_t aid_len,
                              uint8_t* p) {
   int len = aid_len;
   int xx, yy = 0;
@@ -112,7 +112,8 @@ static void nfa_ee_trace_aid(char* p_str, uint8_t id, uint8_t aid_len,
     yy += sprintf(&buff[yy], "%02x ", *p);
     p++;
   }
-  NFA_TRACE_DEBUG4("%s id:0x%x len=%d aid:%s", p_str, id, aid_len, buff);
+  NFA_TRACE_DEBUG4("%s id:0x%x len=%d aid:%s", p_str.c_str(), id, aid_len,
+                   buff);
 }
 
 /*******************************************************************************

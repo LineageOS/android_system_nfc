@@ -21,7 +21,7 @@
  *  function.
  *
  ******************************************************************************/
-#include <string.h>
+#include <string>
 #include "nci_hmsgs.h"
 #include "nfa_api.h"
 #include "nfa_dm_int.h"
@@ -58,8 +58,8 @@ static void nfa_dm_disc_kovio_timeout_cback(TIMER_LIST_ENT* p_tle);
 static void nfa_dm_disc_report_kovio_presence_check(tNFC_STATUS status);
 
 #if (BT_TRACE_VERBOSE == TRUE)
-static char* nfa_dm_disc_state_2_str(uint8_t state);
-static char* nfa_dm_disc_event_2_str(uint8_t event);
+static std::string nfa_dm_disc_state_2_str(uint8_t state);
+static std::string nfa_dm_disc_event_2_str(uint8_t event);
 #endif
 
 typedef struct nfa_dm_p2p_prio_logic {
@@ -1697,8 +1697,8 @@ void nfa_dm_disc_new_state(tNFA_DM_RF_DISC_STATE new_state) {
   NFA_TRACE_DEBUG5(
       "nfa_dm_disc_new_state (): old_state: %s (%d), new_state: %s (%d) "
       "disc_flags: 0x%x",
-      nfa_dm_disc_state_2_str(nfa_dm_cb.disc_cb.disc_state),
-      nfa_dm_cb.disc_cb.disc_state, nfa_dm_disc_state_2_str(new_state),
+      nfa_dm_disc_state_2_str(nfa_dm_cb.disc_cb.disc_state).c_str(),
+      nfa_dm_cb.disc_cb.disc_state, nfa_dm_disc_state_2_str(new_state).c_str(),
       new_state, nfa_dm_cb.disc_cb.disc_flags);
 #else
   NFA_TRACE_DEBUG3(
@@ -2218,55 +2218,54 @@ static void nfa_dm_disc_sm_poll_active(tNFA_DM_RF_DISC_SM_EVENT event,
         sleep_wakeup_event = true;
         nfa_dm_disc_notify_deactivation(NFA_DM_RF_DEACTIVATE_NTF,
                                         &(p_data->nfc_discover));
+      }
+      if ((p_data->nfc_discover.deactivate.type == NFC_DEACTIVATE_TYPE_SLEEP) ||
+          (p_data->nfc_discover.deactivate.type ==
+           NFC_DEACTIVATE_TYPE_SLEEP_AF)) {
+        if (p_data->nfc_discover.deactivate.reason !=
+            NFC_DEACTIVATE_REASON_DH_REQ_FAILED) {
+          /* count for number of times deactivate cmd sent */
+          nfa_dm_cb.deactivate_cmd_retry_count = 0;
         }
-        if ((p_data->nfc_discover.deactivate.type ==
-             NFC_DEACTIVATE_TYPE_SLEEP) ||
-            (p_data->nfc_discover.deactivate.type ==
-             NFC_DEACTIVATE_TYPE_SLEEP_AF)) {
-          if (p_data->nfc_discover.deactivate.reason !=
-              NFC_DEACTIVATE_REASON_DH_REQ_FAILED) {
-            /* count for number of times deactivate cmd sent */
-            nfa_dm_cb.deactivate_cmd_retry_count = 0;
-          }
-          nfa_dm_disc_new_state(NFA_DM_RFST_W4_HOST_SELECT);
-          if (old_sleep_wakeup_flag) {
-            sleep_wakeup_event_processed = true;
-            /* process pending deactivate request */
-            if (nfa_dm_cb.disc_cb.deact_pending) {
-              /* notify RW module that sleep wakeup is finished */
-              /* if deactivation is pending then deactivate  */
-              nfa_dm_disc_end_sleep_wakeup(NFC_STATUS_OK);
+        nfa_dm_disc_new_state(NFA_DM_RFST_W4_HOST_SELECT);
+        if (old_sleep_wakeup_flag) {
+          sleep_wakeup_event_processed = true;
+          /* process pending deactivate request */
+          if (nfa_dm_cb.disc_cb.deact_pending) {
+            /* notify RW module that sleep wakeup is finished */
+            /* if deactivation is pending then deactivate  */
+            nfa_dm_disc_end_sleep_wakeup(NFC_STATUS_OK);
 
-              /* Notify NFA RW sub-systems because NFA_DM_RF_DEACTIVATE_RSP will
-               * not call this function */
-              nfa_rw_proc_disc_evt(NFA_DM_RF_DISC_DEACTIVATED_EVT, NULL, true);
-            } else {
-              /* Successfully went to sleep mode for sleep wakeup */
-              /* Now wake up the tag to complete the operation */
-              NFC_DiscoverySelect(nfa_dm_cb.disc_cb.activated_rf_disc_id,
-                                  nfa_dm_cb.disc_cb.activated_protocol,
-                                  nfa_dm_cb.disc_cb.activated_rf_interface);
-            }
+            /* Notify NFA RW sub-systems because NFA_DM_RF_DEACTIVATE_RSP will
+             * not call this function */
+            nfa_rw_proc_disc_evt(NFA_DM_RF_DISC_DEACTIVATED_EVT, NULL, true);
+          } else {
+            /* Successfully went to sleep mode for sleep wakeup */
+            /* Now wake up the tag to complete the operation */
+            NFC_DiscoverySelect(nfa_dm_cb.disc_cb.activated_rf_disc_id,
+                                nfa_dm_cb.disc_cb.activated_protocol,
+                                nfa_dm_cb.disc_cb.activated_rf_interface);
           }
-          if (p_data->nfc_discover.deactivate.reason ==
-              NFC_DEACTIVATE_REASON_DH_REQ_FAILED) {
-            /* in case deactivation is not sucessfull, NFCC shall send
-               RF_DEACTIVATE_NTF with DH Req failed due to error.
-               MW shall send deactivation cmd again for 3 three times. if
-               deactivation is not successfull 3 times also,
-               then MW shall send deacivate cmd with deactivate type is
-               discovery */
-            if (nfa_dm_cb.deactivate_cmd_retry_count == 3) {
-              if ((!old_sleep_wakeup_flag) ||
-                  (!nfa_dm_cb.disc_cb.deact_pending)) {
-                nfa_dm_send_deactivate_cmd(NFA_DEACTIVATE_TYPE_DISCOVERY);
-              }
-              nfa_dm_cb.deactivate_cmd_retry_count = 0;
-            } else {
-              nfa_dm_cb.deactivate_cmd_retry_count++;
-              nfa_dm_send_deactivate_cmd(p_data->nfc_discover.deactivate.type);
+        }
+        if (p_data->nfc_discover.deactivate.reason ==
+            NFC_DEACTIVATE_REASON_DH_REQ_FAILED) {
+          /* in case deactivation is not sucessfull, NFCC shall send
+             RF_DEACTIVATE_NTF with DH Req failed due to error.
+             MW shall send deactivation cmd again for 3 three times. if
+             deactivation is not successfull 3 times also,
+             then MW shall send deacivate cmd with deactivate type is
+             discovery */
+          if (nfa_dm_cb.deactivate_cmd_retry_count == 3) {
+            if ((!old_sleep_wakeup_flag) ||
+                (!nfa_dm_cb.disc_cb.deact_pending)) {
+              nfa_dm_send_deactivate_cmd(NFA_DEACTIVATE_TYPE_DISCOVERY);
             }
+            nfa_dm_cb.deactivate_cmd_retry_count = 0;
+          } else {
+            nfa_dm_cb.deactivate_cmd_retry_count++;
+            nfa_dm_send_deactivate_cmd(p_data->nfc_discover.deactivate.type);
           }
+        }
       } else if (p_data->nfc_discover.deactivate.type ==
                  NFC_DEACTIVATE_TYPE_IDLE) {
         nfa_dm_disc_new_state(NFA_DM_RFST_IDLE);
@@ -2521,9 +2520,9 @@ void nfa_dm_disc_sm_execute(tNFA_DM_RF_DISC_SM_EVENT event,
   NFA_TRACE_DEBUG5(
       "nfa_dm_disc_sm_execute (): state: %s (%d), event: %s(%d) disc_flags: "
       "0x%x",
-      nfa_dm_disc_state_2_str(nfa_dm_cb.disc_cb.disc_state),
-      nfa_dm_cb.disc_cb.disc_state, nfa_dm_disc_event_2_str(event), event,
-      nfa_dm_cb.disc_cb.disc_flags);
+      nfa_dm_disc_state_2_str(nfa_dm_cb.disc_cb.disc_state).c_str(),
+      nfa_dm_cb.disc_cb.disc_state, nfa_dm_disc_event_2_str(event).c_str(),
+      event, nfa_dm_cb.disc_cb.disc_flags);
 #else
   NFA_TRACE_DEBUG3(
       "nfa_dm_disc_sm_execute(): state: %d, event:%d disc_flags: 0x%x",
@@ -2579,7 +2578,7 @@ void nfa_dm_disc_sm_execute(tNFA_DM_RF_DISC_SM_EVENT event,
 #if (BT_TRACE_VERBOSE == TRUE)
   NFA_TRACE_DEBUG3(
       "nfa_dm_disc_sm_execute (): new state: %s (%d), disc_flags: 0x%x",
-      nfa_dm_disc_state_2_str(nfa_dm_cb.disc_cb.disc_state),
+      nfa_dm_disc_state_2_str(nfa_dm_cb.disc_cb.disc_state).c_str(),
       nfa_dm_cb.disc_cb.disc_state, nfa_dm_cb.disc_cb.disc_flags);
 #else
   NFA_TRACE_DEBUG2("nfa_dm_disc_sm_execute(): new state: %d,  disc_flags: 0x%x",
@@ -2810,7 +2809,7 @@ tNFA_STATUS nfa_dm_rf_deactivate(tNFA_DEACTIVATE_TYPE deactivate_type) {
 ** Description      convert nfc discovery state to string
 **
 *******************************************************************************/
-static char* nfa_dm_disc_state_2_str(uint8_t state) {
+static std::string nfa_dm_disc_state_2_str(uint8_t state) {
   switch (state) {
     case NFA_DM_RFST_IDLE:
       return "IDLE";
@@ -2849,42 +2848,33 @@ static char* nfa_dm_disc_state_2_str(uint8_t state) {
 ** Description      convert nfc discovery RSP/NTF to string
 **
 *******************************************************************************/
-static char* nfa_dm_disc_event_2_str(uint8_t event) {
+static std::string nfa_dm_disc_event_2_str(uint8_t event) {
   switch (event) {
     case NFA_DM_RF_DISCOVER_CMD:
       return "DISCOVER_CMD";
-
     case NFA_DM_RF_DISCOVER_RSP:
       return "DISCOVER_RSP";
-
     case NFA_DM_RF_DISCOVER_NTF:
       return "DISCOVER_NTF";
-
     case NFA_DM_RF_DISCOVER_SELECT_CMD:
       return "SELECT_CMD";
-
     case NFA_DM_RF_DISCOVER_SELECT_RSP:
       return "SELECT_RSP";
-
     case NFA_DM_RF_INTF_ACTIVATED_NTF:
       return "ACTIVATED_NTF";
-
     case NFA_DM_RF_DEACTIVATE_CMD:
       return "DEACTIVATE_CMD";
-
     case NFA_DM_RF_DEACTIVATE_RSP:
       return "DEACTIVATE_RSP";
-
     case NFA_DM_RF_DEACTIVATE_NTF:
       return "DEACTIVATE_NTF";
-
     case NFA_DM_LP_LISTEN_CMD:
       return "NFA_DM_LP_LISTEN_CMD";
-
     case NFA_DM_CORE_INTF_ERROR_NTF:
       return "INTF_ERROR_NTF";
+    default:
+      return "Unknown";
   }
-  return "Unknown";
 }
 #endif /* BT_TRACE_VERBOSE */
 

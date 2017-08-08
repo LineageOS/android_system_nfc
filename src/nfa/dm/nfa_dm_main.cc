@@ -22,7 +22,7 @@
  *
  ******************************************************************************/
 
-#include <string.h>
+#include <string>
 #include "nfa_api.h"
 #include "nfa_dm_int.h"
 #include "nfa_sys.h"
@@ -81,7 +81,7 @@ const tNFA_DM_ACTION nfa_dm_action[] = {
 ** Local function prototypes
 *****************************************************************************/
 #if (BT_TRACE_VERBOSE == TRUE)
-static char* nfa_dm_evt_2_str(uint16_t event);
+static std::string nfa_dm_evt_2_str(uint16_t event);
 #endif
 /*******************************************************************************
 **
@@ -119,7 +119,7 @@ bool nfa_dm_evt_hdlr(NFC_HDR* p_msg) {
 
 #if (BT_TRACE_VERBOSE == TRUE)
   NFA_TRACE_EVENT2("nfa_dm_evt_hdlr event: %s (0x%02x)",
-                   nfa_dm_evt_2_str(event), event);
+                   nfa_dm_evt_2_str(event).c_str(), event);
 #else
   NFA_TRACE_EVENT1("nfa_dm_evt_hdlr event: 0x%x", event);
 #endif
@@ -454,80 +454,56 @@ tNFA_STATUS nfa_dm_check_set_config(uint8_t tlv_list_len, uint8_t* p_tlv_list,
 ** Description      convert nfc revt to string
 **
 *******************************************************************************/
-static char* nfa_dm_evt_2_str(uint16_t event) {
+static std::string nfa_dm_evt_2_str(uint16_t event) {
   switch (NFA_SYS_EVT_START(NFA_ID_DM) | event) {
     case NFA_DM_API_ENABLE_EVT:
       return "NFA_DM_API_ENABLE_EVT";
-
     case NFA_DM_API_DISABLE_EVT:
       return "NFA_DM_API_DISABLE_EVT";
-
     case NFA_DM_API_SET_CONFIG_EVT:
       return "NFA_DM_API_SET_CONFIG_EVT";
-
     case NFA_DM_API_GET_CONFIG_EVT:
       return "NFA_DM_API_GET_CONFIG_EVT";
-
     case NFA_DM_API_REQUEST_EXCL_RF_CTRL_EVT:
       return "NFA_DM_API_REQUEST_EXCL_RF_CTRL_EVT";
-
     case NFA_DM_API_RELEASE_EXCL_RF_CTRL_EVT:
       return "NFA_DM_API_RELEASE_EXCL_RF_CTRL_EVT";
-
     case NFA_DM_API_ENABLE_POLLING_EVT:
       return "NFA_DM_API_ENABLE_POLLING_EVT";
-
     case NFA_DM_API_DISABLE_POLLING_EVT:
       return "NFA_DM_API_DISABLE_POLLING_EVT";
-
     case NFA_DM_API_ENABLE_LISTENING_EVT:
       return "NFA_DM_API_ENABLE_LISTENING_EVT";
-
     case NFA_DM_API_DISABLE_LISTENING_EVT:
       return "NFA_DM_API_DISABLE_LISTENING_EVT";
-
     case NFA_DM_API_PAUSE_P2P_EVT:
       return "NFA_DM_API_PAUSE_P2P_EVT";
-
     case NFA_DM_API_RESUME_P2P_EVT:
       return "NFA_DM_API_RESUME_P2P_EVT";
-
     case NFA_DM_API_RAW_FRAME_EVT:
       return "NFA_DM_API_RAW_FRAME_EVT";
-
     case NFA_DM_API_SET_P2P_LISTEN_TECH_EVT:
       return "NFA_DM_API_SET_P2P_LISTEN_TECH_EVT";
-
     case NFA_DM_API_START_RF_DISCOVERY_EVT:
       return "NFA_DM_API_START_RF_DISCOVERY_EVT";
-
     case NFA_DM_API_STOP_RF_DISCOVERY_EVT:
       return "NFA_DM_API_STOP_RF_DISCOVERY_EVT";
-
     case NFA_DM_API_SET_RF_DISC_DURATION_EVT:
       return "NFA_DM_API_SET_RF_DISC_DURATION_EVT";
-
     case NFA_DM_API_SELECT_EVT:
       return "NFA_DM_API_SELECT_EVT";
-
     case NFA_DM_API_UPDATE_RF_PARAMS_EVT:
       return "NFA_DM_API_UPDATE_RF_PARAMS_EVT";
-
     case NFA_DM_API_DEACTIVATE_EVT:
       return "NFA_DM_API_DEACTIVATE_EVT";
-
     case NFA_DM_API_POWER_OFF_SLEEP_EVT:
       return "NFA_DM_API_POWER_OFF_SLEEP_EVT";
-
     case NFA_DM_API_REG_NDEF_HDLR_EVT:
       return "NFA_DM_API_REG_NDEF_HDLR_EVT";
-
     case NFA_DM_API_DEREG_NDEF_HDLR_EVT:
       return "NFA_DM_API_DEREG_NDEF_HDLR_EVT";
-
     case NFA_DM_TIMEOUT_DISABLE_EVT:
       return "NFA_DM_TIMEOUT_DISABLE_EVT";
-
     case NFA_DM_API_SET_POWER_SUB_STATE_EVT:
       return "NFA_DM_API_SET_POWER_SUB_STATE_EVT";
   }
