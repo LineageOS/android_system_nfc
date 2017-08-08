@@ -107,8 +107,8 @@ typedef struct {
 */
 
 typedef struct {
-  uint8_t link_type;       /* logical link and/or data link                */
-  char* p_service_name;    /* GKI buffer containing service name           */
+  uint8_t link_type;    /* logical link and/or data link                */
+  char* p_service_name; /* GKI buffer containing service name           */
   tLLCP_APP_CBACK* p_app_cback; /* application's callback pointer */
 
   BUFFER_Q ui_xmit_q;      /* UI PDU queue for transmitting                */

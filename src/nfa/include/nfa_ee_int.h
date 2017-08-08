@@ -421,15 +421,15 @@ typedef struct {
   tNFA_EE_CBACK* p_ee_cback[NFA_EE_MAX_CBACKS]; /* to report EE events       */
   tNFA_EE_CBACK* p_ee_disc_cback; /* to report EE discovery result    */
   tNFA_EE_ENABLE_DONE_CBACK*
-      p_enable_cback;        /* callback to notify on enable done*/
-  tNFA_EE_EM_STATE em_state; /* NFA-EE state initialized or not  */
-  uint8_t wait_rsp;          /* num of NCI rsp expected (update) */
-  uint8_t num_ee_expecting;  /* number of ee_info still expecting*/
-  uint8_t cur_ee;            /* the number of ee_info in cb      */
-  uint8_t ee_cfged;          /* the bit mask of configured ECBs  */
-  uint8_t ee_cfg_sts;        /* configuration status             */
-  tNFA_EE_WAIT ee_wait_evt;  /* Pending event(s) to be reported  */
-  tNFA_EE_FLAGS ee_flags;    /* flags                            */
+      p_enable_cback;          /* callback to notify on enable done*/
+  tNFA_EE_EM_STATE em_state;   /* NFA-EE state initialized or not  */
+  uint8_t wait_rsp;            /* num of NCI rsp expected (update) */
+  uint8_t num_ee_expecting;    /* number of ee_info still expecting*/
+  uint8_t cur_ee;              /* the number of ee_info in cb      */
+  uint8_t ee_cfged;            /* the bit mask of configured ECBs  */
+  uint8_t ee_cfg_sts;          /* configuration status             */
+  tNFA_EE_WAIT ee_wait_evt;    /* Pending event(s) to be reported  */
+  tNFA_EE_FLAGS ee_flags;      /* flags                            */
   uint8_t route_block_control; /* controls route block feature   */
 } tNFA_EE_CB;
 
