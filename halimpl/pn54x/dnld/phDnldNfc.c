@@ -970,13 +970,13 @@ NFCSTATUS phDnldNfc_LoadFW(const char* pathName, uint8_t** pImgInfo,
   void* pImageInfoLen = NULL;
   if (pathName == NULL) {
 #if (NFC_NXP_CHIP_TYPE == PN548C2)
-    pathName = "/system/vendor/firmware/libpn548ad_fw.so";
+    pathName = "/system/vendor/lib/libpn548ad_fw.so";
 #elif (NFC_NXP_CHIP_TYPE == PN551)
-    pathName = "/system/vendor/firmware/libpn551_fw.so";
+    pathName = "/system/vendor/lib/libpn551_fw.so";
 #elif (NFC_NXP_CHIP_TYPE == PN553)
-    pathName = "/system/vendor/firmware/libpn553_fw.so";
+    pathName = "/system/vendor/lib/libpn553_fw.so";
 #else
-    pathName = "/system/vendor/firmware/libpn547_fw.so";
+    pathName = "/system/vendor/lib/libpn547_fw.so";
 #endif
   }
 
@@ -1043,13 +1043,13 @@ NFCSTATUS phDnldNfc_LoadRecoveryFW(const char* pathName, uint8_t** pImgInfo,
   /* check for path name */
   if (pathName == NULL) {
 #if (NFC_NXP_CHIP_TYPE == PN548C2)
-    pathName = "/system/vendor/firmware/libpn548ad_fw.so";
+    pathName = "/system/vendor/lib/libpn548ad_fw.so";
 #elif (NFC_NXP_CHIP_TYPE == PN551)
-    pathName = "/system/vendor/firmware/libpn551_fw.so";
+    pathName = "/system/vendor/lib/libpn551_fw.so";
 #elif (NFC_NXP_CHIP_TYPE == PN553)
-    pathName = "/system/vendor/firmware/libpn553_fw.so";
+    pathName = "/system/vendor/lib/libpn553_fw.so";
 #else
-    pathName = "/system/vendor/firmware/libpn547_fw.so";
+    pathName = "/system/vendor/lib/libpn547_fw.so";
 #endif
   }
 
