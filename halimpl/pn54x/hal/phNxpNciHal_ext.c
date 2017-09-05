@@ -17,7 +17,6 @@
 #include <phNxpConfig.h>
 #include <phNxpLog.h>
 #include <phNxpNciHal.h>
-#include <phNxpNciHal_Kovio.h>
 #include <phNxpNciHal_NfcDepSWPrio.h>
 #include <phNxpNciHal_ext.h>
 #include <phTmlNfc.h>
@@ -31,9 +30,6 @@
 extern phNxpNciHal_Control_t nxpncihal_ctrl;
 extern phNxpNciProfile_Control_t nxpprofile_ctrl;
 
-extern int kovio_detected;
-extern int disable_kovio;
-extern int send_to_upper_kovio;
 extern uint32_t cleanup_timer;
 uint8_t icode_detected = 0x00;
 uint8_t icode_send_eof = 0x00;
@@ -89,9 +85,6 @@ void phNxpNciHal_ext_init(void) {
   icode_detected = 0x00;
   icode_send_eof = 0x00;
   setEEModeDone = 0x00;
-  kovio_detected = 0x00;
-  disable_kovio = 0x00;
-  send_to_upper_kovio = 0x01;
   EnableP2P_PrioLogic = false;
 }
 
@@ -132,8 +125,7 @@ NFCSTATUS phNxpNciHal_process_ext_rsp(uint8_t* p_ntf, uint16_t* p_len) {
 
   NXPLOG_NCIHAL_D("Is EnableP2P_PrioLogic: 0x0%X", EnableP2P_PrioLogic);
   if (phNxpDta_IsEnable() == false) {
-    if ((icode_detected != 1) && (kovio_detected != 1) &&
-        (EnableP2P_PrioLogic == true)) {
+    if ((icode_detected != 1) && (EnableP2P_PrioLogic == true)) {
       if (phNxpNciHal_NfcDep_comapre_ntf(p_ntf, *p_len) == NFCSTATUS_FAILED) {
         status = phNxpNciHal_NfcDep_rsp_ext(p_ntf, p_len);
         if (status != NFCSTATUS_INVALID_PARAMETER) {
@@ -145,7 +137,6 @@ NFCSTATUS phNxpNciHal_process_ext_rsp(uint8_t* p_ntf, uint16_t* p_len) {
 #endif
 
   status = NFCSTATUS_SUCCESS;
-  status = phNxpNciHal_kovio_rsp_ext(p_ntf, p_len);
 
   if (p_ntf[0] == 0x61 && p_ntf[1] == 0x05) {
 #if (NFC_NXP_CHIP_TYPE == PN548C2)
