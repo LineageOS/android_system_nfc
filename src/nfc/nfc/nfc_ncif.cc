@@ -700,7 +700,7 @@ Available after Technology Detection
     p_i93->dsfid = *p++;
     STREAM_TO_ARRAY(p_i93->uid, p, NFC_ISO15693_UID_LEN);
   } else if (NCI_DISCOVERY_TYPE_POLL_KOVIO == p_param->mode) {
-    p_param->param.pk.uid_len = *p++;
+    p_param->param.pk.uid_len = len;
     if (p_param->param.pk.uid_len > NFC_KOVIO_MAX_LEN) {
       NFC_TRACE_ERROR2("Kovio UID len:0x%x exceeds max(0x%x)",
                        p_param->param.pk.uid_len, NFC_KOVIO_MAX_LEN);
