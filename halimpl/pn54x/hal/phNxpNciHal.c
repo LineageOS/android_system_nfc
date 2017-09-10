@@ -21,7 +21,6 @@
 #include <phNxpNciHal.h>
 #include <phNxpNciHal_Adaptation.h>
 #include <phNxpNciHal_Dnld.h>
-#include <phNxpNciHal_Kovio.h>
 #include <phNxpNciHal_NfcDepSWPrio.h>
 #include <phNxpNciHal_ext.h>
 #include <phTmlNfc.h>
@@ -70,9 +69,6 @@ extern uint16_t wFwVer;
 
 extern uint16_t fw_maj_ver;
 extern uint16_t rom_version;
-extern int send_to_upper_kovio;
-extern int kovio_detected;
-extern int disable_kovio;
 #if (NFC_NXP_CHIP_TYPE != PN547C2)
 extern uint8_t gRecFWDwnld;
 static uint8_t gRecFwRetryCount;  // variable to hold dummy FW recovery count
@@ -83,7 +79,6 @@ static uint8_t Rx_data[NCI_MAX_DATA_LEN];
 uint8_t discovery_cmd[50] = {0};
 uint8_t discovery_cmd_len = 0;
 #endif
-extern bool_t rf_deactive_cmd;
 uint32_t timeoutTimerId = 0;
 phNxpNciHal_Sem_t config_data;
 
@@ -768,15 +763,6 @@ int phNxpNciHal_write(uint16_t data_len, const uint8_t* p_data) {
     phNxpNciHal_clean_P2P_Prio();
   }
 #endif
-  /* Specific logic to block RF disable when Kovio detection logic is active */
-  if (p_data[0] == 0x21 && p_data[1] == 0x06 && p_data[2] == 0x01) {
-    rf_deactive_cmd = true;
-    if (kovio_detected == true) {
-      NXPLOG_NCIHAL_D(
-          "Kovio detection logic is active: Set Flag to disable it.");
-      disable_kovio = 0x01;
-    }
-  }
 
   /* Check for NXP ext before sending write */
   status =
@@ -982,7 +968,7 @@ static void phNxpNciHal_read_complete(void* pContext,
     }
     /* Read successful send the event to higher layer */
     else if ((nxpncihal_ctrl.p_nfc_stack_data_cback != NULL) &&
-             (status == NFCSTATUS_SUCCESS) && (send_to_upper_kovio == 1)) {
+             (status == NFCSTATUS_SUCCESS)) {
       (*nxpncihal_ctrl.p_nfc_stack_data_cback)(nxpncihal_ctrl.rx_data_len,
                                                nxpncihal_ctrl.p_rx_data);
     }
