@@ -1,6 +1,6 @@
 subdirs = ["src"]
 cc_library_shared {
-    name: "nfc_nci.bcm2079x.default",
+    name: "nfc_nci.bcm2079x",
     proprietary: true,
     relative_install_path: "hw",
     srcs: [
