@@ -1141,7 +1141,8 @@ int phNxpNciHal_core_initialized(uint8_t* p_core_init_rsp_params) {
   }
 
 #ifdef PN547C2_CLOCK_SETTING
-  if ((fw_download_success == 1) || (phNxpNciClock.issetConfig)
+  if (isNxpConfigModified() || (fw_download_success == 1) ||
+      (phNxpNciClock.issetConfig)
 #if (NFC_NXP_HFO_SETTINGS == TRUE)
       || temp_fix == 1
 #endif
@@ -1198,7 +1199,7 @@ int phNxpNciHal_core_initialized(uint8_t* p_core_init_rsp_params) {
     }
   }
 
-  if (fw_download_success == 1) {
+  if (isNxpConfigModified() || (fw_download_success == 1)) {
     retlen = 0;
     fw_download_success = 0;
 
