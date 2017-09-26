@@ -37,7 +37,6 @@ tRW_CB rw_cb;
 *******************************************************************************/
 void rw_init(void) {
   memset(&rw_cb, 0, sizeof(tRW_CB));
-  rw_cb.trace_level = NFC_INITIAL_TRACE_LEVEL;
 }
 
 #if (RW_STATS_INCLUDED == TRUE)
@@ -256,21 +255,4 @@ tNFC_STATUS RW_SetActivatedTagType(tNFC_ACTIVATE_DEVT* p_activate_params,
 
   if (status != NFC_STATUS_OK) rw_cb.p_cback = NULL;
   return status;
-}
-
-/*******************************************************************************
-**
-** Function         RW_SetTraceLevel
-**
-** Description      This function sets the trace level for Reader/Writer mode.
-**                  If called with a value of 0xFF,
-**                  it simply returns the current trace level.
-**
-** Returns          The new or current trace level
-**
-*******************************************************************************/
-uint8_t RW_SetTraceLevel(uint8_t new_level) {
-  if (new_level != 0xFF) rw_cb.trace_level = new_level;
-
-  return (rw_cb.trace_level);
 }
