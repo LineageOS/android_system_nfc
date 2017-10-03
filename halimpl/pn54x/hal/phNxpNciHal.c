@@ -416,7 +416,8 @@ static void phNxpNciHal_get_clk_freq(void) {
         "Clock source value is wrong in config file, setting it as default");
     nxpprofile_ctrl.bClkSrcVal = NXP_SYS_CLK_SRC_SEL;
   }
-  if ((nxpprofile_ctrl.bClkFreqVal < CLK_FREQ_13MHZ) ||
+  if (nxpprofile_ctrl.bClkFreqVal == CLK_SRC_PLL &&
+          (nxpprofile_ctrl.bClkFreqVal < CLK_FREQ_13MHZ) ||
       (nxpprofile_ctrl.bClkFreqVal > CLK_FREQ_52MHZ)) {
     NXPLOG_FWDNLD_E(
         "Clock frequency value is wrong in config file, setting it as default");
