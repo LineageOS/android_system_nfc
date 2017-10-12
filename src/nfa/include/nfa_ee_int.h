@@ -103,7 +103,6 @@ enum {
 typedef uint8_t tNFA_EE_CONN_ST;
 
 #define NFA_EE_MAX_AID_CFG_LEN (510)
-#define NFA_EE_7816_STATUS_LEN (2)
 
 /* NFA EE control block flags:
  * use to indicate an API function has changed the configuration of the
@@ -377,7 +376,6 @@ typedef void (*tNFA_EE_SM_ACT)(tNFA_EE_MSG* p_data);
 
 /* the following status are the definition used in ee_cfg_sts */
 #define NFA_EE_STS_CHANGED_ROUTING 0x01
-#define NFA_EE_STS_CHANGED_VS 0x02
 #define NFA_EE_STS_CHANGED 0x0f
 #define NFA_EE_STS_PREV_ROUTING 0x10
 #define NFA_EE_STS_PREV 0xf0
@@ -434,8 +432,6 @@ typedef struct {
 
 /* Order of Routing entries in Routing Table */
 #define NCI_ROUTE_ORDER_AID 0x01        /* AID routing order */
-#define NCI_ROUTE_ORDER_PATTERN 0x02    /* Pattern routing order*/
-#define NCI_ROUTE_ORDER_SYS_CODE 0x03   /* System Code routing order*/
 #define NCI_ROUTE_ORDER_PROTOCOL 0x04   /* Protocol routing order*/
 #define NCI_ROUTE_ORDER_TECHNOLOGY 0x05 /* Technology routing order*/
 
