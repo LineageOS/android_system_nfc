@@ -51,7 +51,8 @@ static std::string rw_t1t_get_state_name(uint8_t state);
 ** Returns          none
 **
 *******************************************************************************/
-static void rw_t1t_data_cback(uint8_t conn_id, tNFC_CONN_EVT event,
+static void rw_t1t_data_cback(__attribute__((unused)) uint8_t conn_id,
+                              __attribute__((unused)) tNFC_CONN_EVT event,
                               tNFC_CONN* p_data) {
   tRW_T1T_CB* p_t1t = &rw_cb.tcb.t1t;
   tRW_EVENT rw_event = RW_RAW_FRAME_EVT;
@@ -515,7 +516,7 @@ tNFC_STATUS rw_t1t_select(uint8_t hr[T1T_HR_LEN],
 ** Returns          none
 **
 *******************************************************************************/
-void rw_t1t_process_timeout(TIMER_LIST_ENT* p_tle) {
+void rw_t1t_process_timeout(__attribute__((unused)) TIMER_LIST_ENT* p_tle) {
   tRW_T1T_CB* p_t1t = &rw_cb.tcb.t1t;
 
   LOG(ERROR) << StringPrintf("T1T timeout. state=%s command (opcode)=0x%02x ",
