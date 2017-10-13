@@ -17,7 +17,6 @@
  ******************************************************************************/
 #include <android-base/stringprintf.h>
 #include <base/logging.h>
-#include <stdio.h>
 #include "gki_int.h"
 
 #if (GKI_NUM_TOTAL_BUF_POOLS > 16)

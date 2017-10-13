@@ -25,9 +25,8 @@
 #include "ce_api.h"
 #include "ndef_utils.h"
 #include "nfa_ce_int.h"
-#include "nfa_dm_int.h"
 #include "nfa_mem_co.h"
-#include "nfa_sys_int.h"
+
 #if (NFC_NFCEE_INCLUDED == TRUE)
 #include "nfa_ee_int.h"
 #endif

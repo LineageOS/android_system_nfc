@@ -25,10 +25,8 @@
 #include <string.h>
 #include "nfc_target.h"
 
-#include "gki.h"
 #include "nci_hmsgs.h"
 #include "nfc_api.h"
-#include "nfc_int.h"
 #include "rw_api.h"
 #include "rw_int.h"
 

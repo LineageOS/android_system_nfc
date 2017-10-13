@@ -27,13 +27,11 @@
 #include "nfc_target.h"
 #include "trace_api.h"
 
-#include "gki.h"
 #include "nci_hmsgs.h"
 #include "nfc_api.h"
 #include "nfc_int.h"
 #include "rw_api.h"
 #include "rw_int.h"
-#include "tags_int.h"
 
 /* Definitions for constructing t3t command messages */
 #define RW_T3T_FL_PADDING 0x01 /* Padding needed for last NDEF block */
