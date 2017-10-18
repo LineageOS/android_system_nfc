@@ -97,7 +97,6 @@ static void phNxpNciHal_read_complete(void* pContext,
                                       phTmlNfc_TransactInfo_t* pInfo);
 static void phNxpNciHal_close_complete(NFCSTATUS status);
 static void phNxpNciHal_core_initialized_complete(NFCSTATUS status);
-static void phNxpNciHal_pre_discover_complete(NFCSTATUS status);
 static void phNxpNciHal_power_cycle_complete(NFCSTATUS status);
 static void phNxpNciHal_kill_client_thread(
     phNxpNciHal_Control_t* p_nxpncihal_ctrl);
@@ -1032,8 +1031,10 @@ int phNxpNciHal_core_initialized(uint8_t* p_core_init_rsp_params) {
   long bufflen = 260;
   long retlen = 0;
   int isfound;
+#if (NFC_NXP_HFO_SETTINGS == TRUE)
   /* Temp fix to re-apply the proper clock setting */
   int temp_fix = 1;
+#endif
   unsigned long num = 0;
 #if (NFC_NXP_CHIP_TYPE != PN547C2)
   // initialize dummy FW recovery variables
@@ -1854,9 +1855,7 @@ static void phNxpNciHal_core_initialized_complete(NFCSTATUS status) {
  * Function         phNxpNciHal_pre_discover
  *
  * Description      This function is called by libnfc-nci to perform any
- *                  proprietary exchange before RF discovery. When proprietary
- *                  exchange is over completion is informed to libnfc-nci
- *                  through phNxpNciHal_pre_discover_complete function.
+ *                  proprietary exchange before RF discovery.
  *
  * Returns          It always returns NFCSTATUS_SUCCESS (0).
  *
@@ -1864,31 +1863,6 @@ static void phNxpNciHal_core_initialized_complete(NFCSTATUS status) {
 int phNxpNciHal_pre_discover(void) {
   /* Nothing to do here for initial version */
   return NFCSTATUS_SUCCESS;
-}
-
-/******************************************************************************
- * Function         phNxpNciHal_pre_discover_complete
- *
- * Description      This function informs libnfc-nci about completion and
- *                  status of phNxpNciHal_pre_discover through callback.
- *
- * Returns          void.
- *
- ******************************************************************************/
-static void phNxpNciHal_pre_discover_complete(NFCSTATUS status) {
-  static phLibNfc_Message_t msg;
-
-  if (status == NFCSTATUS_SUCCESS) {
-    msg.eMsgType = NCI_HAL_PRE_DISCOVER_CPLT_MSG;
-  } else {
-    msg.eMsgType = NCI_HAL_ERROR_MSG;
-  }
-  msg.pMsgData = NULL;
-  msg.Size = 0;
-
-  phTmlNfc_DeferredCall(gpphTmlNfc_Context->dwCallbackThreadId, &msg);
-
-  return;
 }
 
 /******************************************************************************
@@ -2119,7 +2093,6 @@ static NFCSTATUS phNxpNciHal_get_mw_eeprom(void) {
   NFCSTATUS status = NFCSTATUS_SUCCESS;
   uint8_t retry_cnt = 0;
   static uint8_t get_mw_eeprom_cmd[] = {0x20, 0x03, 0x03, 0x01, 0xA0, 0x0F};
-  uint8_t bConfig;
 
 retry_send_ext:
   if (retry_cnt > 3) {
@@ -2357,7 +2330,6 @@ retry_send_ext:
 }
 
 int check_config_parameter() {
-  NFCSTATUS status = NFCSTATUS_FAILED;
   uint8_t param_clock_src = CLK_SRC_PLL;
   if (nxpprofile_ctrl.bClkSrcVal == CLK_SRC_PLL) {
 #if (NFC_NXP_CHIP_TYPE != PN553)
