@@ -90,6 +90,7 @@ int GetNumValue(const char* name, void* p_value, unsigned long len);
 #define NAME_NCI_HAL_MODULE "NCI_HAL_MODULE"
 #define NAME_NFA_POLL_BAIL_OUT_MODE "NFA_POLL_BAIL_OUT_MODE"
 #define NAME_NFA_PROPRIETARY_CFG "NFA_PROPRIETARY_CFG"
+#define NAME_ISO_DEP_MAX_TRANSCEIVE "ISO_DEP_MAX_TRANSCEIVE"
 
 #define LPTD_PARAM_LEN (40)
 
