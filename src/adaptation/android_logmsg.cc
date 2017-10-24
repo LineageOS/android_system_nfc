@@ -29,7 +29,7 @@ extern uint32_t ScrProtocolTraceFlag;
 #define PRINT(s) __android_log_write(ANDROID_LOG_DEBUG, "BrcmNci", s)
 static char log_line[MAX_LOGCAT_LINE];
 static const char* sTable = "0123456789abcdef";
-static bool sIsUseRaw = FALSE;
+
 static void ToHex(const uint8_t* data, uint16_t len, char* hexString,
                   uint16_t hexStringSize);
 static void dumpbin(const char* data, int size, uint32_t trace_layer,
@@ -46,7 +46,7 @@ void BTDISP_INIT_LOCK() {}
 
 void BTDISP_UNINIT_LOCK() {}
 
-void ProtoDispAdapterUseRawOutput(bool isUseRaw) { sIsUseRaw = isUseRaw; }
+void ProtoDispAdapterUseRawOutput(bool isUseRaw) {}
 
 void ProtoDispAdapterDisplayNciPacket(uint8_t* nciPacket, uint16_t nciPacketLen,
                                       bool is_recv) {

@@ -150,7 +150,6 @@ typedef uint8_t tNFC_STATUS;
 /* use a proprietary range */
 #define NFC_TEST_ID NCI_TEST_ID
 
-typedef uint8_t tNFC_PMID;
 #define NFC_TL_SIZE 2
 #define NFC_SAVED_CMD_SIZE 2
 
@@ -191,8 +190,8 @@ enum {
   NFC_NFCC_POWER_OFF_REVT,          /* 17 NFCC turned off               */
   NFC_SET_POWER_SUB_STATE_REVT,     /* 18 Set power sub state response  */
   NFC_NFCEE_PL_CONTROL_REVT,        /* NFCEE Power/Link Ctrl response*/
-  NFC_NFCEE_STATUS_REVT,            /* NFCEE Status Notification     */
-  NFC_FIRST_VS_REVT                 /* First vendor-specific rsp event  */
+  NFC_NFCEE_STATUS_REVT             /* NFCEE Status Notification     */
+                                    /* First vendor-specific rsp event  */
 };
 typedef uint16_t tNFC_RESPONSE_EVT;
 
@@ -253,7 +252,6 @@ typedef struct {
 #define NFC_NFCEE_INTERFACE_T3T NCI_NFCEE_INTERFACE_T3T
 #define NFC_NFCEE_INTERFACE_TRANSPARENT NCI_NFCEE_INTERFACE_TRANSPARENT
 #define NFC_NFCEE_INTERFACE_PROPRIETARY NCI_NFCEE_INTERFACE_PROPRIETARY
-typedef uint8_t tNFC_NFCEE_INTERFACE;
 
 #define NFC_NFCEE_TAG_HW_ID NCI_NFCEE_TAG_HW_ID
 #define NFC_NFCEE_TAG_ATR_BYTES NCI_NFCEE_TAG_ATR_BYTES
@@ -755,12 +753,6 @@ typedef struct {
 typedef void(tNFC_DISCOVER_CBACK)(tNFC_DISCOVER_EVT event,
                                   tNFC_DISCOVER* p_data);
 
-/* the events reported on tNFC_TEST_CBACK */
-enum {
-  NFC_LOOPBACK_TEVT = NFC_FIRST_TEVT, /* 0  Loopback test             */
-  NFC_RF_CONTROL_TEVT,                /* 1  RF control Test response  */
-  NFC_RF_FIELD_DONE_TEVT              /* 1  RF control Test notificatn*/
-};
 typedef uint16_t tNFC_TEST_EVT;
 
 /* the data type associated with NFC_LOOPBACK_TEVT */
@@ -803,11 +795,6 @@ typedef void(tNFC_CONN_CBACK)(uint8_t conn_id, tNFC_CONN_EVT event,
 #define NFC_RF_CONN_ID 0
 /* the static connection ID for HCI transport */
 #define NFC_HCI_CONN_ID 1
-
-/*************************************
-**  Status callback function
-**************************************/
-typedef void(tNFC_STATUS_CBACK)(tNFC_STATUS status);
 
 /*****************************************************************************
 **  EXTERNAL FUNCTION DECLARATIONS
