@@ -417,8 +417,8 @@ static void phNxpNciHal_get_clk_freq(void) {
     nxpprofile_ctrl.bClkSrcVal = NXP_SYS_CLK_SRC_SEL;
   }
   if (nxpprofile_ctrl.bClkFreqVal == CLK_SRC_PLL &&
-          (nxpprofile_ctrl.bClkFreqVal < CLK_FREQ_13MHZ) ||
-      (nxpprofile_ctrl.bClkFreqVal > CLK_FREQ_52MHZ)) {
+      (nxpprofile_ctrl.bClkFreqVal < CLK_FREQ_13MHZ ||
+       nxpprofile_ctrl.bClkFreqVal > CLK_FREQ_52MHZ)) {
     NXPLOG_FWDNLD_E(
         "Clock frequency value is wrong in config file, setting it as default");
     nxpprofile_ctrl.bClkFreqVal = NXP_SYS_CLK_FREQ_SEL;
@@ -2400,7 +2400,6 @@ void phNxpNciHal_enable_i2c_fragmentation() {
   NFCSTATUS status = NFCSTATUS_FAILED;
   static uint8_t fragmentation_enable_config_cmd[] = {0x20, 0x02, 0x05, 0x01,
                                                       0xA0, 0x05, 0x01, 0x10};
-  int isfound = 0;
   long i2c_status = 0x00;
   long config_i2c_vlaue = 0xff;
   /*NCI_RESET_CMD*/
@@ -2410,8 +2409,8 @@ void phNxpNciHal_enable_i2c_fragmentation() {
   static uint8_t cmd_init_nci2_0[] = {0x20, 0x01, 0x02, 0x00, 0x00};
   static uint8_t get_i2c_fragmentation_cmd[] = {0x20, 0x03, 0x03,
                                                 0x01, 0xA0, 0x05};
-  isfound = (GetNxpNumValue(NAME_NXP_I2C_FRAGMENTATION_ENABLED,
-                            (void*)&i2c_status, sizeof(i2c_status)));
+  GetNxpNumValue(NAME_NXP_I2C_FRAGMENTATION_ENABLED, (void*)&i2c_status,
+                 sizeof(i2c_status));
   status = phNxpNciHal_send_ext_cmd(sizeof(get_i2c_fragmentation_cmd),
                                     get_i2c_fragmentation_cmd);
   if (status != NFCSTATUS_SUCCESS) {
@@ -2424,9 +2423,8 @@ void phNxpNciHal_enable_i2c_fragmentation() {
     } else if (nxpncihal_ctrl.p_rx_data[8] == 0x00) {
       config_i2c_vlaue = 0x00;
     }
-    if (config_i2c_vlaue == i2c_status) {
-      NXPLOG_NCIHAL_E("i2c_fragmentation_status existing");
-    } else {
+    // if the value already matches, nothing to be done
+    if (config_i2c_vlaue != i2c_status) {
       if (i2c_status == 0x01) {
         /* NXP I2C fragmenation enabled*/
         status =
