@@ -337,7 +337,7 @@ typedef struct {
 /* Task constants
 */
 #ifndef TASKPTR
-typedef void (*TASKPTR)(uint32_t);
+typedef uint32_t (*TASKPTR)(uint32_t);
 #endif
 
 /* General pool accessible to GKI_getbuf() */
