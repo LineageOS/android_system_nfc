@@ -515,10 +515,11 @@ void nfc_ncif_event_status(tNFC_RESPONSE_EVT event, uint8_t status) {
 **
 *******************************************************************************/
 void nfc_ncif_error_status(uint8_t conn_id, uint8_t status) {
-  tNFC_CONN_CB* p_cb;
-  p_cb = nfc_find_conn_cb_by_conn_id(conn_id);
+  tNFC_CONN_CB* p_cb = nfc_find_conn_cb_by_conn_id(conn_id);
   if (p_cb && p_cb->p_cback) {
-    (*p_cb->p_cback)(conn_id, NFC_ERROR_CEVT, (tNFC_CONN*)&status);
+    tNFC_CONN nfc_conn;
+    nfc_conn.status = status;
+    (*p_cb->p_cback)(conn_id, NFC_ERROR_CEVT, &nfc_conn);
   }
   if (status == NFC_STATUS_TIMEOUT)
     android::metricslogger::LogCounter("nfc_rf_timeout_error", 1);
@@ -1034,17 +1035,15 @@ void nfc_ncif_proc_activate(uint8_t* p, uint8_t len) {
 *******************************************************************************/
 void nfc_ncif_proc_deactivate(uint8_t status, uint8_t deact_type, bool is_ntf) {
   tNFC_DISCOVER evt_data;
-  tNFC_DEACTIVATE_DEVT* p_deact;
   tNFC_CONN_CB* p_cb = &nfc_cb.conn_cb[NFC_RF_CONN_ID];
   void* p_data;
 
   nfc_set_state(NFC_STATE_IDLE);
-  p_deact = &evt_data.deactivate;
-  p_deact->status = status;
-  p_deact->type = deact_type;
-  p_deact->is_ntf = is_ntf;
+  evt_data.deactivate.status = status;
+  evt_data.deactivate.type = deact_type;
+  evt_data.deactivate.is_ntf = is_ntf;
   if (NFC_GetNCIVersion() == NCI_VERSION_2_0) {
-    p_deact->reason = nfc_cb.deact_reason;
+    evt_data.deactivate.reason = nfc_cb.deact_reason;
   }
 
   while ((p_data = GKI_dequeue(&p_cb->rx_q)) != NULL) {
@@ -1055,8 +1054,11 @@ void nfc_ncif_proc_deactivate(uint8_t status, uint8_t deact_type, bool is_ntf) {
     GKI_freebuf(p_data);
   }
 
-  if (p_cb->p_cback)
-    (*p_cb->p_cback)(NFC_RF_CONN_ID, NFC_DEACTIVATE_CEVT, (tNFC_CONN*)p_deact);
+  if (p_cb->p_cback) {
+    tNFC_CONN nfc_conn;
+    nfc_conn.deactivate = evt_data.deactivate;
+    (*p_cb->p_cback)(NFC_RF_CONN_ID, NFC_DEACTIVATE_CEVT, &nfc_conn);
+  }
 
   if (nfc_cb.p_discv_cback) {
     (*nfc_cb.p_discv_cback)(NFC_DEACTIVATE_DEVT, &evt_data);
@@ -1127,7 +1129,9 @@ void nfc_ncif_proc_ee_action(uint8_t* p, uint16_t plen) {
         }
         break;
     }
-    (*p_cback)(NFC_EE_ACTION_REVT, (tNFC_RESPONSE*)&evt_data);
+    tNFC_RESPONSE nfc_response;
+    nfc_response.ee_action = evt_data;
+    (*p_cback)(NFC_EE_ACTION_REVT, &nfc_response);
   }
 }
 
@@ -1169,7 +1173,9 @@ void nfc_ncif_proc_ee_discover_req(uint8_t* p, uint16_t plen) {
       plen -= NFC_EE_DISCOVER_ENTRY_LEN;
       p_info++;
     }
-    (*p_cback)(NFC_EE_DISCOVER_REQ_REVT, (tNFC_RESPONSE*)&ee_disc_req);
+    tNFC_RESPONSE nfc_response;
+    nfc_response.ee_discover_req = ee_disc_req;
+    (*p_cback)(NFC_EE_DISCOVER_REQ_REVT, &nfc_response);
   }
 }
 
@@ -1204,7 +1210,9 @@ void nfc_ncif_proc_get_routing(uint8_t* p, uint8_t len) {
         evt_data.tlv_size += tl;
         pn += tl;
       }
-      (*nfc_cb.p_resp_cback)(NFC_GET_ROUTING_REVT, (tNFC_RESPONSE*)&evt_data);
+      tNFC_RESPONSE nfc_response;
+      nfc_response.get_routing = evt_data;
+      (*nfc_cb.p_resp_cback)(NFC_GET_ROUTING_REVT, &nfc_response);
     }
   }
 }
@@ -1501,7 +1509,9 @@ void nfc_data_event(tNFC_CONN_CB* p_cb) {
           data_cevt.status = *(p + p_evt->offset + p_evt->len);
         }
       }
-      (*p_cb->p_cback)(p_cb->conn_id, NFC_DATA_CEVT, (tNFC_CONN*)&data_cevt);
+      tNFC_CONN nfc_conn;
+      nfc_conn.data = data_cevt;
+      (*p_cb->p_cback)(p_cb->conn_id, NFC_DATA_CEVT, &nfc_conn);
       p_evt = NULL;
     }
   }
@@ -1670,14 +1680,12 @@ bool nfc_ncif_proc_proprietary_rsp(uint8_t mt, uint8_t gid, uint8_t oid) {
 *******************************************************************************/
 void nfc_mode_set_ntf_timeout() {
   NFC_TRACE_ERROR1("%s", __func__);
-  tNFC_NFCEE_MODE_SET_REVT mode_set_info;
-  mode_set_info.status = NCI_STATUS_FAILED;
-  mode_set_info.nfcee_id = *nfc_cb.last_cmd;
-  mode_set_info.mode = NCI_NFCEE_MD_DEACTIVATE;
-
-  tNFC_RESPONSE* p_evt = (tNFC_RESPONSE*)&mode_set_info;
+  tNFC_RESPONSE nfc_response;
+  nfc_response.mode_set.status = NCI_STATUS_FAILED;
+  nfc_response.mode_set.nfcee_id = *nfc_cb.last_cmd;
+  nfc_response.mode_set.mode = NCI_NFCEE_MD_DEACTIVATE;
 
   tNFC_RESPONSE_CBACK* p_cback = nfc_cb.p_resp_cback;
   tNFC_RESPONSE_EVT event = NFC_NFCEE_MODE_SET_REVT;
-  if (p_cback) (*p_cback)(event, p_evt);
+  if (p_cback) (*p_cback)(event, &nfc_response);
 }
