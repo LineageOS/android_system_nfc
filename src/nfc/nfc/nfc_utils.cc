@@ -178,9 +178,12 @@ extern void nfc_reset_all_conn_cbs(void) {
   deact.is_ntf = TRUE;
   for (xx = 0; xx < NCI_MAX_CONN_CBS; xx++, p_conn_cb++) {
     if (p_conn_cb->conn_id != NFC_ILLEGAL_CONN_ID) {
-      if (p_conn_cb->p_cback)
+      if (p_conn_cb->p_cback) {
+        tNFC_CONN nfc_conn;
+        nfc_conn.deactivate = deact;
         (*p_conn_cb->p_cback)(p_conn_cb->conn_id, NFC_DEACTIVATE_CEVT,
-                              (tNFC_CONN*)&deact);
+                              &nfc_conn);
+      }
       nfc_free_conn_cb(p_conn_cb);
     }
   }
