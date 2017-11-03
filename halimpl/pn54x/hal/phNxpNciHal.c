@@ -2554,9 +2554,6 @@ static void phNxpNciHal_print_res_status(uint8_t* p_rx_data, uint16_t* p_len) {
 NFCSTATUS phNxpNciHal_core_reset_recovery() {
   NFCSTATUS status = NFCSTATUS_FAILED;
 
-  uint8_t buffer[260];
-  long bufflen = 260;
-
   /*NCI_INIT_CMD*/
   static uint8_t cmd_init_nci[] = {0x20, 0x01, 0x00};
   /*NCI_RESET_CMD*/
