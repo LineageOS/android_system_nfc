@@ -97,7 +97,6 @@ static void phNxpNciHal_read_complete(void* pContext,
                                       phTmlNfc_TransactInfo_t* pInfo);
 static void phNxpNciHal_close_complete(NFCSTATUS status);
 static void phNxpNciHal_core_initialized_complete(NFCSTATUS status);
-static void phNxpNciHal_pre_discover_complete(NFCSTATUS status);
 static void phNxpNciHal_power_cycle_complete(NFCSTATUS status);
 static void phNxpNciHal_kill_client_thread(
     phNxpNciHal_Control_t* p_nxpncihal_ctrl);
@@ -417,8 +416,8 @@ static void phNxpNciHal_get_clk_freq(void) {
     nxpprofile_ctrl.bClkSrcVal = NXP_SYS_CLK_SRC_SEL;
   }
   if (nxpprofile_ctrl.bClkFreqVal == CLK_SRC_PLL &&
-          (nxpprofile_ctrl.bClkFreqVal < CLK_FREQ_13MHZ) ||
-      (nxpprofile_ctrl.bClkFreqVal > CLK_FREQ_52MHZ)) {
+      (nxpprofile_ctrl.bClkFreqVal < CLK_FREQ_13MHZ ||
+       nxpprofile_ctrl.bClkFreqVal > CLK_FREQ_52MHZ)) {
     NXPLOG_FWDNLD_E(
         "Clock frequency value is wrong in config file, setting it as default");
     nxpprofile_ctrl.bClkFreqVal = NXP_SYS_CLK_FREQ_SEL;
@@ -1032,8 +1031,10 @@ int phNxpNciHal_core_initialized(uint8_t* p_core_init_rsp_params) {
   long bufflen = 260;
   long retlen = 0;
   int isfound;
+#if (NFC_NXP_HFO_SETTINGS == TRUE)
   /* Temp fix to re-apply the proper clock setting */
   int temp_fix = 1;
+#endif
   unsigned long num = 0;
 #if (NFC_NXP_CHIP_TYPE != PN547C2)
   // initialize dummy FW recovery variables
@@ -1854,9 +1855,7 @@ static void phNxpNciHal_core_initialized_complete(NFCSTATUS status) {
  * Function         phNxpNciHal_pre_discover
  *
  * Description      This function is called by libnfc-nci to perform any
- *                  proprietary exchange before RF discovery. When proprietary
- *                  exchange is over completion is informed to libnfc-nci
- *                  through phNxpNciHal_pre_discover_complete function.
+ *                  proprietary exchange before RF discovery.
  *
  * Returns          It always returns NFCSTATUS_SUCCESS (0).
  *
@@ -1864,31 +1863,6 @@ static void phNxpNciHal_core_initialized_complete(NFCSTATUS status) {
 int phNxpNciHal_pre_discover(void) {
   /* Nothing to do here for initial version */
   return NFCSTATUS_SUCCESS;
-}
-
-/******************************************************************************
- * Function         phNxpNciHal_pre_discover_complete
- *
- * Description      This function informs libnfc-nci about completion and
- *                  status of phNxpNciHal_pre_discover through callback.
- *
- * Returns          void.
- *
- ******************************************************************************/
-static void phNxpNciHal_pre_discover_complete(NFCSTATUS status) {
-  static phLibNfc_Message_t msg;
-
-  if (status == NFCSTATUS_SUCCESS) {
-    msg.eMsgType = NCI_HAL_PRE_DISCOVER_CPLT_MSG;
-  } else {
-    msg.eMsgType = NCI_HAL_ERROR_MSG;
-  }
-  msg.pMsgData = NULL;
-  msg.Size = 0;
-
-  phTmlNfc_DeferredCall(gpphTmlNfc_Context->dwCallbackThreadId, &msg);
-
-  return;
 }
 
 /******************************************************************************
@@ -2119,7 +2093,6 @@ static NFCSTATUS phNxpNciHal_get_mw_eeprom(void) {
   NFCSTATUS status = NFCSTATUS_SUCCESS;
   uint8_t retry_cnt = 0;
   static uint8_t get_mw_eeprom_cmd[] = {0x20, 0x03, 0x03, 0x01, 0xA0, 0x0F};
-  uint8_t bConfig;
 
 retry_send_ext:
   if (retry_cnt > 3) {
@@ -2357,7 +2330,6 @@ retry_send_ext:
 }
 
 int check_config_parameter() {
-  NFCSTATUS status = NFCSTATUS_FAILED;
   uint8_t param_clock_src = CLK_SRC_PLL;
   if (nxpprofile_ctrl.bClkSrcVal == CLK_SRC_PLL) {
 #if (NFC_NXP_CHIP_TYPE != PN553)
@@ -2400,7 +2372,6 @@ void phNxpNciHal_enable_i2c_fragmentation() {
   NFCSTATUS status = NFCSTATUS_FAILED;
   static uint8_t fragmentation_enable_config_cmd[] = {0x20, 0x02, 0x05, 0x01,
                                                       0xA0, 0x05, 0x01, 0x10};
-  int isfound = 0;
   long i2c_status = 0x00;
   long config_i2c_vlaue = 0xff;
   /*NCI_RESET_CMD*/
@@ -2410,8 +2381,8 @@ void phNxpNciHal_enable_i2c_fragmentation() {
   static uint8_t cmd_init_nci2_0[] = {0x20, 0x01, 0x02, 0x00, 0x00};
   static uint8_t get_i2c_fragmentation_cmd[] = {0x20, 0x03, 0x03,
                                                 0x01, 0xA0, 0x05};
-  isfound = (GetNxpNumValue(NAME_NXP_I2C_FRAGMENTATION_ENABLED,
-                            (void*)&i2c_status, sizeof(i2c_status)));
+  GetNxpNumValue(NAME_NXP_I2C_FRAGMENTATION_ENABLED, (void*)&i2c_status,
+                 sizeof(i2c_status));
   status = phNxpNciHal_send_ext_cmd(sizeof(get_i2c_fragmentation_cmd),
                                     get_i2c_fragmentation_cmd);
   if (status != NFCSTATUS_SUCCESS) {
@@ -2424,9 +2395,8 @@ void phNxpNciHal_enable_i2c_fragmentation() {
     } else if (nxpncihal_ctrl.p_rx_data[8] == 0x00) {
       config_i2c_vlaue = 0x00;
     }
-    if (config_i2c_vlaue == i2c_status) {
-      NXPLOG_NCIHAL_E("i2c_fragmentation_status existing");
-    } else {
+    // if the value already matches, nothing to be done
+    if (config_i2c_vlaue != i2c_status) {
       if (i2c_status == 0x01) {
         /* NXP I2C fragmenation enabled*/
         status =
@@ -2583,9 +2553,6 @@ static void phNxpNciHal_print_res_status(uint8_t* p_rx_data, uint16_t* p_len) {
 #if (NFC_NXP_CHIP_TYPE == PN548C2)
 NFCSTATUS phNxpNciHal_core_reset_recovery() {
   NFCSTATUS status = NFCSTATUS_FAILED;
-
-  uint8_t buffer[260];
-  long bufflen = 260;
 
   /*NCI_INIT_CMD*/
   static uint8_t cmd_init_nci[] = {0x20, 0x01, 0x00};

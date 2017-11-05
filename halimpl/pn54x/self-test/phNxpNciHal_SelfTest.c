@@ -668,7 +668,6 @@ static uint8_t st_validator_testSWP1_vltg(nci_data_t* exp,
 static uint8_t st_validator_testAntenna_Txldo(nci_data_t* exp,
                                               phTmlNfc_TransactInfo_t* act) {
   uint8_t result = 0;
-  uint8_t mesuredrange = 0;
   long measured_val = 0;
   int tolerance = 0;
 
@@ -1272,7 +1271,6 @@ NFCSTATUS phNxpNciHal_TestMode_open(void) {
   char* nfc_dev_node = NULL;
   const uint16_t max_len = 260;
   NFCSTATUS status = NFCSTATUS_SUCCESS;
-  uint16_t read_len = 255;
   int8_t ret_val = 0x00;
   /* initialize trace level */
   phNxpLog_InitializeLogLevel();
