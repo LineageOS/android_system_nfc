@@ -15,6 +15,8 @@
  *  limitations under the License.
  *
  ******************************************************************************/
+#include <android-base/stringprintf.h>
+#include <base/logging.h>
 #include <stdio.h>
 #include "gki_int.h"
 
@@ -27,6 +29,7 @@ static void gki_add_to_pool_list(uint8_t pool_id);
 static void gki_remove_from_pool_list(uint8_t pool_id);
 #endif /*  BTU_STACK_LITE_ENABLED == FALSE */
 
+using android::base::StringPrintf;
 /*******************************************************************************
 **
 ** Function         gki_init_free_queue
@@ -281,14 +284,14 @@ void* GKI_getbuf(uint16_t size) {
     Q = &p_cb->freeq[p_cb->pool_list[i]];
     if (Q->cur_cnt < Q->total) {
       if (Q->p_first == 0 && gki_alloc_free_queue(i) != true) {
-        GKI_TRACE_ERROR_0("GKI_getbuf() out of buffer");
+        LOG(ERROR) << StringPrintf("out of buffer");
         GKI_enable();
         return NULL;
       }
 
       if (Q->p_first == 0) {
         /* gki_alloc_free_queue() failed to alloc memory */
-        GKI_TRACE_ERROR_0("GKI_getbuf() fail alloc free queue");
+        LOG(ERROR) << StringPrintf("fail alloc free queue");
         GKI_enable();
         return NULL;
       }
@@ -311,7 +314,7 @@ void* GKI_getbuf(uint16_t size) {
     }
   }
 
-  GKI_TRACE_ERROR_0("GKI_getbuf() unable to allocate buffer!!!!!");
+  LOG(ERROR) << StringPrintf("unable to allocate buffer!!!!!");
 
   GKI_enable();
 
@@ -350,7 +353,7 @@ void* GKI_getpoolbuf(uint8_t pool_id) {
 
     if (Q->p_first == 0) {
       /* gki_alloc_free_queue() failed to alloc memory */
-      GKI_TRACE_ERROR_0("GKI_getpoolbuf() fail alloc free queue");
+      LOG(ERROR) << StringPrintf("fail alloc free queue");
       return NULL;
     }
 

@@ -16,20 +16,11 @@
  *
  ******************************************************************************/
 
-/******************************************************************************
- *
- *  Override the ALOGD(), ALOGE(), and other logging macros from
- *  /system/core/include/cutils/log.h
- *
- ******************************************************************************/
 #include <cutils/properties.h>
 #include <string.h>
 #include "_OverrideLog.h"
 #include "android_logmsg.h"
 #include "config.h"
-
-#undef LOG_TAG
-#define LOG_TAG "BrcmNfcJni"
 
 /*******************************************************************************
 **
@@ -40,12 +31,8 @@
 **                  overrides .conf variable.
 **
 ** Returns:         Global log level:
-**                  BT_TRACE_LEVEL_NONE    0 * No trace messages to be generated
-**                  BT_TRACE_LEVEL_ERROR   1 * Error condition trace messages
-**                  BT_TRACE_LEVEL_WARNING 2 * Warning condition trace messages
-**                  BT_TRACE_LEVEL_API     3 * API traces
-**                  BT_TRACE_LEVEL_EVENT   4 * Debug messages for events
-**                  BT_TRACE_LEVEL_DEBUG   5 * Debug messages (general)
+**                  0 * No trace messages to be generated
+**                  1 * Debug messages
 **
 *******************************************************************************/
 unsigned char initializeGlobalAppLogLevel() {
@@ -54,25 +41,24 @@ unsigned char initializeGlobalAppLogLevel() {
 
   num = 1;
   if (GetNumValue(NAME_APPL_TRACE_LEVEL, &num, sizeof(num)))
-    appl_trace_level = (unsigned char)num;
+    nfc_debug_enabled = (num == 0) ? false : true;
 
   int len = property_get("nfc.app_log_level", valueStr, "");
   if (len > 0) {
     // let Android property override .conf variable
     sscanf(valueStr, "%lu", &num);
-    appl_trace_level = (unsigned char)num;
+    nfc_debug_enabled = (num == 0) ? false : true;
   }
 
-  // 0xFF is a special value used by the stack to query the current
-  // trace level; it does not change any trace level
-  if (appl_trace_level == 0xFF) appl_trace_level = BT_TRACE_LEVEL_DEBUG;
-  ALOGD("%s: level=%u", __func__, appl_trace_level);
+  DLOG_IF(INFO, nfc_debug_enabled)
+      << StringPrintf("%s: level=%u", __func__, nfc_debug_enabled);
 
-  if (appl_trace_level < BT_TRACE_LEVEL_DEBUG) {
+  if (nfc_debug_enabled) {
     // display protocol traces in raw format
     ProtoDispAdapterUseRawOutput(TRUE);
   }
-  return appl_trace_level;
+
+  return nfc_debug_enabled;
 }
 
 uint32_t initializeProtocolLogLevel() {
@@ -96,5 +82,5 @@ uint32_t initializeProtocolLogLevel() {
 
 void initializeGlobalAppDtaMode() {
   appl_dta_mode_flag = 0x01;
-  ALOGD("%s: DTA Enabled", __func__);
+  DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf("%s: DTA Enabled", __func__);
 }

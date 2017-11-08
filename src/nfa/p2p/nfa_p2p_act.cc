@@ -66,7 +66,7 @@ static uint8_t nfa_p2p_allocate_conn_cb(uint8_t local_sap) {
     }
   }
 
-  P2P_TRACE_ERROR0("nfa_p2p_allocate_conn_cb (): No resource");
+  LOG(ERROR) << StringPrintf("No resource");
 
   return LLCP_MAX_DATA_LINK;
 }
@@ -85,7 +85,7 @@ static void nfa_p2p_deallocate_conn_cb(uint8_t xx) {
   if (xx < LLCP_MAX_DATA_LINK) {
     nfa_p2p_cb.conn_cb[xx].flags = 0;
   } else {
-    P2P_TRACE_ERROR1("nfa_p2p_deallocate_conn_cb (): Invalid index (%d)", xx);
+    LOG(ERROR) << StringPrintf("Invalid index (%d)", xx);
   }
 }
 
@@ -124,8 +124,9 @@ static uint8_t nfa_p2p_find_conn_cb(uint8_t local_sap, uint8_t remote_sap) {
 **
 *******************************************************************************/
 static void nfa_p2p_llcp_cback(tLLCP_SAP_CBACK_DATA* p_data) {
-  P2P_TRACE_DEBUG2("nfa_p2p_llcp_cback (): event:0x%02X, local_sap:0x%02X",
-                   p_data->hdr.event, p_data->hdr.local_sap);
+  DLOG_IF(INFO, nfc_debug_enabled)
+      << StringPrintf("event:0x%02X, local_sap:0x%02X", p_data->hdr.event,
+                      p_data->hdr.local_sap);
 
   switch (p_data->hdr.event) {
     case LLCP_SAP_EVT_DATA_IND:
@@ -157,8 +158,7 @@ static void nfa_p2p_llcp_cback(tLLCP_SAP_CBACK_DATA* p_data) {
       break;
 
     default:
-      P2P_TRACE_ERROR1("nfa_p2p_llcp_cback (): Unknown event:0x%02X",
-                       p_data->hdr.event);
+      LOG(ERROR) << StringPrintf("Unknown event:0x%02X", p_data->hdr.event);
       return;
   }
 }
@@ -178,8 +178,8 @@ void nfa_p2p_sdp_cback(uint8_t tid, uint8_t remote_sap) {
   uint8_t xx;
   tNFA_P2P_EVT_DATA evt_data;
 
-  P2P_TRACE_DEBUG2("nfa_p2p_sdp_cback (): tid:0x%02X, remote_sap:0x%02X", tid,
-                   remote_sap);
+  DLOG_IF(INFO, nfc_debug_enabled)
+      << StringPrintf("tid:0x%02X, remote_sap:0x%02X", tid, remote_sap);
 
   /* search for callback function to process */
   for (xx = 0; xx < LLCP_MAX_SDP_TRANSAC; xx++) {
@@ -210,7 +210,7 @@ void nfa_p2p_sdp_cback(uint8_t tid, uint8_t remote_sap) {
 bool nfa_p2p_start_sdp(char* p_service_name, uint8_t local_sap) {
   int xx;
 
-  P2P_TRACE_DEBUG1("nfa_p2p_start_sdp (): SN:<%s>", p_service_name);
+  DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf("SN:<%s>", p_service_name);
 
   /* search for empty slot */
   for (xx = 0; xx < LLCP_MAX_SDP_TRANSAC; xx++) {
@@ -243,7 +243,7 @@ void nfa_p2p_proc_llcp_data_ind(tLLCP_SAP_CBACK_DATA* p_data) {
   uint8_t local_sap, xx;
   tNFA_P2P_EVT_DATA evt_data;
 
-  P2P_TRACE_DEBUG0("nfa_p2p_proc_llcp_data_ind ()");
+  DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   local_sap = p_data->data_ind.local_sap;
 
@@ -285,8 +285,8 @@ void nfa_p2p_proc_llcp_connect_ind(tLLCP_SAP_CBACK_DATA* p_data) {
   tNFA_P2P_EVT_DATA evt_data;
   uint8_t xx;
 
-  P2P_TRACE_DEBUG1("nfa_p2p_proc_llcp_connect_ind () server_sap:0x%x",
-                   p_data->connect_ind.server_sap);
+  DLOG_IF(INFO, nfc_debug_enabled)
+      << StringPrintf("server_sap:0x%x", p_data->connect_ind.server_sap);
 
   server_sap = p_data->connect_ind.server_sap;
   local_sap = p_data->connect_ind.local_sap;
@@ -312,7 +312,7 @@ void nfa_p2p_proc_llcp_connect_ind(tLLCP_SAP_CBACK_DATA* p_data) {
       nfa_p2p_cb.sap_cb[server_sap].p_cback(NFA_P2P_CONN_REQ_EVT, &evt_data);
     }
   } else {
-    P2P_TRACE_ERROR0("nfa_p2p_proc_llcp_connect_ind (): Not registered");
+    LOG(ERROR) << StringPrintf("Not registered");
   }
 }
 
@@ -330,7 +330,7 @@ void nfa_p2p_proc_llcp_connect_resp(tLLCP_SAP_CBACK_DATA* p_data) {
   uint8_t local_sap, xx;
   tNFA_P2P_EVT_DATA evt_data;
 
-  P2P_TRACE_DEBUG0("nfa_p2p_proc_llcp_connect_resp ()");
+  DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   local_sap = p_data->connect_resp.local_sap;
 
@@ -371,7 +371,7 @@ void nfa_p2p_proc_llcp_disconnect_ind(tLLCP_SAP_CBACK_DATA* p_data) {
   uint8_t local_sap, xx;
   tNFA_P2P_EVT_DATA evt_data;
 
-  P2P_TRACE_DEBUG0("nfa_p2p_proc_llcp_disconnect_ind ()");
+  DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   local_sap = p_data->disconnect_ind.local_sap;
 
@@ -399,7 +399,7 @@ void nfa_p2p_proc_llcp_disconnect_ind(tLLCP_SAP_CBACK_DATA* p_data) {
 
       nfa_p2p_cb.sap_cb[local_sap].p_cback(NFA_P2P_DISC_EVT, &evt_data);
 
-      P2P_TRACE_ERROR0("nfa_p2p_proc_llcp_disconnect_ind (): Link deactivated");
+      LOG(ERROR) << StringPrintf("Link deactivated");
     }
   }
 }
@@ -418,7 +418,7 @@ void nfa_p2p_proc_llcp_disconnect_resp(tLLCP_SAP_CBACK_DATA* p_data) {
   uint8_t local_sap, xx;
   tNFA_P2P_EVT_DATA evt_data;
 
-  P2P_TRACE_DEBUG0("nfa_p2p_proc_llcp_disconnect_resp ()");
+  DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   local_sap = p_data->disconnect_resp.local_sap;
 
@@ -458,8 +458,7 @@ void nfa_p2p_proc_llcp_disconnect_resp(tLLCP_SAP_CBACK_DATA* p_data) {
 
         nfa_p2p_cb.sap_cb[local_sap].p_cback(NFA_P2P_DISC_EVT, &evt_data);
       } else {
-        P2P_TRACE_ERROR0(
-            "nfa_p2p_proc_llcp_disconnect_resp (): No connection found");
+        LOG(ERROR) << StringPrintf("No connection found");
       }
     } else {
       evt_data.disc.handle = (NFA_HANDLE_GROUP_P2P | local_sap);
@@ -489,12 +488,12 @@ void nfa_p2p_proc_llcp_congestion(tLLCP_SAP_CBACK_DATA* p_data) {
   evt_data.congest.is_congested = p_data->congest.is_congested;
 
   if (p_data->congest.is_congested) {
-    P2P_TRACE_DEBUG2("nfa_p2p_proc_llcp_congestion () START SAP=(0x%x,0x%x)",
-                     local_sap, remote_sap);
+    DLOG_IF(INFO, nfc_debug_enabled)
+        << StringPrintf("START SAP=(0x%x,0x%x)", local_sap, remote_sap);
 
   } else {
-    P2P_TRACE_DEBUG2("nfa_p2p_proc_llcp_congestion () END SAP=(0x%x,0x%x)",
-                     local_sap, remote_sap);
+    DLOG_IF(INFO, nfc_debug_enabled)
+        << StringPrintf("END SAP=(0x%x,0x%x)", local_sap, remote_sap);
   }
 
   if (nfa_p2p_cb.sap_cb[local_sap].p_cback) {
@@ -532,8 +531,7 @@ void nfa_p2p_proc_llcp_congestion(tLLCP_SAP_CBACK_DATA* p_data) {
           nfa_p2p_cb.sap_cb[local_sap].p_cback(NFA_P2P_CONGEST_EVT, &evt_data);
         }
       } else {
-        P2P_TRACE_ERROR0(
-            "nfa_p2p_proc_llcp_congestion (): No connection found");
+        LOG(ERROR) << StringPrintf("No connection found");
       }
     }
   }
@@ -553,8 +551,8 @@ void nfa_p2p_proc_llcp_link_status(tLLCP_SAP_CBACK_DATA* p_data) {
   uint8_t local_sap, xx;
   tNFA_P2P_EVT_DATA evt_data;
 
-  P2P_TRACE_DEBUG1("nfa_p2p_proc_llcp_link_status () is_activated:%d",
-                   p_data->link_status.is_activated);
+  DLOG_IF(INFO, nfc_debug_enabled)
+      << StringPrintf("is_activated:%d", p_data->link_status.is_activated);
 
   local_sap = p_data->link_status.local_sap;
 
@@ -615,7 +613,7 @@ bool nfa_p2p_reg_server(tNFA_P2P_MSG* p_msg) {
   tNFA_P2P_EVT_DATA evt_data;
   uint8_t server_sap;
 
-  P2P_TRACE_DEBUG0("nfa_p2p_reg_server ()");
+  DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   server_sap = LLCP_RegisterServer(
       p_msg->api_reg_server.server_sap, p_msg->api_reg_server.link_type,
@@ -679,7 +677,7 @@ bool nfa_p2p_reg_client(tNFA_P2P_MSG* p_msg) {
   tNFA_P2P_EVT_DATA evt_data;
   uint8_t local_sap;
 
-  P2P_TRACE_DEBUG0("nfa_p2p_reg_client ()");
+  DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   local_sap =
       LLCP_RegisterClient(p_msg->api_reg_client.link_type, nfa_p2p_llcp_cback);
@@ -723,7 +721,7 @@ bool nfa_p2p_reg_client(tNFA_P2P_MSG* p_msg) {
 bool nfa_p2p_dereg(tNFA_P2P_MSG* p_msg) {
   uint8_t local_sap, xx;
 
-  P2P_TRACE_DEBUG0("nfa_p2p_dereg ()");
+  DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   local_sap = (uint8_t)(p_msg->api_dereg.handle & NFA_HANDLE_MASK);
 
@@ -778,7 +776,7 @@ bool nfa_p2p_accept_connection(tNFA_P2P_MSG* p_msg) {
   uint8_t xx;
   tLLCP_CONNECTION_PARAMS params;
 
-  P2P_TRACE_DEBUG0("nfa_p2p_accept_connection ()");
+  DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   xx = (uint8_t)(p_msg->api_accept.conn_handle & NFA_HANDLE_MASK);
   xx &= ~NFA_P2P_HANDLE_FLAG_CONN;
@@ -806,7 +804,7 @@ bool nfa_p2p_accept_connection(tNFA_P2P_MSG* p_msg) {
 bool nfa_p2p_reject_connection(tNFA_P2P_MSG* p_msg) {
   uint8_t xx;
 
-  P2P_TRACE_DEBUG0("nfa_p2p_reject_connection ()");
+  DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   xx = (uint8_t)(p_msg->api_reject.conn_handle & NFA_HANDLE_MASK);
   xx &= ~NFA_P2P_HANDLE_FLAG_CONN;
@@ -836,7 +834,7 @@ bool nfa_p2p_disconnect(tNFA_P2P_MSG* p_msg) {
   tLLCP_STATUS status;
   tNFA_P2P_EVT_DATA evt_data;
 
-  P2P_TRACE_DEBUG0("nfa_p2p_disconnect ()");
+  DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   xx = (uint8_t)(p_msg->api_disconnect.conn_handle & NFA_HANDLE_MASK);
 
@@ -868,7 +866,7 @@ bool nfa_p2p_disconnect(tNFA_P2P_MSG* p_msg) {
       }
     }
   } else {
-    P2P_TRACE_ERROR0("Handle is not for Data link connection");
+    LOG(ERROR) << StringPrintf("Handle is not for Data link connection");
   }
 
   return true;
@@ -890,7 +888,7 @@ bool nfa_p2p_create_data_link_connection(tNFA_P2P_MSG* p_msg) {
   tLLCP_CONNECTION_PARAMS conn_params;
   tLLCP_STATUS status;
 
-  P2P_TRACE_DEBUG0("nfa_p2p_create_data_link_connection ()");
+  DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   local_sap = (uint8_t)(p_msg->api_connect.client_handle & NFA_HANDLE_MASK);
 
@@ -935,7 +933,7 @@ bool nfa_p2p_send_ui(tNFA_P2P_MSG* p_msg) {
   tLLCP_STATUS status;
   tNFA_P2P_EVT_DATA evt_data;
 
-  P2P_TRACE_DEBUG0("nfa_p2p_send_ui ()");
+  DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   local_sap = (uint8_t)(p_msg->api_send_ui.handle & NFA_HANDLE_MASK);
 
@@ -981,7 +979,7 @@ bool nfa_p2p_send_data(tNFA_P2P_MSG* p_msg) {
   tLLCP_STATUS status;
   uint8_t xx;
 
-  P2P_TRACE_DEBUG0("nfa_p2p_send_data ()");
+  DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   xx = (uint8_t)(p_msg->api_send_data.conn_handle & NFA_HANDLE_MASK);
   xx &= ~NFA_P2P_HANDLE_FLAG_CONN;
@@ -1028,7 +1026,7 @@ bool nfa_p2p_send_data(tNFA_P2P_MSG* p_msg) {
 bool nfa_p2p_set_local_busy(tNFA_P2P_MSG* p_msg) {
   uint8_t xx;
 
-  P2P_TRACE_DEBUG0("nfa_p2p_set_local_busy ()");
+  DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   xx = (uint8_t)(p_msg->api_local_busy.conn_handle & NFA_HANDLE_MASK);
   xx &= ~NFA_P2P_HANDLE_FLAG_CONN;
@@ -1054,7 +1052,7 @@ bool nfa_p2p_get_link_info(tNFA_P2P_MSG* p_msg) {
   tNFA_P2P_EVT_DATA evt_data;
   uint8_t local_sap;
 
-  P2P_TRACE_DEBUG0("nfa_p2p_get_link_info ()");
+  DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   evt_data.link_info.handle = p_msg->api_link_info.handle;
   evt_data.link_info.wks = LLCP_GetRemoteWKS();
@@ -1081,7 +1079,7 @@ bool nfa_p2p_get_remote_sap(tNFA_P2P_MSG* p_msg) {
   tNFA_P2P_EVT_DATA evt_data;
   uint8_t local_sap;
 
-  P2P_TRACE_DEBUG0("nfa_p2p_get_remote_sap ()");
+  DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   local_sap = (uint8_t)(p_msg->api_remote_sap.handle & NFA_HANDLE_MASK);
 
@@ -1128,7 +1126,7 @@ bool nfa_p2p_set_llcp_cfg(tNFA_P2P_MSG* p_msg) {
 **
 *******************************************************************************/
 bool nfa_p2p_restart_rf_discovery(tNFA_P2P_MSG* p_msg) {
-  P2P_TRACE_DEBUG0("nfa_p2p_restart_rf_discovery ()");
+  DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   nfa_dm_rf_deactivate(NFA_DEACTIVATE_TYPE_IDLE);
 
