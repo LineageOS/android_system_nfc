@@ -170,19 +170,3 @@ void llcp_process_timeout(TIMER_LIST_ENT* p_tle) {
       break;
   }
 }
-
-/*******************************************************************************
-**
-** Function         LLCP_SetTraceLevel
-**
-** Description      This function sets the trace level for LLCP.  If called with
-**                  a value of 0xFF, it simply returns the current trace level.
-**
-** Returns          The new or current trace level
-**
-*******************************************************************************/
-uint8_t LLCP_SetTraceLevel(uint8_t new_level) {
-  if (new_level != 0xFF) llcp_cb.trace_level = new_level;
-
-  return (llcp_cb.trace_level);
-}

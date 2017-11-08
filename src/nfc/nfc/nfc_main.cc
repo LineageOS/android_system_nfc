@@ -720,7 +720,6 @@ void NFC_Init(tHAL_NFC_ENTRY* p_hal_entry_tbl) {
   nfc_cb.nci_wait_rsp_tout = NFC_CMD_CMPL_TIMEOUT;
   nfc_cb.p_disc_maps = nfc_interface_mapping;
   nfc_cb.num_disc_maps = NFC_NUM_INTERFACE_MAP;
-  nfc_cb.trace_level = NFC_INITIAL_TRACE_LEVEL;
   nfc_cb.nci_ctrl_size = NCI_CTRL_INIT_SIZE;
   nfc_cb.reassembly = true;
   nfc_cb.nci_version = NCI_VERSION_UNKNOWN;
@@ -1274,24 +1273,6 @@ tNFC_STATUS NFC_PowerCycleNFCC(void) {
 
   LOG(ERROR) << StringPrintf("invalid state = %d", nfc_cb.nfc_state);
   return NFC_STATUS_FAILED;
-}
-
-/*******************************************************************************
-**
-** Function         NFC_SetTraceLevel
-**
-** Description      This function sets the trace level for NFC.  If called with
-**                  a value of 0xFF, it simply returns the current trace level.
-**
-** Returns          The new or current trace level
-**
-*******************************************************************************/
-uint8_t NFC_SetTraceLevel(uint8_t new_level) {
-  NFC_TRACE_API1("NFC_SetTraceLevel () new_level = %d", new_level);
-
-  if (new_level != 0xFF) nfc_cb.trace_level = new_level;
-
-  return (nfc_cb.trace_level);
 }
 
 /*******************************************************************************

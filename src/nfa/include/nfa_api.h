@@ -1415,18 +1415,6 @@ extern tNFA_STATUS NFA_SendRawVsCommand(uint8_t cmd_params_len,
                                         tNFA_VSC_CBACK* p_cback);
 
 /*******************************************************************************
-**
-** Function         NFA_SetTraceLevel
-**
-** Description      This function sets the trace level for NFA.  If called with
-**                  a value of 0xFF, it simply returns the current trace level.
-**
-** Returns          The new or current trace level
-**
-*******************************************************************************/
-extern uint8_t NFA_SetTraceLevel(uint8_t new_level);
-
-/*******************************************************************************
 ** Function:        NFA_EnableDTA_TypeMode
 **
 ** Description:     Initialize and get global DTA type mode from .conf
