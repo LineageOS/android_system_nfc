@@ -201,7 +201,6 @@ typedef struct {
 
   tNFC_STATE nfc_state;
   bool reassembly; /* Reassemble fragmented data pkt */
-  uint8_t trace_level;
   uint8_t last_hdr[NFC_SAVED_HDR_SIZE]; /* part of last NCI command header */
   uint8_t last_cmd[NFC_SAVED_CMD_SIZE]; /* part of last NCI command payload */
   void* p_vsc_cback;       /* the callback function for last VSC command */
