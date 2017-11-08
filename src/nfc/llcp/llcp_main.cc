@@ -48,9 +48,7 @@ void llcp_init(void) {
 
   memset(&llcp_cb, 0, sizeof(tLLCP_CB));
 
-  llcp_cb.trace_level = LLCP_INITIAL_TRACE_LEVEL;
-
-  LLCP_TRACE_DEBUG0("LLCP - llcp_init ()");
+  DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   llcp_cb.lcb.local_link_miu =
       (LLCP_MIU <= LLCP_MAX_MIU ? LLCP_MIU : LLCP_MAX_MIU);
@@ -82,7 +80,7 @@ void llcp_init(void) {
   llcp_cb.max_num_ll_rx_buff =
       (uint8_t)((llcp_cb.num_rx_buff * LLCP_LL_RX_BUFF_LIMIT) / 100);
 
-  LLCP_TRACE_DEBUG4(
+  DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
       "num_rx_buff = %d, rx_congest_start = %d, rx_congest_end = %d, "
       "max_num_ll_rx_buff = %d",
       llcp_cb.num_rx_buff, llcp_cb.overall_rx_congest_start,
@@ -95,8 +93,9 @@ void llcp_init(void) {
   llcp_cb.max_num_ll_tx_buff =
       (uint8_t)((llcp_cb.max_num_tx_buff * LLCP_LL_TX_BUFF_LIMIT) / 100);
 
-  LLCP_TRACE_DEBUG2("max_num_tx_buff = %d, max_num_ll_tx_buff = %d",
-                    llcp_cb.max_num_tx_buff, llcp_cb.max_num_ll_tx_buff);
+  DLOG_IF(INFO, nfc_debug_enabled)
+      << StringPrintf("max_num_tx_buff = %d, max_num_ll_tx_buff = %d",
+                      llcp_cb.max_num_tx_buff, llcp_cb.max_num_ll_tx_buff);
 
   llcp_cb.ll_tx_uncongest_ntf_start_sap = LLCP_SAP_SDP + 1;
 
@@ -117,7 +116,7 @@ void llcp_cleanup(void) {
   uint8_t sap;
   tLLCP_APP_CB* p_app_cb;
 
-  LLCP_TRACE_DEBUG0("LLCP - llcp_cleanup ()");
+  DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   for (sap = LLCP_SAP_SDP; sap < LLCP_NUM_SAPS; sap++) {
     p_app_cb = llcp_util_get_app_cb(sap);
@@ -143,7 +142,8 @@ void llcp_cleanup(void) {
 void llcp_process_timeout(TIMER_LIST_ENT* p_tle) {
   uint8_t reason;
 
-  LLCP_TRACE_DEBUG1("llcp_process_timeout: event=%d", p_tle->event);
+  DLOG_IF(INFO, nfc_debug_enabled)
+      << StringPrintf("llcp_process_timeout: event=%d", p_tle->event);
 
   switch (p_tle->event) {
     case NFC_TTYPE_LLCP_LINK_MANAGER:

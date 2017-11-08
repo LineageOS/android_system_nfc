@@ -681,8 +681,6 @@ bool nfa_dm_is_p2p_paused(void);
   memset(ha, NFC_DH_ID, NFA_DM_MAX_TECH_ROUTE);
 #endif
 
-#if (BT_TRACE_VERBOSE == TRUE)
 std::string nfa_dm_nfc_revt_2_str(tNFC_RESPONSE_EVT event);
-#endif
 
 #endif /* NFA_DM_INT_H */
