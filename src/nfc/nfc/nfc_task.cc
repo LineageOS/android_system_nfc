@@ -28,8 +28,6 @@
 
 #include "ce_int.h"
 #include "nci_hmsgs.h"
-#include "nfc_api.h"
-#include "nfc_hal_api.h"
 #include "nfc_int.h"
 #include "rw_int.h"
 #if (NFC_RW_ONLY == FALSE)
@@ -39,7 +37,6 @@
 #endif
 
 #include "nfa_dm_int.h"
-#include "nfa_sys.h"
 
 /*******************************************************************************
 **

@@ -29,9 +29,6 @@
 
 #include "ce_api.h"
 #include "ce_int.h"
-#include "gki.h"
-#include "nci_hmsgs.h"
-#include "nfc_api.h"
 
 tCE_CB ce_cb;
 

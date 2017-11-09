@@ -27,12 +27,10 @@
 #include "nfc_target.h"
 #include "trace_api.h"
 
-#include "gki.h"
 #include "nfc_api.h"
 #include "nfc_int.h"
 #include "rw_api.h"
 #include "rw_int.h"
-#include "tags_int.h"
 
 /* main state */
 /* T4T is not activated                 */

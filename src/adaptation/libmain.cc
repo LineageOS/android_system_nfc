@@ -17,18 +17,11 @@
  ******************************************************************************/
 #include "_OverrideLog.h"
 
-#include <errno.h>
 #include <fcntl.h>
-#include <malloc.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include "CrcChecksum.h"
-#include "buildcfg.h"
-#include "config.h"
 #include "nfa_nv_ci.h"
-#include "nfa_nv_co.h"
 #include "nfc_hal_nv_co.h"
-#include "nfc_hal_target.h"
+
 extern char bcm_nfc_location[];
 static const char* sNfaStorageBin = "/nfaStorage.bin";
 

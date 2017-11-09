@@ -23,13 +23,8 @@
  ******************************************************************************/
 
 #include "llcp_api.h"
-#include <string.h>
-#include <string>
-#include "bt_types.h"
 #include "gki.h"
-#include "llcp_defs.h"
 #include "llcp_int.h"
-#include "nfc_target.h"
 
 #if (LLCP_TEST_INCLUDED == TRUE) /* this is for LLCP testing */
 

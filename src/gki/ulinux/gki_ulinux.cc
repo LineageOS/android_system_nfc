@@ -17,19 +17,14 @@
  ******************************************************************************/
 #include <errno.h>
 #include <malloc.h>
-#include <stdarg.h>
-#include <stdio.h>
 
 #include <pthread.h> /* must be 1st header defined  */
-#include <time.h>
 #include "_OverrideLog.h"
 #include "gki_int.h"
-#include "gki_target.h"
 
 /* Temp android logging...move to android tgt config file */
 
 #ifndef LINUX_NATIVE
-#include <cutils/log.h>
 #else
 #define LOGV(format, ...) fprintf(stdout, LOG_TAG format, ##__VA_ARGS__)
 #define LOGE(format, ...) fprintf(stderr, LOG_TAG format, ##__VA_ARGS__)

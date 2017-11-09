@@ -28,7 +28,6 @@
 #include "llcp_defs.h"
 #include "llcp_int.h"
 #include "nfc_int.h"
-#include "nfc_target.h"
 
 static tLLCP_STATUS llcp_dlsm_idle(tLLCP_DLCB* p_dlcb, tLLCP_DLC_EVENT event,
                                    void* p_data);
