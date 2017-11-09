@@ -42,8 +42,6 @@ extern uint8_t HCI_LOOPBACK_DEBUG;
 #define NFA_HCI_LAST_HOST_SPECIFIC_GATE 0xEF
 
 #define NFA_HCI_SESSION_ID_LEN 8 /* HCI Session ID length */
-/* Maximum pipes that can be created on a generic pipe  */
-#define NFA_MAX_PIPES_IN_GENERIC_GATE 0x0F
 
 /* HCI SW Version number                       */
 #define NFA_HCI_VERSION_SW 0x090000
@@ -80,8 +78,6 @@ typedef uint8_t tNFA_HCI_STATE;
 /* NFA HCI PIPE states */
 #define NFA_HCI_PIPE_CLOSED 0x00 /* Pipe is closed */
 #define NFA_HCI_PIPE_OPENED 0x01 /* Pipe is opened */
-
-#define NFA_HCI_INVALID_INX 0xFF
 
 typedef uint8_t tNFA_HCI_COMMAND;
 typedef uint8_t tNFA_HCI_RESPONSE;
@@ -358,11 +354,6 @@ typedef struct {
   uint8_t model_id;        /* Model ID */
   uint8_t hci_version;     /* HCI Version */
 } tNFA_ID_MGMT_GATE_INFO;
-
-/* Internal flags */
-/* sub system is being disabled */
-#define NFA_HCI_FL_DISABLING 0x01
-#define NFA_HCI_FL_NV_CHANGED 0x02 /* NV Ram changed */
 
 /* NFA HCI control block */
 typedef struct {
