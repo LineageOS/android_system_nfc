@@ -25,8 +25,6 @@
 #include <string>
 #include "nfa_api.h"
 #include "nfa_dm_int.h"
-#include "nfa_sys.h"
-#include "nfa_sys_int.h"
 
 /*****************************************************************************
 ** Constants and types

@@ -20,7 +20,6 @@
 #include <cutils/log.h>
 #include "android_logmsg.h"
 #include "buildcfg.h"
-#include "nfc_target.h"
 
 extern uint32_t ScrProtocolTraceFlag;
 #define MAX_NCI_PACKET_SIZE 259

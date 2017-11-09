@@ -29,7 +29,6 @@
 #include "llcp_int.h"
 #include "nfa_dm_int.h"
 #include "nfc_int.h"
-#include "nfc_target.h"
 #include "trace_api.h"
 
 const uint16_t llcp_link_rwt

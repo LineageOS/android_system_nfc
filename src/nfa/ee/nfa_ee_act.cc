@@ -25,9 +25,6 @@
 #include "nfa_api.h"
 #include "nfa_dm_int.h"
 #include "nfa_ee_int.h"
-#include "nfa_sys.h"
-#include "nfa_sys_int.h"
-#include "nfc_api.h"
 
 /* the de-bounce timer:
  * The NFA-EE API functions are called to set the routing and VS configuration.

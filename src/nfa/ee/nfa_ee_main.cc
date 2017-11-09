@@ -25,9 +25,6 @@
 #include "config.h"
 #include "nfa_dm_int.h"
 #include "nfa_ee_int.h"
-#include "nfa_sys.h"
-#include "nfa_sys_int.h"
-#include "nfc_api.h"
 
 extern void nfa_ee_vs_cback(tNFC_VS_EVT event, NFC_HDR* p_data);
 /*****************************************************************************

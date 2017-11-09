@@ -28,8 +28,6 @@
 #include "llcp_defs.h"
 #include "llcp_int.h"
 #include "nfc_int.h"
-#include "nfc_target.h"
-#include "trace_api.h"
 
 /*******************************************************************************
 **

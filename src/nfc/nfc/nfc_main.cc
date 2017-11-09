@@ -30,14 +30,11 @@
 
 #include "ce_int.h"
 #include "nci_hmsgs.h"
-#include "nfc_api.h"
-#include "nfc_hal_api.h"
 #include "nfc_int.h"
 #include "rw_int.h"
 
 #if (NFC_RW_ONLY == FALSE)
-#include "ce_api.h"
-#include "ce_int.h"
+
 #include "llcp_int.h"
 
 /* NFC mandates support for at least one logical connection;
