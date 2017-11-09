@@ -89,7 +89,6 @@ class NfcAdaptation {
   static ThreadMutex sLock;
   ThreadCondVar mCondVar;
   tHAL_NFC_ENTRY mHalEntryFuncs;  // function pointers for HAL entry points
-  static nfc_nci_device_t* mHalDeviceContext;
   static android::sp<android::hardware::nfc::V1_0::INfc> mHal;
   static android::hardware::nfc::V1_0::INfcClientCallback* mCallback;
   static tHAL_NFC_CBACK* mHalCallback;
