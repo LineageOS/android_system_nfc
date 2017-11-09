@@ -25,7 +25,6 @@
  ******************************************************************************/
 #include "bt_types.h"
 #include "nfc_api.h"
-#include "nfc_target.h"
 
 #include "nfc_int.h"
 

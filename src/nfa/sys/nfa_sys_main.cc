@@ -24,9 +24,7 @@
 #include <string.h>
 #include "nfa_api.h"
 #include "nfa_dm_int.h"
-#include "nfa_sys.h"
 #include "nfa_sys_int.h"
-#include "nfa_sys_ptim.h"
 
 /* protocol timer update period, in milliseconds */
 #ifndef NFA_SYS_TIMER_PERIOD

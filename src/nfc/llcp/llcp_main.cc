@@ -26,10 +26,8 @@
 #include "bt_types.h"
 #include "gki.h"
 #include "llcp_api.h"
-#include "llcp_defs.h"
 #include "llcp_int.h"
 #include "nfc_int.h"
-#include "nfc_target.h"
 
 tLLCP_CB llcp_cb;
 

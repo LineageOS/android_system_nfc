@@ -25,7 +25,6 @@
 #include "nfa_hci_api.h"
 #include "nfa_hci_int.h"
 #include "nfa_nv_co.h"
-#include "nfa_sys.h"
 
 /*******************************************************************************
 **

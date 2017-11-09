@@ -29,8 +29,6 @@
 
 #include "ce_api.h"
 #include "ce_int.h"
-#include "gki.h"
-#include "nfc_api.h"
 #include "nfc_int.h"
 #include "tags_int.h"
 

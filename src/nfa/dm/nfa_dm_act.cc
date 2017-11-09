@@ -26,17 +26,13 @@
 #include "nci_hmsgs.h"
 #include "nfa_api.h"
 #include "nfa_ce_int.h"
-#include "nfa_dm_int.h"
 #include "nfa_p2p_int.h"
 #include "nfa_rw_api.h"
 #include "nfa_rw_int.h"
-#include "nfa_sys.h"
-#include "nfa_sys_int.h"
-#include "nfc_api.h"
 
 #if (NFC_NFCEE_INCLUDED == TRUE)
 #include "nfa_ee_int.h"
-#include "nfa_hci_int.h"
+
 #endif
 
 #if (NFA_SNEP_INCLUDED == TRUE)
