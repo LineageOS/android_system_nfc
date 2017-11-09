@@ -26,7 +26,6 @@
 #include "nfa_dm_int.h"
 #include "nfa_ee_int.h"
 
-extern void nfa_ee_vs_cback(tNFC_VS_EVT event, NFC_HDR* p_data);
 /*****************************************************************************
 **  Global Variables
 *****************************************************************************/

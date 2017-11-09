@@ -61,6 +61,8 @@ typedef struct {
   }
 #define UINT8_TO_STREAM(p, u8) \
   { *(p)++ = (uint8_t)(u8); }
+#define INT8_TO_STREAM(p, u8) \
+  { *(p)++ = (int8_t)(u8); }
 #define ARRAY8_TO_STREAM(p, a)                                    \
   {                                                               \
     register int ijk;                                             \

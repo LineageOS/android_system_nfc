@@ -40,25 +40,4 @@ int GetNumValue(const char* name, void* p_value, unsigned long len);
 #define NAME_NFA_PROPRIETARY_CFG "NFA_PROPRIETARY_CFG"
 #define NAME_NFA_AID_BLOCK_ROUTE "NFA_AID_BLOCK_ROUTE"
 
-struct tUART_CONFIG {
-  int m_iBaudrate;  // 115200
-  int m_iDatabits;  // 8
-  int m_iParity;    // 0 - none, 1 = odd, 2 = even
-  int m_iStopbits;
-};
-
-extern struct tUART_CONFIG uartConfig;
-
-void readOptionalConfig(const char* option);
-
-/* Snooze mode configuration structure */
-typedef struct {
-  unsigned char snooze_mode;         /* Snooze Mode */
-  unsigned char idle_threshold_dh;   /* Idle Threshold Host */
-  unsigned char idle_threshold_nfcc; /* Idle Threshold NFCC   */
-  unsigned char
-      nfc_wake_active_mode; /* NFC_LP_ACTIVE_LOW or NFC_LP_ACTIVE_HIGH */
-  unsigned char
-      dh_wake_active_mode; /* NFC_LP_ACTIVE_LOW or NFC_LP_ACTIVE_HIGH */
-} tSNOOZE_MODE_CONFIG;
 #endif
