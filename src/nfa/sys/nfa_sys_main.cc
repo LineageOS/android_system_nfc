@@ -24,9 +24,7 @@
 #include <string.h>
 #include "nfa_api.h"
 #include "nfa_dm_int.h"
-#include "nfa_sys.h"
 #include "nfa_sys_int.h"
-#include "nfa_sys_ptim.h"
 
 /* protocol timer update period, in milliseconds */
 #ifndef NFA_SYS_TIMER_PERIOD
@@ -53,7 +51,6 @@ void nfa_sys_init(void) {
   nfa_sys_cb.flags |= NFA_SYS_FL_INITIALIZED;
   nfa_sys_ptim_init(&nfa_sys_cb.ptim_cb, NFA_SYS_TIMER_PERIOD,
                     p_nfa_sys_cfg->timer);
-  nfa_sys_cb.trace_level = p_nfa_sys_cfg->trace_level;
 }
 
 /*******************************************************************************
@@ -70,7 +67,8 @@ void nfa_sys_event(NFC_HDR* p_msg) {
   uint8_t id;
   bool freebuf = true;
 
-  NFA_TRACE_EVENT1("NFA got event 0x%04X", p_msg->event);
+  DLOG_IF(INFO, nfc_debug_enabled)
+      << StringPrintf("NFA got event 0x%04X", p_msg->event);
 
   /* get subsystem id from event */
   id = (uint8_t)(p_msg->event >> 8);
@@ -79,7 +77,7 @@ void nfa_sys_event(NFC_HDR* p_msg) {
   if ((id < NFA_ID_MAX) && (nfa_sys_cb.is_reg[id])) {
     freebuf = (*nfa_sys_cb.reg[id]->evt_hdlr)(p_msg);
   } else {
-    NFA_TRACE_WARNING1("NFA got unregistered event id %d", id);
+    LOG(WARNING) << StringPrintf("NFA got unregistered event id %d", id);
   }
 
   if (freebuf) {
@@ -125,8 +123,8 @@ void nfa_sys_register(uint8_t id, const tNFA_SYS_REG* p_reg) {
       nfa_sys_cb.proc_nfcc_pwr_mode_cplt_mask |= (0x0001 << id);
   }
 
-  NFA_TRACE_DEBUG2("nfa_sys_register () id=%i, enable_cplt_mask=0x%x", id,
-                   nfa_sys_cb.enable_cplt_mask);
+  DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
+      "id=%i, enable_cplt_mask=0x%x", id, nfa_sys_cb.enable_cplt_mask);
 }
 
 /*******************************************************************************
@@ -170,7 +168,8 @@ void nfa_sys_check_disabled(void) {
 **
 *******************************************************************************/
 void nfa_sys_deregister(uint8_t id) {
-  NFA_TRACE_DEBUG1("nfa_sys: deregistering subsystem %i", id);
+  DLOG_IF(INFO, nfc_debug_enabled)
+      << StringPrintf("nfa_sys: deregistering subsystem %i", id);
 
   nfa_sys_cb.is_reg[id] = false;
 
@@ -227,7 +226,8 @@ bool nfa_sys_is_graceful_disable(void) { return nfa_sys_cb.graceful_disable; }
 void nfa_sys_enable_subsystems(void) {
   uint8_t id;
 
-  NFA_TRACE_DEBUG0("nfa_sys: enabling subsystems");
+  DLOG_IF(INFO, nfc_debug_enabled)
+      << StringPrintf("nfa_sys: enabling subsystems");
 
   /* Enable all subsystems except SYS */
   for (id = NFA_ID_DM; id < NFA_ID_MAX; id++) {
@@ -257,7 +257,8 @@ void nfa_sys_disable_subsystems(bool graceful) {
   uint8_t id;
   bool done = true;
 
-  NFA_TRACE_DEBUG1("nfa_sys: disabling subsystems:%d", graceful);
+  DLOG_IF(INFO, nfc_debug_enabled)
+      << StringPrintf("nfa_sys: disabling subsystems:%d", graceful);
   nfa_sys_cb.graceful_disable = graceful;
 
   /* Disable all subsystems above NFA_DM. (NFA_DM and NFA_SYS will be disabled
@@ -294,8 +295,8 @@ void nfa_sys_disable_subsystems(bool graceful) {
 void nfa_sys_notify_nfcc_power_mode(uint8_t nfcc_power_mode) {
   uint8_t id;
 
-  NFA_TRACE_DEBUG1("nfa_sys: notify NFCC power mode(%d) to subsystems",
-                   nfcc_power_mode);
+  DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
+      "nfa_sys: notify NFCC power mode(%d) to subsystems", nfcc_power_mode);
 
   /* Notify NFCC power state to all subsystems except NFA_SYS */
   for (id = NFA_ID_DM; id < NFA_ID_MAX; id++) {
@@ -360,14 +361,3 @@ void nfa_sys_stop_timer(TIMER_LIST_ENT* p_tle) {
 **
 *******************************************************************************/
 void nfa_sys_disable_timers(void) { nfa_sys_cb.timers_disabled = true; }
-
-/*******************************************************************************
-**
-** Function         nfa_sys_set_trace_level
-**
-** Description      Set trace level for BTA
-**
-** Returns          void
-**
-*******************************************************************************/
-void nfa_sys_set_trace_level(uint8_t level) { nfa_sys_cb.trace_level = level; }

@@ -61,7 +61,6 @@ typedef void(tNFA_SYS_DISABLE)(void);
 /* function type for processing the change of NFCC power mode */
 typedef void(tNFA_SYS_PROC_NFCC_PWR_MODE)(uint8_t nfcc_power_mode);
 
-typedef void(tNFA_SYS_CBACK)(void);
 typedef void(tNFA_SYS_ENABLE_CBACK)(void);
 typedef void(tNFA_SYS_PROC_NFCC_PWR_MODE_CMPL)(void);
 
@@ -78,7 +77,6 @@ typedef struct {
   uint16_t mbox_evt;   /* GKI mailbox event */
   uint8_t mbox;        /* GKI mailbox id */
   uint8_t timer;       /* GKI timer id */
-  uint8_t trace_level; /* initial trace level */
 } tNFA_SYS_CFG;
 
 /*****************************************************************************
@@ -100,7 +98,6 @@ extern void nfa_sys_init(void);
 extern void nfa_sys_event(NFC_HDR* p_msg);
 extern void nfa_sys_timer_update(void);
 extern void nfa_sys_disable_timers(void);
-extern void nfa_sys_set_trace_level(uint8_t level);
 
 extern void nfa_sys_register(uint8_t id, const tNFA_SYS_REG* p_reg);
 extern void nfa_sys_deregister(uint8_t id);

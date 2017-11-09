@@ -62,7 +62,6 @@
 #define NFC_TTYPE_P2P_PRIO_RESPONSE 110
 /* added for p2p prio logic clenaup */
 #define NFC_TTYPE_P2P_PRIO_LOGIC_CLEANUP 111
-#define NFC_TTYPE_VS_BASE 200
 /* time out for mode set notification */
 #define NFC_MODE_SET_NTF_TIMEOUT 2
 /* NFC Task event messages */
@@ -107,11 +106,9 @@ enum {
 #define NFC_FL_WAIT_MODE_SET_NTF 0x0100
 
 #define NFC_PEND_CONN_ID 0xFE
-#define NFC_CONN_ID_INT_MASK 0xF0
 #define NFC_CONN_ID_ID_MASK NCI_CID_MASK
 /* set num_buff to this for no flow control */
 #define NFC_CONN_NO_FC 0xFF
-#define NFC_NCI_CONN_NO_FC 0xFF
 
 #if (NFC_RW_ONLY == FALSE)
 /* only allow the entries that the NFCC can support */
@@ -152,8 +149,6 @@ typedef struct {
 /* callback function pointer(8; use 8 to be safe + NFC_SAVED_CMD_SIZE(2) */
 #define NFC_RECEIVE_MSGS_OFFSET (10)
 
-/* NFCC power state change pending callback */
-typedef void(tNFC_PWR_ST_CBACK)(void);
 #define NFC_SAVED_HDR_SIZE (2)
 /* data Reassembly error (in NFC_HDR.layer_specific) */
 #define NFC_RAS_TOO_BIG 0x08
@@ -201,7 +196,6 @@ typedef struct {
 
   tNFC_STATE nfc_state;
   bool reassembly; /* Reassemble fragmented data pkt */
-  uint8_t trace_level;
   uint8_t last_hdr[NFC_SAVED_HDR_SIZE]; /* part of last NCI command header */
   uint8_t last_cmd[NFC_SAVED_CMD_SIZE]; /* part of last NCI command payload */
   void* p_vsc_cback;       /* the callback function for last VSC command */
@@ -248,8 +242,6 @@ extern tNFC_CB nfc_cb;
   { (a) &= ((1 << (v)) - 1); }
 #define MAX_NUM_VALID_BITS_FOR_ACK 0x07
 
-extern void nfc_init(void);
-
 /* from nfc_utils.c */
 extern tNFC_CONN_CB* nfc_alloc_conn_cb(tNFC_CONN_CBACK* p_cback);
 extern tNFC_CONN_CB* nfc_find_conn_cb_by_conn_id(uint8_t conn_id);
@@ -259,7 +251,6 @@ extern void nfc_free_conn_cb(tNFC_CONN_CB* p_cb);
 extern void nfc_reset_all_conn_cbs(void);
 extern void nfc_data_event(tNFC_CONN_CB* p_cb);
 
-void nfc_ncif_send(NFC_HDR* p_buf, bool is_cmd);
 extern uint8_t nfc_ncif_send_data(tNFC_CONN_CB* p_cb, NFC_HDR* p_data);
 extern void nfc_ncif_cmd_timeout(void);
 extern void nfc_wait_2_deactivate_timeout(void);

@@ -25,6 +25,7 @@
 
 #ifndef RW_API_H
 #define RW_API_H
+#include "nfc_api.h"
 #include "tags_defs.h"
 
 #define RW_T1T_BLD_ADD(a, k, y) (a) = (((k) & 0xF) << 3) | ((y) & 0x7);
@@ -149,16 +150,9 @@ typedef uint8_t tRW_NDEF_FLAG;
 
 /* options for RW_T4tPresenceCheck  */
 #define RW_T4T_CHK_READ_BINARY_CH0 0
-#define RW_T4T_CHK_READ_BINARY_CH1 1
-#define RW_T4T_CHK_READ_BINARY_CH2 2
 #define RW_T4T_CHK_READ_BINARY_CH3 3
 #define RW_T4T_CHK_EMPTY_I_BLOCK 4
 #define RW_T4T_CHK_ISO_DEP_NAK_PRES_CHK 5
-typedef struct {
-  tNFC_STATUS status;
-  uint8_t hr[T1T_HR_LEN];
-  uint8_t uid[T1T_CMD_UID_LEN];
-} tRW_T1T_RID_EVT;
 
 typedef struct {
   tNFC_STATUS status;
@@ -1339,18 +1333,4 @@ extern tNFC_STATUS RW_SendRawFrame(uint8_t* p_raw_data, uint16_t data_len);
 *******************************************************************************/
 extern tNFC_STATUS RW_SetActivatedTagType(tNFC_ACTIVATE_DEVT* p_activate_params,
                                           tRW_CBACK* p_cback);
-
-/*******************************************************************************
-**
-** Function         RW_SetTraceLevel
-**
-** Description      This function sets the trace level for Reader/Writer mode.
-**                  If called with a value of 0xFF,
-**                  it simply returns the current trace level.
-**
-** Returns          The new or current trace level
-**
-*******************************************************************************/
-extern uint8_t RW_SetTraceLevel(uint8_t new_level);
-
 #endif /* RW_API_H */

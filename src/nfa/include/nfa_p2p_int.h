@@ -31,15 +31,13 @@
 /*****************************************************************************
 **  Constants and data types
 *****************************************************************************/
-#define NFA_P2P_DEBUG BT_TRACE_VERBOSE
 
 /* NFA P2P LLCP link state */
 enum {
   NFA_P2P_LLCP_STATE_IDLE,
   NFA_P2P_LLCP_STATE_LISTENING,
-  NFA_P2P_LLCP_STATE_ACTIVATED,
+  NFA_P2P_LLCP_STATE_ACTIVATED
 
-  NFA_P2P_LLCP_STATE_MAX
 };
 
 typedef uint8_t tNFA_P2P_LLCP_STATE;
@@ -255,8 +253,6 @@ typedef struct {
       total_pending_ui_pdu; /* total number of tx UI PDU not processed by NFA */
   uint8_t
       total_pending_i_pdu; /* total number of tx I PDU not processed by NFA */
-
-  uint8_t trace_level;
 } tNFA_P2P_CB;
 
 /*****************************************************************************

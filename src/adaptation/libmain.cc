@@ -17,18 +17,11 @@
  ******************************************************************************/
 #include "_OverrideLog.h"
 
-#include <errno.h>
 #include <fcntl.h>
-#include <malloc.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include "CrcChecksum.h"
-#include "buildcfg.h"
-#include "config.h"
 #include "nfa_nv_ci.h"
-#include "nfa_nv_co.h"
 #include "nfc_hal_nv_co.h"
-#include "nfc_hal_target.h"
+
 extern char bcm_nfc_location[];
 static const char* sNfaStorageBin = "/nfaStorage.bin";
 
@@ -85,12 +78,13 @@ extern void nfa_nv_co_read(uint8_t* pBuffer, uint16_t nbytes, uint8_t block) {
   strcpy(filename2, bcm_nfc_location);
   strncat(filename2, sNfaStorageBin, sizeof(filename2) - strlen(filename2) - 1);
   if (strlen(filename2) > 200) {
-    ALOGE("%s: filename too long", __func__);
+    LOG(ERROR) << StringPrintf("%s: filename too long", __func__);
     return;
   }
   sprintf(filename, "%s%u", filename2, block);
 
-  ALOGD("%s: buffer len=%u; file=%s", __func__, nbytes, filename);
+  DLOG_IF(INFO, nfc_debug_enabled)
+      << StringPrintf("%s: buffer len=%u; file=%s", __func__, nbytes, filename);
   int fileStream = open(filename, O_RDONLY);
   if (fileStream >= 0) {
     unsigned short checksum = 0;
@@ -98,14 +92,16 @@ extern void nfa_nv_co_read(uint8_t* pBuffer, uint16_t nbytes, uint8_t block) {
     size_t actualReadData = read(fileStream, pBuffer, nbytes);
     close(fileStream);
     if (actualReadData > 0) {
-      ALOGD("%s: data size=%zu", __func__, actualReadData);
+      DLOG_IF(INFO, nfc_debug_enabled)
+          << StringPrintf("%s: data size=%zu", __func__, actualReadData);
       nfa_nv_ci_read(actualReadData, NFA_NV_CO_OK, block);
     } else {
-      ALOGE("%s: fail to read", __func__);
+      LOG(ERROR) << StringPrintf("%s: fail to read", __func__);
       nfa_nv_ci_read(0, NFA_NV_CO_FAIL, block);
     }
   } else {
-    ALOGD("%s: fail to open", __func__);
+    DLOG_IF(INFO, nfc_debug_enabled)
+        << StringPrintf("%s: fail to open", __func__);
     nfa_nv_ci_read(0, NFA_NV_CO_FAIL, block);
   }
 }
@@ -138,11 +134,12 @@ extern void nfa_nv_co_write(const uint8_t* pBuffer, uint16_t nbytes,
   strcpy(filename2, bcm_nfc_location);
   strncat(filename2, sNfaStorageBin, sizeof(filename2) - strlen(filename2) - 1);
   if (strlen(filename2) > 200) {
-    ALOGE("%s: filename too long", __func__);
+    LOG(ERROR) << StringPrintf("%s: filename too long", __func__);
     return;
   }
   sprintf(filename, "%s%u", filename2, block);
-  ALOGD("%s: bytes=%u; file=%s", __func__, nbytes, filename);
+  DLOG_IF(INFO, nfc_debug_enabled)
+      << StringPrintf("%s: bytes=%u; file=%s", __func__, nbytes, filename);
 
   int fileStream = 0;
 
@@ -151,17 +148,18 @@ extern void nfa_nv_co_write(const uint8_t* pBuffer, uint16_t nbytes,
     unsigned short checksum = crcChecksumCompute(pBuffer, nbytes);
     size_t actualWrittenCrc = write(fileStream, &checksum, sizeof(checksum));
     size_t actualWrittenData = write(fileStream, pBuffer, nbytes);
-    ALOGD("%s: %zu bytes written", __func__, actualWrittenData);
+    DLOG_IF(INFO, nfc_debug_enabled)
+        << StringPrintf("%s: %zu bytes written", __func__, actualWrittenData);
     if ((actualWrittenData == nbytes) &&
         (actualWrittenCrc == sizeof(checksum))) {
       nfa_nv_ci_write(NFA_NV_CO_OK);
     } else {
-      ALOGE("%s: fail to write", __func__);
+      LOG(ERROR) << StringPrintf("%s: fail to write", __func__);
       nfa_nv_ci_write(NFA_NV_CO_FAIL);
     }
     close(fileStream);
   } else {
-    ALOGE("%s: fail to open, error = %d", __func__, errno);
+    LOG(ERROR) << StringPrintf("%s: fail to open, error = %d", __func__, errno);
     nfa_nv_ci_write(NFA_NV_CO_FAIL);
   }
 }
@@ -184,14 +182,14 @@ void delete_stack_non_volatile_store(bool forceDelete) {
   if ((firstTime == false) && (forceDelete == false)) return;
   firstTime = false;
 
-  ALOGD("%s", __func__);
+  DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf("%s", __func__);
 
   memset(filename, 0, sizeof(filename));
   memset(filename2, 0, sizeof(filename2));
   strcpy(filename2, bcm_nfc_location);
   strncat(filename2, sNfaStorageBin, sizeof(filename2) - strlen(filename2) - 1);
   if (strlen(filename2) > 200) {
-    ALOGE("%s: filename too long", __func__);
+    LOG(ERROR) << StringPrintf("%s: filename too long", __func__);
     return;
   }
   sprintf(filename, "%s%u", filename2, DH_NV_BLOCK);
@@ -218,7 +216,7 @@ void delete_stack_non_volatile_store(bool forceDelete) {
 **
 *******************************************************************************/
 void verify_stack_non_volatile_store() {
-  ALOGD("%s", __func__);
+  DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf("%s", __func__);
   char filename[256], filename2[256];
   bool isValid = false;
 
@@ -227,7 +225,7 @@ void verify_stack_non_volatile_store() {
   strcpy(filename2, bcm_nfc_location);
   strncat(filename2, sNfaStorageBin, sizeof(filename2) - strlen(filename2) - 1);
   if (strlen(filename2) > 200) {
-    ALOGE("%s: filename too long", __func__);
+    LOG(ERROR) << StringPrintf("%s: filename too long", __func__);
     return;
   }
 

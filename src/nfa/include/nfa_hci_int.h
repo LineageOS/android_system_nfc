@@ -42,8 +42,6 @@ extern uint8_t HCI_LOOPBACK_DEBUG;
 #define NFA_HCI_LAST_HOST_SPECIFIC_GATE 0xEF
 
 #define NFA_HCI_SESSION_ID_LEN 8 /* HCI Session ID length */
-/* Maximum pipes that can be created on a generic pipe  */
-#define NFA_MAX_PIPES_IN_GENERIC_GATE 0x0F
 
 /* HCI SW Version number                       */
 #define NFA_HCI_VERSION_SW 0x090000
@@ -81,8 +79,6 @@ typedef uint8_t tNFA_HCI_STATE;
 #define NFA_HCI_PIPE_CLOSED 0x00 /* Pipe is closed */
 #define NFA_HCI_PIPE_OPENED 0x01 /* Pipe is opened */
 
-#define NFA_HCI_INVALID_INX 0xFF
-
 typedef uint8_t tNFA_HCI_COMMAND;
 typedef uint8_t tNFA_HCI_RESPONSE;
 
@@ -116,8 +112,6 @@ enum {
 
 #define NFA_HCI_FIRST_API_EVENT NFA_HCI_API_REGISTER_APP_EVT
 #define NFA_HCI_LAST_API_EVENT NFA_HCI_API_SEND_EVENT_EVT
-
-typedef uint16_t tNFA_HCI_INT_EVT;
 
 /* Internal event structures.
 **
@@ -359,11 +353,6 @@ typedef struct {
   uint8_t hci_version;     /* HCI Version */
 } tNFA_ID_MGMT_GATE_INFO;
 
-/* Internal flags */
-/* sub system is being disabled */
-#define NFA_HCI_FL_DISABLING 0x01
-#define NFA_HCI_FL_NV_CHANGED 0x02 /* NV Ram changed */
-
 /* NFA HCI control block */
 typedef struct {
   tNFA_HCI_STATE hci_state; /* state of the HCI */
@@ -487,8 +476,6 @@ extern tNFA_HCI_DYN_PIPE* nfa_hciu_find_active_pipe_on_gate(uint8_t gate_id);
 extern tNFA_HANDLE nfa_hciu_get_pipe_owner(uint8_t pipe_id);
 extern uint8_t nfa_hciu_count_open_pipes_on_gate(tNFA_HCI_DYN_GATE* p_gate);
 extern uint8_t nfa_hciu_count_pipes_on_gate(tNFA_HCI_DYN_GATE* p_gate);
-extern tNFA_STATUS nfa_hciu_asmbl_dyn_pipe_pkt(uint8_t* p_data,
-                                               uint8_t data_len);
 
 extern tNFA_HCI_RESPONSE nfa_hciu_add_pipe_to_gate(uint8_t pipe,
                                                    uint8_t local_gate,
@@ -525,13 +512,11 @@ extern tNFA_STATUS nfa_hciu_send_msg(uint8_t pipe_id, uint8_t type,
                                      uint8_t instruction, uint16_t pkt_len,
                                      uint8_t* p_pkt);
 
-#if (BT_TRACE_VERBOSE == TRUE)
 extern std::string nfa_hciu_instr_2_str(uint8_t type);
 extern std::string nfa_hciu_get_event_name(uint16_t event);
 extern std::string nfa_hciu_get_state_name(uint8_t state);
 extern char* nfa_hciu_get_type_inst_names(uint8_t pipe, uint8_t type,
                                           uint8_t inst, char* p_buff);
 extern std::string nfa_hciu_evt_2_str(uint8_t pipe_id, uint8_t evt);
-#endif
 
 #endif /* NFA_HCI_INT_H */

@@ -19,6 +19,7 @@
 #ifndef NFC_TARGET_H
 #define NFC_TARGET_H
 
+#include "_OverrideLog.h"
 #include "data_types.h"
 
 #ifdef BUILDCFG
@@ -29,9 +30,6 @@
 #include "gki_target.h"
 
 #include "bt_types.h" /* This must be defined AFTER buildcfg.h */
-#ifndef LMP_TEST
-#include "bt_trace.h"
-#endif
 
 #ifndef USERIAL_DEBUG
 #define USERIAL_DEBUG FALSE
@@ -158,13 +156,11 @@
 ******************************************************************************/
 #define NCI_VERSION_UNKNOWN 0x00
 #define NCI_VERSION_1_0 0x10
-#define NCI_VERSION_1_1 0x11
 #define NCI_VERSION_2_0 0x20
 #ifndef NCI_VERSION
 #define NCI_VERSION NCI_VERSION_2_0
 #endif
 #define NCI_CORE_RESET_RSP_LEN(X) (((X) == NCI_VERSION_2_0) ? (0x01) : (0x03))
-#define NCI_VERSION_0_F 0x0F
 
 /* TRUE I2C patch is needed */
 #ifndef NFC_I2C_PATCH_INCLUDED

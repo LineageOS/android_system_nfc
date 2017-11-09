@@ -25,13 +25,11 @@
 
 #include "gki.h"
 #include "nfa_sys.h"
-#include "nfc_target.h"
 
 const tNFA_SYS_CFG nfa_sys_cfg = {
     NFA_MBOX_EVT_MASK,       /* GKI mailbox event */
     NFA_MBOX_ID,             /* GKI mailbox id */
     NFA_TIMER_ID,            /* GKI timer id */
-    APPL_INITIAL_TRACE_LEVEL /* initial trace level */
 };
 
 tNFA_SYS_CFG* p_nfa_sys_cfg = (tNFA_SYS_CFG*)&nfa_sys_cfg;

@@ -15,16 +15,12 @@
  *  limitations under the License.
  *
  ******************************************************************************/
-#include "config.h"
 #include <stdio.h>
 #include <sys/stat.h>
 #include <list>
 #include <string>
 #include <vector>
 #include "_OverrideLog.h"
-
-#undef LOG_TAG
-#define LOG_TAG "NfcAdaptation"
 
 const char* transport_config_paths[] = {"/odm/etc/", "/vendor/etc/", "/etc/"};
 const int transport_config_path_size =
@@ -77,7 +73,6 @@ class CNfcConfig : public vector<const CNfcParam*> {
 
   inline bool Is(unsigned long f) { return (state & f) == f; }
   inline void Set(unsigned long f) { state |= f; }
-  inline void Reset(unsigned long f) { state &= ~f; }
 };
 
 /*******************************************************************************
@@ -188,15 +183,18 @@ bool CNfcConfig::readConfig(const char* name, bool bResetContent) {
   state = BEGIN_LINE;
   /* open config file, read it into a buffer */
   if ((fd = fopen(name, "rb")) == NULL) {
-    ALOGD("%s Cannot open config file %s\n", __func__, name);
+    DLOG_IF(INFO, nfc_debug_enabled)
+        << StringPrintf("%s Cannot open config file %s", __func__, name);
     if (bResetContent) {
-      ALOGD("%s Using default value for all settings\n", __func__);
+      DLOG_IF(INFO, nfc_debug_enabled)
+          << StringPrintf("%s Using default value for all settings", __func__);
       mValidFile = false;
     }
     return false;
   }
-  ALOGD("%s Opened %s config %s\n", __func__,
-        (bResetContent ? "base" : "optional"), name);
+  DLOG_IF(INFO, nfc_debug_enabled)
+      << StringPrintf("%s Opened %s config %s", __func__,
+                      (bResetContent ? "base" : "optional"), name);
 
   mValidFile = true;
   if (size() > 0) {
@@ -459,9 +457,11 @@ const CNfcParam* CNfcConfig::find(const char* p_name) const {
       continue;
     else if (**it == p_name) {
       if ((*it)->str_len() > 0)
-        ALOGD("%s found %s=%s\n", __func__, p_name, (*it)->str_value());
+        DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
+            "%s found %s=%s", __func__, p_name, (*it)->str_value());
       else
-        ALOGD("%s found %s=(0x%lX)\n", __func__, p_name, (*it)->numValue());
+        DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
+            "%s found %s=(0x%lX)", __func__, p_name, (*it)->numValue());
       return *it;
     } else
       break;

@@ -22,7 +22,6 @@
  *
  ******************************************************************************/
 #include <string.h>
-#include "bt_types.h"
 #include "gki.h"
 #include "nfc_target.h"
 
@@ -69,7 +68,7 @@ tNFC_STATUS NFC_NfceeDiscover(bool discover) {
 tNFC_STATUS NFC_NfceeModeSet(uint8_t nfcee_id, tNFC_NFCEE_MODE mode) {
   tNFC_STATUS status = NCI_STATUS_OK;
   if (mode >= NCI_NUM_NFCEE_MODE || nfcee_id == NCI_DH_ID) {
-    NFC_TRACE_ERROR2("%s invalid parameter:%d", __func__, mode);
+    LOG(ERROR) << StringPrintf("%s invalid parameter:%d", __func__, mode);
     return NFC_STATUS_FAILED;
   }
   if (nfc_cb.nci_version != NCI_VERSION_2_0)

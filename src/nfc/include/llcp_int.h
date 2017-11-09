@@ -126,8 +126,7 @@ enum {
   LLCP_DLC_STATE_W4_LOCAL_RESP,  /* waiting for connection confirm from upper
                                     layer  */
   LLCP_DLC_STATE_CONNECTED,      /* data link connection has been established */
-  LLCP_DLC_STATE_W4_REMOTE_DM, /* waiting for disconnection confirm from peer */
-  LLCP_DLC_STATE_MAX
+  LLCP_DLC_STATE_W4_REMOTE_DM /* waiting for disconnection confirm from peer */
 };
 typedef uint8_t tLLCP_DLC_STATE;
 
@@ -217,8 +216,6 @@ typedef struct {
 */
 
 typedef struct {
-  uint8_t trace_level; /* LLCP trace level                             */
-
   tLLCP_SDP_CB sdp_cb; /* SDP control block                            */
   tLLCP_LCB lcb;       /* LLCP link control block                      */
   tLLCP_APP_CB wks_cb[LLCP_MAX_WKS]; /* Application's registration for

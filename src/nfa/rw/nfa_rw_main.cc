@@ -25,8 +25,6 @@
 #include "nfa_dm_int.h"
 #include "nfa_rw_api.h"
 #include "nfa_rw_int.h"
-#include "nfa_sys.h"
-#include "nfa_sys_int.h"
 
 /* NFA_RW control block */
 tNFA_RW_CB nfa_rw_cb;
@@ -49,9 +47,7 @@ const tNFA_RW_ACTION nfa_rw_action_tbl[] = {
 /*****************************************************************************
 ** Local function prototypes
 *****************************************************************************/
-#if (BT_TRACE_VERBOSE == TRUE)
 static std::string nfa_rw_evt_2_str(uint16_t event);
-#endif
 
 /*******************************************************************************
 **
@@ -63,7 +59,7 @@ static std::string nfa_rw_evt_2_str(uint16_t event);
 **
 *******************************************************************************/
 void nfa_rw_init(void) {
-  NFA_TRACE_DEBUG0("nfa_rw_init ()");
+  DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   /* initialize control block */
   memset(&nfa_rw_cb, 0, sizeof(tNFA_RW_CB));
@@ -172,27 +168,21 @@ tNFA_STATUS nfa_rw_send_raw_frame(NFC_HDR* p_data) {
 bool nfa_rw_handle_event(NFC_HDR* p_msg) {
   uint16_t act_idx;
 
-#if (BT_TRACE_VERBOSE == TRUE)
-  NFA_TRACE_EVENT3("nfa_rw_handle_event event: %s (0x%02x), flags: %08x",
-                   nfa_rw_evt_2_str(p_msg->event).c_str(), p_msg->event,
-                   nfa_rw_cb.flags);
-#else
-  NFA_TRACE_EVENT2("nfa_rw_handle_event event: 0x%x, flags: %08x", p_msg->event,
-                   nfa_rw_cb.flags);
-#endif
+  DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
+      "nfa_rw_handle_event event: %s (0x%02x), flags: %08x",
+      nfa_rw_evt_2_str(p_msg->event).c_str(), p_msg->event, nfa_rw_cb.flags);
 
   /* Get NFA_RW sub-event */
   act_idx = (p_msg->event & 0x00FF);
   if (act_idx < (NFA_RW_MAX_EVT & 0xFF)) {
     return (*nfa_rw_action_tbl[act_idx])((tNFA_RW_MSG*)p_msg);
   } else {
-    NFA_TRACE_ERROR1("nfa_rw_handle_event: unhandled event 0x%02X",
-                     p_msg->event);
+    LOG(ERROR) << StringPrintf("nfa_rw_handle_event: unhandled event 0x%02X",
+                               p_msg->event);
     return true;
   }
 }
 
-#if (BT_TRACE_VERBOSE == TRUE)
 /*******************************************************************************
 **
 ** Function         nfa_rw_evt_2_str
@@ -216,4 +206,3 @@ static std::string nfa_rw_evt_2_str(uint16_t event) {
       return "Unknown";
   }
 }
-#endif /* BT_TRACE_VERBOSE */

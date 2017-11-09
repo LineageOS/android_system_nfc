@@ -141,7 +141,6 @@ typedef struct {
   NFC_HDR hdr;
   uint16_t rf_disc_dur_ms;
 } tNFA_DM_API_SET_RF_DISC_DUR;
-#define NFA_RF_DISC_DURATION_MAX 0xFFFF
 
 /* data type for NFA_DM_API_REG_NDEF_HDLR_EVT */
 #define NFA_NDEF_FLAGS_HANDLE_WHOLE_MESSAGE 0x01
@@ -368,8 +367,6 @@ enum {
   NFA_DM_DISC_LRT_NFC_BP
 };
 
-/* SLP_REQ (HLTA) command */
-#define SLP_REQ_CMD 0x5000
 /* NFA_EE_MAX_TECH_ROUTE. only A, B, F, Bprime are supported by UICC now */
 #define NFA_DM_MAX_TECH_ROUTE 4
 
@@ -414,8 +411,6 @@ typedef struct {
 /* NDEF Type Handler Definitions */
 /* Default handler entry in ndef_handler table      */
 #define NFA_NDEF_DEFAULT_HANDLER_IDX 0
-
-#define NFA_PARAM_ID_INVALID 0xFF
 
 /* Maximum number of pending SetConfigs */
 #define NFA_DM_SETCONFIG_PENDING_MAX 32
@@ -599,7 +594,6 @@ void nfa_snep_init(bool is_dta_mode);
 #define nfa_snep_init(is_dta_mode)
 #endif
 
-void nfa_dta_init(void);
 #if (NFC_NFCEE_INCLUDED == TRUE)
 void nfa_ee_init(void);
 void nfa_hci_init(void);
@@ -632,12 +626,12 @@ bool nfa_dm_act_deactivate(tNFA_DM_MSG* p_data);
 bool nfa_dm_act_power_off_sleep(tNFA_DM_MSG* p_data);
 bool nfa_dm_ndef_reg_hdlr(tNFA_DM_MSG* p_data);
 bool nfa_dm_ndef_dereg_hdlr(tNFA_DM_MSG* p_data);
-bool nfa_dm_tout(tNFA_DM_MSG* p_data);
+
 bool nfa_dm_act_reg_vsc(tNFA_DM_MSG* p_data);
 bool nfa_dm_act_send_vsc(tNFA_DM_MSG* p_data);
 uint16_t nfa_dm_act_get_rf_disc_duration();
 bool nfa_dm_act_disable_timeout(tNFA_DM_MSG* p_data);
-bool nfa_dm_act_nfc_cback_data(tNFA_DM_MSG* p_data);
+
 bool nfa_dm_set_power_sub_state(tNFA_DM_MSG* p_data);
 
 void nfa_dm_proc_nfcc_power_mode(uint8_t nfcc_power_mode);
@@ -681,8 +675,6 @@ bool nfa_dm_is_p2p_paused(void);
   memset(ha, NFC_DH_ID, NFA_DM_MAX_TECH_ROUTE);
 #endif
 
-#if (BT_TRACE_VERBOSE == TRUE)
 std::string nfa_dm_nfc_revt_2_str(tNFC_RESPONSE_EVT event);
-#endif
 
 #endif /* NFA_DM_INT_H */

@@ -53,7 +53,6 @@ typedef struct {
 
   bool graceful_disable; /* TRUE if NFA_Disable () is called with TRUE */
   bool timers_disabled;  /* TRUE if sys timers disabled */
-  uint8_t trace_level;   /* Trace level */
 } tNFA_SYS_CB;
 
 /*****************************************************************************
@@ -65,7 +64,5 @@ extern tNFA_SYS_CB nfa_sys_cb;
 
 /* system manager configuration structure */
 extern tNFA_SYS_CFG* p_nfa_sys_cfg;
-
-bool nfa_sys_sm_execute(NFC_HDR* p_msg);
 
 #endif /* NFA_SYS_INT_H */

@@ -28,8 +28,6 @@
 
 #include "ce_int.h"
 #include "nci_hmsgs.h"
-#include "nfc_api.h"
-#include "nfc_hal_api.h"
 #include "nfc_int.h"
 #include "rw_int.h"
 #if (NFC_RW_ONLY == FALSE)
@@ -39,7 +37,6 @@
 #endif
 
 #include "nfa_dm_int.h"
-#include "nfa_sys.h"
 
 /*******************************************************************************
 **
@@ -122,9 +119,10 @@ void nfc_process_timer_evt(void) {
         nfc_mode_set_ntf_timeout();
         break;
       default:
-        NFC_TRACE_DEBUG2("nfc_process_timer_evt: timer:0x%x event (0x%04x)",
-                         p_tle, p_tle->event);
-        NFC_TRACE_DEBUG1(
+        DLOG_IF(INFO, nfc_debug_enabled)
+            << StringPrintf("nfc_process_timer_evt: timer:0x%p event (0x%04x)",
+                            p_tle, p_tle->event);
+        DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
             "nfc_process_timer_evt: unhandled timer event (0x%04x)",
             p_tle->event);
     }
@@ -270,7 +268,7 @@ void nfc_process_quick_timer_evt(void) {
         break;
 #endif
       default:
-        NFC_TRACE_DEBUG1(
+        DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
             "nfc_process_quick_timer_evt: unhandled timer event (0x%04x)",
             p_tle->event);
         break;
@@ -338,9 +336,8 @@ uint32_t nfc_task(uint32_t param) {
 
   /* Initialize the nfc control block */
   memset(&nfc_cb, 0, sizeof(tNFC_CB));
-  nfc_cb.trace_level = NFC_INITIAL_TRACE_LEVEL;
 
-  NFC_TRACE_DEBUG0("NFC_TASK started.");
+  DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf("NFC_TASK started.");
 
   /* main loop */
   while (true) {
@@ -350,7 +347,8 @@ uint32_t nfc_task(uint32_t param) {
     }
     /* Handle NFC_TASK_EVT_TRANSPORT_READY from NFC HAL */
     if (event & NFC_TASK_EVT_TRANSPORT_READY) {
-      NFC_TRACE_DEBUG0("NFC_TASK got NFC_TASK_EVT_TRANSPORT_READY.");
+      DLOG_IF(INFO, nfc_debug_enabled)
+          << StringPrintf("NFC_TASK got NFC_TASK_EVT_TRANSPORT_READY.");
 
       /* Reset the NFC controller. */
       nfc_set_state(NFC_STATE_CORE_INIT);
@@ -385,8 +383,8 @@ uint32_t nfc_task(uint32_t param) {
             break;
 
           default:
-            NFC_TRACE_DEBUG1("nfc_task: unhandle mbox message, event=%04x",
-                             p_msg->event);
+            DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
+                "nfc_task: unhandle mbox message, event=%04x", p_msg->event);
             break;
         }
 
@@ -417,7 +415,7 @@ uint32_t nfc_task(uint32_t param) {
     }
   }
 
-  NFC_TRACE_DEBUG0("nfc_task terminated");
+  DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf("nfc_task terminated");
 
   GKI_exit_task(GKI_get_taskid());
   return 0;

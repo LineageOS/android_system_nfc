@@ -30,7 +30,6 @@
 /*****************************************************************************
 **  Constants and data types
 *****************************************************************************/
-#define NFA_EE_DEBUG BT_TRACE_VERBOSE
 /* the number of tNFA_EE_ECBs (for NFCEEs and DH) */
 #define NFA_EE_NUM_ECBS (NFA_EE_MAX_EE_SUPPORTED + 1)
 /* The index for DH in nfa_ee_cb.ee_cb[] */
@@ -98,13 +97,11 @@ enum {
   NFA_EE_CONN_ST_NONE, /* not connected */
   NFA_EE_CONN_ST_WAIT, /* connection is initiated; waiting for ack */
   NFA_EE_CONN_ST_CONN, /* connected; can send/receive data */
-  NFA_EE_CONN_ST_DISC, /* disconnecting; waiting for ack */
-  NFA_EE_CONN_ST_MAX
+  NFA_EE_CONN_ST_DISC  /* disconnecting; waiting for ack */
 };
 typedef uint8_t tNFA_EE_CONN_ST;
 
 #define NFA_EE_MAX_AID_CFG_LEN (510)
-#define NFA_EE_7816_STATUS_LEN (2)
 
 /* NFA EE control block flags:
  * use to indicate an API function has changed the configuration of the
@@ -278,23 +275,12 @@ typedef struct {
   uint8_t nfcee_id;
 } tNFA_EE_API_DISCONNECT;
 
-typedef struct {
-  NFC_HDR hdr;
-  tNFC_STATUS status; /* The event status. */
-} tNFA_EE_MSG_STATUS;
-
 /* common data type for internal events with nfa_ee_use_cfg_cb[] as TRUE */
 typedef struct {
   NFC_HDR hdr;
   tNFA_EE_ECB* p_cb;
   uint8_t nfcee_id;
 } tNFA_EE_CFG_HDR;
-
-/* data type for tNFC_RESPONSE_EVT */
-typedef struct {
-  NFC_HDR hdr;
-  void* p_data;
-} tNFA_EE_NCI_RESPONSE;
 
 /* data type for NFA_EE_NCI_DISC_RSP_EVT */
 typedef struct {
@@ -378,7 +364,6 @@ typedef void (*tNFA_EE_SM_ACT)(tNFA_EE_MSG* p_data);
 
 /* the following status are the definition used in ee_cfg_sts */
 #define NFA_EE_STS_CHANGED_ROUTING 0x01
-#define NFA_EE_STS_CHANGED_VS 0x02
 #define NFA_EE_STS_CHANGED 0x0f
 #define NFA_EE_STS_PREV_ROUTING 0x10
 #define NFA_EE_STS_PREV 0xf0
@@ -435,8 +420,6 @@ typedef struct {
 
 /* Order of Routing entries in Routing Table */
 #define NCI_ROUTE_ORDER_AID 0x01        /* AID routing order */
-#define NCI_ROUTE_ORDER_PATTERN 0x02    /* Pattern routing order*/
-#define NCI_ROUTE_ORDER_SYS_CODE 0x03   /* System Code routing order*/
 #define NCI_ROUTE_ORDER_PROTOCOL 0x04   /* Protocol routing order*/
 #define NCI_ROUTE_ORDER_TECHNOLOGY 0x05 /* Technology routing order*/
 
@@ -497,7 +480,7 @@ void nfa_ee_report_event(tNFA_EE_CBACK* p_cback, tNFA_EE_EVT event,
                          tNFA_EE_CBACK_DATA* p_data);
 tNFA_EE_ECB* nfa_ee_find_aid_offset(uint8_t aid_len, uint8_t* p_aid,
                                     int* p_offset, int* p_entry);
-void nfa_ee_remove_labels(void);
+
 int nfa_ee_find_total_aid_len(tNFA_EE_ECB* p_cb, int start_entry);
 void nfa_ee_start_timer(void);
 void nfa_ee_reg_cback_enable_done(tNFA_EE_ENABLE_DONE_CBACK* p_cback);

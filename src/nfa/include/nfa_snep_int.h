@@ -31,11 +31,7 @@
 /*****************************************************************************
 **  Constants and data types
 *****************************************************************************/
-#define NFA_SNEP_DEFAULT_SERVER_SAP 0x04 /* SNEP default server SAP   */
-#define NFA_SNEP_HEADER_SIZE 6           /* SNEP header size          */
 /* SNEP Acceptable Length size */
-#define NFA_SNEP_ACCEPT_LEN_SIZE 4
-#define NFA_SNEP_CLIENT_TIMEOUT 1000 /* ms, waiting for response  */
 
 /* NFA SNEP events */
 enum {
@@ -49,9 +45,8 @@ enum {
   NFA_SNEP_API_PUT_REQ_EVT,
   NFA_SNEP_API_GET_RESP_EVT,
   NFA_SNEP_API_PUT_RESP_EVT,
-  NFA_SNEP_API_DISCONNECT_EVT,
+  NFA_SNEP_API_DISCONNECT_EVT
 
-  NFA_SNEP_LAST_EVT
 };
 
 /* data type for NFA_SNEP_API_START_DEFAULT_SERVER_EVT */
@@ -157,17 +152,10 @@ typedef union {
 
 /* NFA SNEP service control block */
 /* ignore flags while searching   */
-#define NFA_SNEP_FLAG_ANY 0x00
-#define NFA_SNEP_FLAG_SERVER 0x01 /* server */
-#define NFA_SNEP_FLAG_CLIENT 0x02 /* client */
 /* waiting for connection confirm */
-#define NFA_SNEP_FLAG_CONNECTING 0x04
 /* data link connected            */
-#define NFA_SNEP_FLAG_CONNECTED 0x08
 /* Waiting for continue response  */
-#define NFA_SNEP_FLAG_W4_RESP_CONTINUE 0x10
 /* Waiting for continue request   */
-#define NFA_SNEP_FLAG_W4_REQ_CONTINUE 0x20
 
 typedef struct {
   uint8_t local_sap;        /* local SAP of service */
@@ -197,7 +185,6 @@ typedef struct {
   tNFA_SNEP_CONN conn[NFA_SNEP_MAX_CONN];
   bool listen_enabled;
   bool is_dta_mode;
-  uint8_t trace_level;
 } tNFA_SNEP_CB;
 
 /*
@@ -236,38 +223,6 @@ extern tNFA_SNEP_DEFAULT_CB nfa_snep_default_cb;
 **  nfa_snep_main.c
 */
 void nfa_snep_init(bool is_dta_mode);
-/*
-**  nfa_snep_default.c
-*/
-void nfa_snep_default_init(void);
-bool nfa_snep_start_default_server(tNFA_SNEP_MSG* p_msg);
-bool nfa_snep_stop_default_server(tNFA_SNEP_MSG* p_msg);
-/*
-**  nfa_snep_srv.c
-*/
-uint8_t nfa_snep_allocate_cb(void);
-void nfa_snep_deallocate_cb(uint8_t xx);
-void nfa_snep_send_msg(uint8_t opcode, uint8_t dlink);
-
-void nfa_snep_llcp_cback(tLLCP_SAP_CBACK_DATA* p_data);
-void nfa_snep_proc_llcp_data_ind(tLLCP_SAP_CBACK_DATA* p_data);
-void nfa_snep_proc_llcp_connect_ind(tLLCP_SAP_CBACK_DATA* p_data);
-void nfa_snep_proc_llcp_connect_resp(tLLCP_SAP_CBACK_DATA* p_data);
-void nfa_snep_proc_llcp_disconnect_ind(tLLCP_SAP_CBACK_DATA* p_data);
-void nfa_snep_proc_llcp_disconnect_resp(tLLCP_SAP_CBACK_DATA* p_data);
-void nfa_snep_proc_llcp_congest(tLLCP_SAP_CBACK_DATA* p_data);
-void nfa_snep_proc_llcp_link_status(tLLCP_SAP_CBACK_DATA* p_data);
-void nfa_snep_proc_llcp_tx_complete(tLLCP_SAP_CBACK_DATA* p_data);
-
-bool nfa_snep_reg_server(tNFA_SNEP_MSG* p_msg);
-bool nfa_snep_reg_client(tNFA_SNEP_MSG* p_msg);
-bool nfa_snep_dereg(tNFA_SNEP_MSG* p_msg);
-bool nfa_snep_connect(tNFA_SNEP_MSG* p_msg);
-bool nfa_snep_put_resp(tNFA_SNEP_MSG* p_msg);
-bool nfa_snep_get_resp(tNFA_SNEP_MSG* p_msg);
-bool nfa_snep_put_req(tNFA_SNEP_MSG* p_msg);
-bool nfa_snep_get_req(tNFA_SNEP_MSG* p_msg);
-bool nfa_snep_disconnect(tNFA_SNEP_MSG* p_msg);
 
 #endif /* (NFA_SNEP_INCLUDED == TRUE) */
 #endif /* NFA_SNEP_INT_H */

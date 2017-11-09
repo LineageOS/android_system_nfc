@@ -87,8 +87,6 @@ typedef struct {
 #define LLCP_LINK_VERSION_FAILED 0x01
 /* Failed to parse received general bytes   */
 #define LLCP_LINK_BAD_GEN_BYTES 0x02
-/* internal error                           */
-#define LLCP_LINK_INTERNAL_ERROR 0x03
 /* Link has been deactivated by local       */
 #define LLCP_LINK_LOCAL_INITIATED 0x04
 /* Link has been deactivated by remote      */
@@ -99,9 +97,6 @@ typedef struct {
 #define LLCP_LINK_FRAME_ERROR 0x07
 /* RF link loss without any rx LLC PDU      */
 #define LLCP_LINK_RF_LINK_LOSS_NO_RX_LLC 0x08
-#define LLCP_LINK_RF_TRANSMISSION_ERR NFC_STATUS_RF_TRANSMISSION_ERR
-#define LLCP_LINK_RF_PROTOCOL_ERR NFC_STATUS_RF_PROTOCOL_ERR
-#define LLCP_LINK_RF_TIMEOUT NFC_STATUS_TIMEOUT
 #define LLCP_LINK_RF_LINK_LOSS_ERR NFC_STATUS_LINK_LOSS
 
 typedef void(tLLCP_LINK_CBACK)(uint8_t event, uint8_t reason);
@@ -656,18 +651,6 @@ extern void LLCP_GetLinkMIU(uint16_t* p_local_link_miu,
 extern tLLCP_STATUS LLCP_DiscoverService(char* p_name, tLLCP_SDP_CBACK* p_cback,
                                          uint8_t* p_tid);
 
-/*******************************************************************************
-**
-** Function         LLCP_SetTraceLevel
-**
-** Description      This function sets the trace level for LLCP.  If called with
-**                  a value of 0xFF, it simply returns the current trace level.
-**
-** Returns          The new or current trace level
-**
-*******************************************************************************/
-
-extern uint8_t LLCP_SetTraceLevel(uint8_t new_level);
 /*******************************************************************************
 **
 ** Function         LLCP_RegisterDtaCback

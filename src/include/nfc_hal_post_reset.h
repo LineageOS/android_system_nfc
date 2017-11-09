@@ -28,7 +28,6 @@
 ** Application control block definitions
 ******************************************************************************/
 #define NFA_APP_PATCHFILE_MAX_PATH 255
-#define NFA_APP_MAX_NUM_REINIT 5
 
 typedef struct {
   uint8_t prm_file[NFA_APP_PATCHFILE_MAX_PATH + 1]; /* Filename of patchram */
@@ -60,14 +59,5 @@ typedef struct {
                                    because of patch download failure */
 } tNFC_POST_RESET_CB;
 extern tNFC_POST_RESET_CB nfc_post_reset_cb;
-
-/*
-** Post NCI reset handler
-**
-** This function is called to start device pre-initialization after
-** NCI CORE-RESET. When pre-initialization is completed,
-** HAL_NfcPreInitDone() must be called to proceed with stack start up.
-*/
-void nfc_hal_post_reset_init(uint32_t brcm_hw_id, uint8_t nvm_type);
 
 #endif /* NFC_HAL_POST_RESET_H */

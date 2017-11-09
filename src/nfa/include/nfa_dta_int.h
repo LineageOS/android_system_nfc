@@ -36,28 +36,8 @@
 /*****************************************************************************
 **  DTA definitions
 *****************************************************************************/
-#define NFA_DTA_PATTERN_NUMBER_INVALID 0xFFFF
-
-#define NFA_DTA_PATTERN_NUMBER_LLCP_CONNECT_BY_SAP 0x1200
-#define NFA_DTA_PATTERN_NUMBER_LLCP_CONNECT_BY_SN 0x1240
-#define NFA_DTA_PATTERN_NUMBER_LLCP_CONNECT_BY_SNL 0x1280
-
-#define NFA_DTA_PATTERN_NUMBER_SNEP_SERVER_ONLY 0x1300
-#define NFA_DTA_PATTERN_NUMBER_SNEP_DEFAULT_PUT_SHORT_NDEF 0x1301
-#define NFA_DTA_PATTERN_NUMBER_SNEP_DEFAULT_PUT_LONG_NDEF 0x1302
-#define NFA_DTA_PATTERN_NUMBER_SNEP_EXTENDED_GET 0x1303
 
 #define NFA_DTA_DISCOVER_PARAMS_MAX 6
-
-/* Header length for long NDEF text message */
-#define NDEF_WKT_TEXT_HDR_LEN 7
-/* Size of NDEF message for T3T write-tests ([DTA] $5.5.6) */
-#define NFA_DTA_T3T_WRITE_NDEF_SIZE 192
-/* System code to use for T3T Listen mode tests */
-#define NFA_DTA_T3T_LISTEN_SYSTEMCODE 0xBABE
-
-/* Maximum protocol preference rank */
-#define NFA_PROTOCOL_RANK_INVALID 0xFF
 
 #define NFA_DTA_SCRATCH_BUF_SIZE T3T_MSG_BLOCKSIZE
 
@@ -87,12 +67,7 @@ typedef struct {
 enum {
   /* device manager local device API events */
   NFA_DTA_API_ENABLE_EVT = NFA_SYS_EVT_START(NFA_ID_DTA),
-  NFA_DTA_API_DISABLE_EVT,
-  NFA_DTA_API_CONFIG_EVT,
   NFA_DTA_API_START_EVT,
-  NFA_DTA_API_STOP_EVT,
-  NFA_DTA_ACTIVATE_EVT,
-  NFA_DTA_DEACTIVATE_EVT,
   NFA_DTA_DATA_CBACK_EVT,
 
   NFA_DTA_MAX_EVT
@@ -136,15 +111,7 @@ typedef struct {
   tNFC_CONN data;
 } tNFA_DTA_NFCDEP_DATA;
 
-enum { NFA_DTA_LLCP_CONNECT_CO_ECHO_OUT, NFA_DTA_LLCP_DISCONNECT_CO_ECHO_OUT };
 typedef uint8_t tNFA_DTA_LLCP_EVT;
-
-enum {
-  NFA_DTA_RW_DATA,
-  NFA_DTA_CE_DATA,
-  NFA_DTA_NFCDEP_DATA,
-  NFA_DTA_LLCP_DATA
-};
 
 typedef uint8_t tNFA_DTA_DATA_TYPE;
 
@@ -168,30 +135,9 @@ typedef union {
   tNFA_DTA_DATA_CBACK data_cback;
 } tNFA_DTA_MSG;
 
-/* DTA states */
-enum {
-  NFA_DTA_ST_IDLE,
-  NFA_DTA_ST_DISCOVER, /* Polling/Listening */
-  NFA_DTA_ST_ACTIVATED /* Activated, listen mode */
-};
 typedef uint8_t tNFA_DTA_STATE;
 
-/* DTA Substates (while in ACTIVATED state) - substate enumerations are found in
- * protocol-specific files (nfa_dta_XXX.c) */
-#define NFA_DTA_SST_IDLE 0
 typedef uint8_t tNFA_DTA_SUBSTATE;
-
-/* DTA discovery states */
-enum {
-  NFA_DTA_DISC_STATE_IDLE,
-  NFA_DTA_DISC_STATE_DISCOVERY,
-  NFA_DTA_DISC_STATE_POLL_ACTIVE,
-  NFA_DTA_DISC_STATE_W4_ALL_DISCOVERIES,
-  NFA_DTA_DISC_STATE_W4_HOST_SELECT,
-  NFA_DTA_DISC_STATE_LISTEN_ACTIVE,
-  NFA_DTA_DISC_STATE_LISTEN_SLEEP,
-  NFA_DTA_DISC_STATE_MAX
-};
 
 /*****************************************************************************
 * DTA control block definitions
@@ -199,8 +145,6 @@ enum {
 
 /* NDEF buffer definitions */
 enum {
-  NFA_DTA_BUF_READ,  /* Buffer for RW Read requests */
-  NFA_DTA_BUF_WRITE, /* Buffer for RW Write requests */
   NFA_DTA_BUF_MAX
 };
 
@@ -211,26 +155,8 @@ typedef struct {
   uint32_t offset; /* current read/write offset */
 } tNFA_DTA_BUF_CB;
 
-/* T4T listen mode test application */
-enum {
-  NFA_DTA_T4T_CE_APP_NONE,     /* Not selected */
-  NFA_DTA_T4T_CE_APP_LOOPBACK, /* loopback test applicaiton */
-  NFA_DTA_T4T_CE_APP_PROP      /* propretary test application */
-};
-
 /* DTA test step command */
 typedef tNFC_STATUS (*tNFA_DTA_CMD_FCN)(void*);
-
-/* dta control block flags */
-#define NFA_DTA_FL_ENABLED 0x00000001 /* DTA is enabled */
-/* Automatically start discovery when NFC is enabled */
-#define NFA_DTA_FL_AUTOSTART 0x00000002
-/* DTA is stopping (NFA_DtaStop called) */
-#define NFA_DTA_FL_STOPPING 0x00000004
-/* DTA is being disabled (NFA_DtaDisable called) */
-#define NFA_DTA_FL_DISABLING 0x00000008
-/* T4T/NFCDEP is deactivating to IDLE (need to DESELECT first) */
-#define NFA_DTA_FL_T4T_DESELECT_DEACT 0x00000010
 
 /* DTA control block */
 typedef struct {
@@ -293,11 +219,6 @@ typedef struct {
   uint16_t llcp_co_out_remote_miu; /* MIU of LT-CO-OUT-DEST */
   uint8_t llcp_co_out_remote_rw;   /* RW of LT-CO-OUT-DEST  */
 
-/* establishing outbound on connection-oriented */
-#define NFA_DTA_LLCP_FLAGS_CO_OUT_CONNECTING 0x01
-/* established outbound on connection-oriented  */
-#define NFA_DTA_LLCP_FLAGS_CO_OUT_CONNECTED 0x02
-
   uint8_t llcp_flags;      /* internal flags for LLCP echo test */
   uint8_t llcp_sdp_tid_cl; /* SDP transaction ID for outbound connectionless */
   uint8_t
@@ -345,75 +266,6 @@ extern uint8_t nfa_dta_start_up_cfg_len;
 /*****************************************************************************
 * DTA internal funciton protoytpes
 *****************************************************************************/
-/* Internal function prototypes */
-void nfa_dta_deactivate(uint8_t deactivate_type);
-void nfa_dta_shutdown(void);
-void nfa_dta_discover_start(void);
-
-/* nfa_sys handler for DTA */
-bool nfa_dta_evt_hdlr(NFC_HDR* p_msg);
-void nfa_dta_sys_disable(void);
-
-/* State machine action functions */
-bool nfa_dta_enable(tNFA_DTA_MSG* p_data);
-bool nfa_dta_disable(tNFA_DTA_MSG* p_data);
-bool nfa_dta_config(tNFA_DTA_MSG* p_data);
-bool nfa_dta_start(tNFA_DTA_MSG* p_data);
-bool nfa_dta_handle_deact(tNFA_DTA_MSG* p_data);
-bool nfa_dta_stop(tNFA_DTA_MSG* p_data);
-bool nfa_dta_run_test(tNFA_DTA_MSG* p_data);
-bool nfa_dta_proc_data(tNFA_DTA_MSG* p_msg_data);
-
-/* Utility functions */
-void nfa_dta_test_set_state(tNFA_DTA_STATE state);
-void nfa_dta_test_set_substate(tNFA_DTA_SUBSTATE substate);
-void nfa_dta_free_ndef_buf(uint8_t ndef_idx);
-uint8_t* nfa_dta_realloc_buf(uint8_t ndef_idx, uint32_t size);
-void nfa_dta_t3t_nfcid_rand(uint8_t nfcid2[NCI_RF_F_UID_LEN]);
-
-/* Test function entry points (in nfa_dta_XXX.c) */
-void nfa_dta_nfcdep_poll_test_start(void);
-void nfa_dta_nfcdep_proc_data(tNFC_CONN_EVT event, tNFC_CONN* p_data);
-void nfa_dta_t1t_poll_test_start(void);
-void nfa_dta_t2t_poll_test_start(void);
-void nfa_dta_t3t_poll_test_start(void);
-void nfa_dta_t4t_poll_test_start(void);
-
-void nfa_dta_nfcdep_listen_test_start(void);
-void nfa_dta_t3t_listen_test_start(void);
-void nfa_dta_t4t_listen_test_start(void);
-
-void nfa_dta_t1t_rw_cback(uint8_t event, tRW_DATA* p_data);
-void nfa_dta_t2t_rw_cback(uint8_t event, tRW_DATA* p_data);
-void nfa_dta_t3t_rw_cback(uint8_t event, tRW_DATA* p_data);
-void nfa_dta_t4t_rw_cback(uint8_t event, tRW_DATA* p_data);
-
-void nfa_dta_t3t_ce_cback(uint8_t event, tCE_DATA* p_data);
-void nfa_dta_t4t_ce_cback(uint8_t event, tCE_DATA* p_data);
-
-void nfa_dta_ce_cback(uint8_t event, tCE_DATA* p_ce_data);
-
-void nfa_dta_t4t_register_apps(void);
-void nfa_dta_t4t_deregister_apps(void);
-
-void nfa_dta_llcp_init(void);
-void nfa_dta_llcp_set_gen_bytes(void);
-void nfa_dta_llcp_clear_gen_bytes(void);
-void nfa_dta_llcp_register_pattern_number_service(void);
-void nfa_dta_llcp_deregister_pattern_number_service(void);
-void nfa_dta_llcp_register_echo(void);
-void nfa_dta_llcp_deregister_echo(void);
-void nfa_dta_llcp_activate_link(void);
-void nfa_dta_llcp_connect_co_echo_out(void);
-void nfa_dta_llcp_disconnect_co_echo_out(void);
-
-void nfa_dta_snep_init(void);
-void nfa_dta_snep_register(void);
-void nfa_dta_snep_deregister(void);
-
-void nfa_dta_emvco_pcd_config_nfcc(bool enable);
-void nfa_dta_emvco_pcd_start(void);
-void nfa_dta_emvco_pcd_cback(uint8_t event, tRW_DATA* p_data);
 
 extern uint8_t* p_nfa_dta_brcm_start_up_cfg;
 extern uint8_t nfa_dta_brcm_start_up_cfg_len;

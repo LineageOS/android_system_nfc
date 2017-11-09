@@ -16,16 +16,10 @@
  *
  ******************************************************************************/
 #include "CrcChecksum.h"
-#include <errno.h>
 #include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <unistd.h>
 #include <string>
 #include "_OverrideLog.h"
-
-#undef LOG_TAG
-#define LOG_TAG "NfcNciHal"
 
 static const unsigned short crctab[256] = {
     0x0000, 0xc0c1, 0xc181, 0x0140, 0xc301, 0x03c0, 0x0280, 0xc241, 0xc601,
@@ -90,7 +84,8 @@ unsigned short crcChecksumCompute(const unsigned char* buffer, int bufferLen) {
 **
 *******************************************************************************/
 bool crcChecksumVerifyIntegrity(const char* filename) {
-  ALOGD("%s: filename=%s", __func__, filename);
+  DLOG_IF(INFO, nfc_debug_enabled)
+      << StringPrintf("%s: filename=%s", __func__, filename);
   bool isGood = FALSE;
   int fileStream = open(filename, O_RDONLY);
   if (fileStream >= 0) {
@@ -107,14 +102,15 @@ bool crcChecksumVerifyIntegrity(const char* filename) {
     }
     close(fileStream);
     if ((actualReadCrc == sizeof(checksum)) && (data.size() > 0)) {
-      ALOGD("%s: data size=%zu", __func__, data.size());
+      DLOG_IF(INFO, nfc_debug_enabled)
+          << StringPrintf("%s: data size=%zu", __func__, data.size());
       if (checksum ==
           crcChecksumCompute((const unsigned char*)data.data(), data.size()))
         isGood = TRUE;
       else
-        ALOGE("%s: checksum mismatch", __func__);
+        LOG(ERROR) << StringPrintf("%s: checksum mismatch", __func__);
     } else
-      ALOGE("%s: invalid length", __func__);
+      LOG(ERROR) << StringPrintf("%s: invalid length", __func__);
   } else
     isGood = TRUE;  // assume file does not exist
   return isGood;
