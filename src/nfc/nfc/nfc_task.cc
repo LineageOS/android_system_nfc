@@ -245,7 +245,7 @@ void nfc_process_quick_timer_evt(void) {
         rw_t1t_process_timeout(p_tle);
         break;
       case NFC_TTYPE_RW_T2T_RESPONSE:
-        rw_t2t_process_timeout(p_tle);
+        rw_t2t_process_timeout();
         break;
       case NFC_TTYPE_RW_T3T_RESPONSE:
         rw_t3t_process_timeout(p_tle);
@@ -329,7 +329,7 @@ void nfc_task_shutdown_nfcc(void) {
 ** Returns          nothing
 **
 *******************************************************************************/
-uint32_t nfc_task(uint32_t param) {
+uint32_t nfc_task() {
   uint16_t event;
   NFC_HDR* p_msg;
   bool free_buf;

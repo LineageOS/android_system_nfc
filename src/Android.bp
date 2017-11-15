@@ -25,9 +25,8 @@ cc_library_shared {
     ],
     cflags: [
         "-DBUILDCFG=1",
-        "-Wno-deprecated-register",
-        "-Wno-unused-parameter",
-        "-Wno-missing-field-initializers",
+        "-Wall",
+        "-Werror",
     ],
     local_include_dirs: [
         "include",
