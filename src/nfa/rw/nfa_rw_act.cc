@@ -41,7 +41,7 @@ static bool nfa_rw_op_req_while_busy(tNFA_RW_MSG* p_data);
 static void nfa_rw_error_cleanup(uint8_t event);
 static void nfa_rw_presence_check(tNFA_RW_MSG* p_data);
 static void nfa_rw_handle_t2t_evt(tRW_EVENT event, tRW_DATA* p_rw_data);
-static bool nfa_rw_detect_ndef(tNFA_RW_MSG* p_data);
+static bool nfa_rw_detect_ndef(void);
 static void nfa_rw_cback(tRW_EVENT event, tRW_DATA* p_rw_data);
 
 /*******************************************************************************
@@ -185,7 +185,7 @@ void nfa_rw_stop_presence_check_timer(void) {
 ** Returns          Nothing
 **
 *******************************************************************************/
-static void nfa_rw_handle_ndef_detect(tRW_EVENT event, tRW_DATA* p_rw_data) {
+static void nfa_rw_handle_ndef_detect(tRW_DATA* p_rw_data) {
   tNFA_CONN_EVT_DATA conn_evt_data;
 
   DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
@@ -296,7 +296,7 @@ static void nfa_rw_handle_ndef_detect(tRW_EVENT event, tRW_DATA* p_rw_data) {
 ** Returns          Nothing
 **
 *******************************************************************************/
-static void nfa_rw_handle_tlv_detect(tRW_EVENT event, tRW_DATA* p_rw_data) {
+static void nfa_rw_handle_tlv_detect(tRW_DATA* p_rw_data) {
   tNFA_CONN_EVT_DATA conn_evt_data;
 
   /* Set TLV detection state */
@@ -581,7 +581,7 @@ static void nfa_rw_handle_t1t_evt(tRW_EVENT event, tRW_DATA* p_rw_data) {
       break;
 
     case RW_T1T_TLV_DETECT_EVT:
-      nfa_rw_handle_tlv_detect(event, p_rw_data);
+      nfa_rw_handle_tlv_detect(p_rw_data);
       break;
 
     case RW_T1T_NDEF_DETECT_EVT:
@@ -597,7 +597,7 @@ static void nfa_rw_handle_t1t_evt(tRW_EVENT event, tRW_DATA* p_rw_data) {
         if (RW_T1tFormatNDef() == NFC_STATUS_OK) break;
       }
 
-      nfa_rw_handle_ndef_detect(event, p_rw_data);
+      nfa_rw_handle_ndef_detect(p_rw_data);
 
       break;
 
@@ -749,18 +749,18 @@ static void nfa_rw_handle_t2t_evt(tRW_EVENT event, tRW_DATA* p_rw_data) {
           (nfa_rw_cb.skip_dyn_locks == true)) {
         /* NDEF Detection is complete */
         nfa_rw_cb.skip_dyn_locks = false;
-        nfa_rw_handle_ndef_detect(event, p_rw_data);
+        nfa_rw_handle_ndef_detect(p_rw_data);
       } else {
         /* Try to detect NDEF again, this time without reading dynamic lock
          * bytes */
         nfa_rw_cb.skip_dyn_locks = true;
-        nfa_rw_detect_ndef(NULL);
+        nfa_rw_detect_ndef();
       }
       break;
 
     case RW_T2T_TLV_DETECT_EVT: /* Lock control/Mem/Prop tlv detection complete
                                    */
-      nfa_rw_handle_tlv_detect(event, p_rw_data);
+      nfa_rw_handle_tlv_detect(p_rw_data);
       break;
 
     case RW_T2T_NDEF_READ_EVT: /* NDEF read completed     */
@@ -854,7 +854,7 @@ static void nfa_rw_handle_t3t_evt(tRW_EVENT event, tRW_DATA* p_rw_data) {
 
   switch (event) {
     case RW_T3T_NDEF_DETECT_EVT: /* NDEF detection complete */
-      nfa_rw_handle_ndef_detect(event, p_rw_data);
+      nfa_rw_handle_ndef_detect(p_rw_data);
       break;
 
     case RW_T3T_UPDATE_CPLT_EVT: /* Write completed */
@@ -982,7 +982,7 @@ static void nfa_rw_handle_t4t_evt(tRW_EVENT event, tRW_DATA* p_rw_data) {
 
   switch (event) {
     case RW_T4T_NDEF_DETECT_EVT: /* Result of NDEF detection procedure */
-      nfa_rw_handle_ndef_detect(event, p_rw_data);
+      nfa_rw_handle_ndef_detect(p_rw_data);
       break;
 
     case RW_T4T_NDEF_FORMAT_CPLT_EVT:
@@ -1116,7 +1116,7 @@ static void nfa_rw_handle_i93_evt(tRW_EVENT event, tRW_DATA* p_rw_data) {
 
   switch (event) {
     case RW_I93_NDEF_DETECT_EVT: /* Result of NDEF detection procedure */
-      nfa_rw_handle_ndef_detect(event, p_rw_data);
+      nfa_rw_handle_ndef_detect(p_rw_data);
       break;
 
     case RW_I93_NDEF_READ_EVT: /* Segment of data received from type 4 tag */
@@ -1523,7 +1523,7 @@ static tNFC_STATUS nfa_rw_start_ndef_read(void) {
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-static bool nfa_rw_detect_ndef(tNFA_RW_MSG* p_data) {
+static bool nfa_rw_detect_ndef() {
   tNFA_CONN_EVT_DATA conn_evt_data;
   DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
@@ -1600,7 +1600,7 @@ static tNFC_STATUS nfa_rw_start_ndef_write(void) {
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-static bool nfa_rw_read_ndef(tNFA_RW_MSG* p_data) {
+static bool nfa_rw_read_ndef() {
   tNFA_STATUS status = NFA_STATUS_OK;
   tNFA_CONN_EVT_DATA conn_evt_data;
 
@@ -1824,7 +1824,7 @@ void nfa_rw_presence_check(tNFA_RW_MSG* p_data) {
 ** Returns          TRUE (caller frees message buffer)
 **
 *******************************************************************************/
-bool nfa_rw_presence_check_tick(tNFA_RW_MSG* p_data) {
+bool nfa_rw_presence_check_tick(__attribute__((unused)) tNFA_RW_MSG* p_data) {
   /* Store the current operation */
   nfa_rw_cb.cur_op = NFA_RW_OP_PRESENCE_CHECK;
   nfa_rw_cb.flags |= NFA_RW_FL_AUTO_PRESENCE_CHECK_BUSY;
@@ -1846,7 +1846,8 @@ bool nfa_rw_presence_check_tick(tNFA_RW_MSG* p_data) {
 ** Returns          TRUE (caller frees message buffer)
 **
 *******************************************************************************/
-bool nfa_rw_presence_check_timeout(tNFA_RW_MSG* p_data) {
+bool nfa_rw_presence_check_timeout(__attribute__((unused))
+                                   tNFA_RW_MSG* p_data) {
   nfa_rw_handle_presence_check_rsp(NFC_STATUS_FAILED);
   return true;
 }
@@ -1860,7 +1861,7 @@ bool nfa_rw_presence_check_timeout(tNFA_RW_MSG* p_data) {
 ** Returns          Nothing
 **
 *******************************************************************************/
-static void nfa_rw_format_tag(tNFA_RW_MSG* p_data) {
+static void nfa_rw_format_tag() {
   tNFC_PROTOCOL protocol = nfa_rw_cb.protocol;
   tNFC_STATUS status = NFC_STATUS_FAILED;
 
@@ -1890,7 +1891,7 @@ static void nfa_rw_format_tag(tNFA_RW_MSG* p_data) {
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-static bool nfa_rw_detect_tlv(tNFA_RW_MSG* p_data, uint8_t tlv) {
+static bool nfa_rw_detect_tlv(uint8_t tlv) {
   DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   switch (nfa_rw_cb.protocol) {
@@ -1971,7 +1972,7 @@ static tNFC_STATUS nfa_rw_config_tag_ro(bool b_hard_lock) {
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-static bool nfa_rw_t1t_rid(tNFA_RW_MSG* p_data) {
+static bool nfa_rw_t1t_rid() {
   if (RW_T1tRid() != NFC_STATUS_OK) nfa_rw_error_cleanup(NFA_READ_CPLT_EVT);
 
   return true;
@@ -1986,7 +1987,7 @@ static bool nfa_rw_t1t_rid(tNFA_RW_MSG* p_data) {
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-static bool nfa_rw_t1t_rall(tNFA_RW_MSG* p_data) {
+static bool nfa_rw_t1t_rall() {
   if (RW_T1tReadAll() != NFC_STATUS_OK) nfa_rw_error_cleanup(NFA_READ_CPLT_EVT);
 
   return true;
@@ -2229,7 +2230,7 @@ static bool nfa_rw_t3t_write(tNFA_RW_MSG* p_data) {
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-static bool nfa_rw_t3t_get_system_codes(tNFA_RW_MSG* p_data) {
+static bool nfa_rw_t3t_get_system_codes() {
   tNFC_STATUS status;
   tNFA_TAG_PARAMS tag_params;
 
@@ -2386,8 +2387,8 @@ static bool nfa_rw_i93_command(tNFA_RW_MSG* p_data) {
 ** Returns          nothing
 **
 *******************************************************************************/
-static void nfa_rw_raw_mode_data_cback(uint8_t conn_id, tNFC_CONN_EVT event,
-                                       tNFC_CONN* p_data) {
+static void nfa_rw_raw_mode_data_cback(__attribute__((unused)) uint8_t conn_id,
+                                       tNFC_CONN_EVT event, tNFC_CONN* p_data) {
   NFC_HDR* p_msg;
   tNFA_CONN_EVT_DATA evt_data;
 
@@ -2642,7 +2643,7 @@ bool nfa_rw_activate_ntf(tNFA_RW_MSG* p_data) {
 ** Returns          TRUE (message buffer to be freed by caller)
 **
 *******************************************************************************/
-bool nfa_rw_deactivate_ntf(tNFA_RW_MSG* p_data) {
+bool nfa_rw_deactivate_ntf(__attribute__((unused)) tNFA_RW_MSG* p_data) {
   /* Clear the activated flag */
   nfa_rw_cb.flags &= ~NFA_RW_FL_ACTIVATED;
 
@@ -2724,11 +2725,11 @@ bool nfa_rw_handle_op_req(tNFA_RW_MSG* p_data) {
   switch (p_data->op_req.op) {
     case NFA_RW_OP_DETECT_NDEF:
       nfa_rw_cb.skip_dyn_locks = false;
-      nfa_rw_detect_ndef(p_data);
+      nfa_rw_detect_ndef();
       break;
 
     case NFA_RW_OP_READ_NDEF:
-      nfa_rw_read_ndef(p_data);
+      nfa_rw_read_ndef();
       break;
 
     case NFA_RW_OP_WRITE_NDEF:
@@ -2753,15 +2754,15 @@ bool nfa_rw_handle_op_req(tNFA_RW_MSG* p_data) {
       break;
 
     case NFA_RW_OP_FORMAT_TAG:
-      nfa_rw_format_tag(p_data);
+      nfa_rw_format_tag();
       break;
 
     case NFA_RW_OP_DETECT_LOCK_TLV:
-      nfa_rw_detect_tlv(p_data, TAG_LOCK_CTRL_TLV);
+      nfa_rw_detect_tlv(TAG_LOCK_CTRL_TLV);
       break;
 
     case NFA_RW_OP_DETECT_MEM_TLV:
-      nfa_rw_detect_tlv(p_data, TAG_MEM_CTRL_TLV);
+      nfa_rw_detect_tlv(TAG_MEM_CTRL_TLV);
       break;
 
     case NFA_RW_OP_SET_TAG_RO:
@@ -2770,11 +2771,11 @@ bool nfa_rw_handle_op_req(tNFA_RW_MSG* p_data) {
       break;
 
     case NFA_RW_OP_T1T_RID:
-      nfa_rw_t1t_rid(p_data);
+      nfa_rw_t1t_rid();
       break;
 
     case NFA_RW_OP_T1T_RALL:
-      nfa_rw_t1t_rall(p_data);
+      nfa_rw_t1t_rall();
       break;
 
     case NFA_RW_OP_T1T_READ:
@@ -2820,7 +2821,7 @@ bool nfa_rw_handle_op_req(tNFA_RW_MSG* p_data) {
       break;
 
     case NFA_RW_OP_T3T_GET_SYSTEM_CODES:
-      nfa_rw_t3t_get_system_codes(p_data);
+      nfa_rw_t3t_get_system_codes();
       break;
 
     /* ISO 15693 tag commands */

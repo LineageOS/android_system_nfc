@@ -65,15 +65,14 @@ typedef struct {
   { *(p)++ = (int8_t)(u8); }
 #define ARRAY8_TO_STREAM(p, a)                                    \
   {                                                               \
-    register int ijk;                                             \
+    int ijk;                                                      \
     for (ijk = 0; ijk < 8; ijk++) *(p)++ = (uint8_t)(a)[7 - ijk]; \
   }
 #define ARRAY_TO_STREAM(p, a, len)                                \
   {                                                               \
-    register int ijk;                                             \
+    int ijk;                                                      \
     for (ijk = 0; ijk < (len); ijk++) *(p)++ = (uint8_t)(a)[ijk]; \
   }
-
 #define STREAM_TO_UINT8(u8, p) \
   {                            \
     (u8) = (uint8_t)(*(p));    \
@@ -93,13 +92,13 @@ typedef struct {
   }
 #define STREAM_TO_ARRAY8(a, p)                     \
   {                                                \
-    register int ijk;                              \
-    register uint8_t* _pa = (uint8_t*)(a) + 7;     \
+    int ijk;                                       \
+    uint8_t* _pa = (uint8_t*)(a) + 7;              \
     for (ijk = 0; ijk < 8; ijk++) *_pa-- = *(p)++; \
   }
 #define STREAM_TO_ARRAY(a, p, len)                                   \
   {                                                                  \
-    register int ijk;                                                \
+    int ijk;                                                         \
     for (ijk = 0; ijk < (len); ijk++) ((uint8_t*)(a))[ijk] = *(p)++; \
   }
 
@@ -129,7 +128,7 @@ typedef struct {
   { *(p)++ = (uint8_t)(u8); }
 #define ARRAY_TO_BE_STREAM(p, a, len)                             \
   {                                                               \
-    register int ijk;                                             \
+    int ijk;                                                      \
     for (ijk = 0; ijk < (len); ijk++) *(p)++ = (uint8_t)(a)[ijk]; \
   }
 

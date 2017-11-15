@@ -550,8 +550,6 @@ void rw_i93_send_to_upper(NFC_HDR* p_resp) {
 **
 *******************************************************************************/
 bool rw_i93_send_to_lower(NFC_HDR* p_msg) {
-  DispRWI93Tag(p_msg, false, 0x00);
-
   /* store command for retransmitting */
   if (rw_cb.tcb.i93.p_retry_cmd) {
     GKI_freebuf(rw_cb.tcb.i93.p_retry_cmd);
@@ -2884,8 +2882,8 @@ void rw_i93_process_timeout(TIMER_LIST_ENT* p_tle) {
 ** Returns          none
 **
 *******************************************************************************/
-static void rw_i93_data_cback(uint8_t conn_id, tNFC_CONN_EVT event,
-                              tNFC_CONN* p_data) {
+static void rw_i93_data_cback(__attribute__((unused)) uint8_t conn_id,
+                              tNFC_CONN_EVT event, tNFC_CONN* p_data) {
   tRW_I93_CB* p_i93 = &rw_cb.tcb.i93;
   NFC_HDR* p_resp;
   tRW_DATA rw_data;
@@ -2946,8 +2944,6 @@ static void rw_i93_data_cback(uint8_t conn_id, tNFC_CONN_EVT event,
     p_i93->p_retry_cmd = NULL;
     p_i93->retry_count = 0;
   }
-
-  DispRWI93Tag(p_resp, true, p_i93->sent_cmd);
 
   DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
       "RW I93 state: <%s (%d)>", rw_i93_get_state_name(p_i93->state).c_str(),
