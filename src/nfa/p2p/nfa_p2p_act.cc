@@ -1120,7 +1120,7 @@ bool nfa_p2p_set_llcp_cfg(tNFA_P2P_MSG* p_msg) {
 ** Returns          TRUE to deallocate buffer
 **
 *******************************************************************************/
-bool nfa_p2p_restart_rf_discovery(tNFA_P2P_MSG* p_msg) {
+bool nfa_p2p_restart_rf_discovery(__attribute__((unused)) tNFA_P2P_MSG* p_msg) {
   DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   nfa_dm_rf_deactivate(NFA_DEACTIVATE_TYPE_IDLE);
