@@ -1,1 +1,1 @@
-subdirs = ["src"]
+subdirs = ["src", "utils"]
