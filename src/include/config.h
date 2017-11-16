@@ -39,5 +39,6 @@ int GetNumValue(const char* name, void* p_value, unsigned long len);
 #define NAME_NFA_POLL_BAIL_OUT_MODE "NFA_POLL_BAIL_OUT_MODE"
 #define NAME_NFA_PROPRIETARY_CFG "NFA_PROPRIETARY_CFG"
 #define NAME_NFA_AID_BLOCK_ROUTE "NFA_AID_BLOCK_ROUTE"
+#define NAME_ISO_DEP_MAX_TRANSCEIVE "ISO_DEP_MAX_TRANSCEIVE"
 
 #endif
