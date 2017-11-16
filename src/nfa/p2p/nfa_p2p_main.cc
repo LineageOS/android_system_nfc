@@ -158,7 +158,8 @@ void nfa_p2p_discovery_cback(tNFA_DM_RF_DISC_EVT event, tNFC_DISCOVER* p_data) {
 ** Returns          void
 **
 *******************************************************************************/
-static void nfa_p2p_update_active_listen_timeout_cback(TIMER_LIST_ENT* p_tle) {
+static void nfa_p2p_update_active_listen_timeout_cback(__attribute__((unused))
+                                                       TIMER_LIST_ENT* p_tle) {
   LOG(ERROR) << __func__;
 
   /* restore active listen mode */

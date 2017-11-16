@@ -120,8 +120,6 @@ static void rw_t4t_sm_ndef_format(NFC_HDR* p_r_apdu);
 **
 *******************************************************************************/
 static bool rw_t4t_send_to_lower(NFC_HDR* p_c_apdu) {
-  DispRWT4Tags(p_c_apdu, false);
-
   if (NFC_SendData(NFC_RF_CONN_ID, p_c_apdu) != NFC_STATUS_OK) {
     LOG(ERROR) << StringPrintf("failed");
     return false;
@@ -1057,8 +1055,8 @@ static void rw_t4t_handle_error(tNFC_STATUS status, uint8_t sw1, uint8_t sw2) {
 *******************************************************************************/
 static void rw_t4t_sm_ndef_format(NFC_HDR* p_r_apdu) {
   tRW_T4T_CB* p_t4t = &rw_cb.tcb.t4t;
-  uint8_t *p, type, length;
-  uint16_t status_words, nlen;
+  uint8_t* p;
+  uint16_t status_words;
   tRW_DATA rw_data;
 
   DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
@@ -1735,8 +1733,8 @@ void rw_t4t_handle_isodep_nak_rsp(uint8_t status, bool is_ntf) {
 ** Returns          none
 **
 *******************************************************************************/
-static void rw_t4t_data_cback(uint8_t conn_id, tNFC_CONN_EVT event,
-                              tNFC_CONN* p_data) {
+static void rw_t4t_data_cback(__attribute__((unused)) uint8_t conn_id,
+                              tNFC_CONN_EVT event, tNFC_CONN* p_data) {
   tRW_T4T_CB* p_t4t = &rw_cb.tcb.t4t;
   NFC_HDR* p_r_apdu;
   tRW_DATA rw_data;
@@ -1778,8 +1776,6 @@ static void rw_t4t_data_cback(uint8_t conn_id, tNFC_CONN_EVT event,
     default:
       return;
   }
-
-  if (p_t4t->state != RW_T4T_STATE_IDLE) DispRWT4Tags(p_r_apdu, true);
 
   DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
       "RW T4T state: <%s (%d)>", rw_t4t_get_state_name(p_t4t->state).c_str(),
