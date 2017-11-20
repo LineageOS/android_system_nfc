@@ -23,6 +23,10 @@
  *
  ******************************************************************************/
 #include <string.h>
+
+#include <android-base/stringprintf.h>
+#include <base/logging.h>
+
 #include "nci_hmsgs.h"
 #include "nfa_api.h"
 #include "nfa_ce_int.h"
@@ -38,6 +42,10 @@
 #if (NFA_SNEP_INCLUDED == TRUE)
 #include "nfa_snep_int.h"
 #endif
+
+using android::base::StringPrintf;
+
+extern bool nfc_debug_enabled;
 
 /* This is the timeout value to guarantee disable is performed within reasonable
  * amount of time */

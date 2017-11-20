@@ -24,15 +24,24 @@
  *
 ******************************************************************************/
 #include <string.h>
-#include "bt_types.h"
+
+#include <android-base/stringprintf.h>
+#include <base/logging.h>
+
 #include "nfc_target.h"
 
+#include "bt_types.h"
 #include "nci_hmsgs.h"
 #include "nfc_api.h"
 #include "rw_api.h"
 #include "rw_int.h"
 
+using android::base::StringPrintf;
+
+extern bool nfc_debug_enabled;
+
 tRW_CB rw_cb;
+
 /*******************************************************************************
 *******************************************************************************/
 void rw_init(void) {

@@ -22,6 +22,10 @@
  *
  ******************************************************************************/
 #include <string.h>
+
+#include <android-base/stringprintf.h>
+#include <base/logging.h>
+
 #include "ce_api.h"
 #include "ndef_utils.h"
 #include "nfa_ce_int.h"
@@ -30,6 +34,10 @@
 #if (NFC_NFCEE_INCLUDED == TRUE)
 #include "nfa_ee_int.h"
 #endif
+
+using android::base::StringPrintf;
+
+extern bool nfc_debug_enabled;
 
 /*****************************************************************************
 * Protocol-specific event handlers

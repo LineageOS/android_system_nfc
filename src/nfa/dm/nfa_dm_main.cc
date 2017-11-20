@@ -21,10 +21,17 @@
  *  This is the main implementation file for the NFA device manager.
  *
  ******************************************************************************/
-
 #include <string>
+
+#include <android-base/stringprintf.h>
+#include <base/logging.h>
+
 #include "nfa_api.h"
 #include "nfa_dm_int.h"
+
+using android::base::StringPrintf;
+
+extern bool nfc_debug_enabled;
 
 /*****************************************************************************
 ** Constants and types
