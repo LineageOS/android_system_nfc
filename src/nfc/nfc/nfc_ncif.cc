@@ -1373,7 +1373,7 @@ void nfc_ncif_proc_init_rsp(NFC_HDR* p_msg) {
       nfc_set_state(NFC_STATE_W4_POST_INIT_CPLT);
 
       nfc_cb.p_nci_init_rsp = p_msg;
-      nfc_cb.p_hal->core_initialized(p_msg->len - p_msg->offset, p);
+      nfc_cb.p_hal->core_initialized(p_msg->len, p);
     }
   } else {
     if (nfc_cb.nci_version == NCI_VERSION_UNKNOWN) {
