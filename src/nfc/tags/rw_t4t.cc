@@ -34,7 +34,6 @@
 #include "nfc_int.h"
 #include "rw_api.h"
 #include "rw_int.h"
-#include "trace_api.h"
 
 using android::base::StringPrintf;
 
