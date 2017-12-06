@@ -22,9 +22,17 @@
  *
  ******************************************************************************/
 #include <string>
+
+#include <android-base/stringprintf.h>
+#include <base/logging.h>
+
 #include "config.h"
 #include "nfa_dm_int.h"
 #include "nfa_ee_int.h"
+
+using android::base::StringPrintf;
+
+extern bool nfc_debug_enabled;
 
 /*****************************************************************************
 **  Global Variables
