@@ -23,7 +23,10 @@
  *  (callback). On the transmit side, it manages the command transmission.
  *
  ******************************************************************************/
+#include <android-base/stringprintf.h>
+#include <base/logging.h>
 #include <metricslogger/metrics_logger.h>
+
 #include "nfc_target.h"
 
 #include "include/debug_nfcsnoop.h"
@@ -33,6 +36,9 @@
 #include "nfc_int.h"
 #include "rw_api.h"
 #include "rw_int.h"
+
+using android::base::StringPrintf;
+
 #if (NFC_RW_ONLY == FALSE)
 static const uint8_t nfc_mpl_code_to_size[] = {64, 128, 192, 254};
 
@@ -45,6 +51,8 @@ static tNFC_FW_VERSION nfc_fw_version;
 #define NFC_LB_ATTRIB_REQ_FIXED_BYTES 8
 
 extern unsigned char appl_dta_mode_flag;
+extern bool nfc_debug_enabled;
+
 /*******************************************************************************
 **
 ** Function         nfc_ncif_update_window

@@ -29,6 +29,7 @@ static void gki_remove_from_pool_list(uint8_t pool_id);
 #endif /*  BTU_STACK_LITE_ENABLED == FALSE */
 
 using android::base::StringPrintf;
+
 /*******************************************************************************
 **
 ** Function         gki_init_free_queue

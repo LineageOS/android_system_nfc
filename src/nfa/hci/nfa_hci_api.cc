@@ -21,9 +21,16 @@
  *  NFA interface to HCI
  *
  ******************************************************************************/
+#include <android-base/stringprintf.h>
+#include <base/logging.h>
+
 #include "nfa_hci_api.h"
 #include "nfa_hci_defs.h"
 #include "nfa_hci_int.h"
+
+using android::base::StringPrintf;
+
+extern bool nfc_debug_enabled;
 
 /*******************************************************************************
 **
