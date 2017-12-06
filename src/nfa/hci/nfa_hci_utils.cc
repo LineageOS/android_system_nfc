@@ -22,11 +22,19 @@
  *
  ******************************************************************************/
 #include <string>
+
+#include <android-base/stringprintf.h>
+#include <base/logging.h>
+
 #include "nfa_dm_int.h"
 #include "nfa_hci_api.h"
 #include "nfa_hci_defs.h"
 #include "nfa_hci_int.h"
 #include "trace_api.h"
+
+using android::base::StringPrintf;
+
+extern bool nfc_debug_enabled;
 
 static void handle_debug_loopback(NFC_HDR* p_buf, uint8_t type,
                                   uint8_t instruction);

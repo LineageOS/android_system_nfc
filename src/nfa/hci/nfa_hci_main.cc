@@ -22,6 +22,10 @@
  *
  ******************************************************************************/
 #include <string.h>
+
+#include <android-base/stringprintf.h>
+#include <base/logging.h>
+
 #include "nfa_dm_int.h"
 #include "nfa_ee_api.h"
 #include "nfa_ee_int.h"
@@ -30,6 +34,10 @@
 #include "nfa_hci_int.h"
 #include "nfa_nv_co.h"
 #include "trace_api.h"
+
+using android::base::StringPrintf;
+
+extern bool nfc_debug_enabled;
 
 /*****************************************************************************
 **  Global Variables

@@ -20,7 +20,13 @@
 #include <list>
 #include <string>
 #include <vector>
-#include "_OverrideLog.h"
+
+#include <android-base/stringprintf.h>
+#include <base/logging.h>
+
+using android::base::StringPrintf;
+
+extern bool nfc_debug_enabled;
 
 const char* transport_config_paths[] = {"/odm/etc/", "/vendor/etc/", "/etc/"};
 const int transport_config_path_size =

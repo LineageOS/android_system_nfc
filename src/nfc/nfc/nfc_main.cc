@@ -24,11 +24,15 @@
  *
  ******************************************************************************/
 #include <string.h>
-#include "bt_types.h"
-#include "gki.h"
+
+#include <android-base/stringprintf.h>
+#include <base/logging.h>
+
 #include "nfc_target.h"
 
+#include "bt_types.h"
 #include "ce_int.h"
+#include "gki.h"
 #include "nci_hmsgs.h"
 #include "nfc_int.h"
 #include "rw_int.h"
@@ -49,6 +53,11 @@
 #define NFC_SET_MAX_CONN_DEFAULT()
 
 #endif /* NFC_RW_ONLY */
+
+using android::base::StringPrintf;
+
+extern bool nfc_debug_enabled;
+
 /****************************************************************************
 ** Declarations
 ****************************************************************************/
