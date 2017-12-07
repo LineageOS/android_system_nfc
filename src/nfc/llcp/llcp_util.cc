@@ -23,11 +23,19 @@
  ******************************************************************************/
 
 #include <string.h>
+
+#include <android-base/stringprintf.h>
+#include <base/logging.h>
+
 #include "bt_types.h"
 #include "gki.h"
 #include "llcp_defs.h"
 #include "llcp_int.h"
 #include "nfc_int.h"
+
+using android::base::StringPrintf;
+
+extern bool nfc_debug_enabled;
 
 /*******************************************************************************
 **

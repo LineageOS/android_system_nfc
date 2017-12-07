@@ -22,10 +22,18 @@
  *
  ******************************************************************************/
 #include <string.h>
+
+#include <android-base/stringprintf.h>
+#include <base/logging.h>
+
 #include "nfa_dm_int.h"
 #include "nfa_hci_api.h"
 #include "nfa_hci_defs.h"
 #include "nfa_hci_int.h"
+
+using android::base::StringPrintf;
+
+extern bool nfc_debug_enabled;
 
 /* Static local functions       */
 static void nfa_hci_api_register(tNFA_HCI_EVENT_DATA* p_evt_data);
