@@ -17,10 +17,16 @@
  ******************************************************************************/
 #include <errno.h>
 #include <malloc.h>
-
 #include <pthread.h> /* must be 1st header defined  */
-#include "_OverrideLog.h"
+
+#include <android-base/stringprintf.h>
+#include <base/logging.h>
+
 #include "gki_int.h"
+
+using android::base::StringPrintf;
+
+extern bool nfc_debug_enabled;
 
 /* Temp android logging...move to android tgt config file */
 

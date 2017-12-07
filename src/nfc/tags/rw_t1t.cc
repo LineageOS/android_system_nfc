@@ -23,6 +23,10 @@
  *
  ******************************************************************************/
 #include <string>
+
+#include <android-base/stringprintf.h>
+#include <base/logging.h>
+
 #include "nfc_target.h"
 
 #include "gki.h"
@@ -32,7 +36,11 @@
 #include "rw_api.h"
 #include "rw_int.h"
 
+using android::base::StringPrintf;
+
+extern bool nfc_debug_enabled;
 extern unsigned char appl_dta_mode_flag;
+
 /* Local Functions */
 static tRW_EVENT rw_t1t_handle_rid_rsp(NFC_HDR* p_pkt);
 static void rw_t1t_data_cback(uint8_t conn_id, tNFC_CONN_EVT event,

@@ -22,10 +22,18 @@
  *
  ******************************************************************************/
 #include <string.h>
+
+#include <android-base/stringprintf.h>
+#include <base/logging.h>
+
 #include "ndef_utils.h"
 #include "nfa_dm_int.h"
 #include "nfa_mem_co.h"
 #include "nfa_rw_int.h"
+
+using android::base::StringPrintf;
+
+extern bool nfc_debug_enabled;
 
 #define NFA_RW_OPTION_INVALID 0xFF
 
