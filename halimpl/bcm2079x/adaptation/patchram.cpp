@@ -376,10 +376,10 @@ static void getNfaValues(uint32_t chipid) {
 **
 *******************************************************************************/
 static void StartPatchDownload(uint32_t chipid) {
-  ALOGD("%s: chipid=%" PRIu32, __func__, chipid);
+  ALOGD("%s: chipid=%" PRIX32, __func__, chipid);
 
   char chipID[30];
-  sprintf(chipID, "%" PRIu32, chipid);
+  sprintf(chipID, "%" PRIx32, chipid);
   ALOGD("%s: chidId=%s", __func__, chipID);
 
   readOptionalConfig(chipID);  // Read optional chip specific settings
@@ -486,7 +486,7 @@ static void StartPatchDownload(uint32_t chipid) {
 **
 *******************************************************************************/
 void nfc_hal_post_reset_init(uint32_t brcm_hw_id, uint8_t nvm_type) {
-  ALOGD("%s: brcm_hw_id=0x%" PRIu32 ", nvm_type=%d", __func__, brcm_hw_id,
+  ALOGD("%s: brcm_hw_id=0x%" PRIX32 ", nvm_type=%d", __func__, brcm_hw_id,
         nvm_type);
   tHAL_NFC_STATUS stat = HAL_NFC_STATUS_FAILED;
   uint8_t max_credits = 1, allow_no_nvm = 0;
