@@ -175,6 +175,7 @@ extern uint8_t* scru_dump_hex(uint8_t* p, char* p_title, uint32_t len,
                               uint32_t trace_layer, uint32_t trace_type);
 
 static pthread_t worker_thread1 = 0;
+static bool worker_thread_running = false;
 
 typedef struct {
   volatile unsigned long bt_wake_state;
@@ -735,6 +736,7 @@ uint32_t userial_read_thread(uint32_t arg) {
   NFC_HDR* p_buf = NULL;
 
   worker_thread1 = pthread_self();
+  worker_thread_running = true;
 
   ALOGD("start userial_read_thread, id=%lx", worker_thread1);
   _timeout = POLL_TIMEOUT;
@@ -821,6 +823,8 @@ uint32_t userial_read_thread(uint32_t arg) {
 
   GKI_exit_task(GKI_get_taskid());
   ALOGD("USERIAL READ: EXITING TASK\n");
+
+  worker_thread_running = false;
 
   return 0;
 }
@@ -1455,11 +1459,14 @@ void userial_close_thread(uint32_t params) {
   }
 
   send_wakeup_signal();
-  result = pthread_join(worker_thread1, NULL);
-  if (result < 0)
-    ALOGE("%s: pthread_join() FAILED: result: %d", __func__, result);
-  else
-    ALOGD("%s: pthread_join() joined: result: %d", __func__, result);
+
+  if (worker_thread_running == true) {
+    result = pthread_join(worker_thread1, NULL);
+    if (result < 0)
+      ALOGE("%s: pthread_join() FAILED: result: %d", __func__, result);
+    else
+      ALOGD("%s: pthread_join() joined: result: %d", __func__, result);
+  }
 
   if (linux_cb.sock_power_control > 0) {
     result = ioctl(linux_cb.sock_power_control, BCMNFC_WAKE_CTL, sleep_state());
