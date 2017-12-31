@@ -650,7 +650,7 @@ uint32_t nfc_hal_main_task(uint32_t param) {
             p += 5;
             STREAM_TO_UINT8(num_interfaces, p);
             p += (num_interfaces + 3);
-            nfc_hal_cb.ncit_cb.nci_ctrl_size = *p;
+            nfc_hal_cb.ncit_cb.nci_ctrl_size = 255;
 
             /* start post initialization */
             nfc_hal_cb.dev_cb.next_dm_config = NFC_HAL_DM_CONFIG_LPTD;
