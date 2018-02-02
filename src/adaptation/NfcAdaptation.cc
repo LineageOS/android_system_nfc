@@ -301,6 +301,12 @@ void NfcAdaptation::FactoryReset() {
   }
 }
 
+void NfcAdaptation::DeviceShutdown() {
+  if (mHal_1_1 != nullptr) {
+    mHal_1_1->closeForPowerOffCase();
+  }
+}
+
 /*******************************************************************************
 **
 ** Function:    NfcAdaptation::Dump
