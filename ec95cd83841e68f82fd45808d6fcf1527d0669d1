@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3bb31453_4cd8bf1f",
+        "filename": "halimpl/bcm2079x/adaptation/patchram.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 382,
+      "author": {
+        "id": 17901
+      },
+      "writtenOn": "2018-02-09T20:21:21Z",
+      "side": 1,
+      "message": "Capital letter?",
+      "revId": "ec95cd83841e68f82fd45808d6fcf1527d0669d1",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
