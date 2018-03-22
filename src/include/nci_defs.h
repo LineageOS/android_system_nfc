@@ -395,10 +395,15 @@ typedef uint8_t tNCI_DISCOVERY_TYPE;
 #define NCI_ROUTE_PWR_STATE_SWITCH_OFF 0x02
 /* The device's battery is removed */
 #define NCI_ROUTE_PWR_STATE_BATT_OFF 0x04
-/* The device is in screen off Unlock mode */
-/* The device is in screen on lock mode */
-#define NCI_ROUTE_PWR_STATE_SCREEN_ON_LOCK 0x10
-/* The device is in screen off lock mode */
+/* The device is screen off Unlock mode */
+#define NCI_ROUTE_PWR_STATE_SCREEN_OFF_UNLOCK() \
+  ((NFC_GetNCIVersion() == NCI_VERSION_2_0) ? 0x08 : 0x80)
+/* The device is screen on lock mode */
+#define NCI_ROUTE_PWR_STATE_SCREEN_ON_LOCK() \
+  ((NFC_GetNCIVersion() == NCI_VERSION_2_0) ? 0x10 : 0x40)
+/* The device is screen off lock mode */
+#define NCI_ROUTE_PWR_STATE_SCREEN_OFF_LOCK() \
+  ((NFC_GetNCIVersion() == NCI_VERSION_2_0) ? 0x20 : 0x00)
 
 /* Hardware / Registration Identification  */
 #define NCI_NFCEE_TAG_HW_ID 0x00
