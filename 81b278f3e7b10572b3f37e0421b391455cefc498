@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "790b5d0a_dbece190",
+        "filename": "halimpl/bcm2079x/hal/hal/nfc_hal_main.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 655,
+      "author": {
+        "id": 11883
+      },
+      "writtenOn": "2018-03-25T18:07:07Z",
+      "side": 1,
+      "message": "what\u0027s the value of p at this point?\nIt\u0027s initialized for sure",
+      "range": {
+        "startLine": 655,
+        "startChar": 47,
+        "endLine": 655,
+        "endChar": 50
+      },
+      "revId": "81b278f3e7b10572b3f37e0421b391455cefc498",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
