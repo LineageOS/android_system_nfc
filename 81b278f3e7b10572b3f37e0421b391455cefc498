@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "60794960_30c78241",
+        "filename": "halimpl/bcm2079x/hal/hal/nfc_hal_main.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 444
+      },
+      "writtenOn": "2018-03-29T17:00:46Z",
+      "side": 1,
+      "message": "Never mind. For some reason everything works fine here now, with just this patch reverted as well.",
+      "parentUuid": "c08530f9_77c8c26d",
+      "revId": "81b278f3e7b10572b3f37e0421b391455cefc498",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "790b5d0a_dbece190",
         "filename": "halimpl/bcm2079x/hal/hal/nfc_hal_main.c",
         "patchSetId": 12
