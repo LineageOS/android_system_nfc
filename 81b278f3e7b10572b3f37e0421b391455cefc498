@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c08530f9_77c8c26d",
+        "filename": "halimpl/bcm2079x/hal/hal/nfc_hal_main.c",
+        "patchSetId": 12
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 10245
+      },
+      "writtenOn": "2018-03-29T13:37:43Z",
+      "side": 1,
+      "message": "Are you fully sure that you\u0027re not just hitting the randomness where this issue isn\u0027t hit? When I tested, p_msg-\u003eoffset was always 0 here, so removing it shouldn\u0027t change anything. Can you check the value of it on your side?",
+      "parentUuid": "ce8b8780_b0d8f4a4",
+      "revId": "81b278f3e7b10572b3f37e0421b391455cefc498",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "790b5d0a_dbece190",
         "filename": "halimpl/bcm2079x/hal/hal/nfc_hal_main.c",
         "patchSetId": 12
