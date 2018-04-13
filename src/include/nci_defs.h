@@ -149,6 +149,7 @@
 #define NCI_STATUS_UNKNOWN_OID 0x08
 #define NCI_STATUS_INVALID_PARAM 0x09
 #define NCI_STATUS_MSG_SIZE_TOO_BIG 0x0A
+#define NCI_STATUS_NOT_SUPPORTED 0x0B
 /* discovery */
 #define NCI_STATUS_ALREADY_STARTED 0xA0
 #define NCI_STATUS_ACTIVATION_FAILED 0xA1
@@ -387,16 +388,22 @@ typedef uint8_t tNCI_DISCOVERY_TYPE;
 /* Protocol based routing  */
 #define NCI_ROUTE_TAG_PROTO 0x01
 #define NCI_ROUTE_TAG_AID 0x02 /* AID routing */
+#define NCI_ROUTE_TAG_SYSCODE 0x03 /* SystemCode routing */
 
 #define NCI_ROUTE_PWR_STATE_ON 0x01 /* The device is on */
 /* The device is switched off */
 #define NCI_ROUTE_PWR_STATE_SWITCH_OFF 0x02
 /* The device's battery is removed */
 #define NCI_ROUTE_PWR_STATE_BATT_OFF 0x04
-/* The device is in screen off Unlock mode */
-/* The device is in screen on lock mode */
-#define NCI_ROUTE_PWR_STATE_SCREEN_ON_LOCK 0x10
-/* The device is in screen off lock mode */
+/* The device is screen off Unlock mode */
+#define NCI_ROUTE_PWR_STATE_SCREEN_OFF_UNLOCK() \
+  ((NFC_GetNCIVersion() == NCI_VERSION_2_0) ? 0x08 : 0x80)
+/* The device is screen on lock mode */
+#define NCI_ROUTE_PWR_STATE_SCREEN_ON_LOCK() \
+  ((NFC_GetNCIVersion() == NCI_VERSION_2_0) ? 0x10 : 0x40)
+/* The device is screen off lock mode */
+#define NCI_ROUTE_PWR_STATE_SCREEN_OFF_LOCK() \
+  ((NFC_GetNCIVersion() == NCI_VERSION_2_0) ? 0x20 : 0x00)
 
 /* Hardware / Registration Identification  */
 #define NCI_NFCEE_TAG_HW_ID 0x00
@@ -531,6 +538,8 @@ typedef uint8_t tNCI_DISCOVERY_TYPE;
 #define NCI_POLLING_DH_DISABLE_MASK 0x00
 /* The DH polling is considered as a enable NFCEE */
 #define NCI_POLLING_DH_ENABLE_MASK 0x01
+/* SCBR support check with Core Init resp OCT1 byte */
+#define NCI_SCBR_MASK 0x10
 
 /* AID matching is allowed when the SELECT AID is longer */
 #define NCI_ROUTE_QUAL_LONG_SELECT 0x10
