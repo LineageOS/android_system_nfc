@@ -73,6 +73,7 @@ enum {
   NFA_EE_ROUT_TIMEOUT_EVT,
   NFA_EE_DISCV_TIMEOUT_EVT,
   NFA_EE_CFG_TO_NFCC_EVT,
+  NFA_EE_NCI_NFCEE_STATUS_NTF_EVT,
   NFA_EE_MAX_EVT
 
 };
@@ -378,6 +379,12 @@ typedef struct {
   tNFC_EE_DISCOVER_REQ_REVT* p_data;
 } tNFA_EE_NCI_DISC_REQ;
 
+/* data type for NFA_EE_NCI_NFCEE_STATUS_EVT */
+typedef struct {
+  NFC_HDR hdr;
+  tNFC_NFCEE_STATUS_REVT* p_data;
+} tNFA_EE_NCI_NFCEE_STATUS_NTF;
+
 /* union of all event data types */
 typedef union {
   NFC_HDR hdr;
@@ -403,6 +410,7 @@ typedef union {
   tNFA_EE_NCI_CONN conn;
   tNFA_EE_NCI_ACTION act;
   tNFA_EE_NCI_DISC_REQ disc_req;
+  tNFA_EE_NCI_NFCEE_STATUS_NTF nfcee_status_ntf;
 } tNFA_EE_MSG;
 
 /* type for State Machine (SM) action functions */
@@ -447,6 +455,10 @@ typedef uint8_t tNFA_EE_FLAGS;
 #define NFA_EE_DISC_STS_REQ 0x02
 /* received NFA_EE_MODE_SET_COMPLETE  */
 #define NFA_EE_MODE_SET_COMPLETE 0x03
+/* initialize EE_RECOVERY             */
+#define NFA_EE_RECOVERY_INIT 0x04
+/* update ee config during EE_RECOVERY */
+#define NFA_EE_RECOVERY_REDISCOVERED 0x05
 typedef uint8_t tNFA_EE_DISC_STS;
 
 typedef void(tNFA_EE_ENABLE_DONE_CBACK)(tNFA_EE_DISC_STS status);
@@ -469,6 +481,7 @@ typedef struct {
   tNFA_EE_WAIT ee_wait_evt;    /* Pending event(s) to be reported  */
   tNFA_EE_FLAGS ee_flags;      /* flags                            */
   uint8_t route_block_control; /* controls route block feature   */
+  bool isDiscoveryStopped;     /* discovery status                  */
 } tNFA_EE_CB;
 
 /* Order of Routing entries in Routing Table */
@@ -524,6 +537,7 @@ void nfa_ee_report_disc_done(bool notify_sys);
 void nfa_ee_nci_disc_rsp(tNFA_EE_MSG* p_data);
 void nfa_ee_nci_disc_ntf(tNFA_EE_MSG* p_data);
 void nfa_ee_nci_mode_set_rsp(tNFA_EE_MSG* p_data);
+void nfa_ee_nci_nfcee_status_ntf(tNFA_EE_MSG* p_data);
 void nfa_ee_nci_wait_rsp(tNFA_EE_MSG* p_data);
 void nfa_ee_nci_conn(tNFA_EE_MSG* p_data);
 void nfa_ee_nci_action_ntf(tNFA_EE_MSG* p_data);
