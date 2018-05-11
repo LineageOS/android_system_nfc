@@ -77,7 +77,8 @@ const tNFA_EE_SM_ACT nfa_ee_actions[] = {
     nfa_ee_nci_wait_rsp,        /* NFA_EE_NCI_WAIT_RSP_EVT      */
     nfa_ee_rout_timeout,        /* NFA_EE_ROUT_TIMEOUT_EVT      */
     nfa_ee_discv_timeout,       /* NFA_EE_DISCV_TIMEOUT_EVT     */
-    nfa_ee_lmrt_to_nfcc         /* NFA_EE_CFG_TO_NFCC_EVT       */
+    nfa_ee_lmrt_to_nfcc,        /* NFA_EE_CFG_TO_NFCC_EVT       */
+    nfa_ee_nci_nfcee_status_ntf /*NFA_EE_NCI_NFCEE_STATUS_NTF_EVT*/
 };
 
 /*******************************************************************************
@@ -346,6 +347,10 @@ void nfa_ee_proc_evt(tNFC_RESPONSE_EVT event, void* p_data) {
     case NFC_SET_ROUTING_REVT:
       int_event = NFA_EE_NCI_WAIT_RSP_EVT;
       cbk.opcode = NCI_MSG_RF_SET_ROUTING;
+      break;
+
+    case NFC_NFCEE_STATUS_REVT:
+      int_event = NFA_EE_NCI_NFCEE_STATUS_NTF_EVT;
       break;
   }
 
