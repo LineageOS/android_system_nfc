@@ -73,6 +73,8 @@ extern uint8_t HCI_LOOPBACK_DEBUG;
  */
 #define NFA_HCI_STATE_RESTORE_NETWK_ENABLE 0x08
 
+#define NFA_HCI_STATE_EE_RECOVERY 0x09
+
 typedef uint8_t tNFA_HCI_STATE;
 
 /* NFA HCI PIPE states */
