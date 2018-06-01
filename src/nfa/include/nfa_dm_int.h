@@ -545,6 +545,9 @@ typedef struct {
 
   uint8_t power_state; /* current screen/power  state */
   uint32_t eDtaMode;   /* To enable the DTA type modes. */
+  uint8_t pending_power_state; /* pending screen state change received in
+                                  LISTEN_ACTIVE state which needs to be applied
+                                  after current transaction is completed*/
 } tNFA_DM_CB;
 
 /* Internal function prototypes */
