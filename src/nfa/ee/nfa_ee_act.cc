@@ -29,6 +29,7 @@
 #include "nfa_api.h"
 #include "nfa_dm_int.h"
 #include "nfa_ee_int.h"
+#include "nfa_hci_int.h"
 
 using android::base::StringPrintf;
 
@@ -885,12 +886,12 @@ void nfa_ee_api_set_tech_cfg(tNFA_EE_MSG* p_data) {
     return;
   }
 
-  p_cb->tech_switch_on = p_data->set_tech.technologies_switch_on;
-  p_cb->tech_switch_off = p_data->set_tech.technologies_switch_off;
-  p_cb->tech_battery_off = p_data->set_tech.technologies_battery_off;
-  p_cb->tech_screen_lock = p_data->set_tech.technologies_screen_lock;
-  p_cb->tech_screen_off = p_data->set_tech.technologies_screen_off;
-  p_cb->tech_screen_off_lock = p_data->set_tech.technologies_screen_off_lock;
+  p_cb->tech_switch_on |= p_data->set_tech.technologies_switch_on;
+  p_cb->tech_switch_off |= p_data->set_tech.technologies_switch_off;
+  p_cb->tech_battery_off |= p_data->set_tech.technologies_battery_off;
+  p_cb->tech_screen_lock |= p_data->set_tech.technologies_screen_lock;
+  p_cb->tech_screen_off |= p_data->set_tech.technologies_screen_off;
+  p_cb->tech_screen_off_lock |= p_data->set_tech.technologies_screen_off_lock;
   nfa_ee_update_route_size(p_cb);
   if (nfa_ee_total_lmrt_size() > NFC_GetLmrtSize()) {
     LOG(ERROR) << StringPrintf("nfa_ee_api_set_tech_cfg Exceed LMRT size");
@@ -1506,6 +1507,9 @@ void nfa_ee_report_disc_done(bool notify_enable_done) {
       NFA_EeGetInfo(&evt_data.ee_discover.num_ee, evt_data.ee_discover.ee_info);
       nfa_ee_report_event(p_cback, NFA_EE_DISCOVER_EVT, &evt_data);
     }
+    if ((nfa_hci_cb.hci_state == NFA_HCI_STATE_EE_RECOVERY) &&
+        nfa_ee_cb.p_enable_cback)
+      (*nfa_ee_cb.p_enable_cback)(NFA_EE_RECOVERY_REDISCOVERED);
   }
 }
 
@@ -1814,6 +1818,29 @@ void nfa_ee_nci_disc_ntf(tNFA_EE_MSG* p_data) {
 
 /*******************************************************************************
 **
+** Function         nfa_ee_nci_nfcee_status_ntf
+**
+** Description      Process the callback for NFCEE status notification
+**
+** Returns          void
+**
+*******************************************************************************/
+void nfa_ee_nci_nfcee_status_ntf(tNFA_EE_MSG* p_data) {
+  if (p_data != NULL) {
+    tNFC_NFCEE_STATUS_REVT* p_ee_data = p_data->nfcee_status_ntf.p_data;
+    if ((NFA_GetNCIVersion() == NCI_VERSION_2_0) &&
+        (p_ee_data->nfcee_status == NFC_NFCEE_STATUS_UNRECOVERABLE_ERROR)) {
+      tNFA_EE_ECB* p_cb = nfa_ee_find_ecb(p_ee_data->nfcee_id);
+      if (p_cb && nfa_ee_cb.p_enable_cback) {
+        (*nfa_ee_cb.p_enable_cback)(NFA_EE_RECOVERY_INIT);
+        NFC_NfceeDiscover(true);
+      }
+    }
+  }
+}
+
+/*******************************************************************************
+**
 ** Function         nfa_ee_check_restore_complete
 **
 ** Description      Check if restore the NFA-EE related configuration to the
@@ -1945,8 +1972,11 @@ void nfa_ee_nci_mode_set_rsp(tNFA_EE_MSG* p_data) {
     return;
   }
 
-  /* update routing table and vs on mode change */
-  nfa_ee_start_timer();
+  /* Do not update routing table in EE_RECOVERY state */
+  if (nfa_hci_cb.hci_state != NFA_HCI_STATE_EE_RECOVERY) {
+    /* Start routing table update debounce timer */
+    nfa_ee_start_timer();
+  }
   LOG(ERROR) << StringPrintf("%s p_rsp->status:0x%02x", __func__,
                              p_rsp->status);
   if (p_rsp->status == NFA_STATUS_OK) {
