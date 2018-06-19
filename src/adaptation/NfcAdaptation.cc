@@ -23,7 +23,6 @@
 #include <hwbinder/ProcessState.h>
 
 #include "NfcAdaptation.h"
-#include "android_logmsg.h"
 #include "debug_nfcsnoop.h"
 #include "nfa_api.h"
 #include "nfa_rw_api.h"
