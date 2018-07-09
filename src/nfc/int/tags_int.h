@@ -90,6 +90,6 @@ extern const char* t2t_info_to_str(const tT2T_CMD_RSP_INFO* p_info);
 #define t2t_info_to_str(x) ""
 #endif
 extern int tags_pow(int x, int y);
-extern unsigned int tags_log2(register unsigned int x);
+extern unsigned int tags_log2(unsigned int x);
 
 #endif /* TAGS_INT_H */
