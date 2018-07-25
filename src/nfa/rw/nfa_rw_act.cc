@@ -64,7 +64,7 @@ static void nfa_rw_cback(tRW_EVENT event, tRW_DATA* p_rw_data);
 void nfa_rw_free_ndef_rx_buf(void) {
   if (nfa_rw_cb.p_ndef_buf) {
     nfa_mem_co_free(nfa_rw_cb.p_ndef_buf);
-    nfa_rw_cb.p_ndef_buf = NULL;
+    nfa_rw_cb.p_ndef_buf = nullptr;
   }
 }
 
@@ -88,7 +88,7 @@ static void nfa_rw_store_ndef_rx_buf(tRW_DATA* p_rw_data) {
   nfa_rw_cb.ndef_rd_offset += p_rw_data->data.p_data->len;
 
   GKI_freebuf(p_rw_data->data.p_data);
-  p_rw_data->data.p_data = NULL;
+  p_rw_data->data.p_data = nullptr;
 }
 
 /*******************************************************************************
@@ -104,7 +104,7 @@ static void nfa_rw_send_data_to_upper(tRW_DATA* p_rw_data) {
   tNFA_CONN_EVT_DATA conn_evt_data;
 
   if ((p_rw_data->status == NFC_STATUS_TIMEOUT) ||
-      (p_rw_data->data.p_data == NULL))
+      (p_rw_data->data.p_data == nullptr))
     return;
 
   DLOG_IF(INFO, nfc_debug_enabled)
@@ -121,7 +121,7 @@ static void nfa_rw_send_data_to_upper(tRW_DATA* p_rw_data) {
   nfa_dm_act_conn_cback_notify(NFA_DATA_EVT, &conn_evt_data);
 
   GKI_freebuf(p_rw_data->data.p_data);
-  p_rw_data->data.p_data = NULL;
+  p_rw_data->data.p_data = nullptr;
 }
 
 /*******************************************************************************
@@ -164,7 +164,7 @@ static void nfa_rw_check_start_presence_check_timer(
                           presence_check_start_delay);
     } else {
       /* Presence check now */
-      nfa_rw_presence_check(NULL);
+      nfa_rw_presence_check(nullptr);
     }
   }
 }
@@ -263,7 +263,7 @@ static void nfa_rw_handle_ndef_detect(tRW_DATA* p_rw_data) {
     if (nfa_rw_cb.cur_op == NFA_RW_OP_READ_NDEF) {
       /* if ndef detection was done as part of ndef-read operation, then notify
        * NDEF handlers of failure */
-      nfa_dm_ndef_handle_message(NFA_STATUS_FAILED, NULL, 0);
+      nfa_dm_ndef_handle_message(NFA_STATUS_FAILED, nullptr, 0);
 
       /* Notify app of read status */
       nfa_dm_act_conn_cback_notify(NFA_READ_CPLT_EVT, &conn_evt_data);
@@ -403,7 +403,7 @@ void nfa_rw_handle_sleep_wakeup_rsp(tNFC_STATUS status) {
         if (nfa_rw_cb.halt_event == RW_T2T_READ_CPLT_EVT) {
           if (nfa_rw_cb.rw_data.data.p_data)
             GKI_freebuf(nfa_rw_cb.rw_data.data.p_data);
-          nfa_rw_cb.rw_data.data.p_data = NULL;
+          nfa_rw_cb.rw_data.data.p_data = nullptr;
         }
         /* Do not try to detect NDEF again but just notify current operation
          * failed */
@@ -481,7 +481,7 @@ void nfa_rw_handle_presence_check_rsp(tNFC_STATUS status) {
         nfa_dm_act_conn_cback_notify(NFA_PRESENCE_CHECK_EVT,
                                      &nfa_conn_evt_data);
         GKI_freebuf(nfa_rw_cb.p_pending_msg);
-        nfa_rw_cb.p_pending_msg = NULL;
+        nfa_rw_cb.p_pending_msg = nullptr;
       }
       /* For all other APIs called during auto-presence check, perform the
          command now (if tag is still present) */
@@ -489,13 +489,13 @@ void nfa_rw_handle_presence_check_rsp(tNFC_STATUS status) {
         DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
             "Performing deferred operation after presence check...");
         p_pending_msg = (NFC_HDR*)nfa_rw_cb.p_pending_msg;
-        nfa_rw_cb.p_pending_msg = NULL;
+        nfa_rw_cb.p_pending_msg = nullptr;
         nfa_rw_handle_event(p_pending_msg);
         GKI_freebuf(p_pending_msg);
       } else {
         /* Tag no longer present. Free command for pending API command */
         GKI_freebuf(nfa_rw_cb.p_pending_msg);
-        nfa_rw_cb.p_pending_msg = NULL;
+        nfa_rw_cb.p_pending_msg = nullptr;
       }
     }
 
@@ -542,7 +542,7 @@ static void nfa_rw_handle_t1t_evt(tRW_EVENT event, tRW_DATA* p_rw_data) {
   conn_evt_data.status = p_rw_data->data.status;
   switch (event) {
     case RW_T1T_RID_EVT:
-      if (p_rw_data->data.p_data != NULL) {
+      if (p_rw_data->data.p_data != nullptr) {
         /* Assume the data is just the response byte sequence */
         p_rid_rsp = (uint8_t*)(p_rw_data->data.p_data + 1) +
                     p_rw_data->data.p_data->offset;
@@ -551,7 +551,7 @@ static void nfa_rw_handle_t1t_evt(tRW_EVENT event, tRW_DATA* p_rw_data) {
         /* Fetch UID0-3 from RID response message */
         STREAM_TO_ARRAY(tag_params.t1t.uid, p_rid_rsp, T1T_CMD_UID_LEN);
         GKI_freebuf(p_rw_data->data.p_data);
-        p_rw_data->data.p_data = NULL;
+        p_rw_data->data.p_data = nullptr;
       }
 
       /* Command complete - perform cleanup, notify the app */
@@ -620,7 +620,7 @@ static void nfa_rw_handle_t1t_evt(tRW_EVENT event, tRW_DATA* p_rw_data) {
         if (nfa_rw_cb.cur_op == NFA_RW_OP_READ_NDEF) {
           /* If current operation is READ_NDEF, then notify ndef handlers of
            * failure */
-          nfa_dm_ndef_handle_message(NFA_STATUS_FAILED, NULL, 0);
+          nfa_dm_ndef_handle_message(NFA_STATUS_FAILED, nullptr, 0);
         }
       }
 
@@ -781,7 +781,7 @@ static void nfa_rw_handle_t2t_evt(tRW_EVENT event, tRW_DATA* p_rw_data) {
         if (nfa_rw_cb.cur_op == NFA_RW_OP_READ_NDEF) {
           /* If current operation is READ_NDEF, then notify ndef handlers of
            * failure */
-          nfa_dm_ndef_handle_message(NFA_STATUS_FAILED, NULL, 0);
+          nfa_dm_ndef_handle_message(NFA_STATUS_FAILED, nullptr, 0);
         }
       }
 
@@ -893,7 +893,7 @@ static void nfa_rw_handle_t3t_evt(tRW_EVENT event, tRW_DATA* p_rw_data) {
         if (nfa_rw_cb.cur_op == NFA_RW_OP_READ_NDEF) {
           /* If current operation is READ_NDEF, then notify ndef handlers of
            * failure */
-          nfa_dm_ndef_handle_message(NFA_STATUS_FAILED, NULL, 0);
+          nfa_dm_ndef_handle_message(NFA_STATUS_FAILED, nullptr, 0);
         }
       }
 
@@ -937,7 +937,7 @@ static void nfa_rw_handle_t3t_evt(tRW_EVENT event, tRW_DATA* p_rw_data) {
         tag_params.t3t.p_system_codes = p_rw_data->t3t_sc.p_system_codes;
       } else {
         tag_params.t3t.num_system_codes = 0;
-        tag_params.t3t.p_system_codes = NULL;
+        tag_params.t3t.p_system_codes = nullptr;
       }
 
       nfa_dm_notify_activation_status(NFA_STATUS_OK, &tag_params);
@@ -1039,7 +1039,7 @@ static void nfa_rw_handle_t4t_evt(tRW_EVENT event, tRW_DATA* p_rw_data) {
       if (nfa_rw_cb.cur_op == NFA_RW_OP_READ_NDEF) {
         /* If current operation is READ_NDEF, then notify ndef handlers of
          * failure */
-        nfa_dm_ndef_handle_message(NFA_STATUS_FAILED, NULL, 0);
+        nfa_dm_ndef_handle_message(NFA_STATUS_FAILED, nullptr, 0);
 
         /* Free ndef buffer */
         nfa_rw_free_ndef_rx_buf();
@@ -1160,7 +1160,7 @@ static void nfa_rw_handle_i93_evt(tRW_EVENT event, tRW_DATA* p_rw_data) {
       if (nfa_rw_cb.cur_op == NFA_RW_OP_READ_NDEF) {
         /* If current operation is READ_NDEF, then notify ndef handlers of
          * failure */
-        nfa_dm_ndef_handle_message(NFA_STATUS_FAILED, NULL, 0);
+        nfa_dm_ndef_handle_message(NFA_STATUS_FAILED, nullptr, 0);
 
         /* Free ndef buffer */
         nfa_rw_free_ndef_rx_buf();
@@ -1293,7 +1293,7 @@ static void nfa_rw_handle_i93_evt(tRW_EVENT event, tRW_DATA* p_rw_data) {
       }
 
       GKI_freebuf(p_rw_data->i93_data.p_data);
-      p_rw_data->i93_data.p_data = NULL;
+      p_rw_data->i93_data.p_data = nullptr;
 
       nfa_rw_cb.cur_op = NFA_RW_OP_MAX; /* clear current operation */
       break;
@@ -1472,7 +1472,7 @@ static tNFC_STATUS nfa_rw_start_ndef_read(void) {
         << StringPrintf("NDEF message is zero-length");
 
     /* Send zero-lengh NDEF message to ndef callback */
-    nfa_dm_ndef_handle_message(NFA_STATUS_OK, NULL, 0);
+    nfa_dm_ndef_handle_message(NFA_STATUS_OK, nullptr, 0);
 
     /* Command complete - perform cleanup, notify app */
     nfa_rw_command_complete();
@@ -1485,7 +1485,7 @@ static tNFC_STATUS nfa_rw_start_ndef_read(void) {
    * needed) */
   nfa_rw_free_ndef_rx_buf();
   nfa_rw_cb.p_ndef_buf = (uint8_t*)nfa_mem_co_alloc(nfa_rw_cb.ndef_cur_size);
-  if (nfa_rw_cb.p_ndef_buf == NULL) {
+  if (nfa_rw_cb.p_ndef_buf == nullptr) {
     LOG(ERROR) << StringPrintf(
         "Unable to allocate a buffer for reading NDEF (size=%i)",
         nfa_rw_cb.ndef_cur_size);
@@ -1806,7 +1806,7 @@ bool nfa_rw_presence_check_tick(__attribute__((unused)) tNFA_RW_MSG* p_data) {
       << StringPrintf("Auto-presence check starting...");
 
   /* Perform presence check */
-  nfa_rw_presence_check(NULL);
+  nfa_rw_presence_check(nullptr);
 
   return true;
 }
@@ -2214,7 +2214,7 @@ static bool nfa_rw_t3t_get_system_codes() {
     /* Command complete - perform cleanup, notify app */
     nfa_rw_command_complete();
     tag_params.t3t.num_system_codes = 0;
-    tag_params.t3t.p_system_codes = NULL;
+    tag_params.t3t.p_system_codes = nullptr;
 
     nfa_dm_notify_activation_status(NFA_STATUS_OK, &tag_params);
   }
@@ -2245,7 +2245,7 @@ static bool nfa_rw_i93_command(tNFA_RW_MSG* p_data) {
                                  p_data->op_req.params.i93_cmd.uid);
       } else {
         status = RW_I93Inventory(p_data->op_req.params.i93_cmd.afi_present,
-                                 p_data->op_req.params.i93_cmd.afi, NULL);
+                                 p_data->op_req.params.i93_cmd.afi, nullptr);
       }
       break;
 
@@ -2323,7 +2323,7 @@ static bool nfa_rw_i93_command(tNFA_RW_MSG* p_data) {
       if (p_data->op_req.params.i93_cmd.uid_present) {
         status = RW_I93GetSysInfo(p_data->op_req.params.i93_cmd.uid);
       } else {
-        status = RW_I93GetSysInfo(NULL);
+        status = RW_I93GetSysInfo(nullptr);
       }
       break;
 
@@ -2386,7 +2386,7 @@ static void nfa_rw_raw_mode_data_cback(__attribute__((unused)) uint8_t conn_id,
           "received NFC_DATA_CEVT with NULL data pointer");
     }
   } else if (event == NFC_DEACTIVATE_CEVT) {
-    NFC_SetStaticRfCback(NULL);
+    NFC_SetStaticRfCback(nullptr);
   }
 }
 
@@ -2411,9 +2411,9 @@ bool nfa_rw_activate_ntf(tNFA_RW_MSG* p_data) {
       (nfa_rw_cb.protocol == NFC_PROTOCOL_T2T) &&
       (nfa_rw_cb.pa_sel_res == NFC_SEL_RES_NFC_FORUM_T2T)) {
     /* Type 2 tag is wake up from HALT State */
-    if (nfa_dm_cb.p_activate_ntf != NULL) {
+    if (nfa_dm_cb.p_activate_ntf != nullptr) {
       GKI_freebuf(nfa_dm_cb.p_activate_ntf);
-      nfa_dm_cb.p_activate_ntf = NULL;
+      nfa_dm_cb.p_activate_ntf = nullptr;
     }
     DLOG_IF(INFO, nfc_debug_enabled)
         << StringPrintf("- Type 2 tag wake up from HALT State");
@@ -2462,7 +2462,7 @@ bool nfa_rw_activate_ntf(tNFA_RW_MSG* p_data) {
     NFC_SetStaticRfCback(nfa_rw_raw_mode_data_cback);
 
     /* Notify app of NFA_ACTIVATED_EVT and start presence check timer */
-    nfa_dm_notify_activation_status(NFA_STATUS_OK, NULL);
+    nfa_dm_notify_activation_status(NFA_STATUS_OK, nullptr);
     nfa_rw_check_start_presence_check_timer(NFA_RW_PRESENCE_CHECK_INTERVAL);
     return true;
   }
@@ -2479,7 +2479,7 @@ bool nfa_rw_activate_ntf(tNFA_RW_MSG* p_data) {
     NFC_SetStaticRfCback(nfa_rw_raw_mode_data_cback);
 
     /* Notify app of NFA_ACTIVATED_EVT and start presence check timer */
-    nfa_dm_notify_activation_status(NFA_STATUS_OK, NULL);
+    nfa_dm_notify_activation_status(NFA_STATUS_OK, nullptr);
     nfa_rw_check_start_presence_check_timer(NFA_RW_PRESENCE_CHECK_INTERVAL);
     return true;
   }
@@ -2637,14 +2637,14 @@ bool nfa_rw_deactivate_ntf(__attribute__((unused)) tNFA_RW_MSG* p_data) {
     }
 
     GKI_freebuf(nfa_rw_cb.p_pending_msg);
-    nfa_rw_cb.p_pending_msg = NULL;
+    nfa_rw_cb.p_pending_msg = nullptr;
   }
 
   /* If we are in the process of waking up tag from HALT state */
   if (nfa_rw_cb.halt_event == RW_T2T_READ_CPLT_EVT) {
     if (nfa_rw_cb.rw_data.data.p_data)
       GKI_freebuf(nfa_rw_cb.rw_data.data.p_data);
-    nfa_rw_cb.rw_data.data.p_data = NULL;
+    nfa_rw_cb.rw_data.data.p_data = nullptr;
   }
 
   /* Stop presence check timer (if started) */
