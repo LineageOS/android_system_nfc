@@ -99,7 +99,7 @@ void* gki_task_entry(void* params) {
                              p_pthread_info->task_id);
   gki_cb.os.thread_id[p_pthread_info->task_id] = 0;
 
-  return NULL;
+  return nullptr;
 }
 /* end android */
 
@@ -122,7 +122,7 @@ void GKI_init(void) {
 
   gki_buffer_init();
   gki_timers_init();
-  gki_cb.com.OSTicks = (uint32_t)times(0);
+  gki_cb.com.OSTicks = (uint32_t)times(nullptr);
 
   pthread_mutexattr_init(&attr);
 
@@ -139,8 +139,8 @@ void GKI_init(void) {
    * state.
    * this works too even if GKI_NO_TICK_STOP is defined in btld.txt */
   p_os->no_timer_suspend = GKI_TIMER_TICK_RUN_COND;
-  pthread_mutex_init(&p_os->gki_timer_mutex, NULL);
-  pthread_cond_init(&p_os->gki_timer_cond, NULL);
+  pthread_mutex_init(&p_os->gki_timer_mutex, nullptr);
+  pthread_cond_init(&p_os->gki_timer_cond, nullptr);
 }
 
 /*******************************************************************************
@@ -207,9 +207,9 @@ uint8_t GKI_create_task(TASKPTR task_entry, uint8_t task_id, int8_t* taskname,
   gki_cb.com.OSWaitEvt[task_id] = 0;
 
   /* Initialize mutex and condition variable objects for events and timeouts */
-  pthread_mutex_init(&gki_cb.os.thread_evt_mutex[task_id], NULL);
+  pthread_mutex_init(&gki_cb.os.thread_evt_mutex[task_id], nullptr);
   pthread_cond_init(&gki_cb.os.thread_evt_cond[task_id], &attr);
-  pthread_mutex_init(&gki_cb.os.thread_timeout_mutex[task_id], NULL);
+  pthread_mutex_init(&gki_cb.os.thread_timeout_mutex[task_id], nullptr);
   pthread_cond_init(&gki_cb.os.thread_timeout_cond[task_id], &attr);
 
   pthread_attr_init(&attr1);
@@ -580,7 +580,7 @@ uint16_t GKI_wait(uint16_t flag, uint32_t timeout) {
   }
 
   gki_pthread_info_t* p_pthread_info = &gki_pthread_info[rtask];
-  if (p_pthread_info->pCond != NULL && p_pthread_info->pMutex != NULL) {
+  if (p_pthread_info->pCond != nullptr && p_pthread_info->pMutex != nullptr) {
     int ret;
     DLOG_IF(INFO, nfc_debug_enabled)
         << StringPrintf("GKI_wait task=%i, pCond/pMutex = %p/%p", rtask,
@@ -588,8 +588,8 @@ uint16_t GKI_wait(uint16_t flag, uint32_t timeout) {
     ret = pthread_mutex_lock(p_pthread_info->pMutex);
     ret = pthread_cond_signal(p_pthread_info->pCond);
     ret = pthread_mutex_unlock(p_pthread_info->pMutex);
-    p_pthread_info->pMutex = NULL;
-    p_pthread_info->pCond = NULL;
+    p_pthread_info->pMutex = nullptr;
+    p_pthread_info->pCond = nullptr;
   }
   gki_cb.com.OSWaitForEvt[rtask] = flag;
 
@@ -947,7 +947,7 @@ int8_t* GKI_get_time_stamp(int8_t* tbuf) {
   uint32_t h_time;
   int8_t* p_out = tbuf;
 
-  gki_cb.com.OSTicks = times(0);
+  gki_cb.com.OSTicks = times(nullptr);
   ms_time = GKI_TICKS_TO_MS(gki_cb.com.OSTicks);
   s_time = ms_time / 100; /* 100 Ticks per second */
   m_time = s_time / 60;
@@ -1028,7 +1028,7 @@ void* GKI_os_malloc(uint32_t size) { return (malloc(size)); }
 **
 *******************************************************************************/
 void GKI_os_free(void* p_mem) {
-  if (p_mem != NULL) free(p_mem);
+  if (p_mem != nullptr) free(p_mem);
   return;
 }
 

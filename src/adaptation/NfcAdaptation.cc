@@ -50,10 +50,10 @@ extern void GKI_shutdown();
 extern void verify_stack_non_volatile_store();
 extern void delete_stack_non_volatile_store(bool forceDelete);
 
-NfcAdaptation* NfcAdaptation::mpInstance = NULL;
+NfcAdaptation* NfcAdaptation::mpInstance = nullptr;
 ThreadMutex NfcAdaptation::sLock;
-tHAL_NFC_CBACK* NfcAdaptation::mHalCallback = NULL;
-tHAL_NFC_DATA_CBACK* NfcAdaptation::mHalDataCallback = NULL;
+tHAL_NFC_CBACK* NfcAdaptation::mHalCallback = nullptr;
+tHAL_NFC_DATA_CBACK* NfcAdaptation::mHalDataCallback = nullptr;
 ThreadCondVar NfcAdaptation::mHalOpenCompletedEvent;
 ThreadCondVar NfcAdaptation::mHalCloseCompletedEvent;
 sp<INfc> NfcAdaptation::mHal;
@@ -148,7 +148,7 @@ NfcAdaptation::NfcAdaptation() {
 ** Returns:     none
 **
 *******************************************************************************/
-NfcAdaptation::~NfcAdaptation() { mpInstance = NULL; }
+NfcAdaptation::~NfcAdaptation() { mpInstance = nullptr; }
 
 /*******************************************************************************
 **
@@ -309,12 +309,12 @@ void NfcAdaptation::Initialize() {
 
   GKI_init();
   GKI_enable();
-  GKI_create_task((TASKPTR)NFCA_TASK, BTU_TASK, (int8_t*)"NFCA_TASK", 0, 0,
-                  (pthread_cond_t*)NULL, NULL);
+  GKI_create_task((TASKPTR)NFCA_TASK, BTU_TASK, (int8_t*)"NFCA_TASK", nullptr, 0,
+                  (pthread_cond_t*)nullptr, nullptr);
   {
     AutoThreadMutex guard(mCondVar);
-    GKI_create_task((TASKPTR)Thread, MMI_TASK, (int8_t*)"NFCA_THREAD", 0, 0,
-                    (pthread_cond_t*)NULL, NULL);
+    GKI_create_task((TASKPTR)Thread, MMI_TASK, (int8_t*)"NFCA_THREAD", nullptr, 0,
+                    (pthread_cond_t*)nullptr, nullptr);
     mCondVar.wait();
   }
 
@@ -390,7 +390,7 @@ void NfcAdaptation::signal() { mCondVar.signal(); }
 uint32_t NfcAdaptation::NFCA_TASK(__attribute__((unused)) uint32_t arg) {
   const char* func = "NfcAdaptation::NFCA_TASK";
   DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf("%s: enter", func);
-  GKI_run(0);
+  GKI_run(nullptr);
   DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf("%s: exit", func);
   return 0;
 }
@@ -411,7 +411,7 @@ uint32_t NfcAdaptation::Thread(__attribute__((unused)) uint32_t arg) {
   {
     ThreadCondVar CondVar;
     AutoThreadMutex guard(CondVar);
-    GKI_create_task((TASKPTR)nfc_task, NFC_TASK, (int8_t*)"NFC_TASK", 0, 0,
+    GKI_create_task((TASKPTR)nfc_task, NFC_TASK, (int8_t*)"NFC_TASK", nullptr, 0,
                     (pthread_cond_t*)CondVar, (pthread_mutex_t*)CondVar);
     CondVar.wait();
   }
