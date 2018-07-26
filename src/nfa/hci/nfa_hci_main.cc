@@ -172,7 +172,7 @@ void nfa_hci_ee_info_cback(tNFA_EE_DISC_STS status) {
       break;
     case NFA_EE_RECOVERY_INIT:
       /*NFCEE recovery in progress*/
-      nfa_ee_cb.isDiscoveryStopped = nfa_dm_act_stop_rf_discovery(NULL);
+      nfa_ee_cb.isDiscoveryStopped = nfa_dm_act_stop_rf_discovery(nullptr);
       nfa_hci_cb.hci_state = NFA_HCI_STATE_EE_RECOVERY;
       break;
   }
@@ -562,7 +562,7 @@ void nfa_hci_enable_one_nfcee(void) {
     } else if (nfa_hci_cb.hci_state == NFA_HCI_STATE_EE_RECOVERY) {
       nfa_hci_cb.hci_state = NFA_HCI_STATE_IDLE;
       if (nfa_ee_cb.isDiscoveryStopped == true) {
-        nfa_dm_act_start_rf_discovery(NULL);
+        nfa_dm_act_start_rf_discovery(nullptr);
         nfa_ee_cb.isDiscoveryStopped = false;
       }
     }
@@ -726,7 +726,7 @@ static void nfa_hci_conn_cback(uint8_t conn_id, tNFC_CONN_EVT event,
     nfa_sys_deregister(NFA_ID_HCI);
   }
 
-  if ((event != NFC_DATA_CEVT) || (p_pkt == NULL)) return;
+  if ((event != NFC_DATA_CEVT) || (p_pkt == nullptr)) return;
 
   if ((nfa_hci_cb.hci_state == NFA_HCI_STATE_WAIT_NETWK_ENABLE) ||
       (nfa_hci_cb.hci_state == NFA_HCI_STATE_RESTORE_NETWK_ENABLE)) {
@@ -930,7 +930,7 @@ void nfa_hci_rsp_timeout() {
         nfa_hciu_send_clear_all_pipe_cmd();
       } else {
         nfa_hciu_remove_all_pipes_from_host(0);
-        nfa_hci_api_dealloc_gate(NULL);
+        nfa_hci_api_dealloc_gate(nullptr);
       }
       break;
 
@@ -940,7 +940,7 @@ void nfa_hci_rsp_timeout() {
         nfa_hciu_send_clear_all_pipe_cmd();
       } else {
         nfa_hciu_remove_all_pipes_from_host(0);
-        nfa_hci_api_deregister(NULL);
+        nfa_hci_api_deregister(nullptr);
       }
       break;
 
@@ -953,9 +953,9 @@ void nfa_hci_rsp_timeout() {
         evt_data.rcvd_evt.pipe = nfa_hci_cb.pipe_in_use;
         evt_data.rcvd_evt.evt_code = 0;
         evt_data.rcvd_evt.evt_len = 0;
-        evt_data.rcvd_evt.p_evt_buf = NULL;
+        evt_data.rcvd_evt.p_evt_buf = nullptr;
         nfa_hci_cb.rsp_buf_size = 0;
-        nfa_hci_cb.p_rsp_buf = NULL;
+        nfa_hci_cb.p_rsp_buf = nullptr;
 
         break;
       }
@@ -1070,7 +1070,7 @@ void nfa_hci_rsp_timeout() {
 static void nfa_hci_set_receive_buf(uint8_t pipe) {
   if ((pipe >= NFA_HCI_FIRST_DYNAMIC_PIPE) &&
       (nfa_hci_cb.type == NFA_HCI_EVENT_TYPE)) {
-    if ((nfa_hci_cb.rsp_buf_size) && (nfa_hci_cb.p_rsp_buf != NULL)) {
+    if ((nfa_hci_cb.rsp_buf_size) && (nfa_hci_cb.p_rsp_buf != nullptr)) {
       nfa_hci_cb.p_msg_data = nfa_hci_cb.p_rsp_buf;
       nfa_hci_cb.max_msg_len = nfa_hci_cb.rsp_buf_size;
       return;

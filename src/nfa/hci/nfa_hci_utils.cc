@@ -58,7 +58,7 @@ tNFA_HCI_DYN_PIPE* nfa_hciu_find_pipe_by_pid(uint8_t pipe_id) {
   }
 
   /* If here, not found */
-  return (NULL);
+  return (nullptr);
 }
 
 /*******************************************************************************
@@ -78,7 +78,7 @@ tNFA_HCI_DYN_GATE* nfa_hciu_find_gate_by_gid(uint8_t gate_id) {
     if (pg->gate_id == gate_id) return (pg);
   }
 
-  return (NULL);
+  return (nullptr);
 }
 
 /*******************************************************************************
@@ -98,7 +98,7 @@ tNFA_HCI_DYN_GATE* nfa_hciu_find_gate_by_owner(tNFA_HANDLE app_handle) {
     if (pg->gate_owner == app_handle) return (pg);
   }
 
-  return (NULL);
+  return (nullptr);
 }
 
 /*******************************************************************************
@@ -120,7 +120,7 @@ tNFA_HCI_DYN_GATE* nfa_hciu_find_gate_with_nopipes_by_owner(
     if ((pg->gate_owner == app_handle) && (pg->pipe_inx_mask == 0)) return (pg);
   }
 
-  return (NULL);
+  return (nullptr);
 }
 
 /*******************************************************************************
@@ -186,7 +186,7 @@ tNFA_HANDLE nfa_hciu_get_gate_owner(uint8_t gate_id) {
   tNFA_HCI_DYN_GATE* pg;
 
   pg = nfa_hciu_find_gate_by_gid(gate_id);
-  if (pg == NULL) return (NFA_HANDLE_INVALID);
+  if (pg == nullptr) return (NFA_HANDLE_INVALID);
 
   return (pg->gate_owner);
 }
@@ -205,10 +205,10 @@ tNFA_HANDLE nfa_hciu_get_pipe_owner(uint8_t pipe_id) {
   tNFA_HCI_DYN_GATE* pg;
 
   pp = nfa_hciu_find_pipe_by_pid(pipe_id);
-  if (pp == NULL) return (NFA_HANDLE_INVALID);
+  if (pp == nullptr) return (NFA_HANDLE_INVALID);
 
   pg = nfa_hciu_find_gate_by_gid(pp->local_gate);
-  if (pg == NULL) return (NFA_HANDLE_INVALID);
+  if (pg == nullptr) return (NFA_HANDLE_INVALID);
 
   return (pg->gate_owner);
 }
@@ -233,13 +233,13 @@ tNFA_HCI_DYN_GATE* nfa_hciu_alloc_gate(uint8_t gate_id,
       (gate_id < NFA_HCI_FIRST_PROP_GATE) &&
       (((app_handle & NFA_HANDLE_GROUP_MASK) != NFA_HANDLE_GROUP_HCI) ||
        (app_inx >= NFA_HCI_MAX_APP_CB) ||
-       (nfa_hci_cb.p_app_cback[app_inx] == NULL))) {
-    return (NULL);
+       (nfa_hci_cb.p_app_cback[app_inx] == nullptr))) {
+    return (nullptr);
   }
 
   if (gate_id != 0) {
     pg = nfa_hciu_find_gate_by_gid(gate_id);
-    if (pg != NULL) return (pg);
+    if (pg != nullptr) return (pg);
   } else {
     /* If gate_id is 0, we need to assign a free one */
     /* Loop through all possible gate IDs checking if they are already used */
@@ -249,13 +249,13 @@ tNFA_HCI_DYN_GATE* nfa_hciu_alloc_gate(uint8_t gate_id,
       if (gate_id == NFA_HCI_CONNECTIVITY_GATE) gate_id++;
 
       /* Check if the gate is already allocated */
-      if (nfa_hciu_find_gate_by_gid(gate_id) == NULL) break;
+      if (nfa_hciu_find_gate_by_gid(gate_id) == nullptr) break;
     }
     if (gate_id > NFA_HCI_LAST_PROP_GATE) {
       LOG(ERROR) << StringPrintf(
           "nfa_hci_alloc_gate - no free Gate ID: %u  App Handle: 0x%04x",
           gate_id, app_handle);
-      return (NULL);
+      return (nullptr);
     }
   }
 
@@ -280,7 +280,7 @@ tNFA_HCI_DYN_GATE* nfa_hciu_alloc_gate(uint8_t gate_id,
   LOG(ERROR) << StringPrintf(
       "nfa_hci_alloc_gate - no CB  Gate ID: %u  App Handle: 0x%04x", gate_id,
       app_handle);
-  return (NULL);
+  return (nullptr);
 }
 
 /*******************************************************************************
@@ -314,7 +314,7 @@ tNFA_STATUS nfa_hciu_send_msg(uint8_t pipe_id, uint8_t type,
 
   while ((first_pkt == true) || (msg_len != 0)) {
     p_buf = (NFC_HDR*)GKI_getpoolbuf(NFC_RW_POOL_ID);
-    if (p_buf != NULL) {
+    if (p_buf != nullptr) {
       p_buf->offset = NCI_MSG_OFFSET_SIZE + NCI_DATA_HDR_SIZE;
 
       /* First packet has a 2-byte header, subsequent fragments have a 1-byte
@@ -417,7 +417,7 @@ tNFA_HCI_DYN_PIPE* nfa_hciu_alloc_pipe(uint8_t pipe_id) {
 
   /* If we already have a pipe of the same ID, release it first it */
   pp = nfa_hciu_find_pipe_by_pid(pipe_id);
-  if (pp != NULL) {
+  if (pp != nullptr) {
     if (pipe_id > NFA_HCI_LAST_DYNAMIC_PIPE) return pp;
     nfa_hciu_release_pipe(pipe_id);
   }
@@ -437,7 +437,7 @@ tNFA_HCI_DYN_PIPE* nfa_hciu_alloc_pipe(uint8_t pipe_id) {
 
   DLOG_IF(INFO, nfc_debug_enabled)
       << StringPrintf("nfa_hciu_alloc_pipe:%d, NO free entries !!", pipe_id);
-  return (NULL);
+  return (nullptr);
 }
 
 /*******************************************************************************
@@ -452,7 +452,7 @@ tNFA_HCI_DYN_PIPE* nfa_hciu_alloc_pipe(uint8_t pipe_id) {
 void nfa_hciu_release_gate(uint8_t gate_id) {
   tNFA_HCI_DYN_GATE* p_gate = nfa_hciu_find_gate_by_gid(gate_id);
 
-  if (p_gate != NULL) {
+  if (p_gate != nullptr) {
     DLOG_IF(INFO, nfc_debug_enabled)
         << StringPrintf("ID: %d  owner: 0x%04x  pipe_inx_mask: 0x%04x", gate_id,
                         p_gate->gate_owner, p_gate->pipe_inx_mask);
@@ -486,10 +486,10 @@ tNFA_HCI_RESPONSE nfa_hciu_add_pipe_to_gate(uint8_t pipe_id, uint8_t local_gate,
 
   p_gate = nfa_hciu_find_gate_by_gid(local_gate);
 
-  if (p_gate != NULL) {
+  if (p_gate != nullptr) {
     /* Allocate a pipe control block */
     p_pipe = nfa_hciu_alloc_pipe(pipe_id);
-    if (p_pipe != NULL) {
+    if (p_pipe != nullptr) {
       p_pipe->pipe_id = pipe_id;
       p_pipe->pipe_state = NFA_HCI_PIPE_CLOSED;
       p_pipe->dest_host = dest_host;
@@ -538,7 +538,7 @@ tNFA_HCI_RESPONSE nfa_hciu_add_pipe_to_static_gate(uint8_t local_gate,
 
   /* Allocate a pipe control block */
   p_pipe = nfa_hciu_alloc_pipe(pipe_id);
-  if (p_pipe != NULL) {
+  if (p_pipe != nullptr) {
     p_pipe->pipe_id = pipe_id;
     p_pipe->pipe_state = NFA_HCI_PIPE_CLOSED;
     p_pipe->dest_host = dest_host;
@@ -580,14 +580,14 @@ tNFA_HCI_DYN_PIPE* nfa_hciu_find_active_pipe_by_owner(tNFA_HANDLE app_handle) {
     if ((pp->pipe_id != 0) && (pp->pipe_id >= NFA_HCI_FIRST_DYNAMIC_PIPE) &&
         (pp->pipe_id <= NFA_HCI_LAST_DYNAMIC_PIPE) &&
         (nfa_hciu_is_active_host(pp->dest_host))) {
-      if (((pg = nfa_hciu_find_gate_by_gid(pp->local_gate)) != NULL) &&
+      if (((pg = nfa_hciu_find_gate_by_gid(pp->local_gate)) != nullptr) &&
           (pg->gate_owner == app_handle))
         return (pp);
     }
   }
 
   /* If here, not found */
-  return (NULL);
+  return (nullptr);
 }
 
 /*******************************************************************************
@@ -647,14 +647,14 @@ tNFA_HCI_DYN_PIPE* nfa_hciu_find_pipe_by_owner(tNFA_HANDLE app_handle) {
   for (xx = 0, pp = nfa_hci_cb.cfg.dyn_pipes; xx < NFA_HCI_MAX_PIPE_CB;
        xx++, pp++) {
     if (pp->pipe_id != 0) {
-      if (((pg = nfa_hciu_find_gate_by_gid(pp->local_gate)) != NULL) &&
+      if (((pg = nfa_hciu_find_gate_by_gid(pp->local_gate)) != nullptr) &&
           (pg->gate_owner == app_handle))
         return (pp);
     }
   }
 
   /* If here, not found */
-  return (NULL);
+  return (nullptr);
 }
 
 /*******************************************************************************
@@ -677,14 +677,14 @@ tNFA_HCI_DYN_PIPE* nfa_hciu_find_pipe_on_gate(uint8_t gate_id) {
   for (xx = 0, pp = nfa_hci_cb.cfg.dyn_pipes; xx < NFA_HCI_MAX_PIPE_CB;
        xx++, pp++) {
     if (pp->pipe_id != 0) {
-      if (((pg = nfa_hciu_find_gate_by_gid(pp->local_gate)) != NULL) &&
+      if (((pg = nfa_hciu_find_gate_by_gid(pp->local_gate)) != nullptr) &&
           (pg->gate_id == gate_id))
         return (pp);
     }
   }
 
   /* If here, not found */
-  return (NULL);
+  return (nullptr);
 }
 
 /*******************************************************************************
@@ -769,14 +769,14 @@ tNFA_HCI_DYN_PIPE* nfa_hciu_find_active_pipe_on_gate(uint8_t gate_id) {
     if ((pp->pipe_id != 0) && (pp->pipe_id >= NFA_HCI_FIRST_DYNAMIC_PIPE) &&
         (pp->pipe_id <= NFA_HCI_LAST_DYNAMIC_PIPE) &&
         (nfa_hciu_is_active_host(pp->dest_host))) {
-      if (((pg = nfa_hciu_find_gate_by_gid(pp->local_gate)) != NULL) &&
+      if (((pg = nfa_hciu_find_gate_by_gid(pp->local_gate)) != nullptr) &&
           (pg->gate_id == gate_id))
         return (pp);
     }
   }
 
   /* If here, not found */
-  return (NULL);
+  return (nullptr);
 }
 
 /*******************************************************************************
@@ -798,7 +798,7 @@ tNFA_HCI_RESPONSE nfa_hciu_release_pipe(uint8_t pipe_id) {
       << StringPrintf("nfa_hciu_release_pipe: %u", pipe_id);
 
   p_pipe = nfa_hciu_find_pipe_by_pid(pipe_id);
-  if (p_pipe == NULL) return (NFA_HCI_ANY_E_NOK);
+  if (p_pipe == nullptr) return (NFA_HCI_ANY_E_NOK);
 
   if (pipe_id > NFA_HCI_LAST_DYNAMIC_PIPE) {
     DLOG_IF(INFO, nfc_debug_enabled)
@@ -813,7 +813,7 @@ tNFA_HCI_RESPONSE nfa_hciu_release_pipe(uint8_t pipe_id) {
     nfa_hci_cb.cfg.id_mgmt_gate.pipe_inx_mask &= ~(uint32_t)(1 << pipe_index);
   } else {
     p_gate = nfa_hciu_find_gate_by_gid(p_pipe->local_gate);
-    if (p_gate == NULL) {
+    if (p_gate == nullptr) {
       /* Mark the pipe control block as free */
       p_pipe->pipe_id = 0;
       return (NFA_HCI_ANY_E_NOK);
@@ -856,7 +856,7 @@ void nfa_hciu_remove_all_pipes_from_host(uint8_t host) {
       continue;
 
     pg = nfa_hciu_find_gate_by_gid(pp->local_gate);
-    if (pg != NULL) {
+    if (pg != nullptr) {
       evt_data.deleted.status = NFA_STATUS_OK;
       evt_data.deleted.pipe = pp->pipe_id;
 
@@ -964,7 +964,7 @@ tNFA_STATUS nfa_hciu_send_open_pipe_cmd(uint8_t pipe) {
   nfa_hci_cb.pipe_in_use = pipe;
 
   status = nfa_hciu_send_msg(pipe, NFA_HCI_COMMAND_TYPE, NFA_HCI_ANY_OPEN_PIPE,
-                             0, NULL);
+                             0, nullptr);
 
   return status;
 }
@@ -984,7 +984,7 @@ tNFA_STATUS nfa_hciu_send_close_pipe_cmd(uint8_t pipe) {
   nfa_hci_cb.pipe_in_use = pipe;
 
   status = nfa_hciu_send_msg(pipe, NFA_HCI_COMMAND_TYPE, NFA_HCI_ANY_CLOSE_PIPE,
-                             0, NULL);
+                             0, nullptr);
 
   return status;
 }
@@ -1050,7 +1050,7 @@ void nfa_hciu_send_to_app(tNFA_HCI_EVT event, tNFA_HCI_EVT_DATA* p_evt,
   /* First, check if the application handle is valid */
   if (((app_handle & NFA_HANDLE_GROUP_MASK) == NFA_HANDLE_GROUP_HCI) &&
       (app_inx < NFA_HCI_MAX_APP_CB)) {
-    if (nfa_hci_cb.p_app_cback[app_inx] != NULL) {
+    if (nfa_hci_cb.p_app_cback[app_inx] != nullptr) {
       nfa_hci_cb.p_app_cback[app_inx](event, p_evt);
       return;
     }
@@ -1076,7 +1076,7 @@ void nfa_hciu_send_to_all_apps(tNFA_HCI_EVT event, tNFA_HCI_EVT_DATA* p_evt) {
   uint8_t app_inx;
 
   for (app_inx = 0; app_inx < NFA_HCI_MAX_APP_CB; app_inx++) {
-    if (nfa_hci_cb.p_app_cback[app_inx] != NULL)
+    if (nfa_hci_cb.p_app_cback[app_inx] != nullptr)
       nfa_hci_cb.p_app_cback[app_inx](event, p_evt);
   }
 }
@@ -1096,7 +1096,7 @@ void nfa_hciu_send_to_apps_handling_connectivity_evts(
   uint8_t app_inx;
 
   for (app_inx = 0; app_inx < NFA_HCI_MAX_APP_CB; app_inx++) {
-    if ((nfa_hci_cb.p_app_cback[app_inx] != NULL) &&
+    if ((nfa_hci_cb.p_app_cback[app_inx] != nullptr) &&
         (nfa_hci_cb.cfg.b_send_conn_evts[app_inx]))
 
       nfa_hci_cb.p_app_cback[app_inx](event, p_evt);
@@ -1339,7 +1339,7 @@ char* nfa_hciu_get_type_inst_names(uint8_t pipe, uint8_t type, uint8_t inst,
 std::string nfa_hciu_evt_2_str(uint8_t pipe_id, uint8_t evt) {
   tNFA_HCI_DYN_PIPE* p_pipe = nfa_hciu_find_pipe_by_pid(pipe_id);
   if (pipe_id != NFA_HCI_ADMIN_PIPE &&
-      pipe_id != NFA_HCI_LINK_MANAGEMENT_PIPE && p_pipe != NULL &&
+      pipe_id != NFA_HCI_LINK_MANAGEMENT_PIPE && p_pipe != nullptr &&
       p_pipe->local_gate == NFA_HCI_CONNECTIVITY_GATE) {
     switch (evt) {
       case NFA_HCI_EVT_CONNECTIVITY:
