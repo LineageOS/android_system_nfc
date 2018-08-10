@@ -1279,11 +1279,17 @@ void nfa_hci_handle_admin_gate_cmd(uint8_t* p_data) {
         nfa_hciu_send_open_pipe_cmd(NFA_HCI_ADMIN_PIPE);
         return;
       } else {
-        if ((source_host >= NFA_HCI_HOST_ID_UICC0) &&
-            (source_host <
-             (NFA_HCI_HOST_ID_UICC0 + NFA_HCI_MAX_HOST_IN_NETWORK))) {
-          nfa_hci_cb.reset_host[source_host - NFA_HCI_HOST_ID_UICC0] =
-              source_host;
+        uint8_t host_index = 0;
+
+        if ((source_host == NFA_HCI_HOST_ID_UICC0) ||
+            (source_host >= NFA_HCI_HOST_ID_FIRST_DYNAMICALLY_ALLOCATED)) {
+          while (host_index < NFA_HCI_MAX_HOST_IN_NETWORK) {
+            if (nfa_hci_cb.reset_host[host_index] == 0x0) {
+              nfa_hci_cb.reset_host[host_index] = source_host;
+              break;
+            }
+            host_index++;
+          }
         }
       }
       break;
@@ -1364,27 +1370,33 @@ void nfa_hci_handle_admin_gate_rsp(uint8_t* p_data, uint8_t data_len) {
 
       case NFA_HCI_ANY_GET_PARAMETER:
         if (nfa_hci_cb.param_in_use == NFA_HCI_HOST_LIST_INDEX) {
-          host_count = 0;
-          while (host_count < NFA_HCI_MAX_HOST_IN_NETWORK) {
-            nfa_hci_cb.inactive_host[host_count] =
-                NFA_HCI_HOST_ID_UICC0 + host_count;
-            host_count++;
-          }
+          uint8_t host_index = 0;
+
+          memset(nfa_hci_cb.active_host, 0x0, NFA_HCI_MAX_HOST_IN_NETWORK);
 
           host_count = 0;
+
           /* Collect active host in the Host Network */
-          while (host_count < data_len) {
+          while ((host_count < data_len) &&
+                 (host_count < NFA_HCI_MAX_HOST_IN_NETWORK)) {
             host_id = (uint8_t)*p_data++;
 
-            if ((host_id >= NFA_HCI_HOST_ID_UICC0) &&
-                (host_id <
-                 NFA_HCI_HOST_ID_UICC0 + NFA_HCI_MAX_HOST_IN_NETWORK)) {
-              nfa_hci_cb.inactive_host[host_id - NFA_HCI_HOST_ID_UICC0] = 0x00;
-              nfa_hci_cb.reset_host[host_id - NFA_HCI_HOST_ID_UICC0] = 0x00;
+            if ((host_id == NFA_HCI_HOST_ID_UICC0) ||
+                (host_id >= NFA_HCI_HOST_ID_FIRST_DYNAMICALLY_ALLOCATED)) {
+              nfa_hci_cb.active_host[host_index] = host_id;
+              uint8_t index = 0;
+              while (index < NFA_HCI_MAX_HOST_IN_NETWORK) {
+                if (nfa_hci_cb.reset_host[index] == host_id) {
+                  nfa_hci_cb.reset_host[index] = 0x0;
+                  break;
+                }
+                index++;
+              }
+              host_index++;
             }
-
             host_count++;
           }
+
           nfa_hci_startup_complete(NFA_STATUS_OK);
         } else if (nfa_hci_cb.param_in_use == NFA_HCI_SESSION_IDENTITY_INDEX) {
           /* The only parameter we get when initializing is the session ID.
@@ -1477,26 +1489,32 @@ void nfa_hci_handle_admin_gate_rsp(uint8_t* p_data, uint8_t data_len) {
           evt_data.hosts.num_hosts = data_len;
           memcpy(evt_data.hosts.host, p_data, data_len);
 
-          host_count = 0;
-          while (host_count < NFA_HCI_MAX_HOST_IN_NETWORK) {
-            nfa_hci_cb.inactive_host[host_count] =
-                NFA_HCI_HOST_ID_UICC0 + host_count;
-            host_count++;
-          }
+          uint8_t host_index = 0;
+
+          memset(nfa_hci_cb.active_host, 0x0, NFA_HCI_MAX_HOST_IN_NETWORK);
 
           host_count = 0;
           /* Collect active host in the Host Network */
-          while (host_count < data_len) {
+          while ((host_count < data_len) &&
+                 (host_count < NFA_HCI_MAX_HOST_IN_NETWORK)) {
             host_id = (uint8_t)*p_data++;
 
-            if ((host_id >= NFA_HCI_HOST_ID_UICC0) &&
-                (host_id <
-                 NFA_HCI_HOST_ID_UICC0 + NFA_HCI_MAX_HOST_IN_NETWORK)) {
-              nfa_hci_cb.inactive_host[host_id - NFA_HCI_HOST_ID_UICC0] = 0x00;
-              nfa_hci_cb.reset_host[host_id - NFA_HCI_HOST_ID_UICC0] = 0x00;
+            if ((host_id == NFA_HCI_HOST_ID_UICC0) ||
+                (host_id >= NFA_HCI_HOST_ID_FIRST_DYNAMICALLY_ALLOCATED)) {
+              nfa_hci_cb.active_host[host_index] = host_id;
+              uint8_t index = 0;
+              while (index < NFA_HCI_MAX_HOST_IN_NETWORK) {
+                if (nfa_hci_cb.reset_host[index] == host_id) {
+                  nfa_hci_cb.reset_host[index] = 0x0;
+                  break;
+                }
+                index++;
+              }
+              host_index++;
             }
             host_count++;
           }
+
           if (nfa_hciu_is_no_host_resetting())
             nfa_hci_check_pending_api_requests();
           nfa_hciu_send_to_app(NFA_HCI_HOST_LIST_EVT, &evt_data,

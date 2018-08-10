@@ -355,7 +355,6 @@ tNFA_STATUS NFA_HciGetHostList(tNFA_HANDLE hci_handle) {
 tNFA_STATUS NFA_HciCreatePipe(tNFA_HANDLE hci_handle, uint8_t source_gate_id,
                               uint8_t dest_host, uint8_t dest_gate) {
   tNFA_HCI_API_CREATE_PIPE_EVT* p_msg;
-  uint8_t xx;
 
   DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
       "hci_handle:0x%04x, source gate:0x%02X, "
@@ -384,12 +383,9 @@ tNFA_STATUS NFA_HciCreatePipe(tNFA_HANDLE hci_handle, uint8_t source_gate_id,
     return (NFA_STATUS_FAILED);
   }
 
-  for (xx = 0; xx < NFA_HCI_MAX_HOST_IN_NETWORK; xx++)
-    if (nfa_hci_cb.inactive_host[xx] == dest_host) break;
-
-  if (xx != NFA_HCI_MAX_HOST_IN_NETWORK) {
+  if (!nfa_hciu_is_active_host(dest_host)) {
     DLOG_IF(INFO, nfc_debug_enabled)
-        << StringPrintf("Host not active:0x%02x", dest_host);
+        << StringPrintf("Host not active: 0x%02x", dest_host);
     return (NFA_STATUS_FAILED);
   }
 
@@ -771,7 +767,6 @@ tNFA_STATUS NFA_HciDeletePipe(tNFA_HANDLE hci_handle, uint8_t pipe) {
 tNFA_STATUS NFA_HciAddStaticPipe(tNFA_HANDLE hci_handle, uint8_t host,
                                  uint8_t gate, uint8_t pipe) {
   tNFA_HCI_API_ADD_STATIC_PIPE_EVT* p_msg;
-  uint8_t xx;
 
   if ((NFA_HANDLE_GROUP_MASK & hci_handle) != NFA_HANDLE_GROUP_HCI) {
     DLOG_IF(INFO, nfc_debug_enabled)
@@ -779,12 +774,9 @@ tNFA_STATUS NFA_HciAddStaticPipe(tNFA_HANDLE hci_handle, uint8_t host,
     return (NFA_STATUS_FAILED);
   }
 
-  for (xx = 0; xx < NFA_HCI_MAX_HOST_IN_NETWORK; xx++)
-    if (nfa_hci_cb.inactive_host[xx] == host) break;
-
-  if (xx != NFA_HCI_MAX_HOST_IN_NETWORK) {
+  if (!nfa_hciu_is_active_host(host)) {
     DLOG_IF(INFO, nfc_debug_enabled)
-        << StringPrintf("Host not active:0x%02x", host);
+        << StringPrintf("Host not active: 0x%02x", host);
     return (NFA_STATUS_FAILED);
   }
 
