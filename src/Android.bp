@@ -31,6 +31,7 @@ cc_library_shared {
         "-DBUILDCFG=1",
         "-Wall",
         "-Werror",
+        "-Wimplicit-fallthrough",
     ],
     local_include_dirs: [
         "include",

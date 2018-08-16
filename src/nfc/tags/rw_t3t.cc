@@ -2234,7 +2234,8 @@ void rw_t3t_conn_cback(uint8_t conn_id, tNFC_CONN_EVT event,
         GKI_freebuf((NFC_HDR*)(p_data->data.p_data));
         p_data->data.p_data = nullptr;
       }
-    /* Data event with error status...fall through to NFC_ERROR_CEVT case */
+      /* Data event with error status...fall through to NFC_ERROR_CEVT case */
+      FALLTHROUGH_INTENDED;
 
     case NFC_ERROR_CEVT:
       nfc_stop_quick_timer(&p_cb->timer);
