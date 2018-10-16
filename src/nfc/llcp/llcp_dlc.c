@@ -22,6 +22,7 @@
  *
  ******************************************************************************/
 
+#include <log/log.h>
 #include <string.h>
 #include "bt_types.h"
 #include "gki.h"
@@ -880,6 +881,15 @@ void llcp_dlc_proc_i_pdu(uint8_t dsap, uint8_t ssap, uint16_t i_pdu_length,
     if (p_msg) {
       i_pdu_length = p_msg->len;
       p_i_pdu = (uint8_t*)(p_msg + 1) + p_msg->offset;
+    }
+
+    if (i_pdu_length < LLCP_PDU_HEADER_SIZE + LLCP_SEQUENCE_SIZE) {
+      android_errorWriteLog(0x534e4554, "116722267");
+      LLCP_TRACE_ERROR1("Insufficient I PDU length %d", i_pdu_length);
+      if (p_msg) {
+        GKI_freebuf(p_msg);
+      }
+      return;
     }
 
     info_len = i_pdu_length - LLCP_PDU_HEADER_SIZE - LLCP_SEQUENCE_SIZE;
