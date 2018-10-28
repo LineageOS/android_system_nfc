@@ -63,6 +63,7 @@ INfcClientCallback* NfcAdaptation::mCallback;
 bool nfc_debug_enabled = false;
 std::string nfc_storage_path;
 uint8_t appl_dta_mode_flag = 0x00;
+bool isDownloadFirmwareCompleted = false;
 
 extern tNFA_DM_CFG nfa_dm_cfg;
 extern tNFA_PROPRIETARY_CFG nfa_proprietary_cfg;
@@ -685,8 +686,9 @@ uint8_t NfcAdaptation::HalGetMaxNfcee() {
 ** Returns:     None.
 **
 *******************************************************************************/
-void NfcAdaptation::DownloadFirmware() {
+bool NfcAdaptation::DownloadFirmware() {
   const char* func = "NfcAdaptation::DownloadFirmware";
+  isDownloadFirmwareCompleted = false;
   DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf("%s: enter", func);
   HalInitialize();
 
@@ -702,6 +704,8 @@ void NfcAdaptation::DownloadFirmware() {
 
   HalTerminate();
   DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf("%s: exit", func);
+
+  return isDownloadFirmwareCompleted;
 }
 
 /*******************************************************************************
@@ -723,6 +727,7 @@ void NfcAdaptation::HalDownloadFirmwareCallback(nfc_event_t event,
     case HAL_NFC_OPEN_CPLT_EVT: {
       DLOG_IF(INFO, nfc_debug_enabled)
           << StringPrintf("%s: HAL_NFC_OPEN_CPLT_EVT", func);
+      if (event_status == HAL_NFC_STATUS_OK) isDownloadFirmwareCompleted = true;
       mHalOpenCompletedEvent.signal();
       break;
     }

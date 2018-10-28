@@ -86,7 +86,7 @@ class NfcAdaptation {
   void DeviceShutdown();
   static NfcAdaptation& GetInstance();
   tHAL_NFC_ENTRY* GetHalEntryFuncs();
-  void DownloadFirmware();
+  bool DownloadFirmware();
   void GetVendorConfigs(std::map<std::string, ConfigValue>& configMap);
   void Dump(int fd);
 
