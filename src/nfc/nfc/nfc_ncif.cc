@@ -27,6 +27,7 @@
 #include <metricslogger/metrics_logger.h>
 #include <stdlib.h>
 #include <string.h>
+
 #include "nfc_target.h"
 
 #include "include/debug_nfcsnoop.h"
@@ -1217,8 +1218,13 @@ void nfc_ncif_proc_get_routing(uint8_t* p, uint8_t len) {
       for (yy = 0; yy < evt_data.num_tlvs; yy++) {
         tl = *(p + 1);
         tl += NFC_TL_SIZE;
-        STREAM_TO_ARRAY(pn, p, tl);
         evt_data.tlv_size += tl;
+        if (evt_data.tlv_size > NFC_MAX_EE_TLV_SIZE) {
+          android_errorWriteLog(0x534e4554, "117554809");
+          NFC_TRACE_ERROR1("%s Invalid data format", __func__);
+          return;
+        }
+        STREAM_TO_ARRAY(pn, p, tl);
         pn += tl;
       }
       (*nfc_cb.p_resp_cback)(NFC_GET_ROUTING_REVT, (tNFC_RESPONSE*)&evt_data);
