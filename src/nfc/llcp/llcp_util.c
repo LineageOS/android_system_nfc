@@ -112,7 +112,6 @@ bool llcp_util_parse_link_params(uint16_t length, uint8_t* p_bytes) {
       default:
         LLCP_TRACE_ERROR1(
             "llcp_util_parse_link_params (): Unexpected type 0x%x", param_type);
-        BE_STREAM_TO_UINT8(param_len, p);
         p += param_len;
         break;
     }
@@ -545,7 +544,6 @@ tLLCP_STATUS llcp_util_parse_connect(uint8_t* p_bytes, uint16_t length,
       default:
         LLCP_TRACE_ERROR1("llcp_util_parse_connect (): Unexpected type 0x%x",
                           param_type);
-        BE_STREAM_TO_UINT8(param_len, p);
         p += param_len;
         break;
     }
@@ -664,7 +662,6 @@ tLLCP_STATUS llcp_util_parse_cc(uint8_t* p_bytes, uint16_t length,
       default:
         LLCP_TRACE_ERROR1("llcp_util_parse_cc (): Unexpected type 0x%x",
                           param_type);
-        BE_STREAM_TO_UINT8(param_len, p);
         p += param_len;
         break;
     }
