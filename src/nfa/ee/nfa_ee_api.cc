@@ -433,15 +433,20 @@ tNFA_STATUS NFA_EeAddAidRouting(tNFA_HANDLE ee_handle, uint8_t aid_len,
   p_cb = nfa_ee_find_ecb(nfcee_id);
 
   /* validate parameters - make sure the AID is in valid length range */
-  if ((p_cb == nullptr) || (aid_len == 0) || (p_aid == nullptr) ||
-      (aid_len < NFA_MIN_AID_LEN) || (aid_len > NFA_MAX_AID_LEN)) {
+  if ((p_cb == nullptr) ||
+      ((NFA_GetNCIVersion() == NCI_VERSION_2_0) && (aid_len != 0) &&
+       (p_aid == nullptr)) ||
+      ((NFA_GetNCIVersion() != NCI_VERSION_2_0) &&
+       ((aid_len == 0) || (p_aid == nullptr) || (aid_len < NFA_MIN_AID_LEN))) ||
+      (aid_len > NFA_MAX_AID_LEN)) {
     LOG(ERROR) << StringPrintf("Bad ee_handle or AID (len=%d)", aid_len);
     status = NFA_STATUS_INVALID_PARAM;
   } else {
     p_msg = (tNFA_EE_API_ADD_AID*)GKI_getbuf(size);
     if (p_msg != nullptr) {
-      DLOG_IF(INFO, nfc_debug_enabled)
-          << StringPrintf("aid:<%02x%02x>", p_aid[0], p_aid[1]);
+      if (p_aid != nullptr)
+        DLOG_IF(INFO, nfc_debug_enabled)
+            << StringPrintf("aid:<%02x%02x>", p_aid[0], p_aid[1]);
       p_msg->hdr.event = NFA_EE_API_ADD_AID_EVT;
       p_msg->nfcee_id = nfcee_id;
       p_msg->p_cb = p_cb;
@@ -449,7 +454,7 @@ tNFA_STATUS NFA_EeAddAidRouting(tNFA_HANDLE ee_handle, uint8_t aid_len,
       p_msg->power_state = power_state;
       p_msg->p_aid = (uint8_t*)(p_msg + 1);
       p_msg->aidInfo = aidInfo;
-      memcpy(p_msg->p_aid, p_aid, aid_len);
+      if (p_aid != nullptr) memcpy(p_msg->p_aid, p_aid, aid_len);
 
       nfa_sys_sendmsg(p_msg);
 
@@ -487,7 +492,11 @@ tNFA_STATUS NFA_EeRemoveAidRouting(uint8_t aid_len, uint8_t* p_aid) {
   uint16_t size = sizeof(tNFA_EE_API_REMOVE_AID) + aid_len;
 
   DLOG_IF(INFO, nfc_debug_enabled) << __func__;
-  if ((aid_len == 0) || (p_aid == nullptr) || (aid_len > NFA_MAX_AID_LEN)) {
+  if (((NFA_GetNCIVersion() == NCI_VERSION_2_0) && (aid_len != 0) &&
+       (p_aid == nullptr)) ||
+      ((NFA_GetNCIVersion() != NCI_VERSION_2_0) &&
+       ((aid_len == 0) || (p_aid == nullptr) || (aid_len < NFA_MIN_AID_LEN))) ||
+      (aid_len > NFA_MAX_AID_LEN)) {
     LOG(ERROR) << StringPrintf("Bad AID");
     status = NFA_STATUS_INVALID_PARAM;
   } else {
@@ -603,6 +612,18 @@ tNFA_STATUS NFA_EeRemoveSystemCodeRouting(uint16_t systemcode) {
   }
   return status;
 }
+
+/*******************************************************************************
+**
+** Function         NFA_GetAidTableSize
+**
+** Description      This function is called to get the Maximum AID routing table
+*size.
+**
+** Returns          AID routing table maximum size
+**
+*******************************************************************************/
+uint16_t NFA_GetAidTableSize() { return nfa_ee_find_max_aid_cfg_len(); }
 
 /*******************************************************************************
 **
