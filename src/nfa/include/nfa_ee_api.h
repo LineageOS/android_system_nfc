@@ -438,6 +438,17 @@ extern tNFA_STATUS NFA_EeRemoveSystemCodeRouting(uint16_t systemcode);
 
 /*******************************************************************************
 **
+** Function         NFA_GetAidTableSize
+**
+** Description      This function is called to get the AID routing table size.
+**
+** Returns          Maximum AID routing table size.
+**
+*******************************************************************************/
+extern uint16_t NFA_GetAidTableSize();
+
+/*******************************************************************************
+**
 ** Function         NFA_EeGetLmrtRemainingSize
 **
 ** Description      This function is called to get remaining size of the
