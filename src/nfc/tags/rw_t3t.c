@@ -22,7 +22,9 @@
  *  mode.
  *
  ******************************************************************************/
+#include <log/log.h>
 #include <string.h>
+
 #include "bt_types.h"
 #include "nfc_target.h"
 #include "trace_api.h"
@@ -1384,7 +1386,7 @@ void rw_t3t_act_handle_check_rsp(tRW_T3T_CB* p_cb, NFC_HDR* p_msg_rsp) {
                     p_t3t_rsp[T3T_MSG_RSP_OFFSET_RSPCODE]);
     nfc_status = NFC_STATUS_FAILED;
     GKI_freebuf(p_msg_rsp);
-  } else {
+  } else if (p_msg_rsp->len >= T3T_MSG_RSP_OFFSET_CHECK_DATA) {
     /* Copy incoming data into buffer */
     p_msg_rsp->offset +=
         T3T_MSG_RSP_OFFSET_CHECK_DATA; /* Skip over t3t header */
@@ -1392,6 +1394,10 @@ void rw_t3t_act_handle_check_rsp(tRW_T3T_CB* p_cb, NFC_HDR* p_msg_rsp) {
     evt_data.status = NFC_STATUS_OK;
     evt_data.p_data = p_msg_rsp;
     (*(rw_cb.p_cback))(RW_T3T_CHECK_EVT, (tRW_DATA*)&evt_data);
+  } else {
+    android_errorWriteLog(0x534e4554, "120503926");
+    nfc_status = NFC_STATUS_FAILED;
+    GKI_freebuf(p_msg_rsp);
   }
 
   p_cb->rw_state = RW_T3T_STATE_IDLE;
@@ -1848,6 +1854,10 @@ void rw_t3t_act_handle_fmt_rsp(tRW_T3T_CB* p_cb, NFC_HDR* p_msg_rsp) {
                         NCI_NFCID2_LEN) != 0)) /* verify response IDm */
     {
       evt_data.status = NFC_STATUS_FAILED;
+    } else if (p_msg_rsp->len <
+               (T3T_MSG_RSP_OFFSET_CHECK_DATA + T3T_MSG_BLOCKSIZE)) {
+      evt_data.status = NFC_STATUS_FAILED;
+      android_errorWriteLog(0x534e4554, "120506143");
     } else {
       /* Check if memory configuration (MC) block to see if SYS_OP=1 (NDEF
        * enabled) */
@@ -2061,16 +2071,18 @@ void rw_t3t_act_handle_sro_rsp(tRW_T3T_CB* p_cb, NFC_HDR* p_msg_rsp) {
                         NCI_NFCID2_LEN) != 0)) /* verify response IDm */
     {
       evt_data.status = NFC_STATUS_FAILED;
+    } else if (p_msg_rsp->len <
+               (T3T_MSG_RSP_OFFSET_CHECK_DATA + T3T_MSG_BLOCKSIZE)) {
+      evt_data.status = NFC_STATUS_FAILED;
+      android_errorWriteLog(0x534e4554, "120506143");
     } else {
       /* Check if memory configuration (MC) block to see if SYS_OP=1 (NDEF
        * enabled) */
       p_mc = &p_t3t_rsp[T3T_MSG_RSP_OFFSET_CHECK_DATA]; /* Point to MC data of
                                                            CHECK response */
 
-      if (p_mc[T3T_MSG_FELICALITE_MC_OFFSET_SYS_OP] != 0x01) {
-        /* Tag is not currently enabled for NDEF */
-        evt_data.status = NFC_STATUS_FAILED;
-      } else {
+      evt_data.status = NFC_STATUS_FAILED;
+      if (p_mc[T3T_MSG_FELICALITE_MC_OFFSET_SYS_OP] == 0x01) {
         /* Set MC_SP field with MC[0] = 0x00 & MC[1] = 0xC0 (Hardlock) to change
          * access permission from RW to RO */
         p_mc[T3T_MSG_FELICALITE_MC_OFFSET_MC_SP] = 0x00;
