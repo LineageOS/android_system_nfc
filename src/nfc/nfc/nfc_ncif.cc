@@ -25,6 +25,7 @@
  ******************************************************************************/
 #include <android-base/stringprintf.h>
 #include <base/logging.h>
+#include <log/log.h>
 #include <metricslogger/metrics_logger.h>
 
 #include "nfc_target.h"
@@ -479,18 +480,33 @@ void nfc_ncif_rf_management_status(tNFC_DISCOVER_EVT event, uint8_t status) {
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_set_config_status(uint8_t* p,
-                                __attribute__((unused)) uint8_t len) {
+void nfc_ncif_set_config_status(uint8_t* p, uint8_t len) {
   tNFC_RESPONSE evt_data;
   if (nfc_cb.p_resp_cback) {
-    evt_data.set_config.status = (tNFC_STATUS)*p++;
-    evt_data.set_config.num_param_id = NFC_STATUS_OK;
-    if (evt_data.set_config.status != NFC_STATUS_OK) {
-      evt_data.set_config.num_param_id = *p++;
-      STREAM_TO_ARRAY(evt_data.set_config.param_ids, p,
-                      evt_data.set_config.num_param_id);
+    evt_data.set_config.num_param_id = 0;
+    if (len == 0) {
+      LOG(ERROR) << StringPrintf("Insufficient RSP length");
+      evt_data.set_config.status = NFC_STATUS_SYNTAX_ERROR;
+      (*nfc_cb.p_resp_cback)(NFC_SET_CONFIG_REVT, &evt_data);
+      return;
     }
-
+    evt_data.set_config.status = (tNFC_STATUS)*p++;
+    if (evt_data.set_config.status != NFC_STATUS_OK && len > 1) {
+      evt_data.set_config.num_param_id = *p++;
+      if (evt_data.set_config.num_param_id > NFC_MAX_NUM_IDS) {
+        android_errorWriteLog(0x534e4554, "114047681");
+        LOG(ERROR) << StringPrintf("OOB write num_param_id %d",
+                                   evt_data.set_config.num_param_id);
+        evt_data.set_config.num_param_id = 0;
+      } else if (evt_data.set_config.num_param_id <= len - 2) {
+        STREAM_TO_ARRAY(evt_data.set_config.param_ids, p,
+                        evt_data.set_config.num_param_id);
+      } else {
+        LOG(ERROR) << StringPrintf("Insufficient RSP length %d,num_param_id %d",
+                                   len, evt_data.set_config.num_param_id);
+        evt_data.set_config.num_param_id = 0;
+      }
+    }
     (*nfc_cb.p_resp_cback)(NFC_SET_CONFIG_REVT, &evt_data);
   }
 }
@@ -1220,8 +1236,13 @@ void nfc_ncif_proc_get_routing(uint8_t* p,
       for (yy = 0; yy < evt_data.num_tlvs; yy++) {
         tl = *(p + 1);
         tl += NFC_TL_SIZE;
-        STREAM_TO_ARRAY(pn, p, tl);
         evt_data.tlv_size += tl;
+        if (evt_data.tlv_size > NFC_MAX_EE_TLV_SIZE) {
+          android_errorWriteLog(0x534e4554, "117554809");
+          LOG(ERROR) << __func__ << "Invalid data format";
+          return;
+        }
+        STREAM_TO_ARRAY(pn, p, tl);
         pn += tl;
       }
       tNFC_RESPONSE nfc_response;
