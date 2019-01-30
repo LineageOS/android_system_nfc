@@ -1641,6 +1641,11 @@ void rw_i93_sm_detect_ndef(NFC_HDR* p_resp) {
       "sub_state:%s (0x%x)",
       rw_i93_get_sub_state_name(p_i93->sub_state).c_str(), p_i93->sub_state);
 
+  if (length == 0) {
+    android_errorWriteLog(0x534e4554, "121260197");
+    rw_i93_handle_error(NFC_STATUS_FAILED);
+    return;
+  }
   STREAM_TO_UINT8(flags, p);
   length--;
 
@@ -1660,6 +1665,11 @@ void rw_i93_sm_detect_ndef(NFC_HDR* p_resp) {
   switch (p_i93->sub_state) {
     case RW_I93_SUBSTATE_WAIT_UID:
 
+      if (length < (I93_UID_BYTE_LEN + 1)) {
+        android_errorWriteLog(0x534e4554, "121260197");
+        rw_i93_handle_error(NFC_STATUS_FAILED);
+        return;
+      }
       STREAM_TO_UINT8(u8, p); /* DSFID */
       p_uid = p_i93->uid;
       STREAM_TO_ARRAY8(p_uid, p);
