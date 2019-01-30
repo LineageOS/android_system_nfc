@@ -2019,6 +2019,12 @@ void rw_i93_sm_read_ndef(NFC_HDR* p_resp) {
 
   DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
+  if (length == 0) {
+    android_errorWriteLog(0x534e4554, "122035770");
+    rw_i93_handle_error(NFC_STATUS_FAILED);
+    return;
+  }
+
   STREAM_TO_UINT8(flags, p);
   length--;
 
