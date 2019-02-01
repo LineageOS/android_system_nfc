@@ -1875,6 +1875,12 @@ void rw_i93_sm_update_ndef(NFC_HDR* p_resp) {
   RW_TRACE_DEBUG1("rw_i93_sm_update_ndef () sub_state:0x%x", p_i93->sub_state);
 #endif
 
+  if (length == 0 || p_i93->block_size > I93_MAX_BLOCK_LENGH) {
+    android_errorWriteLog(0x534e4554, "122320256");
+    rw_i93_handle_error(NFC_STATUS_FAILED);
+    return;
+  }
+
   STREAM_TO_UINT8(flags, p);
   length--;
 
@@ -1898,6 +1904,12 @@ void rw_i93_sm_update_ndef(NFC_HDR* p_resp) {
       /* get offset of length field */
       length_offset = (p_i93->ndef_tlv_start_offset + 1) % p_i93->block_size;
 
+      if (length < length_offset) {
+        android_errorWriteLog(0x534e4554, "122320256");
+        rw_i93_handle_error(NFC_STATUS_FAILED);
+        return;
+      }
+
       /* set length to zero */
       *(p + length_offset) = 0x00;
 
@@ -1911,6 +1923,11 @@ void rw_i93_sm_update_ndef(NFC_HDR* p_resp) {
 
         /* write the first part of NDEF in the same block */
         for (; xx < p_i93->block_size; xx++) {
+          if (xx > length || p_i93->rw_length > p_i93->ndef_length) {
+            android_errorWriteLog(0x534e4554, "122320256");
+            rw_i93_handle_error(NFC_STATUS_FAILED);
+            return;
+          }
           if (p_i93->rw_length < p_i93->ndef_length) {
             *(p + xx) = *(p_i93->p_update_data + p_i93->rw_length++);
           } else {
@@ -2057,6 +2074,12 @@ void rw_i93_sm_update_ndef(NFC_HDR* p_resp) {
 
           /* update length field within the read block */
           for (xx = length_offset; xx < p_i93->block_size; xx++) {
+            if (xx > length) {
+              android_errorWriteLog(0x534e4554, "122320256");
+              rw_i93_handle_error(NFC_STATUS_FAILED);
+              return;
+            }
+
             if (p_i93->rw_length == 3)
               *(p + xx) = 0xFF;
             else if (p_i93->rw_length == 2)
