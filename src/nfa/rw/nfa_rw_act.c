@@ -21,6 +21,7 @@
  *  This file contains the action functions the NFA_RW state machine.
  *
  ******************************************************************************/
+#include <log/log.h>
 #include <string.h>
 #include "ndef_utils.h"
 #include "nfa_dm_int.h"
@@ -76,11 +77,16 @@ static void nfa_rw_store_ndef_rx_buf(tRW_DATA* p_rw_data) {
 
   p = (uint8_t*)(p_rw_data->data.p_data + 1) + p_rw_data->data.p_data->offset;
 
-  /* Save data into buffer */
-  memcpy(&nfa_rw_cb.p_ndef_buf[nfa_rw_cb.ndef_rd_offset], p,
-         p_rw_data->data.p_data->len);
-  nfa_rw_cb.ndef_rd_offset += p_rw_data->data.p_data->len;
-
+  if ((nfa_rw_cb.ndef_rd_offset + p_rw_data->data.p_data->len) <=
+      nfa_rw_cb.ndef_cur_size) {
+    /* Save data into buffer */
+    memcpy(&nfa_rw_cb.p_ndef_buf[nfa_rw_cb.ndef_rd_offset], p,
+           p_rw_data->data.p_data->len);
+    nfa_rw_cb.ndef_rd_offset += p_rw_data->data.p_data->len;
+  } else {
+    NFA_TRACE_ERROR0("RW_SetActivatedTagType failed.");
+    android_errorWriteLog(0x534e4554, "123583388");
+  }
   GKI_freebuf(p_rw_data->data.p_data);
   p_rw_data->data.p_data = NULL;
 }
