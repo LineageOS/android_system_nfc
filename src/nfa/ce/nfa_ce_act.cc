@@ -21,7 +21,6 @@
  *  This file contains the action functions the NFA_CE state machine.
  *
  ******************************************************************************/
-#include <log/log.h>
 #include <string.h>
 
 #include <android-base/stringprintf.h>
@@ -1041,8 +1040,7 @@ bool nfa_ce_deactivate_ntf(tNFA_CE_MSG* p_ce_msg) {
       if ((p_cb->listen_info[i].flags & NFA_CE_LISTEN_INFO_UICC) &&
           (i == p_cb->idx_cur_active)) {
         conn_evt.deactivated.type = deact_type;
-        if (p_cb->p_active_conn_cback)
-          (*p_cb->p_active_conn_cback)(NFA_DEACTIVATED_EVT, &conn_evt);
+        (*p_cb->p_active_conn_cback)(NFA_DEACTIVATED_EVT, &conn_evt);
       } else if ((p_cb->activation_params.protocol == NFA_PROTOCOL_ISO_DEP) &&
                  (p_cb->listen_info[i].protocol_mask &
                   NFA_PROTOCOL_MASK_ISO_DEP)) {
@@ -1051,14 +1049,12 @@ bool nfa_ce_deactivate_ntf(tNFA_CE_MSG* p_ce_msg) {
               NFA_CE_LISTEN_INFO_T4T_ACTIVATE_PND)) {
           if (i == NFA_CE_LISTEN_INFO_IDX_NDEF) {
             conn_evt.deactivated.type = deact_type;
-            if (p_cb->p_active_conn_cback)
-              (*p_cb->p_active_conn_cback)(NFA_DEACTIVATED_EVT, &conn_evt);
+            (*p_cb->p_active_conn_cback)(NFA_DEACTIVATED_EVT, &conn_evt);
           } else {
             conn_evt.ce_deactivated.handle =
                 NFA_HANDLE_GROUP_CE | ((tNFA_HANDLE)i);
             conn_evt.ce_deactivated.type = deact_type;
-            if (p_cb->p_active_conn_cback)
-              (*p_cb->p_active_conn_cback)(NFA_CE_DEACTIVATED_EVT, &conn_evt);
+            (*p_cb->p_active_conn_cback)(NFA_CE_DEACTIVATED_EVT, &conn_evt);
           }
         }
       } else if ((p_cb->activation_params.protocol == NFA_PROTOCOL_T3T) &&
@@ -1068,17 +1064,12 @@ bool nfa_ce_deactivate_ntf(tNFA_CE_MSG* p_ce_msg) {
               NFA_CE_LISTEN_INFO_T3T_ACTIVATE_PND)) {
           if (i == NFA_CE_LISTEN_INFO_IDX_NDEF) {
             conn_evt.deactivated.type = deact_type;
-            if (p_cb->p_active_conn_cback)
-              (*p_cb->p_active_conn_cback)(NFA_DEACTIVATED_EVT, &conn_evt);
+            (*p_cb->p_active_conn_cback)(NFA_DEACTIVATED_EVT, &conn_evt);
           } else {
             conn_evt.ce_deactivated.handle =
                 NFA_HANDLE_GROUP_CE | ((tNFA_HANDLE)i);
             conn_evt.ce_deactivated.type = deact_type;
-            if (p_cb->p_active_conn_cback) {
-              (*p_cb->p_active_conn_cback)(NFA_CE_DEACTIVATED_EVT, &conn_evt);
-            } else {
-              android_errorWriteLog(0x534e4554, "120846143");
-            }
+            (*p_cb->p_active_conn_cback)(NFA_CE_DEACTIVATED_EVT, &conn_evt);
           }
         }
       }
