@@ -23,8 +23,6 @@
  *
  ******************************************************************************/
 #include "ndef_utils.h"
-#include <log/log.h>
-#include <stddef.h>
 #include <string.h>
 
 /*******************************************************************************
@@ -195,13 +193,6 @@ tNDEF_STATUS NDEF_MsgValidate(uint8_t* p_msg, uint32_t msg_len,
             p_rec_type[type_index] > NDEF_RTD_VALID_END)
           return (NDEF_MSG_INVALID_TYPE);
       }
-    }
-
-    /* Check for integer overflow */
-    if (((uint8_t*)(~0U) - p_rec) <
-        (ptrdiff_t)(payload_len + type_len + id_len)) {
-      android_errorWriteLog(0x534e4554, "126200054");
-      return (NDEF_MSG_LENGTH_MISMATCH);
     }
 
     /* Point to next record */
