@@ -618,31 +618,38 @@ void nfc_ncif_proc_rf_field_ntf(uint8_t rf_status) {
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_proc_credits(uint8_t* p, __attribute__((unused)) uint16_t plen) {
+void nfc_ncif_proc_credits(uint8_t* p, uint16_t plen) {
   uint8_t num, xx;
   tNFC_CONN_CB* p_cb;
 
-  num = *p++;
-  for (xx = 0; xx < num; xx++) {
-    p_cb = nfc_find_conn_cb_by_conn_id(*p++);
-    if (p_cb && p_cb->num_buff != NFC_CONN_NO_FC) {
-      p_cb->num_buff += (*p);
-#if (BT_USE_TRACES == TRUE)
-      if (p_cb->num_buff > p_cb->init_credits) {
-        if (nfc_cb.nfc_state == NFC_STATE_OPEN) {
-          /* if this happens in activated state, it's very likely that our NFCC
-           * has issues */
-          /* However, credit may be returned after deactivation */
-          LOG(ERROR) << StringPrintf("num_buff:0x%x, init_credits:0x%x",
-                                     p_cb->num_buff, p_cb->init_credits);
-        }
-        p_cb->num_buff = p_cb->init_credits;
-      }
-#endif
-      /* check if there's nay data in tx q to be sent */
-      nfc_ncif_send_data(p_cb, nullptr);
+  if (plen != 0) {
+    num = *p++;
+    plen--;
+    if (num > plen) {
+      android_errorWriteLog(0x534e4554, "118148142");
+      return;
     }
-    p++;
+    for (xx = 0; xx < num; xx++) {
+      p_cb = nfc_find_conn_cb_by_conn_id(*p++);
+      if (p_cb && p_cb->num_buff != NFC_CONN_NO_FC) {
+        p_cb->num_buff += (*p);
+#if (BT_USE_TRACES == TRUE)
+        if (p_cb->num_buff > p_cb->init_credits) {
+          if (nfc_cb.nfc_state == NFC_STATE_OPEN) {
+            /* if this happens in activated state, it's very likely that our
+             * NFCC has issues */
+            /* However, credit may be returned after deactivation */
+            LOG(ERROR) << StringPrintf("num_buff:0x%x, init_credits:0x%x",
+                                       p_cb->num_buff, p_cb->init_credits);
+          }
+          p_cb->num_buff = p_cb->init_credits;
+        }
+#endif
+        /* check if there's nay data in tx q to be sent */
+        nfc_ncif_send_data(p_cb, nullptr);
+      }
+      p++;
+    }
   }
 }
 /*******************************************************************************
