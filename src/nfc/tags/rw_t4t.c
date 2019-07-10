@@ -22,6 +22,7 @@
  *  mode.
  *
  ******************************************************************************/
+#include <log/log.h>
 #include <string.h>
 #include "bt_types.h"
 #include "nfc_target.h"
@@ -226,6 +227,12 @@ static bool rw_t4t_update_version_details(NFC_HDR* p_r_apdu) {
   tRW_T4T_CB* p_t4t = &rw_cb.tcb.t4t;
   uint8_t* p;
   uint16_t major_version, minor_version;
+
+  if (p_r_apdu->len < T4T_DES_GET_VERSION_LEN) {
+    RW_TRACE_ERROR1("%s incorrect p_r_apdu length", __func__);
+    android_errorWriteLog(0x534e4554, "120865977");
+    return false;
+  }
 
   p = (uint8_t*)(p_r_apdu + 1) + p_r_apdu->offset;
   major_version = *(p + 3);
@@ -1012,6 +1019,8 @@ static void rw_t4t_handle_error(tNFC_STATUS status, uint8_t sw1, uint8_t sw2) {
 
     rw_data.t4t_sw.sw1 = sw1;
     rw_data.t4t_sw.sw2 = sw2;
+    rw_data.ndef.cur_size = 0;
+    rw_data.ndef.max_size = 0;
 
     switch (p_t4t->state) {
       case RW_T4T_STATE_DETECT_NDEF:
@@ -1820,6 +1829,16 @@ static void rw_t4t_data_cback(uint8_t conn_id, tNFC_CONN_EVT event,
 #else
   RW_TRACE_DEBUG1("RW T4T state: %d", p_t4t->state);
 #endif
+
+  if (p_t4t->state != RW_T4T_STATE_IDLE &&
+      p_t4t->state != RW_T4T_STATE_PRESENCE_CHECK &&
+      p_r_apdu->len < T4T_RSP_STATUS_WORDS_SIZE) {
+    RW_TRACE_ERROR1("%s incorrect p_r_apdu length", __func__);
+    android_errorWriteLog(0x534e4554, "120865977");
+    rw_t4t_handle_error(NFC_STATUS_FAILED, 0, 0);
+    GKI_freebuf(p_r_apdu);
+    return;
+  }
 
   switch (p_t4t->state) {
     case RW_T4T_STATE_IDLE:
