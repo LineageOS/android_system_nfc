@@ -1597,7 +1597,7 @@ void nfc_data_event(tNFC_CONN_CB* p_cb) {
          */
         if ((p_cb->act_protocol >= NCI_PROTOCOL_T1T) &&
             (p_cb->act_protocol <= NCI_PROTOCOL_T3T)) {
-          p_evt->len--;
+          if (p_evt->len) p_evt->len--;
           p = (uint8_t*)(p_evt + 1);
           data_cevt.status = *(p + p_evt->offset + p_evt->len);
           if ((NFC_GetNCIVersion() == NCI_VERSION_2_0) &&
@@ -1614,7 +1614,7 @@ void nfc_data_event(tNFC_CONN_CB* p_cb) {
         }
         if ((NFC_GetNCIVersion() == NCI_VERSION_2_0) &&
             (p_cb->act_protocol == NCI_PROTOCOL_T5T)) {
-          p_evt->len--;
+          if (p_evt->len) p_evt->len--;
           p = (uint8_t*)(p_evt + 1);
           data_cevt.status = *(p + p_evt->offset + p_evt->len);
         }
