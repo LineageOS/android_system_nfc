@@ -14,7 +14,7 @@ cc_library_shared {
         "libz",
         "libchrome",
         "libbase",
-	"libstatslog",
+        "libstatslog",
 
         // Treble configuration
         "libhidlbase",
@@ -64,3 +64,77 @@ cc_library_shared {
         },
     },
 }
+
+cc_defaults {
+    name: "nfc_fuzzer_defaults",
+    host_supported: true,
+    static_libs: [
+        "libnfcutils",
+        "libcutils",
+        "liblog",
+        "libbase",
+        "libchrome",
+        "libmetricslogger",
+    ],
+    cflags: [
+        "-DBUILDCFG=1",
+        "-Wall",
+        "-Werror",
+        "-Wimplicit-fallthrough",
+        "-g",
+        "-DFUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION",
+        "-DGKI_ENABLE_BUF_CORRUPTION_CHECK=FALSE",
+    ],
+    product_variables: {
+        debuggable: {
+            cflags: [
+                "-DDCHECK_ALWAYS_ON"
+            ],
+        },
+    },
+    local_include_dirs: [
+        "include",
+        "gki/ulinux",
+        "gki/common",
+        "nfc/include",
+        "fuzzers/inc",
+    ],
+}
+
+cc_fuzz {
+    name: "nfc_nci_fuzzer",
+    defaults: ["nfc_fuzzer_defaults"],
+    srcs: [
+        "nfc/nci/*.cc",
+        "nfc/nfc/*.cc",
+        "gki/common/*.cc",
+        "gki/ulinux/*.cc",
+        "fuzzers/*.cc",
+        "fuzzers/nci/*.cc",
+    ],
+}
+
+cc_fuzz {
+    name: "nfc_rw_fuzzer",
+    defaults: ["nfc_fuzzer_defaults"],
+    srcs: [
+        "nfc/tags/*.cc",
+        "gki/common/*.cc",
+        "gki/ulinux/*.cc",
+        "fuzzers/*.cc",
+        "fuzzers/rw/*.cc",
+    ],
+}
+
+cc_fuzz {
+    name: "nfc_ce_fuzzer",
+    defaults: ["nfc_fuzzer_defaults"],
+    srcs: [
+        "nfc/tags/*.cc",
+        "gki/common/*.cc",
+        "gki/ulinux/*.cc",
+        "fuzzers/*.cc",
+        "fuzzers/ce/*.cc",
+    ],
+}
+
