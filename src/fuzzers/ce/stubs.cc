@@ -1,4 +1,5 @@
 #include "fuzz_cmn.h"
+#include "rw_int.h"
 
 // These are the functions implemented elsewhere in the NFC code. Our fuzzing
 // doesn't need them. To avoid pulling into more source code we simply stub
@@ -15,6 +16,8 @@ tNFA_PROPRIETARY_CFG nfa_proprietary_cfg = {
     0x74, /* NCI_DISCOVERY_TYPE_POLL_B_PRIME */
     0xF4, /* NCI_DISCOVERY_TYPE_LISTEN_B_PRIME */
 };
+
+tRW_CB rw_cb = {};
 
 tNFA_PROPRIETARY_CFG* p_nfa_proprietary_cfg =
     (tNFA_PROPRIETARY_CFG*)&nfa_proprietary_cfg;

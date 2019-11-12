@@ -97,6 +97,7 @@ cc_defaults {
         "gki/ulinux",
         "gki/common",
         "nfc/include",
+        "nfa/include",
         "fuzzers/inc",
     ],
 }
@@ -118,7 +119,8 @@ cc_fuzz {
     name: "nfc_rw_fuzzer",
     defaults: ["nfc_fuzzer_defaults"],
     srcs: [
-        "nfc/tags/*.cc",
+        "nfc/tags/rw_*.cc",
+        "nfc/tags/tags_int.cc",
         "gki/common/*.cc",
         "gki/ulinux/*.cc",
         "fuzzers/*.cc",
@@ -130,11 +132,25 @@ cc_fuzz {
     name: "nfc_ce_fuzzer",
     defaults: ["nfc_fuzzer_defaults"],
     srcs: [
-        "nfc/tags/*.cc",
+        "nfc/tags/ce_*.cc",
+        "nfc/tags/tags_int.cc",
         "gki/common/*.cc",
         "gki/ulinux/*.cc",
         "fuzzers/*.cc",
         "fuzzers/ce/*.cc",
+    ],
+}
+
+cc_fuzz {
+    name: "nfc_ndef_fuzzer",
+    defaults: ["nfc_fuzzer_defaults"],
+    srcs: [
+        "nfa/dm/nfa_dm_ndef.cc",
+        "nfc/ndef/*.cc",
+        "gki/common/*.cc",
+        "gki/ulinux/*.cc",
+        "fuzzers/*.cc",
+        "fuzzers/ndef/*.cc",
     ],
 }
 
