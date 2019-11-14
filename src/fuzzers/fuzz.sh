@@ -5,24 +5,25 @@
 # required for official build and fuzzing.
 
 function init() {
-  PROJ=$(basename $PWD)
-  FUZZER_NAME=nfc_${PROJ}_fuzzer
-  FUZZ_DIR=data/fuzz
-  FUZZ_OPTIONS="$FUZZ_OPTIONS -close_fd_mask=3 -max_len=255 -artifact_prefix=/$FUZZ_DIR/crashes_$FUZZER_NAME/"
-
   if [ -z "$ANDROID_BUILD_TOP" ];
   then
     echo "Did you forget lunch?"
     exit 1
   fi
+  source $ANDROID_BUILD_TOP/build/envsetup.sh
+
+  PROJ=$(basename $PWD)
+  FUZZER_NAME=nfc_${PROJ}_fuzzer
+  FUZZ_DIR=data/fuzz/$(get_build_var TARGET_ARCH)/$FUZZER_NAME
+  FUZZ_OPTIONS="$FUZZ_OPTIONS -close_fd_mask=3 -max_len=255 -artifact_prefix=/$FUZZ_DIR/crashes/"
 }
 
 function run_once() {
   if [ "$1" == "-c" ];
   then
-    adb shell rm -rf /$FUZZ_DIR/corpus_$FUZZER_NAME /$FUZZ_DIR/crashes_$FUZZER_NAME /$FUZZ_DIR/gcov_$FUZZER_NAME
-    adb shell mkdir -p /$FUZZ_DIR/corpus_$FUZZER_NAME /$FUZZ_DIR/crashes_$FUZZER_NAME /$FUZZ_DIR/gcov_$FUZZER_NAME
-    adb push ./corpus/* /$FUZZ_DIR/corpus_$FUZZER_NAME/  >/dev/null 2>&1
+    adb shell rm -rf /$FUZZ_DIR/corpus /$FUZZ_DIR/crashes /$FUZZ_DIR/gcov
+    adb shell mkdir -p /$FUZZ_DIR/corpus /$FUZZ_DIR/crashes /$FUZZ_DIR/gcov
+    adb push ./corpus/* /$FUZZ_DIR/corpus/  >/dev/null 2>&1
     rm -rf ./logs ./coverage
 
     shift
@@ -31,15 +32,15 @@ function run_once() {
   adb logcat -c
   if [ -z "$1" ];
   then
-    PAYLOAD=/$FUZZ_DIR/corpus_$FUZZER_NAME
+    PAYLOAD=/$FUZZ_DIR/corpus
     echo "Fuzzing with corpus from $PAYLOAD..."
   else
     PAYLOAD=$1
     echo "Verifying payload $PAYLOAD..."
   fi
 
-  adb shell mkdir -p /$FUZZ_DIR/corpus_$FUZZER_NAME /$FUZZ_DIR/crashes_$FUZZER_NAME /$FUZZ_DIR/gcov_$FUZZER_NAME
-  adb shell LD_LIBRARY_PATH=/system/lib64/vndk-29 GCOV_PREFIX=/$FUZZ_DIR/gcov_$FUZZER_NAME GCOV_PREFIX_STRIP=3 /$FUZZ_DIR/$FUZZER_NAME $FUZZ_OPTIONS $PAYLOAD
+  adb shell mkdir -p /$FUZZ_DIR/corpus /$FUZZ_DIR/crashes /$FUZZ_DIR/gcov
+  adb shell LD_LIBRARY_PATH=/system/lib64/vndk-29 GCOV_PREFIX=/$FUZZ_DIR/gcov GCOV_PREFIX_STRIP=3 /$FUZZ_DIR/$FUZZER_NAME $FUZZ_OPTIONS $PAYLOAD
 
   echo "==========================================================================================="
   adb logcat -d| $ANDROID_BUILD_TOP/external/compiler-rt/lib/asan/scripts/symbolize.py
@@ -48,9 +49,9 @@ function run_once() {
 function run_fuzz() {
   if [ "$1" == "-c" ];
   then
-    adb shell rm -rf /$FUZZ_DIR/corpus_$FUZZER_NAME /$FUZZ_DIR/crashes_$FUZZER_NAME /$FUZZ_DIR/gcov_$FUZZER_NAME
-    adb shell mkdir -p /$FUZZ_DIR/corpus_$FUZZER_NAME /$FUZZ_DIR/crashes_$FUZZER_NAME /$FUZZ_DIR/gcov_$FUZZER_NAME
-    adb push ./corpus/* /$FUZZ_DIR/corpus_$FUZZER_NAME/  >/dev/null 2>&1
+    adb shell rm -rf /$FUZZ_DIR/corpus /$FUZZ_DIR/crashes /$FUZZ_DIR/gcov
+    adb shell mkdir -p /$FUZZ_DIR/corpus /$FUZZ_DIR/crashes /$FUZZ_DIR/gcov
+    adb push ./corpus/* /$FUZZ_DIR/corpus/  >/dev/null 2>&1
     rm -rf ./logs ./coverage
   fi
 
@@ -97,7 +98,6 @@ function run_fuzz() {
 }
 
 function build() {
-  source $ANDROID_BUILD_TOP/build/envsetup.sh
   pushd $ANDROID_BUILD_TOP && \
     SANITIZE_TARGET="hwaddress fuzzer" mmma system/nfc/src -j48 && \
     popd
@@ -132,7 +132,7 @@ function debug() {
 }
 
 function get_cov() {
-  mkdir -p ./coverage && adb pull /$FUZZ_DIR/gcov_$FUZZER_NAME/0/out/soong ./coverage
+  mkdir -p ./coverage && adb pull /$FUZZ_DIR/gcov/0/out/soong ./coverage
   unzip -o $OUT/coverage/$FUZZ_DIR/$FUZZER_NAME.zip -d ./coverage
   lcov --directory ./coverage --base-directory $ANDROID_BUILD_TOP --gcov-tool $(pwd)/../llvm-gcov --capture -o ./coverage/cov.info
   TS=`date +"%m-%d-%Y-%H-%M-%S"`
