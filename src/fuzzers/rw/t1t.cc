@@ -141,6 +141,17 @@ static bool Fuzz_Init(Fuzz_Context& ctx) {
   return result;
 }
 
+static void Fuzz_Deinit(Fuzz_Context& /*ctx*/) {
+  if (rf_cback) {
+    tNFC_CONN conn = {.data = {
+                          .status = NFC_STATUS_OK,
+                          .p_data = nullptr,
+                      }};
+
+    rf_cback(NFC_RF_CONN_ID, NFC_DEACTIVATE_CEVT, &conn);
+  }
+}
+
 static void Fuzz_Run(Fuzz_Context& ctx) {
   for (auto it = ctx.Data.cbegin(); it != ctx.Data.cend(); ++it) {
     NFC_HDR* p_msg;
@@ -177,4 +188,5 @@ void Type1_Fuzz(uint8_t SubType, const std::vector<bytes_t>& Data) {
   if (Fuzz_Init(ctx)) {
     Fuzz_Run(ctx);
   }
+  Fuzz_Deinit(ctx);
 }
