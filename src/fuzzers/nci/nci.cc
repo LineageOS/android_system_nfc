@@ -18,6 +18,30 @@ static void nfc_vs_cback(tNFC_VS_EVT event, uint16_t len, uint8_t* data) {
           BytesToHex(data, len).c_str());
 }
 
+static void nfc_rf_cback(uint8_t conn_id, tNFC_CONN_EVT event,
+                         tNFC_CONN* p_data) {
+  FUZZLOG(MODULE_NAME "rf_cback, conn_id=%d, event=0x%02x", conn_id, event);
+
+  if (event == NFC_DATA_CEVT) {
+    if (p_data->data.p_data) {
+      GKI_freebuf(p_data->data.p_data);
+      p_data->data.p_data = nullptr;
+    }
+  }
+}
+
+static void nfc_hci_cback(uint8_t conn_id, tNFC_CONN_EVT event,
+                          tNFC_CONN* p_data) {
+  FUZZLOG(MODULE_NAME "hci_cback, conn_id=%d, event=0x%02x", conn_id, event);
+
+  if (event == NFC_DATA_CEVT) {
+    if (p_data->data.p_data) {
+      GKI_freebuf(p_data->data.p_data);
+      p_data->data.p_data = nullptr;
+    }
+  }
+}
+
 extern void hal_inject_event(uint8_t hal_evt, tHAL_NFC_STATUS status);
 extern bool hal_inject_data(const uint8_t* p_data, uint16_t data_len);
 extern tHAL_NFC_ENTRY* get_hal_func_entries();
@@ -34,17 +58,23 @@ static bool Fuzz_Init(Fuzz_Context& /*ctx*/) {
   NFC_Enable(resp_cback);
 
   NFC_RegVSCback(true, nfc_vs_cback);
+  NFC_SetStaticRfCback(nfc_rf_cback);
+  NFC_SetStaticHciCback(nfc_hci_cback);
 
   nfc_set_state(NFC_STATE_CORE_INIT);
   nci_snd_core_reset(NCI_RESET_TYPE_RESET_CFG);
   return true;
 }
 
+static void Fuzz_Deinit(Fuzz_Context& /*ctx*/) {
+  nfc_reset_all_conn_cbs();
+  GKI_shutdown();
+}
+
 static void Fuzz_Run(Fuzz_Context& ctx) {
   for (auto it = ctx.Data.cbegin(); it != ctx.Data.cend(); ++it) {
     hal_inject_data(it->data(), it->size());
   }
-  GKI_shutdown();
 }
 
 void Nci_FixPackets(uint8_t /*SubType*/, std::vector<bytes_t>& /*Packets*/) {}
@@ -54,4 +84,6 @@ void Nci_Fuzz(uint8_t SubType, const std::vector<bytes_t>& Packets) {
   if (Fuzz_Init(ctx)) {
     Fuzz_Run(ctx);
   }
+
+  Fuzz_Deinit(ctx);
 }
