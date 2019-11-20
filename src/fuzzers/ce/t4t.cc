@@ -11,6 +11,13 @@ enum {
 
 static void ce_cback(tCE_EVENT event, tCE_DATA* p_ce_data) {
   FUZZLOG(MODULE_NAME "event=0x%02x, p_ce_data=%p", event, p_ce_data);
+
+  if (event == CE_T4T_RAW_FRAME_EVT) {
+    if (p_ce_data->raw_frame.p_data) {
+      GKI_freebuf(p_ce_data->raw_frame.p_data);
+      p_ce_data->raw_frame.p_data = nullptr;
+    }
+  }
 }
 
 static bool Init(Fuzz_Context& /*ctx*/) {
@@ -24,11 +31,11 @@ static bool Init(Fuzz_Context& /*ctx*/) {
     return false;
   }
 
-  uint8_t AID[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
   if (CE_T4T_AID_HANDLE_INVALID == CE_T4tRegisterAID(0, nullptr, ce_cback)) {
     return false;
   }
 
+  uint8_t AID[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
   if (CE_T4T_AID_HANDLE_INVALID ==
       CE_T4tRegisterAID(sizeof(AID), AID, ce_cback)) {
     return false;

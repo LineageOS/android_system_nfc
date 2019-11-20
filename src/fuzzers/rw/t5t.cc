@@ -34,7 +34,8 @@ enum {
 
 static void rw_cback(tRW_EVENT event, tRW_DATA* p_rw_data) {
   FUZZLOG(MODULE_NAME "rw_cback: event=0x%02x, p_rw_data=%p", event, p_rw_data);
-  if (event == RW_I93_DATA_EVT) {
+  if (event == RW_I93_DATA_EVT || event == RW_I93_NDEF_READ_EVT ||
+      event == RW_I93_NDEF_READ_CPLT_EVT) {
     if (p_rw_data->i93_data.p_data) {
       GKI_freebuf(p_rw_data->i93_data.p_data);
       p_rw_data->i93_data.p_data = nullptr;

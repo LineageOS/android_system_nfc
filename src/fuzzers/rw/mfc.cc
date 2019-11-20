@@ -17,6 +17,18 @@ enum {
 
 static void rw_cback(tRW_EVENT event, tRW_DATA* p_rw_data) {
   FUZZLOG(MODULE_NAME "event=0x%02x, p_rw_data=%p", event, p_rw_data);
+
+  if (event == RW_MFC_RAW_FRAME_EVT) {
+    if (p_rw_data->raw_frame.p_data) {
+      GKI_freebuf(p_rw_data->raw_frame.p_data);
+      p_rw_data->raw_frame.p_data = nullptr;
+    }
+  } else if (event == RW_MFC_NDEF_READ_CPLT_EVT) {
+    if (p_rw_data->data.p_data) {
+      GKI_freebuf(p_rw_data->data.p_data);
+      p_rw_data->data.p_data = nullptr;
+    }
+  }
 }
 
 #define TEST_NFCID_VALUE \
