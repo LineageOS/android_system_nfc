@@ -117,10 +117,11 @@ static bool Fuzz_Init(Fuzz_Context& ctx) {
 
 static void Fuzz_Deinit(Fuzz_Context& /*ctx*/) {
   if (rf_cback) {
-    tNFC_CONN conn = {.data = {
-                          .status = NFC_STATUS_OK,
-                          .p_data = nullptr,
-                      }};
+    tNFC_CONN conn = {
+        .deactivate = {.status = NFC_STATUS_OK,
+                       .type = NFC_DEACTIVATE_TYPE_IDLE,
+                       .is_ntf = true,
+                       .reason = NFC_DEACTIVATE_REASON_DH_REQ_FAILED}};
 
     rf_cback(NFC_RF_CONN_ID, NFC_DEACTIVATE_CEVT, &conn);
   }

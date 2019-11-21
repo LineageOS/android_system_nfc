@@ -11,8 +11,13 @@ enum {
   SUB_TYPE_WRITE_NO_ERASE,
   SUB_TYPE_READ_SEG,
   SUB_TYPE_READ_8,
-  RW_T1T_SUB_TYPE_WRITE_ERASE_8,
-  RW_T1T_SUB_TYPE_WRITE_NO_ERASE_8,
+  SUB_TYPE_WRITE_ERASE_8,
+  SUB_TYPE_WRITE_NO_ERASE_8,
+  SUB_TYPE_FORMAT_NDEF,
+  SUB_TYPE_LOCATE_TLV,
+  SUB_TYPE_READ_NDEF,
+  SUB_TYPE_WRITE_NDEF,
+  SUB_TYPE_SET_READONLY,
 
   SUB_TYPE_MAX
 };
@@ -99,6 +104,32 @@ static bool Init_WriteNoErase8(Fuzz_Context& ctx) {
   return NFC_STATUS_OK == RW_T1tWriteNoErase8(0, scratch);
 }
 
+static bool Init_FormatNdef(Fuzz_Context& /*ctx*/) {
+  return NFC_STATUS_OK == RW_T1tFormatNDef();
+}
+static bool Init_LocateTlv(Fuzz_Context& /*ctx*/) {
+  return NFC_STATUS_OK == RW_T1tLocateTlv(TAG_NDEF_TLV);
+}
+static bool Init_ReadNdef(Fuzz_Context& ctx) {
+  tRW_T1T_CB* p_t1t = &rw_cb.tcb.t1t;
+  p_t1t->hr[0] = T1T_NDEF_SUPPORTED;
+  p_t1t->tag_attribute = RW_T1_TAG_ATTRB_READ_WRITE;
+  p_t1t->ndef_msg_len = 256;
+
+  auto scratch = ctx.GetBuffer(4096);
+  return NFC_STATUS_OK == RW_T1tReadNDef(scratch, 4096);
+}
+static bool Init_WriteNdef(Fuzz_Context& ctx) {
+  const uint8_t data[] = {0x01, 0x02, 0x03, 0x04, 0x01, 0x02, 0x03, 0x04,
+                          0x01, 0x02, 0x03, 0x04, 0x01, 0x02, 0x03, 0x04};
+
+  auto scratch = ctx.GetBuffer(sizeof(data), data);
+  return NFC_STATUS_OK == RW_T1tWriteNDef(sizeof(data), scratch);
+}
+static bool Init_SetReadOnly(Fuzz_Context& /*ctx*/) {
+  return NFC_STATUS_OK == RW_T1tSetTagReadOnly(true);
+}
+
 static bool Fuzz_Init(Fuzz_Context& ctx) {
   if (!Init(ctx)) {
     FUZZLOG(MODULE_NAME "initialization failed");
@@ -131,12 +162,28 @@ static bool Fuzz_Init(Fuzz_Context& ctx) {
     case SUB_TYPE_READ_8:
       result = Init_Read8(ctx);
       break;
-    case RW_T1T_SUB_TYPE_WRITE_ERASE_8:
+    case SUB_TYPE_WRITE_ERASE_8:
       result = Init_WriteErase8(ctx);
       break;
-    case RW_T1T_SUB_TYPE_WRITE_NO_ERASE_8:
+    case SUB_TYPE_WRITE_NO_ERASE_8:
       result = Init_WriteNoErase8(ctx);
       break;
+    case SUB_TYPE_FORMAT_NDEF:
+      result = Init_FormatNdef(ctx);
+      break;
+    case SUB_TYPE_LOCATE_TLV:
+      result = Init_LocateTlv(ctx);
+      break;
+    case SUB_TYPE_READ_NDEF:
+      result = Init_ReadNdef(ctx);
+      break;
+    case SUB_TYPE_WRITE_NDEF:
+      result = Init_WriteNdef(ctx);
+      break;
+    case SUB_TYPE_SET_READONLY:
+      result = Init_SetReadOnly(ctx);
+      break;
+
     default:
       FUZZLOG(MODULE_NAME "Unknown command %d", ctx.SubType);
       result = false;
@@ -152,10 +199,11 @@ static bool Fuzz_Init(Fuzz_Context& ctx) {
 
 static void Fuzz_Deinit(Fuzz_Context& /*ctx*/) {
   if (rf_cback) {
-    tNFC_CONN conn = {.data = {
-                          .status = NFC_STATUS_OK,
-                          .p_data = nullptr,
-                      }};
+    tNFC_CONN conn = {
+        .deactivate = {.status = NFC_STATUS_OK,
+                       .type = NFC_DEACTIVATE_TYPE_IDLE,
+                       .is_ntf = true,
+                       .reason = NFC_DEACTIVATE_REASON_DH_REQ_FAILED}};
 
     rf_cback(NFC_RF_CONN_ID, NFC_DEACTIVATE_CEVT, &conn);
   }

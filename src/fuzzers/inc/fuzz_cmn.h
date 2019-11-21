@@ -32,7 +32,7 @@ extern "C" int LLVMFuzzerInitialize(int*, char***);
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* Data, size_t Size);
 extern "C" size_t LLVMFuzzerMutate(uint8_t* Data, size_t Size, size_t MaxSize);
 
-extern "C" void __gcov_flush(void);
+extern "C" void __gcov_flush(void) __attribute__((weak));
 
 class Fuzz_Context {
   std::vector<std::unique_ptr<uint8_t[]>> _ScratchPtrs;
