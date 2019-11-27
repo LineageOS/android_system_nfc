@@ -173,5 +173,9 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* Data, size_t Size) {
         break;
     }
   }
+
+  if (__gcov_flush) {
+    __gcov_flush();
+  }
   return 0;
 }
