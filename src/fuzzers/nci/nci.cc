@@ -1,7 +1,8 @@
 #include "fuzz.h"
 #include "gki_int.h"
 
-#define MODULE_NAME "NCI Fuzzing:"
+#define MODULE_NAME "nfc_nci_fuzzer"
+const char fuzzer_name[] = MODULE_NAME;
 
 enum {
   SUB_TYPE_DUMMY,
@@ -10,17 +11,17 @@ enum {
 };
 
 static void resp_cback(tNFC_RESPONSE_EVT event, tNFC_RESPONSE* p_data) {
-  FUZZLOG(MODULE_NAME "event=0x%02x, p_data=%p", event, p_data);
+  FUZZLOG(MODULE_NAME ": event=0x%02x, p_data=%p", event, p_data);
 }
 
 static void nfc_vs_cback(tNFC_VS_EVT event, uint16_t len, uint8_t* data) {
-  FUZZLOG(MODULE_NAME "event=0x%02x, data=%p", event,
+  FUZZLOG(MODULE_NAME ": event=0x%02x, data=%p", event,
           BytesToHex(data, len).c_str());
 }
 
 static void nfc_rf_cback(uint8_t conn_id, tNFC_CONN_EVT event,
                          tNFC_CONN* p_data) {
-  FUZZLOG(MODULE_NAME "rf_cback, conn_id=%d, event=0x%02x", conn_id, event);
+  FUZZLOG(MODULE_NAME ": rf_cback, conn_id=%d, event=0x%02x", conn_id, event);
 
   if (event == NFC_DATA_CEVT) {
     if (p_data->data.p_data) {
@@ -32,7 +33,7 @@ static void nfc_rf_cback(uint8_t conn_id, tNFC_CONN_EVT event,
 
 static void nfc_hci_cback(uint8_t conn_id, tNFC_CONN_EVT event,
                           tNFC_CONN* p_data) {
-  FUZZLOG(MODULE_NAME "hci_cback, conn_id=%d, event=0x%02x", conn_id, event);
+  FUZZLOG(MODULE_NAME ": hci_cback, conn_id=%d, event=0x%02x", conn_id, event);
 
   if (event == NFC_DATA_CEVT) {
     if (p_data->data.p_data) {
@@ -67,7 +68,7 @@ static bool Fuzz_Init(Fuzz_Context& /*ctx*/) {
 }
 
 static void Fuzz_Deinit(Fuzz_Context& /*ctx*/) {
-  nfc_reset_all_conn_cbs();
+  nfc_task_shutdown_nfcc();
   GKI_shutdown();
 }
 
@@ -77,10 +78,17 @@ static void Fuzz_Run(Fuzz_Context& ctx) {
   }
 }
 
-void Nci_FixPackets(uint8_t /*SubType*/, std::vector<bytes_t>& /*Packets*/) {}
+void Fuzz_FixPackets(std::vector<bytes_t>& Packets, uint /*Seed*/) {
+  for (auto it = Packets.begin(); it != Packets.end(); ++it) {
+    // NCI packets should have at least 2 bytes.
+    if (it->size() < 2) {
+      it->resize(2);
+    }
+  }
+}
 
-void Nci_Fuzz(uint8_t SubType, const std::vector<bytes_t>& Packets) {
-  Fuzz_Context ctx(SubType % SUB_TYPE_MAX, Packets);
+void Fuzz_RunPackets(const std::vector<bytes_t>& Packets) {
+  Fuzz_Context ctx(SUB_TYPE_DUMMY, Packets);
   if (Fuzz_Init(ctx)) {
     Fuzz_Run(ctx);
   }

@@ -28,6 +28,8 @@ std::string BytesToHex(const uint8_t* data, size_t size);
 std::string BytesToHex(const bytes_t& data);
 bytes_t FuzzSeqGen(size_t minLen, size_t maxLen);
 
+extern void GKI_shutdown();
+
 extern "C" int LLVMFuzzerInitialize(int*, char***);
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* Data, size_t Size);
 extern "C" size_t LLVMFuzzerMutate(uint8_t* Data, size_t Size, size_t MaxSize);
@@ -60,5 +62,9 @@ class Fuzz_Context {
 
   ~Fuzz_Context() {}
 };
+
+extern const char fuzzer_name[];
+extern void Fuzz_FixPackets(std::vector<bytes_t>& Packets, uint Seed);
+extern void Fuzz_RunPackets(const std::vector<bytes_t>& Packets);
 
 #endif
