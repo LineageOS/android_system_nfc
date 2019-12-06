@@ -2,10 +2,6 @@
 #include "nfa_api.h"
 #include "nfa_dm_int.h"
 
-#define MODULE_NAME "nfc_ndef_fuzzer"
-
-const char fuzzer_name[] = MODULE_NAME;
-
 tNFA_DM_CB nfa_dm_cb = {};
 bool ndef_handler_registered = false;
 
@@ -38,15 +34,18 @@ static bool init() {
   return ndef_handler_registered;
 }
 
-void Fuzz_FixPackets(std::vector<bytes_t>& /*Packets*/, uint /*Seed*/) {}
+extern "C" int LLVMFuzzerTestOneInput(const uint8_t* Data, size_t Size) {
+  const char* argv[] = {"nfc_ndef_fuzzer"};
+  base::CommandLine::Init(1, argv);
+  logging::SetLogItems(false, false, false, false);
 
-void Fuzz_RunPackets(const std::vector<bytes_t>& Packets) {
+  // first byte is the type and command
   if (!init()) {
-    return;
+    return 0;
   }
 
-  for (auto it = Packets.cbegin(); it != Packets.cend(); ++it) {
-    nfa_dm_ndef_handle_message(NFA_STATUS_OK, const_cast<uint8_t*>(it->data()),
-                               (uint32_t)it->size());
-  }
+  nfa_dm_ndef_handle_message(NFA_STATUS_OK, const_cast<uint8_t*>(Data),
+                             (uint32_t)Size);
+
+  return 0;
 }

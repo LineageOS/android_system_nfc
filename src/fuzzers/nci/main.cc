@@ -1,10 +1,7 @@
 #include "fuzz.h"
 
-extern void Type3_FixPackets(uint8_t SubType, std::vector<bytes_t>& Packets);
-extern void Type4_FixPackets(uint8_t SubType, std::vector<bytes_t>& Packets);
-
-extern void Type3_Fuzz(uint8_t SubType, const std::vector<bytes_t>& Packets);
-extern void Type4_Fuzz(uint8_t SubType, const std::vector<bytes_t>& Packets);
+extern void Nci_FixPackets(uint8_t SubType, std::vector<bytes_t>& Packets);
+extern void Nci_Fuzz(uint8_t SubType, const std::vector<bytes_t>& Packets);
 
 static std::vector<bytes_t> UnpackPackets(const uint8_t* Data, size_t Size) {
   std::vector<bytes_t> result;
@@ -88,54 +85,24 @@ extern "C" size_t LLVMFuzzerCustomMutator(uint8_t* Data, size_t Size,
     p.resize(size);
   }
 
-  uint8_t CtrlByte = Data[0];
-  uint8_t FuzzType = (CtrlByte >> 5) % Fuzz_TypeMax;
-  uint8_t FuzzSubType = CtrlByte & 0x1F;
-
-  switch (FuzzType) {
-    case Fuzz_Type3:
-      Type3_FixPackets(FuzzSubType, Packets);
-      break;
-
-    case Fuzz_Type4:
-      Type4_FixPackets(FuzzSubType, Packets);
-      break;
-
-    default:
-      FUZZLOG("Unknown fuzz type %hhu", FuzzType);
-      break;
-  }
+  uint8_t FuzzType = Data[0];
+  Nci_FixPackets(FuzzType, Packets);
 
   Size = PackPackets(Packets, Data + 1, MaxSize - 1);
   return Size + 1;
 }
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* Data, size_t Size) {
-  const char* argv[] = {"nfc_ce_fuzzer"};
+  const char* argv[] = {"nfc_nci_fuzzer"};
   base::CommandLine::Init(1, argv);
   logging::SetLogItems(false, false, false, false);
 
   // first byte is the type and command
   if (Size > 0) {
-    uint8_t FuzzType = (Data[0] >> 5) % Fuzz_TypeMax;
-    uint8_t FuzzSubType = Data[0] & 0x1F;
+    uint8_t FuzzType = Data[0];
     auto Packets = UnpackPackets(Data + 1, Size - 1);
 
-    FUZZLOG("Fuzzing Type%u tag", (uint)(FuzzType + 1));
-
-    switch (FuzzType) {
-      case Fuzz_Type3:
-        Type3_Fuzz(FuzzSubType, Packets);
-        break;
-
-      case Fuzz_Type4:
-        Type4_Fuzz(FuzzSubType, Packets);
-        break;
-
-      default:
-        FUZZLOG("Unknown fuzz type: %hhu", FuzzType);
-        break;
-    }
+    Nci_Fuzz(FuzzType, Packets);
   }
   return 0;
 }
