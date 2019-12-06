@@ -21,7 +21,9 @@ bool hal_inject_data(const uint8_t* p_data, uint16_t data_len) {
   // For NCI responses, nfc_ncif_process_event checks the response OID matches
   // the command being sent last time. So mimic this by always copying the first
   // two bytes into last header.
-  memcpy(nfc_cb.last_hdr, p_data, sizeof(nfc_cb.last_hdr));
+  if (data_len >= sizeof(nfc_cb.last_hdr)) {
+    memcpy(nfc_cb.last_hdr, p_data, sizeof(nfc_cb.last_hdr));
+  }
 
   NFC_HDR* p_msg;
   p_msg = (NFC_HDR*)GKI_getbuf(sizeof(NFC_HDR) + NFC_RECEIVE_MSGS_OFFSET +

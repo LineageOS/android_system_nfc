@@ -15,7 +15,7 @@ function init() {
   PROJ=$(basename $PWD)
   FUZZER_NAME=nfc_${PROJ}_fuzzer
   FUZZ_DIR=data/fuzz/$(get_build_var TARGET_ARCH)/$FUZZER_NAME
-  FUZZ_OPTIONS="$FUZZ_OPTIONS -close_fd_mask=3 -max_len=255 -artifact_prefix=/$FUZZ_DIR/crashes/"
+  FUZZ_OPTIONS="$FUZZ_OPTIONS -close_fd_mask=3 -max_len=512 -artifact_prefix=/$FUZZ_DIR/crashes/"
 }
 
 function run_once() {

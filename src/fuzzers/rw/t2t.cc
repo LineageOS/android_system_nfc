@@ -1,6 +1,6 @@
 #include "fuzz.h"
 
-#define MODULE_NAME "Type2 Read/Write:"
+#define MODULE_NAME "Type2 Read/Write"
 
 enum {
   SUB_TYPE_PRESENCE_CHECK,
@@ -17,7 +17,8 @@ enum {
 };
 
 static void rw_cback(tRW_EVENT event, tRW_DATA* p_rw_data) {
-  FUZZLOG(MODULE_NAME "rw_cback: event=0x%02x, p_rw_data=%p", event, p_rw_data);
+  FUZZLOG(MODULE_NAME ": rw_cback: event=0x%02x, p_rw_data=%p", event,
+          p_rw_data);
 
   if (event == RW_T2T_READ_CPLT_EVT || event == RW_T2T_RAW_FRAME_EVT) {
     if (p_rw_data->data.p_data) {
@@ -40,7 +41,7 @@ static bool Init(Fuzz_Context& /*ctx*/) {
 
   rw_init();
   if (NFC_STATUS_OK != RW_SetActivatedTagType(&activate_params, rw_cback)) {
-    FUZZLOG(MODULE_NAME "RW_SetActivatedTagType failed");
+    FUZZLOG(MODULE_NAME ": RW_SetActivatedTagType failed");
     return false;
   }
 
@@ -106,7 +107,7 @@ static bool Init_FormatNDef(Fuzz_Context& /*ctx*/) {
 
 static bool Fuzz_Init(Fuzz_Context& ctx) {
   if (!Init(ctx)) {
-    FUZZLOG(MODULE_NAME "initialization failed");
+    FUZZLOG(MODULE_NAME ": initialization failed");
     return false;
   }
 
@@ -143,13 +144,13 @@ static bool Fuzz_Init(Fuzz_Context& ctx) {
       result = Init_FormatNDef(ctx);
       break;
     default:
-      FUZZLOG(MODULE_NAME "Unknown command %d", ctx.SubType);
+      FUZZLOG(MODULE_NAME ": Unknown command %d", ctx.SubType);
       result = false;
       break;
   }
 
   if (!result) {
-    FUZZLOG(MODULE_NAME "Initializing command %02X failed", ctx.SubType);
+    FUZZLOG(MODULE_NAME ": Initializing command %02X failed", ctx.SubType);
   }
 
   return result;
@@ -168,11 +169,11 @@ static void Fuzz_Deinit(Fuzz_Context& /*ctx*/) {
 }
 
 static void Fuzz_Run(Fuzz_Context& ctx) {
-  for (auto it = ctx.Data.cbegin(); it != ctx.Data.cend(); ++it) {
+  for (auto it = ctx.Data.cbegin() + 1; it != ctx.Data.cend(); ++it) {
     NFC_HDR* p_msg;
     p_msg = (NFC_HDR*)GKI_getbuf(sizeof(NFC_HDR) + it->size());
     if (p_msg == nullptr) {
-      FUZZLOG(MODULE_NAME "GKI_getbuf returns null, size=%zu", it->size());
+      FUZZLOG(MODULE_NAME ": GKI_getbuf returns null, size=%zu", it->size());
       return;
     }
 
@@ -188,8 +189,8 @@ static void Fuzz_Run(Fuzz_Context& ctx) {
                           .p_data = p_msg,
                       }};
 
-    FUZZLOG(MODULE_NAME "SubType=%02X, Response[%u/%u]=%s", ctx.SubType,
-            (uint)(it - ctx.Data.cbegin() + 1), (uint)ctx.Data.size(),
+    FUZZLOG(MODULE_NAME ": SubType=%02X, Response[%zd/%zu]=%s", ctx.SubType,
+            it - ctx.Data.cbegin() + 1, ctx.Data.size(),
             BytesToHex(*it).c_str());
 
     rf_cback(NFC_RF_CONN_ID, NFC_DATA_CEVT, &conn);
