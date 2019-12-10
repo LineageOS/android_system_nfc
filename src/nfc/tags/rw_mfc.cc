@@ -633,8 +633,7 @@ static void rw_mfc_conn_cback(uint8_t conn_id, tNFC_CONN_EVT event,
                               tNFC_CONN* p_data) {
   tRW_MFC_CB* p_mfc = &rw_cb.tcb.mfc;
   tRW_READ_DATA evt_data;
-  NFC_HDR* mfc_data = {};
-  uint8_t* p;
+  NFC_HDR* mfc_data = nullptr;
   tRW_DATA rw_data;
 
   DLOG_IF(INFO, nfc_debug_enabled)
@@ -693,9 +692,6 @@ static void rw_mfc_conn_cback(uint8_t conn_id, tNFC_CONN_EVT event,
     default:
       break;
   }
-
-  /* Assume the data is just the response byte sequence */
-  p = (uint8_t*)(mfc_data + 1) + mfc_data->offset;
 
   switch (p_mfc->state) {
     case RW_MFC_STATE_IDLE:
