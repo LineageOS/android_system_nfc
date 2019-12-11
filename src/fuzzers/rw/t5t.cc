@@ -269,6 +269,12 @@ static bool Fuzz_Init(Fuzz_Context& ctx) {
 
 static void Fuzz_Deinit(Fuzz_Context& /*ctx*/) {
   if (rf_cback) {
+    tRW_I93_CB* p_i93 = &rw_cb.tcb.i93;
+    if (p_i93->p_update_data) {
+      GKI_freebuf(p_i93->p_update_data);
+      p_i93->p_update_data = nullptr;
+    }
+
     tNFC_CONN conn = {
         .deactivate = {.status = NFC_STATUS_OK,
                        .type = NFC_DEACTIVATE_TYPE_IDLE,
@@ -300,8 +306,8 @@ static void Fuzz_Run(Fuzz_Context& ctx) {
                           .p_data = p_msg,
                       }};
 
-    FUZZLOG(MODULE_NAME ": SubType=%02X, Response[%zd/%zu]=%s", ctx.SubType,
-            it - ctx.Data.cbegin() + 1, ctx.Data.size(),
+    FUZZLOG(MODULE_NAME ": SubType=%02X, Response[%zd/%zd]=%s", ctx.SubType,
+            it - ctx.Data.cbegin(), ctx.Data.size() - 1,
             BytesToHex(*it).c_str());
 
     rf_cback(NFC_RF_CONN_ID, NFC_DATA_CEVT, &conn);
@@ -311,7 +317,7 @@ static void Fuzz_Run(Fuzz_Context& ctx) {
 void Type5_FixPackets(uint8_t /*SubType*/, std::vector<bytes_t>& /*Data*/) {}
 
 void Type5_Fuzz(uint8_t SubType, const std::vector<bytes_t>& Data) {
-  Fuzz_Context ctx(SubType, Data);
+  Fuzz_Context ctx(SubType % SUB_TYPE_MAX, Data);
   if (Fuzz_Init(ctx)) {
     Fuzz_Run(ctx);
   }

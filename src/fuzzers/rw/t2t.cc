@@ -189,8 +189,8 @@ static void Fuzz_Run(Fuzz_Context& ctx) {
                           .p_data = p_msg,
                       }};
 
-    FUZZLOG(MODULE_NAME ": SubType=%02X, Response[%zd/%zu]=%s", ctx.SubType,
-            it - ctx.Data.cbegin() + 1, ctx.Data.size(),
+    FUZZLOG(MODULE_NAME ": SubType=%02X, Response[%zd/%zd]=%s", ctx.SubType,
+            it - ctx.Data.cbegin(), ctx.Data.size() - 1,
             BytesToHex(*it).c_str());
 
     rf_cback(NFC_RF_CONN_ID, NFC_DATA_CEVT, &conn);
@@ -200,7 +200,7 @@ static void Fuzz_Run(Fuzz_Context& ctx) {
 void Type2_FixPackets(uint8_t /*SubType*/, std::vector<bytes_t>& /*Data*/) {}
 
 void Type2_Fuzz(uint8_t SubType, const std::vector<bytes_t>& Data) {
-  Fuzz_Context ctx(SubType, Data);
+  Fuzz_Context ctx(SubType % SUB_TYPE_MAX, Data);
   if (Fuzz_Init(ctx)) {
     Fuzz_Run(ctx);
   }

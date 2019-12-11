@@ -271,8 +271,8 @@ static void Fuzz_Run(Fuzz_Context& ctx) {
     uint8_t* p = (uint8_t*)(p_msg + 1) + p_msg->offset;
     memcpy(p, it->data(), it->size());
 
-    FUZZLOG(MODULE_NAME ": SubType=%02X, Response[%zd/%zu]=%s", ctx.SubType,
-            it - ctx.Data.cbegin() + 1, ctx.Data.size(),
+    FUZZLOG(MODULE_NAME ": SubType=%02X, Response[%zd/%zd]=%s", ctx.SubType,
+            it - ctx.Data.cbegin(), ctx.Data.size() - 1,
             BytesToHex(*it).c_str());
 
     if (ctx.SubType >= SUB_TYPE_NCI_CMD_FIRST) {
