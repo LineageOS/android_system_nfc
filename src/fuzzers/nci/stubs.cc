@@ -43,6 +43,6 @@ void nfa_dm_p2p_timer_event() { abort(); }
 void nfa_dm_p2p_prio_logic_cleanup() { abort(); }
 void rw_mfc_process_timeout(TIMER_LIST_ENT*) { abort(); }
 void ce_t4t_process_timeout(TIMER_LIST_ENT*) { abort(); }
-void llcp_cleanup() { abort(); }
+void llcp_cleanup() {}
 void nfa_sys_event(NFC_HDR*) { abort(); }
 void nfa_sys_timer_update() { abort(); }
