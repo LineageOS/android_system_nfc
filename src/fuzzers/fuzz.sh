@@ -99,7 +99,11 @@ function run_fuzz() {
 
 function build() {
   pushd $ANDROID_BUILD_TOP
-  SANITIZE_TARGET="hwaddress fuzzer" NATIVE_COVERAGE="true" COVERAGE_PATHS="system/nfc/src" mmma system/nfc/src -j48
+  SANITIZE_HOST="address" \
+    SANITIZE_TARGET="hwaddress fuzzer" \
+    NATIVE_COVERAGE="true" \
+    COVERAGE_PATHS="system/nfc/src" \
+    make -j $FUZZER_NAME
   popd
   adb shell mkdir -p /$FUZZ_DIR
   adb push $OUT/symbols/$FUZZ_DIR/$FUZZER_NAME /$FUZZ_DIR/
