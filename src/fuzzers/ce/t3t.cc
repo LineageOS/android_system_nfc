@@ -2,6 +2,13 @@
 
 #define MODULE_NAME "Type3 Emulator:"
 
+// Copied from ce_t3t.cc
+enum {
+  CE_T3T_COMMAND_INVALID,
+  CE_T3T_COMMAND_NFC_FORUM,
+  CE_T3T_COMMAND_FELICA
+};
+
 enum {
   SUB_TYPE_READONLY,
   SUB_TYPE_READWRITE,
@@ -15,7 +22,7 @@ static void ce_cback(tCE_EVENT event, tCE_DATA* p_ce_data) {
 
 #define TEST_NFCID_VALUE \
   { 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88 }
-// const uint8_t TEST_NFCID[] = TEST_NFCID_VALUE;
+const uint8_t TEST_NFCID[] = TEST_NFCID_VALUE;
 
 static bool Init(Fuzz_Context& /*ctx*/) {
   tNFC_ACTIVATE_DEVT activate_params = {
@@ -111,7 +118,21 @@ static void Fuzz_Run(Fuzz_Context& ctx) {
   }
 }
 
-void Type3_FixPackets(uint8_t /*SubType*/, std::vector<bytes_t>& /*Packets*/) {}
+void Type3_FixPackets(uint8_t /*SubType*/, std::vector<bytes_t>& Packets) {
+  for (auto it = Packets.begin() + 1; it != Packets.end(); ++it) {
+    if (it->size() < T3T_MSG_CMD_COMMON_HDR_LEN) {
+      it->resize(T3T_MSG_CMD_COMMON_HDR_LEN);
+      memset(it->data(), 0, it->size());
+    }
+
+    auto p = it->data();
+    p[0] = it->size();
+
+    if (p[1] != CE_T3T_COMMAND_FELICA) {
+      memcpy(&p[2], TEST_NFCID, sizeof(TEST_NFCID));
+    }
+  }
+}
 
 void Type3_Fuzz(uint8_t SubType, const std::vector<bytes_t>& Packets) {
   Fuzz_Context ctx(SubType % SUB_TYPE_MAX, Packets);

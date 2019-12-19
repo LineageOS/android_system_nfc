@@ -125,13 +125,14 @@ void Type4_FixPackets(uint8_t /*SubType*/, std::vector<bytes_t>& Packets) {
   const uint8_t valid_cmds[] = {T4T_CMD_INS_SELECT, T4T_CMD_INS_READ_BINARY,
                                 T4T_CMD_INS_UPDATE_BINARY};
 
-  for (auto& pkt : Packets) {
-    if (pkt.size() < T4T_CMD_MIN_HDR_SIZE) {
-      pkt.resize(T4T_CMD_MIN_HDR_SIZE);
+  for (auto it = Packets.begin() + 1; it != Packets.end(); ++it) {
+    if (it->size() < T4T_CMD_MIN_HDR_SIZE) {
+      it->resize(T4T_CMD_MIN_HDR_SIZE);
     }
 
-    pkt[0] = T4T_CMD_CLASS;
-    pkt[1] = valid_cmds[pkt[1] % sizeof(valid_cmds)];
+    auto p = it->data();
+    p[0] = T4T_CMD_CLASS;
+    p[1] = valid_cmds[p[1] % sizeof(valid_cmds)];
   }
 }
 
