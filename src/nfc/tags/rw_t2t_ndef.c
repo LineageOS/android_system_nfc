@@ -592,6 +592,12 @@ static void rw_t2t_handle_tlv_detect_rsp(uint8_t* p_data) {
               android_errorWriteLog(0x534e4554, "120506143");
             }
             if ((tlvtype == TAG_LOCK_CTRL_TLV) || (tlvtype == TAG_NDEF_TLV)) {
+              if (p_t2t->num_lockbytes > 0) {
+                RW_TRACE_ERROR0("Malformed tag!");
+                android_errorWriteLog(0x534e4554, "147309942");
+                failed = true;
+                break;
+              }
               /* Collect Lock TLV */
               p_t2t->tlv_value[2 - p_t2t->bytes_count] = p_data[offset];
               if (p_t2t->bytes_count == 0) {
