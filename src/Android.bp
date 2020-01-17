@@ -66,11 +66,6 @@ cc_library_shared {
     sanitize: {
         misc_undefined: ["bounds"],
         integer_overflow: true,
-        diag: {
-            integer_overflow: true,
-            misc_undefined: ["bounds"],
-            no_recover: ["bounds", "integer"],
-        },
     },
 
 }
