@@ -10,7 +10,6 @@ cc_library_shared {
         "liblog",
         "libdl",
         "libhardware",
-        "libmetricslogger",
         "libz",
         "libchrome",
         "libbase",
@@ -80,7 +79,6 @@ cc_defaults {
         "liblog",
         "libbase",
         "libchrome",
-        "libmetricslogger",
     ],
     cflags: [
         "-DBUILDCFG=1",

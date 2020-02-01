@@ -17,6 +17,4 @@ void stats_write(int32_t, ...) {}
 }  // namespace util
 }  // namespace android
 
-int write_to_logger(android_log_context, log_id_t) { return 0; }
-
 #endif
