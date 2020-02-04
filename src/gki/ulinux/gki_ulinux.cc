@@ -118,8 +118,6 @@ void GKI_init(void) {
   pthread_mutexattr_t attr;
   tGKI_OS* p_os;
 
-  memset(&gki_cb, 0, sizeof(gki_cb));
-
   gki_buffer_init();
   gki_timers_init();
   gki_cb.com.OSTicks = (uint32_t)times(nullptr);
