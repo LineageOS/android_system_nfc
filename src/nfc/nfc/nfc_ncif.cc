@@ -370,16 +370,34 @@ void nfc_ncif_send_cmd(NFC_HDR* p_buf) {
 **
 *******************************************************************************/
 bool nfc_ncif_process_event(NFC_HDR* p_msg) {
-  uint8_t mt, pbf, gid, *p, *pp;
+  uint8_t mt, pbf, gid, *p;
   bool free = true;
   uint8_t oid;
+  uint16_t len;
   uint8_t *p_old, old_gid, old_oid, old_mt;
 
   p = (uint8_t*)(p_msg + 1) + p_msg->offset;
 
-  pp = p;
-  NCI_MSG_PRS_HDR0(pp, mt, pbf, gid);
-  oid = ((*pp) & NCI_OID_MASK);
+  if (p_msg->len < 3) {
+    // Per NCI spec, every packets should have at least 3 bytes: HDR0, HDR1, and
+    // LEN field.
+    LOG(ERROR) << StringPrintf("Invalid NCI packet: p_msg->len: %d",
+                               p_msg->len);
+    return free;
+  }
+
+  // LEN field contains the size of the payload, not including the 3-byte packet
+  // header.
+  len = p[2] + 3;
+  if (p_msg->len < len) {
+    // Making sure the packet holds enough data than it claims.
+    LOG(ERROR) << StringPrintf("Invalid NCI packet: p_msg->len (%d) < len (%d)",
+                               p_msg->len, len);
+    return free;
+  }
+
+  NCI_MSG_PRS_HDR0(p, mt, pbf, gid);
+  oid = ((*p) & NCI_OID_MASK);
   if (nfc_cb.rawVsCbflag == true &&
       nfc_ncif_proc_proprietary_rsp(mt, gid, oid) == true) {
     nci_proc_prop_raw_vs_rsp(p_msg);
@@ -398,7 +416,7 @@ bool nfc_ncif_process_event(NFC_HDR* p_msg) {
     case NCI_MT_RSP:
       DLOG_IF(INFO, nfc_debug_enabled)
           << StringPrintf("NFC received rsp gid:%d", gid);
-      oid = ((*pp) & NCI_OID_MASK);
+      oid = ((*p) & NCI_OID_MASK);
       p_old = nfc_cb.last_hdr;
       NCI_MSG_PRS_HDR0(p_old, old_mt, pbf, old_gid);
       old_oid = ((*p_old) & NCI_OID_MASK);
@@ -1540,6 +1558,10 @@ void nfc_ncif_proc_get_config_rsp(NFC_HDR* p_evt) {
 void nfc_ncif_proc_t3t_polling_ntf(uint8_t* p, uint16_t plen) {
   uint8_t status;
   uint8_t num_responses;
+
+  if (plen < NFC_TL_SIZE) {
+    return;
+  }
 
   /* Pass result to RW_T3T for processing */
   STREAM_TO_UINT8(status, p);
