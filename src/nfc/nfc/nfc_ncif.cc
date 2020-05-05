@@ -25,7 +25,9 @@
  ******************************************************************************/
 #include <android-base/stringprintf.h>
 #include <base/logging.h>
+#include <fcntl.h>
 #include <log/log.h>
+#include <sys/stat.h>
 
 #include "nfc_target.h"
 
@@ -55,9 +57,44 @@ static tNFC_FW_VERSION nfc_fw_version;
 
 extern unsigned char appl_dta_mode_flag;
 extern bool nfc_debug_enabled;
+extern std::string nfc_storage_path;
 
 static struct timeval timer_start;
 static struct timeval timer_end;
+
+static const off_t NATIVE_CRASH_FILE_SIZE = (1024 * 1024);
+
+void storeNativeCrashLogs(void) {
+  std::string filename = "/native_crash_logs";
+  std::string filepath = nfc_storage_path + filename;
+  int fileStream;
+  off_t fileSize;
+  DLOG_IF(INFO, nfc_debug_enabled)
+      << StringPrintf("%s: file=%s", __func__, filepath.c_str());
+  // check file size
+  struct stat st;
+  if (stat(filepath.c_str(), &st) == 0) {
+    fileSize = st.st_size;
+  } else {
+    fileSize = 0;
+  }
+
+  if (fileSize >= NATIVE_CRASH_FILE_SIZE) {
+    fileStream =
+        open(filepath.c_str(), O_RDWR | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+  } else {
+    fileStream =
+        open(filepath.c_str(), O_RDWR | O_CREAT | O_APPEND, S_IRUSR | S_IWUSR);
+  }
+
+  if (fileStream >= 0) {
+    debug_nfcsnoop_dump(fileStream);
+    close(fileStream);
+  } else {
+    LOG(ERROR) << StringPrintf("%s: fail to create, error = %d", __func__,
+                               errno);
+  }
+}
 
 /*******************************************************************************
 **
@@ -113,6 +150,7 @@ void nfc_ncif_cmd_timeout(void) {
   // Do not abort if for fuzz testing -- this may have some undesired
   // effect but this is the best we can do.
 #else
+  storeNativeCrashLogs();
   abort();
 #endif
 }
