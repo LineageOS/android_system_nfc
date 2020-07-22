@@ -1874,13 +1874,13 @@ void nfc_data_event(tNFC_CONN_CB* p_cb) {
 
       data_cevt.p_data = p_evt;
       /* adjust payload, if needed */
-      if (p_cb->conn_id == NFC_RF_CONN_ID) {
+      if (p_cb->conn_id == NFC_RF_CONN_ID && p_evt->len) {
         /* if NCI_PROTOCOL_T1T/NCI_PROTOCOL_T2T/NCI_PROTOCOL_T3T, the status
          * byte needs to be removed
          */
         if ((p_cb->act_protocol >= NCI_PROTOCOL_T1T) &&
             (p_cb->act_protocol <= NCI_PROTOCOL_T3T)) {
-          if (p_evt->len) p_evt->len--;
+          p_evt->len--;
           p = (uint8_t*)(p_evt + 1);
           data_cevt.status = *(p + p_evt->offset + p_evt->len);
           if ((NFC_GetNCIVersion() == NCI_VERSION_2_0) &&
@@ -1897,7 +1897,7 @@ void nfc_data_event(tNFC_CONN_CB* p_cb) {
         }
         if ((NFC_GetNCIVersion() == NCI_VERSION_2_0) &&
             (p_cb->act_protocol == NCI_PROTOCOL_T5T)) {
-          if (p_evt->len) p_evt->len--;
+          p_evt->len--;
           p = (uint8_t*)(p_evt + 1);
           data_cevt.status = *(p + p_evt->offset + p_evt->len);
         }
