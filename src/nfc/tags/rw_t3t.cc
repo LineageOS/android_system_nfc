@@ -292,7 +292,10 @@ void rw_t3t_process_error(tNFC_STATUS status) {
       /* If doing presence check, use status=NFC_STATUS_FAILED, otherwise
        * NFC_STATUS_TIMEOUT */
       evt_data.status = status;
-      evt = rw_t3t_api_res_evt[p_cb->cur_cmd];
+      if (rw_cb.cur_retry < RW_MAX_RETRIES)
+        evt = rw_t3t_api_res_evt[p_cb->cur_cmd];
+      else
+        evt = RW_T3T_INTF_ERROR_EVT;
 
       /* Set additional flags for RW_T3T_NDEF_DETECT_EVT */
       if (evt == RW_T3T_NDEF_DETECT_EVT) {
@@ -561,7 +564,7 @@ tNFC_STATUS rw_t3t_send_to_lower(NFC_HDR* p_msg) {
 #endif /* RW_STATS_INCLUDED */
 
   /* Set NFC-F SoD field (payload len + 1) */
-  p_msg->offset -= 1; /* Point to SoD field */
+  if (p_msg->offset) p_msg->offset -= 1; /* Point to SoD field */
   p = (uint8_t*)(p_msg + 1) + p_msg->offset;
   UINT8_TO_STREAM(p, (p_msg->len + 1));
   p_msg->len += 1; /* Increment len to include SoD */
