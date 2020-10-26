@@ -332,6 +332,8 @@ typedef enum {
 #define NFA_P2P_PAUSED_EVT 38
 /* P2P services resumed event */
 #define NFA_P2P_RESUMED_EVT 39
+/* T2T command completed */
+#define NFA_T2T_CMD_CPLT_EVT 40
 
 /* NFC deactivation type */
 #define NFA_DEACTIVATE_TYPE_IDLE NFC_DEACTIVATE_TYPE_IDLE
