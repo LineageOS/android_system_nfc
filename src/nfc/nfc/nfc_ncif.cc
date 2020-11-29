@@ -1395,16 +1395,26 @@ void nfc_ncif_proc_deactivate(uint8_t status, uint8_t deact_type, bool is_ntf) {
 void nfc_ncif_proc_ee_action(uint8_t* p, uint16_t plen) {
   tNFC_EE_ACTION_REVT evt_data;
   tNFC_RESPONSE_CBACK* p_cback = nfc_cb.p_resp_cback;
+  tNFC_RESPONSE nfc_response;
   uint8_t data_len, ulen, tag, *p_data;
   uint8_t max_len;
 
   if (p_cback) {
     memset(&evt_data.act_data, 0, sizeof(tNFC_ACTION_DATA));
+    if (plen > 3) {
+      plen -= 3;
+    } else {
+      evt_data.status = NFC_STATUS_FAILED;
+      evt_data.nfcee_id = 0;
+      nfc_response.ee_action = evt_data;
+      (*p_cback)(NFC_EE_ACTION_REVT, &nfc_response);
+      android_errorWriteLog(0x534e4554, "157649306");
+      return;
+    }
     evt_data.status = NFC_STATUS_OK;
     evt_data.nfcee_id = *p++;
     evt_data.act_data.trigger = *p++;
     data_len = *p++;
-    if (plen >= 3) plen -= 3;
     if (data_len > plen) data_len = (uint8_t)plen;
 
     switch (evt_data.act_data.trigger) {
@@ -1447,7 +1457,6 @@ void nfc_ncif_proc_ee_action(uint8_t* p, uint16_t plen) {
         }
         break;
     }
-    tNFC_RESPONSE nfc_response;
     nfc_response.ee_action = evt_data;
     (*p_cback)(NFC_EE_ACTION_REVT, &nfc_response);
   }
@@ -1515,34 +1524,42 @@ void nfc_ncif_proc_ee_discover_req(uint8_t* p, uint16_t plen) {
 ** Returns          void
 **
 *******************************************************************************/
-void nfc_ncif_proc_get_routing(uint8_t* p,
-                               __attribute__((unused)) uint8_t len) {
+void nfc_ncif_proc_get_routing(uint8_t* p, uint8_t len) {
   tNFC_GET_ROUTING_REVT evt_data;
-  uint8_t more, num_entries, xx, yy, *pn, tl;
+  uint8_t more, num_entries, xx, *pn;
   tNFC_STATUS status = NFC_STATUS_CONTINUE;
 
-  if (nfc_cb.p_resp_cback) {
+  if (len >= 2 && nfc_cb.p_resp_cback) {
     more = *p++;
     num_entries = *p++;
+    if (num_entries == 0) return;
+    len -= 2;
+    if (len < 2) {
+      LOG(ERROR) << StringPrintf("Invalid len=%d", len);
+      return;
+    }
     for (xx = 0; xx < num_entries; xx++) {
       if ((more == false) && (xx == (num_entries - 1))) status = NFC_STATUS_OK;
       evt_data.status = (tNFC_STATUS)status;
-      evt_data.nfcee_id = *p++;
-      evt_data.num_tlvs = *p++;
-      evt_data.tlv_size = 0;
-      pn = evt_data.param_tlvs;
-      for (yy = 0; yy < evt_data.num_tlvs; yy++) {
-        tl = *(p + 1);
-        tl += NFC_TL_SIZE;
-        evt_data.tlv_size += tl;
-        if (evt_data.tlv_size > NFC_MAX_EE_TLV_SIZE) {
-          android_errorWriteLog(0x534e4554, "117554809");
-          LOG(ERROR) << __func__ << "Invalid data format";
-          return;
-        }
-        STREAM_TO_ARRAY(pn, p, tl);
-        pn += tl;
+      if (len >= 2)
+        len -= 2;
+      else
+        return;
+      evt_data.qualifier_type = *p++;
+      evt_data.num_tlvs = 1;
+      evt_data.tlv_size = *p++;
+      if (evt_data.tlv_size > NFC_MAX_EE_TLV_SIZE) {
+        android_errorWriteLog(0x534e4554, "117554809");
+        LOG(ERROR) << __func__ << "Invalid data format";
+        return;
       }
+      if (evt_data.tlv_size > len) {
+        LOG(ERROR) << StringPrintf("Invalid evt_data.tlv_size");
+        return;
+      } else
+        len -= evt_data.tlv_size;
+      pn = evt_data.param_tlvs;
+      STREAM_TO_ARRAY(pn, p, evt_data.tlv_size);
       tNFC_RESPONSE nfc_response;
       nfc_response.get_routing = evt_data;
       (*nfc_cb.p_resp_cback)(NFC_GET_ROUTING_REVT, &nfc_response);
@@ -1834,13 +1851,13 @@ void nfc_data_event(tNFC_CONN_CB* p_cb) {
 
       data_cevt.p_data = p_evt;
       /* adjust payload, if needed */
-      if (p_cb->conn_id == NFC_RF_CONN_ID) {
+      if (p_cb->conn_id == NFC_RF_CONN_ID && p_evt->len) {
         /* if NCI_PROTOCOL_T1T/NCI_PROTOCOL_T2T/NCI_PROTOCOL_T3T, the status
          * byte needs to be removed
          */
         if ((p_cb->act_protocol >= NCI_PROTOCOL_T1T) &&
             (p_cb->act_protocol <= NCI_PROTOCOL_T3T)) {
-          if (p_evt->len) p_evt->len--;
+          p_evt->len--;
           p = (uint8_t*)(p_evt + 1);
           data_cevt.status = *(p + p_evt->offset + p_evt->len);
           if ((NFC_GetNCIVersion() == NCI_VERSION_2_0) &&
@@ -1857,7 +1874,7 @@ void nfc_data_event(tNFC_CONN_CB* p_cb) {
         }
         if ((NFC_GetNCIVersion() == NCI_VERSION_2_0) &&
             (p_cb->act_protocol == NCI_PROTOCOL_T5T)) {
-          if (p_evt->len) p_evt->len--;
+          p_evt->len--;
           p = (uint8_t*)(p_evt + 1);
           data_cevt.status = *(p + p_evt->offset + p_evt->len);
         }
