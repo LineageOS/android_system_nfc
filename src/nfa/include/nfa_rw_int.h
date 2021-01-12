@@ -95,6 +95,7 @@ enum {
   NFA_RW_OP_T2T_READ,
   NFA_RW_OP_T2T_WRITE,
   NFA_RW_OP_T2T_SECTOR_SELECT,
+  NFA_RW_OP_T2T_READ_DYN_LOCKS,
 
   /* Exclusive Type-3 tag operations */
   NFA_RW_OP_T3T_READ,
@@ -164,6 +165,11 @@ typedef struct {
 /* NFA_RW_OP_T2T_SECTOR_SELECT params */
 typedef struct { uint8_t sector_number; } tNFA_RW_OP_PARAMS_T2T_SECTOR_SELECT;
 
+/* NFA_RW_OP_T2T_READ_DYN_LOCKS params */
+typedef struct {
+  bool read_dyn_locks;
+} tNFA_RW_OP_PARAMS_T2T_READ_DYN_LOCKS;
+
 /* NFA_RW_OP_T3T_READ params */
 typedef struct {
   uint8_t num_blocks;
@@ -209,6 +215,7 @@ typedef union {
   tNFA_RW_OP_PARAMS_T2T_READ t2t_read;
   tNFA_RW_OP_PARAMS_T2T_WRITE t2t_write;
   tNFA_RW_OP_PARAMS_T2T_SECTOR_SELECT t2t_sector_select;
+  tNFA_RW_OP_PARAMS_T2T_READ_DYN_LOCKS t2t_read_dyn_locks;
 
   /* params for NFA_RW_OP_T3T_READ and NFA_RW_OP_T3T_WRITE */
   tNFA_RW_OP_PARAMS_T3T_READ t3t_read;
