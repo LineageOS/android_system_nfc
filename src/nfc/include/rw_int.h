@@ -365,8 +365,8 @@ typedef uint8_t tRW_T2T_LOCK_STATUS;
 typedef struct {
   uint16_t offset;              /* Offset of the lock byte in the Tag */
   uint16_t num_bits;            /* Number of lock bits in the lock byte */
-  uint8_t bytes_locked_per_bit; /* No. of tag bytes gets locked by a bit in this
-                                   byte       */
+  uint16_t bytes_locked_per_bit; /* No. of tag bytes gets locked by a bit
+                                    in this byte */
 } tRW_T2T_LOCK_INFO;
 
 typedef struct {
