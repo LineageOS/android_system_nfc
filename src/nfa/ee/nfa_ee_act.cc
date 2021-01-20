@@ -1643,6 +1643,20 @@ void nfa_ee_api_disconnect(tNFA_EE_MSG* p_data) {
 
 /*******************************************************************************
 **
+** Function         nfa_ee_api_pwr_and_link_ctrl
+**
+** Description      Initiates closing of the connection to the given NFCEE
+**
+** Returns          void
+**
+*******************************************************************************/
+void nfa_ee_api_pwr_and_link_ctrl(tNFA_EE_MSG* p_data) {
+  NFC_NfceePLConfig(p_data->pwr_and_link_ctrl.nfcee_id,
+                    p_data->pwr_and_link_ctrl.config);
+}
+
+/*******************************************************************************
+**
 ** Function         nfa_ee_report_disc_done
 **
 ** Description      Process the callback for NFCEE discovery response
@@ -2257,6 +2271,23 @@ void nfa_ee_nci_wait_rsp(tNFA_EE_MSG* p_data) {
     if (p_rsp->opcode == NCI_MSG_RF_SET_ROUTING) nfa_ee_cb.wait_rsp--;
   }
   nfa_ee_report_update_evt();
+}
+
+/*******************************************************************************
+**
+** Function         nfa_ee_pwr_and_link_ctrl_rsp
+**
+** Description      Process the result for NCI response
+**
+** Returns          void
+**
+*******************************************************************************/
+void nfa_ee_pwr_and_link_ctrl_rsp(tNFA_EE_MSG* p_data) {
+  tNFA_EE_CBACK_DATA evt_data;
+  if (p_data != nullptr) {
+    evt_data.status = NFA_STATUS_OK;
+    nfa_ee_report_event(nullptr, NFA_EE_PWR_AND_LINK_CTRL_EVT, &evt_data);
+  }
 }
 
 /*******************************************************************************
