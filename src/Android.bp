@@ -71,6 +71,7 @@ cc_library_shared {
     sanitize: {
         misc_undefined: ["bounds"],
         integer_overflow: true,
+        scs: true,
     },
 
 }
@@ -175,4 +176,3 @@ cc_fuzz {
         "fuzzers/llcp/*.cc",
     ],
 }
-
