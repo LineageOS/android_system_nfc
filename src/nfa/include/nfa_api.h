@@ -259,7 +259,6 @@ typedef enum {
   NFA_DTA_LLCP_MODE = 0x00000002,
   NFA_DTA_HCEF_MODE = 0x00000004,
   NFA_DTA_CR8 = 0x00000080,
-  NFA_DTA_CR12 = 0x00000040,
 } tNFA_eDtaModes;
 
 /* NFA Connection Callback Events */
