@@ -115,14 +115,6 @@ void nfc_ncif_cmd_timeout(void) {
   if (nfc_cb.nfc_state == NFC_STATE_CORE_INIT) {
     nfc_enabled(NFC_STATUS_FAILED, nullptr);
   }
-
-  /* XXX maco since this failure is unrecoverable, abort the process */
-#ifdef FUZZING_BUILD_MODE_UNSAFE_FOR_PRODUCTION
-  // Do not abort if for fuzz testing -- this may have some undesired
-  // effect but this is the best we can do.
-#else
-  abort();
-#endif
 }
 
 /*******************************************************************************
