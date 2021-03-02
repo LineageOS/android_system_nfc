@@ -118,7 +118,7 @@ enum {
   NFA_RW_OP_I93_LOCK_DSFID,
   NFA_RW_OP_I93_GET_SYS_INFO,
   NFA_RW_OP_I93_GET_MULTI_BLOCK_STATUS,
-
+  NFA_RW_OP_I93_SET_ADDR_MODE,
   NFA_RW_OP_MAX
 };
 typedef uint8_t tNFA_RW_OP;
@@ -190,6 +190,7 @@ typedef struct {
   bool afi_present;
   uint8_t afi;
   uint8_t dsfid;
+  bool addr_mode;
   uint16_t first_block_number;
   uint16_t number_blocks;
   uint8_t* p_data;
@@ -322,6 +323,7 @@ typedef struct {
   uint8_t i93_block_size;
   uint16_t i93_num_block;
   uint8_t i93_uid[I93_UID_BYTE_LEN];
+  uint8_t i93_addr_mode;
 } tNFA_RW_CB;
 extern tNFA_RW_CB nfa_rw_cb;
 
