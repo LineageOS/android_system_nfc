@@ -72,7 +72,8 @@ static bool Init_Inventory(Fuzz_Context& /*ctx*/) {
 }
 
 static bool Init_StayQuiet(Fuzz_Context& /*ctx*/) {
-  return NFC_STATUS_OK == RW_I93StayQuiet();
+  uint8_t uid[] = TEST_UID_VALUE;
+  return NFC_STATUS_OK == RW_I93StayQuiet(uid);
 }
 
 static bool Init_ReadSingleBlock(Fuzz_Context& /*ctx*/) {
