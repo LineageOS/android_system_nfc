@@ -50,48 +50,7 @@ extern bool nfc_debug_enabled;
 #define RW_I93_FORMAT_DATA_LEN 8
 /* max getting lock status if get multi block sec is supported */
 #define RW_I93_GET_MULTI_BLOCK_SEC_SIZE 253
-/*Capability Container CC Size */
-#define RW_I93_CC_SIZE 4
 
-/* main state */
-enum {
-  RW_I93_STATE_NOT_ACTIVATED, /* ISO15693 is not activated            */
-  RW_I93_STATE_IDLE,          /* waiting for upper layer API          */
-  RW_I93_STATE_BUSY,          /* waiting for response from tag        */
-
-  RW_I93_STATE_DETECT_NDEF,   /* performing NDEF detection precedure  */
-  RW_I93_STATE_READ_NDEF,     /* performing read NDEF procedure       */
-  RW_I93_STATE_UPDATE_NDEF,   /* performing update NDEF procedure     */
-  RW_I93_STATE_FORMAT,        /* performing format procedure          */
-  RW_I93_STATE_SET_READ_ONLY, /* performing set read-only procedure   */
-
-  RW_I93_STATE_PRESENCE_CHECK /* checking presence of tag             */
-};
-
-/* sub state */
-enum {
-  RW_I93_SUBSTATE_WAIT_UID,          /* waiting for response of inventory    */
-  RW_I93_SUBSTATE_WAIT_SYS_INFO,     /* waiting for response of get sys info */
-  RW_I93_SUBSTATE_WAIT_CC,           /* waiting for reading CC               */
-  RW_I93_SUBSTATE_SEARCH_NDEF_TLV,   /* searching NDEF TLV                   */
-  RW_I93_SUBSTATE_CHECK_LOCK_STATUS, /* check if any NDEF TLV is locked      */
-
-  RW_I93_SUBSTATE_RESET_LEN,  /* set length to 0 to update NDEF TLV   */
-  RW_I93_SUBSTATE_WRITE_NDEF, /* writing NDEF and Terminator TLV      */
-  RW_I93_SUBSTATE_UPDATE_LEN, /* set length into NDEF TLV             */
-
-  RW_I93_SUBSTATE_WAIT_RESET_DSFID_AFI, /* reset DSFID and AFI */
-  RW_I93_SUBSTATE_CHECK_READ_ONLY,   /* check if any block is locked         */
-  RW_I93_SUBSTATE_WRITE_CC_NDEF_TLV, /* write CC and empty NDEF/Terminator TLV
-                                        */
-
-  RW_I93_SUBSTATE_WAIT_UPDATE_CC, /* updating CC as read-only             */
-  RW_I93_SUBSTATE_LOCK_NDEF_TLV,  /* lock blocks of NDEF TLV              */
-  RW_I93_SUBSTATE_WAIT_LOCK_CC    /* lock block of CC                     */
-};
-
-static std::string rw_i93_get_state_name(uint8_t state);
-static std::string rw_i93_get_sub_state_name(uint8_t sub_state);
 static std::string rw_i93_get_tag_name(uint8_t product_version);
 
 static void rw_i93_data_cback(uint8_t conn_id, tNFC_CONN_EVT event,
@@ -633,6 +592,7 @@ void rw_i93_send_to_upper(NFC_HDR* p_resp) {
 
         memcpy(rw_data.i93_sys_info.uid, p_i93->uid, I93_UID_BYTE_LEN);
 
+        p_i93->i93_t5t_mode = RW_I93_GET_SYS_INFO_MEM_INFO;
         event = RW_I93_SYS_INFO_EVT;
       } else {
         /* retrying with protocol extension flag */
@@ -654,6 +614,7 @@ void rw_i93_send_to_upper(NFC_HDR* p_resp) {
 
         memcpy(rw_data.i93_sys_info.uid, p_i93->uid, I93_UID_BYTE_LEN);
 
+        p_i93->i93_t5t_mode = RW_I93_GET_SYS_INFO_MEM_INFO;
         event = RW_I93_SYS_INFO_EVT;
       } else {
         /* retrying with protocol extension flag or with extended sys info
@@ -1704,8 +1665,17 @@ tNFC_STATUS rw_i93_get_next_blocks(uint16_t offset) {
   if (p_i93->intl_flags & RW_I93_FLAG_READ_MULTI_BLOCK) {
     num_block = RW_I93_READ_MULTI_BLOCK_SIZE / p_i93->block_size;
 
-    if (num_block + first_block > p_i93->num_block)
-      num_block = p_i93->num_block - first_block;
+    // first_block is an offset related to the beginning of the T5T_Area for T5T
+    // tags but physical memory for ISO15693 tags
+    if (p_i93->i93_t5t_mode == RW_I93_GET_SYS_INFO_MEM_INFO) {
+      if (num_block + first_block > p_i93->num_block)
+        num_block = p_i93->num_block - first_block;
+    } else {
+      if (num_block + first_block >
+          p_i93->num_block + p_i93->t5t_area_start_block)
+        num_block =
+            p_i93->num_block - first_block + p_i93->t5t_area_start_block;
+    }
 
     if (p_i93->uid[1] == I93_UID_IC_MFG_CODE_STM) {
       /* LRIS64K, M24LR64-R, M24LR04E-R, M24LR16E-R, M24LR64E-R requires
@@ -1751,6 +1721,11 @@ tNFC_STATUS rw_i93_get_next_blocks(uint16_t offset) {
                       (first_block % I93_ONS_BLOCKS_PER_SECTOR);
         }
       }
+    }
+
+    if (num_block == 0) {
+      /* only one remaining block to read */
+      return rw_i93_send_cmd_read_single_block(first_block, false);
     }
 
     return rw_i93_send_cmd_read_multi_blocks(first_block, num_block);
@@ -1817,7 +1792,7 @@ void rw_i93_sm_detect_ndef(NFC_HDR* p_resp) {
   tNFC_STATUS status = NFC_STATUS_FAILED;
 
   DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
-      "sub_state:%s (0x%x)",
+      "%s - sub_state:%s (0x%x)", __func__,
       rw_i93_get_sub_state_name(p_i93->sub_state).c_str(), p_i93->sub_state);
 
   if (length == 0) {
@@ -1835,7 +1810,7 @@ void rw_i93_sm_detect_ndef(NFC_HDR* p_resp) {
       p_i93->intl_flags |= RW_I93_FLAG_16BIT_NUM_BLOCK;
     } else {
       DLOG_IF(INFO, nfc_debug_enabled)
-          << StringPrintf("Got error flags (0x%02x)", flags);
+          << StringPrintf("%s - Got error flags (0x%02x)", __func__, flags);
       rw_i93_handle_error(NFC_STATUS_FAILED);
     }
     return;
@@ -1856,7 +1831,7 @@ void rw_i93_sm_detect_ndef(NFC_HDR* p_resp) {
       if (u8 != I93_DFS_UNSUPPORTED) {
         /* if Data Storage Format is unknown */
         DLOG_IF(INFO, nfc_debug_enabled)
-            << StringPrintf("Got unknown DSFID (0x%02x)", u8);
+            << StringPrintf("%s - Got unknown DSFID (0x%02x)", __func__, u8);
         rw_i93_handle_error(NFC_STATUS_FAILED);
       } else {
         /* get system information to get memory size */
@@ -1881,7 +1856,7 @@ void rw_i93_sm_detect_ndef(NFC_HDR* p_resp) {
 
       if ((p_i93->block_size == 0) || (p_i93->num_block == 0)) {
         DLOG_IF(INFO, nfc_debug_enabled)
-            << StringPrintf("Unable to get tag memory size");
+            << StringPrintf("%s - Unable to get tag memory size", __func__);
         rw_i93_handle_error(status);
       } else {
         /* read CC in the first block */
@@ -1923,11 +1898,13 @@ void rw_i93_sm_detect_ndef(NFC_HDR* p_resp) {
       **       : Bit 2:More than 2040 bytes are supported [STM, ONS]
       */
 
-      DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
-          "cc: 0x%02X 0x%02X 0x%02X 0x%02X", cc[0], cc[1], cc[2], cc[3]);
       DLOG_IF(INFO, nfc_debug_enabled)
-          << StringPrintf("Total blocks:0x%04X, Block size:0x%02X",
-                          p_i93->num_block, p_i93->block_size);
+          << StringPrintf("%s - cc[0-3]: 0x%02X 0x%02X 0x%02X 0x%02X", __func__,
+                          cc[0], cc[1], cc[2], cc[3]);
+
+      DLOG_IF(INFO, nfc_debug_enabled)
+          << StringPrintf("%s - Total blocks:0x%04X, Block size:0x%02X",
+                          __func__, p_i93->num_block, p_i93->block_size);
 
       if ((cc[0] == I93_ICODE_CC_MAGIC_NUMER_E1) ||
           (cc[0] == I93_ICODE_CC_MAGIC_NUMER_E2)) {
@@ -1946,7 +1923,7 @@ void rw_i93_sm_detect_ndef(NFC_HDR* p_resp) {
             p_i93->intl_flags |= RW_I93_FLAG_READ_ONLY;
           }
           if (cc[3] & I93_ICODE_CC_MBREAD_MASK) {
-            /* tag supports read multi blocks command */
+            /* tag supports read multiple blocks command */
             p_i93->intl_flags |= RW_I93_FLAG_READ_MULTI_BLOCK;
           }
           if (cc[3] & I93_ICODE_CC_SPECIAL_FRAME_MASK) {
@@ -1999,8 +1976,8 @@ void rw_i93_sm_detect_ndef(NFC_HDR* p_resp) {
             p_i93->tlv_type = I93_ICODE_TLV_TYPE_TERM;
             break;
           } else {
-            DLOG_IF(INFO, nfc_debug_enabled)
-                << StringPrintf("Invalid type: 0x%02x", *(p + xx));
+            DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
+                "%s - Invalid type: 0x%02x", __func__, *(p + xx));
             rw_i93_handle_error(NFC_STATUS_FAILED);
             return;
           }
@@ -2199,7 +2176,7 @@ void rw_i93_sm_detect_ndef(NFC_HDR* p_resp) {
       p_i93->sent_cmd = 0;
 
       DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
-          "NDEF cur_size(%d),max_size (%d), flags (0x%x)",
+          "%s - NDEF cur_size(%d),max_size (%d), flags (0x%x)", __func__,
           rw_data.ndef.cur_size, rw_data.ndef.max_size, rw_data.ndef.flags);
 
       (*(rw_cb.p_cback))(RW_I93_NDEF_DETECT_EVT, &rw_data);
@@ -2239,7 +2216,7 @@ void rw_i93_sm_read_ndef(NFC_HDR* p_resp) {
 
   if (flags & I93_FLAG_ERROR_DETECTED) {
     DLOG_IF(INFO, nfc_debug_enabled)
-        << StringPrintf("Got error flags (0x%02x)", flags);
+        << StringPrintf("%s - Got error flags (0x%02x)", __func__, flags);
     rw_i93_handle_error(NFC_STATUS_FAILED);
     return;
   }
@@ -2286,14 +2263,14 @@ void rw_i93_sm_read_ndef(NFC_HDR* p_resp) {
     p_i93->sent_cmd = 0;
 
     DLOG_IF(INFO, nfc_debug_enabled)
-        << StringPrintf("NDEF read complete read (%d)/total (%d)", p_resp->len,
-                        p_i93->ndef_length);
+        << StringPrintf("%s - NDEF read complete read (%d)/total (%d)",
+                        __func__, p_resp->len, p_i93->ndef_length);
 
     (*(rw_cb.p_cback))(RW_I93_NDEF_READ_CPLT_EVT, &rw_data);
   } else {
     DLOG_IF(INFO, nfc_debug_enabled)
-        << StringPrintf("NDEF read segment read (%d)/total (%d)", p_resp->len,
-                        p_i93->ndef_length);
+        << StringPrintf("%s - NDEF read segment read (%d)/total (%d)", __func__,
+                        p_resp->len, p_i93->ndef_length);
 
     if (p_resp->len > 0) {
       (*(rw_cb.p_cback))(RW_I93_NDEF_READ_EVT, &rw_data);
@@ -2329,7 +2306,7 @@ void rw_i93_sm_update_ndef(NFC_HDR* p_resp) {
   tRW_DATA rw_data;
 
   DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
-      "sub_state:%s (0x%x)",
+      "%s - sub_state:%s (0x%x)", __func__,
       rw_i93_get_sub_state_name(p_i93->sub_state).c_str(), p_i93->sub_state);
 
   if (length == 0 || p_i93->block_size > I93_MAX_BLOCK_LENGH) {
@@ -2350,7 +2327,7 @@ void rw_i93_sm_update_ndef(NFC_HDR* p_resp) {
       /* ignore error */
     } else {
       DLOG_IF(INFO, nfc_debug_enabled)
-          << StringPrintf("Got error flags (0x%02x)", flags);
+          << StringPrintf("%s - Got error flags (0x%02x)", __func__, flags);
       rw_i93_handle_error(NFC_STATUS_FAILED);
       return;
     }
@@ -2568,8 +2545,9 @@ void rw_i93_sm_update_ndef(NFC_HDR* p_resp) {
         }
       } else {
         DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
-            "NDEF update complete, %d bytes, (%d-%d)", p_i93->ndef_length,
-            p_i93->ndef_tlv_start_offset, p_i93->ndef_tlv_last_offset);
+            "%s - NDEF update complete, %d bytes, (%d-%d)", __func__,
+            p_i93->ndef_length, p_i93->ndef_tlv_start_offset,
+            p_i93->ndef_tlv_last_offset);
 
         p_i93->state = RW_I93_STATE_IDLE;
         p_i93->sent_cmd = 0;
@@ -3086,8 +3064,8 @@ void rw_i93_handle_error(tNFC_STATUS status) {
   tRW_DATA rw_data;
   tRW_EVENT event;
 
-  DLOG_IF(INFO, nfc_debug_enabled)
-      << StringPrintf("status:0x%02X, state:0x%X", status, p_i93->state);
+  DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
+      "%s - status:0x%02X, state:0x%X", __func__, status, p_i93->state);
 
   nfc_stop_quick_timer(&p_i93->timer);
 
@@ -3174,14 +3152,16 @@ void rw_i93_handle_error(tNFC_STATUS status) {
 void rw_i93_process_timeout(TIMER_LIST_ENT* p_tle) {
   NFC_HDR* p_buf;
 
-  DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf("event=%d", p_tle->event);
+  DLOG_IF(INFO, nfc_debug_enabled)
+      << StringPrintf("%s - event=%d", __func__, p_tle->event);
 
   if (p_tle->event == NFC_TTYPE_RW_I93_RESPONSE) {
     if ((rw_cb.tcb.i93.retry_count < RW_MAX_RETRIES) &&
         (rw_cb.tcb.i93.p_retry_cmd) &&
         (rw_cb.tcb.i93.sent_cmd != I93_CMD_STAY_QUIET)) {
       rw_cb.tcb.i93.retry_count++;
-      LOG(ERROR) << StringPrintf("retry_count = %d", rw_cb.tcb.i93.retry_count);
+      LOG(ERROR) << StringPrintf("%s - retry_count = %d", __func__,
+                                 rw_cb.tcb.i93.retry_count);
 
       p_buf = rw_cb.tcb.i93.p_retry_cmd;
       rw_cb.tcb.i93.p_retry_cmd = nullptr;
@@ -3199,7 +3179,7 @@ void rw_i93_process_timeout(TIMER_LIST_ENT* p_tle) {
     }
     rw_i93_handle_error(NFC_STATUS_TIMEOUT);
   } else {
-    LOG(ERROR) << StringPrintf("unknown event=%d", p_tle->event);
+    LOG(ERROR) << StringPrintf("%s - unknown event=%d", __func__, p_tle->event);
   }
 }
 
@@ -3220,7 +3200,8 @@ static void rw_i93_data_cback(__attribute__((unused)) uint8_t conn_id,
 
   uint8_t begin_state = p_i93->state;
 
-  DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf("event = 0x%X", event);
+  DLOG_IF(INFO, nfc_debug_enabled)
+      << StringPrintf("%s - event = 0x%X", __func__, event);
 
   if ((event == NFC_DEACTIVATE_CEVT) || (event == NFC_ERROR_CEVT) ||
       ((event == NFC_DATA_CEVT) && (p_data->status != NFC_STATUS_OK))) {
@@ -3230,7 +3211,8 @@ static void rw_i93_data_cback(__attribute__((unused)) uint8_t conn_id,
       if ((p_i93->retry_count < RW_MAX_RETRIES) && (p_i93->p_retry_cmd)) {
         p_i93->retry_count++;
 
-        LOG(ERROR) << StringPrintf("retry_count = %d", p_i93->retry_count);
+        LOG(ERROR) << StringPrintf("%s - retry_count = %d", __func__,
+                                   p_i93->retry_count);
 
         p_resp = p_i93->p_retry_cmd;
         p_i93->p_retry_cmd = nullptr;
@@ -3284,8 +3266,8 @@ static void rw_i93_data_cback(__attribute__((unused)) uint8_t conn_id,
   }
 
   DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
-      "RW I93 state: <%s (%d)>", rw_i93_get_state_name(p_i93->state).c_str(),
-      p_i93->state);
+      "%s - RW I93 state: <%s (%d)>", __func__,
+      rw_i93_get_state_name(p_i93->state).c_str(), p_i93->state);
 
   switch (p_i93->state) {
     case RW_I93_STATE_IDLE:
@@ -3308,7 +3290,15 @@ static void rw_i93_data_cback(__attribute__((unused)) uint8_t conn_id,
       break;
 
     case RW_I93_STATE_DETECT_NDEF:
-      rw_i93_sm_detect_ndef(p_resp);
+      if (p_i93->i93_t5t_mode == RW_I93_GET_SYS_INFO_MEM_INFO) {
+        DLOG_IF(INFO, nfc_debug_enabled)
+            << StringPrintf("%s - rw_i93_sm_detect_ndef()", __func__);
+        rw_i93_sm_detect_ndef(p_resp);
+      } else {
+        DLOG_IF(INFO, nfc_debug_enabled)
+            << StringPrintf("%s - rw_t5t_sm_detect_ndef()", __func__);
+        rw_t5t_sm_detect_ndef(p_resp);
+      }
       GKI_freebuf(p_resp);
       break;
 
@@ -3318,7 +3308,15 @@ static void rw_i93_data_cback(__attribute__((unused)) uint8_t conn_id,
       break;
 
     case RW_I93_STATE_UPDATE_NDEF:
-      rw_i93_sm_update_ndef(p_resp);
+      if (p_i93->i93_t5t_mode == RW_I93_GET_SYS_INFO_MEM_INFO) {
+        DLOG_IF(INFO, nfc_debug_enabled)
+            << StringPrintf("%s - rw_i93_sm_update_ndef()", __func__);
+        rw_i93_sm_update_ndef(p_resp);
+      } else {
+        DLOG_IF(INFO, nfc_debug_enabled)
+            << StringPrintf("%s - rw_t5t_sm_update_ndef()", __func__);
+        rw_t5t_sm_update_ndef(p_resp);
+      }
       GKI_freebuf(p_resp);
       break;
 
@@ -3328,7 +3326,15 @@ static void rw_i93_data_cback(__attribute__((unused)) uint8_t conn_id,
       break;
 
     case RW_I93_STATE_SET_READ_ONLY:
-      rw_i93_sm_set_read_only(p_resp);
+      if (p_i93->i93_t5t_mode == RW_I93_GET_SYS_INFO_MEM_INFO) {
+        DLOG_IF(INFO, nfc_debug_enabled)
+            << StringPrintf("%s - rw_i93_sm_set_read_only()", __func__);
+        rw_i93_sm_set_read_only(p_resp);
+      } else {
+        DLOG_IF(INFO, nfc_debug_enabled)
+            << StringPrintf("%s - rw_t5t_sm_set_read_only()", __func__);
+        rw_t5t_sm_set_read_only(p_resp);
+      }
       GKI_freebuf(p_resp);
       break;
 
@@ -3343,14 +3349,15 @@ static void rw_i93_data_cback(__attribute__((unused)) uint8_t conn_id,
       break;
 
     default:
-      LOG(ERROR) << StringPrintf("invalid state=%d", p_i93->state);
+      LOG(ERROR) << StringPrintf("%s - invalid state=%d", __func__,
+                                 p_i93->state);
       GKI_freebuf(p_resp);
       break;
   }
 
   if (begin_state != p_i93->state) {
     DLOG_IF(INFO, nfc_debug_enabled)
-        << StringPrintf("RW I93 state changed:<%s> -> <%s>",
+        << StringPrintf("%s - RW I93 state changed:<%s> -> <%s>", __func__,
                         rw_i93_get_state_name(begin_state).c_str(),
                         rw_i93_get_state_name(p_i93->state).c_str());
   }
@@ -3474,7 +3481,7 @@ tNFC_STATUS RW_I93ReadSingleBlock(uint16_t block_number) {
   tNFC_STATUS status;
 
   DLOG_IF(INFO, nfc_debug_enabled)
-      << StringPrintf("block_number:0x%02X", block_number);
+      << StringPrintf("%s - block_number:0x%02X", __func__, block_number);
 
   if (rw_cb.tcb.i93.state != RW_I93_STATE_IDLE) {
     LOG(ERROR) << StringPrintf("Unable to start command at state (0x%X)",
@@ -3702,8 +3709,8 @@ tNFC_STATUS RW_I93ResetToReady(void) {
   DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   if (rw_cb.tcb.i93.state != RW_I93_STATE_IDLE) {
-    LOG(ERROR) << StringPrintf("Unable to start command at state (0x%X)",
-                               rw_cb.tcb.i93.state);
+    LOG(ERROR) << StringPrintf("%s - Unable to start command at state (0x%X)",
+                               __func__, rw_cb.tcb.i93.state);
     return NFC_STATUS_BUSY;
   }
 
@@ -3867,8 +3874,8 @@ tNFC_STATUS RW_I93GetSysInfo(uint8_t* p_uid) {
   DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   if (rw_cb.tcb.i93.state != RW_I93_STATE_IDLE) {
-    LOG(ERROR) << StringPrintf("Unable to start command at state (0x%X)",
-                               rw_cb.tcb.i93.state);
+    LOG(ERROR) << StringPrintf("%s - Unable to start command at state (0x%X)",
+                               __func__, rw_cb.tcb.i93.state);
     return NFC_STATUS_BUSY;
   }
 
@@ -3942,8 +3949,8 @@ tNFC_STATUS RW_I93DetectNDef(void) {
   DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   if (rw_cb.tcb.i93.state != RW_I93_STATE_IDLE) {
-    LOG(ERROR) << StringPrintf("Unable to start command at state (0x%X)",
-                               rw_cb.tcb.i93.state);
+    LOG(ERROR) << StringPrintf("%s - Unable to start command at state (0x%X)",
+                               __func__, rw_cb.tcb.i93.state);
     return NFC_STATUS_FAILED;
   }
 
@@ -3996,8 +4003,8 @@ tNFC_STATUS RW_I93ReadNDef(void) {
   DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   if (rw_cb.tcb.i93.state != RW_I93_STATE_IDLE) {
-    LOG(ERROR) << StringPrintf("Unable to start command at state (0x%X)",
-                               rw_cb.tcb.i93.state);
+    LOG(ERROR) << StringPrintf("%s - Unable to start command at state (0x%X)",
+                               __func__, rw_cb.tcb.i93.state);
     return NFC_STATUS_FAILED;
   }
 
@@ -4012,7 +4019,7 @@ tNFC_STATUS RW_I93ReadNDef(void) {
       return NFC_STATUS_FAILED;
     }
   } else {
-    LOG(ERROR) << StringPrintf("No NDEF detected");
+    LOG(ERROR) << StringPrintf("%s - No NDEF detected", __func__);
     return NFC_STATUS_FAILED;
   }
 
@@ -4039,24 +4046,25 @@ tNFC_STATUS RW_I93ReadNDef(void) {
 tNFC_STATUS RW_I93UpdateNDef(uint16_t length, uint8_t* p_data) {
   uint16_t block_number;
 
-  DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf("length:%d", length);
+  DLOG_IF(INFO, nfc_debug_enabled)
+      << StringPrintf("%s - length:%d", __func__, length);
 
   if (rw_cb.tcb.i93.state != RW_I93_STATE_IDLE) {
-    LOG(ERROR) << StringPrintf("Unable to start command at state (0x%X)",
-                               rw_cb.tcb.i93.state);
+    LOG(ERROR) << StringPrintf("%s - Unable to start command at state (0x%X)",
+                               __func__, rw_cb.tcb.i93.state);
     return NFC_STATUS_FAILED;
   }
 
   if (rw_cb.tcb.i93.tlv_type == I93_ICODE_TLV_TYPE_NDEF) {
     if (rw_cb.tcb.i93.intl_flags & RW_I93_FLAG_READ_ONLY) {
-      LOG(ERROR) << StringPrintf("NDEF is read-only");
+      LOG(ERROR) << StringPrintf("%s - NDEF is read-only", __func__);
       return NFC_STATUS_FAILED;
     }
     if (rw_cb.tcb.i93.max_ndef_length < length) {
       LOG(ERROR) << StringPrintf(
-          "data (%d bytes) is more than max NDEF length "
+          "%s - data (%d bytes) is more than max NDEF length "
           "(%d)",
-          length, rw_cb.tcb.i93.max_ndef_length);
+          __func__, length, rw_cb.tcb.i93.max_ndef_length);
       return NFC_STATUS_FAILED;
     }
 
@@ -4077,7 +4085,7 @@ tNFC_STATUS RW_I93UpdateNDef(uint16_t length, uint8_t* p_data) {
       return NFC_STATUS_FAILED;
     }
   } else {
-    LOG(ERROR) << StringPrintf("No NDEF detected");
+    LOG(ERROR) << StringPrintf("%s - No NDEF detected", __func__);
     return NFC_STATUS_FAILED;
   }
 
@@ -4147,17 +4155,20 @@ tNFC_STATUS RW_I93FormatNDef(void) {
 **
 *******************************************************************************/
 tNFC_STATUS RW_I93SetTagReadOnly(void) {
+  uint8_t cc_blk0[4];
+
   DLOG_IF(INFO, nfc_debug_enabled) << __func__;
 
   if (rw_cb.tcb.i93.state != RW_I93_STATE_IDLE) {
-    LOG(ERROR) << StringPrintf("Unable to start command at state (0x%X)",
-                               rw_cb.tcb.i93.state);
+    LOG(ERROR) << StringPrintf("%s - Unable to start command at state (0x%X)",
+                               __func__, rw_cb.tcb.i93.state);
     return NFC_STATUS_FAILED;
   }
 
-  if (rw_cb.tcb.i93.tlv_type == I93_ICODE_TLV_TYPE_NDEF) {
+  if ((rw_cb.tcb.i93.tlv_type == I93_ICODE_TLV_TYPE_NDEF) &&
+      (rw_cb.tcb.i93.i93_t5t_mode != RW_T5T_CC_READ_MEM_INFO)) {
     if (rw_cb.tcb.i93.intl_flags & RW_I93_FLAG_READ_ONLY) {
-      LOG(ERROR) << StringPrintf("NDEF is already read-only");
+      LOG(ERROR) << StringPrintf("%s - NDEF is already read-only", __func__);
       return NFC_STATUS_FAILED;
     }
 
@@ -4169,7 +4180,28 @@ tNFC_STATUS RW_I93SetTagReadOnly(void) {
       return NFC_STATUS_FAILED;
     }
   } else {
-    LOG(ERROR) << StringPrintf("No NDEF detected");
+    if (rw_cb.tcb.i93.i93_t5t_mode == RW_T5T_CC_READ_MEM_INFO) {
+      memcpy(cc_blk0, rw_cb.tcb.i93.gre_cc_content, 4);
+
+      /* mark CC as read-only */
+      *(cc_blk0 + 1) |= I93_ICODE_CC_READ_ONLY;
+
+      DLOG_IF(INFO, nfc_debug_enabled) << StringPrintf(
+          "%s - Set CC1 to RO - cc[0]=0x%02x, cc[1]=0x%02x, "
+          "cc[2]=0x%02x, cc[3]=0x%02x",
+          __func__, *cc_blk0, *(cc_blk0 + 1), *(cc_blk0 + 2), *(cc_blk0 + 3));
+
+      if (rw_i93_send_cmd_write_single_block(0, cc_blk0) == NFC_STATUS_OK) {
+        rw_cb.tcb.i93.state = RW_I93_STATE_SET_READ_ONLY;
+        rw_cb.tcb.i93.sub_state = RW_I93_SUBSTATE_WAIT_UPDATE_CC;
+      } else {
+        rw_i93_handle_error(NFC_STATUS_FAILED);
+        return NFC_STATUS_FAILED;
+      }
+
+      return NFC_STATUS_OK;
+    }
+    LOG(ERROR) << StringPrintf("%s - No NDEF detected", __func__);
     return NFC_STATUS_FAILED;
   }
 
@@ -4201,14 +4233,20 @@ tNFC_STATUS RW_I93PresenceCheck(void) {
     return NFC_STATUS_FAILED;
   } else if (rw_cb.tcb.i93.state == RW_I93_STATE_NOT_ACTIVATED) {
     evt_data.status = NFC_STATUS_FAILED;
-    (*rw_cb.p_cback)(RW_T4T_PRESENCE_CHECK_EVT, &evt_data);
+    (*rw_cb.p_cback)(RW_I93_PRESENCE_CHECK_EVT, &evt_data);
 
     return NFC_STATUS_OK;
   } else if (rw_cb.tcb.i93.state != RW_I93_STATE_IDLE) {
     return NFC_STATUS_BUSY;
   } else {
-    /* The support of AFI by the VICC is optional, so do not include AFI */
-    status = rw_i93_send_cmd_inventory(rw_cb.tcb.i93.uid, false, 0x00);
+    if (rw_cb.tcb.i93.i93_t5t_mode == RW_I93_GET_SYS_INFO_MEM_INFO) {
+      /* The support of AFI by the VICC is optional, so do not include AFI */
+      status = rw_i93_send_cmd_inventory(rw_cb.tcb.i93.uid, false, 0x00);
+    } else {
+      /* Extended command not expected for presence check */
+      rw_cb.tcb.i93.intl_flags &= ~RW_I93_FLAG_EXT_COMMANDS;
+      status = rw_i93_send_cmd_read_single_block(0, false);
+    }
 
     if (status == NFC_STATUS_OK) {
       /* do not retry during presence check */
@@ -4263,7 +4301,7 @@ tNFC_STATUS RW_I93SetAddressingMode(bool mode) {
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-static std::string rw_i93_get_state_name(uint8_t state) {
+std::string rw_i93_get_state_name(uint8_t state) {
   switch (state) {
     case RW_I93_STATE_NOT_ACTIVATED:
       return "NOT_ACTIVATED";
@@ -4299,7 +4337,7 @@ static std::string rw_i93_get_state_name(uint8_t state) {
 ** Returns          pointer to the name
 **
 *******************************************************************************/
-static std::string rw_i93_get_sub_state_name(uint8_t sub_state) {
+std::string rw_i93_get_sub_state_name(uint8_t sub_state) {
   switch (sub_state) {
     case RW_I93_SUBSTATE_WAIT_UID:
       return "WAIT_UID";
@@ -4307,6 +4345,8 @@ static std::string rw_i93_get_sub_state_name(uint8_t sub_state) {
       return "WAIT_SYS_INFO";
     case RW_I93_SUBSTATE_WAIT_CC:
       return "WAIT_CC";
+    case RW_I93_SUBSTATE_WAIT_CC_EXT:
+      return "WAIT_CC_EXT";
     case RW_I93_SUBSTATE_SEARCH_NDEF_TLV:
       return "SEARCH_NDEF_TLV";
     case RW_I93_SUBSTATE_CHECK_LOCK_STATUS:
@@ -4329,6 +4369,8 @@ static std::string rw_i93_get_sub_state_name(uint8_t sub_state) {
       return "LOCK_NDEF_TLV";
     case RW_I93_SUBSTATE_WAIT_LOCK_CC:
       return "WAIT_LOCK_CC";
+    case RW_I93_SUBSTATE_LOCK_T5T_AREA:
+      return "LOCK_T5T_AREA";
     default:
       return "???? UNKNOWN SUBSTATE";
   }
