@@ -2656,22 +2656,16 @@ bool nfa_rw_activate_ntf(tNFA_RW_MSG* p_data) {
     memcpy(tag_params.t2t.uid, p_activate_params->rf_tech_param.param.pa.nfcid1,
            p_activate_params->rf_tech_param.param.pa.nfcid1_len);
   } else if (NFC_PROTOCOL_T3T == nfa_rw_cb.protocol) {
-    if (appl_dta_mode_flag) {
-      /* Incase of DTA mode Dont send commands to get system code. Just notify
-       * activation */
-      activate_notify = true;
-    } else {
-      /* Delay notifying upper layer of NFA_ACTIVATED_EVT until system codes
-       * are retrieved */
-      activate_notify = false;
+    /* Delay notifying upper layer of NFA_ACTIVATED_EVT until system codes
+     * are retrieved */
+    activate_notify = false;
 
-      /* Issue command to get Felica system codes */
-      tNFA_RW_MSG msg;
-      msg.op_req.op = NFA_RW_OP_T3T_GET_SYSTEM_CODES;
-      bool free_buf = nfa_rw_handle_op_req(&msg);
-      CHECK(free_buf)
-          << "nfa_rw_handle_op_req is holding on to soon-garbage stack memory.";
-    }
+    /* Issue command to get Felica system codes */
+    tNFA_RW_MSG msg;
+    msg.op_req.op = NFA_RW_OP_T3T_GET_SYSTEM_CODES;
+    bool free_buf = nfa_rw_handle_op_req(&msg);
+    CHECK(free_buf)
+        << "nfa_rw_handle_op_req is holding on to soon-garbage stack memory.";
   } else if (NFA_PROTOCOL_T5T == nfa_rw_cb.protocol) {
     /* Delay notifying upper layer of NFA_ACTIVATED_EVT to retrieve additional
      * tag infomation */
