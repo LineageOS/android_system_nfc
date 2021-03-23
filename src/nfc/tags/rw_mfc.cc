@@ -634,6 +634,11 @@ static void rw_mfc_conn_cback(uint8_t conn_id, tNFC_CONN_EVT event,
   NFC_HDR* mfc_data = nullptr;
   tRW_DATA rw_data;
 
+  if (!p_data) {
+    LOG(ERROR) << __func__ << "Invalid p_data";
+    return;
+  }
+
   DLOG_IF(INFO, nfc_debug_enabled)
       << StringPrintf("%s conn_id=%i, evt=0x%x", __func__, conn_id, event);
   /* Only handle static conn_id */
@@ -676,10 +681,7 @@ static void rw_mfc_conn_cback(uint8_t conn_id, tNFC_CONN_EVT event,
           evt_data.status = (tNFC_STATUS)(*(uint8_t*)p_data);
         } else if (p_data) {
           evt_data.status = p_data->status;
-        } else {
-          evt_data.status = NFC_STATUS_FAILED;
         }
-
         evt_data.p_data = NULL;
         (*rw_cb.p_cback)(RW_MFC_INTF_ERROR_EVT, (tRW_DATA*)&evt_data);
         break;
@@ -689,6 +691,11 @@ static void rw_mfc_conn_cback(uint8_t conn_id, tNFC_CONN_EVT event,
 
     default:
       break;
+  }
+
+  if ((p_mfc->state != RW_MFC_STATE_IDLE) && (mfc_data == NULL)) {
+    LOG(ERROR) << StringPrintf("%s NULL pointer", __func__);
+    return;
   }
 
   switch (p_mfc->state) {
