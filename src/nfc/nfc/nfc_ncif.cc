@@ -1179,6 +1179,12 @@ void nfc_ncif_proc_ee_discover_req(uint8_t* p, uint16_t plen) {
 
   DLOG_IF(INFO, nfc_debug_enabled)
       << StringPrintf("nfc_ncif_proc_ee_discover_req %d len:%d", *p, plen);
+
+  if (!plen) {
+    android_errorWriteLog(0x534e4554, "221856662");
+    return;
+  }
+
   if (p_cback) {
     u8 = *p;
     ee_disc_req.status = NFC_STATUS_OK;
