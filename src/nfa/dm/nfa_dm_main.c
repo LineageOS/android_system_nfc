@@ -238,8 +238,7 @@ tNFA_STATUS nfa_dm_check_set_config(uint8_t tlv_list_len, uint8_t* p_tlv_list,
     p_value = p_tlv_list + xx + 2;
     p_cur_len = NULL;
     if (len > (tlv_list_len - xx - 2)) {
-      LOG(ERROR) << StringPrintf("error: invalid TLV length: t:0x%x, l:%d",
-                                 type, len);
+      NFA_TRACE_ERROR2("error: invalid TLV length: t:0x%x, l:%d", type, len);
       android_errorWriteLog(0x534e4554, "221216105");
       return NFA_STATUS_FAILED;
     }

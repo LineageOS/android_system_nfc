@@ -1164,6 +1164,11 @@ void nfc_ncif_proc_ee_discover_req(uint8_t* p, uint16_t plen) {
   tNFC_EE_DISCOVER_INFO* p_info;
   uint8_t u8;
 
+  if (!plen) {
+    android_errorWriteLog(0x534e4554, "221856662");
+    return;
+  }
+
   NFC_TRACE_DEBUG2("nfc_ncif_proc_ee_discover_req %d len:%d", *p, plen);
   if (p_cback) {
     u8 = *p;
