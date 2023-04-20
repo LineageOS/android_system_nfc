@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b74bd648_956b138d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 23518
+      },
+      "writtenOn": "2023-04-20T14:50:30Z",
+      "side": 1,
+      "message": "Builds fine for Moto G LTE and LG G4 - all good on the Lg G4 install. Thanks for continuing support and, as well, abandoning all the empty commits from 05-22 - much appreciated.",
+      "revId": "d751463856e968430d4859a55a97f12b2553de19",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71"
+    }
+  ]
+}
