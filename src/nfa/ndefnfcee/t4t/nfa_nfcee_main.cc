@@ -61,8 +61,11 @@ void nfa_t4tnfcee_init(void) {
       nfa_t4tnfcee_cb.t4tnfcee_state = NFA_T4TNFCEE_STATE_DISABLED;
       /* register message handler on NFA SYS */
       nfa_sys_register(NFA_ID_T4TNFCEE, &nfa_t4tnfcee_sys_reg);
+      nfa_t4tnfcee_cb.ndefEmulationConfig = true;
+      return;
     }
   }
+  nfa_t4tnfcee_cb.ndefEmulationConfig = false;
 }
 
 /*******************************************************************************
@@ -347,4 +350,28 @@ bool NFA_T4tNfcEeIsProcessing(void) {
 *******************************************************************************/
 bool NFA_T4tNfcEeIsEmulationSupported(void) {
   return nfa_t4tnfcee_cb.ndefEmulationSupport;
+}
+
+/*******************************************************************************
+**
+** Function         nfa_t4tnfcee_is_config
+**
+** Description      Indicates if T4t NDEF Nfcee emulation is configured or not
+**
+** Returns          true if supported else false
+**
+*******************************************************************************/
+bool nfa_t4tnfcee_is_config() { return nfa_t4tnfcee_cb.ndefEmulationConfig; }
+
+/*******************************************************************************
+**
+** Function         nfa_t4tnfcee_is_enabled
+**
+** Description      T4T is enabled and initialized.
+**
+** Returns          true if T4T Nfcee is enabled initialization
+**
+*******************************************************************************/
+bool nfa_t4tnfcee_is_discovered(void) {
+  return (nfa_t4tnfcee_cb.t4tnfcee_state >= NFA_T4TNFCEE_STATE_TRY_ENABLE);
 }

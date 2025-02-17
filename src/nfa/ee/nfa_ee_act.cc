@@ -33,6 +33,8 @@
 #include "nfa_ee_int.h"
 #include "nfa_hci_int.h"
 #include "nfa_nfcee_int.h"
+#include "nfa_sys_int.h"
+#include "nfc_config.h"
 #include "nfc_int.h"
 
 using android::base::StringPrintf;
@@ -1943,6 +1945,8 @@ void nfa_ee_nci_disc_ntf(tNFA_EE_MSG* p_data) {
   tNFA_EE_ECB* p_cb = nullptr;
   bool notify_enable_done = false;
   bool notify_new_ee = false;
+  bool notify_ndef_nfcee = false;
+  bool store_info = true;
   tNFA_EE_CBACK_DATA evt_data = {0};
   tNFA_EE_INFO* p_info;
   tNFA_EE_EM_STATE new_em_state = NFA_EE_EM_STATE_MAX;
@@ -2017,14 +2021,34 @@ void nfa_ee_nci_disc_ntf(tNFA_EE_MSG* p_data) {
   LOG(VERBOSE) << StringPrintf("nfa_ee_nci_disc_ntf cur_ee:%d", nfa_ee_cb.cur_ee);
 
   if (p_cb) {
-    p_cb->nfcee_id = p_ee->nfcee_id;
-    p_cb->ee_status = p_ee->ee_status;
-    p_cb->num_interface = p_ee->num_interface;
-    memcpy(p_cb->ee_interface, p_ee->ee_interface, p_ee->num_interface);
-    p_cb->num_tlvs = p_ee->num_tlvs;
-    memcpy(p_cb->ee_tlv, p_ee->ee_tlv, p_ee->num_tlvs * sizeof(tNFA_EE_TLV));
-    if (NFA_GetNCIVersion() >= NCI_VERSION_2_0)
-      p_cb->ee_power_supply_status = p_ee->nfcee_power_ctrl;
+    if (p_ee->ee_tlv[NFCEE_TAG_INDEX].tag == NFCEE_TYPE_NDEF) {
+      int defaultNdefNfcee =
+          NfcConfig::getUnsigned(NAME_DEFAULT_NDEF_NFCEE_ROUTE, 0x10);
+      // First, check NFCEE Id matches
+      if (defaultNdefNfcee == p_ee->nfcee_id) {
+        // Second check that feature is configured
+        if (nfa_t4tnfcee_is_config()) {
+          // Allow normal processing
+          notify_ndef_nfcee = true;
+        } else {
+          LOG(WARNING) << StringPrintf(
+              "%s: NDEF-NFCEE not config but enabled in FW, discard data",
+              __func__);
+          store_info = false;
+        }
+      }
+    }
+
+    if (store_info) {
+      p_cb->nfcee_id = p_ee->nfcee_id;
+      p_cb->ee_status = p_ee->ee_status;
+      p_cb->num_interface = p_ee->num_interface;
+      memcpy(p_cb->ee_interface, p_ee->ee_interface, p_ee->num_interface);
+      p_cb->num_tlvs = p_ee->num_tlvs;
+      memcpy(p_cb->ee_tlv, p_ee->ee_tlv, p_ee->num_tlvs * sizeof(tNFA_EE_TLV));
+      if (NFA_GetNCIVersion() >= NCI_VERSION_2_0)
+        p_cb->ee_power_supply_status = p_ee->nfcee_power_ctrl;
+    }
     if (nfa_ee_cb.em_state == NFA_EE_EM_STATE_RESTORING) {
       /* NCI spec says: An NFCEE_DISCOVER_NTF that contains a Protocol type of
        * "HCI Access"
@@ -2040,12 +2064,24 @@ void nfa_ee_nci_disc_ntf(tNFA_EE_MSG* p_data) {
       }
     }
 
-    if (p_cb->ee_tlv[NFCEE_TAG_INDEX].tag == NFCEE_TYPE_NDEF) {
+    if (notify_ndef_nfcee &&
+        (p_cb->ee_tlv[NFCEE_TAG_INDEX].tag == NFCEE_TYPE_NDEF)) {
       nfa_t4tnfcee_set_ee_cback(p_cb);
       p_info = &evt_data.new_ee;
       p_info->ee_handle = (tNFA_HANDLE)p_cb->nfcee_id;
       p_info->ee_status = p_cb->ee_status;
       nfa_ee_report_event(p_cb->p_ee_cback, NFA_EE_DISCOVER_EVT, &evt_data);
+    }
+
+    // If all have been received, NDEF-NFCEE configured but no
+    // NFCEE_DISCOVER_NTF received
+    if (nfa_ee_cb.num_ee_expecting == 0) {
+      if (nfa_t4tnfcee_is_config() && !nfa_t4tnfcee_is_discovered()) {
+        LOG(WARNING) << StringPrintf(
+            "%s: NDEF-NFCEE config but not enabled in FW, resetting flag",
+            __func__);
+        nfa_sys_cb.enable_cplt_mask &= ~(0x0001 << NFA_ID_T4TNFCEE);
+      }
     }
 
     if ((nfa_ee_cb.p_ee_disc_cback == nullptr) && (notify_new_ee == true)) {

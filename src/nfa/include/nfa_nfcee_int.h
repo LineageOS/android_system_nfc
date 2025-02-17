@@ -140,6 +140,7 @@ typedef struct {
   uint16_t rd_offset;        /* current read-offset of incoming NDEF data  */
   uint32_t dataLen;          /*length of the data*/
   bool ndefEmulationSupport; /* NDEF emulation support */
+  bool ndefEmulationConfig;  /* NDEF emulation configuration */
   uint8_t connId;            /* NDEF NFCEE CONN ID */
 } tNFA_T4TNFCEE_CB;
 extern tNFA_T4TNFCEE_CB nfa_t4tnfcee_cb;
@@ -157,3 +158,5 @@ void nfa_t4tnfcee_set_ee_cback(tNFA_EE_ECB* p_ecb);
 void nfa_t4tnfcee_init();
 void nfa_t4tnfcee_deinit(void);
 tNFC_STATUS nfa_t4tnfcee_proc_disc_evt(tNFA_T4TNFCEE_OP event);
+bool nfa_t4tnfcee_is_config();
+bool nfa_t4tnfcee_is_discovered(void);
