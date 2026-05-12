@@ -1054,6 +1054,7 @@ static void rw_mfc_handle_read_op(uint8_t* data) {
         }
       } else {
         android_errorWriteLog(0x534e4554, "178725766");
+        failed = true;
       }
 
       if (p_mfc->work_offset >= p_mfc->ndef_length) {
