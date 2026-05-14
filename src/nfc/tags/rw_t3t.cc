@@ -829,6 +829,13 @@ tNFC_STATUS rw_t3t_send_next_ndef_update_cmd(tRW_T3T_CB* p_cb) {
         ndef_blocks_to_write); /* Number of blocks to write in this command */
     timeout = rw_t3t_update_timeout(ndef_blocks_to_write);
 
+    if (ndef_blocks_to_write > UINT16_MAX - first_block_to_write) {
+        LOG(ERROR) << StringPrintf("%s: Heap out-of-bounds",
+                               __func__);
+        android_errorWriteLog(0x534e4554, "508389055");
+        return NFC_STATUS_FAILED;
+    }
+
     for (block_id = first_block_to_write;
          block_id < (first_block_to_write + ndef_blocks_to_write); block_id++) {
       if (block_id < 256) {
@@ -970,6 +977,13 @@ tNFC_STATUS rw_t3t_send_next_ndef_check_cmd(tRW_T3T_CB* p_cb) {
     /* Add number of blocks in this CHECK command */
     UINT8_TO_STREAM(
         p, cur_blocks_to_read); /* Number of blocks to check in this command */
+
+    if (cur_blocks_to_read > UINT16_MAX - first_block_to_read) {
+        LOG(ERROR) << StringPrintf("%s: Heap out-of-bounds",
+                               __func__);
+        android_errorWriteLog(0x534e4554, "508389055");
+        return NFC_STATUS_FAILED;
+    }
 
     for (block_id = first_block_to_read;
          block_id < (first_block_to_read + cur_blocks_to_read); block_id++) {
