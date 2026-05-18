@@ -136,6 +136,7 @@ typedef struct {
   tNFA_T4TNFCEE_RW_STATE rw_state;    /* Read Write state */
   tNFA_T4TNFCEE_MSG* p_pending_msg;   /* Pending command */
   uint8_t* p_dataBuf;                 /* Data buffer */
+  uint32_t p_dataBuf_len;             /* Allocated size of Data buffer */
   uint16_t cur_fileId;                /* Current FileId */
   uint16_t rd_offset;        /* current read-offset of incoming NDEF data  */
   uint32_t dataLen;          /*length of the data*/

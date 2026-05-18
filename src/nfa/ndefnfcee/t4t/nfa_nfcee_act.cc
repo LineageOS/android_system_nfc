@@ -18,6 +18,7 @@
 
 #include <android-base/logging.h>
 #include <android-base/stringprintf.h>
+#include <log/log.h>
 #include <string.h>
 
 #include <iomanip>
@@ -65,6 +66,7 @@ void nfa_t4tnfcee_free_rx_buf(void) {
     nfa_mem_co_free(nfa_t4tnfcee_cb.p_dataBuf);
     nfa_t4tnfcee_cb.p_dataBuf = NULL;
   }
+  nfa_t4tnfcee_cb.p_dataBuf_len = 0;
   nfa_t4tnfcee_cb.rd_offset = 0x00;
   nfa_t4tnfcee_cb.dataLen = 0x00;
 }
@@ -182,6 +184,12 @@ static void nfa_t4tnfcee_check_sw(tRW_DATA* p_rwData) {
   uint8_t* p;
   uint16_t status_words;
   NFC_HDR* p_r_apdu = p_rwData->raw_frame.p_data;
+  if (p_r_apdu->len < T4T_RSP_STATUS_WORDS_SIZE) {
+    p_rwData->raw_frame.status = NFC_STATUS_FAILED;
+    LOG(ERROR) << StringPrintf("%s: Invalid p_r_apdu->len %d", __func__,
+                               p_r_apdu->len);
+    return;
+  }
   p = (uint8_t*)(p_r_apdu + 1) + p_r_apdu->offset;
   p += (p_r_apdu->len - T4T_RSP_STATUS_WORDS_SIZE);
   BE_STREAM_TO_UINT16(status_words, p);
@@ -244,9 +252,19 @@ void nfa_t4tnfcee_store_cc_info(NFC_HDR* p_data) {
       ccInfo = (uint8_t*)(p_data + 1) +
                p_data->offset;  // CC data does not require NDEF header offset
       nfa_t4tnfcee_cb.p_dataBuf = (uint8_t*)nfa_mem_co_alloc(p_data->len);
-      memcpy(&nfa_t4tnfcee_cb.p_dataBuf[0], ccInfo, p_data->len);
+      if (nfa_t4tnfcee_cb.p_dataBuf != nullptr) {
+        nfa_t4tnfcee_cb.p_dataBuf_len = p_data->len;
+        memcpy(&nfa_t4tnfcee_cb.p_dataBuf[0], ccInfo, p_data->len);
+      } else {
+        nfa_t4tnfcee_cb.p_dataBuf_len = 0;
+      }
       return;
     } else {
+      if (p_data->len < (0x07 + T4TNFCEE_SIZEOF_STATUS_BYTES)) {
+        LOG(ERROR) << StringPrintf("%s: Invalid CC len %d", __func__,
+                                   p_data->len);
+        return;
+      }
       ccInfo = (uint8_t*)(p_data + 1) + p_data->offset + jumpToFirstTLV;
     }
   } else {
@@ -289,9 +307,16 @@ void nfa_t4tnfcee_store_rx_buf(NFC_HDR* p_data) {
     LOG(DEBUG) << StringPrintf("%s copying data len %d  rd_offset: %d", __func__,
                                 p_data->len, nfa_t4tnfcee_cb.rd_offset);
     p = (uint8_t*)(p_data + 1) + p_data->offset;
-    memcpy(&nfa_t4tnfcee_cb.p_dataBuf[nfa_t4tnfcee_cb.rd_offset], p,
-           p_data->len);
-    nfa_t4tnfcee_cb.rd_offset += p_data->len;
+    if (((uint32_t)nfa_t4tnfcee_cb.rd_offset + p_data->len) <=
+        nfa_t4tnfcee_cb.p_dataBuf_len) {
+      memcpy(&nfa_t4tnfcee_cb.p_dataBuf[nfa_t4tnfcee_cb.rd_offset], p,
+             p_data->len);
+      nfa_t4tnfcee_cb.rd_offset += p_data->len;
+    } else {
+      LOG(ERROR) << StringPrintf("%s: Exceed p_dataBuf_len error", __func__);
+      nfa_t4tnfcee_cb.status = NFA_STATUS_FAILED;
+      android_errorWriteLog(0x534e4554, "508390497");
+    }
   } else {
     LOG(DEBUG) << StringPrintf("%s Data is NULL", __func__);
   }
@@ -310,6 +335,7 @@ void nfa_t4tnfcee_initialize_data(tNFA_T4TNFCEE_MSG* p_data) {
   nfa_t4tnfcee_cb.rw_state = PROP_DISABLED;
   nfa_t4tnfcee_cb.rd_offset = 0;
   nfa_t4tnfcee_cb.p_dataBuf = nullptr;
+  nfa_t4tnfcee_cb.p_dataBuf_len = 0;
   nfa_t4tnfcee_cb.dataLen = 0x00;
   BE_STREAM_TO_UINT16(nfa_t4tnfcee_cb.cur_fileId, p_data->op_req.p_fileId);
 }
@@ -434,6 +460,13 @@ void nfa_t4tnfcee_handle_file_operations(tRW_DATA* p_rwData) {
       }
 
       nfa_t4tnfcee_cb.p_dataBuf = (uint8_t*)nfa_mem_co_alloc(lenDataToBeRead);
+      if (nfa_t4tnfcee_cb.p_dataBuf == nullptr) {
+        nfa_t4tnfcee_cb.p_dataBuf_len = 0;
+        nfa_t4tnfcee_cb.status = NFC_STATUS_FAILED;
+        nfa_t4tnfcee_notify_rx_evt();
+        break;
+      }
+      nfa_t4tnfcee_cb.p_dataBuf_len = lenDataToBeRead;
       RW_T4tNfceeReadFile(T4T_FILE_LENGTH_SIZE, lenDataToBeRead);
       nfa_t4tnfcee_cb.rw_state = WAIT_READ_FILE;
       break;
