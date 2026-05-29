@@ -739,7 +739,6 @@ tNFC_STATUS rw_t3t_send_update_ndef_attribute_cmd(tRW_T3T_CB* p_cb,
 *****************************************************************************/
 tNFC_STATUS rw_t3t_send_next_ndef_update_cmd(tRW_T3T_CB* p_cb) {
   tNFC_STATUS retval = NFC_STATUS_OK;
-  uint16_t block_id;
   uint16_t first_block_to_write;
   uint16_t ndef_blocks_to_write, ndef_blocks_remaining;
   uint32_t ndef_bytes_remaining, ndef_padding = 0;
@@ -748,7 +747,7 @@ tNFC_STATUS rw_t3t_send_next_ndef_update_cmd(tRW_T3T_CB* p_cb) {
   NFC_HDR* p_cmd_buf;
   uint8_t *p_cmd_start, *p;
   uint8_t blocks_per_update;
-  uint32_t timeout;
+  uint32_t timeout, block_id;
 
   p_cmd_buf = rw_t3t_get_cmd_buf();
   if (p_cmd_buf != nullptr) {
@@ -810,7 +809,8 @@ tNFC_STATUS rw_t3t_send_next_ndef_update_cmd(tRW_T3T_CB* p_cb) {
         ndef_blocks_to_write); /* Number of blocks to write in this command */
     timeout = rw_t3t_update_timeout(ndef_blocks_to_write);
 
-    if (ndef_blocks_to_write > UINT16_MAX - first_block_to_write) {
+    if ((uint32_t)first_block_to_write + ndef_blocks_to_write > 0x10000) {
+        GKI_freebuf(p_cmd_buf);
         LOG(ERROR) << StringPrintf("%s: Heap out-of-bounds",
                                __func__);
         android_errorWriteLog(0x534e4554, "508389055");
@@ -818,7 +818,7 @@ tNFC_STATUS rw_t3t_send_next_ndef_update_cmd(tRW_T3T_CB* p_cb) {
     }
 
     for (block_id = first_block_to_write;
-         block_id < (first_block_to_write + ndef_blocks_to_write); block_id++) {
+         block_id < ((uint32_t)first_block_to_write + ndef_blocks_to_write); block_id++) {
       if (block_id < 256) {
         /* Block IDs 0-255 can be specified in '2-byte' format: byte0=0,
          * byte1=blocknumber */
@@ -892,9 +892,8 @@ tNFC_STATUS rw_t3t_send_next_ndef_update_cmd(tRW_T3T_CB* p_cb) {
 *****************************************************************************/
 tNFC_STATUS rw_t3t_send_next_ndef_check_cmd(tRW_T3T_CB* p_cb) {
   tNFC_STATUS retval = NFC_STATUS_OK;
-  uint16_t block_id;
   uint16_t ndef_blocks_remaining, first_block_to_read, cur_blocks_to_read;
-  uint32_t ndef_bytes_remaining;
+  uint32_t ndef_bytes_remaining, block_id;
   NFC_HDR* p_cmd_buf;
   uint8_t *p_cmd_start, *p;
 
@@ -954,7 +953,8 @@ tNFC_STATUS rw_t3t_send_next_ndef_check_cmd(tRW_T3T_CB* p_cb) {
     UINT8_TO_STREAM(
         p, cur_blocks_to_read); /* Number of blocks to check in this command */
 
-    if (cur_blocks_to_read > UINT16_MAX - first_block_to_read) {
+    if ((uint32_t)first_block_to_read + cur_blocks_to_read > 0x10000) {
+        GKI_freebuf(p_cmd_buf);
         LOG(ERROR) << StringPrintf("%s: Heap out-of-bounds",
                                __func__);
         android_errorWriteLog(0x534e4554, "508389055");
@@ -962,7 +962,7 @@ tNFC_STATUS rw_t3t_send_next_ndef_check_cmd(tRW_T3T_CB* p_cb) {
     }
 
     for (block_id = first_block_to_read;
-         block_id < (first_block_to_read + cur_blocks_to_read); block_id++) {
+         block_id < ((uint32_t)first_block_to_read + cur_blocks_to_read); block_id++) {
       if (block_id < 256) {
         /* Block IDs 0-255 can be specified in '2-byte' format: byte0=0,
          * byte1=blocknumber */
