@@ -207,6 +207,11 @@ static bool rw_t4t_set_ber_tlv(NFC_HDR* p_c_apdu, uint8_t* p, uint32_t length) {
     } else {
       /* Realign with MLc (taking into account header now) */
       length = p_t4t->max_update_size;
+      if (p_t4t->max_update_size <= data_header) {
+        LOG(ERROR) << StringPrintf(
+            "%s: max_update_size too small for ODO/DDO header", __func__);
+        return false;
+      }
       data_length = p_t4t->max_update_size - data_header;
     }
   } else {
@@ -215,6 +220,11 @@ static bool rw_t4t_set_ber_tlv(NFC_HDR* p_c_apdu, uint8_t* p, uint32_t length) {
     } else {
       /* Realign with MLc (taking into account header now) */
       length = p_t4t->max_update_size;
+      if (p_t4t->max_update_size <= data_header) {
+        LOG(ERROR) << StringPrintf(
+            "%s: max_update_size too small for ODO/DDO header", __func__);
+        return false;
+      }
       data_length = p_t4t->max_update_size - data_header;
     }
   }
@@ -1029,7 +1039,11 @@ static bool rw_t4t_update_file(void) {
       LOG(DEBUG) << StringPrintf(
           "%s - MV 3.0 detected, update NDEF Message size > 0x7FFF", __func__);
 
-      return rw_t4t_set_ber_tlv(p_c_apdu, p, length);
+      if (!rw_t4t_set_ber_tlv(p_c_apdu, p, length)) {
+        GKI_freebuf(p_c_apdu);
+        return false;
+      }
+      return true;
 
     } else {
       LOG(ERROR) << StringPrintf("%s - Cannot write above 0x7FFF for MV2.0",
