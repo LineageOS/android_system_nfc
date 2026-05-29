@@ -1005,7 +1005,6 @@ static void rw_mfc_handle_read_op(uint8_t* data) {
   NFC_HDR* mfc_data;
   uint16_t len;
   uint16_t offset;
-  uint16_t saved_length;
   bool failed = false;
   bool done = false;
   tRW_READ_DATA evt_data;
@@ -1027,31 +1026,32 @@ static void rw_mfc_handle_read_op(uint8_t* data) {
       /* On the first read, adjust for any partial block offset */
       offset = 0;
       len = RW_MFC_1K_BLOCK_SIZE;
-      saved_length = p_mfc->ndef_length;
 
       if (p_mfc->work_offset == 0) {
         /* The Ndef Message offset may be present in the read 16 bytes */
         offset = p_mfc->ndef_start_pos;
 
-        if (!rw_nfc_decodeTlv(data)) {
-          failed = true;
+        uint16_t saved_len = p_mfc->ndef_length;
+        uint8_t saved_pos = p_mfc->ndef_start_pos;
+        if (!rw_nfc_decodeTlv(data) || p_mfc->ndef_length > saved_len) {
           DLOG_IF(INFO, nfc_debug_enabled) << __func__ << " FAILED finding TLV";
+          if (p_mfc->ndef_length > saved_len) {
+            android_errorWriteLog(0x534e4554, "178725766");
+          }
+          p_mfc->ndef_length = saved_len; /* roll back */
+          p_mfc->ndef_start_pos = saved_pos;
+          failed = true;
         }
       }
 
-      if (!failed && saved_length >= p_mfc->ndef_length) {
+      if (!failed) {
         /* Skip all reserved and lock bytes */
-        while ((offset < len) && (p_mfc->work_offset < p_mfc->ndef_length))
-
-        {
+        while ((offset < len) && (p_mfc->work_offset < p_mfc->ndef_length)) {
           /* Collect the NDEF Message */
           p_mfc->p_ndef_buffer[p_mfc->work_offset] = p[offset];
           p_mfc->work_offset++;
           offset++;
         }
-      } else {
-        android_errorWriteLog(0x534e4554, "178725766");
-        failed = true;
       }
 
       if (p_mfc->work_offset >= p_mfc->ndef_length) {
