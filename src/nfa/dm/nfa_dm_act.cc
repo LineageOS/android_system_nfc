@@ -22,6 +22,7 @@
  *  machine.
  *
  ******************************************************************************/
+#include <log/log.h>
 #include <string.h>
 
 #include <android-base/stringprintf.h>
@@ -1759,6 +1760,11 @@ void nfa_dm_notify_activation_status(tNFA_STATUS status,
                p_nfcid, nfcid_len);
       } else {
         nfcid_len = p_tech_params->param.pa.nfcid1_len;
+        if (nfcid_len > NCI_NFCID1_MAX_LEN) {
+          android_errorWriteLog(0x534e4554, "522373576");
+          nfcid_len = NCI_NFCID1_MAX_LEN;
+          p_tech_params->param.pa.nfcid1_len = nfcid_len;
+        }
         p_nfcid = p_tech_params->param.pa.nfcid1;
       }
     } else if (p_tech_params->mode == NFC_DISCOVERY_TYPE_POLL_B) {
@@ -1772,6 +1778,11 @@ void nfa_dm_notify_activation_status(tNFA_STATUS status,
       p_nfcid = p_tech_params->param.pi93.uid;
     } else if (p_tech_params->mode == NFC_DISCOVERY_TYPE_POLL_KOVIO) {
       nfcid_len = p_tech_params->param.pk.uid_len;
+      if (nfcid_len > NFC_KOVIO_MAX_LEN) {
+          android_errorWriteLog(0x534e4554, "522373576");
+          nfcid_len = NFC_KOVIO_MAX_LEN;
+          p_tech_params->param.pk.uid_len = nfcid_len;
+      }
       p_nfcid = p_tech_params->param.pk.uid;
     } else {
       nfcid_len = 0;
