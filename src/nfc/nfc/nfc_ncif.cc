@@ -1033,7 +1033,7 @@ void nfc_ncif_proc_activate(uint8_t* p, uint8_t len) {
 
   nfc_set_state(NFC_STATE_OPEN);
 
-  memset(p_intf, 0, sizeof(tNFC_INTF_PARAMS));
+  memset(&evt_data.activate, 0, sizeof(evt_data.activate));
   // validate packet length should be larger than (rf_disc_id + type +
   // protocol + mode + buff_size + num_buff + length of rf parameters).
   if (plen < 7) {
